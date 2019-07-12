@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    /* Basic Options */
+    "target": "es5",
+    "module": "commonjs",
+    "lib": [
+      "es2015",
+      "dom"
+    ],
+    "outDir": "./dist",
+    "rootDir": "./src/extension",
+    "strict": true,
+    "esModuleInterop": true
+  }
+}
