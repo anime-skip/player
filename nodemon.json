@@ -1,0 +1,6 @@
+{
+  "ignore": ["dist", "node_modules", ".git"],
+  "exec": "yarn build",
+  "watch": ["src"],
+  "ext": "ts,html,css,json,png,jpg,svg"
+}

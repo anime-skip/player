@@ -1,0 +1,56 @@
+{
+  "name": "VRV Anime Skip",
+  "version": "0.1.0",
+  "description": "Allows users to skip fillers/intro/recaps on VRV.",
+  "manifest_version": 2,
+  "permissions": ["activeTab", "storage"],
+  "browser_action": {
+    "browser_style": true,
+    "default_icon": {
+      "16": "img/extension-logo/16.png",
+      "32": "img/extension-logo/32.png",
+      "48": "img/extension-logo/48.png",
+      "128": "img/extension-logo/128.png"
+    },
+    "default_title": "Anime Skip",
+    "default_popup": "html/popup.html"
+  },
+  "page_action": {
+    "default_popup": "html/popup.html",
+    "default_icon": {
+      "16": "img/extension-logo/16.png",
+      "32": "img/extension-logo/32.png",
+      "48": "img/extension-logo/48.png",
+      "128": "img/extension-logo/128.png"
+    }
+  },
+  "options_ui": {
+    "page": "html/options.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["file:///media/aklinker1/External%20Storage/Programming/full-stack/anime-skip/chrome-extension/example/index.html"],
+      "js": ["js/services/example.js", "js/player.js"],
+      "css": ["css/player.css"]
+    },
+    
+    {
+      "matches": ["https://static.vrv.co/*"],
+      "js": ["data/timestamps.js", "player-injection.js"],
+      "css": [],
+      "all_frames": true
+    },
+    {
+      "matches": ["https://vrv.co/watch/*", "https://vrv.co/watch/*"],
+      "js": ["web-injection.js"],
+      "css": []
+    }
+  ],
+  "icons": {
+    "16": "img/extension-logo/16.png",
+    "32": "img/extension-logo/32.png",
+    "48": "img/extension-logo/48.png",
+    "128": "img/extension-logo/128.png"
+  },
+  "web_accessible_resources": ["img/logo.png"]
+}

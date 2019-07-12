@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Test Overlay</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+</head>
+
+<body>
+  <div class="video-container">
+    <video id="video" src="video.mp4" autoplay></video>
+    <!-- CONTENT_RIP_START
+    <div id="as_container" class="no-selection">
+      <div class="left-player-content">
+        <h2 class="paused-episode-name"></h2>
+        <h1 class="paused-show-name"></h1>
+        <h3 class="paused-episode-info"></h3>
+        <div id="change-episode-info" class="navbar-button">
+          <img class="navbar-button--icon" src="../src/assets/ic_edit_episode.svg" alt="Change Episode Info">
+          <p class="navbar-button--label">Change Episode Info</p>
+        </div>
+      </div>
+      <div class="right-player-content">
+        <div id="login-button" class="navbar-button" title="Login">
+          <img class="navbar-button--icon" src="../src/assets/ic_login.svg" alt="Login">
+        </div>
+      </div>
+      <div class="navbar">
+        <div>
+          <div class="navbar--background"></div>
+          <div class="navbar--progress">
+            <input class="progress--current-marker" type="range" min="0" value="0">
+          </div>
+          <div class="navbar--buttons">
+
+            <div id="navbar--play" class="navbar-button" title="Play">
+              <img class="navbar-button--icon" src="../src/assets/ic_play.svg" alt="Play">
+            </div>
+            <div id="navbar--pause" class="navbar-button" title="Pause">
+              <img class="navbar-button--icon" src="../src/assets/ic_pause.svg" alt="Pause">
+            </div>
+            <div id="navbar--next-episode" class="navbar-button" title="Next Episode">
+              <img class="navbar-button--icon" src="../src/assets/ic_next_episode.svg" alt="Next Episode">
+            </div>
+            <div class="volume-wrapper">
+              <div id="navbar--volume" class="navbar-button" title="Volume Togggle">
+                <img class="navbar-button--icon" alt="Volume">
+              </div>
+              <div id="volume-slider">
+                <div></div>
+                <input type="range" min="0" max="100" value="100">
+              </div>
+            </div>
+
+            <div class="navbar--divider"></div>
+
+            <div id="navbar--prev-timestamp" class="navbar-button" title="Prev Timestamp">
+              <img class="navbar-button--icon" src="../src/assets/ic_prev_timestamp.svg" alt="Prev Timestamp">
+            </div>
+            <div id="navbar--next-timestamp" class="navbar-button" title="Next Timestamp">
+              <img class="navbar-button--icon" src="../src/assets/ic_next_timestamp.svg" alt="Next Timestamp">
+            </div>
+
+            <div class="navbar--divider"></div>
+
+            <div class="time-display">
+              <span id="current-time"></span>
+              <span>/</span>
+              <span id="total-time"></span>
+            </div>
+
+            <div class="navbar--space"></div>
+
+            <div id="navbar--cancel-changes" class="navbar-button">
+              <img class="navbar-button--icon" src="../src/assets/ic_cancel.svg" alt="Cancel Changes">
+              <p class="navbar-button--label">Cancel</p>
+            </div>
+            <div id="navbar--submit-changes" class="navbar-button">
+              <img class="navbar-button--icon" src="../src/assets/ic_save_changes.svg" alt="Submit Changes">
+              <p class="navbar-button--label">Submit</p>
+            </div>
+            <div id="navbar--timestamp-search" class="navbar-button" title="Search for Timestamps">
+              <img class="navbar-button--icon" src="../src/assets/ic_search.svg" alt="Search for Timestamps">
+              <p class="navbar-button--label navbar-search-episode-label"></p>
+            </div>
+            <div id="navbar--edit" class="navbar-button" title="Toggle Edit Mode">
+              <img class="navbar-button--icon" src="../src/assets/ic_edit.svg" alt="Toggle Edit Mode">
+            </div>
+
+            <div class="navbar--divider"></div>
+
+            <div id="navbar--overflow" class="navbar-button" title="Overflow Settings">
+              <img class="navbar-button--icon" src="../src/assets/ic_more.svg" alt="Overflow Settings">
+            </div>
+            <div id="navbar--enter-fullscreen" class="navbar-button" title="Enter Fullscreen">
+              <img class="navbar-button--icon" src="../src/assets/ic_enter_fullscreen.svg" alt="Enter Fullscreen">
+            </div>
+            <div id="navbar--exit-fullscreen" class="navbar-button" title="Exit Fullscreen">
+              <img class="navbar-button--icon" src="../src/assets/ic_exit_fullscreen.svg" alt="Exit Fullscreen">
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="dialogs">
+        <div class="dialog" id="dialog-basic">
+          <h1></h1>
+          <div class="buttons">
+            <div class="negative dialog-button"></div>
+            <div class="positive dialog-button"></div>
+          </div>
+        </div>
+        <div class="dialog overflow" id="dialog-overflow">
+          <ul>
+            <li>Playback Speed</li>
+            <li>Autoplay</li>
+            <li>Hide all controls</li>
+          </ul>
+        </div>
+        <div class="dialog login" id="dialog-login">
+          <h1>
+            <span>Anime Skip Login</span>
+            <img class="login-icon" src="../src/assets/ic_login.svg" alt="Login">
+          </h1>
+          <div class="md-input">
+            <input id="username-or-email" type="text" required="required"/>
+            <label for="username-or-email">Username or Email</label>
+          </div>
+          <div class="md-input">
+            <input id="password" type="password" required="required"/>
+            <label for="password">Password</label>
+          </div>
+          <p id="login-error" class="error">Username or password is incorrect</p>
+          <div class="buttons">
+            <a class="negative dialog-button" href="http://www.anime-skip.com/sign-up" target="?">Sign Up</a>
+            <div class="positive dialog-button">Login</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    CONTENT_RIP_END-->
+  </div>
+</body>
+
+</html>
