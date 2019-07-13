@@ -14,7 +14,7 @@ rm -rf dist/* &> /dev/null
 
 title "Installing dist/"
 text "web-ext run"
-web-ext run --start-url about:debugging --source-dir ./dist > /dev/null &
+web-ext run --start-url google.com --source-dir ./dist > /dev/null &
 PID=$!
 sleep 2
 kill -9 $PID &> /dev/null

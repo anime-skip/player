@@ -3,16 +3,17 @@
   "version": "0.1.0",
   "description": "Allows users to skip fillers/intro/recaps on VRV.",
   "manifest_version": 2,
-  "permissions": [
-    "activeTab",
-    "declarativeContent",
-    "storage"
-  ],
-  "background": {
-    "scripts": [
-      "background.js"
-    ],
-    "persistent": false
+  "permissions": ["activeTab", "storage"],
+  "browser_action": {
+    "browser_style": true,
+    "default_icon": {
+      "16": "img/extension-logo/16.png",
+      "32": "img/extension-logo/32.png",
+      "48": "img/extension-logo/48.png",
+      "128": "img/extension-logo/128.png"
+    },
+    "default_title": "Anime Skip",
+    "default_popup": "html/popup.html"
   },
   "page_action": {
     "default_popup": "html/popup.html",
@@ -23,8 +24,15 @@
       "128": "img/extension-logo/128.png"
     }
   },
-  "options_page": "html/options.html",
+  "options_ui": {
+    "page": "html/options.html"
+  },
   "content_scripts": [
+    {
+      "matches": ["https://www.google.com/*"],
+      "js": ["js/player.js"],
+      "css": ["css/player.css"]
+    },
     {
       "matches": ["https://static.vrv.co/*"],
       "js": ["data/timestamps.ts", "player-injection.ts"],
@@ -42,5 +50,6 @@
     "32": "img/extension-logo/32.png",
     "48": "img/extension-logo/48.png",
     "128": "img/extension-logo/128.png"
-  }
+  },
+  "web_accessible_resources": ["img/logo.png"]
 }

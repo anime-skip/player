@@ -13,7 +13,7 @@
     "sourceMap": false,
     "declaration": false,
     "strict": true,
-    "esModuleInterop": true,
+    "esModuleInterop": true
   },
   "include": ["src/extension/*"]
 }

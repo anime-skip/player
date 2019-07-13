@@ -12,6 +12,9 @@ title "Building src/player"
 text "Compiling vue"
 yarn vue-cli-service build > /dev/null
 
+text "Copying assets"
+cp -a src/player/img/. dist/img > /dev/null
+
 text "Cleaning dist/"
 rm -f dist/js/*.js.map > /dev/null
 rm -f dist/player.html > /dev/null
