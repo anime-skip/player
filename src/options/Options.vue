@@ -13,6 +13,6 @@ export default class Options extends Vue {}
 
 <style lang="scss">
 .Options {
-  padding: 24px;
+  padding: 12px 0;
 }
 </style>

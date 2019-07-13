@@ -13,6 +13,6 @@ export default class Popup extends Vue {}
 
 <style lang="scss">
 .Popup {
-  padding: 24px;
+  padding: 16px;
 }
 </style>

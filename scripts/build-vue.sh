@@ -7,7 +7,7 @@ function text {
     echo -e "\x1B[0m- $1\x1B[2m"
 }
 
-title "Building src/player and src/options"
+title "Building src/player, src/options, and src/popup"
 
 text "Compiling vue"
 yarn vue-cli-service build > /dev/null
