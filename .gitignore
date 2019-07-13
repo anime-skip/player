@@ -3,3 +3,4 @@ dist/
 .extension-old/
 
 yarn-error.log
+example/video.mp4
