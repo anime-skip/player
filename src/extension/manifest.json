@@ -1,0 +1,46 @@
+{
+  "name": "VRV Anime Skip",
+  "version": "0.1.0",
+  "description": "Allows users to skip fillers/intro/recaps on VRV.",
+  "manifest_version": 2,
+  "permissions": [
+    "activeTab",
+    "declarativeContent",
+    "storage"
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": false
+  },
+  "page_action": {
+    "default_popup": "html/popup.html",
+    "default_icon": {
+      "16": "img/extension-logo/16.png",
+      "32": "img/extension-logo/32.png",
+      "48": "img/extension-logo/48.png",
+      "128": "img/extension-logo/128.png"
+    }
+  },
+  "options_page": "html/options.html",
+  "content_scripts": [
+    {
+      "matches": ["https://static.vrv.co/*"],
+      "js": ["data/timestamps.ts", "player-injection.ts"],
+      "css": ["./css/@Timestamps.css"],
+      "all_frames": true
+    },
+    {
+      "matches": ["https://vrv.co/watch/*", "https://vrv.co/watch/*"],
+      "js": ["web-injection.ts"],
+      "css": ["./css/@Toolbar.css"]
+    }
+  ],
+  "icons": {
+    "16": "img/extension-logo/16.png",
+    "32": "img/extension-logo/32.png",
+    "48": "img/extension-logo/48.png",
+    "128": "img/extension-logo/128.png"
+  }
+}

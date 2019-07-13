@@ -2,3 +2,4 @@ node_modules/
 dist/
 .extension-old/
 
+yarn-error.log

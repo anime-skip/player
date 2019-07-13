@@ -1,0 +1,51 @@
+section#vrv-skip-toolbar {
+  display: flex;
+  flex-direction: row;
+  background-color: #1b1a26;
+}
+
+section#vrv-skip-toolbar>div {
+  height: 42px;
+  line-height: 42px;
+  color: white;
+  border-left: 2px solid #fd0;
+  cursor: pointer;
+  user-select: none;
+  transition: 200ms;
+  white-space: nowrap;
+  min-width: 4px;
+  position: relative;
+}
+
+section#vrv-skip-toolbar>div>span {
+  width: 0;
+  opacity: 0;
+  transition: 200ms;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  overflow-x: hidden;
+  padding: 0 16px;
+}
+
+section#vrv-skip-toolbar>div:hover {
+  background-color: #302e42;
+  position: unset;
+  left: unset;
+  top: unset;
+  bottom: unset;
+}
+
+section#vrv-skip-toolbar>div:hover>span {
+  width: auto;
+  position: unset;
+  left: unset;
+  top: unset;
+  bottom: unset;
+  opacity: 1;
+}
+
+section#vrv-skip-toolbar>div:active {
+  background-color: #474658;
+}

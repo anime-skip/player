@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "cd dist && web-ext run",
+    "build": "./scripts/build.sh",
     "build:player": "./scripts/build-player.sh",
     "build:extension": "./scripts/build-extension.sh",
     "lint": "tslint && vue-cli-service lint"

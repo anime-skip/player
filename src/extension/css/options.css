@@ -1,0 +1,19 @@
+body * {
+  padding: 0;
+  margin: 0;
+}
+
+.checkbox {
+  display: flex;
+  flex-direction: row;
+  padding: 8px;
+  align-items: center;
+}
+
+.checkbox>input {
+  margin-right: 16px;
+}
+
+.checkbox>p {
+  font-size: 16px;
+}
