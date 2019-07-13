@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import Img from './components/Img.vue';
+import Img from '@Shared/components/Img.vue';
 
 @Component({
   components: {

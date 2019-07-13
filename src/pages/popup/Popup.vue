@@ -1,6 +1,6 @@
 <template>
   <div class="Popup">
-    <p>Vue Popup Page</p>
+    <p>Welcome to Anime Skip</p>
   </div>
 </template>
 
