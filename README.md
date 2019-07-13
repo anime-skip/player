@@ -1,29 +1,11 @@
-# vue-chrome-extension
+# Anime Skip - Web Extension
 
-## Project setup
-```
-yarn install
-```
+Inject a custom player over the top of the `VRV` and `Funimation` players.
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
+## Development
+
+```bash
+yarn build
 ```
 
-### Compiles and minifies for production
-```
-yarn run build
-```
-
-### Run your tests
-```
-yarn run test
-```
-
-### Lints and fixes files
-```
-yarn run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Build and install the extension in your web browser. I have tested this with Firefox, and it works well. It will open to the `example/index.html` file. This is the file used for testing, rather than the actual services to avoid over-usage of the token.
