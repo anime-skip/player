@@ -2,6 +2,8 @@ module.exports = {
   filenameHashing: false, 
   pages: {
     player: { entry: 'src/player/main.ts' },
+    options: { entry: 'src/options/main.ts' },
+    popup: { entry: 'src/popup/main.ts' },
   },
   configureWebpack: {
     optimization: {

@@ -2,12 +2,19 @@
 <html>
 
 <head>
-  <link rel="stylesheet" href="../css/options.css">
-  <meta charset="utf-8" />
+  <meta charset=utf-8>
+  <meta http-equiv=X-UA-Compatible content="IE=edge">
+  <meta name=viewport content="width=device-width,initial-scale=1">
+  <title>Vue App</title>
+  <link href=/css/options.css rel=preload as=style>
+  <link href=/js/options.js rel=preload as=script>
+  <link href=/css/options.css rel=stylesheet>
 </head>
 
 <body>
-  <h1>VRV Skip Options</h1>
+  <div id="app"></div>
+  <script src=/js/options.js></script>
+  <!--<h1>VRV Skip Options</h1>
   <div class="checkbox">
     <input type="checkbox" name="auto-skip-enabled" id="auto-skip-enabled">
     <p>Auto Skip Enabled</p>
@@ -34,7 +41,7 @@
       <input type="checkbox" name="skip-outro" id="skip-outro">
       <p>Outro</p>
     </div>
-  </div>
+  </div>-->
 </body>
 <script src="../js/options.ts"></script>
 
