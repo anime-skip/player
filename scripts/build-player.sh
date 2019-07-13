@@ -16,7 +16,7 @@ text "Copying assets"
 cp -a src/player/img/. dist/img > /dev/null
 
 text "Cleaning dist/"
-rm -f dist/js/*.js.map > /dev/null
+# rm -f dist/js/*.js.map > /dev/null
 rm -f dist/player.html > /dev/null
 
 echo -e "\x1B[0m"

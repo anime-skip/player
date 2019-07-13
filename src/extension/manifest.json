@@ -29,20 +29,21 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://www.google.com/*"],
-      "js": ["js/player.js"],
+      "matches": ["file:///media/aklinker1/External%20Storage/Programming/full-stack/anime-skip/chrome-extension/example/index.html"],
+      "js": ["js/services/example.js", "js/player.js"],
       "css": ["css/player.css"]
     },
+    
     {
       "matches": ["https://static.vrv.co/*"],
-      "js": ["data/timestamps.ts", "player-injection.ts"],
-      "css": ["./css/@Timestamps.css"],
+      "js": ["data/timestamps.js", "player-injection.js"],
+      "css": [],
       "all_frames": true
     },
     {
       "matches": ["https://vrv.co/watch/*", "https://vrv.co/watch/*"],
-      "js": ["web-injection.ts"],
-      "css": ["./css/@Toolbar.css"]
+      "js": ["web-injection.js"],
+      "css": []
     }
   ],
   "icons": {

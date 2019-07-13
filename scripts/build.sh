@@ -14,7 +14,9 @@ rm -rf dist/* &> /dev/null
 
 title "Installing dist/"
 text "web-ext run"
-web-ext run --start-url google.com --source-dir ./dist > /dev/null &
+web-ext run \
+    --start-url "file:///media/aklinker1/External%20Storage/Programming/full-stack/anime-skip/chrome-extension/example/index.html" \
+    --source-dir ./dist > /dev/null &
 PID=$!
 sleep 2
 kill -9 $PID &> /dev/null

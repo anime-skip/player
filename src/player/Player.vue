@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="AnimeSkipPlayer">
     <Img src="img/logo.png"/>
   </div>
 </template>
@@ -13,11 +13,11 @@ import Img from './components/Img.vue';
     Img,
   },
 })
-export default class App extends Vue {}
+export default class Player extends Vue {}
 </script>
 
 <style lang="scss">
-#app {
+#AnimeSkipPlayer {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

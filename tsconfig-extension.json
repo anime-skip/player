@@ -15,5 +15,5 @@
     "strict": true,
     "esModuleInterop": true
   },
-  "include": ["src/extension/*"]
+  "include": ["src/extension"]
 }

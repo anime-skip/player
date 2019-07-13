@@ -17,13 +17,7 @@ export default class Image extends Vue {
     if (browser) getURL = browser.runtime.getURL;
     // @ts-ignore
     else if (chrome) getURL = chrome.runtime.getURL;
-    console.log('img:', getURL(this.src));
     return getURL(this.src);
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.Image {
-}
-</style>
