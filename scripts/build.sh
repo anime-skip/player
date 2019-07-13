@@ -9,7 +9,7 @@ function text {
 echo ""
 
 rm -rf dist/* &> /dev/null
-./scripts/build-player.sh
+./scripts/build-vue.sh
 ./scripts/build-extension.sh
 
 title "Installing dist/"
