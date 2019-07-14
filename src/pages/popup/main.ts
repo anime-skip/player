@@ -3,6 +3,6 @@ import Popup from './Popup.vue';
 
 Vue.config.productionTip = false;
 
-const vue = new Vue({
+new Vue({
     render: (h) => h(Popup),
 }).$mount('#app');

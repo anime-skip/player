@@ -17,6 +17,15 @@ module.exports = {
       },
     },
   },
+  css: {
+    loaderOptions: {
+      sass: {
+        data: `
+          @import "src/shared/scss/variables.scss";
+        `,
+      },
+    },
+  }
 
   // chainWebpack: config => {
   //   config.module

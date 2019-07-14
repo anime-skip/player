@@ -15,6 +15,7 @@ rm -rf dist/* &> /dev/null
 title "Installing dist/"
 text "web-ext run"
 web-ext run \
+    --browser-console \
     --start-url "./example/index.html" \
     --source-dir ./dist > /dev/null &
 PID=$!

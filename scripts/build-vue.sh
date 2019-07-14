@@ -15,7 +15,7 @@ yarn vue-cli-service build > /dev/null
 text "Copying assets"
 cp -a src/pages/player/img/. dist/img > /dev/null
 cp -a src/pages/options/img/. dist/img > /dev/null
-cp -a src/pages/options/img/. dist/img > /dev/null
+cp -a src/pages/popup/img/. dist/img > /dev/null
 
 text "Cleaning dist/"
 rm -f dist/player.html > /dev/null
