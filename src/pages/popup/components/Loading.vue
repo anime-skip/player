@@ -1,22 +1,13 @@
 <template>
-  <div class="Loading">
-    <h1>Anime Skip</h1>
-    <TextInput label="Username" />
-    <TextInput label="Password" />
-    <div>
-        <button>Sign Up</button>
-        <button>Log In</button>
-    </div>
-  </div>
+  <ProgressOverlay :isLoading="true">
+    <div class="sizing" />
+  </ProgressOverlay>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import TextInput from '@Shared/components/TextInput.vue';
 
-@Component({
-    components: { TextInput },
-})
+@Component
 export default class Loading extends Vue {
 
 }
@@ -24,6 +15,9 @@ export default class Loading extends Vue {
 
 <style lang="scss" scoped>
 .Loading {
-  
+  .sizing {
+    width: 250px;
+    height: 175px;
+  }
 }
 </style>

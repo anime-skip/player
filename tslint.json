@@ -16,6 +16,17 @@
     "object-literal-sort-keys": false,
     "no-consecutive-blank-lines": false,
     "one-line": false,
-    "curly": false
+    "curly": false,
+    "no-console": false,
+    "no-shadowed-variable": [true, {
+      "class": true,
+      "enum": true,
+      "function": false,
+      "interface": false,
+      "namespace": false,
+      "typeAlias": false,
+      "typeParameter": false,
+      "underscore": false
+    }]
   }
 }

@@ -3,7 +3,6 @@
     <Img class="icon" :class="{ focused: isFocused }" :src="leftIcon" v-if="leftIcon !== null" />
     <input
       class="input"
-      ref="input"
       :type="type"
       v-model="value"
       :placeholder="hint"

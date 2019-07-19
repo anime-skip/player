@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import Browser from '../Browser';
+import Browser from '../utils/Browser';
 
 @Component
 export default class Image extends Vue {
