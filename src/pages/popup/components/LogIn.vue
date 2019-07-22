@@ -68,7 +68,7 @@ export default class LogIn extends Vue {
 .LogIn {
   display: flex;
   flex-direction: column;
-  padding: 16px 24px;
+  padding: 32px 40px;
   .header {
     margin-bottom: 24px;
   }

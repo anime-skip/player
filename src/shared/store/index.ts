@@ -17,15 +17,9 @@ const initialState: VuexState = {
   myUser: undefined,
 };
 
-
-
-
 export default new Vuex.Store({
   state: initialState,
   mutations,
   actions,
   getters,
 });
-
-
-

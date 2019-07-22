@@ -5,23 +5,75 @@
 
       <h2 class="settings-group-label">General</h2>
       <div class="input-grid input-grid--2">
-        <Checkbox :isChecked="true" text="Auto-skip sections"/>
-        <Checkbox :isChecked="false" text="Force auto-play"/>
+        <Checkbox
+          :isChecked="getPref('enableAutoSkip')"
+          text="Skip specified sections"
+          @click.native="onClickAutoSkip"
+        />
+        <Checkbox
+          :isChecked="getPref('enableAutoPlay')"
+          text="Force video auto-play"
+          @click.native="onClickAutoPlay"
+        />
       </div>
 
       <h2 class="settings-group-label">Skipped Sections</h2>
       <div class="input-grid">
-        <Checkbox :isChecked="true" text="Branding"/>
-        <Checkbox :isChecked="true" text="Intros"/>
-        <Checkbox :isChecked="false" text="Mixed Intros"/>
-        <Checkbox :isChecked="true" text="Recaps"/>
-        <Checkbox :isChecked="true" text="Title Cards"/>
-        <Checkbox :isChecked="false" text="Canon"/>
-        <Checkbox :isChecked="true" text="Filler"/>
-        <Checkbox :isChecked="true" text="Transitions"/>
-        <Checkbox :isChecked="true" text="Credits"/>
-        <Checkbox :isChecked="false" text="Mixed Credits"/>
-        <Checkbox :isChecked="true" text="Previews"/>
+        <Checkbox 
+          :isChecked="getPref('skipBranding')"
+          text="Branding"
+          @click.native="onClickBranding"
+        />
+        <Checkbox 
+          :isChecked="getPref('skipIntros')"
+          text="Intros"
+          @click.native="onClickIntros"
+        />
+        <Checkbox
+          :isChecked="getPref('skipNewIntros')"
+          text="New Intros"
+          @click.native="onClickNewIntros"
+        />
+        <Checkbox 
+          :isChecked="getPref('skipRecaps')"
+          text="Recaps"
+          @click.native="onClickRecaps"
+        />
+        <Checkbox 
+          :isChecked="getPref('skipTitleCard')"
+          text="Title Cards"
+          @click.native="onClickTitleCards"
+        />
+        <Checkbox 
+          :isChecked="getPref('skipCanon')"
+          text="Canon"
+          @click.native="onClickCanon"
+        />
+        <Checkbox 
+          :isChecked="getPref('skipFiller')"
+          text="Filler"
+          @click.native="onClickFiller"
+        />
+        <Checkbox 
+          :isChecked="getPref('skipTransitions')"
+          text="Transitions"
+          @click.native="onClickTransitions"
+        />
+        <Checkbox 
+          :isChecked="getPref('skipCredits')"
+          text="Credits"
+          @click.native="onClickCredits"
+        />
+        <Checkbox 
+          :isChecked="getPref('skipMixedCredits')"
+          text="Mixed Credits"
+          @click.native="onClickMixedCredits"
+        />
+        <Checkbox 
+          :isChecked="getPref('skipPreview')"
+          text="Previews"
+          @click.native="onClickPreviews"
+        />
       </div>
       <p class="help">Need help?&ensp;<a href="">View Preference Descriptions</a></p>
     </div>
@@ -33,16 +85,75 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import ProgressOverlay from '../../../shared/components/ProgressOverlay.vue';
 import PopupHeader from './PopupHeader.vue';
 import Checkbox from './Checkbox.vue';
+import { Getter, Action } from '../../../shared/utils/VuexDecorators';
 
 @Component({
   components: { ProgressOverlay, PopupHeader, Checkbox },
 })
-export default class Preferences extends Vue {}
+export default class Preferences extends Vue {
+
+  @Getter('preferences') public preferences?: Api.Preferences;
+
+  @Action('togglePref') public togglePreference!: (pref: keyof Api.Preferences) => void;
+
+  public togglePref(pref: keyof Api.Preferences): void {
+    this.togglePreference(pref);
+  }
+
+  public getPref(pref: keyof Api.Preferences): boolean {
+    const prefs = this.preferences;
+    if (!prefs) {
+      return false;
+    }
+    return prefs[pref];
+  }
+
+  public onClickAutoSkip() {
+    this.togglePreference('enableAutoSkip');
+  }
+  public onClickAutoPlay() {
+    this.togglePreference('enableAutoPlay');
+  }
+  public onClickBranding() {
+    this.togglePreference('skipBranding');
+  }
+  public onClickIntros() {
+    this.togglePreference('skipIntros');
+  }
+  public onClickNewIntros() {
+    this.togglePreference('skipNewIntros');
+  }
+  public onClickRecaps() {
+    this.togglePreference('skipRecaps');
+  }
+  public onClickTitleCards() {
+    this.togglePreference('skipTitleCard');
+  }
+  public onClickCanon() {
+    this.togglePreference('skipCanon');
+  }
+  public onClickFiller() {
+    this.togglePreference('skipFiller');
+  }
+  public onClickTransitions() {
+    this.togglePreference('skipTransitions');
+  }
+  public onClickCredits() {
+    this.togglePreference('skipCredits');
+  }
+  public onClickMixedCredits() {
+    this.togglePreference('skipMixedCredits');
+  }
+  public onClickPreviews() {
+    this.togglePreference('skipPreview');
+  }
+
+}
 </script>
 
 <style lang="scss" scoped>
 .Preferences {
-  padding: 16px 24px;
+  padding: 32px 40px;
   .column {
     display: flex;
     flex-direction: column;

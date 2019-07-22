@@ -3,9 +3,11 @@ type AxiosResponse<T> = import('axios').AxiosResponse<T>
 declare namespace Api {
   interface Preferences {
     enableAutoSkip: boolean;
+    enableAutoPlay: boolean;
     skipBranding: boolean;
     skipIntros: boolean;
     skipNewIntros: boolean;
+    skipMixedIntros: boolean;
     skipRecaps: boolean;
     skipFiller: boolean;
     skipCanon: boolean;

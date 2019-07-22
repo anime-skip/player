@@ -14,6 +14,7 @@ declare interface VuexState {
      */
     loginState?: boolean,
     myUser?: Api.MyUser;
+    preferenceChangeError?: boolean;
 }
 
 declare interface LoginManualPayload {

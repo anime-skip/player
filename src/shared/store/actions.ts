@@ -66,3 +66,22 @@ export function loginRefresh(
             commit('loginLoading', false);
         });
 }
+
+export function togglePref(
+    { commit, state }: ActionContext<VuexState, VuexState>,
+    pref: keyof Api.Preferences,
+) {
+    const value = !state.myUser!.preferences[pref];
+    commit('togglePref', { pref, value });
+    Api.mutatePrefs(pref, value, state.token || '')
+        .then(() => {
+            commit('setPreferenceError', false);
+            commit('updatePreference', { pref, value });
+        }).catch((err) => {
+            console.error('error', err);
+            commit('setPreferenceError', true);
+            setTimeout(() => {
+                commit('togglePref', { pref, value: !value });
+            }, 200);
+        });
+}

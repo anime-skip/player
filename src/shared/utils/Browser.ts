@@ -6,7 +6,7 @@ export default class Browser {
             if (browser) {
                 // @ts-ignore
                 const keyMap = await browser.storage.local.get(key);
-                return keyMap[key];
+                return JSON.parse(keyMap[key]);
             }
             // // @ts-ignore
             // else if (chrome) getItem = chrome.storage.local.get;
@@ -17,7 +17,14 @@ export default class Browser {
             // @ts-ignore
             if (browser) {
                 // @ts-ignore
-                return await browser.storage.local.get(keys);
+                const values = await browser.storage.local.get(keys);
+                const parsed: any = {};
+                for (const key in values) {
+                    if (values.hasOwnProperty(key)) {
+                        parsed[key] = JSON.parse(values[key]);
+                    }
+                }
+                return parsed;
             }
             // // @ts-ignore
             // else if (chrome) getItem = chrome.storage.local.get;
