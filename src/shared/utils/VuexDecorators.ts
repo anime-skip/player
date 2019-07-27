@@ -18,3 +18,13 @@ export function Action(actionName: string) {
         };
     });
 }
+
+export function Mutation(mutationName: string) {
+    return createDecorator((options, key) => {
+        if (!options.methods) options.methods = {};
+        options.methods[key] = function(payload: any) {
+            console.log('Mutation:', mutationName, payload);
+            return this.$store.commit(mutationName, payload);
+        };
+    });
+}

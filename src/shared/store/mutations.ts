@@ -22,6 +22,17 @@ export function login(state: VuexState, loginPayload: Api.LoginResponse) {
   persistAccount(state);
 }
 
+export function logOut(state: VuexState) {
+  Vue.set(state, 'token', undefined);
+  Vue.set(state, 'tokenExpiresAt', undefined);
+  Vue.set(state, 'refreshToken', undefined);
+  Vue.set(state, 'refreshTokenExpiresAt', undefined);
+  Vue.set(state, 'loginError', false);
+  Vue.set(state, 'myUser', undefined);
+  changeLoginState(state, false);
+  persistAccount(state);
+}
+
 export function loginError(state: VuexState) {
   Vue.set(state, 'token', undefined);
   Vue.set(state, 'refreshToken', undefined);

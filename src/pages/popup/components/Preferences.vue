@@ -1,7 +1,7 @@
 <template>
   <ProgressOverlay :isLoading="isLoggingIn" class="Preferences">
     <div class="column">
-      <PopupHeader title="Preferences" class="header"/>
+      <PopupHeader title="Preferences" class="header" />
 
       <h2 class="settings-group-label">General</h2>
       <div class="input-grid input-grid--2">
@@ -19,63 +19,50 @@
 
       <h2 class="settings-group-label">Skipped Sections</h2>
       <div class="input-grid">
-        <Checkbox 
+        <Checkbox
           :isChecked="getPref('skipBranding')"
           text="Branding"
           @click.native="onClickBranding"
         />
-        <Checkbox 
-          :isChecked="getPref('skipIntros')"
-          text="Intros"
-          @click.native="onClickIntros"
-        />
+        <Checkbox :isChecked="getPref('skipIntros')" text="Intros" @click.native="onClickIntros" />
         <Checkbox
           :isChecked="getPref('skipNewIntros')"
           text="New Intros"
           @click.native="onClickNewIntros"
         />
-        <Checkbox 
-          :isChecked="getPref('skipRecaps')"
-          text="Recaps"
-          @click.native="onClickRecaps"
-        />
-        <Checkbox 
+        <Checkbox :isChecked="getPref('skipRecaps')" text="Recaps" @click.native="onClickRecaps" />
+        <Checkbox
           :isChecked="getPref('skipTitleCard')"
           text="Title Cards"
           @click.native="onClickTitleCards"
         />
-        <Checkbox 
-          :isChecked="getPref('skipCanon')"
-          text="Canon"
-          @click.native="onClickCanon"
-        />
-        <Checkbox 
-          :isChecked="getPref('skipFiller')"
-          text="Filler"
-          @click.native="onClickFiller"
-        />
-        <Checkbox 
+        <Checkbox :isChecked="getPref('skipCanon')" text="Canon" @click.native="onClickCanon" />
+        <Checkbox :isChecked="getPref('skipFiller')" text="Filler" @click.native="onClickFiller" />
+        <Checkbox
           :isChecked="getPref('skipTransitions')"
           text="Transitions"
           @click.native="onClickTransitions"
         />
-        <Checkbox 
+        <Checkbox
           :isChecked="getPref('skipCredits')"
           text="Credits"
           @click.native="onClickCredits"
         />
-        <Checkbox 
+        <Checkbox
           :isChecked="getPref('skipMixedCredits')"
           text="Mixed Credits"
           @click.native="onClickMixedCredits"
         />
-        <Checkbox 
+        <Checkbox
           :isChecked="getPref('skipPreview')"
           text="Previews"
           @click.native="onClickPreviews"
         />
       </div>
-      <p class="help">Need help?&ensp;<a href="">View Preference Descriptions</a></p>
+      <div class="bottom-row">
+        <a class="link" href>Need help?</a>
+        <a class="link" href="#" @click.prevent="logOut()">Log out</a>
+      </div>
     </div>
   </ProgressOverlay>
 </template>
@@ -85,16 +72,18 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import ProgressOverlay from '../../../shared/components/ProgressOverlay.vue';
 import PopupHeader from './PopupHeader.vue';
 import Checkbox from './Checkbox.vue';
-import { Getter, Action } from '../../../shared/utils/VuexDecorators';
+import { Getter, Action, Mutation } from '../../../shared/utils/VuexDecorators';
 
 @Component({
   components: { ProgressOverlay, PopupHeader, Checkbox },
 })
 export default class Preferences extends Vue {
-
   @Getter('preferences') public preferences?: Api.Preferences;
 
-  @Action('togglePref') public togglePreference!: (pref: keyof Api.Preferences) => void;
+  @Action('togglePref') public togglePreference!: (
+    pref: keyof Api.Preferences,
+  ) => void;
+  @Mutation('logOut') public logOut!: () => void;
 
   public togglePref(pref: keyof Api.Preferences): void {
     this.togglePreference(pref);
@@ -147,7 +136,6 @@ export default class Preferences extends Vue {
   public onClickPreviews() {
     this.togglePreference('skipPreview');
   }
-
 }
 </script>
 
@@ -172,15 +160,14 @@ export default class Preferences extends Vue {
     color: $textPrimary;
     margin-top: 16px;
   }
-  .help {
-    padding: 16px 32px 0 32px;
-    color: $textSecondary;
-    font-size: 14px;
-    align-self: stretch;
-    text-align: center;
-    a {
-      color: $textPrimary;
-    }
+  a {
+    color: $textPrimary;
+  }
+  .bottom-row {
+    padding-top: 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
   }
 }
 </style>
