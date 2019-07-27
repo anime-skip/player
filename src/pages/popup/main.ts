@@ -1,8 +1,11 @@
 import Vue from 'vue';
 import Popup from './Popup.vue';
+import store from '../../shared/store';
+
 
 Vue.config.productionTip = false;
 
-const vue = new Vue({
-    render: (h) => h(Popup),
+new Vue({
+  render: (h) => h(Popup),
+  store,
 }).$mount('#app');

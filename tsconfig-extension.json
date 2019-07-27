@@ -9,8 +9,7 @@
     ],
     "outDir": "./dist",
     "rootDir": "./src/extension",
-    "": "",
-    "sourceMap": false,
+    "sourceMap": true,
     "declaration": false,
     "strict": true,
     "esModuleInterop": true

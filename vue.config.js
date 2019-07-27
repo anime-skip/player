@@ -1,15 +1,31 @@
+const path = require('path');
+
 module.exports = {
   filenameHashing: false, 
   pages: {
-    player: { entry: 'src/player/main.ts' },
-    options: { entry: 'src/options/main.ts' },
-    popup: { entry: 'src/popup/main.ts' },
+    player: { entry: 'src/pages/player/main.ts' },
+    options: { entry: 'src/pages/options/main.ts' },
+    popup: { entry: 'src/pages/popup/main.ts' },
   },
   configureWebpack: {
     optimization: {
       splitChunks: false,
     },
+    resolve: {
+      alias: {
+        '@Shared': path.resolve(__dirname, 'src/shared'),
+      },
+    },
   },
+  css: {
+    loaderOptions: {
+      sass: {
+        data: `
+          @import "src/shared/scss/variables.scss";
+        `,
+      },
+    },
+  }
 
   // chainWebpack: config => {
   //   config.module

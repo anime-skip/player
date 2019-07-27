@@ -52,5 +52,5 @@
     "48": "img/extension-logo/48.png",
     "128": "img/extension-logo/128.png"
   },
-  "web_accessible_resources": ["img/logo.png"]
+  "web_accessible_resources": ["img/logo.png", "img/ic-password.svg", "img/ic-account.svg"]
 }

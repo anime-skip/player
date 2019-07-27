@@ -15,7 +15,7 @@ rm -rf dist/* &> /dev/null
 title "Installing dist/"
 text "web-ext run"
 web-ext run \
-    --start-url "./example/index.html" \
+    --start-url "about:debugging" \
     --source-dir ./dist > /dev/null &
 PID=$!
 sleep 2

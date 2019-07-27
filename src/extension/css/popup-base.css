@@ -1,0 +1,9 @@
+body {
+    overflow-y: hidden;
+    background-color: #242C36;
+}
+
+html, body {
+    min-width: 350px;
+    max-width: 550px;
+}

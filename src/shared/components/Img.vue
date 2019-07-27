@@ -4,6 +4,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import Browser from '../utils/Browser';
 
 @Component
 export default class Image extends Vue {
@@ -12,12 +13,7 @@ export default class Image extends Vue {
    */
   @Prop(String) public src!: string;
   public get resolvedSrc(): string {
-    let getURL = (extUrl: string) => extUrl;
-    // @ts-ignore
-    if (browser) getURL = browser.runtime.getURL;
-    // @ts-ignore
-    else if (chrome) getURL = chrome.runtime.getURL;
-    return getURL(this.src);
+    return Browser.resolveUrl(this.src);
   }
 }
 </script>
