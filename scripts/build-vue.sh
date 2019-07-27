@@ -10,16 +10,32 @@ function text {
 title "Building src/player, src/options, and src/popup"
 
 text "Compiling vue"
-yarn vue-cli-service build > /dev/null
+if [ "$1" == "debug" ]; then
+    yarn vue-cli-service build
+else 
+    yarn vue-cli-service build > /dev/null
+fi
 
 text "Copying assets"
-cp -a src/pages/player/img/. dist/img > /dev/null
-cp -a src/pages/options/img/. dist/img > /dev/null
-cp -a src/pages/popup/img/. dist/img > /dev/null
+if [ "$1" == "debug" ]; then
+    cp -a src/pages/player/img/. dist/img
+    cp -a src/pages/options/img/. dist/img
+    cp -a src/pages/popup/img/. dist/img
+else 
+    cp -a src/pages/player/img/. dist/img > /dev/null
+    cp -a src/pages/options/img/. dist/img > /dev/null
+    cp -a src/pages/popup/img/. dist/img > /dev/null
+fi
 
 text "Cleaning dist/"
-rm -f dist/player.html > /dev/null
-rm -f dist/options.html > /dev/null
-rm -f dist/popup.html > /dev/null
+if [ "$1" == "debug" ]; then
+    rm -f dist/player.html
+    rm -f dist/options.html
+    rm -f dist/popup.html
+else 
+    rm -f dist/player.html > /dev/null
+    rm -f dist/options.html > /dev/null
+    rm -f dist/popup.html > /dev/null
+fi
 
 echo -e "\x1B[0m"

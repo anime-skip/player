@@ -38,8 +38,8 @@ import PopupHeader from './PopupHeader.vue';
 })
 export default class LogIn extends Vue {
   public isError: boolean = false;
-  public username: string = '';
-  public password: string = '';
+  public username: string = 'aklinker1';
+  public password: string = 'password';
 
   @Getter('isLoggingIn') public isLoggingIn!: boolean;
 

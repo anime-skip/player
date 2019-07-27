@@ -1,12 +1,20 @@
 import Vue from 'vue';
 import Player from './Player.vue';
-import store from './store';
+import store from '../../shared/store';
 
 const rootQuery = getRootQuery();
-console.log(`Injecting player onto ${rootQuery}`);
+console.info(`Injecting player onto ${rootQuery}`);
+
+video.controls = false;
+video.autoplay = false;
+video.pause();
+
+const elementsToHide = getElementsToHide();
+elementsToHide.forEach((element) => {
+  element.remove();
+});
 
 Vue.config.productionTip = false;
-
 const vue = new Vue({
   store,
   render: (h) => h(Player),

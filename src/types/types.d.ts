@@ -1,4 +1,6 @@
 declare function getRootQuery(): string;
+declare const video: HTMLVideoElement;
+declare function getElementsToHide(): HTMLElement[];
 
 declare interface VuexState {
     token?: string;

@@ -1,8 +1,8 @@
 import Axios, { AxiosResponse } from 'axios';
 
 const axios = Axios.create({
-    // baseURL: 'http://localhost:8000/',
-    baseURL: 'http://api.anime-skip.com/',
+    baseURL: 'http://localhost:8000/',
+    // baseURL: 'http://api.anime-skip.com/',
 });
 
 function query(q: string) {

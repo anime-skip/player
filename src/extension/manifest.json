@@ -29,7 +29,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["file:///media/aklinker1/External%20Storage/Programming/full-stack/anime-skip/chrome-extension/example/index.html"],
+      "matches": ["file:///media/aklinker1/External%20Storage/Programming/full-stack/anime-skip/web-extension/example/index.html"],
       "js": ["js/services/example.js", "js/player.js"],
       "css": ["css/player.css"]
     },

@@ -4,9 +4,7 @@
   "private": true,
   "scripts": {
     "build": "./scripts/build.sh",
-    "build:vue": "./scripts/build-vue.sh",
-    "build:vue:debug": "vue-cli-service build",
-    "build:extension": "./scripts/build-extension.sh",
+    "build:debug": "./scripts/build.sh debug",
     "lint": "tslint && vue-cli-service lint"
   },
   "dependencies": {
