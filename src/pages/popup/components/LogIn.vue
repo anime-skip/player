@@ -17,7 +17,9 @@
         type="password"
         v-model="password"
       />
-      <p class="error-message row" v-if="isError">Username or password was incorrect</p>
+      <p class="error-message row" v-if="isError">
+        Username or password was incorrect
+      </p>
       <div class="bottom-row">
         <input type="submit" value="Log In" class="clickable focus button" />
         <a href="https://www.anime-skip.com/sign-up">Sign Up</a>
@@ -27,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import TextInput from '@Shared/components/TextInput.vue';
 import { Action, Getter } from '../../../shared/utils/VuexDecorators';
 import ProgressOverlay from '../../../shared/components/ProgressOverlay.vue';
@@ -44,7 +46,7 @@ export default class LogIn extends Vue {
   @Getter('isLoggingIn') public isLoggingIn!: boolean;
 
   @Action('loginManual') public loginManual!: (
-    payload: LoginManualPayload,
+    payload: LoginManualPayload
   ) => void;
 
   public mounted() {

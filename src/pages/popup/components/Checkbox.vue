@@ -1,7 +1,7 @@
 <template>
   <div class="Checkbox clickable" :class="{ 'dark down': !isChecked }">
     <Img class="checkmark" :src="getIcon()" />
-    <span class="text" :class="{ selected: isChecked }">{{text}}</span>
+    <span class="text" :class="{ selected: isChecked }">{{ text }}</span>
   </div>
 </template>
 

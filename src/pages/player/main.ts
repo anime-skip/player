@@ -10,14 +10,14 @@ video.autoplay = false;
 video.pause();
 
 const elementsToHide = getElementsToHide();
-elementsToHide.forEach((element) => {
+elementsToHide.forEach(element => {
   element.remove();
 });
 
 Vue.config.productionTip = false;
 const vue = new Vue({
   store,
-  render: (h) => h(Player),
+  render: h => h(Player),
 }).$mount();
 
 const parent = document.querySelector(rootQuery) as HTMLElement;

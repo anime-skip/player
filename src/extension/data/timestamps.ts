@@ -1,3 +1,4 @@
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 const DATABASE_TIMESTAMPS: any = {
   'Fullmetal Alchemist: Brotherhood---SEASON 1: EPISODE 3': [
     {
@@ -29,9 +30,7 @@ const DATABASE_TIMESTAMPS: any = {
       type: 'preview',
     },
   ],
-  'Fullmetal Alchemist: Brotherhood---SEASON 1: EPISODE 20': [
-
-  ],
+  'Fullmetal Alchemist: Brotherhood---SEASON 1: EPISODE 20': [],
   'Fullmetal Alchemist: Brotherhood---SEASON 1: EPISODE 21': [
     {
       time: 0,

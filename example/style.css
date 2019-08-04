@@ -4,7 +4,7 @@ body, body * {
 }
 
 body {
-    background-color: #303040;
+    background-color: #242C36;
 }
 
 video {
@@ -30,5 +30,4 @@ video {
     bottom: 0;
     height: 48px;
     background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: grayscale(30%);
 }
