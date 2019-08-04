@@ -4,12 +4,8 @@
     <div class="content">
       <Timeline :isActive="isActive" />
       <div class="buttons">
-        <ToolbarButton>
-          <PlayPauseButton
-            @click.native="setPaused(!isPaused)"
-            :isPaused="isPaused"
-            :setPaused="setPaused"
-          />
+        <ToolbarButton @click.native="setPaused(!isPaused)">
+          <PlayPauseButton :isPaused="isPaused" />
         </ToolbarButton>
       </div>
     </div>
@@ -77,6 +73,11 @@ $height: 56px;
     right: 0;
     bottom: 0;
     top: 0;
+    .buttons {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
   }
 }
 </style>

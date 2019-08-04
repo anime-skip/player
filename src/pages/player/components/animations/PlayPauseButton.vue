@@ -14,8 +14,8 @@ export default class PlayPauseButton extends Vue {
   @Prop(Boolean) public isPaused!: boolean;
 
   public animating: boolean = false;
-  public value: number = 0;
-  public startValue: number = 0;
+  public value: number = 1;
+  public startValue: number = 1;
   public finishValue: number = 1;
   public durationMs: number = 200;
   public startedAtMs: number = 0;
@@ -25,9 +25,9 @@ export default class PlayPauseButton extends Vue {
     console.log('Watch triggered with', isPaused);
     this.startValue = this.value;
     if (isPaused) {
-      this.finishValue = 0;
-    } else {
       this.finishValue = 1;
+    } else {
+      this.finishValue = 0;
     }
     this.startAnimation();
   }
