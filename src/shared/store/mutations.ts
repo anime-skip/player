@@ -15,8 +15,9 @@ async function persistAccount(state: VuexState): Promise<void> {
 
 export function restoreState(
   state: VuexState,
-  localStorageState: VuexState
+  localStorageState: Partial<VuexState>
 ): void {
+  console.log(localStorageState);
   for (const field in localStorageState) {
     if (state.hasOwnProperty(field)) {
       // @ts-ignore
@@ -30,6 +31,7 @@ export function changeLoginState(
   newLoginState: boolean | undefined
 ): void {
   Vue.set(state, 'loginState', newLoginState);
+  Browser.storage.setItem('loginState', newLoginState);
 }
 
 export function login(state: VuexState, loginPayload: Api.LoginResponse): void {

@@ -1,3 +1,12 @@
+import { persistedKeys } from './Constants';
+
+function prepareChangedStorage(object: any): Partial<VuexState> {
+  for (const key in object) {
+    object[key] = JSON.parse(object[key].newValue);
+  }
+  return object;
+}
+
 export default class Browser {
   public static storage = {
     getItem: async <T>(key: string): Promise<T | undefined> => {
@@ -39,6 +48,14 @@ export default class Browser {
       }
       // // @ts-ignore
       // else if (chrome) setItem = chrome.storage.local.set;
+    },
+    addListener: (callback: (changes: Partial<VuexState>) => void): void => {
+      // @ts-ignore
+      browser.storage.onChanged.addListener((changes, area) => {
+        if (area === 'local') {
+          callback(prepareChangedStorage(changes));
+        }
+      });
     },
   };
 
