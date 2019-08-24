@@ -73,7 +73,6 @@ export default class Player extends Vue {
     video.onpause = () => this.pause();
     this.initialLoad();
     Browser.storage.addListener((changes: Partial<VuexState>) => {
-      console.log('>>>>>> Changed', Object.keys(changes));
       this.$store.commit('restoreState', changes);
     });
   }
