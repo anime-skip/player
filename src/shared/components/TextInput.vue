@@ -1,6 +1,11 @@
 <template>
   <div class="TextInput clickable dark" :class="{ down: isFocused }">
-    <Img class="icon" :class="{ focused: isFocused }" :src="leftIcon" v-if="leftIcon !== null" />
+    <Img
+      class="icon"
+      :class="{ focused: isFocused }"
+      :src="leftIcon"
+      v-if="leftIcon !== null"
+    />
     <input
       class="input"
       :type="type"
@@ -31,10 +36,10 @@ export default class TextInput extends Vue {
   private value: string = this.defaultValue || '';
   private isFocused: boolean = false;
 
-  public onFocus(event: FocusEvent) {
+  public onFocus() {
     this.isFocused = true;
   }
-  public onBlur(event: FocusEvent) {
+  public onBlur() {
     this.isFocused = false;
   }
   public updateValue({ target: { value } }: any) {
@@ -47,11 +52,11 @@ export default class TextInput extends Vue {
 <style lang="scss">
 $colorNotActive: rgba(
   $color: black,
-  $alpha: 0.24
+  $alpha: 0.24,
 );
 $colorFongNotActive: rgba(
   $color: black,
-  $alpha: 0.32
+  $alpha: 0.32,
 );
 $transitionMs: 200ms;
 $inputHeight: 48px;

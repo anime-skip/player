@@ -1,0 +1,52 @@
+{
+    "root": true,
+    "extends": [
+        "plugin:@typescript-eslint/recommended",
+        "plugin:vue/essential",
+        "plugin:prettier/recommended",
+        "eslint:recommended"
+    ],
+    "parserOptions": {
+        "ecmaVersion": 2018, // Allows for the parsing of modern ECMAScript features
+        "sourceType":  "module",
+        "parser": "@typescript-eslint/parser",
+    },
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true,
+        "webextensions": true,
+    },
+    "globals": {
+        "video": true,
+        "getRootQuery": true,
+        "getElementsToHide": true,
+    },
+    "rules": {
+        "space-before-blocks": "warn",
+        "no-unused-vars": "off",
+        "no-console": ["warn", {
+            "allow": ["info", "warn", "error"],
+        }],
+        "@typescript-eslint/indent": ["warn", 2],
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/explicit-function-return-type": ["warn", {
+            "allowExpressions": true,
+            "allowHigherOrderFunctions": true,
+        }],
+        "@typescript-eslint/no-unused-vars": ["warn", {
+            "args": "all",
+            "argsIgnorePattern": "^_"
+        }]
+    },
+    "overrides": [
+        {
+            "files": ["**/*.d.ts"],
+            "rules": {
+                "@typescript-eslint/no-empty-interface": "off",
+                "@typescript-eslint/no-unused-vars": "off",
+                "@typescript-eslint/indent": "off",
+            }
+        }
+    ]
+}

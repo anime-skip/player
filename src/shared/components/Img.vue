@@ -1,5 +1,5 @@
 <template>
-  <img :src="resolvedSrc" />
+  <img :src="resolvedSrc" :draggable="draggable" />
 </template>
 
 <script lang="ts">
@@ -12,6 +12,7 @@ export default class Image extends Vue {
    * Path should be relative to the manifest.json
    */
   @Prop(String) public src!: string;
+  @Prop(Boolean) public draggable?: boolean;
   public get resolvedSrc(): string {
     return Browser.resolveUrl(this.src);
   }

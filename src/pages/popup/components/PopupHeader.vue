@@ -1,7 +1,7 @@
 <template>
   <div class="PopupHeader">
     <h1 class="title">
-      {{title}}&ensp;
+      {{ title }}&ensp;
       <span class="subtitle">&bull;&ensp;Anime Skip</span>
     </h1>
   </div>

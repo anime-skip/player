@@ -1,65 +1,81 @@
-const DATABASE_TIMESTAMPS: any = {
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+export const DATABASE_TIMESTAMPS: any = {
   'Fullmetal Alchemist: Brotherhood---SEASON 1: EPISODE 3': [
     {
+      id: Math.random(),
       time: 0,
-      type: 'recap',
+      _typeId: 5,
     },
     {
+      id: Math.random(),
       time: 30.00521,
-      type: 'intro',
+      _typeId: 3,
     },
     {
+      id: Math.random(),
       time: 119.925273,
-      type: 'canon',
+      _typeId: 0,
     },
     {
-      time: 718,
-      type: 'transition',
+      id: Math.random(),
+      time: 690,
+      _typeId: 7,
     },
     {
+      id: Math.random(),
       time: 724.479432,
-      type: 'canon',
+      _typeId: 0,
     },
     {
+      id: Math.random(),
       time: 1347.5,
-      type: 'credits',
+      _typeId: 8,
     },
     {
+      id: Math.random(),
       time: 1437.346892,
-      type: 'preview',
+      _typeId: 10,
     },
   ],
-  'Fullmetal Alchemist: Brotherhood---SEASON 1: EPISODE 20': [
-
-  ],
+  'Fullmetal Alchemist: Brotherhood---SEASON 1: EPISODE 20': [],
   'Fullmetal Alchemist: Brotherhood---SEASON 1: EPISODE 21': [
     {
+      id: Math.random(),
       time: 0,
-      type: 'canon',
+      _typeId: 'canon',
     },
     {
+      id: Math.random(),
       time: 80.440593,
-      type: 'intro',
+      _typeId: 'intro',
     },
     {
+      id: Math.random(),
       time: 170.195858,
-      type: 'canon',
+      _typeId: 'canon',
     },
     {
+      id: Math.random(),
       time: 637.057221,
-      type: 'transition',
+      _typeId: 'transition',
     },
     {
+      id: Math.random(),
       time: 643.768824,
-      type: 'canon',
+      _typeId: 'canon',
     },
     {
+      id: Math.random(),
       time: 1347.234784,
-      type: 'credits',
+      _typeId: 'credits',
     },
     {
+      id: Math.random(),
       time: 1437.06805,
-      type: 'preview',
+      _typeId: 'preview',
     },
   ],
 };
+
+export const TIMESTAMP_ARRAY: any =
+  DATABASE_TIMESTAMPS['Fullmetal Alchemist: Brotherhood---SEASON 1: EPISODE 3'];

@@ -1,11 +1,11 @@
 <template>
   <div class="Toast" :class="{ visible }">
-    {{message}}
+    {{ message }}
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class Toast extends Vue {

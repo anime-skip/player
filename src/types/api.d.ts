@@ -1,4 +1,9 @@
-type AxiosResponse<T> = import('axios').AxiosResponse<T>
+type AxiosResponse<T> = import('axios').AxiosResponse<T>;
+
+declare interface GraphQlBody {
+  query?: string;
+  variables?: { [variableName: string]: any };
+}
 
 declare namespace Api {
   interface Preferences {
@@ -21,6 +26,26 @@ declare namespace Api {
     username: string;
     verified: boolean;
     preferences: Preferences;
+  }
+  interface Show {
+    id: number;
+    name: string;
+    originalName?: string;
+    website?: string;
+    image?: string;
+  }
+  interface Episode {
+    id: number;
+    name?: string;
+    season?: number;
+    absoluteNumber?: number;
+    number?: number;
+    show?: Show;
+  }
+  interface Timestamp {
+    id: number;
+    time: number;
+    _typeId: number;
   }
 
   interface LoginResponse {

@@ -24,20 +24,36 @@
           text="Branding"
           @click.native="onClickBranding"
         />
-        <Checkbox :isChecked="getPref('skipIntros')" text="Intros" @click.native="onClickIntros" />
+        <Checkbox
+          :isChecked="getPref('skipIntros')"
+          text="Intros"
+          @click.native="onClickIntros"
+        />
         <Checkbox
           :isChecked="getPref('skipNewIntros')"
           text="New Intros"
           @click.native="onClickNewIntros"
         />
-        <Checkbox :isChecked="getPref('skipRecaps')" text="Recaps" @click.native="onClickRecaps" />
+        <Checkbox
+          :isChecked="getPref('skipRecaps')"
+          text="Recaps"
+          @click.native="onClickRecaps"
+        />
         <Checkbox
           :isChecked="getPref('skipTitleCard')"
           text="Title Cards"
           @click.native="onClickTitleCards"
         />
-        <Checkbox :isChecked="getPref('skipCanon')" text="Canon" @click.native="onClickCanon" />
-        <Checkbox :isChecked="getPref('skipFiller')" text="Filler" @click.native="onClickFiller" />
+        <Checkbox
+          :isChecked="getPref('skipCanon')"
+          text="Canon"
+          @click.native="onClickCanon"
+        />
+        <Checkbox
+          :isChecked="getPref('skipFiller')"
+          text="Filler"
+          @click.native="onClickFiller"
+        />
         <Checkbox
           :isChecked="getPref('skipTransitions')"
           text="Transitions"
@@ -68,7 +84,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import ProgressOverlay from '../../../shared/components/ProgressOverlay.vue';
 import PopupHeader from './PopupHeader.vue';
 import Checkbox from './Checkbox.vue';
@@ -81,7 +97,7 @@ export default class Preferences extends Vue {
   @Getter('preferences') public preferences?: Api.Preferences;
 
   @Action('togglePref') public togglePreference!: (
-    pref: keyof Api.Preferences,
+    pref: keyof Api.Preferences
   ) => void;
   @Mutation('logOut') public logOut!: () => void;
 

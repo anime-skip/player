@@ -1,0 +1,173 @@
+<template>
+  <div class="VolumeButton" :class="{ dragging: isDragging }">
+    <ToolbarButton class="button" @click.native="toggleMuted">
+      <Img
+        src="img/ic_volume_muted.svg"
+        class="ic_muted"
+        :class="volumeClass"
+      />
+      <Img
+        src="img/ic_volume_speaker.svg"
+        class="ic_speaker"
+        :class="volumeClass"
+      />
+      <Img src="img/ic_volume_low.svg" class="ic_low" :class="volumeClass" />
+      <Img src="img/ic_volume_high.svg" class="ic_high" :class="volumeClass" />
+    </ToolbarButton>
+    <VueSlider
+      class="slider"
+      v-model="level"
+      height="3"
+      silent
+      max="1"
+      interval="0.05"
+      duration="0.1"
+      :dotSize="11"
+      @change="setVolume"
+      @drag-start="isDragging = true"
+      @drag-end="isDragging = false"
+    />
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+import Img from '../../../../shared/components/Img.vue';
+import VueSlider from 'vue-slider-component';
+import ToolbarButton from '../ToolbarButton.vue';
+import '../../scss/VolumeSlider.scss';
+
+@Component({
+  components: { Img, VueSlider, ToolbarButton },
+})
+export default class VolumeButton extends Vue {
+  public isMuted: boolean = video.muted;
+  public level: number = video.volume;
+  public isDragging: boolean = false;
+
+  public constructor() {
+    super();
+    video.onvolumechange = () => {
+      this.level = video.volume;
+    };
+    video.setMuted = this.setMuted;
+  }
+
+  public setMuted(isMuted: boolean): void {
+    this.isMuted = isMuted;
+    video.muted = isMuted;
+    console.log('isMuted', video.muted);
+  }
+
+  public toggleMuted(): void {
+    this.setMuted(!this.isMuted);
+  }
+
+  public get volumeClass(): string {
+    if (this.isMuted) {
+      return 'muted';
+    }
+    if (this.level < 0.33) {
+      return 'low';
+    }
+    if (this.level < 0.67) {
+      return 'medium';
+    }
+    return 'high';
+  }
+
+  public setVolume(newVolume: number): void {
+    video.volume = newVolume;
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.VolumeButton {
+  display: flex;
+  flex-direction: row;
+  width: 40px;
+  align-items: center;
+  overflow-x: hidden;
+  padding-right: 12px;
+  margin-right: 8px;
+  &:hover,
+  &.dragging {
+    width: 128px;
+  }
+
+  .button {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    position: relative;
+    img {
+      position: absolute;
+      left: 8px;
+      right: 8px;
+      top: 5px;
+      bottom: 5px;
+      transition: 200ms;
+    }
+
+    .ic_muted {
+      opacity: 0;
+      &.muted {
+        opacity: 1;
+      }
+    }
+    .ic_speaker {
+      &.muted {
+        opacity: 0;
+        transform: translateX(-4px);
+      }
+      &.low {
+        transform: translateX(0);
+      }
+      &.medium {
+        transform: translateX(-2px);
+      }
+      &.high {
+        transform: translateX(-4px);
+      }
+    }
+    .ic_low {
+      &.muted {
+        opacity: 0;
+        transform: translateX(-2px);
+      }
+      &.low {
+        opacity: 0;
+      }
+      &.medium {
+      }
+      &.high {
+        transform: translateX(-2px);
+      }
+    }
+    .ic_high {
+      &.muted {
+        opacity: 0;
+      }
+      &.low {
+        opacity: 0;
+      }
+      &.medium {
+        opacity: 0;
+      }
+      &.high {
+      }
+    }
+  }
+
+  .slider {
+    flex: 1;
+    cursor: pointer;
+    display: none;
+  }
+  &:hover .slider,
+  &.dragging .slider {
+    display: block;
+  }
+}
+</style>

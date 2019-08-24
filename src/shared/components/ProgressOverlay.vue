@@ -1,6 +1,6 @@
 <template>
   <div class="Progress">
-    <slot/>
+    <slot />
     <div class="spinner-wrapper" v-if="isLoading">
       <svg
         class="spinner"
@@ -45,7 +45,7 @@ $duration: 1.4s;
     right: 0;
     top: 0;
     bottom: 0;
-    background-color: rgba($color: $background500, $alpha: 0.80);
+    background-color: rgba($color: $background500, $alpha: 0.8);
 
     display: flex;
     flex-direction: column;
