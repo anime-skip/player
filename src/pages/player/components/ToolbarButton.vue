@@ -1,14 +1,20 @@
 <template>
-  <div class="ToolbarButton">
-    <slot />
+  <div class="ToolbarButton" v-ripple>
+    <slot v-if="icon == null" />
+    <Img v-else :src="icon" draggable="false" />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import Img from '../../../shared/components/Img.vue';
 
-@Component
-export default class ToolbarButton extends Vue {}
+@Component({
+  components: { Img },
+})
+export default class ToolbarButton extends Vue {
+  @Prop(String) public icon?: string;
+}
 </script>
 
 <style lang="scss" scoped>

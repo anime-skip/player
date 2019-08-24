@@ -1,5 +1,12 @@
 declare function getRootQuery(): string;
-declare const video: HTMLVideoElement;
+interface VideoInjection {
+  addTime: (seconds: number) => void;
+  togglePlayPause: () => void;
+  nextTimestamp: () => void;
+  previousTimestamp: () => void;
+  setMuted: (isMuted: boolean) => void;
+}
+declare const video: HTMLVideoElement & VideoInjection;
 declare function getElementsToHide(): HTMLElement[];
 
 declare interface VuexState {
@@ -26,4 +33,14 @@ declare interface LoginManualPayload {
 
 declare interface LoginRefreshPayload {
   refreshToken: string;
+}
+
+declare interface PlayerState {
+  isActive: boolean;
+  isEditing: boolean;
+  isBuffering: boolean;
+  isLoadingEpisodeInfo: boolean;
+  isPaused: boolean;
+  isFullscreen: boolean;
+  isMuted: boolean;
 }

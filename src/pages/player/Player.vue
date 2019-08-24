@@ -1,11 +1,15 @@
 <template>
   <div
     id="AnimeSkipPlayer"
-    :class="{ active: isActive, paused: isPaused, buffering: isLoading }"
+    :class="{
+      active: playerState.isActive,
+      paused: playerState.isPaused,
+      buffering: playerState.isBuffering,
+    }"
     @mouseenter.prevent="toggleActive(true)"
     @mouseleave.prevent="toggleActive(false)"
     @mousemove.prevent="toggleActive(true)"
-    @click="setPaused(!isPaused)"
+    @click="setPaused(!playerState.isPaused)"
   >
     <div class="left-content">
       <EpisodeInfo :episode="episode" />
@@ -13,9 +17,9 @@
     <div class="right-content"></div>
     <ToolBar
       class="bottom-content"
-      :isActive="isActive"
-      :isPaused="isPaused"
+      :playerState="playerState"
       :setPaused="setPaused"
+      :timestamps="timestamps"
     />
   </div>
 </template>
@@ -25,17 +29,26 @@ import { Component, Vue } from 'vue-property-decorator';
 import Img from '@Shared/components/Img.vue';
 import ToolBar from './components/Toolbar.vue';
 import EpisodeInfo from './components/EpisodeInfo.vue';
+import KeyboardShortcuts from './mixins/KeyboardShortcuts';
+import { TIMESTAMP_ARRAY } from '../../extension/data/timestamps';
 
 @Component({
   components: { Img, ToolBar, EpisodeInfo },
+  mixins: [KeyboardShortcuts],
 })
 export default class Player extends Vue {
-  public isActive: boolean = false;
-  public isEditing: boolean = false;
-  public isLoading: boolean = false;
-  public isPaused: boolean = true;
+  public playerState: PlayerState = {
+    isActive: false,
+    isEditing: false,
+    isBuffering: false,
+    isPaused: video.paused,
+    isLoadingEpisodeInfo: false,
+    isFullscreen: false,
+    isMuted: video.muted,
+  };
   public activeTimer?: number;
   public activeTimeout: number = 2000;
+  public timestamps?: Api.Timestamp[] = TIMESTAMP_ARRAY;
 
   public episode: Api.Episode = {
     id: 0,
@@ -49,8 +62,15 @@ export default class Player extends Vue {
     },
   };
 
+  constructor() {
+    super();
+    video.togglePlayPause = this.togglePlayPause;
+    video.onplay = () => this.play();
+    video.onpause = () => this.pause();
+  }
+
   public toggleActive(isActive: boolean) {
-    this.isActive = isActive;
+    Vue.set(this.playerState, 'isActive', isActive);
     if (this.activeTimer != null) {
       clearTimeout(this.activeTimer);
     }
@@ -62,18 +82,27 @@ export default class Player extends Vue {
   }
 
   public play() {
-    console.log('playing');
-    this.isPaused = false;
-    video.play();
-    this.toggleActive(true);
+    try {
+      video.play();
+      Vue.set(this.playerState, 'isPaused', false);
+      this.toggleActive(true);
+    } catch (err) {
+      console.error('Failed to play video: ' + err.message, err);
+    }
   }
   public pause() {
-    console.log('pausing');
-    this.isPaused = true;
-    video.pause();
+    try {
+      video.pause();
+      Vue.set(this.playerState, 'isPaused', true);
+    } catch (err) {
+      console.error('Failed to pause video: ' + err.message, err);
+    }
   }
   public setPaused(isPaused: boolean) {
     isPaused ? this.pause() : this.play();
+  }
+  public togglePlayPause(): void {
+    this.setPaused(!this.playerState.isPaused);
   }
 }
 </script>
@@ -97,11 +126,11 @@ export default class Player extends Vue {
   cursor: none;
   &.active,
   &.paused {
-    cursor: pointer;
+    cursor: unset;
   }
   &.paused,
   &.buffering {
-    background-color: rgba($color: $background500, $alpha: 0.75);
+    background-color: rgba($color: $input700, $alpha: 0.75);
   }
   * {
     font-family: 'Overpass', sans-serif;

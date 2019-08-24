@@ -42,6 +42,11 @@ declare namespace Api {
     number?: number;
     show?: Show;
   }
+  interface Timestamp {
+    id: number;
+    time: number;
+    _typeId: number;
+  }
 
   interface LoginResponse {
     token: string;
