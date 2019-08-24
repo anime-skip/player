@@ -50,4 +50,9 @@ export default class Browser {
     else if (chrome) getURL = chrome.runtime.getURL;
     return getURL(extUrl);
   }
+
+  public static openPopup(): void {
+    // @ts-ignore
+    if (browser) browser.browserAction.openPopup();
+  }
 }

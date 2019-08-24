@@ -31,6 +31,7 @@ import ToolBar from './components/Toolbar.vue';
 import EpisodeInfo from './components/EpisodeInfo.vue';
 import KeyboardShortcuts from './mixins/KeyboardShortcuts';
 import { TIMESTAMP_ARRAY } from '../../extension/data/timestamps';
+import { Action } from '../../shared/utils/VuexDecorators';
 
 @Component({
   components: { Img, ToolBar, EpisodeInfo },
@@ -62,11 +63,14 @@ export default class Player extends Vue {
     },
   };
 
+  @Action('initialLoad') public initialLoad!: () => void;
+
   constructor() {
     super();
     video.togglePlayPause = this.togglePlayPause;
     video.onplay = () => this.play();
     video.onpause = () => this.pause();
+    this.initialLoad();
   }
 
   public toggleActive(isActive: boolean) {

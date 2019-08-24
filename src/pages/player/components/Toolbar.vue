@@ -46,6 +46,16 @@
           icon="img/ic_edit.svg"
           v-if="false"
         />
+        <ToolbarButton
+          v-if="!loginState"
+          icon="img/ic-password.svg"
+          @click.native="openPopup()"
+        />
+        <ToolbarButton
+          v-else
+          icon="img/ic-account.svg"
+          @click.native="openPopup()"
+        />
         <div class="divider margin-left" v-if="false" />
         <ToolbarButton
           class="margin-left"
@@ -69,6 +79,8 @@ import PlayPauseButton from './animations/PlayPauseButton.vue';
 import FullscreenButton from './animations/FullscreenButton.vue';
 import VolumeButton from './animations/VolumeButton.vue';
 import Utils from '../../../shared/utils/Utils';
+import Browser from '../../../shared/utils/Browser';
+import { Getter } from '../../../shared/utils/VuexDecorators';
 
 @Component({
   components: {
@@ -89,6 +101,9 @@ export default class ToolBar extends Vue {
   public isFullscreenCount: number = 0;
   public Utils = Utils;
   public duration: string = 'Loading...';
+  public openPopup = Browser.openPopup;
+
+  @Getter('loginState') public loginState?: boolean;
 
   constructor() {
     super();

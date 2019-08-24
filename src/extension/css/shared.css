@@ -36,10 +36,20 @@ a {
     border-radius: 3px;
 }
 
+/* .clickable:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 0 0 #135DC1;
+} */
+
 .clickable.dark {
     background-color: #151A20;
     box-shadow: 0 3px 0 0 #0B0D10;
 }
+
+/* .clickable.dark:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 0 0 #0B0D10;
+} */
 
 .clickable.down, .clickable.focus:active {
     transform: translateY(0);
@@ -47,5 +57,6 @@ a {
 }
 
 .clickable.dark.down, .clickable.dark.focus:active {
+    transform: translateY(0);
     box-shadow: 0 0 0 0 #0B0D10;
 }
