@@ -9,6 +9,16 @@ interface VideoInjection {
 declare const video: HTMLVideoElement & VideoInjection;
 declare function getElementsToHide(): HTMLElement[];
 
+declare type MessageType = 'loginStateChanged';
+
+declare interface MessagePayload {
+  loginStateChanged: boolean;
+}
+
+declare interface MessageResponse {
+  loginStateChanged: undefined;
+}
+
 declare interface VuexState {
   token?: string;
   tokenExpiresAt?: number;

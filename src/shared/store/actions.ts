@@ -39,7 +39,7 @@ export function initialLoad(
   context: ActionContext<VuexState, VuexState>
 ): void {
   Browser.storage
-    .getAll<VuexState>(persistedKeys)
+    .getAll<Partial<VuexState>>(persistedKeys)
     .then(async newState => {
       context.commit('restoreState', newState);
 
