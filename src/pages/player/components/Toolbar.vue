@@ -25,16 +25,18 @@
         <VolumeButton />
         <div class="divider margin-right" />
         <ToolbarButton
+          v-if="timestamps.length > 0"
           class="margin-right"
           icon="img/ic_prev_timestamp.svg"
           @click.native="previousTimestamp()"
         />
         <ToolbarButton
+          v-if="timestamps.length > 0"
           class="margin-right"
           icon="img/ic_next_timestamp.svg"
           @click.native="nextTimestamp()"
         />
-        <div class="divider margin-right" />
+        <div class="divider margin-right" v-if="timestamps.length > 0" />
         <p class="current-time">
           {{ formattedTime }}&ensp;/&ensp;<span>{{ duration }}</span>
         </p>
