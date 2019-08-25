@@ -23,7 +23,6 @@
         "onVideoChanged": true,
         "checkVideoChanged": true,
         "getRootQuery": true,
-        "getElementsToHide": true,
         "arguments": true,
     },
     "rules": {
