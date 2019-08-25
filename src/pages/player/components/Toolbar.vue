@@ -104,7 +104,7 @@ export default class ToolBar extends Vue {
   public togglePlayPause = VideoUtils.togglePlayPause;
   public isFullscreenEnabled = document.fullscreenEnabled;
 
-  @Getter('loginState') public loginState?: boolean;
+  @Getter() public loginState?: boolean;
 
   constructor() {
     super();

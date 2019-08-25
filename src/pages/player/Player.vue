@@ -30,7 +30,6 @@ import Img from '@Shared/components/Img.vue';
 import ToolBar from './components/Toolbar.vue';
 import EpisodeInfo from './components/EpisodeInfo.vue';
 import KeyboardShortcuts from './mixins/KeyboardShortcuts';
-import { TIMESTAMP_ARRAY } from '../../extension/data/timestamps';
 import { Action, Mutation } from '../../shared/utils/VuexDecorators';
 import Browser from '../../shared/utils/Browser';
 import VideoUtils from './VideoUtils';
@@ -51,23 +50,14 @@ export default class Player extends Vue {
   };
   public activeTimer?: number;
   public activeTimeout: number = 2000;
-  public timestamps?: Api.Timestamp[] = TIMESTAMP_ARRAY;
+  public timestamps?: Api.Timestamp[];
   public togglePlayPause = VideoUtils.togglePlayPause;
 
-  public episode: Api.Episode = {
-    id: 0,
-    name: 'The Demon Tree',
-    season: 3,
-    absoluteNumber: 49,
-    number: 1,
-    show: {
-      id: 0,
-      name: 'Sword Art Online',
-    },
-  };
+  public episode?: Api.Episode;
 
-  @Action('initialLoad') public initialLoad!: () => void;
-  @Mutation('restoreState') public restoreState!: (storageChanges: any) => void;
+  @Action() public initialLoad!: () => void;
+  @Action() public fetchEpisode!: (url: string) => void;
+  @Mutation() public restoreState!: (storageChanges: any) => void;
 
   constructor() {
     super();
@@ -77,8 +67,10 @@ export default class Player extends Vue {
     });
     this.initialLoad();
     Browser.storage.addListener((changes: Partial<VuexState>) => {
+      console.log('data changed');
       this.restoreState(changes);
     });
+    // fetchEpisode();
   }
 
   public toggleActive(isActive: boolean) {

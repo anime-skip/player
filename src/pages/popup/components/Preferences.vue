@@ -94,16 +94,10 @@ import { Getter, Action, Mutation } from '../../../shared/utils/VuexDecorators';
   components: { ProgressOverlay, PopupHeader, Checkbox },
 })
 export default class Preferences extends Vue {
-  @Getter('preferences') public preferences?: Api.Preferences;
+  @Getter() public preferences?: Api.Preferences;
 
-  @Action('togglePref') public togglePreference!: (
-    pref: keyof Api.Preferences
-  ) => void;
-  @Mutation('logOut') public logOut!: () => void;
-
-  public togglePref(pref: keyof Api.Preferences): void {
-    this.togglePreference(pref);
-  }
+  @Action() public togglePref!: (pref: keyof Api.Preferences) => void;
+  @Mutation() public logOut!: () => void;
 
   public getPref(pref: keyof Api.Preferences): boolean {
     const prefs = this.preferences;
@@ -114,43 +108,43 @@ export default class Preferences extends Vue {
   }
 
   public onClickAutoSkip() {
-    this.togglePreference('enableAutoSkip');
+    this.togglePref('enableAutoSkip');
   }
   public onClickAutoPlay() {
-    this.togglePreference('enableAutoPlay');
+    this.togglePref('enableAutoPlay');
   }
   public onClickBranding() {
-    this.togglePreference('skipBranding');
+    this.togglePref('skipBranding');
   }
   public onClickIntros() {
-    this.togglePreference('skipIntros');
+    this.togglePref('skipIntros');
   }
   public onClickNewIntros() {
-    this.togglePreference('skipNewIntros');
+    this.togglePref('skipNewIntros');
   }
   public onClickRecaps() {
-    this.togglePreference('skipRecaps');
+    this.togglePref('skipRecaps');
   }
   public onClickTitleCards() {
-    this.togglePreference('skipTitleCard');
+    this.togglePref('skipTitleCard');
   }
   public onClickCanon() {
-    this.togglePreference('skipCanon');
+    this.togglePref('skipCanon');
   }
   public onClickFiller() {
-    this.togglePreference('skipFiller');
+    this.togglePref('skipFiller');
   }
   public onClickTransitions() {
-    this.togglePreference('skipTransitions');
+    this.togglePref('skipTransitions');
   }
   public onClickCredits() {
-    this.togglePreference('skipCredits');
+    this.togglePref('skipCredits');
   }
   public onClickMixedCredits() {
-    this.togglePreference('skipMixedCredits');
+    this.togglePref('skipMixedCredits');
   }
   public onClickPreviews() {
-    this.togglePreference('skipPreview');
+    this.togglePref('skipPreview');
   }
 }
 </script>

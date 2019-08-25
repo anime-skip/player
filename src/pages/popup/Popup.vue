@@ -29,10 +29,10 @@ import Toast from './components/Toast.vue';
 export default class Popup extends Vue {
   public token?: string = undefined;
 
-  @Getter('loginState') public loginState?: boolean;
-  @Getter('preferenceChangeError') public preferenceChangeError!: boolean;
+  @Getter() public loginState?: boolean;
+  @Getter() public preferenceChangeError!: boolean;
 
-  @Action('initialLoad') public initialLoad!: () => void;
+  @Action() public initialLoad!: () => void;
 
   public created() {
     this.initialLoad();
