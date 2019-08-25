@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Allows users to skip fillers/intro/recaps on VRV.",
   "manifest_version": 2,
-  "permissions": ["activeTab", "storage", "http://localhost:8000/*", "http://api.anime-skip.com/graphql"],
+  "permissions": ["activeTab", "storage"],
   "browser_action": {
     "browser_style": true,
     "default_icon": {
