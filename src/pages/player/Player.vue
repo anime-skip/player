@@ -55,10 +55,9 @@ export default class Player extends Vue {
 
   public episode?: Api.Episode;
 
-  @Action('initialLoad') public initialLoad!: () => void;
-  // @Action()
-  @Mutation()
-  public restoreState!: (storageChanges: any) => void;
+  @Action() public initialLoad!: () => void;
+  @Action() public fetchEpisode!: (url: string) => void;
+  @Mutation() public restoreState!: (storageChanges: any) => void;
 
   constructor() {
     super();
@@ -68,6 +67,7 @@ export default class Player extends Vue {
     });
     this.initialLoad();
     Browser.storage.addListener((changes: Partial<VuexState>) => {
+      console.log('data changed');
       this.restoreState(changes);
     });
     // fetchEpisode();

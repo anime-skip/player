@@ -43,11 +43,9 @@ export default class LogIn extends Vue {
   public username: string = 'aklinker1';
   public password: string = 'password';
 
-  @Getter('isLoggingIn') public isLoggingIn!: boolean;
+  @Getter() public isLoggingIn!: boolean;
 
-  @Action('loginManual') public loginManual!: (
-    payload: LoginManualPayload
-  ) => void;
+  @Action() public loginManual!: (payload: LoginManualPayload) => void;
 
   public mounted() {
     (this.$refs.form as Element).addEventListener('submit', this.onSubmit);
