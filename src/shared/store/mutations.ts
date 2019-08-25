@@ -97,3 +97,7 @@ export function setPreferenceError(state: VuexState, isError: boolean): void {
     }, 5000);
   }
 }
+
+export function setEpisodeInfo(state: VuexState, episode: Api.Episode): void {
+  Vue.set(state, 'episode', episode);
+}

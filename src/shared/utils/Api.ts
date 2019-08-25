@@ -1,8 +1,45 @@
-import Axios, { AxiosResponse } from 'axios';
+import Axios from 'axios';
+import Utils from './Utils';
+import Browser from './Browser';
 
 const axios = Axios.create({
   baseURL: 'http://localhost:8000/',
   // baseURL: 'http://api.anime-skip.com/',
+});
+axios.interceptors.request.use((config): any => {
+  /* eslint-disable no-console */
+  console.groupCollapsed(
+    `%cAPI  %c/${config.url}`,
+    'font-weight: 600; color: default;',
+    'font-weight: 400; color: black;'
+  );
+  console.log(`URL: %c${config.baseURL}${config.url}`, 'color: #137AF8');
+  const headers = {
+    ...config.headers,
+    ...config.headers.common,
+    ...config.headers[config.method || 'get'],
+  };
+  delete headers.get;
+  delete headers.post;
+  delete headers.put;
+  delete headers.delete;
+  delete headers.patch;
+  delete headers.head;
+  console.log('Headers: ', headers);
+  if (config.params) {
+    console.log('Parameters: ', config.params);
+  }
+  if (config.data) {
+    console.log(
+      `GraphQL:\n%c${Utils.formatGraphql(config.data.query)}`,
+      'color: #137AF8'
+    );
+    if (config.data.variables) {
+      console.log('Variables: ', config.data.variables);
+    }
+  }
+  /* eslint-enable no-console */
+  return config;
 });
 
 function query(q: string): GraphQlBody {
@@ -17,74 +54,112 @@ function mutation(
 }
 
 const preferencesData = `
-    enableAutoSkip enableAutoPlay skipBranding skipIntros skipNewIntros skipRecaps skipFiller
-    skipCanon skipTransitions skipTitleCard skipCredits skipMixedCredits skipPreview`;
+  enableAutoSkip enableAutoPlay
+  skipBranding skipIntros skipNewIntros skipRecaps skipFiller skipCanon skipTransitions skipTitleCard skipCredits skipMixedCredits skipPreview
+`;
 
-const loginData = `token refreshToken
-    myUser {
-        username verified
-        preferences {
-            ${preferencesData}
-        }
-    }`;
+const loginData = `
+  token refreshToken
+  myUser {
+    username verified
+    preferences {
+      ${preferencesData}
+    }
+  }
+`;
 
-type LoginResponse = AxiosResponse<{
-  data: {
-    login: Api.LoginResponse;
-  };
-}>;
+const episodeData = `
+  id absoluteNumber number season name 
+  timestamps {
+    id time _typeId
+  }
+  show { id name originalName website image }
+`;
 
 export default class Api {
+  private static async send<Q extends string, D>(
+    data: any
+  ): Promise<{ data: { [field in Q]: D } }> {
+    try {
+      const token = await Browser.storage.getItem<string>('token');
+      const response = await axios.post('graphql', data, {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : undefined,
+        },
+      });
+
+      /* eslint-disable no-console */
+      console.log();
+      console.log('Response: ', response.data);
+      console.groupEnd();
+      /* eslint-enable no-console */
+
+      return response.data;
+    } catch (err) {
+      /* eslint-disable no-console */
+      console.log();
+      console.error(err);
+      console.groupEnd();
+      /* eslint-enable no-console */
+      throw err;
+    }
+  }
+
   public static async loginManual(
     username: string,
     password: string
   ): Promise<Api.LoginResponse> {
-    const response: LoginResponse = await axios.post(
-      'graphql',
-      query(`{
-                login(usernameOrEmail: "${username}", password: "${password}") {
-                    ${loginData}
-                }
-            }`)
+    const q = query(
+      `{
+        login(usernameOrEmail: "${username}", password: "${password}") {
+          ${loginData}
+        }
+      }`
     );
-    return response.data.data.login;
+    const response = await this.send<'login', Api.LoginResponse>(q);
+    return response.data.login;
   }
 
   public static async loginRefresh(
     refreshToken: string
   ): Promise<Api.LoginResponse> {
-    const response: LoginResponse = await axios.post(
-      'graphql',
-      query(`{
-                login(refreshToken: "${refreshToken}") {
-                    ${loginData}
-                }
-            }`)
+    const q = query(
+      `{
+        login(refreshToken: "${refreshToken}") {
+          ${loginData}
+        }
+      }`
     );
-    return response.data.data.login;
+    const response = await this.send<'login', Api.LoginResponse>(q);
+    return response.data.login;
   }
 
   public static async mutatePrefs(
     pref: keyof Api.Preferences,
-    value: boolean,
-    token: string
+    value: boolean
   ): Promise<void> {
-    const headers: any = {
-      Authorization: `Bearer ${token}`,
-    };
-    return axios.post(
-      'graphql',
-      mutation(
-        `mutation UpdatePreferenes($prefs: PreferencesInput) {
-                    preferences(preferences: $prefs) {
-                        ${preferencesData}
-                    }
-                }`,
-        {
-          prefs: { [pref]: value },
+    const m = mutation(
+      `mutation UpdatePreferenes($prefs: PreferencesInput) {
+        preferences(preferences: $prefs) {
+          ${preferencesData}
         }
-      ),
-      { headers }
+      }`,
+      {
+        prefs: { [pref]: value },
+      }
     );
+    await this.send(m);
+  }
+
+  public static async fetchEpisodeByUrl(url: string): Promise<Api.Episode> {
+    const q = query(
+      `{
+        episode(url: "${url}") {
+          ${episodeData}
+        }
+      }`
+    );
+    const response = await this.send<'episode', Api.Episode>(q);
+    return response.data.episode;
   }
 }

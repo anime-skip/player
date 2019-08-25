@@ -19,7 +19,6 @@
       class="bottom-content"
       :playerState="playerState"
       :setPaused="setPaused"
-      :timestamps="timestamps"
     />
   </div>
 </template>
@@ -30,9 +29,10 @@ import Img from '@Shared/components/Img.vue';
 import ToolBar from './components/Toolbar.vue';
 import EpisodeInfo from './components/EpisodeInfo.vue';
 import KeyboardShortcuts from './mixins/KeyboardShortcuts';
-import { Action, Mutation } from '../../shared/utils/VuexDecorators';
+import { Action, Mutation, Getter } from '../../shared/utils/VuexDecorators';
 import Browser from '../../shared/utils/Browser';
 import VideoUtils from './VideoUtils';
+import Messenger from '../../shared/utils/Messenger';
 
 @Component({
   components: { Img, ToolBar, EpisodeInfo },
@@ -50,14 +50,14 @@ export default class Player extends Vue {
   };
   public activeTimer?: number;
   public activeTimeout: number = 2000;
-  public timestamps?: Api.Timestamp[];
   public togglePlayPause = VideoUtils.togglePlayPause;
 
-  public episode?: Api.Episode;
+  @Getter() public episode?: Api.Episode;
+
+  @Mutation() public setEpisodeInfo!: (episode: Api.Episode) => void;
+  @Mutation() public restoreState!: (storageChanges: any) => void;
 
   @Action() public initialLoad!: () => void;
-  @Action() public fetchEpisode!: (url: string) => void;
-  @Mutation() public restoreState!: (storageChanges: any) => void;
 
   constructor() {
     super();
@@ -65,12 +65,21 @@ export default class Player extends Vue {
       video.onplay = () => this.onPlay();
       video.onpause = () => this.onPause();
     });
-    this.initialLoad();
     Browser.storage.addListener((changes: Partial<VuexState>) => {
-      console.log('data changed');
       this.restoreState(changes);
+      if (changes.token) this.fetchEpisode();
     });
-    // fetchEpisode();
+  }
+
+  public created(): void {
+    this.initialLoad();
+    this.fetchEpisode();
+  }
+
+  public fetchEpisode(): void {
+    new Messenger().send('fetchEpisode', Browser.getURL()).then(episode => {
+      this.setEpisodeInfo(episode);
+    });
   }
 
   public toggleActive(isActive: boolean) {

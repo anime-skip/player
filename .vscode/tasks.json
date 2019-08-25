@@ -9,6 +9,13 @@
             "group": "build",
             "command": "yarn build",
             "problemMatcher": []
+        },
+        {
+            "label": "Build (Debug)",
+            "type": "shell",
+            "group": "build",
+            "command": "yarn build:debug",
+            "problemMatcher": []
         }
     ]
 }

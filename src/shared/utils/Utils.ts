@@ -15,8 +15,9 @@ export default class Utils {
 
   public static isSkipped(
     { _typeId }: Api.Timestamp,
-    preferences: Api.Preferences
+    preferences?: Api.Preferences
   ): boolean {
+    if (!preferences) return false;
     if (!preferences.enableAutoSkip) return false;
     switch (_typeId) {
       case 0:
@@ -115,5 +116,30 @@ export default class Utils {
       });
     }
     return this._videoLoadPromise;
+  }
+
+  public static formatGraphql(data: string): string {
+    const lines = data
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => !!line);
+
+    function addTabs(string: string, tabs: number): string {
+      let result = string;
+      for (let i = 0; i < tabs; i++) {
+        result = '  ' + result;
+      }
+      return result;
+    }
+
+    let tabs = 0;
+    const tabbedLines = lines.map(line => {
+      if (line === '}') tabs--;
+      const newLine = addTabs(line, tabs);
+      if (line.endsWith('{')) tabs++;
+      return newLine;
+    });
+
+    return tabbedLines.join('\n');
   }
 }

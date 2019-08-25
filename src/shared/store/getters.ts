@@ -37,3 +37,14 @@ export function preferences(state: VuexState): Api.Preferences | undefined {
 export function preferenceChangeError(state: VuexState): boolean {
   return !!state.preferenceChangeError;
 }
+
+export function timestamps(state: VuexState): Api.Timestamp[] {
+  if (state.episode == null) {
+    return [];
+  }
+  return state.episode.timestamps;
+}
+
+export function episode(state: VuexState): Api.Episode | undefined {
+  return state.episode;
+}

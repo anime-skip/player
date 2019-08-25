@@ -84,7 +84,7 @@ export function togglePref(
     value = !state.myUser.preferences[pref];
   }
   commit('togglePref', { pref, value });
-  Api.mutatePrefs(pref, value, state.token || '')
+  Api.mutatePrefs(pref, value)
     .then(() => {
       commit('setPreferenceError', false);
       commit('updatePreference', { pref, value });

@@ -22,7 +22,7 @@
       completed
     />
     <Img
-      v-for="timestamp of timestamps || []"
+      v-for="timestamp of timestamps"
       :key="timestamp.id"
       class="Timestamp"
       src="img/ic_timestamp.svg"
@@ -51,40 +51,26 @@ import VueSlider from 'vue-slider-component';
 import '../scss/VideoSlider.scss';
 import Utils from '../../../shared/utils/Utils';
 import Api from '../../../shared/utils/Api';
+import { Getter } from '../../../shared/utils/VuexDecorators';
 
 interface SectionData {
   timestamp: Api.Timestamp;
   endTime: number;
   isSkipped: boolean;
 }
-const prefs: Api.Preferences = {
-  enableAutoSkip: true,
-  enableAutoPlay: true,
-  skipBranding: true,
-  skipIntros: true,
-  skipNewIntros: false,
-  skipMixedIntros: false,
-  skipRecaps: true,
-  skipFiller: true,
-  skipCanon: false,
-  skipTransitions: true,
-  skipTitleCard: true,
-  skipCredits: true,
-  skipMixedCredits: false,
-  skipPreview: true,
-};
 
 @Component({
   components: { Section, Img, VueSlider },
 })
 export default class Timeline extends Vue {
-  @Prop(Array) public timestamps?: Api.Timestamp[];
   @Prop(Boolean) public isFlipped?: boolean;
   @Prop(Number) public currentTime!: number;
   @Prop(Function) public updateTime!: (
     newTime: number,
     updatePlayer?: boolean
   ) => void;
+  @Prop(Array) public timestamps!: Api.Timestamp[];
+  @Prop(Object) public prefs?: Api.Preferences;
 
   public duration: number = 0;
   public sections: SectionData[] = [];
@@ -100,9 +86,19 @@ export default class Timeline extends Vue {
     });
   }
 
+  @Watch('perfs')
+  public onPrefsChange(): void {
+    this.updateSections();
+  }
+
+  @Watch('timestamps')
+  public onTimestampsChange(): void {
+    this.updateSections();
+  }
+
   @Watch('currentTime')
   public onChangeCurrentTime(newTime: number, oldTime: number): void {
-    if (this.timestamps && Math.abs(oldTime - newTime) < 1) {
+    if (this.timestamps.length > 0 && Math.abs(oldTime - newTime) < 1) {
       const next = Utils.nextTimestamp(oldTime, this.timestamps);
       if (
         (oldTime === 0 && !this.skippedFromZero) ||
@@ -111,7 +107,11 @@ export default class Timeline extends Vue {
         if (oldTime === 0) {
           this.skippedFromZero = true;
         }
-        const future = Utils.nextTimestamp(oldTime, this.timestamps, prefs);
+        const future = Utils.nextTimestamp(
+          oldTime,
+          this.timestamps,
+          this.prefs
+        );
         const skipToTime = future ? future.time : getVideo().duration;
         this.updateTime(skipToTime, true);
       }
@@ -125,6 +125,10 @@ export default class Timeline extends Vue {
 
   public onChangeDuration(newDuration?: number) {
     this.duration = newDuration || 0;
+    this.updateSections();
+  }
+
+  public updateSections(): void {
     this.sections = this.getSections();
     this.completedSections = this.getCompletedSections();
   }
@@ -145,7 +149,7 @@ export default class Timeline extends Vue {
   }
 
   public getSections(): SectionData[] {
-    if (!this.timestamps) {
+    if (this.timestamps.length === 0) {
       return [
         {
           timestamp: this.unknownTimestamp,
@@ -159,7 +163,7 @@ export default class Timeline extends Vue {
       (timestamp: Api.Timestamp, index: number): SectionData => ({
         timestamp: timestamp,
         endTime: withEnd[index + 1].time,
-        isSkipped: Utils.isSkipped(timestamp, prefs),
+        isSkipped: Utils.isSkipped(timestamp, this.prefs),
       })
     );
   }
@@ -170,7 +174,7 @@ export default class Timeline extends Vue {
     return this.sections.filter(section => {
       return (
         section.timestamp.time < this.currentTime &&
-        !Utils.isSkipped(section.timestamp, prefs)
+        !Utils.isSkipped(section.timestamp, this.prefs)
       );
     });
   }

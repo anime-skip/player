@@ -12,7 +12,11 @@ export default class Browser {
       if (browser) {
         // @ts-ignore
         const keyMap = await browser.storage.local.get(key);
-        return JSON.parse(keyMap[key]);
+        try {
+          return JSON.parse(keyMap[key]);
+        } catch (err) {
+          return keyMap[key];
+        }
       }
       // // @ts-ignore
       // else if (chrome) getItem = chrome.storage.local.get;

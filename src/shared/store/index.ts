@@ -15,6 +15,7 @@ const initialState: VuexState = {
   loginLoading: false,
   loginState: undefined,
   myUser: undefined,
+  episode: undefined,
 };
 
 export default new Vuex.Store({
