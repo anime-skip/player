@@ -51,7 +51,6 @@ export function logOut(state: VuexState): void {
   Vue.set(state, 'refreshTokenExpiresAt', undefined);
   Vue.set(state, 'loginError', false);
   Vue.set(state, 'myUser', undefined);
-  Vue.set(state, 'episode', undefined);
   changeLoginState(state, false);
   persistAccount(state);
 }
