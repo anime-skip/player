@@ -112,7 +112,7 @@ export default class Timeline extends Vue {
           this.skippedFromZero = true;
         }
         const future = Utils.nextTimestamp(oldTime, this.timestamps, prefs);
-        const skipToTime = future ? future.time : video.duration;
+        const skipToTime = future ? future.time : getVideo().duration;
         this.updateTime(skipToTime, true);
       }
     }

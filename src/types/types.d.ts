@@ -1,4 +1,5 @@
 declare function getRootQuery(): string;
+declare function getVideoQuery(): string;
 interface VideoInjection {
   addTime: (seconds: number) => void;
   togglePlayPause: () => void;
@@ -6,8 +7,10 @@ interface VideoInjection {
   previousTimestamp: () => void;
   setMuted: (isMuted: boolean) => void;
 }
-declare const video: HTMLVideoElement & VideoInjection;
-declare function getElementsToHide(): HTMLElement[];
+declare function getVideo(): HTMLVideoElement;
+declare function onVideoChanged(
+  callback: (video: HTMLVideoElement) => void
+): void;
 
 declare type MessageType = 'loginStateChanged';
 

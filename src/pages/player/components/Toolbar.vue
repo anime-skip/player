@@ -13,10 +13,7 @@
         :updateTime="updateTime"
       />
       <div class="buttons">
-        <ToolbarButton
-          class="margin-right"
-          @click.native="setPaused(!playerState.isPaused)"
-        >
+        <ToolbarButton class="margin-right" @click.native="togglePlayPause()">
           <PlayPauseButton :state="playerState.isPaused ? 1 : 0" />
         </ToolbarButton>
         <ToolbarButton
@@ -58,6 +55,7 @@
         />
         <div class="divider margin-left" v-if="false" />
         <ToolbarButton
+          v-if="isFullscreenEnabled"
           class="margin-left"
           @click.native="setFullscreen(!Utils.isFullscreen())"
         >
@@ -81,6 +79,7 @@ import VolumeButton from './animations/VolumeButton.vue';
 import Utils from '../../../shared/utils/Utils';
 import Browser from '../../../shared/utils/Browser';
 import { Getter } from '../../../shared/utils/VuexDecorators';
+import VideoUtils from '../VideoUtils';
 
 @Component({
   components: {
@@ -102,15 +101,18 @@ export default class ToolBar extends Vue {
   public Utils = Utils;
   public duration: string = 'Loading...';
   public openPopup = Browser.openPopup;
+  public togglePlayPause = VideoUtils.togglePlayPause;
+  public isFullscreenEnabled = document.fullscreenEnabled;
 
   @Getter('loginState') public loginState?: boolean;
 
   constructor() {
     super();
-    video.ontimeupdate = () => this.updateTime(video.currentTime);
-    video.addTime = this.addTime;
-    video.nextTimestamp = this.nextTimestamp;
-    video.previousTimestamp = this.previousTimestamp;
+    onVideoChanged(video => {
+      video.ontimeupdate = () => this.updateTime(video.currentTime);
+    });
+    VideoUtils.nextTimestamp = this.nextTimestamp;
+    VideoUtils.previousTimestamp = this.previousTimestamp;
     document.addEventListener('fullscreenchange', () => {
       this.isFullscreen = Utils.isFullscreen();
       this.isFullscreenCount++;
@@ -139,7 +141,7 @@ export default class ToolBar extends Vue {
 
   public updateTime(newTime: number, updateVideo?: boolean) {
     if (updateVideo) {
-      video.currentTime = newTime;
+      VideoUtils.setCurrentTime(newTime);
     }
     this.currentTime = newTime;
   }
@@ -152,6 +154,7 @@ export default class ToolBar extends Vue {
     const nextTimestamp = this.timestamps.find(
       timestamp => timestamp.time > this.currentTime
     );
+    const video = getVideo();
     if (nextTimestamp) {
       this.updateTime(nextTimestamp.time, true);
     } else if (video.duration) {
@@ -167,7 +170,6 @@ export default class ToolBar extends Vue {
     const previousTimestamp = this.timestamps
       .filter(timestamp => timestamp.time < this.currentTime - 1)
       .pop();
-    console.log('prev timestamp', previousTimestamp);
     if (previousTimestamp) {
       this.updateTime(previousTimestamp.time, true);
     } else {
@@ -191,10 +193,11 @@ export default class ToolBar extends Vue {
 
 <style lang="scss" scoped>
 $height: 56px;
+$offsetInactive: 4px;
 .ToolBar {
   position: relative;
   height: $height;
-  transform: translateY($height - 6px);
+  transform: translateY($height - $offsetInactive);
   transition: 200ms;
   transition-property: transform;
   user-select: none;

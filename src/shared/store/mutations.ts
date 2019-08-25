@@ -17,7 +17,6 @@ export function restoreState(
   state: VuexState,
   localStorageState: Partial<VuexState>
 ): void {
-  console.log(localStorageState);
   for (const field in localStorageState) {
     if (state.hasOwnProperty(field)) {
       // @ts-ignore

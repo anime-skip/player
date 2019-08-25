@@ -15,12 +15,15 @@
         "browser": true,
         "es6": true,
         "node": true,
-        "webextensions": true,
+        "webextensions": true
     },
     "globals": {
-        "video": true,
+        "getVideo": true,
+        "getVideoQuery": true,
+        "onVideoChanged": true,
+        "checkVideoChanged": true,
         "getRootQuery": true,
-        "getElementsToHide": true,
+        "arguments": true,
     },
     "rules": {
         "space-before-blocks": "warn",

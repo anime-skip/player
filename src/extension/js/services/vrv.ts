@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-console.info('Injection script for example/index.html');
+console.info('Injection script for VRV');
 
 // @ts-ignore
 function getRootQuery(): string {
-  return '.video-container';
+  return 'body>div';
 }
 
 // @ts-ignore
 function getVideoQuery(): string {
-  return '#video';
+  return 'video';
 }
+
+document.body.classList.add('hide-for-anime-skip');

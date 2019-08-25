@@ -6,7 +6,6 @@ const axios = Axios.create({
 });
 
 function query(q: string): GraphQlBody {
-  console.log('Query:\n', q);
   return { query: q };
 }
 
@@ -14,7 +13,6 @@ function mutation(
   mutationString: string,
   vars: { [variableName: string]: any }
 ): GraphQlBody {
-  console.log('Mutation:\n', mutationString);
   return { query: mutationString, variables: vars };
 }
 

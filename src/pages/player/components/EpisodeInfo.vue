@@ -55,6 +55,11 @@ export default class EpisodeInfo extends Vue {
 
 <style lang="scss" scoped>
 .EpisodeInfo {
+  * {
+    text-align: start;
+    margin: 0;
+  }
+
   h1 {
     font-size: 64px;
     font-weight: 300;

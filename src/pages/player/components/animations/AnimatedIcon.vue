@@ -26,7 +26,6 @@ export default class FullscreenButton extends Vue {
 
   @Watch('state')
   public onChangeState(newState: number, oldState: number) {
-    console.log('state changed: ', oldState, 'to', newState, this.state);
     this.startState = oldState;
     this.finishState = newState;
     this.maxState = Math.max(newState, oldState);
