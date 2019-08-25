@@ -1,11 +1,12 @@
 const path = require('path');
 
 module.exports = {
-  filenameHashing: false, 
+  filenameHashing: false,
   pages: {
     player: { entry: 'src/pages/player/main.ts' },
     options: { entry: 'src/pages/options/main.ts' },
     popup: { entry: 'src/pages/popup/main.ts' },
+    background: { entry: 'src/pages/background/main.ts' },
   },
   configureWebpack: {
     optimization: {

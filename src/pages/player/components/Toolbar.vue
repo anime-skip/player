@@ -8,9 +8,10 @@
     <div class="content">
       <Timeline
         :isFlipped="!playerState.isPaused && !playerState.isActive"
-        :timestamps="timestamps"
         :currentTime="currentTime"
         :updateTime="updateTime"
+        :prefs="preferences"
+        :timestamps="timestamps"
       />
       <div class="buttons">
         <ToolbarButton class="margin-right" @click.native="togglePlayPause()">
@@ -93,7 +94,6 @@ import VideoUtils from '../VideoUtils';
 export default class ToolBar extends Vue {
   @Prop(Object) public playerState!: PlayerState;
   @Prop(Boolean) public setPaused!: (isPaused: boolean) => void;
-  @Prop(Array) public timestamps!: Api.Timestamp[];
 
   public currentTime: number = 0;
   public isFullscreen: boolean = false;
@@ -105,6 +105,8 @@ export default class ToolBar extends Vue {
   public isFullscreenEnabled = document.fullscreenEnabled;
 
   @Getter() public loginState?: boolean;
+  @Getter() public timestamps!: Api.Timestamp[];
+  @Getter() public preferences?: Api.Preferences;
 
   constructor() {
     super();

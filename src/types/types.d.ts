@@ -12,14 +12,15 @@ declare function onVideoChanged(
   callback: (video: HTMLVideoElement) => void
 ): void;
 
-declare type MessageType = 'loginStateChanged';
+declare type MessageType = 'fetchEpisode';
+declare type MessageTypeMap<T = any> = Partial<{ [type in MessageType]: T }>;
 
-declare interface MessagePayload {
-  loginStateChanged: boolean;
+declare interface MessagePayload extends MessageTypeMap {
+  fetchEpisode: string;
 }
 
-declare interface MessageResponse {
-  loginStateChanged: undefined;
+declare interface MessageResponse extends MessageTypeMap {
+  fetchEpisode: Api.Episode;
 }
 
 declare interface VuexState {
@@ -37,6 +38,7 @@ declare interface VuexState {
   loginState?: boolean;
   myUser?: Api.MyUser;
   preferenceChangeError?: boolean;
+  episode?: Api.Episode;
 }
 
 declare interface LoginManualPayload {

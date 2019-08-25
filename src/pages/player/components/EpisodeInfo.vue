@@ -43,7 +43,7 @@ export default class EpisodeInfo extends Vue {
       return `Season ${this.episode.season} (#${this.episode.absoluteNumber})`;
     }
     if (this.episode.number != null && this.episode.season != null) {
-      return `Season ${this.episode.season}, ${this.episode.number}`;
+      return `Season ${this.episode.season}, Episode ${this.episode.number}`;
     }
     if (this.episode.absoluteNumber != null) {
       return `Episode #${this.episode.absoluteNumber}`;

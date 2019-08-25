@@ -41,6 +41,7 @@ declare namespace Api {
     absoluteNumber?: number;
     number?: number;
     show?: Show;
+    timestamps: Timestamp[];
   }
   interface Timestamp {
     id: number;
