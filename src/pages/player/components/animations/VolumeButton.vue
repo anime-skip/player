@@ -50,15 +50,16 @@ export default class VolumeButton extends Vue {
     super();
     onVideoChanged(video => {
       video.onvolumechange = () => {
-        this.level = video.volume;
+        this.level = this.isMuted ? 0 : video.volume;
       };
       this.isMuted = video.muted;
-      this.level = video.volume;
+      this.level = this.isMuted ? 0 : video.volume;
     });
   }
 
   public setMuted(isMuted: boolean) {
     this.isMuted = isMuted;
+    this.level = this.isMuted ? 0 : getVideo().volume;
     VideoUtils.setMuted(isMuted);
   }
 
@@ -70,10 +71,10 @@ export default class VolumeButton extends Vue {
     if (this.isMuted) {
       return 'muted';
     }
-    if (this.level < 0.33) {
+    if (this.level <= 0.05) {
       return 'low';
     }
-    if (this.level < 0.67) {
+    if (this.level < 0.6) {
       return 'medium';
     }
     return 'high';
@@ -87,14 +88,17 @@ export default class VolumeButton extends Vue {
 .VolumeButton {
   display: flex;
   flex-direction: row;
-  width: 40px;
+  width: 128px;
+  max-width: 40px;
   align-items: center;
   overflow-x: hidden;
   padding-right: 12px;
   margin-right: 8px;
+  transition: 200ms;
+  transition-property: max-width;
   &:hover,
   &.dragging {
-    width: 128px;
+    max-width: 128px;
   }
 
   .button {
