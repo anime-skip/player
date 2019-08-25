@@ -47,7 +47,7 @@ export default class Utils {
   }
 
   public static enterFullscreen(): void {
-    const elem = document.getElementById('AnimeSkipPlayer');
+    const elem = document.querySelector(getRootQuery());
     if (!elem) {
       console.warn('Could not find player to enter fullscreen');
       return;
@@ -105,6 +105,7 @@ export default class Utils {
     if (!this._videoLoadPromise) {
       this._videoLoadPromise = new Promise(res => {
         const timeout = window.setInterval(function() {
+          const video = getVideo();
           const duration = Math.round(video.duration);
           if (video.readyState > 0) {
             res(duration);

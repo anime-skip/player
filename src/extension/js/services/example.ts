@@ -1,16 +1,19 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 console.info('Injection script for example/index.html');
 
-/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+// @ts-ignore
 function getRootQuery(): string {
   return '.video-container';
 }
 
-// tslint:disable-next-line:no-var-keyword
-var video = document.querySelector('#video') as HTMLVideoElement;
-video.autoplay = false;
-video.controls = false;
+// @ts-ignore
+function getVideoQuery(): string {
+  return '#video';
+}
 
-/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+var video = document.querySelector('#video') as HTMLVideoElement;
+
+// @ts-ignore
 function getElementsToHide(): HTMLElement[] {
   return [document.querySelector('.glass') as HTMLElement];
 }

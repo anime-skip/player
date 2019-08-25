@@ -36,30 +36,33 @@ import Img from '../../../../shared/components/Img.vue';
 import VueSlider from 'vue-slider-component';
 import ToolbarButton from '../ToolbarButton.vue';
 import '../../scss/VolumeSlider.scss';
+import VideoUtils from '../../VideoUtils';
 
 @Component({
   components: { Img, VueSlider, ToolbarButton },
 })
 export default class VolumeButton extends Vue {
-  public isMuted: boolean = video.muted;
-  public level: number = video.volume;
+  public isMuted: boolean = getVideo().muted;
+  public level: number = getVideo().volume;
   public isDragging: boolean = false;
 
   public constructor() {
     super();
-    video.onvolumechange = () => {
+    onVideoChanged(video => {
+      video.onvolumechange = () => {
+        this.level = video.volume;
+      };
+      this.isMuted = video.muted;
       this.level = video.volume;
-    };
-    video.setMuted = this.setMuted;
+    });
   }
 
-  public setMuted(isMuted: boolean): void {
+  public setMuted(isMuted: boolean) {
     this.isMuted = isMuted;
-    video.muted = isMuted;
-    console.log('isMuted', video.muted);
+    VideoUtils.setMuted(isMuted);
   }
 
-  public toggleMuted(): void {
+  public toggleMuted() {
     this.setMuted(!this.isMuted);
   }
 
@@ -76,9 +79,7 @@ export default class VolumeButton extends Vue {
     return 'high';
   }
 
-  public setVolume(newVolume: number): void {
-    video.volume = newVolume;
-  }
+  public setVolume = VideoUtils.setVolume;
 }
 </script>
 

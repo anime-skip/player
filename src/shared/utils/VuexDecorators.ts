@@ -23,7 +23,6 @@ export function Mutation(mutationName: string): VueDecorator {
   return createDecorator((options, key): void => {
     if (!options.methods) options.methods = {};
     options.methods[key] = function(payload: any): any {
-      console.log('Mutation:', mutationName, payload);
       return this.$store.commit(mutationName, payload);
     };
   });

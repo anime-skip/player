@@ -9,7 +9,7 @@
     @mouseenter.prevent="toggleActive(true)"
     @mouseleave.prevent="toggleActive(false)"
     @mousemove.prevent="toggleActive(true)"
-    @click="setPaused(!playerState.isPaused)"
+    @click="togglePlayPause()"
   >
     <div class="left-content">
       <EpisodeInfo :episode="episode" />
@@ -31,8 +31,9 @@ import ToolBar from './components/Toolbar.vue';
 import EpisodeInfo from './components/EpisodeInfo.vue';
 import KeyboardShortcuts from './mixins/KeyboardShortcuts';
 import { TIMESTAMP_ARRAY } from '../../extension/data/timestamps';
-import { Action } from '../../shared/utils/VuexDecorators';
+import { Action, Mutation } from '../../shared/utils/VuexDecorators';
 import Browser from '../../shared/utils/Browser';
+import VideoUtils from './VideoUtils';
 
 @Component({
   components: { Img, ToolBar, EpisodeInfo },
@@ -43,14 +44,15 @@ export default class Player extends Vue {
     isActive: false,
     isEditing: false,
     isBuffering: false,
-    isPaused: video.paused,
+    isPaused: getVideo().paused,
     isLoadingEpisodeInfo: false,
     isFullscreen: false,
-    isMuted: video.muted,
+    isMuted: getVideo().muted,
   };
   public activeTimer?: number;
   public activeTimeout: number = 2000;
   public timestamps?: Api.Timestamp[] = TIMESTAMP_ARRAY;
+  public togglePlayPause = VideoUtils.togglePlayPause;
 
   public episode: Api.Episode = {
     id: 0,
@@ -65,15 +67,17 @@ export default class Player extends Vue {
   };
 
   @Action('initialLoad') public initialLoad!: () => void;
+  @Mutation('restoreState') public restoreState!: (storageChanges: any) => void;
 
   constructor() {
     super();
-    video.togglePlayPause = this.togglePlayPause;
-    video.onplay = () => this.play();
-    video.onpause = () => this.pause();
+    onVideoChanged(video => {
+      video.onplay = () => this.onPlay();
+      video.onpause = () => this.onPause();
+    });
     this.initialLoad();
     Browser.storage.addListener((changes: Partial<VuexState>) => {
-      this.$store.commit('restoreState', changes);
+      this.restoreState(changes);
     });
   }
 
@@ -89,28 +93,12 @@ export default class Player extends Vue {
     }
   }
 
-  public play() {
-    try {
-      video.play();
-      Vue.set(this.playerState, 'isPaused', false);
-      this.toggleActive(true);
-    } catch (err) {
-      console.error('Failed to play video: ' + err.message, err);
-    }
+  public onPlay() {
+    Vue.set(this.playerState, 'isPaused', false);
+    this.toggleActive(true);
   }
-  public pause() {
-    try {
-      video.pause();
-      Vue.set(this.playerState, 'isPaused', true);
-    } catch (err) {
-      console.error('Failed to pause video: ' + err.message, err);
-    }
-  }
-  public setPaused(isPaused: boolean) {
-    isPaused ? this.pause() : this.play();
-  }
-  public togglePlayPause(): void {
-    this.setPaused(!this.playerState.isPaused);
+  public onPause() {
+    Vue.set(this.playerState, 'isPaused', true);
   }
 }
 </script>

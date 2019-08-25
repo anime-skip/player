@@ -1,0 +1,11 @@
+.hide-for-anime-skip .vjs-pause-screen,
+.hide-for-anime-skip .vjs-text-track-display,
+.hide-for-anime-skip .vjs-loading-spinner,
+.hide-for-anime-skip .vjs-control-bar,
+.hide-for-anime-skip #android_div,
+.hide-for-anime-skip .vilos-spinner-overlay,
+.hide-for-anime-skip .vilos_stats_display,
+.hide-for-anime-skip #miniProgressContainer,
+.hide-for-anime-skip #standalone_softsubs {
+    display: none !important;
+}

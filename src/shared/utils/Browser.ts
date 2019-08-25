@@ -1,5 +1,3 @@
-import { persistedKeys } from './Constants';
-
 function prepareChangedStorage(object: any): Partial<VuexState> {
   for (const key in object) {
     object[key] = JSON.parse(object[key].newValue);
@@ -71,5 +69,11 @@ export default class Browser {
   public static openPopup(): void {
     // @ts-ignore
     if (browser) browser.browserAction.openPopup();
+  }
+
+  public static getURL(): string {
+    return window.location != window.parent.location
+      ? document.referrer
+      : document.location.href;
   }
 }

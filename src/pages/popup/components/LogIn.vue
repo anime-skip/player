@@ -50,12 +50,10 @@ export default class LogIn extends Vue {
   ) => void;
 
   public mounted() {
-    console.log('login component', this.isLoggingIn);
     (this.$refs.form as Element).addEventListener('submit', this.onSubmit);
   }
 
   public onSubmit(event: Event) {
-    console.log('onSumbit');
     event.preventDefault();
     event.stopPropagation();
     this.loginManual({
