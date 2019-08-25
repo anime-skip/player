@@ -20,7 +20,7 @@ text "web-ext run"
 # https://vrv.co/watch/GYP5EVKGY/Demon-Slayer-Kimetsu-no-Yaiba:Against-Corps-Rules
 # file:///media/aklinker1/External%20Storage/Programming/full-stack/anime-skip/web-extension/example/index.html
 web-ext run \
-    --start-url "https://vrv.co/watch/GYP5EVKGY/Demon-Slayer-Kimetsu-no-Yaiba:Against-Corps-Rules" \
+    --start-url "file:///media/aklinker1/External%20Storage/Programming/full-stack/anime-skip/web-extension/example/index.html" \
     --source-dir ./dist \
     --firefox-profile=/home/aklinker1/.mozilla/firefox/dhrin1rt.default > /dev/null
 
