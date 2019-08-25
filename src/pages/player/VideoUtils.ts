@@ -15,7 +15,6 @@ export default class VideoUtils {
   }
 
   public static setMuted(isMuted: boolean): void {
-    console.log('Setting muted', isMuted);
     getVideo().muted = isMuted;
   }
   public static setVolume(newVolume: number): void {
