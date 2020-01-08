@@ -1,6 +1,7 @@
 import Axios from 'axios';
 import Utils from './Utils';
 import Browser from './Browser';
+import md5 from 'md5';
 
 const axios = Axios.create({
   baseURL: 'http://localhost:8000/',
@@ -55,13 +56,13 @@ function mutation(
 
 const preferencesData = `
   enableAutoSkip enableAutoPlay
-  skipBranding skipIntros skipNewIntros skipRecaps skipFiller skipCanon skipTransitions skipTitleCard skipCredits skipMixedCredits skipPreview
+  skipBranding skipIntros skipNewIntros skipMixedIntros skipRecaps skipFiller skipCanon skipTransitions skipTitleCard skipCredits skipMixedCredits skipNewCredits skipPreview
 `;
 
 const loginData = `
-  token refreshToken
-  myUser {
-    username verified
+  authToken refreshToken
+  account {
+    username emailVerified
     preferences {
       ${preferencesData}
     }
@@ -98,7 +99,11 @@ export default class Api {
     } catch (err) {
       /* eslint-disable no-console */
       console.log();
-      console.error(err);
+      console.error(err.message, {
+        status: err.response.status,
+        headers: err.response.headers,
+        ...err.response.data,
+      });
       console.groupEnd();
       /* eslint-enable no-console */
       throw err;
@@ -111,7 +116,7 @@ export default class Api {
   ): Promise<Api.LoginResponse> {
     const q = query(
       `{
-        login(usernameOrEmail: "${username}", password: "${password}") {
+        login(usernameEmail: "${username}", passwordHash: "${md5(password)}") {
           ${loginData}
         }
       }`
@@ -125,7 +130,7 @@ export default class Api {
   ): Promise<Api.LoginResponse> {
     const q = query(
       `{
-        login(refreshToken: "${refreshToken}") {
+        loginRefresh(refreshToken: "${refreshToken}") {
           ${loginData}
         }
       }`
@@ -134,18 +139,15 @@ export default class Api {
     return response.data.login;
   }
 
-  public static async mutatePrefs(
-    pref: keyof Api.Preferences,
-    value: boolean
-  ): Promise<void> {
+  public static async updatePreferences(prefs: Api.Preferences): Promise<void> {
     const m = mutation(
-      `mutation UpdatePreferenes($prefs: PreferencesInput) {
-        preferences(preferences: $prefs) {
+      `mutation SavePreferences($prefs: InputPreferences!) {
+        savePreferences(preferences: $prefs) {
           ${preferencesData}
         }
       }`,
       {
-        prefs: { [pref]: value },
+        prefs,
       }
     );
     await this.send(m);

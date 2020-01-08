@@ -5,16 +5,16 @@ export default class Utils {
     preferences?: Api.Preferences
   ): Api.Timestamp | undefined {
     if (!preferences) {
-      return timestamps.find(timestamp => timestamp.time > currentTime);
+      return timestamps.find(timestamp => timestamp.at > currentTime);
     }
     return timestamps.find(
       timestamp =>
-        timestamp.time > currentTime && !Utils.isSkipped(timestamp, preferences)
+        timestamp.at > currentTime && !Utils.isSkipped(timestamp, preferences)
     );
   }
 
   public static isSkipped(
-    { _typeId }: Api.Timestamp,
+    { typeId: _typeId }: Api.Timestamp,
     preferences?: Api.Preferences
   ): boolean {
     if (!preferences) return false;

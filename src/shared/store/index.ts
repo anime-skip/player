@@ -14,7 +14,7 @@ const initialState: VuexState = {
   loginError: false,
   loginLoading: false,
   loginState: undefined,
-  myUser: undefined,
+  account: undefined,
   episode: undefined,
 };
 

@@ -1,11 +1,6 @@
 #!/bin/bash
+source scripts/_utils.sh
 set -e
-function title {
-    echo -e "\x1B[34m\x1B[1m$1\x1b[0m"
-}
-function text {
-    echo -e "\x1B[0m- $1\x1B[2m"
-}
 
 title "Building src/player, src/options, and src/popup"
 
@@ -17,14 +12,15 @@ else
 fi
 
 text "Copying assets"
+mkdir dist/img
 if [ "$1" == "debug" ]; then
-    cp -a src/pages/player/img/. dist/img
-    cp -a src/pages/options/img/. dist/img
-    cp -a src/pages/popup/img/. dist/img
+    cp -r src/pages/*/img/* dist/img
+    # cp -r src/pages/options/img/* dist/img
+    # cp -r src/pages/popup/img/* dist/img
 else 
-    cp -a src/pages/player/img/. dist/img > /dev/null
-    cp -a src/pages/options/img/. dist/img > /dev/null
-    cp -a src/pages/popup/img/. dist/img > /dev/null
+    cp -r src/pages/*/img/* dist/img > /dev/null
+    # cp -r src/pages/options/img/* dist/img > /dev/null
+    # cp -r src/pages/popup/img/* dist/img > /dev/null
 fi
 
 text "Cleaning dist/"

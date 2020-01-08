@@ -3,5 +3,5 @@ export const persistedKeys = [
   'tokenExpiresAt',
   'refreshToken',
   'refreshTokenExpiresAt',
-  'myUser',
+  'account',
 ];

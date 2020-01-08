@@ -22,7 +22,7 @@ export default class FullscreenButton extends Vue {
   public animating: boolean = false;
   public percent: number = 1;
   public startedAtMs: number = 0;
-  public timeout?: number;
+  public timeout?: any;
 
   @Watch('state')
   public onChangeState(newState: number, oldState: number) {

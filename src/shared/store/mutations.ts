@@ -34,12 +34,12 @@ export function changeLoginState(
 }
 
 export function login(state: VuexState, loginPayload: Api.LoginResponse): void {
-  Vue.set(state, 'token', loginPayload.token);
+  Vue.set(state, 'token', loginPayload.authToken);
   Vue.set(state, 'tokenExpiresAt', Date.now() + 43200000); // 12 hours
   Vue.set(state, 'refreshToken', loginPayload.refreshToken);
   Vue.set(state, 'refreshTokenExpiresAt', Date.now() + 604800000); // 7 days
   Vue.set(state, 'loginError', false);
-  Vue.set(state, 'myUser', loginPayload.myUser);
+  Vue.set(state, 'account', loginPayload.account);
   changeLoginState(state, true);
   persistAccount(state);
 }
@@ -50,7 +50,7 @@ export function logOut(state: VuexState): void {
   Vue.set(state, 'refreshToken', undefined);
   Vue.set(state, 'refreshTokenExpiresAt', undefined);
   Vue.set(state, 'loginError', false);
-  Vue.set(state, 'myUser', undefined);
+  Vue.set(state, 'account', undefined);
   changeLoginState(state, false);
   persistAccount(state);
 }
@@ -70,22 +70,22 @@ export function togglePref(
   state: VuexState,
   change: { pref: keyof Api.Preferences; value: any }
 ): void {
-  if (!state.myUser) {
-    console.warn('togglePref() called without myUser in the store');
+  if (!state.account) {
+    console.warn('togglePref() called without account in the store');
     return;
   }
-  Vue.set(state.myUser.preferences, change.pref, change.value);
+  Vue.set(state.account.preferences, change.pref, change.value);
 }
 
-export function updatePreference(
+export function persistPreferences(
   state: VuexState,
-  payload: { pref: keyof Api.Preferences; value: any }
+  payload: Api.Preferences
 ): void {
-  if (!state.myUser) {
-    console.warn('updatePreference() called without myUser in the store');
+  if (!state.account) {
+    console.warn('updatePreference() called without account in the store');
     return;
   }
-  Vue.set(state.myUser.preferences, payload.pref, payload.value);
+  Vue.set(state.account, 'preferences', payload);
   persistAccount(state);
 }
 

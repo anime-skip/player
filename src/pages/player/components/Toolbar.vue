@@ -156,11 +156,11 @@ export default class ToolBar extends Vue {
 
   public nextTimestamp(): void {
     const nextTimestamp = this.timestamps.find(
-      timestamp => timestamp.time > this.currentTime
+      timestamp => timestamp.at > this.currentTime
     );
     const video = getVideo();
     if (nextTimestamp) {
-      this.updateTime(nextTimestamp.time, true);
+      this.updateTime(nextTimestamp.at, true);
     } else if (video.duration) {
       this.updateTime(video.duration, true);
     } else {
@@ -172,10 +172,10 @@ export default class ToolBar extends Vue {
 
   public previousTimestamp(): void {
     const previousTimestamp = this.timestamps
-      .filter(timestamp => timestamp.time < this.currentTime - 1)
+      .filter(timestamp => timestamp.at < this.currentTime - 1)
       .pop();
     if (previousTimestamp) {
-      this.updateTime(previousTimestamp.time, true);
+      this.updateTime(previousTimestamp.at, true);
     } else {
       this.updateTime(0, true);
     }

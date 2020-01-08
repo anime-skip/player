@@ -26,7 +26,7 @@
       :key="timestamp.id"
       class="Timestamp"
       src="img/ic_timestamp.svg"
-      :style="{ left: `${(timestamp.time / duration) * 100}%` }"
+      :style="{ left: `${(timestamp.at / duration) * 100}%` }"
     />
     <VueSlider
       class="slider"
@@ -102,7 +102,7 @@ export default class Timeline extends Vue {
       const next = Utils.nextTimestamp(oldTime, this.timestamps);
       if (
         (oldTime === 0 && !this.skippedFromZero) ||
-        (next && next.time < newTime && next.time >= oldTime)
+        (next && next.at < newTime && next.at >= oldTime)
       ) {
         if (oldTime === 0) {
           this.skippedFromZero = true;
@@ -112,7 +112,7 @@ export default class Timeline extends Vue {
           this.timestamps,
           this.prefs
         );
-        const skipToTime = future ? future.time : getVideo().duration;
+        const skipToTime = future ? future.at : getVideo().duration;
         this.updateTime(skipToTime, true);
       }
     }
@@ -135,16 +135,16 @@ export default class Timeline extends Vue {
 
   public get unknownTimestamp(): Api.Timestamp {
     return {
-      time: 0,
+      at: 0,
       id: -2,
-      _typeId: -2,
+      typeId: -2,
     };
   }
   public get endTimestamp(): Api.Timestamp {
     return {
       id: -1,
-      time: this.duration || 0,
-      _typeId: -1,
+      at: this.duration || 0,
+      typeId: -1,
     };
   }
 
@@ -162,7 +162,7 @@ export default class Timeline extends Vue {
     return this.timestamps.map<SectionData>(
       (timestamp: Api.Timestamp, index: number): SectionData => ({
         timestamp: timestamp,
-        endTime: withEnd[index + 1].time,
+        endTime: withEnd[index + 1].at,
         isSkipped: Utils.isSkipped(timestamp, this.prefs),
       })
     );
@@ -173,7 +173,7 @@ export default class Timeline extends Vue {
     }
     return this.sections.filter(section => {
       return (
-        section.timestamp.time < this.currentTime &&
+        section.timestamp.at < this.currentTime &&
         !Utils.isSkipped(section.timestamp, this.prefs)
       );
     });
