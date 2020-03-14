@@ -7,7 +7,7 @@
       <div class="input-grid input-grid--2">
         <Checkbox
           :isChecked="getPref('enableAutoSkip')"
-          text="Skip selected sections"
+          text="Auto-skip Sections"
           @click.native="updatePreferences('enableAutoSkip')"
         />
         <!-- 
