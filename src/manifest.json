@@ -40,11 +40,11 @@
     {
       "matches": ["https://static.vrv.co/*"],
       "js": [
-        "content-scripts/vrv.js",
         "content-scripts/all.js",
+        "content-scripts/vrv.js",
         "player/index.js"
       ],
-      "css": ["player/index.css", "content-scripts/services/vrv.css"],
+      "css": ["player/index.css", "content-scripts/vrv/index.css"],
       "all_frames": true
     }
   ],

@@ -10,11 +10,13 @@
           text="Skip selected sections"
           @click.native="updatePreferences('enableAutoSkip')"
         />
-        <!-- <Checkbox
+        <!-- 
+        <Checkbox
           :isChecked="getPref('enableAutoPlay')"
           text="Force video auto-play"
           @click.native="onClickAutoPlay"
-        /> -->
+        />
+        -->
       </div>
 
       <h2 class="settings-group-label">Skipped Sections</h2>
@@ -64,6 +66,10 @@ export default class Preferences extends Vue {
       return false;
     }
     return prefs[pref];
+  }
+
+  public onClickAutoSkip() {
+    this.updatePreferences('enableAutoSkip');
   }
 
   public onClickPreference(preferenceKey: keyof Api.Preferences): void {
