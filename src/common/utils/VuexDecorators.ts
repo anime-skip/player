@@ -1,5 +1,6 @@
 import { createDecorator, VueDecorator } from 'vue-class-component';
-import types from '@/common/store/types';
+import mutationTypes from '@/common/store/mutationTypes';
+import actionTypes from '@/common/store/actionTypes';
 
 export function Getter(getterName?: string): VueDecorator {
   return createDecorator((options, key): void => {
@@ -15,18 +16,19 @@ export function Action(actionName?: string): VueDecorator {
   return createDecorator((options, key): void => {
     if (!options.methods) options.methods = {};
     options.methods[key] = function(payload: any): any {
-      return this.$store.dispatch(actionName || key, payload);
+      // @ts-ignore
+      return this.$store.dispatch(actionTypes[actionName || key], payload);
     };
   });
 }
 
-export function Mutation(mutationName?: keyof typeof types): VueDecorator {
+export function Mutation(mutationName?: keyof typeof mutationTypes): VueDecorator {
   return createDecorator((options, key: any): void => {
     if (!options.methods) options.methods = {};
     // @ts-ignore
     options.methods[key] = function(payload: any): any {
       // @ts-ignore
-      return this.$store.commit(types[mutationName || key], payload);
+      return this.$store.commit(mutationTypes[mutationName || key], payload);
     };
   });
 }

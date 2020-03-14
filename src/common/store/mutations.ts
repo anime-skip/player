@@ -2,7 +2,9 @@ import { persistedKeys } from '@/common/utils/Constants';
 import Browser from '@/common/utils/Browser';
 import Vue from 'vue';
 import { Mutation } from 'vuex';
-import types from './types';
+import types from './mutationTypes';
+import { as } from '../utils/GlobalUtils';
+import RequestState from '../utils/RequestState';
 
 // Helpers /////////////////////////////////////////////////////////////////////
 
@@ -13,16 +15,18 @@ async function persistAccount(state: VuexState): Promise<void> {
   }
 }
 
-function changeLoginState(state: VuexState, newLoginState: boolean | undefined): void {
-  state.loginState = newLoginState;
-  Browser.storage.setItem('loginState', newLoginState);
+function loginRequestState(state: VuexState, loginRequestState: RequestState): void {
+  state.loginRequestState = loginRequestState;
+  Browser.storage.setItem('loginState', loginRequestState);
 }
 
 // Mutations ///////////////////////////////////////////////////////////////////
 
-export const mutations: {
-  [type in ValueOf<typeof types>]: Mutation<VuexState>;
-} = {
+export default as<
+  {
+    [type in ValueOf<typeof types>]: Mutation<VuexState>;
+  }
+>({
   // Storage
   [types.restoreState](state, localStorageState: Partial<VuexState>) {
     for (const field in localStorageState) {
@@ -42,15 +46,13 @@ export const mutations: {
   },
 
   // Login
-  [types.changeLoginState]: changeLoginState,
   [types.login](state, loginPayload: Api.LoginResponse) {
     state.token = loginPayload.authToken;
     state.tokenExpiresAt = Date.now() + 43200000; // 12 hours
     state.refreshToken = loginPayload.refreshToken;
     state.refreshTokenExpiresAt = Date.now() + 604800000; // 7 days
-    state.loginError = false;
     state.account = loginPayload.account;
-    changeLoginState(state, true);
+    loginRequestState(state, RequestState.SUCCESS);
     persistAccount(state);
   },
   [types.logOut](state) {
@@ -58,19 +60,12 @@ export const mutations: {
     state.tokenExpiresAt = undefined;
     state.refreshToken = undefined;
     state.refreshTokenExpiresAt = undefined;
-    state.loginError = false;
     state.account = undefined;
-    changeLoginState(state, false);
+    loginRequestState(state, RequestState.NOT_REQUESTED);
     persistAccount(state);
   },
-  [types.loginError](state) {
-    state.token = undefined;
-    state.refreshToken = undefined;
-    state.loginError = true;
-    changeLoginState(state, false);
-  },
-  [types.loginLoading](state, isLoading: boolean) {
-    state.loginLoading = isLoading;
+  [types.loginRequestState](state, requestState: RequestState) {
+    loginRequestState(state, requestState);
   },
 
   // Preferences
@@ -81,17 +76,12 @@ export const mutations: {
     }
     Vue.set(state.account.preferences, change.pref, change.value);
   },
-  [types.setPreferenceError](state, isError: boolean) {
-    state.preferenceChangeError = isError;
-    if (isError) {
-      setTimeout(() => {
-        state.preferenceChangeError = false;
-      }, 5000);
-    }
+  [types.preferencesRequestState](state, requestState: RequestState) {
+    state.preferencesRequestState = requestState;
   },
 
   // Episodes
   [types.setEpisodeInfo](state, episode: Api.Episode) {
     state.episode = episode;
   },
-};
+});

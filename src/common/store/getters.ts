@@ -1,5 +1,6 @@
 import { as } from '../utils/GlobalUtils';
 import { GetterTree } from 'vuex';
+import RequestState from '../utils/RequestState';
 
 export default as<GetterTree<VuexState, VuexState>>({
   // General
@@ -8,11 +9,13 @@ export default as<GetterTree<VuexState, VuexState>>({
   },
 
   // Login
-  loginState(state): boolean | undefined {
-    return state.loginState;
+  isLoggingIn({ loginRequestState }): boolean {
+    console.log('isLoggingIn', loginRequestState === RequestState.LOADING);
+    return loginRequestState === RequestState.LOADING;
   },
-  isLoggingIn(state): boolean {
-    return !!state.loginLoading;
+  isLoggedIn({ loginRequestState }): boolean {
+    console.log('isLoggedIn', loginRequestState === RequestState.SUCCESS);
+    return loginRequestState === RequestState.SUCCESS;
   },
 
   // Authentication
@@ -23,10 +26,7 @@ export default as<GetterTree<VuexState, VuexState>>({
     return state.token;
   },
   refreshToken(state): string | undefined {
-    if (
-      state.refreshTokenExpiresAt &&
-      state.refreshTokenExpiresAt <= Date.now()
-    ) {
+    if (state.refreshTokenExpiresAt && state.refreshTokenExpiresAt <= Date.now()) {
       return undefined;
     }
     return state.refreshToken;
@@ -38,9 +38,6 @@ export default as<GetterTree<VuexState, VuexState>>({
       return undefined;
     }
     return state.account.preferences;
-  },
-  preferenceChangeError(state): boolean {
-    return !!state.preferenceChangeError;
   },
 
   // Shows
