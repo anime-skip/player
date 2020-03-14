@@ -1,4 +1,5 @@
 import { createDecorator, VueDecorator } from 'vue-class-component';
+import types from '@/common/store/types';
 
 export function Getter(getterName?: string): VueDecorator {
   return createDecorator((options, key): void => {
@@ -19,11 +20,13 @@ export function Action(actionName?: string): VueDecorator {
   });
 }
 
-export function Mutation(mutationName?: string): VueDecorator {
-  return createDecorator((options, key): void => {
+export function Mutation(mutationName?: keyof typeof types): VueDecorator {
+  return createDecorator((options, key: any): void => {
     if (!options.methods) options.methods = {};
+    // @ts-ignore
     options.methods[key] = function(payload: any): any {
-      return this.$store.commit(mutationName || key, payload);
+      // @ts-ignore
+      return this.$store.commit(types[mutationName || key], payload);
     };
   });
 }

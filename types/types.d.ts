@@ -41,3 +41,5 @@ declare interface SkippablePreference {
   title: string;
   help: string;
 }
+
+type ValueOf<T> = T[keyof T];

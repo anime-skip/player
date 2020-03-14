@@ -15,10 +15,7 @@
       <EpisodeInfo :episode="episode" />
     </div>
     <div class="right-content"></div>
-    <ToolBar
-      class="bottom-content"
-      :playerState="playerState"
-    />
+    <ToolBar class="bottom-content" :playerState="playerState" />
   </div>
 </template>
 
