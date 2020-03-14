@@ -20,7 +20,7 @@ export default class Section extends Vue {
   @Prop(Boolean) public completed?: boolean;
 
   public get left(): number {
-    return (this.timestamp.time / this.duration) * 100;
+    return (this.timestamp.at / this.duration) * 100;
   }
   public get width(): number {
     if (this.currentTime == null || this.currentTime > this.endTime) {

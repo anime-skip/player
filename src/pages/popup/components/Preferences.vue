@@ -25,6 +25,16 @@
           @click.native="onClickBranding"
         />
         <Checkbox
+          :isChecked="getPref('skipRecaps')"
+          text="Recaps"
+          @click.native="onClickRecaps"
+        />
+        <Checkbox
+          :isChecked="getPref('skipTitleCard')"
+          text="Title Cards"
+          @click.native="onClickTitleCards"
+        />
+        <Checkbox
           :isChecked="getPref('skipIntros')"
           text="Intros"
           @click.native="onClickIntros"
@@ -35,14 +45,9 @@
           @click.native="onClickNewIntros"
         />
         <Checkbox
-          :isChecked="getPref('skipRecaps')"
-          text="Recaps"
-          @click.native="onClickRecaps"
-        />
-        <Checkbox
-          :isChecked="getPref('skipTitleCard')"
-          text="Title Cards"
-          @click.native="onClickTitleCards"
+          :isChecked="getPref('skipMixedIntros')"
+          text="Mixed Intros"
+          @click.native="onClickMixedIntros"
         />
         <Checkbox
           :isChecked="getPref('skipCanon')"
@@ -63,6 +68,11 @@
           :isChecked="getPref('skipCredits')"
           text="Credits"
           @click.native="onClickCredits"
+        />
+        <Checkbox
+          :isChecked="getPref('skipNewCredits')"
+          text="New Credits"
+          @click.native="onClickNewCredits"
         />
         <Checkbox
           :isChecked="getPref('skipMixedCredits')"
@@ -96,7 +106,7 @@ import { Getter, Action, Mutation } from '../../../shared/utils/VuexDecorators';
 export default class Preferences extends Vue {
   @Getter() public preferences?: Api.Preferences;
 
-  @Action() public togglePref!: (pref: keyof Api.Preferences) => void;
+  @Action() public updatePreferences!: (pref: keyof Api.Preferences) => void;
   @Mutation() public logOut!: () => void;
 
   public getPref(pref: keyof Api.Preferences): boolean {
@@ -108,43 +118,49 @@ export default class Preferences extends Vue {
   }
 
   public onClickAutoSkip() {
-    this.togglePref('enableAutoSkip');
+    this.updatePreferences('enableAutoSkip');
   }
   public onClickAutoPlay() {
-    this.togglePref('enableAutoPlay');
+    this.updatePreferences('enableAutoPlay');
   }
   public onClickBranding() {
-    this.togglePref('skipBranding');
-  }
-  public onClickIntros() {
-    this.togglePref('skipIntros');
-  }
-  public onClickNewIntros() {
-    this.togglePref('skipNewIntros');
+    this.updatePreferences('skipBranding');
   }
   public onClickRecaps() {
-    this.togglePref('skipRecaps');
+    this.updatePreferences('skipRecaps');
   }
   public onClickTitleCards() {
-    this.togglePref('skipTitleCard');
+    this.updatePreferences('skipTitleCard');
+  }
+  public onClickIntros() {
+    this.updatePreferences('skipIntros');
+  }
+  public onClickNewIntros() {
+    this.updatePreferences('skipNewIntros');
+  }
+  public onClickMixedIntros() {
+    this.updatePreferences('skipMixedIntros');
   }
   public onClickCanon() {
-    this.togglePref('skipCanon');
+    this.updatePreferences('skipCanon');
   }
   public onClickFiller() {
-    this.togglePref('skipFiller');
+    this.updatePreferences('skipFiller');
   }
   public onClickTransitions() {
-    this.togglePref('skipTransitions');
+    this.updatePreferences('skipTransitions');
   }
   public onClickCredits() {
-    this.togglePref('skipCredits');
+    this.updatePreferences('skipCredits');
+  }
+  public onClickNewCredits() {
+    this.updatePreferences('skipNewCredits');
   }
   public onClickMixedCredits() {
-    this.togglePref('skipMixedCredits');
+    this.updatePreferences('skipMixedCredits');
   }
   public onClickPreviews() {
-    this.togglePref('skipPreview');
+    this.updatePreferences('skipPreview');
   }
 }
 </script>

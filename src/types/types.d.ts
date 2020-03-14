@@ -36,7 +36,7 @@ declare interface VuexState {
    * `false` - Auth token is invalid or does not exist
    */
   loginState?: boolean;
-  myUser?: Api.MyUser;
+  account?: Api.Account;
   preferenceChangeError?: boolean;
   episode?: Api.Episode;
 }

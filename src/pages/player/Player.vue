@@ -48,7 +48,7 @@ export default class Player extends Vue {
     isFullscreen: false,
     isMuted: getVideo().muted,
   };
-  public activeTimer?: number;
+  public activeTimer?: any;
   public activeTimeout: number = 2000;
   public togglePlayPause = VideoUtils.togglePlayPause;
 

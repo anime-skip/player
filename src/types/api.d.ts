@@ -19,12 +19,13 @@ declare namespace Api {
     skipTransitions: boolean;
     skipTitleCard: boolean;
     skipCredits: boolean;
+    skipNewCredits: boolean;
     skipMixedCredits: boolean;
     skipPreview: boolean;
   }
-  interface MyUser {
+  interface Account {
     username: string;
-    verified: boolean;
+    emailVerified: boolean;
     preferences: Preferences;
   }
   interface Show {
@@ -45,13 +46,13 @@ declare namespace Api {
   }
   interface Timestamp {
     id: number;
-    time: number;
-    _typeId: number;
+    at: number;
+    typeId: number;
   }
 
   interface LoginResponse {
-    token: string;
+    authToken: string;
     refreshToken: string;
-    myUser: MyUser;
+    account: Account;
   }
 }

@@ -28,10 +28,10 @@ export function isLoggingIn(state: VuexState): boolean {
 }
 
 export function preferences(state: VuexState): Api.Preferences | undefined {
-  if (!state.myUser) {
+  if (!state.account) {
     return undefined;
   }
-  return state.myUser.preferences;
+  return state.account.preferences;
 }
 
 export function preferenceChangeError(state: VuexState): boolean {

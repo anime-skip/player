@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.19.0",
+    "md5": "^2.2.1",
     "prettier": "^1.18.2",
     "vue": "^2.6.10",
     "vue-class-component": "^7.0.2",
@@ -20,6 +21,7 @@
   "devDependencies": {
     "@types/chrome": "^0.0.75",
     "@types/firefox-webext-browser": "^67.0.2",
+    "@types/md5": "^2.1.33",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "@vue/cli-plugin-typescript": "^3.9.0",

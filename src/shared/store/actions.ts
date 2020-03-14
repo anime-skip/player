@@ -75,24 +75,30 @@ export function initialLoad(
     });
 }
 
-export function togglePref(
+export function updatePreferences(
   { commit, state }: ActionContext<VuexState, VuexState>,
   pref: keyof Api.Preferences
 ): void {
-  let value = false;
-  if (state.myUser) {
-    value = !state.myUser.preferences[pref];
+  if (state.account == null) {
+    commit('setPreferenceError', true);
+    return;
   }
-  commit('togglePref', { pref, value });
-  Api.mutatePrefs(pref, value)
+  const allPreferences = state.account.preferences;
+  const newValue = !allPreferences[pref];
+  const newPreferences = {
+    ...allPreferences,
+    [pref]: newValue,
+  };
+  commit('togglePref', { pref, value: newValue });
+  Api.updatePreferences(newPreferences)
     .then(() => {
       commit('setPreferenceError', false);
-      commit('updatePreference', { pref, value });
+      commit('persistPreferences', newPreferences);
     })
     .catch(() => {
       commit('setPreferenceError', true);
       setTimeout(() => {
-        commit('togglePref', { pref, value: !value });
+        commit('togglePref', { pref, value: !newValue });
       }, 200);
     });
 }
