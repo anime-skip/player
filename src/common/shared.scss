@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css?family=Overpass:400,500,600&display=swap');
+body, body * {
+    margin: 0;
+    padding: 0;
+}
+
+body * {
+    font-family: 'Overpass', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+    color: #2B78E0;
+}
+
+.button {
+    border: none;
+    outline: none;
+    height: 36px;
+    padding: 0 12px;
+    padding-top: 2px;
+    font-weight: 700px;
+    font-size: 14px;
+    box-sizing: border-box;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.clickable {
+    color: rgba(255, 255, 255, 0.9);
+    background-color: #2B78E0;
+    transform: translateY(-3px);
+    box-shadow: 0 3px 0 0 #135DC1;
+    transition: 200ms;
+    border-radius: 3px;
+}
+
+/* .clickable:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 0 0 #135DC1;
+} */
+
+.clickable.dark {
+    background-color: #151A20;
+    box-shadow: 0 3px 0 0 #0B0D10;
+}
+
+/* .clickable.dark:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 0 0 #0B0D10;
+} */
+
+.clickable.down, .clickable.focus:active {
+    transform: translateY(0);
+    box-shadow: 0 0 0 0 #135DC1;
+}
+
+.clickable.dark.down, .clickable.dark.focus:active {
+    transform: translateY(0);
+    box-shadow: 0 0 0 0 #0B0D10;
+}

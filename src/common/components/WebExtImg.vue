@@ -1,0 +1,21 @@
+<template>
+  <img :src="resolvedSrc" :draggable="draggable" />
+</template>
+
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import Browser from '@/common/utils/Browser';
+
+@Component
+export default class WebExtImg extends Vue {
+  /**
+   * Path should be relative to the assets folder
+   */
+  @Prop(String) public src!: string;
+  @Prop(Boolean) public draggable?: boolean;
+
+  public get resolvedSrc(): string {
+    return Browser.resolveUrl(this.src);
+  }
+}
+</script>

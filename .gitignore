@@ -1,6 +1,6 @@
 node_modules/
 dist/
-.extension-old/
+dist-zip/
 
-yarn-error.log
+*.log
 example/video.mp4
