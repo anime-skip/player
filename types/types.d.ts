@@ -35,3 +35,9 @@ declare interface PlayerState {
   isFullscreen: boolean;
   isMuted: boolean;
 }
+
+declare interface SkippablePreference {
+  key: keyof Api.Preferences;
+  title: string;
+  help: string;
+}

@@ -6,7 +6,6 @@ import Ripple from 'vue-ripple-directive';
 console.info('INJECTED player/index.ts');
 
 let existingPlayers = document.querySelectorAll('#AnimeSkipPlayer');
-console.log('Existing players', existingPlayers);
 if (existingPlayers.length > 0) {
   console.info('Player already added, removing');
   existingPlayers.forEach(player => {

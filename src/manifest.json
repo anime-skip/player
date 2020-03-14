@@ -30,18 +30,21 @@
   "content_scripts": [
     {
       "matches": ["file:///*/example/index.html"],
-      "js": ["content-scripts/all.js", "content-scripts/example/index.js", "player/index.js"],
-      "css": ["player/index.css", "content-scripts/example/index.css"]
-    },
-    {
-      "matches": ["file:///*/example/index.html_______"],
-      "js": ["content-scripts/all.js", "content-scripts/example/index.js"],
+      "js": [
+        "content-scripts/all.js",
+        "content-scripts/example/index.js",
+        "player/index.js"
+      ],
       "css": ["player/index.css", "content-scripts/example/index.css"]
     },
     {
       "matches": ["https://static.vrv.co/*"],
-      "js": ["content-scripts/vrv.js", "content-scripts/all.js", "player/index.js"],
-      "css": ["player/index.css", "content-scripts/services/vrv.css"],
+      "js": [
+        "content-scripts/all.js",
+        "content-scripts/vrv.js",
+        "player/index.js"
+      ],
+      "css": ["player/index.css", "content-scripts/vrv/index.css"],
       "all_frames": true
     }
   ],

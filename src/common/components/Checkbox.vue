@@ -1,5 +1,9 @@
 <template>
-  <div class="Checkbox clickable" :class="{ 'dark down': !isChecked }">
+  <div
+    class="Checkbox clickable"
+    :title="tooltip"
+    :class="{ 'dark down': !isChecked, 'transparent disabled': isDisabled }"
+  >
     <WebExtImg class="checkmark" :src="getIcon()" />
     <span class="text" :class="{ selected: isChecked }">{{ text }}</span>
   </div>
@@ -16,6 +20,7 @@ export default class Checkbox extends Vue {
   @Prop(Boolean) public isChecked!: boolean;
   @Prop(Boolean) public isDisabled!: boolean;
   @Prop(String) public text!: string;
+  @Prop(String) public tooltip!: string;
 
   public getIcon(): string {
     return `ic-${this.isChecked ? 'checked' : 'unchecked'}.svg`;
@@ -42,7 +47,7 @@ export default class Checkbox extends Vue {
     font-weight: 700;
     padding-top: 2px;
     font-size: 14px;
-    color: $textSecondary;
+    color: $textPrimary;
     &.selected {
       color: $textPrimary;
     }
