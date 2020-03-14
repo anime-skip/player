@@ -25,7 +25,6 @@ export default class Popup extends Vue {
 
   @Getter() public isLoggedIn?: boolean;
   @Getter() public isLoggingIn?: boolean;
-  @Getter() public preferenceChangeError!: boolean;
 
   @Action() public initialLoad!: () => void;
 

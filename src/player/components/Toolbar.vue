@@ -17,11 +17,7 @@
         <ToolbarButton class="margin-right" @click.native="togglePlayPause()">
           <PlayPauseButton :state="playerState.isPaused ? 1 : 0" />
         </ToolbarButton>
-        <ToolbarButton
-          class="margin-right"
-          icon="ic_next_episode.svg"
-          v-if="false"
-        />
+        <ToolbarButton class="margin-right" icon="ic_next_episode.svg" v-if="false" />
         <VolumeButton />
         <div class="divider margin-right" />
         <ToolbarButton
@@ -41,31 +37,16 @@
           {{ formattedTime }}&ensp;/&ensp;<span>{{ duration }}</span>
         </p>
         <div class="space" />
-        <ToolbarButton
-          class="margin-left"
-          icon="ic_edit.svg"
-          v-if="false"
-        />
-        <ToolbarButton
-          v-if="!loginState"
-          icon="ic-password.svg"
-          @click.native="openPopup()"
-        />
-        <ToolbarButton
-          v-else
-          icon="ic-account.svg"
-          @click.native="openPopup()"
-        />
+        <ToolbarButton class="margin-left" icon="ic_edit.svg" v-if="false" />
+        <ToolbarButton v-if="!isLoggedIn" icon="ic-password.svg" @click.native="openPopup()" />
+        <ToolbarButton v-else icon="ic-account.svg" @click.native="openPopup()" />
         <div class="divider margin-left" v-if="false" />
         <ToolbarButton
           v-if="isFullscreenEnabled"
           class="margin-left"
           @click.native="setFullscreen(!Utils.isFullscreen())"
         >
-          <FullscreenButton
-            :state="Utils.isFullscreen() ? 0 : 1"
-            :key="isFullscreenCount"
-          />
+          <FullscreenButton :state="Utils.isFullscreen() ? 0 : 1" :key="isFullscreenCount" />
         </ToolbarButton>
       </div>
     </div>
@@ -105,7 +86,7 @@ export default class ToolBar extends Vue {
   public togglePlayPause = VideoUtils.togglePlayPause;
   public isFullscreenEnabled = document.fullscreenEnabled;
 
-  @Getter() public loginState?: boolean;
+  @Getter() public isLoggedIn?: boolean;
   @Getter() public timestamps!: Api.Timestamp[];
   @Getter() public preferences?: Api.Preferences;
 
@@ -136,10 +117,7 @@ export default class ToolBar extends Vue {
     if (duration === 0) {
       this.duration = 'Loading...';
     }
-    this.duration = this.formatSeconds(
-      duration,
-      this.playerState.isPaused ? 2 : 0
-    );
+    this.duration = this.formatSeconds(duration, this.playerState.isPaused ? 2 : 0);
   }
 
   public updateTime(newTime: number, updateVideo?: boolean) {
@@ -154,9 +132,7 @@ export default class ToolBar extends Vue {
   }
 
   public nextTimestamp(): void {
-    const nextTimestamp = this.timestamps.find(
-      timestamp => timestamp.at > this.currentTime
-    );
+    const nextTimestamp = this.timestamps.find(timestamp => timestamp.at > this.currentTime);
     const video = global.getVideo();
     if (nextTimestamp) {
       this.updateTime(nextTimestamp.at, true);
@@ -186,10 +162,7 @@ export default class ToolBar extends Vue {
     return mins + ':' + (secs < 10 ? '0' : '') + secs;
   }
   public get formattedTime(): string {
-    return this.formatSeconds(
-      this.currentTime,
-      this.playerState.isPaused ? 2 : 0
-    );
+    return this.formatSeconds(this.currentTime, this.playerState.isPaused ? 2 : 0);
   }
 }
 </script>
@@ -220,10 +193,7 @@ $offsetInactive: 4px;
     transition: 200ms;
     transition-property: opacity;
     opacity: 0;
-    background: linear-gradient(
-      transparent,
-      rgba($color: $background500, $alpha: 0.75)
-    );
+    background: linear-gradient(transparent, rgba($color: $background500, $alpha: 0.75));
   }
   &.active {
     .gradient {

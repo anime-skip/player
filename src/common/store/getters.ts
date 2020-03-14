@@ -7,6 +7,9 @@ export default as<GetterTree<VuexState, VuexState>>({
   state(state): VuexState {
     return state;
   },
+  activeDialog(state): string {
+    return state.activeDialog;
+  },
 
   // Login
   isLoggingIn({ loginRequestState }): boolean {

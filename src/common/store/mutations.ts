@@ -17,7 +17,7 @@ async function persistAccount(state: VuexState): Promise<void> {
 
 function loginRequestState(state: VuexState, loginRequestState: RequestState): void {
   state.loginRequestState = loginRequestState;
-  Browser.storage.setItem('loginState', loginRequestState);
+  Browser.storage.setItem('loginRequestState', loginRequestState);
 }
 
 // Mutations ///////////////////////////////////////////////////////////////////
