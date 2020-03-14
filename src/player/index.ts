@@ -6,7 +6,6 @@ import Ripple from 'vue-ripple-directive';
 console.info('INJECTED player/index.ts');
 
 let existingPlayers = document.querySelectorAll('#AnimeSkipPlayer');
-console.log('Existing players');
 if (existingPlayers.length > 0) {
   console.info('Player already added, removing');
   existingPlayers.forEach(player => {
@@ -35,7 +34,3 @@ global.onVideoChanged(video => {
   video.controls = false;
   video.autoplay = false;
 });
-
-// @ts-ignore
-checkVideoChanged();
-global.getVideo().pause();
