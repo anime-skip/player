@@ -1,13 +1,16 @@
-import Api from '@/common/Api';
 import Browser from '@/common/utils/Browser';
 import { ActionContext, Action } from 'vuex';
 import { persistedKeys } from '@/common/utils/Constants';
 import mutations from './mutationTypes';
-import { as } from '../utils/GlobalUtils';
+import { as, sleep } from '../utils/GlobalUtils';
 import types from './actionTypes';
 import RequestState from '../utils/RequestState';
+import { stat } from 'fs';
+import { AssertionError } from 'assert';
 
 // TODO make everything async
+
+type VuexStateWithAccount = VuexState & { account: Api.Account };
 
 // Helpers /////////////////////////////////////////////////////////////////////
 
@@ -16,7 +19,7 @@ function loginRefresh(
   { refreshToken }: LoginRefreshPayload
 ): void {
   commit(mutations.loginRequestState, RequestState.LOADING);
-  Api.loginRefresh(refreshToken)
+  global.Api.loginRefresh(refreshToken)
     .then(async loginData => {
       commit(mutations.login, loginData);
       commit(mutations.loginRequestState, RequestState.SUCCESS);
@@ -24,6 +27,15 @@ function loginRefresh(
     .catch(_ => {
       commit(mutations.loginRequestState, RequestState.FAILURE);
     });
+}
+
+function assertLoggedIn(
+  context: ActionContext<VuexState, VuexState>
+): asserts context is ActionContext<VuexStateWithAccount, VuexStateWithAccount> {
+  if (context.state.account == null) {
+    context.commit(mutations.loginRequestState, RequestState.FAILURE);
+    throw new AssertionError({ message: 'state.account does not exist, log in again' });
+  }
 }
 
 // Actions /////////////////////////////////////////////////////////////////////
@@ -65,11 +77,22 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
         console.error('Failed getting local storage', err);
       });
   },
+  async [types.showDialog]({ state, commit }, dialogName?: string) {
+    if (state.activeDialog === dialogName) return;
+
+    if (state.activeDialog) {
+      commit(mutations.activeDialog, undefined);
+      await sleep(250);
+    }
+    if (dialogName) {
+      commit(mutations.activeDialog, dialogName);
+    }
+  },
 
   // Auth
   [types.loginManual]({ commit }, { username, password }: LoginManualPayload) {
     commit(mutations.loginRequestState, RequestState.LOADING);
-    Api.loginManual(username, password)
+    global.Api.loginManual(username, password)
       .then(loginData => {
         commit(mutations.login, loginData);
         commit(mutations.loginRequestState, RequestState.SUCCESS);
@@ -80,11 +103,11 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
   },
   [types.loginRefresh]: loginRefresh,
 
-  [types.updatePreferences]({ commit, state }, pref: keyof Api.Preferences) {
-    if (state.account == null) {
-      commit(mutations.preferencesRequestState, RequestState.FAILURE);
-      return;
-    }
+  // Preferences
+  [types.updatePreferences](context, pref: keyof Api.Preferences) {
+    assertLoggedIn(context);
+    const { commit, state } = context;
+
     const allPreferences = state.account.preferences;
     const newValue = !allPreferences[pref];
     const newPreferences = {
@@ -93,7 +116,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     };
     commit(mutations.preferencesRequestState, RequestState.LOADING);
     commit(mutations.togglePref, { pref, value: newValue });
-    Api.updatePreferences(newPreferences)
+    global.Api.updatePreferences(newPreferences)
       .then(() => {
         commit(mutations.preferencesRequestState, RequestState.SUCCESS);
         commit(mutations.persistPreferences, newPreferences);
@@ -104,5 +127,13 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
           commit(mutations.togglePref, { pref, value: !newValue });
         }, 200);
       });
+  },
+
+  // Shows
+
+  // Episodes
+  [types.fetchEpisodeByUrl](context) {
+    assertLoggedIn(context);
+    const { commit, state } = context;
   },
 });

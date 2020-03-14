@@ -7,17 +7,15 @@ export default as<GetterTree<VuexState, VuexState>>({
   state(state): VuexState {
     return state;
   },
-  activeDialog(state): string {
+  activeDialog(state): string | undefined {
     return state.activeDialog;
   },
 
   // Login
   isLoggingIn({ loginRequestState }): boolean {
-    console.log('isLoggingIn', loginRequestState === RequestState.LOADING);
     return loginRequestState === RequestState.LOADING;
   },
   isLoggedIn({ loginRequestState }): boolean {
-    console.log('isLoggedIn', loginRequestState === RequestState.SUCCESS);
     return loginRequestState === RequestState.SUCCESS;
   },
 

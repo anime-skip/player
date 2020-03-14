@@ -1,9 +1,22 @@
+import '@/common/shared.scss';
 import Vue from 'vue';
 import Player from './Player.vue';
 import store from '@/common/store';
 import Ripple from 'vue-ripple-directive';
+import MessengerApi from '@/common/api/MessengerApi';
 
 console.info('INJECTED player/index.ts');
+
+// Setup Globals
+
+global.Api = MessengerApi;
+
+global.onVideoChanged(video => {
+  video.controls = false;
+  video.autoplay = false;
+});
+
+// Clean DOM
 
 let existingPlayers = document.querySelectorAll('#AnimeSkipPlayer');
 if (existingPlayers.length > 0) {
@@ -13,8 +26,10 @@ if (existingPlayers.length > 0) {
   });
 }
 
+// Inject DOM
+
 const rootQuery = global.getRootQuery();
-console.log(`Adding player to ${rootQuery}`);
+console.info(`Adding player to ${rootQuery}`);
 
 // Set the style to hide all the old elements
 document.body.classList.add('hide-for-anime-skip');
@@ -29,8 +44,3 @@ const vue = new Vue({
 }).$mount();
 const parent = document.querySelector(rootQuery) as HTMLElement;
 parent.appendChild(vue.$el);
-
-global.onVideoChanged(video => {
-  video.controls = false;
-  video.autoplay = false;
-});

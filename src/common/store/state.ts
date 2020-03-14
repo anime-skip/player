@@ -1,6 +1,7 @@
 import RequestState from '../utils/RequestState';
 
 export const initialState: VuexState = {
+  activeDialog: undefined,
   token: undefined,
   tokenExpiresAt: undefined,
   refreshToken: undefined,

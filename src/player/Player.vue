@@ -16,6 +16,9 @@
     </div>
     <div class="right-content"></div>
     <ToolBar class="bottom-content" :playerState="playerState" />
+
+    <!-- Dialogs -->
+    <AccountDialog />
   </div>
 </template>
 
@@ -24,6 +27,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import ToolBar from './components/Toolbar.vue';
 import EpisodeInfo from './components/EpisodeInfo.vue';
+import AccountDialog from './components/AccountDialog.vue';
 import KeyboardShortcuts from '@/common/mixins/KeyboardShortcuts';
 import { Action, Mutation, Getter } from '@/common/utils/VuexDecorators';
 import Browser from '@/common/utils/Browser';
@@ -31,7 +35,7 @@ import VideoUtils from './VideoUtils';
 import Messenger from '@/common/utils/Messenger';
 
 @Component({
-  components: { WebExtImg, ToolBar, EpisodeInfo },
+  components: { WebExtImg, ToolBar, EpisodeInfo, AccountDialog },
   mixins: [KeyboardShortcuts],
 })
 export default class Player extends Vue {
@@ -54,6 +58,7 @@ export default class Player extends Vue {
   @Mutation() public restoreState!: (storageChanges: any) => void;
 
   @Action() public initialLoad!: () => void;
+  @Action() public fetchEpisodeByUrl!: (url: string) => void;
 
   constructor() {
     super();
@@ -63,19 +68,17 @@ export default class Player extends Vue {
     });
     Browser.storage.addListener((changes: Partial<VuexState>) => {
       this.restoreState(changes);
-      if (changes.token) this.fetchEpisode();
+      if (changes.token) this.fetchEpisodeInfo();
     });
   }
 
   public created(): void {
     this.initialLoad();
-    this.fetchEpisode();
+    this.fetchEpisodeInfo();
   }
 
-  public fetchEpisode(): void {
-    new Messenger().send('fetchEpisode', Browser.getURL()).then(episode => {
-      this.setEpisodeInfo(episode);
-    });
+  public fetchEpisodeInfo(): void {
+    this.fetchEpisodeByUrl(Browser.getURL());
   }
 
   public toggleActive(isActive: boolean) {

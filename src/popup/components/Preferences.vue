@@ -80,7 +80,6 @@ export default class Preferences extends Vue {
 
 <style lang="scss" scoped>
 .Preferences {
-  padding: 32px 40px;
   .column {
     display: flex;
     flex-direction: column;

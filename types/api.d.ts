@@ -6,6 +6,13 @@ declare interface GraphQlBody {
 }
 
 declare namespace Api {
+  interface Implementation {
+    loginManual(username: string, password: string): Promise<Api.LoginResponse>;
+    loginRefresh(refreshToken: string): Promise<Api.LoginResponse>;
+    updatePreferences(prefs: Api.Preferences): Promise<void>;
+    fetchEpisodeByUrl(url: string): Promise<Api.Episode>;
+  }
+
   interface Preferences {
     enableAutoSkip: boolean;
     enableAutoPlay: boolean;
@@ -47,7 +54,7 @@ declare namespace Api {
     show?: Show;
     timestamps: Timestamp[];
   }
-  
+
   interface Timestamp {
     id: number;
     at: number;

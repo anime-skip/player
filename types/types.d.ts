@@ -6,16 +6,28 @@ interface VideoInjection {
   setMuted: (isMuted: boolean) => void;
 }
 
-declare type MessageType = 'fetchEpisode';
-declare type MessageTypeMap<T = any> = Partial<{ [type in MessageType]: T }>;
+declare type MessageType = keyof Api.Implementation;
+declare type MessageTypeListenerMap<T> = Partial<{ [type in MessageType]: T }>;
+declare type MessageTypeMap<T> = Record<MessageType, T>;
 
-declare interface MessagePayload extends MessageTypeMap {
-  fetchEpisode: string;
+declare interface MessagePayload extends Implements<MessageTypeMap<any>, MessagePayload> {
+  fetchEpisodeByUrl: string;
+  loginManual: { username: string; password: string };
+  loginRefresh: string;
+  updatePreferences: Api.Preferences;
 }
 
-declare interface MessageResponse extends MessageTypeMap {
-  fetchEpisode: Api.Episode;
+declare interface MessageResponse extends Implements<MessageTypeMap<any>, MessageResponse> {
+  fetchEpisodeByUrl: Api.Episode;
+  loginManual: Api.LoginResponse;
+  loginRefresh: Api.LoginResponse;
+  updatePreferences: void;
 }
+
+declare type MessageListener<T extends MessageType> = (
+  payload: MessagePayload[T]
+) => Promise<MessageResponse[T]>;
+declare type MessageListeners = { [type in MessageType]: MessageListener<type> };
 
 declare interface LoginManualPayload {
   username: string;
@@ -43,3 +55,4 @@ declare interface SkippablePreference {
 }
 
 type ValueOf<T> = T[keyof T];
+type Implements<T, U extends T> = {};

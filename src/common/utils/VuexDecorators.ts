@@ -12,7 +12,7 @@ export function Getter(getterName?: string): VueDecorator {
   });
 }
 
-export function Action(actionName?: string): VueDecorator {
+export function Action(actionName?: keyof typeof actionTypes): VueDecorator {
   return createDecorator((options, key): void => {
     if (!options.methods) options.methods = {};
     options.methods[key] = function(payload: any): any {

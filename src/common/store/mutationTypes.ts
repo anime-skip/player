@@ -1,4 +1,6 @@
 export default {
+  activeDialog: '@@general/activeDialog',
+
   restoreState: '@@storage/restoreState' as const,
   persistPreferences: '@@storage/persistPreferences' as const,
 

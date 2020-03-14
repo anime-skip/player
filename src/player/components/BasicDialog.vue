@@ -1,8 +1,9 @@
 <template>
   <div
     class="BasicDialog"
+    :id="name"
     :style="`align-items: ${gravityX}`"
-    :class="{ visible: isVisible }"
+    :class="{ visible: isVisible, dim: isDim }"
     @click.stop="dismiss()"
   >
     <div class="row" :style="`justify-content: ${gravityY}`" v-if="isVisible">
@@ -15,30 +16,24 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Mutation, Getter } from '@/common/utils/VuexDecorators';
+import { Mutation, Getter, Action } from '@/common/utils/VuexDecorators';
 
 @Component
 export default class BasicDialog extends Vue {
   @Prop(String) public name!: string;
-  @Prop({ type: String, default: 'center' }) public gravityX!:
-    | 'center'
-    | 'start'
-    | 'end';
-  @Prop({ type: String, default: 'center' }) public gravityY!:
-    | 'center'
-    | 'start'
-    | 'end';
+  @Prop({ type: String, default: 'center' }) public gravityX!: 'center' | 'start' | 'end';
+  @Prop({ type: String, default: 'center' }) public gravityY!: 'center' | 'start' | 'end';
+  @Prop(Boolean) public isDim?: boolean;
 
   @Getter() activeDialog?: string;
 
-  @Mutation('showDialog') hideDialog!: () => void;
+  @Action('showDialog') hideDialog!: () => void;
 
   public get isVisible(): boolean {
     return this.name === this.activeDialog;
   }
 
   public dismiss(): void {
-    console.log('dismissing');
     this.hideDialog();
   }
 }
@@ -54,12 +49,16 @@ export default class BasicDialog extends Vue {
   right: 0;
   top: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding-bottom: 32px;
   opacity: 0;
-  transition: 500ms;
+  transition: 250ms;
   transition-property: opacity;
   pointer-events: none;
+  cursor: pointer;
+  overflow: hidden;
+
+  &.dim {
+    background-color: rgba(255, 0, 0, 0.5);
+  }
 
   &.visible {
     opacity: 1;
@@ -78,11 +77,17 @@ export default class BasicDialog extends Vue {
 
   .container {
     border-radius: 4px;
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 6px 10px rgba(0, 0, 0, 0.22),
+      0 2px 5px rgba(0, 0, 0, 0.4);
     background-color: $background500;
     transform: translate(0px, 100px);
-    transition: 500ms;
+    transition: 250ms;
     transition-property: transform, opacity;
+    cursor: pointer;
+
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: $divider #00000000;
   }
 }
 </style>

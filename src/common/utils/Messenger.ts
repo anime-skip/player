@@ -1,5 +1,5 @@
 export default class Messenger {
-  public listeners: MessageTypeMap<(payload: any) => Promise<any>> = {};
+  public listeners?: MessageListeners;
 
   public constructor() {
     // @ts-ignore
@@ -11,7 +11,6 @@ export default class Messenger {
     type: T,
     payload: MessagePayload[T]
   ): Promise<MessageResponse[T]> => {
-    // console.log('sending', { type, payload });
     // @ts-ignore
     const response = await browser.runtime.sendMessage({
       type,
@@ -20,22 +19,23 @@ export default class Messenger {
     return response;
   };
 
-  public on = <T extends MessageType>(
-    type: T,
-    callback: (payload: MessagePayload[T]) => Promise<MessageResponse[T]>
-  ): void => {
-    this.listeners[type] = callback;
+  public on = (listeners: MessageListeners): void => {
+    this.listeners = listeners;
   };
 
-  private onReceiveMessage = async <T extends MessageType>(
-    { type, payload }: { type: MessageType; payload: MessagePayload[T] },
-    _sender: any,
-    sendResponse: (response: any) => void
-  ): Promise<any> => {
-    const callback = this.listeners[type];
-    console.log('Received Message', { type, payload, callback });
+  private onReceiveMessage = async <T extends MessageType>({
+    type,
+    payload,
+  }: {
+    type: MessageType;
+    payload: MessagePayload[T];
+  }): Promise<any> => {
+    console.log('Received Message', { type, payload });
+    if (!this.listeners) return;
+
+    const callback = (this.listeners[type] as unknown) as MessageListener<T>;
     if (callback) {
-      const response = await callback(payload);
+      const response = await callback(payload as MessagePayload[T]);
       console.log('sendResponse', { response });
       return response;
     }

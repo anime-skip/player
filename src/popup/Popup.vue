@@ -21,8 +21,6 @@ import { Getter, Action } from '@/common/utils/VuexDecorators';
   },
 })
 export default class Popup extends Vue {
-  public token?: string = undefined;
-
   @Getter() public isLoggedIn?: boolean;
   @Getter() public isLoggingIn?: boolean;
 
@@ -31,11 +29,10 @@ export default class Popup extends Vue {
   public created() {
     this.initialLoad();
   }
-
-  public data() {
-    return {
-      isLoading: this.login,
-    };
-  }
 }
 </script>
+
+<style lang="scss" scoped>
+.Popup {
+}
+</style>

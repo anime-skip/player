@@ -1,19 +1,28 @@
-$primary300: #03A9F4;
-$primary500: #2B78E0;
-$primary700: #135DC1;
+$primary300: #03a9f4;
+$primary500: #2b78e0;
+$primary700: #135dc1;
 $background300: rgb(49, 63, 82);
-$background500: #242C36;
-$input500: #151A20;
-$input700: #0B0D10;
-$textPrimary: rgba($color: white, $alpha: 0.9);
-$textPrimarySolid: #E9E9EB;
-$textSecondary: rgba($color: white, $alpha: 0.48);
+$background500: #242c36;
+$input500: #151a20;
+$input700: #0b0d10;
+$textPrimary: rgba(
+  $color: white,
+  $alpha: 0.9,
+);
+$textPrimarySolid: #e9e9eb;
+$textSecondary: rgba(
+  $color: white,
+  $alpha: 0.48,
+);
 $textSecondarySolid: rgb(165, 170, 177);
-$divider: rgba($color: white, $alpha: 0.12);
+$divider: rgba(
+  $color: white,
+  $alpha: 0.12,
+);
+$toolbarHeight: 56px;
 
-
-$shadow-1: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-$shadow-2: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-$shadow-3: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-$shadow-4: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-$shadow-5: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+$shadow-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+$shadow-2: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+$shadow-3: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+$shadow-4: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+$shadow-5: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);

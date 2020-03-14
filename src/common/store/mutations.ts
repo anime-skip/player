@@ -27,6 +27,11 @@ export default as<
     [type in ValueOf<typeof types>]: Mutation<VuexState>;
   }
 >({
+  // General
+  [types.activeDialog](state, dialogName: string | undefined) {
+    state.activeDialog = dialogName;
+  },
+
   // Storage
   [types.restoreState](state, localStorageState: Partial<VuexState>) {
     for (const field in localStorageState) {
