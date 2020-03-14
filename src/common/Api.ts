@@ -157,7 +157,7 @@ export default class Api {
   public static async fetchEpisodeByUrl(url: string): Promise<Api.Episode> {
     const q = query(
       `{
-        episode(url: "${url}") {
+        findEpisodeByUrl(url: "${url}") {
           ${episodeData}
         }
       }`

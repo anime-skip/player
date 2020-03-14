@@ -3,15 +3,15 @@ import Player from './Player.vue';
 import store from '@/common/store';
 import Ripple from 'vue-ripple-directive';
 
-console.info("INJECTED player/index.ts");
+console.info('INJECTED player/index.ts');
 
-let existingPlayers = document.querySelectorAll("#AnimeSkipPlayer");
-console.log("Existing players", existingPlayers);
+let existingPlayers = document.querySelectorAll('#AnimeSkipPlayer');
+console.log('Existing players');
 if (existingPlayers.length > 0) {
-  console.info("Player already added, removing");
-  existingPlayers.forEach((player) => {
+  console.info('Player already added, removing');
+  existingPlayers.forEach(player => {
     player.remove();
-  })
+  });
 }
 
 const rootQuery = global.getRootQuery();
