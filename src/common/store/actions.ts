@@ -2,10 +2,9 @@ import Browser from '@/common/utils/Browser';
 import { ActionContext, Action } from 'vuex';
 import { persistedKeys } from '@/common/utils/Constants';
 import mutations from './mutationTypes';
-import { as, sleep, clone } from '../utils/GlobalUtils';
+import { as, sleep } from '../utils/GlobalUtils';
 import types from './actionTypes';
 import RequestState from '../utils/RequestState';
-import { stat } from 'fs';
 import { AssertionError } from 'assert';
 import mutationTypes from './mutationTypes';
 

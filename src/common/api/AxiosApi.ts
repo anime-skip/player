@@ -82,39 +82,31 @@ const episodeUrlData = `
 /* eslint-disable no-console */
 async function sendGraphql<Q extends string, D>(data: any): Promise<{ data: { [field in Q]: D } }> {
   try {
-    console.log(1);
     const token = await Browser.storage.getItem<string>('token');
-    console.log(2);
     const response = await axios.post('graphql', data, {
       headers: {
         Authorization: token ? `Bearer ${token}` : undefined,
       },
     });
-    console.log(3);
-    if (response?.data?.errors) {
-      console.log(4);
+    if (response.data?.errors) {
       const error = new Error(
         `GraphQL Request failed with ${response.data.errors.length} errors`
       ) as AxiosError;
       error.response = response;
-      console.log(5);
       throw error;
     }
 
     console.log('Response: ', response.data);
     console.groupEnd();
-    console.log(6);
 
     return response.data;
   } catch (err) {
-    console.log(7);
     console.error(err.message, {
-      status: err.response?.status,
-      headers: err.response?.headers,
-      errors: err.response?.data.errors,
+      status: err.response.status,
+      headers: err.response.headers,
+      errors: err.response.data.errors,
       response: err.response,
     });
-    console.log(8);
     console.groupEnd();
     throw err;
   }
