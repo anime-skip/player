@@ -1,16 +1,8 @@
 <template>
   <div class="VolumeButton" :class="{ dragging: isDragging }">
-    <ToolbarButton class="button" @click.native="toggleMuted">
-      <WebExtImg
-        src="ic_volume_muted.svg"
-        class="ic_muted"
-        :class="volumeClass"
-      />
-      <WebExtImg
-        src="ic_volume_speaker.svg"
-        class="ic_speaker"
-        :class="volumeClass"
-      />
+    <ToolbarButton class="inner-button" @click.native="toggleMuted">
+      <WebExtImg src="ic_volume_muted.svg" class="ic_muted" :class="volumeClass" />
+      <WebExtImg src="ic_volume_speaker.svg" class="ic_speaker" :class="volumeClass" />
       <WebExtImg src="ic_volume_low.svg" class="ic_low" :class="volumeClass" />
       <WebExtImg src="ic_volume_high.svg" class="ic_high" :class="volumeClass" />
     </ToolbarButton>
@@ -101,7 +93,7 @@ export default class VolumeButton extends Vue {
     max-width: 128px;
   }
 
-  .button {
+  .inner-button {
     width: 24px;
     height: 24px;
     margin-right: 12px;

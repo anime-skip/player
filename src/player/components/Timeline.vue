@@ -172,20 +172,21 @@ export default class Timeline extends Vue {
 <style lang="scss" scoped>
 .Timeline {
   height: 11px;
-  margin-top: -4px;
-  margin-bottom: -1px;
   position: relative;
   cursor: pointer;
-  transform: scaleY(1);
+  transform: scaleY(1) translateY(4px);
   &.flipped {
     transform: scaleY(-1);
+    .slider {
+      transform: translateY(4px);
+    }
   }
   & > * {
     position: absolute;
   }
 
   .slider {
-    top: -5px;
+    top: -1px;
     left: 0;
     right: 0;
     transition: top;

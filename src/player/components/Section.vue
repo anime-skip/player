@@ -36,7 +36,7 @@ export default class Section extends Vue {
   position: absolute;
   background-color: rgba($color: $background300, $alpha: 0.75);
   height: 3px;
-  top: 0;
+  top: 4px;
 }
 .skipped {
   background-color: transparent;

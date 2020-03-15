@@ -179,7 +179,7 @@ export default class ToolBar extends Vue {
 </script>
 
 <style lang="scss" scoped>
-$offsetInactive: 4px;
+$offsetInactive: 6px;
 .ToolBar {
   position: relative;
   height: $toolbarHeight;
@@ -239,7 +239,7 @@ $offsetInactive: 4px;
       }
       .divider {
         width: 2px;
-        height: 40px;
+        height: 32px;
         border-radius: 1px;
         background-color: $divider;
       }
