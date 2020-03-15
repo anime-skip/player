@@ -107,9 +107,6 @@ $inputHeight: 48px;
   }
 
   .error-message {
-    color: $red300;
-    font-size: 15px;
-    font-weight: 500;
     margin: 0 16px;
     margin-top: 8px;
   }

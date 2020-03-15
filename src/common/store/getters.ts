@@ -43,6 +43,9 @@ export default as<GetterTree<VuexState, VuexState>>({
     }
     return state.account.preferences;
   },
+  hasPreferenceError({ preferencesRequestState }): boolean {
+    return preferencesRequestState === RequestState.FAILURE;
+  },
 
   // Shows
 

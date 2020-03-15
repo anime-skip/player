@@ -25,7 +25,7 @@ export default class ToolBar extends Vue {}
 
   .container {
     max-height: 300px;
-    max-width: 300px;
+    max-width: 400px;
     & > * {
       padding: 14px 16px;
     }
