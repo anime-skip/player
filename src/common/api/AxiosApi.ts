@@ -68,9 +68,15 @@ const loginData = `
 const episodeData = `
   id absoluteNumber number season name 
   timestamps {
-    id time _typeId
+    id at typeId
   }
   show { id name originalName website image }
+`;
+
+const episodeUrlData = `
+  episode {
+    ${episodeData}
+  }
 `;
 
 async function sendGraphql<Q extends string, D>(data: any): Promise<{ data: { [field in Q]: D } }> {
@@ -104,16 +110,16 @@ async function sendGraphql<Q extends string, D>(data: any): Promise<{ data: { [f
 }
 
 export default as<Api.Implementation>({
-  async fetchEpisodeByUrl(url: string): Promise<Api.Episode> {
+  async fetchEpisodeByUrl(url: string): Promise<Api.EpisodeUrl> {
     const q = query(
       `{
-        episode(url: "${url}") {
-          ${episodeData}
+        findEpisodeUrl(episodeUrl: "${url}") {
+          ${episodeUrlData}
         }
       }`
     );
-    const response = await sendGraphql<'episode', Api.Episode>(q);
-    return response.data.episode;
+    const response = await sendGraphql<'findEpisodeUrl', Api.EpisodeUrl>(q);
+    return response.data.findEpisodeUrl;
   },
 
   async loginManual(username: string, password: string): Promise<Api.LoginResponse> {

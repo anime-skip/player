@@ -12,7 +12,7 @@
     @click="togglePlayPause()"
   >
     <div class="left-content">
-      <EpisodeInfo :episode="episode" />
+      <EpisodeInfo />
     </div>
     <div class="right-content"></div>
     <ToolBar class="bottom-content" :playerState="playerState" />
@@ -52,29 +52,30 @@ export default class Player extends Vue {
   public activeTimeout: number = 2000;
   public togglePlayPause = VideoUtils.togglePlayPause;
 
-  @Getter() public episode?: Api.Episode;
+  @Getter() public token?: string;
 
-  @Mutation() public setEpisodeInfo!: (episode: Api.Episode) => void;
-  @Mutation() public restoreState!: (storageChanges: any) => void;
+  @Mutation() public restoreState!: (payload: { changes: any; callback?: () => void }) => void;
 
-  @Action() public initialLoad!: () => void;
+  @Action() public initialLoad!: (callback?: () => void) => void;
   @Action() public fetchEpisodeByUrl!: (url: string) => void;
 
   constructor() {
     super();
-    global.onVideoChanged(video => {
-      video.onplay = () => this.onPlay();
-      video.onpause = () => this.onPause();
-    });
     Browser.storage.addListener((changes: Partial<VuexState>) => {
-      this.restoreState(changes);
-      if (changes.token) this.fetchEpisodeInfo();
+      this.restoreState({ changes });
     });
   }
 
   public created(): void {
     this.initialLoad();
-    this.fetchEpisodeInfo();
+  }
+
+  public mounted(): void {
+    global.onVideoChanged(video => {
+      this.fetchEpisodeInfo();
+      video.onplay = () => this.onPlay();
+      video.onpause = () => this.onPause();
+    });
   }
 
   public fetchEpisodeInfo(): void {

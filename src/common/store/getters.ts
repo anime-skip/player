@@ -19,7 +19,6 @@ export default as<GetterTree<VuexState, VuexState>>({
     return loginRequestState === RequestState.SUCCESS;
   },
   isLogInError({ loginRequestState }): boolean {
-    console.log('isLogInError', loginRequestState === RequestState.FAILURE);
     return loginRequestState === RequestState.FAILURE;
   },
 
@@ -48,15 +47,18 @@ export default as<GetterTree<VuexState, VuexState>>({
   // Shows
 
   // Episodes
-  episode(state): Api.Episode | undefined {
-    return state.episode;
+  episodeUrl({ episodeUrl }): Api.EpisodeUrl | undefined {
+    return episodeUrl;
+  },
+  episodeRequestState({ episodeRequestState }): RequestState {
+    return episodeRequestState;
   },
 
   // Timestamps
   timestamps(state): Api.Timestamp[] {
-    if (state.episode == null) {
+    if (state.episodeUrl == null) {
       return [];
     }
-    return state.episode.timestamps;
+    return state.episodeUrl.episode.timestamps;
   },
 });

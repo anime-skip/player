@@ -8,6 +8,7 @@ export const initialState: VuexState = {
   refreshTokenExpiresAt: undefined,
   loginRequestState: RequestState.NOT_REQUESTED,
   account: undefined,
-  episode: undefined,
   preferencesRequestState: RequestState.NOT_REQUESTED,
+  episodeUrl: undefined,
+  episodeRequestState: RequestState.NOT_REQUESTED,
 };

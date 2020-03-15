@@ -10,7 +10,7 @@ declare namespace Api {
     loginManual(username: string, password: string): Promise<Api.LoginResponse>;
     loginRefresh(refreshToken: string): Promise<Api.LoginResponse>;
     updatePreferences(prefs: Api.Preferences): Promise<void>;
-    fetchEpisodeByUrl(url: string): Promise<Api.Episode>;
+    fetchEpisodeByUrl(url: string): Promise<Api.EpisodeUrl>;
   }
 
   interface Preferences {
@@ -43,6 +43,10 @@ declare namespace Api {
     originalName?: string;
     website?: string;
     image?: string;
+  }
+
+  interface EpisodeUrl {
+    episode: Episode;
   }
 
   interface Episode {

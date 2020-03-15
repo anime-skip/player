@@ -1,5 +1,5 @@
 <template>
-  <div class="EpisodeInfo">
+  <div class="EpisodeInfo" v-if="hasTriedLoadingEpisodeInfo">
     <h2>
       {{ showTitle }}
       <span>&ensp;&bull;&ensp;Anime Skip</span>
@@ -7,46 +7,60 @@
     <h1>{{ episodeTitle }}</h1>
     <h3>{{ episodeDetails }}</h3>
   </div>
+  <Loading v-else-if="isLoadingEpisodeInfo" />
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Getter } from '@/common/utils/VuexDecorators';
+import RequestState from '@/common/utils/RequestState';
+import Loading from '@/common/components/Loading.vue';
 
-@Component
+@Component({
+  components: { Loading },
+})
 export default class EpisodeInfo extends Vue {
-  @Prop(Object) public episode?: Api.Episode;
+  @Getter() public episodeUrl?: Api.EpisodeUrl;
+  @Getter() public episodeRequestState!: RequestState;
+
+  public get hasTriedLoadingEpisodeInfo(): boolean {
+    return (
+      this.episodeRequestState === RequestState.FAILURE ||
+      this.episodeRequestState === RequestState.SUCCESS
+    );
+  }
+
+  public get isLoadingEpisodeInfo(): boolean {
+    return this.episodeRequestState === RequestState.LOADING;
+  }
 
   public get showTitle(): string {
-    if (!this.episode || !this.episode.show || !this.episode.show.name) {
-      return 'Unknown Show';
-    }
-    return this.episode.show.name;
+    return this.episodeUrl?.episode?.show?.name ?? 'Unknown Show';
   }
 
   public get episodeTitle(): string {
-    if (!this.episode || !this.episode.name) {
-      return 'Unknown Episode';
-    }
-    return this.episode.name;
+    return this.episodeUrl?.episode?.name ?? 'Unknown Episode';
   }
 
   public get episodeDetails(): string {
-    if (!this.episode) return '';
-    if (
-      this.episode.absoluteNumber != null &&
-      this.episode.number != null &&
-      this.episode.season != null
-    ) {
-      return `Season ${this.episode.season}, Episode ${this.episode.number} (#${this.episode.absoluteNumber})`;
+    if (!this.episodeUrl) return '';
+
+    const { absoluteNumber, number, season } = this.episodeUrl?.episode;
+
+    if (absoluteNumber != null && number != null && season != null && number === absoluteNumber) {
+      return `Season ${season}, Episode ${number}`;
     }
-    if (this.episode.absoluteNumber != null && this.episode.season != null) {
-      return `Season ${this.episode.season} (#${this.episode.absoluteNumber})`;
+    if (absoluteNumber != null && number != null && season != null) {
+      return `Season ${season}, Episode ${number} (#${absoluteNumber})`;
     }
-    if (this.episode.number != null && this.episode.season != null) {
-      return `Season ${this.episode.season}, Episode ${this.episode.number}`;
+    if (absoluteNumber != null && season != null) {
+      return `Season ${season} (#${absoluteNumber})`;
     }
-    if (this.episode.absoluteNumber != null) {
-      return `Episode #${this.episode.absoluteNumber}`;
+    if (number != null && season != null) {
+      return `Season ${season}, Episode ${number}`;
+    }
+    if (absoluteNumber != null) {
+      return `Episode #${absoluteNumber}`;
     }
     return '';
   }
@@ -62,21 +76,23 @@ export default class EpisodeInfo extends Vue {
 
   h1 {
     font-size: 64px;
-    font-weight: 300;
+    font-weight: 400;
     color: $textPrimarySolid;
   }
 
   h2 {
     font-size: 26px;
+    font-weight: 600;
     color: $primary300;
     span {
       color: $textSecondary;
-      font-weight: 300;
+      font-weight: 400;
     }
   }
 
   h3 {
     font-size: 20px;
+    font-weight: 400;
     color: $textSecondarySolid;
   }
 }

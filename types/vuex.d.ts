@@ -7,5 +7,6 @@ declare interface VuexState {
   loginRequestState: RequestState;
   account?: Api.Account;
   preferencesRequestState?: RequestState;
-  episode?: Api.Episode;
+  episodeUrl?: Api.EpisodeUrl;
+  episodeRequestState: RequestState;
 }

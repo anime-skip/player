@@ -7,6 +7,7 @@ import types from './actionTypes';
 import RequestState from '../utils/RequestState';
 import { stat } from 'fs';
 import { AssertionError } from 'assert';
+import mutationTypes from './mutationTypes';
 
 // TODO make everything async
 
@@ -33,7 +34,7 @@ function assertLoggedIn(
   context: ActionContext<VuexState, VuexState>
 ): asserts context is ActionContext<VuexStateWithAccount, VuexStateWithAccount> {
   if (context.state.account == null) {
-    context.commit(mutations.loginRequestState, RequestState.FAILURE);
+    context.commit(mutations.loginRequestState, RequestState.NOT_REQUESTED);
     throw new AssertionError({ message: 'state.account does not exist, log in again' });
   }
 }
@@ -42,11 +43,13 @@ function assertLoggedIn(
 
 export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState> }>({
   // General
-  [types.initialLoad](context) {
+  [types.initialLoad](context, callback?: () => void) {
+    console.log('initialLoad');
     Browser.storage
       .getAll<Partial<VuexState>>(persistedKeys)
       .then(async newState => {
-        context.commit(mutations.restoreState, newState);
+        context.commit(mutations.restoreState, { changes: newState });
+        console.log('initialLoad 2', callback);
 
         if (!newState.token) {
           context.commit(mutations.loginRequestState, RequestState.NOT_REQUESTED);
@@ -72,6 +75,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
         } catch (err) {
           console.error('Failed to get auth token with the refresh token', err);
         }
+        if (callback) callback();
       })
       .catch(err => {
         console.error('Failed getting local storage', err);
@@ -132,8 +136,14 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
   // Shows
 
   // Episodes
-  [types.fetchEpisodeByUrl](context) {
-    assertLoggedIn(context);
-    const { commit, state } = context;
+  async [types.fetchEpisodeByUrl]({ commit, state }, url) {
+    try {
+      this.commit(mutationTypes.episodeRequestState, RequestState.LOADING);
+      const episodeUrl = await global.Api.fetchEpisodeByUrl(url);
+      this.commit(mutationTypes.episodeRequestState, RequestState.SUCCESS);
+      this.commit(mutationTypes.setEpisodeInfo, episodeUrl);
+    } catch (err) {
+      this.commit(mutationTypes.episodeRequestState, RequestState.FAILURE);
+    }
   },
 });

@@ -9,37 +9,11 @@ export default class Browser {
   public static storage = {
     getItem: async <T>(key: string): Promise<T | undefined> => {
       // @ts-ignore
-      if (browser) {
-        // @ts-ignore
-        const keyMap = await browser.storage.local.get(key);
-        try {
-          return JSON.parse(keyMap[key] as string);
-        } catch (err) {
-          return keyMap[key] as any;
-        }
-      }
-      // // @ts-ignore
-      // else if (chrome) getItem = chrome.storage.local.get;
-
-      throw Error('"browser" or "chrome" are not defined');
+      const keyMap = await browser.storage.local.get(key);
+      return (keyMap[key] as unknown) as T;
     },
-    getAll: async <T>(keys: string[]): Promise<T> => {
-      // @ts-ignore
-      if (browser) {
-        // @ts-ignore
-        const values = await browser.storage.local.get(keys);
-        const parsed: any = {};
-        for (const key in values) {
-          if (values.hasOwnProperty(key)) {
-            parsed[key] = JSON.parse(values[key] as string);
-          }
-        }
-        return parsed;
-      }
-      // // @ts-ignore
-      // else if (chrome) getItem = chrome.storage.local.get;
-
-      throw Error('"browser" or "chrome" are not defined');
+    getAll: async <T extends { [key: string]: any }>(keys: (keyof T)[]): Promise<T> => {
+      return (await browser.storage.local.get(keys as any)) as T;
     },
     setItem: async (key: string, value: any): Promise<void> => {
       // @ts-ignore
@@ -67,7 +41,7 @@ export default class Browser {
     if (browser) getURL = browser.runtime.getURL;
     // @ts-ignore
     else if (chrome) getURL = chrome.runtime.getURL;
-    return getURL("assets/" + extUrl);
+    return getURL('assets/' + extUrl);
   }
 
   public static openPopup(): void {
@@ -76,8 +50,6 @@ export default class Browser {
   }
 
   public static getURL(): string {
-    return window.location != window.parent.location
-      ? document.referrer
-      : document.location.href;
+    return window.location != window.parent.location ? document.referrer : document.location.href;
   }
 }

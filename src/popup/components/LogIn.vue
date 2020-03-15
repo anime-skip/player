@@ -18,9 +18,6 @@
         type="password"
         v-model="password"
       />
-      <p class="error-message row" v-if="isError">
-        Username or password was incorrect
-      </p>
       <div class="bottom-row">
         <input type="submit" value="Log In" class="clickable focus button" />
         <a href="https://www.anime-skip.com/sign-up">Sign Up</a>
