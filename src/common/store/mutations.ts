@@ -10,8 +10,7 @@ import RequestState from '../utils/RequestState';
 
 async function persistAccount(state: VuexState): Promise<void> {
   for (const key of persistedKeys) {
-    // @ts-ignore
-    await Browser.storage.setItem(key, clone(state[key]));
+    await Browser.storage.setItem(key, state[key]);
   }
 }
 
@@ -39,8 +38,6 @@ export default as<
   ) {
     for (const field in changes) {
       if (state.hasOwnProperty(field)) {
-        // @ts-ignore
-        console.log('restoring', { field, value: clone(changes[field]) });
         // @ts-ignore
         Vue.set(state, field, changes[field]);
       }

@@ -44,12 +44,10 @@ function assertLoggedIn(
 export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState> }>({
   // General
   [types.initialLoad](context, callback?: () => void) {
-    console.log('initialLoad');
     Browser.storage
       .getAll<Partial<VuexState>>(persistedKeys)
       .then(async newState => {
         context.commit(mutations.restoreState, { changes: newState });
-        console.log('initialLoad 2', callback);
 
         if (!newState.token) {
           context.commit(mutations.loginRequestState, RequestState.NOT_REQUESTED);

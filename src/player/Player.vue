@@ -52,8 +52,6 @@ export default class Player extends Vue {
   public activeTimeout: number = 2000;
   public togglePlayPause = VideoUtils.togglePlayPause;
 
-  @Getter() public token?: string;
-
   @Mutation() public restoreState!: (payload: { changes: any; callback?: () => void }) => void;
 
   @Action() public initialLoad!: (callback?: () => void) => void;

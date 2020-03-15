@@ -7,18 +7,14 @@
     <h1>{{ episodeTitle }}</h1>
     <h3>{{ episodeDetails }}</h3>
   </div>
-  <Loading v-else-if="isLoadingEpisodeInfo" />
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Getter } from '@/common/utils/VuexDecorators';
 import RequestState from '@/common/utils/RequestState';
-import Loading from '@/common/components/Loading.vue';
 
-@Component({
-  components: { Loading },
-})
+@Component
 export default class EpisodeInfo extends Vue {
   @Getter() public episodeUrl?: Api.EpisodeUrl;
   @Getter() public episodeRequestState!: RequestState;
