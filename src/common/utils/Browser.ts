@@ -10,20 +10,27 @@ export default class Browser {
     getItem: async <T>(key: string): Promise<T | undefined> => {
       // @ts-ignore
       const keyMap = await browser.storage.local.get(key);
-      return (keyMap[key] as unknown) as T;
+      const value = keyMap[key] as any;
+      try {
+        return JSON.parse(value) as T;
+      } catch (err) {
+        return value as T;
+      }
     },
     getAll: async <T extends { [key: string]: any }>(keys: (keyof T)[]): Promise<T> => {
-      return (await browser.storage.local.get(keys as any)) as T;
+      const storage = await browser.storage.local.get(keys as any);
+      const data: any = {};
+      keys.forEach(key => {
+        try {
+          data[key] = JSON.parse(storage[key]);
+        } catch (err) {
+          data[key] = storage[key];
+        }
+      });
+      return data;
     },
     setItem: async (key: string, value: any): Promise<void> => {
-      // @ts-ignore
-      if (browser) {
-        // @ts-ignore
-        await browser.storage.local.set({ [key]: value });
-        return;
-      }
-      // // @ts-ignore
-      // else if (chrome) setItem = chrome.storage.local.set;
+      await browser.storage.local.set({ [key]: JSON.stringify(value) });
     },
     addListener: (callback: (changes: Partial<VuexState>) => void): void => {
       // @ts-ignore

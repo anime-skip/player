@@ -88,7 +88,7 @@ async function sendGraphql<Q extends string, D>(data: any): Promise<{ data: { [f
         Authorization: token ? `Bearer ${token}` : undefined,
       },
     });
-    if (response.data.errors) {
+    if (response.data?.errors) {
       const error = new Error(
         `GraphQL Request failed with ${response.data.errors.length} errors`
       ) as AxiosError;
