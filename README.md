@@ -13,6 +13,5 @@ This will install and open firefox. To open another browser, more changes will h
 
 ## TODO
 
-- Add error message to preference change
 - Try to create an episode at a URL that has already been deleted
 - Error on timeline drag

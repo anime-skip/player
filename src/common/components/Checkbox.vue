@@ -37,7 +37,6 @@ export default class Checkbox extends Vue {
   padding-left: 8px;
   padding-right: 12px;
   cursor: pointer;
-  overflow-x: hidden;
   .checkmark {
     width: 24px;
     height: 24px;
