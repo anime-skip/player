@@ -94,19 +94,19 @@ export default class Preferences extends Vue {
   }
   .input-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(150px, 1fr));
     grid-gap: 16px;
     margin: 16px 0;
     align-items: stretch;
     &.small {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(150px, 1fr));
     }
   }
   .input-grid--2 {
     align-items: stretch;
-    grid-template-columns: repeat(2, minMax(1fr, 150px));
+    grid-template-columns: repeat(2, minmax(225px, 1fr));
     &.small {
-      grid-template-columns: repeat(1, 1fr);
+      grid-template-columns: repeat(1, minmax(225px, 1fr));
     }
   }
   .settings-group-label {
