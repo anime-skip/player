@@ -1,13 +1,13 @@
 <template>
   <div class="Popup">
     <Loading v-if="isLoggingIn" />
-    <LogIn v-if="!isLoggedIn" />
-    <Preferences v-else />
+    <LogIn v-if="!isLoggedIn" :small="small" />
+    <Preferences v-else :small="small" />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 import Loading from '@/common/components/Loading.vue';
 import LogIn from './components/LogIn.vue';
 import Preferences from './components/Preferences.vue';
@@ -21,6 +21,8 @@ import { Getter, Action } from '@/common/utils/VuexDecorators';
   },
 })
 export default class Popup extends Vue {
+  @Prop(Boolean) public small?: string;
+
   @Getter() public isLoggedIn?: boolean;
   @Getter() public isLoggingIn?: boolean;
 

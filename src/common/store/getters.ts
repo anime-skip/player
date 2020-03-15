@@ -18,6 +18,10 @@ export default as<GetterTree<VuexState, VuexState>>({
   isLoggedIn({ loginRequestState }): boolean {
     return loginRequestState === RequestState.SUCCESS;
   },
+  isLogInError({ loginRequestState }): boolean {
+    console.log('isLogInError', loginRequestState === RequestState.FAILURE);
+    return loginRequestState === RequestState.FAILURE;
+  },
 
   // Authentication
   token(state): string | undefined {

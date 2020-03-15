@@ -1,6 +1,6 @@
 <template>
   <BasicDialog name="AccountDialog" gravityX="end" gravityY="end">
-    <Popup />
+    <Popup small />
   </BasicDialog>
 </template>
 
@@ -25,8 +25,9 @@ export default class ToolBar extends Vue {}
 
   .container {
     max-height: 300px;
+    max-width: 300px;
     & > * {
-      padding: 12px 16px;
+      padding: 14px 16px;
     }
   }
 }

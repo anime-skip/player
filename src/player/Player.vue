@@ -104,8 +104,6 @@ export default class Player extends Vue {
 </script>
 
 <style lang="scss">
-@import url('https://fonts.googleapis.com/css?family=Overpass:300,400,600&display=swap');
-
 #AnimeSkipPlayer {
   position: absolute;
   left: 0;

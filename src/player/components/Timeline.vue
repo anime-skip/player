@@ -1,9 +1,5 @@
 <template>
-  <div
-    ref="timeline"
-    class="Timeline"
-    :class="{ flipped: isFlipped, seeking: isSeeking }"
-  >
+  <div ref="timeline" class="Timeline" :class="{ flipped: isFlipped, seeking: isSeeking }">
     <Section
       v-for="section of sections"
       :key="section.timestamp.id"
@@ -50,7 +46,6 @@ import WebExtImg from '@/common/components/WebExtImg.vue';
 import VueSlider from 'vue-slider-component';
 import '../scss/VideoSlider.scss';
 import Utils from '@/common/utils/Utils';
-import Api from '@/common/Api';
 import { Getter } from '@/common/utils/VuexDecorators';
 
 interface SectionData {
@@ -65,10 +60,7 @@ interface SectionData {
 export default class Timeline extends Vue {
   @Prop(Boolean) public isFlipped?: boolean;
   @Prop(Number) public currentTime!: number;
-  @Prop(Function) public updateTime!: (
-    newTime: number,
-    updatePlayer?: boolean
-  ) => void;
+  @Prop(Function) public updateTime!: (newTime: number, updatePlayer?: boolean) => void;
   @Prop(Array) public timestamps!: Api.Timestamp[];
   @Prop(Object) public prefs?: Api.Preferences;
 
@@ -107,11 +99,7 @@ export default class Timeline extends Vue {
         if (oldTime === 0) {
           this.skippedFromZero = true;
         }
-        const future = Utils.nextTimestamp(
-          oldTime,
-          this.timestamps,
-          this.prefs
-        );
+        const future = Utils.nextTimestamp(oldTime, this.timestamps, this.prefs);
         const skipToTime = future ? future.at : global.getVideo().duration;
         this.updateTime(skipToTime, true);
       }
@@ -173,8 +161,7 @@ export default class Timeline extends Vue {
     }
     return this.sections.filter(section => {
       return (
-        section.timestamp.at < this.currentTime &&
-        !Utils.isSkipped(section.timestamp, this.prefs)
+        section.timestamp.at < this.currentTime && !Utils.isSkipped(section.timestamp, this.prefs)
       );
     });
   }

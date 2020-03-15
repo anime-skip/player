@@ -1,10 +1,10 @@
 <template>
   <ProgressOverlay :isLoading="isLoggingIn" class="Preferences">
     <div class="column">
-      <PopupHeader title="Preferences" class="header" />
+      <PopupHeader title="Preferences" class="header" :small="small" />
 
       <h2 class="settings-group-label">General</h2>
-      <div class="input-grid input-grid--2">
+      <div class="input-grid input-grid--2" :class="{ small }">
         <Checkbox
           :isChecked="getPref('enableAutoSkip')"
           text="Auto-skip Sections"
@@ -20,7 +20,7 @@
       </div>
 
       <h2 class="settings-group-label">Skipped Sections</h2>
-      <div class="input-grid">
+      <div class="input-grid" :class="{ small }">
         <Checkbox
           v-for="preference in SKIPPABLE_PREFERENCES"
           :key="preference.key"
@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 import ProgressOverlay from '@/common/components/ProgressOverlay.vue';
 import PopupHeader from './PopupHeader.vue';
 import Checkbox from '@/common/components/Checkbox.vue';
@@ -50,10 +50,13 @@ import { SKIPPABLE_PREFERENCES } from '../../common/utils/Constants';
   components: { ProgressOverlay, PopupHeader, Checkbox },
 })
 export default class Preferences extends Vue {
+  @Prop(Boolean) public small?: string;
+
   @Getter() public preferences?: Api.Preferences;
   @Getter() public isLoggingIn!: boolean;
 
   @Action() public updatePreferences!: (pref: keyof Api.Preferences) => void;
+
   @Mutation() public logOut!: () => void;
 
   public get SKIPPABLE_PREFERENCES(): SkippablePreference[] {
@@ -89,9 +92,15 @@ export default class Preferences extends Vue {
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 16px;
     margin: 16px 0;
+    &.small {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
   .input-grid--2 {
     grid-template-columns: repeat(2, 1fr);
+    &.small {
+      grid-template-columns: repeat(1, 1fr);
+    }
   }
   .settings-group-label {
     font-size: 14px;
@@ -100,6 +109,7 @@ export default class Preferences extends Vue {
   }
   a {
     color: $textPrimary;
+    font-size: 15px;
   }
   .bottom-row {
     padding-top: 16px;

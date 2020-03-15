@@ -35,7 +35,7 @@ export default class Messenger {
 
     const callback = (this.listeners[type] as unknown) as MessageListener<T>;
     if (callback) {
-      const response = await callback(payload as MessagePayload[T]);
+      const response = await callback(payload);
       console.log('sendResponse', { response });
       return response;
     }

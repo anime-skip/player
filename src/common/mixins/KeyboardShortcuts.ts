@@ -44,6 +44,11 @@ const functionMapping: { [combination: string]: () => void } = {
 };
 
 function onKeyDown({ keyCode, ctrlKey }: KeyboardEvent): void {
+  // Preventy triggers during typing
+  if (document.activeElement?.tagName === 'INPUT') {
+    return;
+  }
+
   const key = keys[keyCode];
   if (!key) return;
 

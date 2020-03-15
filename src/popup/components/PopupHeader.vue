@@ -1,8 +1,8 @@
 <template>
   <div class="PopupHeader">
-    <h1 class="title">
+    <h1 class="title" :class="{ small }">
       {{ title }}&ensp;
-      <span class="subtitle">&bull;&ensp;Anime Skip</span>
+      <span class="subtitle" :class="{ small }">&bull;&ensp;Anime Skip</span>
     </h1>
   </div>
 </template>
@@ -13,6 +13,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 @Component
 export default class PopupHeader extends Vue {
   @Prop(String) public title!: string;
+  @Prop(Boolean) public small?: string;
 }
 </script>
 
@@ -22,11 +23,19 @@ export default class PopupHeader extends Vue {
     color: $textPrimary;
     font-size: 22px;
     font-weight: 700;
+
+    &.small {
+      font-size: 18px;
+    }
   }
   .subtitle {
     color: $textSecondary;
     font-size: 22px;
     font-weight: 400;
+
+    &.small {
+      font-size: 18px;
+    }
   }
 }
 </style>
