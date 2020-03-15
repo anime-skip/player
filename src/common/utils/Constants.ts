@@ -1,9 +1,10 @@
 export const persistedKeys = [
-  'token',
-  'tokenExpiresAt',
-  'refreshToken',
-  'refreshTokenExpiresAt',
-  'account',
+  'token' as const,
+  'tokenExpiresAt' as const,
+  'refreshToken' as const,
+  'refreshTokenExpiresAt' as const,
+  'loginRequestState' as const,
+  'account' as const,
 ];
 
 /**
@@ -13,8 +14,7 @@ export const SKIPPABLE_PREFERENCES: SkippablePreference[] = [
   {
     key: 'skipBranding',
     title: 'Branding',
-    help:
-      'Publisher and studio branding animations, generally right at the start of the episode',
+    help: 'Publisher and studio branding animations, generally right at the start of the episode',
   },
   {
     key: 'skipRecaps',
@@ -47,14 +47,12 @@ export const SKIPPABLE_PREFERENCES: SkippablePreference[] = [
   {
     key: 'skipCanon',
     title: 'Cannon',
-    help:
-      "A story driven section that is faithful to the source material's plot",
+    help: "A story driven section that is faithful to the source material's plot",
   },
   {
     key: 'skipFiller',
     title: 'Filler',
-    help:
-      "A story driven section that does not follow the source material's plot",
+    help: "A story driven section that does not follow the source material's plot",
   },
   {
     key: 'skipTransitions',

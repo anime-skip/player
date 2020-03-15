@@ -3,15 +3,14 @@ import Browser from '@/common/utils/Browser';
 import Vue from 'vue';
 import { Mutation } from 'vuex';
 import types from './mutationTypes';
-import { as } from '../utils/GlobalUtils';
+import { as, clone } from '../utils/GlobalUtils';
 import RequestState from '../utils/RequestState';
 
 // Helpers /////////////////////////////////////////////////////////////////////
 
 async function persistAccount(state: VuexState): Promise<void> {
   for (const key of persistedKeys) {
-    // @ts-ignore
-    await Browser.storage.setItem(key, JSON.stringify(state[key]));
+    await Browser.storage.setItem(key, state[key]);
   }
 }
 
@@ -33,13 +32,17 @@ export default as<
   },
 
   // Storage
-  [types.restoreState](state, localStorageState: Partial<VuexState>) {
-    for (const field in localStorageState) {
+  [types.restoreState](
+    state,
+    { changes, callback }: { changes: Partial<VuexState>; callback?: () => void }
+  ) {
+    for (const field in changes) {
       if (state.hasOwnProperty(field)) {
         // @ts-ignore
-        Vue.set(state, field, localStorageState[field]);
+        Vue.set(state, field, changes[field]);
       }
     }
+    if (callback) callback();
   },
   [types.persistPreferences](state, payload: Api.Preferences) {
     if (!state.account) {
@@ -86,7 +89,10 @@ export default as<
   },
 
   // Episodes
-  [types.setEpisodeInfo](state, episode: Api.Episode) {
-    state.episode = episode;
+  [types.setEpisodeInfo](state, episode: Api.EpisodeUrl) {
+    state.episodeUrl = episode;
+  },
+  [types.episodeRequestState](state, requestState: RequestState) {
+    state.episodeRequestState = requestState;
   },
 });

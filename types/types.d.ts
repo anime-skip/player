@@ -18,7 +18,7 @@ declare interface MessagePayload extends Implements<MessageTypeMap<any>, Message
 }
 
 declare interface MessageResponse extends Implements<MessageTypeMap<any>, MessageResponse> {
-  fetchEpisodeByUrl: Api.Episode;
+  fetchEpisodeByUrl: Api.EpisodeUrl;
   loginManual: Api.LoginResponse;
   loginRefresh: Api.LoginResponse;
   updatePreferences: void;

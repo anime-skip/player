@@ -12,4 +12,5 @@ export default {
   preferencesRequestState: '@@preferences/preferencesRequestState' as const,
 
   setEpisodeInfo: '@@episodes/setEpisodeInfo' as const,
+  episodeRequestState: '@@episodes/episodeRequestState' as const,
 };
