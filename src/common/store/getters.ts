@@ -1,50 +1,62 @@
-export function loginState(state: VuexState): boolean | undefined {
-  return state.loginState;
-}
+import { as } from '../utils/GlobalUtils';
+import { GetterTree } from 'vuex';
+import RequestState from '../utils/RequestState';
 
-export function token(state: VuexState): string | undefined {
-  if (state.tokenExpiresAt && state.tokenExpiresAt <= Date.now()) {
-    return undefined;
-  }
-  return state.token;
-}
+export default as<GetterTree<VuexState, VuexState>>({
+  // General
+  state(state): VuexState {
+    return state;
+  },
+  activeDialog(state): string | undefined {
+    return state.activeDialog;
+  },
 
-export function refreshToken(state: VuexState): string | undefined {
-  if (
-    state.refreshTokenExpiresAt &&
-    state.refreshTokenExpiresAt <= Date.now()
-  ) {
-    return undefined;
-  }
-  return state.refreshToken;
-}
+  // Login
+  isLoggingIn({ loginRequestState }): boolean {
+    return loginRequestState === RequestState.LOADING;
+  },
+  isLoggedIn({ loginRequestState }): boolean {
+    return loginRequestState === RequestState.SUCCESS;
+  },
+  isLogInError({ loginRequestState }): boolean {
+    console.log('isLogInError', loginRequestState === RequestState.FAILURE);
+    return loginRequestState === RequestState.FAILURE;
+  },
 
-export function state(state: VuexState): VuexState {
-  return state;
-}
+  // Authentication
+  token(state): string | undefined {
+    if (state.tokenExpiresAt && state.tokenExpiresAt <= Date.now()) {
+      return undefined;
+    }
+    return state.token;
+  },
+  refreshToken(state): string | undefined {
+    if (state.refreshTokenExpiresAt && state.refreshTokenExpiresAt <= Date.now()) {
+      return undefined;
+    }
+    return state.refreshToken;
+  },
 
-export function isLoggingIn(state: VuexState): boolean {
-  return !!state.loginLoading;
-}
+  // Preferences
+  preferences(state): Api.Preferences | undefined {
+    if (!state.account) {
+      return undefined;
+    }
+    return state.account.preferences;
+  },
 
-export function preferences(state: VuexState): Api.Preferences | undefined {
-  if (!state.account) {
-    return undefined;
-  }
-  return state.account.preferences;
-}
+  // Shows
 
-export function preferenceChangeError(state: VuexState): boolean {
-  return !!state.preferenceChangeError;
-}
+  // Episodes
+  episode(state): Api.Episode | undefined {
+    return state.episode;
+  },
 
-export function timestamps(state: VuexState): Api.Timestamp[] {
-  if (state.episode == null) {
-    return [];
-  }
-  return state.episode.timestamps;
-}
-
-export function episode(state: VuexState): Api.Episode | undefined {
-  return state.episode;
-}
+  // Timestamps
+  timestamps(state): Api.Timestamp[] {
+    if (state.episode == null) {
+      return [];
+    }
+    return state.episode.timestamps;
+  },
+});

@@ -3,5 +3,6 @@
     "trailingComma": "es5",
     "jsxBracketSameLine": true,
     "endOfLine": "lf",
+    "printWidth": 100,
     "tabWidth": 2
 }

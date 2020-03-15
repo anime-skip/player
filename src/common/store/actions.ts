@@ -1,104 +1,139 @@
-import Api from '@/common/Api';
 import Browser from '@/common/utils/Browser';
-import { ActionContext } from 'vuex';
+import { ActionContext, Action } from 'vuex';
 import { persistedKeys } from '@/common/utils/Constants';
+import mutations from './mutationTypes';
+import { as, sleep } from '../utils/GlobalUtils';
+import types from './actionTypes';
+import RequestState from '../utils/RequestState';
+import { stat } from 'fs';
+import { AssertionError } from 'assert';
 
-export function loginManual(
-  { commit }: ActionContext<VuexState, VuexState>,
-  { username, password }: LoginManualPayload
-): void {
-  commit('loginLoading', true);
-  Api.loginManual(username, password)
-    .then(loginData => {
-      commit('login', loginData);
-      commit('loginLoading', false);
-    })
-    .catch(() => {
-      commit('loginError');
-      commit('loginLoading', false);
-    });
-}
+// TODO make everything async
 
-export function loginRefresh(
+type VuexStateWithAccount = VuexState & { account: Api.Account };
+
+// Helpers /////////////////////////////////////////////////////////////////////
+
+function loginRefresh(
   { commit }: ActionContext<VuexState, VuexState>,
   { refreshToken }: LoginRefreshPayload
 ): void {
-  commit('loginLoading', true);
-  Api.loginRefresh(refreshToken)
+  commit(mutations.loginRequestState, RequestState.LOADING);
+  global.Api.loginRefresh(refreshToken)
     .then(async loginData => {
-      commit('login', loginData);
-      commit('loginLoading', false);
+      commit(mutations.login, loginData);
+      commit(mutations.loginRequestState, RequestState.SUCCESS);
     })
     .catch(_ => {
-      commit('loginError');
-      commit('loginLoading', false);
+      commit(mutations.loginRequestState, RequestState.FAILURE);
     });
 }
 
-export function initialLoad(
+function assertLoggedIn(
   context: ActionContext<VuexState, VuexState>
-): void {
-  Browser.storage
-    .getAll<Partial<VuexState>>(persistedKeys)
-    .then(async newState => {
-      context.commit('restoreState', newState);
-
-      if (!newState.token) {
-        context.commit('changeLoginState', false);
-        return;
-      }
-      /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-      if (Date.now() <= newState.tokenExpiresAt!) {
-        context.commit('changeLoginState', true);
-        return;
-      }
-      if (newState.refreshToken == null) {
-        context.commit('changeLoginState', false);
-        return;
-      }
-      /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-      if (Date.now() > newState.refreshTokenExpiresAt!) {
-        context.commit('changeLoginState', false);
-        return;
-      }
-
-      try {
-        await loginRefresh(context, { refreshToken: newState.refreshToken });
-        context.commit('changeLoginState', true);
-      } catch (err) {
-        console.error('Failed to get auth token with the refresh token', err);
-        context.commit('changeLoginState', false);
-      }
-    })
-    .catch(err => {
-      console.error('Failed getting local storage', err);
-    });
-}
-
-export function updatePreferences(
-  { commit, state }: ActionContext<VuexState, VuexState>,
-  pref: keyof Api.Preferences
-): void {
-  if (state.account == null) {
-    commit('setPreferenceError', true);
-    return;
+): asserts context is ActionContext<VuexStateWithAccount, VuexStateWithAccount> {
+  if (context.state.account == null) {
+    context.commit(mutations.loginRequestState, RequestState.FAILURE);
+    throw new AssertionError({ message: 'state.account does not exist, log in again' });
   }
-  const allPreferences = state.account.preferences;
-  const newValue = !allPreferences[pref];
-  const newPreferences = {
-    ...allPreferences,
-    [pref]: newValue,
-  };
-  commit('togglePref', { pref, value: newValue });
-  Api.updatePreferences(newPreferences)
-    .then(() => {
-      commit('setPreferenceError', false);
-      commit('persistPreferences', newPreferences);
-    })
-    .catch(() => {
-      commit('setPreferenceError', true);
-      setTimeout(() => {
-        commit('togglePref', { pref, value: !newValue });
-      }, 200);
-    });
 }
+
+// Actions /////////////////////////////////////////////////////////////////////
+
+export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState> }>({
+  // General
+  [types.initialLoad](context) {
+    Browser.storage
+      .getAll<Partial<VuexState>>(persistedKeys)
+      .then(async newState => {
+        context.commit(mutations.restoreState, newState);
+
+        if (!newState.token) {
+          context.commit(mutations.loginRequestState, RequestState.NOT_REQUESTED);
+          return;
+        }
+        /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+        if (Date.now() <= newState.tokenExpiresAt!) {
+          context.commit(mutations.loginRequestState, RequestState.SUCCESS);
+          return;
+        }
+        if (newState.refreshToken == null) {
+          context.commit(mutations.loginRequestState, RequestState.NOT_REQUESTED);
+          return;
+        }
+        /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+        if (Date.now() > newState.refreshTokenExpiresAt!) {
+          context.commit(mutations.loginRequestState, RequestState.NOT_REQUESTED);
+          return;
+        }
+
+        try {
+          await loginRefresh(context, { refreshToken: newState.refreshToken });
+        } catch (err) {
+          console.error('Failed to get auth token with the refresh token', err);
+        }
+      })
+      .catch(err => {
+        console.error('Failed getting local storage', err);
+      });
+  },
+  async [types.showDialog]({ state, commit }, dialogName?: string) {
+    if (state.activeDialog === dialogName) return;
+
+    if (state.activeDialog) {
+      commit(mutations.activeDialog, undefined);
+      await sleep(250);
+    }
+    if (dialogName) {
+      commit(mutations.activeDialog, dialogName);
+    }
+  },
+
+  // Auth
+  [types.loginManual]({ commit }, { username, password }: LoginManualPayload) {
+    commit(mutations.loginRequestState, RequestState.LOADING);
+    global.Api.loginManual(username, password)
+      .then(loginData => {
+        commit(mutations.login, loginData);
+        commit(mutations.loginRequestState, RequestState.SUCCESS);
+      })
+      .catch(() => {
+        commit(mutations.loginRequestState, RequestState.FAILURE);
+      });
+  },
+  [types.loginRefresh]: loginRefresh,
+
+  // Preferences
+  [types.updatePreferences](context, pref: keyof Api.Preferences) {
+    assertLoggedIn(context);
+    const { commit, state } = context;
+
+    const allPreferences = state.account.preferences;
+    const newValue = !allPreferences[pref];
+    const newPreferences = {
+      ...allPreferences,
+      [pref]: newValue,
+    };
+    commit(mutations.preferencesRequestState, RequestState.LOADING);
+    commit(mutations.togglePref, { pref, value: newValue });
+    global.Api.updatePreferences(newPreferences)
+      .then(() => {
+        commit(mutations.preferencesRequestState, RequestState.SUCCESS);
+        commit(mutations.persistPreferences, newPreferences);
+      })
+      .catch(() => {
+        commit(mutations.preferencesRequestState, RequestState.FAILURE);
+        setTimeout(() => {
+          commit(mutations.togglePref, { pref, value: !newValue });
+        }, 200);
+      });
+  },
+
+  // Shows
+
+  // Episodes
+  [types.fetchEpisodeByUrl](context) {
+    assertLoggedIn(context);
+    const { commit, state } = context;
+  },
+});

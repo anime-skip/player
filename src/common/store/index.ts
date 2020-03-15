@@ -1,22 +1,11 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import * as mutations from './mutations';
-import * as actions from './actions';
-import * as getters from './getters';
+import mutations from './mutations';
+import actions from './actions';
+import getters from './getters';
+import { initialState } from './state';
 
 Vue.use(Vuex);
-
-const initialState: VuexState = {
-  token: undefined,
-  tokenExpiresAt: undefined,
-  refreshToken: undefined,
-  refreshTokenExpiresAt: undefined,
-  loginError: false,
-  loginLoading: false,
-  loginState: undefined,
-  account: undefined,
-  episode: undefined,
-};
 
 export default new Vuex.Store({
   state: initialState,

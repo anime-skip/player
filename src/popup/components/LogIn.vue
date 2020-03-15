@@ -1,18 +1,19 @@
 <template>
   <ProgressOverlay :isLoading="isLoggingIn">
     <form class="LogIn" ref="form">
-      <PopupHeader title="Log In" class="header" />
+      <PopupHeader title="Log In" class="header" :small="small" />
       <TextInput
         class="flex row"
         leftIcon="ic-account.svg"
-        hint="Username"
+        label="Username"
         autocomplete="username"
         v-model="username"
       />
       <TextInput
         class="flex row"
         leftIcon="ic-password.svg"
-        hint="Password"
+        label="Password"
+        :errorMessage="isLogInError ? 'Username or password is incorrect' : undefined"
         autocomplete="current-password"
         type="password"
         v-model="password"
@@ -29,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 import TextInput from '@/common/components/TextInput.vue';
 import { Action, Getter } from '@/common/utils/VuexDecorators';
 import ProgressOverlay from '@/common/components/ProgressOverlay.vue';
@@ -43,7 +44,10 @@ export default class LogIn extends Vue {
   public username: string = 'aklinker1';
   public password: string = 'password';
 
+  @Prop(Boolean) public small?: string;
+
   @Getter() public isLoggingIn!: boolean;
+  @Getter() public isLogInError!: boolean;
 
   @Action() public loginManual!: (payload: LoginManualPayload) => void;
 
@@ -66,7 +70,6 @@ export default class LogIn extends Vue {
 .LogIn {
   display: flex;
   flex-direction: column;
-  padding: 32px 40px;
   .header {
     margin-bottom: 24px;
   }

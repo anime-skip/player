@@ -17,11 +17,7 @@
         <ToolbarButton class="margin-right" @click.native="togglePlayPause()">
           <PlayPauseButton :state="playerState.isPaused ? 1 : 0" />
         </ToolbarButton>
-        <ToolbarButton
-          class="margin-right"
-          icon="ic_next_episode.svg"
-          v-if="false"
-        />
+        <ToolbarButton class="margin-right" icon="ic_next_episode.svg" v-if="false" />
         <VolumeButton />
         <div class="divider margin-right" />
         <ToolbarButton
@@ -41,20 +37,10 @@
           {{ formattedTime }}&ensp;/&ensp;<span>{{ duration }}</span>
         </p>
         <div class="space" />
+        <ToolbarButton class="margin-left" icon="ic_edit.svg" v-if="false" />
         <ToolbarButton
-          class="margin-left"
-          icon="ic_edit.svg"
-          v-if="false"
-        />
-        <ToolbarButton
-          v-if="!loginState"
-          icon="ic-password.svg"
-          @click.native="openPopup()"
-        />
-        <ToolbarButton
-          v-else
-          icon="ic-account.svg"
-          @click.native="openPopup()"
+          :icon="!isLoggedIn ? 'ic-password.svg' : 'ic-account.svg'"
+          @click.native="toggleAccountDialog"
         />
         <div class="divider margin-left" v-if="false" />
         <ToolbarButton
@@ -62,10 +48,7 @@
           class="margin-left"
           @click.native="setFullscreen(!Utils.isFullscreen())"
         >
-          <FullscreenButton
-            :state="Utils.isFullscreen() ? 0 : 1"
-            :key="isFullscreenCount"
-          />
+          <FullscreenButton :state="Utils.isFullscreen() ? 0 : 1" :key="isFullscreenCount" />
         </ToolbarButton>
       </div>
     </div>
@@ -76,12 +59,13 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import Timeline from './Timeline.vue';
 import ToolbarButton from './ToolbarButton.vue';
+import AccountDialog from './AccountDialog.vue';
 import PlayPauseButton from './animations/PlayPauseButton.vue';
 import FullscreenButton from './animations/FullscreenButton.vue';
 import VolumeButton from './animations/VolumeButton.vue';
 import Utils from '@/common/utils/Utils';
 import Browser from '@/common/utils/Browser';
-import { Getter } from '@/common/utils/VuexDecorators';
+import { Getter, Action } from '@/common/utils/VuexDecorators';
 import VideoUtils from '../VideoUtils';
 
 @Component({
@@ -91,6 +75,7 @@ import VideoUtils from '../VideoUtils';
     ToolbarButton,
     FullscreenButton,
     VolumeButton,
+    AccountDialog,
   },
 })
 export default class ToolBar extends Vue {
@@ -101,13 +86,15 @@ export default class ToolBar extends Vue {
   public isFullscreenCount: number = 0;
   public Utils = Utils;
   public duration: string = 'Loading...';
-  public openPopup = Browser.openPopup;
   public togglePlayPause = VideoUtils.togglePlayPause;
   public isFullscreenEnabled = document.fullscreenEnabled;
 
-  @Getter() public loginState?: boolean;
+  @Getter() public isLoggedIn?: boolean;
   @Getter() public timestamps!: Api.Timestamp[];
   @Getter() public preferences?: Api.Preferences;
+  @Getter() public activeDialog?: string;
+
+  @Action() public showDialog!: (dialogName?: string) => void;
 
   constructor() {
     super();
@@ -136,10 +123,7 @@ export default class ToolBar extends Vue {
     if (duration === 0) {
       this.duration = 'Loading...';
     }
-    this.duration = this.formatSeconds(
-      duration,
-      this.playerState.isPaused ? 2 : 0
-    );
+    this.duration = this.formatSeconds(duration, this.playerState.isPaused ? 2 : 0);
   }
 
   public updateTime(newTime: number, updateVideo?: boolean) {
@@ -154,9 +138,7 @@ export default class ToolBar extends Vue {
   }
 
   public nextTimestamp(): void {
-    const nextTimestamp = this.timestamps.find(
-      timestamp => timestamp.at > this.currentTime
-    );
+    const nextTimestamp = this.timestamps.find(timestamp => timestamp.at > this.currentTime);
     const video = global.getVideo();
     if (nextTimestamp) {
       this.updateTime(nextTimestamp.at, true);
@@ -180,27 +162,28 @@ export default class ToolBar extends Vue {
     }
   }
 
+  public toggleAccountDialog(): void {
+    this.showDialog(!this.activeDialog ? 'AccountDialog' : undefined);
+  }
+
   public formatSeconds(seconds: number, decimalPlaces: number) {
     const mins = Math.floor(seconds / 60);
     const secs = parseFloat((seconds % 60).toFixed(decimalPlaces));
     return mins + ':' + (secs < 10 ? '0' : '') + secs;
   }
+
   public get formattedTime(): string {
-    return this.formatSeconds(
-      this.currentTime,
-      this.playerState.isPaused ? 2 : 0
-    );
+    return this.formatSeconds(this.currentTime, this.playerState.isPaused ? 2 : 0);
   }
 }
 </script>
 
 <style lang="scss" scoped>
-$height: 56px;
 $offsetInactive: 4px;
 .ToolBar {
   position: relative;
-  height: $height;
-  transform: translateY($height - $offsetInactive);
+  height: $toolbarHeight;
+  transform: translateY($toolbarHeight - $offsetInactive);
   transition: 200ms;
   transition-property: transform;
   user-select: none;
@@ -220,10 +203,7 @@ $offsetInactive: 4px;
     transition: 200ms;
     transition-property: opacity;
     opacity: 0;
-    background: linear-gradient(
-      transparent,
-      rgba($color: $background500, $alpha: 0.75)
-    );
+    background: linear-gradient(transparent, rgba($color: $background500, $alpha: 0.75));
   }
   &.active {
     .gradient {

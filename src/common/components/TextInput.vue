@@ -1,21 +1,24 @@
 <template>
-  <div class="TextInput clickable dark" :class="{ down: isFocused || value }">
-    <WebExtImg
-      class="icon"
-      :class="{ focused: isFocused }"
-      :src="leftIcon"
-      v-if="leftIcon !== null"
-    />
-    <input
-      class="input"
-      :type="type"
-      v-model="value"
-      :placeholder="hint"
-      @focus="onFocus"
-      @blur="onBlur"
-      :autocomplete="autocomplete || 'off'"
-      @input="updateValue"
-    />
+  <div class="TextInput">
+    <div class="input-wrapper clickable dark" :class="{ down: isFocused || value }">
+      <WebExtImg
+        class="icon"
+        :class="{ focused: isFocused }"
+        :src="leftIcon"
+        v-if="leftIcon !== null"
+      />
+      <input
+        class="input"
+        :type="type"
+        v-model="value"
+        :placeholder="label"
+        @focus="onFocus"
+        @blur="onBlur"
+        :autocomplete="autocomplete || 'off'"
+        @input="updateValue"
+      />
+    </div>
+    <span v-if="errorMessage" class="error-message">{{ errorMessage }}</span>
   </div>
 </template>
 
@@ -27,7 +30,8 @@ import WebExtImg from './WebExtImg.vue';
   components: { WebExtImg },
 })
 export default class TextInput extends Vue {
-  @Prop(String) private hint!: string;
+  @Prop(String) private label!: string;
+  @Prop(String) private errorMessage?: string;
   @Prop(String) private autocomplete?: 'username' | 'current-password';
   @Prop(String) private defaultValue?: string;
   @Prop({ default: 'text' }) private type!: 'text' | 'password';
@@ -63,39 +67,51 @@ $inputHeight: 48px;
 
 .TextInput {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  height: $inputHeight;
-  background: $input500;
-  margin-bottom: 8px;
-  border-radius: 3px;
-  .icon {
-    width: 24px;
-    height: 24px;
-    margin-left: 12px;
-    opacity: 0.48;
-    transition: $transitionMs;
-    transition-property: opacity;
-    &.focused {
-      opacity: 0.9;
+  flex-direction: column;
+
+  .input-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: $inputHeight;
+    background: $input500;
+    border-radius: 3px;
+    .icon {
+      width: 24px;
+      height: 24px;
+      margin-left: 12px;
+      opacity: 0.48;
+      transition: $transitionMs;
+      transition-property: opacity;
+      &.focused {
+        opacity: 0.9;
+      }
+    }
+    .input {
+      flex: 1;
+      background-color: transparent;
+      border: none;
+      outline: none;
+      height: $inputHeight;
+      padding: 4px 12px 0 12px;
+      box-sizing: border-box;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: $inputHeight;
+      caret-color: $primary500;
+      color: $textPrimary;
+      &::placeholder {
+        color: $textSecondary;
+      }
     }
   }
-  .input {
-    flex: 1;
-    background-color: transparent;
-    border: none;
-    outline: none;
-    height: $inputHeight;
-    padding: 4px 12px 0 12px;
-    box-sizing: border-box;
+
+  .error-message {
+    color: $red300;
     font-size: 15px;
     font-weight: 500;
-    line-height: $inputHeight;
-    caret-color: $primary500;
-    color: $textPrimary;
-    &::placeholder {
-      color: $textSecondary;
-    }
+    margin: 0 16px;
+    margin-top: 8px;
   }
 }
 </style>

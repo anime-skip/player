@@ -2,6 +2,7 @@ import Axios from 'axios';
 import Utils from '@/common/utils/Utils';
 import Browser from '@/common/utils/Browser';
 import md5 from 'md5';
+import { as } from '../utils/GlobalUtils';
 
 const axios = Axios.create({
   baseURL: 'http://localhost:8000/',
@@ -32,10 +33,7 @@ axios.interceptors.request.use((config): any => {
     console.log('Parameters: ', config.params);
   }
   if (config.data) {
-    console.log(
-      `GraphQL:\n%c${Utils.formatGraphql(config.data.query)}`,
-      'color: #137AF8'
-    );
+    console.log(`GraphQL:\n%c${Utils.formatGraphql(config.data.query)}`, 'color: #137AF8');
     if (config.data.variables) {
       console.log('Variables: ', config.data.variables);
     }
@@ -48,10 +46,7 @@ function query(q: string): GraphQlBody {
   return { query: q };
 }
 
-function mutation(
-  mutationString: string,
-  vars: { [variableName: string]: any }
-): GraphQlBody {
+function mutation(mutationString: string, vars: { [variableName: string]: any }): GraphQlBody {
   return { query: mutationString, variables: vars };
 }
 
@@ -78,43 +73,50 @@ const episodeData = `
   show { id name originalName website image }
 `;
 
-export default class Api {
-  private static async send<Q extends string, D>(
-    data: any
-  ): Promise<{ data: { [field in Q]: D } }> {
-    try {
-      const token = await Browser.storage.getItem<string>('token');
-      const response = await axios.post('graphql', data, {
-        headers: {
-          Authorization: token ? `Bearer ${token}` : undefined,
-        },
-      });
+async function sendGraphql<Q extends string, D>(data: any): Promise<{ data: { [field in Q]: D } }> {
+  try {
+    const token = await Browser.storage.getItem<string>('token');
+    const response = await axios.post('graphql', data, {
+      headers: {
+        Authorization: token ? `Bearer ${token}` : undefined,
+      },
+    });
 
-      /* eslint-disable no-console */
-      console.log();
-      console.log('Response: ', response.data);
-      console.groupEnd();
-      /* eslint-enable no-console */
+    /* eslint-disable no-console */
+    console.log();
+    console.log('Response: ', response.data);
+    console.groupEnd();
+    /* eslint-enable no-console */
 
-      return response.data;
-    } catch (err) {
-      /* eslint-disable no-console */
-      console.log();
-      console.error(err.message, {
-        status: err.response.status,
-        headers: err.response.headers,
-        ...err.response.data,
-      });
-      console.groupEnd();
-      /* eslint-enable no-console */
-      throw err;
-    }
+    return response.data;
+  } catch (err) {
+    /* eslint-disable no-console */
+    console.log();
+    console.error(err.message, {
+      status: err.response.status,
+      headers: err.response.headers,
+      ...err.response.data,
+    });
+    console.groupEnd();
+    /* eslint-enable no-console */
+    throw err;
   }
+}
 
-  public static async loginManual(
-    username: string,
-    password: string
-  ): Promise<Api.LoginResponse> {
+export default as<Api.Implementation>({
+  async fetchEpisodeByUrl(url: string): Promise<Api.Episode> {
+    const q = query(
+      `{
+        episode(url: "${url}") {
+          ${episodeData}
+        }
+      }`
+    );
+    const response = await sendGraphql<'episode', Api.Episode>(q);
+    return response.data.episode;
+  },
+
+  async loginManual(username: string, password: string): Promise<Api.LoginResponse> {
     const q = query(
       `{
         login(usernameEmail: "${username}", passwordHash: "${md5(password)}") {
@@ -122,13 +124,11 @@ export default class Api {
         }
       }`
     );
-    const response = await this.send<'login', Api.LoginResponse>(q);
+    const response = await sendGraphql<'login', Api.LoginResponse>(q);
     return response.data.login;
-  }
+  },
 
-  public static async loginRefresh(
-    refreshToken: string
-  ): Promise<Api.LoginResponse> {
+  async loginRefresh(refreshToken: string): Promise<Api.LoginResponse> {
     const q = query(
       `{
         loginRefresh(refreshToken: "${refreshToken}") {
@@ -136,11 +136,11 @@ export default class Api {
         }
       }`
     );
-    const response = await this.send<'login', Api.LoginResponse>(q);
+    const response = await sendGraphql<'login', Api.LoginResponse>(q);
     return response.data.login;
-  }
+  },
 
-  public static async updatePreferences(prefs: Api.Preferences): Promise<void> {
+  async updatePreferences(prefs: Api.Preferences): Promise<void> {
     const m = mutation(
       `mutation SavePreferences($prefs: InputPreferences!) {
         savePreferences(preferences: $prefs) {
@@ -151,18 +151,6 @@ export default class Api {
         prefs,
       }
     );
-    await this.send(m);
-  }
-
-  public static async fetchEpisodeByUrl(url: string): Promise<Api.Episode> {
-    const q = query(
-      `{
-        episode(url: "${url}") {
-          ${episodeData}
-        }
-      }`
-    );
-    const response = await this.send<'episode', Api.Episode>(q);
-    return response.data.episode;
-  }
-}
+    await sendGraphql(m);
+  },
+});
