@@ -1,10 +1,10 @@
 export default class Messenger {
   public listeners?: MessageListeners;
 
-  public constructor() {
+  public constructor(listeners?: MessageListeners) {
+    this.listeners = listeners;
     // @ts-ignore
     browser.runtime.onMessage.addListener(this.onReceiveMessage);
-    // console.log('initialized messenger');
   }
 
   public send = async <T extends MessageType>(
@@ -17,10 +17,6 @@ export default class Messenger {
       payload,
     });
     return response;
-  };
-
-  public on = (listeners: MessageListeners): void => {
-    this.listeners = listeners;
   };
 
   private onReceiveMessage = async <T extends MessageType>({
