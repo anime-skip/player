@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import Axios, { AxiosError } from 'axios';
 import Utils from '@/common/utils/Utils';
 import Browser from '@/common/utils/Browser';
 import md5 from 'md5';
@@ -79,6 +79,7 @@ const episodeUrlData = `
   }
 `;
 
+/* eslint-disable no-console */
 async function sendGraphql<Q extends string, D>(data: any): Promise<{ data: { [field in Q]: D } }> {
   try {
     const token = await Browser.storage.getItem<string>('token');
@@ -87,27 +88,30 @@ async function sendGraphql<Q extends string, D>(data: any): Promise<{ data: { [f
         Authorization: token ? `Bearer ${token}` : undefined,
       },
     });
+    if (response.data.errors) {
+      const error = new Error(
+        `GraphQL Request failed with ${response.data.errors.length} errors`
+      ) as AxiosError;
+      error.response = response;
+      throw error;
+    }
 
-    /* eslint-disable no-console */
-    console.log();
     console.log('Response: ', response.data);
     console.groupEnd();
-    /* eslint-enable no-console */
 
     return response.data;
   } catch (err) {
-    /* eslint-disable no-console */
-    console.log();
     console.error(err.message, {
       status: err.response.status,
       headers: err.response.headers,
-      ...err.response.data,
+      errors: err.response.data.errors,
+      response: err.response,
     });
     console.groupEnd();
-    /* eslint-enable no-console */
     throw err;
   }
 }
+/* eslint-enable no-console */
 
 export default as<Api.Implementation>({
   async fetchEpisodeByUrl(url: string): Promise<Api.EpisodeUrl> {
