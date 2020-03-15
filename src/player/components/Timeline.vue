@@ -10,7 +10,7 @@
     />
     <Section
       v-for="section of completedSections"
-      :key="section.timestamp.id"
+      :key="'completed' + section.timestamp.id"
       :timestamp="section.timestamp"
       :endTime="section.endTime"
       :duration="duration"
@@ -128,6 +128,7 @@ export default class Timeline extends Vue {
       typeId: -2,
     };
   }
+
   public get endTimestamp(): Api.Timestamp {
     return {
       id: -1,
