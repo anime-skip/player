@@ -1,5 +1,5 @@
 <template>
-  <div class="EpisodeInfo" v-if="hasTriedLoadingEpisodeInfo">
+  <div class="EpisodeInfo" :class="{ visible: hasTriedLoadingEpisodeInfo }">
     <h2>
       {{ showTitle }}
       <span>&ensp;&bull;&ensp;Anime Skip</span>
@@ -65,6 +65,14 @@ export default class EpisodeInfo extends Vue {
 
 <style lang="scss" scoped>
 .EpisodeInfo {
+  opacity: 0;
+  transition: 250ms;
+  transition-property: opacity;
+
+  &.visible {
+    opacity: 1;
+  }
+
   * {
     text-align: start;
     margin: 0;
