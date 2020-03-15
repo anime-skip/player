@@ -1,13 +1,12 @@
 # Anime Skip - Web Extension
 
-Inject a custom player over the top of the `VRV` and `Funimation` players.
+Inject a custom player over the top of the certain web players (`VRV`, `Funimation`).
 
 ## Development
 
 ```bash
-yarn build
+yarn install
+yarn watch:dev
 ```
 
-Build and install the extension in your web browser. I have tested this with Firefox, and it works well. It will open to the `example/index.html` file. This is the file used for testing, rather than the actual services to avoid over-usage of the token.
-
-https://codepen.io/mrrocks/pen/EiplA
+This will install and open firefox. To open another browser, more changes will have to be made.
