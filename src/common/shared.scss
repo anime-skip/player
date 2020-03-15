@@ -67,3 +67,9 @@ a {
   pointer-events: none;
   cursor: pointer;
 }
+
+.error-message {
+  color: $red400;
+  font-size: 15px;
+  font-weight: 500;
+}

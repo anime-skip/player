@@ -30,6 +30,9 @@
           @click.native="onClickPreference(preference.key)"
         />
       </div>
+      <span v-if="hasPreferenceError" class="error-message">
+        Could not save preferences, please try again later
+      </span>
       <div class="bottom-row">
         <a class="link" href>Need help?</a>
         <a class="link" href="#" @click.prevent="logOut()">Log out</a>
@@ -54,6 +57,7 @@ export default class Preferences extends Vue {
 
   @Getter() public preferences?: Api.Preferences;
   @Getter() public isLoggingIn!: boolean;
+  @Getter() public hasPreferenceError!: boolean;
 
   @Action() public updatePreferences!: (pref: keyof Api.Preferences) => void;
 
@@ -86,18 +90,21 @@ export default class Preferences extends Vue {
   .column {
     display: flex;
     flex-direction: column;
+    align-items: stretch;
   }
   .input-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 16px;
     margin: 16px 0;
+    align-items: stretch;
     &.small {
       grid-template-columns: repeat(2, 1fr);
     }
   }
   .input-grid--2 {
-    grid-template-columns: repeat(2, 1fr);
+    align-items: stretch;
+    grid-template-columns: repeat(2, minMax(1fr, 150px));
     &.small {
       grid-template-columns: repeat(1, 1fr);
     }
@@ -110,6 +117,9 @@ export default class Preferences extends Vue {
   a {
     color: $textPrimary;
     font-size: 15px;
+  }
+  .error-message {
+    color: $red400;
   }
   .bottom-row {
     padding-top: 16px;
