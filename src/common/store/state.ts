@@ -2,6 +2,7 @@ import RequestState from '../utils/RequestState';
 
 export const initialState: VuexState = {
   activeDialog: undefined,
+  playbackRate: 1,
   token: undefined,
   tokenExpiresAt: undefined,
   refreshToken: undefined,

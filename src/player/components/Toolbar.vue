@@ -37,15 +37,11 @@
           {{ formattedTime }}&ensp;/&ensp;<span>{{ duration }}</span>
         </p>
         <div class="space" />
-        <ToolbarButton class="margin-left" icon="ic_edit.svg" v-if="false" />
-        <ToolbarButton
-          :icon="!isLoggedIn ? 'ic-password.svg' : 'ic-account.svg'"
-          @click.native="toggleAccountDialog"
-        />
-        <div class="divider margin-left" v-if="false" />
+        <ToolbarButton class="margin-left" icon="ic_edit.svg" />
+        <div class="divider margin-left" />
+        <ToolbarButton class="margin-left" icon="ic_more.svg" @click.native="toggleAccountDialog" />
         <ToolbarButton
           v-if="isFullscreenEnabled"
-          class="margin-left"
           @click.native="setFullscreen(!Utils.isFullscreen())"
         >
           <FullscreenButton :state="Utils.isFullscreen() ? 0 : 1" :key="isFullscreenCount" />
@@ -89,7 +85,6 @@ export default class ToolBar extends Vue {
   public togglePlayPause = VideoUtils.togglePlayPause;
   public isFullscreenEnabled = document.fullscreenEnabled;
 
-  @Getter() public isLoggedIn?: boolean;
   @Getter() public timestamps!: Api.Timestamp[];
   @Getter() public preferences?: Api.Preferences;
   @Getter() public activeDialog?: string;
@@ -188,6 +183,7 @@ $offsetInactive: 6px;
   transition-property: transform;
   user-select: none;
   cursor: default;
+
   &.active,
   &.paused {
     transform: translateY(0);

@@ -54,5 +54,11 @@ declare interface SkippablePreference {
   help: string;
 }
 
+declare interface PlaybackRate {
+  value: number;
+  display: string;
+  hideWhenSmall?: boolean;
+}
+
 type ValueOf<T> = T[keyof T];
 type Implements<T, U extends T> = {};

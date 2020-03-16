@@ -10,7 +10,8 @@
           text="Auto-skip Sections"
           @click.native="updatePreferences('enableAutoSkip')"
         />
-        <!-- 
+        <PlaybackRatePicker :showLess="!small" />
+        <!--
         <Checkbox
           :isChecked="getPref('enableAutoPlay')"
           text="Force video auto-play"
@@ -46,11 +47,13 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import ProgressOverlay from '@/common/components/ProgressOverlay.vue';
 import PopupHeader from './PopupHeader.vue';
 import Checkbox from '@/common/components/Checkbox.vue';
+import TextInput from '@/common/components/TextInput.vue';
+import PlaybackRatePicker from '@/common/components/PlaybackRatePicker.vue';
 import { Getter, Action, Mutation } from '@/common/utils/VuexDecorators';
 import { SKIPPABLE_PREFERENCES } from '../../common/utils/Constants';
 
 @Component({
-  components: { ProgressOverlay, PopupHeader, Checkbox },
+  components: { ProgressOverlay, PopupHeader, Checkbox, TextInput, PlaybackRatePicker },
 })
 export default class Preferences extends Vue {
   @Prop(Boolean) public small?: string;

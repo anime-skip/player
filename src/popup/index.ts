@@ -8,6 +8,8 @@ import AxiosApi from '@/common/api/AxiosApi';
 // Setup Globals
 
 global.Api = AxiosApi;
+// @ts-ignore
+global.getVideo = () => undefined;
 
 // Inject DOM
 

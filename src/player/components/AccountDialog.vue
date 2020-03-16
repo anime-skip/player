@@ -23,7 +23,7 @@ export default class ToolBar extends Vue {}
   margin-right: 16px;
   margin-bottom: $toolbarHeight + 4px + 8px;
 
-  .container {
+  .dialog-root-container {
     max-height: 300px;
     max-width: 400px;
     & > * {
