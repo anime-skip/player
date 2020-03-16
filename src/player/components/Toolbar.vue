@@ -263,7 +263,7 @@ $offsetActiveVrv: 3px;
   }
 }
 
-// VRV specific translations
+// VRV specific styles
 .ToolBar.vrv {
   transform: translateY($toolbarHeight - $offsetInactiveVrv);
 

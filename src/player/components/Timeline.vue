@@ -219,6 +219,7 @@ $translationInactiveSliderVrv: 3px;
   }
 }
 
+// VRV specific styles
 .Timeline.vrv {
   transform: scaleY(1) translateY($translationVrv);
   &.flipped {
