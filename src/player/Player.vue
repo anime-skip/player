@@ -82,11 +82,9 @@ export default class Player extends Vue {
 
       // Managing the buffer
       video.onplaying = () => {
-        console.log('onplaying');
         this.buffering = false;
       };
       video.onwaiting = () => {
-        console.log('onwaiting');
         this.buffering = true;
       };
     });
