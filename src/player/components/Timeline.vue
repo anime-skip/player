@@ -73,8 +73,10 @@ export default class Timeline extends Vue {
 
   public constructor() {
     super();
-    Utils.waitForVideoLoad().then(duration => {
-      this.onChangeDuration(duration);
+    global.onVideoChanged(video => {
+      Utils.waitForVideoLoad().then(duration => {
+        this.onChangeDuration(duration);
+      });
     });
   }
 

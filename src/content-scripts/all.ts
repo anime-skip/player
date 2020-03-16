@@ -14,7 +14,7 @@ global.getVideo = (): HTMLVideoElement => {
 let oldVideo: HTMLVideoElement | undefined;
 function checkVideoChanged(): void {
   const newVideo = global.getVideo();
-  if (newVideo != null && newVideo !== oldVideo) {
+  if (newVideo != null && (newVideo !== oldVideo || newVideo.src !== oldVideo.src)) {
     videoCallbacks.forEach(callback => callback(newVideo));
   }
   oldVideo = newVideo;
