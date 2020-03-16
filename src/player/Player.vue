@@ -19,12 +19,14 @@
 
     <!-- Dialogs -->
     <AccountDialog />
+    <Loading v-if="buffering" class="buffer-loading-container" />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import WebExtImg from '@/common/components/WebExtImg.vue';
+import Loading from '@/common/components/Loading.vue';
 import ToolBar from './components/Toolbar.vue';
 import EpisodeInfo from './components/EpisodeInfo.vue';
 import AccountDialog from './components/AccountDialog.vue';
@@ -35,7 +37,7 @@ import VideoUtils from './VideoUtils';
 import Messenger from '@/common/utils/Messenger';
 
 @Component({
-  components: { WebExtImg, ToolBar, EpisodeInfo, AccountDialog },
+  components: { WebExtImg, ToolBar, EpisodeInfo, AccountDialog, Loading },
   mixins: [KeyboardShortcuts],
 })
 export default class Player extends Vue {
@@ -51,6 +53,7 @@ export default class Player extends Vue {
   public activeTimer?: any;
   public activeTimeout: number = 2000;
   public togglePlayPause = VideoUtils.togglePlayPause;
+  public buffering = false;
 
   @Getter() playbackRate!: number;
 
@@ -76,6 +79,14 @@ export default class Player extends Vue {
       this.fetchEpisodeInfo();
       video.onplay = () => this.onPlay();
       video.onpause = () => this.onPause();
+
+      // Managing the buffer
+      video.onplaying = () => {
+        this.buffering = false;
+      };
+      video.onwaiting = () => {
+        this.buffering = true;
+      };
     });
   }
 
@@ -155,6 +166,22 @@ export default class Player extends Vue {
 
   .bottom-content {
     grid-area: toolbar;
+  }
+
+  .buffer-loading-container {
+    position: absolute;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba($color: $background500, $alpha: 0.5);
+
+    * {
+      background-color: transparent;
+    }
   }
 }
 </style>
