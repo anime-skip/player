@@ -1,5 +1,13 @@
 <template>
-  <div ref="timeline" class="Timeline" :class="{ flipped: isFlipped, seeking: isSeeking }">
+  <div
+    ref="timeline"
+    class="Timeline"
+    :class="{
+      vrv: service === 'vrv',
+      flipped: isFlipped,
+      seeking: isSeeking,
+    }"
+  >
     <Section
       v-for="section of sections"
       :key="section.timestamp.id"
@@ -70,6 +78,7 @@ export default class Timeline extends Vue {
   public isSeeking: boolean = false;
   public seekingTime: number = 0;
   public skippedFromZero: boolean = false;
+  public service = global.service;
 
   public constructor() {
     super();
@@ -172,15 +181,20 @@ export default class Timeline extends Vue {
 </script>
 
 <style lang="scss" scoped>
+$translationDefault: 4px;
+$translationInactiveSliderDefault: 4px;
+$translationVrv: 0px;
+$translationInactiveSliderVrv: 3px;
+
 .Timeline {
   height: 11px;
   position: relative;
   cursor: pointer;
-  transform: scaleY(1) translateY(4px);
+  transform: scaleY(1) translateY($translationDefault);
   &.flipped {
     transform: scaleY(-1);
     .slider {
-      transform: translateY(4px);
+      transform: translateY($translationInactiveSliderDefault);
     }
   }
   & > * {
@@ -202,6 +216,15 @@ export default class Timeline extends Vue {
     width: 12px;
     top: 0;
     transform: translateX(-50%);
+  }
+}
+
+.Timeline.vrv {
+  transform: scaleY(1) translateY($translationVrv);
+  &.flipped {
+    .slider {
+      transform: translateY($translationInactiveSliderVrv);
+    }
   }
 }
 </style>
