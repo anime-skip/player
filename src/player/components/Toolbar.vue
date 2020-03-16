@@ -1,7 +1,11 @@
 <template>
   <div
     class="ToolBar"
-    :class="{ active: playerState.isActive, paused: playerState.isPaused }"
+    :class="{
+      vrv: service === 'vrv',
+      active: playerState.isActive,
+      paused: playerState.isPaused,
+    }"
     @click.stop
   >
     <div class="gradient"></div>
@@ -84,6 +88,7 @@ export default class ToolBar extends Vue {
   public duration: string = 'Loading...';
   public togglePlayPause = VideoUtils.togglePlayPause;
   public isFullscreenEnabled = document.fullscreenEnabled;
+  public service = global.service;
 
   @Getter() public timestamps!: Api.Timestamp[];
   @Getter() public preferences?: Api.Preferences;
@@ -174,11 +179,15 @@ export default class ToolBar extends Vue {
 </script>
 
 <style lang="scss" scoped>
-$offsetInactive: 6px;
+$offsetInactiveDefault: 6px;
+$offsetActiveDefault: 0px;
+$offsetInactiveVrv: 6px;
+$offsetActiveVrv: 3px;
+
 .ToolBar {
   position: relative;
   height: $toolbarHeight;
-  transform: translateY($toolbarHeight - $offsetInactive);
+  transform: translateY($toolbarHeight - $offsetInactiveDefault);
   transition: 200ms;
   transition-property: transform;
   user-select: none;
@@ -186,7 +195,7 @@ $offsetInactive: 6px;
 
   &.active,
   &.paused {
-    transform: translateY(0);
+    transform: translateY($offsetActiveDefault);
   }
 
   .gradient {
@@ -251,6 +260,16 @@ $offsetInactive: 6px;
         color: $textSecondary;
       }
     }
+  }
+}
+
+// VRV specific styles
+.ToolBar.vrv {
+  transform: translateY($toolbarHeight - $offsetInactiveVrv);
+
+  &.active,
+  &.paused {
+    transform: translateY($offsetActiveVrv);
   }
 }
 </style>

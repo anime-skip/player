@@ -11,6 +11,7 @@ declare interface ServiceHelpers {
   getVideo(): HTMLVideoElement;
   onVideoChanged(callback: (video: HTMLVideoElement) => void): void;
   Api: Api.Implementation;
+  service: 'vrv' | 'example' | undefined;
 }
 
 declare global {
