@@ -52,6 +52,8 @@ export default class Player extends Vue {
   public activeTimeout: number = 2000;
   public togglePlayPause = VideoUtils.togglePlayPause;
 
+  @Getter() playbackRate!: number;
+
   @Mutation() public restoreState!: (payload: { changes: any; callback?: () => void }) => void;
 
   @Action() public initialLoad!: (callback?: () => void) => void;
@@ -70,6 +72,7 @@ export default class Player extends Vue {
 
   public mounted(): void {
     global.onVideoChanged(video => {
+      video.playbackRate = this.playbackRate;
       this.fetchEpisodeInfo();
       video.onplay = () => this.onPlay();
       video.onpause = () => this.onPause();

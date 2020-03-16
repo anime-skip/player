@@ -13,13 +13,17 @@ This will install and open firefox. To open another browser, more changes will h
 
 ## TODO
 
-- playback speed
-- Try to create an episode at a URL that has already been deleted
-- Error on timeline drag
-- custom timeline translation for each service
+#### Necessary
+
 - update video duration on video change
 - Create Episode (& show) dialog
 - Edit Mode
+
+#### Optinoal
+
+- custom timeline translation for each service
+- Try to create an episode at a URL that has already been deleted
+- Error on timeline drag
 
 ## Keyboard shortcut plans
 

@@ -38,11 +38,8 @@ import { PLAYBACK_SPEEDS } from '../../common/utils/Constants';
 })
 export default class PlaybackRatePicker extends Vue {
   public customRate = '';
-
-  @Getter() public playbackRate!: number;
-
   @Prop(Boolean) public showLess?: string;
-
+  @Getter() public playbackRate!: number;
   @Mutation() public changePlaybackRate!: (speed: number) => void;
 
   public data() {
@@ -86,8 +83,6 @@ export default class PlaybackRatePicker extends Vue {
   public onBlurCustom() {
     const value = this.customRate;
     this.changePlaybackRate(Number(value));
-
-    console.log('changed', { selected: this.isConstantSelected() });
     if (this.isConstantSelected()) {
       this.customRate = '';
     }
