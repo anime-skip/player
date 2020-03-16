@@ -6,10 +6,10 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import ProgressOverlay from '@/common/components/ProgressOverlay';
+import ProgressOverlay from '@/common/components/ProgressOverlay.vue';
 
 @Component({
-  components: { ProgressOverlay }
+  components: { ProgressOverlay },
 })
 export default class Loading extends Vue {}
 </script>

@@ -15,7 +15,6 @@ This will install and open firefox. To open another browser, more changes will h
 
 #### Necessary
 
-- Loading buffer
 - Create Episode (& show) dialog
 - Edit Mode
 
