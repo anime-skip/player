@@ -1,5 +1,6 @@
 export default {
   activeDialog: '@@general/activeDialog',
+  changePlaybackRate: '@@general/changePlaybackRate',
 
   restoreState: '@@storage/restoreState' as const,
   persistPreferences: '@@storage/persistPreferences' as const,

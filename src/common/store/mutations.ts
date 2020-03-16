@@ -3,7 +3,7 @@ import Browser from '@/common/utils/Browser';
 import Vue from 'vue';
 import { Mutation } from 'vuex';
 import types from './mutationTypes';
-import { as, clone } from '../utils/GlobalUtils';
+import { as } from '../utils/GlobalUtils';
 import RequestState from '../utils/RequestState';
 
 // Helpers /////////////////////////////////////////////////////////////////////
@@ -19,6 +19,21 @@ function loginRequestState(state: VuexState, loginRequestState: RequestState): v
   Browser.storage.setItem('loginRequestState', loginRequestState);
 }
 
+function changePlaybackRate(state: VuexState, playbackRate: RequestState): void {
+  state.playbackRate = playbackRate;
+  Browser.storage.getItem('playbackRate').then(storedRate => {
+    if (storedRate !== playbackRate) {
+      Browser.storage.setItem('playbackRate', playbackRate);
+    }
+  });
+
+  const video = global.getVideo();
+  if (video) {
+    console.log('Changing video to:', { playbackRate });
+    video.playbackRate = playbackRate || 1;
+  }
+}
+
 // Mutations ///////////////////////////////////////////////////////////////////
 
 export default as<
@@ -30,6 +45,7 @@ export default as<
   [types.activeDialog](state, dialogName: string | undefined) {
     state.activeDialog = dialogName;
   },
+  [types.changePlaybackRate]: changePlaybackRate,
 
   // Storage
   [types.restoreState](
@@ -38,8 +54,13 @@ export default as<
   ) {
     for (const field in changes) {
       if (state.hasOwnProperty(field)) {
-        // @ts-ignore
-        Vue.set(state, field, changes[field]);
+        if (field === 'playbackRate') {
+          const playbackRate = changes[field] as number;
+          changePlaybackRate(state, playbackRate);
+        } else {
+          // @ts-ignore
+          Vue.set(state, field, changes[field]);
+        }
       }
     }
     if (callback) callback();

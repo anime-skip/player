@@ -7,7 +7,7 @@
     @click.stop="dismiss()"
   >
     <div class="row" :style="`justify-content: ${gravityY}`" v-if="isVisible">
-      <div class="container" @click.stop>
+      <div class="dialog-root-container" @click.stop>
         <slot />
       </div>
     </div>
@@ -54,7 +54,7 @@ export default class BasicDialog extends Vue {
   transition-property: opacity;
   pointer-events: none;
   cursor: pointer;
-  overflow: hidden;
+  overflow: visible;
 
   &.dim {
     background-color: rgba(255, 0, 0, 0.5);
@@ -64,7 +64,7 @@ export default class BasicDialog extends Vue {
     opacity: 1;
     pointer-events: unset;
 
-    .container {
+    .dialog-root-container {
       transform: translate(0px, 0px);
     }
   }
@@ -75,7 +75,7 @@ export default class BasicDialog extends Vue {
     flex: 1;
   }
 
-  .container {
+  .dialog-root-container {
     border-radius: 4px;
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 6px 10px rgba(0, 0, 0, 0.22),
       0 2px 5px rgba(0, 0, 0, 0.4);
@@ -83,7 +83,7 @@ export default class BasicDialog extends Vue {
     transform: translate(0px, 100px);
     transition: 250ms;
     transition-property: transform, opacity;
-    cursor: pointer;
+    cursor: auto;
 
     overflow-y: auto;
     scrollbar-width: thin;

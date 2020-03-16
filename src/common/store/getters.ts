@@ -10,6 +10,9 @@ export default as<GetterTree<VuexState, VuexState>>({
   activeDialog(state): string | undefined {
     return state.activeDialog;
   },
+  playbackRate({ playbackRate }): number {
+    return playbackRate;
+  },
 
   // Login
   isLoggingIn({ loginRequestState }): boolean {

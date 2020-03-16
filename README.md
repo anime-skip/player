@@ -13,5 +13,43 @@ This will install and open firefox. To open another browser, more changes will h
 
 ## TODO
 
+- playback speed
 - Try to create an episode at a URL that has already been deleted
 - Error on timeline drag
+- custom timeline translation for each service
+- update video duration on video change
+- Create Episode (& show) dialog
+- Edit Mode
+
+## Keyboard shortcut plans
+
+```
+w  e  r           i  o
+ s  d  f        j  k  l     ⏎
+  x  c  v        m  ,
+```
+
+#### Forwards Navigation
+
+`E` - next timestamp/end<br />
+`R` - Large step forward<br />
+`F` - medium step forward<br />
+`V` - small step forward<br />
+
+#### Backwards Navigation
+
+`C` - previous timestamp<br />
+`W` - large step backward<br />
+`S` - Medium step backward<br />
+`X` - small step backward<br />
+
+#### Editing Tools
+
+`J` - go back 1 frame<br />
+`K` - Stop and place timestamp<br />
+`L` - go forward 1 frame<br />
+`I` - Cycle through timestamp types<br />
+`O` - Cycle through timestamp types<br />
+`M` - Switch timestamp being edited to the previous one<br />
+`,` - Switch timestamp being edited to the next one<br />
+`⏎` - Stop editing current timestamp and resume the video<br />

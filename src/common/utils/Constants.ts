@@ -5,6 +5,31 @@ export const persistedKeys = [
   'refreshTokenExpiresAt' as const,
   'loginRequestState' as const,
   'account' as const,
+  'playbackRate' as const,
+];
+
+export const PLAYBACK_SPEEDS: PlaybackRate[] = [
+  {
+    value: 0.5,
+    display: '0.5',
+  },
+  {
+    value: 1,
+    display: '1.0',
+  },
+  {
+    value: 1.25,
+    display: '1.25',
+    hideWhenSmall: true,
+  },
+  {
+    value: 1.5,
+    display: '1.5',
+  },
+  {
+    value: 2,
+    display: '2.0',
+  },
 ];
 
 /**

@@ -1,5 +1,6 @@
 declare interface VuexState {
   activeDialog?: string;
+  playbackRate: number;
   token?: string;
   tokenExpiresAt?: number;
   refreshToken?: string;
