@@ -50,7 +50,6 @@ const functionMapping: { [combination: string]: () => void } = {
 };
 
 function onKeyDown({ keyCode, ctrlKey }: KeyboardEvent): void {
-  console.log('Keycode: ' + keyCode);
   // Preventy triggers during typing
   if (document.activeElement?.tagName === 'INPUT') {
     return;
