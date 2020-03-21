@@ -1,49 +1,56 @@
 import VideoUtils from '../../player/VideoUtils';
 
 const keys: { [keyCode: number]: string } = {
-  38: 'UP',
-  40: 'DOWN',
-  37: 'LEFT',
-  39: 'RIGHT',
+  13: 'ENTER',
   32: 'SPACE',
-  81: 'Q',
-  87: 'W',
-  69: 'E',
+  37: 'LEFT',
+  38: 'UP',
+  39: 'RIGHT',
+  40: 'DOWN',
   65: 'A',
-  83: 'S',
-  68: 'D',
-  90: 'Z',
-  88: 'X',
   67: 'C',
+  68: 'D',
+  69: 'E',
+  70: 'F',
+  73: 'I',
+  74: 'J',
+  75: 'K',
+  76: 'L',
+  77: 'M',
+  79: 'O',
+  81: 'Q',
+  82: 'R',
+  83: 'S',
+  86: 'V',
+  87: 'W',
+  88: 'X',
+  90: 'Z',
+  188: ',',
   219: '[',
   221: ']',
 };
 
 const functionMapping: { [combination: string]: () => void } = {
   // Advance Time
-  ']': () => VideoUtils.addTime(1 / 24),
-  C: () => VideoUtils.addTime(2),
-  RIGHT: () => VideoUtils.addTime(5),
-  D: () => VideoUtils.addTime(5),
-  E: () => VideoUtils.addTime(85),
+  L: () => VideoUtils.addTime(1 / 24),
+  V: () => VideoUtils.addTime(2),
+  F: () => VideoUtils.addTime(5),
+  R: () => VideoUtils.addTime(85),
+  E: () => VideoUtils.nextTimestamp(),
+
   // Rewind Time
-  '[': () => VideoUtils.addTime(-1 / 24),
-  Z: () => VideoUtils.addTime(-2),
-  LEFT: () => VideoUtils.addTime(-5),
-  A: () => VideoUtils.addTime(-5),
-  Q: () => VideoUtils.addTime(-85),
-  // Next Timestamp
-  'ctrl+RIGHT': () => VideoUtils.nextTimestamp(),
-  W: () => VideoUtils.nextTimestamp(),
-  // Previous Timestamp
-  'ctrl+LEFT': () => VideoUtils.previousTimestamp(),
-  X: () => VideoUtils.previousTimestamp(),
-  // Play/Pause
-  SPACE: () => VideoUtils.togglePlayPause(),
-  S: () => VideoUtils.togglePlayPause(),
+  J: () => VideoUtils.addTime(-1 / 24),
+  X: () => VideoUtils.addTime(-2),
+  S: () => VideoUtils.addTime(-5),
+  W: () => VideoUtils.addTime(-85),
+  C: () => VideoUtils.previousTimestamp(),
+
+  // General Controls
+  D: () => VideoUtils.togglePlayPause(),
 };
 
 function onKeyDown({ keyCode, ctrlKey }: KeyboardEvent): void {
+  console.log('Keycode: ' + keyCode);
   // Preventy triggers during typing
   if (document.activeElement?.tagName === 'INPUT') {
     return;
@@ -60,10 +67,10 @@ function onKeyDown({ keyCode, ctrlKey }: KeyboardEvent): void {
 }
 
 const KeyboardShortcutMixin = {
-  created: function(): void {
+  created(): void {
     document.onkeydown = onKeyDown;
   },
-  destroyed: function(): void {
+  destroyed(): void {
     document.onkeydown = () => {};
   },
 };

@@ -15,12 +15,12 @@ This will install and open firefox. To open another browser, more changes will h
 
 #### Necessary
 
+- Move keyboard shortcuts
 - Create Episode (& show) dialog
 - Edit Mode
 
 #### Optinoal
 
-- custom timeline translation for each service
 - Try to create an episode at a URL that has already been deleted
 - Error on timeline drag
 
