@@ -15,7 +15,7 @@ import BasicDialog from './BasicDialog.vue';
     Popup,
   },
 })
-export default class ToolBar extends Vue {}
+export default class AccountDialog extends Vue {}
 </script>
 
 <style lang="scss">

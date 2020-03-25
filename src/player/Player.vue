@@ -19,6 +19,7 @@
 
     <!-- Dialogs -->
     <AccountDialog />
+    <EpisodeEditorDialog />
     <Loading v-if="buffering" class="buffer-loading-container" />
   </div>
 </template>
@@ -30,6 +31,7 @@ import Loading from '@/common/components/Loading.vue';
 import ToolBar from './components/Toolbar.vue';
 import EpisodeInfo from './components/EpisodeInfo.vue';
 import AccountDialog from './components/AccountDialog.vue';
+import EpisodeEditorDialog from './components/EpisodeEditorDialog.vue';
 import KeyboardShortcuts from '@/common/mixins/KeyboardShortcuts';
 import { Action, Mutation, Getter } from '@/common/utils/VuexDecorators';
 import Browser from '@/common/utils/Browser';
@@ -37,7 +39,7 @@ import VideoUtils from './VideoUtils';
 import Messenger from '@/common/utils/Messenger';
 
 @Component({
-  components: { WebExtImg, ToolBar, EpisodeInfo, AccountDialog, Loading },
+  components: { WebExtImg, ToolBar, EpisodeInfo, AccountDialog, EpisodeEditorDialog, Loading },
   mixins: [KeyboardShortcuts],
 })
 export default class Player extends Vue {
@@ -58,6 +60,7 @@ export default class Player extends Vue {
   @Getter() playbackRate!: number;
 
   @Mutation() public restoreState!: (payload: { changes: any; callback?: () => void }) => void;
+  @Mutation() public changePlaybackRate!: (playbackRate: number) => void;
 
   @Action() public initialLoad!: (callback?: () => void) => void;
   @Action() public fetchEpisodeByUrl!: (url: string) => void;
@@ -75,7 +78,7 @@ export default class Player extends Vue {
 
   public mounted(): void {
     global.onVideoChanged(video => {
-      video.playbackRate = this.playbackRate;
+      this.changePlaybackRate(this.playbackRate);
       this.fetchEpisodeInfo();
       video.onplay = () => this.onPlay();
       video.onpause = () => this.onPause();

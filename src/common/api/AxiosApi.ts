@@ -65,6 +65,10 @@ const loginData = `
   }
 `;
 
+const showSearchData = `id name originalName`;
+
+const episodeSearchData = `id name season number absoluteNumber`;
+
 const episodeData = `
   id absoluteNumber number season name 
   timestamps {
@@ -114,18 +118,6 @@ async function sendGraphql<Q extends string, D>(data: any): Promise<{ data: { [f
 /* eslint-enable no-console */
 
 export default as<Api.Implementation>({
-  async fetchEpisodeByUrl(url: string): Promise<Api.EpisodeUrl> {
-    const q = query(
-      `{
-        findEpisodeUrl(episodeUrl: "${url}") {
-          ${episodeUrlData}
-        }
-      }`
-    );
-    const response = await sendGraphql<'findEpisodeUrl', Api.EpisodeUrl>(q);
-    return response.data.findEpisodeUrl;
-  },
-
   async loginManual(username: string, password: string): Promise<Api.LoginResponse> {
     const q = query(
       `{
@@ -162,5 +154,38 @@ export default as<Api.Implementation>({
       }
     );
     await sendGraphql(m);
+  },
+
+  async searchShows(name: string): Promise<Api.ShowSearchResult[]> {
+    const q = query(`{
+      searchShows(search: "${name}", limit: 5) {
+        ${showSearchData}
+      }
+    }`);
+    const response = await sendGraphql<'searchShows', Api.ShowSearchResult[]>(q);
+    return response.data.searchShows;
+  },
+
+  async searchEpisodes(name: string): Promise<Api.EpisodeSearchResult[]> {
+    const q = query(`{
+      searchEpisodes(search: "${name}", limit: 5) {
+        ${episodeSearchData}
+      }
+    }`);
+    console.log({ q });
+    const response = await sendGraphql<'searchEpisodes', Api.EpisodeSearchResult[]>(q);
+    return response.data.searchEpisodes;
+  },
+
+  async fetchEpisodeByUrl(url: string): Promise<Api.EpisodeUrl> {
+    const q = query(
+      `{
+        findEpisodeUrl(episodeUrl: "${url}") {
+          ${episodeUrlData}
+        }
+      }`
+    );
+    const response = await sendGraphql<'findEpisodeUrl', Api.EpisodeUrl>(q);
+    return response.data.findEpisodeUrl;
   },
 });

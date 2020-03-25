@@ -11,17 +11,21 @@ declare type MessageTypeListenerMap<T> = Partial<{ [type in MessageType]: T }>;
 declare type MessageTypeMap<T> = Record<MessageType, T>;
 
 declare interface MessagePayload extends Implements<MessageTypeMap<any>, MessagePayload> {
-  fetchEpisodeByUrl: string;
   loginManual: { username: string; password: string };
   loginRefresh: string;
   updatePreferences: Api.Preferences;
+  searchShows: string;
+  searchEpisodes: string;
+  fetchEpisodeByUrl: string;
 }
 
 declare interface MessageResponse extends Implements<MessageTypeMap<any>, MessageResponse> {
-  fetchEpisodeByUrl: Api.EpisodeUrl;
   loginManual: Api.LoginResponse;
   loginRefresh: Api.LoginResponse;
   updatePreferences: void;
+  searchShows: Api.ShowSearchResult[];
+  searchEpisodes: Api.EpisodeSearchResult[];
+  fetchEpisodeByUrl: Api.EpisodeUrl;
 }
 
 declare type MessageListener<T extends MessageType> = (

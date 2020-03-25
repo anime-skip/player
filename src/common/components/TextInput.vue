@@ -1,21 +1,19 @@
 <template>
   <div class="TextInput">
-    <div class="input-wrapper clickable dark" :class="{ down: isFocused || value }">
-      <WebExtImg
-        class="icon"
-        :class="{ focused: isFocused }"
-        :src="leftIcon"
-        v-if="leftIcon !== null"
-      />
+    <div
+      class="input-wrapper clickable dark"
+      :class="{ down: isFocused || value, invalid: !isValid }"
+    >
+      <WebExtImg class="icon" v-if="leftIcon" :class="{ focused: isFocused }" :src="leftIcon" />
       <input
         class="input"
         :type="type"
-        v-model="value"
+        v-model="inputValue"
         :placeholder="label"
         @focus="onFocus"
         @blur="onBlur"
         :autocomplete="autocomplete || 'off'"
-        @input="updateValue"
+        @keypress.esc="onPressEsc"
       />
     </div>
     <span v-if="errorMessage" class="error-message">{{ errorMessage }}</span>
@@ -36,19 +34,31 @@ export default class TextInput extends Vue {
   @Prop(String) private defaultValue?: string;
   @Prop({ default: 'text' }) private type!: 'text' | 'password';
   @Prop(String) private leftIcon?: string;
+  @Prop({ type: Boolean, required: false, default: true }) isValid!: boolean;
+  @Prop(String) private value?: string;
 
-  private value: string = this.defaultValue || '';
   private isFocused: boolean = false;
 
   public onFocus() {
+    this.$emit('focus');
     this.isFocused = true;
   }
+
   public onBlur() {
+    this.$emit('blur');
     this.isFocused = false;
   }
-  public updateValue({ target: { value } }: any) {
-    this.value = value;
+
+  public get inputValue(): string {
+    return this.value ?? this.defaultValue ?? '';
+  }
+  public set inputValue(value) {
     this.$emit('input', value);
+  }
+
+  public onPressEsc() {
+    console.log('onPressEsc');
+    this.$emit('keypress-esc');
   }
 }
 </script>
@@ -74,7 +84,6 @@ $inputHeight: 48px;
     flex-direction: row;
     align-items: center;
     height: $inputHeight;
-    background: $input500;
     border-radius: 3px;
     .icon {
       width: 24px;

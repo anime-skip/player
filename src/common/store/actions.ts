@@ -136,8 +136,33 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
   },
 
   // Shows
+  async [types.searchShows]({ commit }, name: string) {
+    console.info('actions.searchShows', { name });
+    try {
+      commit(mutationTypes.searchShowsRequestState, RequestState.LOADING);
+      const results = await global.Api.searchShows(name);
+      commit(mutationTypes.searchShowsRequestState, RequestState.SUCCESS);
+      commit(mutationTypes.searchShowsResult, results);
+      console.trace('types.searchShows');
+    } catch (err) {
+      console.error('actions.searchShows', err);
+      commit(mutationTypes.searchShowsRequestState, RequestState.FAILURE);
+    }
+  },
 
   // Episodes
+  async [types.searchEpisodes]({ commit }, name: string) {
+    console.info('actions.searchEpisodes', { name });
+    try {
+      commit(mutationTypes.searchEpisodesRequestState, RequestState.LOADING);
+      const results = await global.Api.searchEpisodes(name);
+      commit(mutationTypes.searchEpisodesRequestState, RequestState.SUCCESS);
+      commit(mutationTypes.searchEpisodesResult, results);
+    } catch (err) {
+      console.error('actions.searchEpisodes', err);
+      commit(mutationTypes.searchEpisodesRequestState, RequestState.FAILURE);
+    }
+  },
   async [types.fetchEpisodeByUrl]({ commit }, url) {
     console.info('actions.fetchEpisodeByUrl', { url });
     try {

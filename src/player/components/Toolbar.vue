@@ -41,7 +41,26 @@
           {{ formattedTime }}&ensp;/&ensp;<span>{{ duration }}</span>
         </p>
         <div class="space" />
-        <ToolbarButton class="margin-left" icon="ic_edit.svg" />
+        <ToolbarButton
+          v-if="!isEditing"
+          class="margin-left"
+          icon="ic_edit.svg"
+          @click.native="startEditMode"
+        />
+        <ToolbarButton
+          v-if="isEditing"
+          class="margin-left"
+          icon="ic_edit.svg"
+          title="Edit Episode Info"
+          @click.native="openEpisodeEditorDialog"
+        />
+        <ToolbarButton
+          v-if="isEditing"
+          class="margin-left"
+          icon="ic_save_changes.svg"
+          title="Save Changes"
+          @click.native="toggleEditMode(false)"
+        />
         <div class="divider margin-left" />
         <ToolbarButton class="margin-left" icon="ic_more.svg" @click.native="toggleAccountDialog" />
         <ToolbarButton
@@ -65,8 +84,9 @@ import FullscreenButton from './animations/FullscreenButton.vue';
 import VolumeButton from './animations/VolumeButton.vue';
 import Utils from '@/common/utils/Utils';
 import Browser from '@/common/utils/Browser';
-import { Getter, Action } from '@/common/utils/VuexDecorators';
+import { Getter, Action, Mutation } from '@/common/utils/VuexDecorators';
 import VideoUtils from '../VideoUtils';
+import WebExtImg from '@/common/components/WebExtImg.vue';
 
 @Component({
   components: {
@@ -76,6 +96,7 @@ import VideoUtils from '../VideoUtils';
     FullscreenButton,
     VolumeButton,
     AccountDialog,
+    WebExtImg,
   },
 })
 export default class ToolBar extends Vue {
@@ -93,6 +114,10 @@ export default class ToolBar extends Vue {
   @Getter() public timestamps!: Api.Timestamp[];
   @Getter() public preferences?: Api.Preferences;
   @Getter() public activeDialog?: string;
+  @Getter() public isEditing!: boolean;
+  @Getter() public episodeUrl!: boolean;
+
+  @Mutation() public toggleEditMode!: (isEditing: boolean) => void;
 
   @Action() public showDialog!: (dialogName?: string) => void;
 
@@ -174,6 +199,19 @@ export default class ToolBar extends Vue {
 
   public get formattedTime(): string {
     return this.formatSeconds(this.currentTime, this.playerState.isPaused ? 2 : 0);
+  }
+
+  // Edit Mode
+
+  public startEditMode() {
+    this.toggleEditMode(true);
+    if (!this.episodeUrl) {
+      this.openEpisodeEditorDialog();
+    }
+  }
+
+  public openEpisodeEditorDialog() {
+    this.showDialog('EpisodeEditorDialog');
   }
 }
 </script>

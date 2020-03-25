@@ -1,6 +1,7 @@
 export default {
   activeDialog: '@@general/activeDialog',
   changePlaybackRate: '@@general/changePlaybackRate',
+  toggleEditMode: '@@general/toggleEditMode',
 
   restoreState: '@@storage/restoreState' as const,
   persistPreferences: '@@storage/persistPreferences' as const,
@@ -12,6 +13,11 @@ export default {
   togglePref: '@@preferences/togglePref' as const,
   preferencesRequestState: '@@preferences/preferencesRequestState' as const,
 
+  searchShowsRequestState: '@@shows/searchShowsRequestState' as const,
+  searchShowsResult: '@@shows/searchShowsResult' as const,
+
+  searchEpisodesRequestState: '@@episodes/searchEpisodesRequestState' as const,
+  searchEpisodesResult: '@@episodes/searchEpisodesResult' as const,
   setEpisodeInfo: '@@episodes/setEpisodeInfo' as const,
   episodeRequestState: '@@episodes/episodeRequestState' as const,
 };

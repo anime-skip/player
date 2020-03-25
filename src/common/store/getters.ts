@@ -13,6 +13,9 @@ export default as<GetterTree<VuexState, VuexState>>({
   playbackRate({ playbackRate }): number {
     return playbackRate;
   },
+  isEditing({ isEditing }): boolean {
+    return isEditing;
+  },
 
   // Login
   isLoggingIn({ loginRequestState }): boolean {
@@ -51,8 +54,14 @@ export default as<GetterTree<VuexState, VuexState>>({
   },
 
   // Shows
+  searchShowsResult({ searchShowsResult }): Api.ShowSearchResult[] {
+    return searchShowsResult;
+  },
 
   // Episodes
+  searchEpisodesResult({ searchEpisodesResult }): Api.EpisodeSearchResult[] {
+    return searchEpisodesResult;
+  },
   episodeUrl({ episodeUrl }): Api.EpisodeUrl | undefined {
     return episodeUrl;
   },

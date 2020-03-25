@@ -3,7 +3,7 @@
     <div class="column">
       <PopupHeader title="Preferences" class="header" :small="small" />
 
-      <h2 class="settings-group-label">General</h2>
+      <h2 class="section-header">General</h2>
       <div class="input-grid input-grid--2" :class="{ small }">
         <Checkbox
           :isChecked="getPref('enableAutoSkip')"
@@ -20,7 +20,7 @@
         -->
       </div>
 
-      <h2 class="settings-group-label">Skipped Sections</h2>
+      <h2 class="section-header">Skipped Sections</h2>
       <div class="input-grid" :class="{ small }">
         <Checkbox
           v-for="preference in SKIPPABLE_PREFERENCES"
@@ -111,11 +111,6 @@ export default class Preferences extends Vue {
     &.small {
       grid-template-columns: repeat(1, minmax(225px, 1fr));
     }
-  }
-  .settings-group-label {
-    font-size: 14px;
-    color: $textPrimary;
-    margin-top: 16px;
   }
   a {
     color: $textPrimary;

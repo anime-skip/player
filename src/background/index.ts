@@ -8,10 +8,12 @@ global.Api = AxiosApi;
 
 // Setup Messaging
 
-new Messenger({
-  fetchEpisodeByUrl: url => global.Api.fetchEpisodeByUrl(url),
+new Messenger('background', {
   loginManual: ({ username, password }) => global.Api.loginManual(username, password),
   loginRefresh: global.Api.loginRefresh,
   updatePreferences: global.Api.updatePreferences,
+  searchShows: global.Api.searchShows,
+  searchEpisodes: global.Api.searchEpisodes,
+  fetchEpisodeByUrl: global.Api.fetchEpisodeByUrl,
 });
 console.info('Started messenger on the background script');
