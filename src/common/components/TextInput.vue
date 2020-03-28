@@ -78,6 +78,7 @@ $inputHeight: 48px;
 .TextInput {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 
   .input-wrapper {
     display: flex;
@@ -85,6 +86,7 @@ $inputHeight: 48px;
     align-items: center;
     height: $inputHeight;
     border-radius: 3px;
+
     .icon {
       width: 24px;
       height: 24px;
