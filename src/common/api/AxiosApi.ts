@@ -5,8 +5,8 @@ import md5 from 'md5';
 import { as } from '../utils/GlobalUtils';
 
 const axios = Axios.create({
-  baseURL: 'http://localhost:8000/',
-  // baseURL: 'http://api.anime-skip.com/',
+  baseURL:
+    process.env.NODE_ENV === 'production' ? 'http://api.anime-skip.com/' : 'http://localhost:8000/',
 });
 
 axios.interceptors.request.use((config): any => {
