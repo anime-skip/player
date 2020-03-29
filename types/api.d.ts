@@ -5,8 +5,6 @@ declare interface GraphQlBody {
   variables?: { [variableName: string]: any };
 }
 
-type GQLBase<T> = Record<keyof T, T[keyof T]>;
-
 declare namespace Api {
   interface Implementation {
     loginManual(username: string, password: string): Promise<Api.LoginResponse>;
