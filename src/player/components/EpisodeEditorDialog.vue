@@ -15,7 +15,8 @@
         v-model="showSearch"
         :isValid="isShowSelected()"
         :isShowingSuggestions="isShowSearchSearchable()"
-        @focus="onFocusShowSearch"
+        @focus="onFocusShowSearch(true)"
+        @blur="onFocusShowSearch(false)"
       >
         <div
           v-for="(show, index) in showSearchListItems"
@@ -36,7 +37,8 @@
         v-model="episodeSearch"
         :isValid="isEpisodeSelected()"
         :isShowingSuggestions="isEpisodeSearchSearchable()"
-        @focus="onFocusEpisodeSearch"
+        @focus="onFocusEpisodeSearch(true)"
+        @blur="onFocusEpisodeSearch(false)"
       >
         <div
           v-for="(epiosde, index) in episodeSearchListItems"
@@ -53,19 +55,50 @@
 
       <div class="edit-section" v-if="isShowingEditSection()">
         <h2 class="section-header">Edit Episode Info</h2>
-        <TextInput class="row" label="Show Name" v-model="editableShowName" />
-        <TextInput class="row" label="Episode Name" v-model="editableEpisodeName" />
+        <h2 v-if="isTempEditingDisabled || selectedShowId !== 'new-show-id'" class="section-header">
+          (Editing an existing data is not supported yet)
+        </h2>
+        <TextInput
+          class="row"
+          label="Show Name"
+          v-model="editableShowName"
+          :disabled="isTempEditingDisabled || selectedShowId !== 'new-show-id'"
+        />
+        <TextInput
+          class="row"
+          label="Episode Name"
+          v-model="editableEpisodeName"
+          :disabled="isTempEditingDisabled"
+        />
         <div class="row flex-row">
-          <TextInput class="flex-1" label="Season" v-model="editableSeasonNumber" />
+          <TextInput
+            class="flex-1"
+            label="Season"
+            v-model="editableSeasonNumber"
+            :disabled="isTempEditingDisabled"
+          />
           <div class="column-space" />
-          <TextInput class="flex-1" label="Episode #" v-model="editableEpisodeNumber" />
+          <TextInput
+            class="flex-1"
+            label="Episode #"
+            v-model="editableEpisodeNumber"
+            :disabled="isTempEditingDisabled"
+          />
           <div class="column-space" />
-          <TextInput class="flex-1" label="Overall #" v-model="editableAbsoluteNumber" />
+          <TextInput
+            class="flex-1"
+            label="Overall #"
+            v-model="editableAbsoluteNumber"
+            :disabled="isTempEditingDisabled"
+          />
         </div>
         <input
           type="submit"
           value="Save Episode"
           class="clickable focus button save"
+          :class="{
+            'disabled transparent': isTempEditingDisabled,
+          }"
           @click="onClickSaveChanges"
         />
       </div>
@@ -154,6 +187,12 @@ export default class EpisodeEditorDialog extends Vue {
     return `Edit Episode`;
   }
 
+  public get isTempEditingDisabled(): boolean {
+    return (
+      this.selectedShowId !== CREATE_NEW_SHOW_ID && this.selectedEpisodeId !== CREATE_NEW_EPISODE_ID
+    );
+  }
+
   public get showSearchListItems(): AutocompleteItem[] {
     return [
       ...this.searchShowsResult.map(item => ({
@@ -195,7 +234,8 @@ export default class EpisodeEditorDialog extends Vue {
   }
 
   public onFocusShowSearch(isFocused: boolean) {
-    if (isFocused && this.showSearch === CREATE_NEW_SHOW_TITLE) {
+    console.log('onFocusShowSearch', { isFocused });
+    if (isFocused && this.selectedShowId === CREATE_NEW_SHOW_ID) {
       this.showSearch = '';
       this.selectedShowId = undefined;
     }
@@ -310,13 +350,56 @@ export default class EpisodeEditorDialog extends Vue {
   }
 
   public onClickSaveChanges() {
+    // Prepare data
+    const episodeName = this.editableEpisodeName;
+    const number = isFinite(Number(this.editableEpisodeNumber))
+      ? Number(this.editableEpisodeNumber)
+      : undefined;
+    const season = isFinite(Number(this.editableSeasonNumber))
+      ? Number(this.editableSeasonNumber)
+      : undefined;
+    const absoluteNumber = isFinite(Number(this.editableAbsoluteNumber))
+      ? Number(this.editableAbsoluteNumber)
+      : undefined;
+    const episodeData: Api.InputEpisode = {
+      name: episodeName,
+      number,
+      season,
+      absoluteNumber,
+    };
+
     // Creating Data
     if (this.selectedShowId === CREATE_NEW_SHOW_ID) {
-      console.log('Create show, create episode, create episode url');
-      return;
+      this.createEpisodeData({
+        show: {
+          create: true,
+          name: this.editableShowName,
+        },
+        episode: {
+          create: true,
+          data: episodeData,
+        },
+        episodeUrl: {
+          create: true,
+          data: { url: Browser.getURL() },
+        },
+      });
     }
     if (this.selectedEpisodeId === CREATE_NEW_EPISODE_ID) {
-      console.log('create episode, create episode url');
+      this.createEpisodeData({
+        show: {
+          create: false,
+          showId: this.selectedShowId!,
+        },
+        episode: {
+          create: true,
+          data: episodeData,
+        },
+        episodeUrl: {
+          create: true,
+          data: { url: Browser.getURL() },
+        },
+      });
       return;
     }
     if (
@@ -325,13 +408,29 @@ export default class EpisodeEditorDialog extends Vue {
       this.episodeUrl == null
     ) {
       this.createEpisodeData({
-        show: { create: false, showId: this.selectedShowId! },
-        episode: { create: false, episodeId: this.selectedEpisodeId! },
+        show: {
+          create: false,
+          showId: this.selectedShowId!,
+        },
+        episode: {
+          create: false,
+          episodeId: this.selectedEpisodeId!,
+        },
         episodeUrl: {
           create: true,
           data: { url: Browser.getURL() },
         },
       });
+      return;
+    }
+
+    // Change relationships
+    if (this.episodeUrl?.episode?.show?.id !== this.selectedShowId) {
+      console.log('Update episode.showId');
+      return;
+    }
+    if (this.episodeUrl?.episode.id !== this.selectedEpisodeId) {
+      console.log('Update episodeUrl.episodeId');
       return;
     }
 

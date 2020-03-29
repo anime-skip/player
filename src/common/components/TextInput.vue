@@ -2,7 +2,7 @@
   <div class="TextInput">
     <div
       class="input-wrapper clickable dark"
-      :class="{ down: isFocused || value, invalid: !isValid }"
+      :class="{ down: isFocused || value, invalid: !isValid, 'disabled transparent': disabled }"
     >
       <WebExtImg class="icon" v-if="leftIcon" :class="{ focused: isFocused }" :src="leftIcon" />
       <input
@@ -36,6 +36,7 @@ export default class TextInput extends Vue {
   @Prop(String) private leftIcon?: string;
   @Prop({ type: Boolean, required: false, default: true }) isValid!: boolean;
   @Prop(String) private value?: string;
+  @Prop(Boolean) private disabled?: boolean;
 
   private isFocused: boolean = false;
 

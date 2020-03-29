@@ -42,7 +42,7 @@
         </p>
         <div class="space" />
         <ToolbarButton
-          v-if="!isEditing"
+          v-if="!isEditing && isLoggedIn"
           class="margin-left"
           icon="ic_edit.svg"
           @click.native="startEditMode"
@@ -61,7 +61,7 @@
           title="Save Timestamps"
           @click.native="toggleEditMode(false)"
         />
-        <div class="divider margin-left" />
+        <div v-if="isLoggedIn" class="divider margin-left" />
         <ToolbarButton class="margin-left" icon="ic_more.svg" @click.native="toggleAccountDialog" />
         <ToolbarButton
           v-if="isFullscreenEnabled"
@@ -116,6 +116,7 @@ export default class ToolBar extends Vue {
   @Getter() public activeDialog?: string;
   @Getter() public isEditing!: boolean;
   @Getter() public episodeUrl!: boolean;
+  @Getter() public isLoggedIn?: boolean;
 
   @Mutation() public toggleEditMode!: (isEditing: boolean) => void;
 

@@ -60,7 +60,7 @@ export default class AutocompleteTextInput extends Vue {
 
   public onBlurInput() {
     this.isFocused = false;
-    this.$emit('focus');
+    this.$emit('blur');
   }
 
   public onPressEsc() {

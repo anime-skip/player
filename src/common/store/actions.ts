@@ -157,13 +157,15 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
   ) {
     console.info('actions.createEpisodeData', { showData, episodeData, episodeUrlData });
     try {
-      // Hide the dialog
+      // Setup
       dispatch(types.showDialog, undefined);
+      commit(mutationTypes.episodeRequestState, RequestState.LOADING);
 
       // Show
       let showId: string;
       if (showData.create) {
-        showId = 'TODO';
+        const result = await global.Api.createShow({ name: showData.name });
+        showId = result.id;
       } else {
         showId = showData.showId;
       }
@@ -171,7 +173,8 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       // Episode
       let episodeId: string;
       if (episodeData.create) {
-        episodeId = 'TODO';
+        const result = await global.Api.createEpisode(episodeData.data, showId);
+        episodeId = result.id;
       } else {
         episodeId = episodeData.episodeId;
       }
@@ -180,6 +183,9 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       let episodeUrl: string;
       if (episodeUrlData.create) {
         episodeUrl = episodeUrlData.data.url;
+        try {
+          await global.Api.deleteEpisodeUrl(episodeUrl);
+        } catch (err) {}
         await global.Api.createEpisodeUrl(episodeUrlData.data, episodeId);
       } else {
         episodeUrl = episodeUrlData.url;
@@ -189,8 +195,10 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
 
       // Update the data
       dispatch(types.fetchEpisodeByUrl, episodeUrl);
+      commit(mutationTypes.episodeRequestState, RequestState.SUCCESS);
     } catch (err) {
       console.error(err);
+      commit(mutationTypes.episodeRequestState, RequestState.FAILURE);
     }
   },
   async [types.searchEpisodes]({ commit }, name: string) {

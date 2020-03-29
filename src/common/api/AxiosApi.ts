@@ -67,6 +67,8 @@ const loginData = `
 
 const showSearchData = `id name originalName`;
 
+const showData = `id name originalName website image`;
+
 const episodeSearchData = `id name season number absoluteNumber`;
 
 const episodeData = `
@@ -74,10 +76,17 @@ const episodeData = `
   timestamps {
     id at typeId
   }
-  show { id name originalName website image }
+  show { 
+    ${showData} 
+  }
+`;
+
+const episodeUrlNoEpisodeData = `
+  createdAt
 `;
 
 const episodeUrlData = `
+  ${episodeUrlNoEpisodeData}
   episode {
     ${episodeData}
   }
@@ -118,7 +127,7 @@ async function sendGraphql<Q extends string, D>(data: any): Promise<{ data: { [f
 /* eslint-enable no-console */
 
 export default as<Api.Implementation>({
-  async loginManual(username: string, password: string): Promise<Api.LoginResponse> {
+  async loginManual(username, password): Promise<Api.LoginResponse> {
     const q = query(
       `{
         login(usernameEmail: "${username}", passwordHash: "${md5(password)}") {
@@ -130,7 +139,7 @@ export default as<Api.Implementation>({
     return response.data.login;
   },
 
-  async loginRefresh(refreshToken: string): Promise<Api.LoginResponse> {
+  async loginRefresh(refreshToken): Promise<Api.LoginResponse> {
     const q = query(
       `{
         loginRefresh(refreshToken: "${refreshToken}") {
@@ -142,7 +151,7 @@ export default as<Api.Implementation>({
     return response.data.login;
   },
 
-  async updatePreferences(prefs: Api.Preferences): Promise<void> {
+  async updatePreferences(prefs): Promise<void> {
     const m = mutation(
       `mutation SavePreferences($prefs: InputPreferences!) {
         savePreferences(preferences: $prefs) {
@@ -156,7 +165,21 @@ export default as<Api.Implementation>({
     await sendGraphql(m);
   },
 
-  async searchShows(name: string): Promise<Api.ShowSearchResult[]> {
+  async createShow(data): Promise<Api.Show> {
+    const m = mutation(
+      `mutation CreateShow($data: InputShow!) {
+        createShow(showInput: $data, becomeAdmin: false) {
+          ${showData}
+        }
+      }`,
+      {
+        data,
+      }
+    );
+    const response = await sendGraphql<'createShow', Api.ShowSearchResult>(m);
+    return response.data.createShow;
+  },
+  async searchShows(name): Promise<Api.ShowSearchResult[]> {
     const q = query(`{
       searchShows(search: "${name}", limit: 5) {
         ${showSearchData}
@@ -166,6 +189,21 @@ export default as<Api.Implementation>({
     return response.data.searchShows;
   },
 
+  async createEpisode(data, showId): Promise<Api.EpisodeSearchResult> {
+    const m = mutation(
+      `mutation CreateEpisode($data: InputEpisode!, $showId: ID!) {
+        createEpisode(episodeInput: $data, showId: $showId) {
+          ${episodeSearchData}
+        }
+      }`,
+      {
+        data,
+        showId,
+      }
+    );
+    const response = await sendGraphql<'createEpisode', Api.EpisodeSearchResult>(m);
+    return response.data.createEpisode;
+  },
   async searchEpisodes(name: string): Promise<Api.EpisodeSearchResult[]> {
     const q = query(`{
       searchEpisodes(search: "${name}", limit: 5) {
@@ -178,22 +216,35 @@ export default as<Api.Implementation>({
   },
 
   async createEpisodeUrl(data, episodeId): Promise<Api.EpisodeUrl> {
-    const q = mutation(
+    const m = mutation(
       `mutation CreateEpisodeUrl($data: InputEpisodeUrl!, $episodeId: ID!) {
         createEpisodeUrl(episodeUrlInput: $data, episodeId: $episodeId) {
           ${episodeUrlData}
         }
       }`,
       {
-        data: data,
+        data,
         episodeId,
       }
     );
-    const response = await sendGraphql<'findEpisodeUrl', Api.EpisodeUrl>(q);
-    return response.data.findEpisodeUrl;
+    const response = await sendGraphql<'createEpisodeUrl', Api.EpisodeUrl>(m);
+    return response.data.createEpisodeUrl;
   },
-
-  async fetchEpisodeByUrl(url: string): Promise<Api.EpisodeUrl> {
+  async deleteEpisodeUrl(episodeUrl: string): Promise<Api.EpisodeUrlNoEpisode> {
+    const m = mutation(
+      `mutation DeleteEpisodeUrl($episodeUrl: String!) {
+        deleteEpisodeUrl(episodeUrl: $episodeUrl) {
+          ${episodeUrlNoEpisodeData}
+        }
+      }`,
+      {
+        episodeUrl,
+      }
+    );
+    const response = await sendGraphql<'deleteEpisodeUrl', Api.EpisodeUrl>(m);
+    return response.data.deleteEpisodeUrl;
+  },
+  async fetchEpisodeByUrl(url): Promise<Api.EpisodeUrl> {
     const q = query(
       `{
         findEpisodeUrl(episodeUrl: "${url}") {
