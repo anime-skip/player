@@ -58,7 +58,7 @@
           v-if="isEditing"
           class="margin-left"
           icon="ic_save_changes.svg"
-          title="Save Changes"
+          title="Save Timestamps"
           @click.native="toggleEditMode(false)"
         />
         <div class="divider margin-left" />
@@ -188,7 +188,7 @@ export default class ToolBar extends Vue {
   }
 
   public toggleAccountDialog(): void {
-    this.showDialog(!this.activeDialog ? 'AccountDialog' : undefined);
+    this.showDialog(this.activeDialog === 'AccountDialog' ? undefined : 'AccountDialog');
   }
 
   public formatSeconds(seconds: number, decimalPlaces: number) {

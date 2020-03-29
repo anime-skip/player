@@ -10,8 +10,12 @@ declare namespace Api {
     loginManual(username: string, password: string): Promise<Api.LoginResponse>;
     loginRefresh(refreshToken: string): Promise<Api.LoginResponse>;
     updatePreferences(prefs: Api.Preferences): Promise<void>;
+
     searchShows(name: string): Promise<Api.ShowSearchResult[]>;
+
     searchEpisodes(name: string): Promise<Api.EpisodeSearchResult[]>;
+
+    createEpisodeUrl(data: Api.InputEpisodeUrl, episodeId: string): Promise<Api.EpisodeUrl>;
     fetchEpisodeByUrl(url: string): Promise<Api.EpisodeUrl>;
   }
 
@@ -54,12 +58,23 @@ declare namespace Api {
     episode: Episode;
   }
 
+  interface InputEpisodeUrl {
+    url: string;
+  }
+
   interface EpisodeSearchResult {
     id: string;
     name?: string;
     season?: number;
     absoluteNumber?: number;
     number?: number;
+  }
+
+  interface InputEpisode {
+    name?: string;
+    season?: number;
+    number?: number;
+    absoluteNumber?: number;
   }
 
   interface Episode extends EpisodeSearchResult {

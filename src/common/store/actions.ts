@@ -151,6 +151,48 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
   },
 
   // Episodes
+  async [types.createEpisodeData](
+    { commit, dispatch },
+    { show: showData, episode: episodeData, episodeUrl: episodeUrlData }: CreateEpisodeDataPayload
+  ) {
+    console.info('actions.createEpisodeData', { showData, episodeData, episodeUrlData });
+    try {
+      // Hide the dialog
+      dispatch(types.showDialog, undefined);
+
+      // Show
+      let showId: string;
+      if (showData.create) {
+        showId = 'TODO';
+      } else {
+        showId = showData.showId;
+      }
+
+      // Episode
+      let episodeId: string;
+      if (episodeData.create) {
+        episodeId = 'TODO';
+      } else {
+        episodeId = episodeData.episodeId;
+      }
+
+      // EpisodeUrl
+      let episodeUrl: string;
+      if (episodeUrlData.create) {
+        episodeUrl = episodeUrlData.data.url;
+        await global.Api.createEpisodeUrl(episodeUrlData.data, episodeId);
+      } else {
+        episodeUrl = episodeUrlData.url;
+      }
+
+      console.log('Created Episode Data:', { showId, episodeId, episodeUrl });
+
+      // Update the data
+      dispatch(types.fetchEpisodeByUrl, episodeUrl);
+    } catch (err) {
+      console.error(err);
+    }
+  },
   async [types.searchEpisodes]({ commit }, name: string) {
     console.info('actions.searchEpisodes', { name });
     try {

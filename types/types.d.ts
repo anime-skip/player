@@ -16,6 +16,7 @@ declare interface MessagePayload extends Implements<MessageTypeMap<any>, Message
   updatePreferences: Api.Preferences;
   searchShows: string;
   searchEpisodes: string;
+  createEpisodeUrl: { episodeId: string; data: Api.InputEpisodeUrl };
   fetchEpisodeByUrl: string;
 }
 
@@ -25,6 +26,7 @@ declare interface MessageResponse extends Implements<MessageTypeMap<any>, Messag
   updatePreferences: void;
   searchShows: Api.ShowSearchResult[];
   searchEpisodes: Api.EpisodeSearchResult[];
+  createEpisodeUrl: Api.EpisodeUrl;
   fetchEpisodeByUrl: Api.EpisodeUrl;
 }
 
@@ -66,3 +68,33 @@ declare interface PlaybackRate {
 
 type ValueOf<T> = T[keyof T];
 type Implements<T, U extends T> = {};
+
+interface CreateEpisodeDataPayload {
+  show:
+    | {
+        create: false;
+        showId: string;
+      }
+    | {
+        create: true;
+        name: string;
+      };
+  episode:
+    | {
+        create: false;
+        episodeId: string;
+      }
+    | {
+        create: true;
+        data: Api.InputEpisode;
+      };
+  episodeUrl:
+    | {
+        create: false;
+        url: string;
+      }
+    | {
+        create: true;
+        data: Api.InputEpisodeUrl;
+      };
+}

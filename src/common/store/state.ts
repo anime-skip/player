@@ -1,9 +1,9 @@
 import RequestState from '../utils/RequestState';
 
 export const initialState: VuexState = {
-  activeDialog: 'EpisodeEditorDialog', // undefined,
+  activeDialog: undefined,
   playbackRate: 1,
-  isEditing: true,
+  isEditing: false,
 
   token: undefined,
   tokenExpiresAt: undefined,

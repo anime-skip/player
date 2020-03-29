@@ -9,6 +9,7 @@ export default {
 
   searchShows: '@shows/searchShows' as const,
 
+  createEpisodeData: '@episodes/createEpisodeData' as const,
   fetchEpisodeByUrl: '@episodes/fetchEpisodeByUrl' as const,
   searchEpisodes: '@episodes/searchEpisodes' as const,
 };

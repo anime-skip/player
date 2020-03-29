@@ -177,6 +177,22 @@ export default as<Api.Implementation>({
     return response.data.searchEpisodes;
   },
 
+  async createEpisodeUrl(data, episodeId): Promise<Api.EpisodeUrl> {
+    const q = mutation(
+      `mutation CreateEpisodeUrl($data: InputEpisodeUrl!, $episodeId: ID!) {
+        createEpisodeUrl(episodeUrlInput: $data, episodeId: $episodeId) {
+          ${episodeUrlData}
+        }
+      }`,
+      {
+        data: data,
+        episodeId,
+      }
+    );
+    const response = await sendGraphql<'findEpisodeUrl', Api.EpisodeUrl>(q);
+    return response.data.findEpisodeUrl;
+  },
+
   async fetchEpisodeByUrl(url: string): Promise<Api.EpisodeUrl> {
     const q = query(
       `{

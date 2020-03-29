@@ -1,5 +1,10 @@
 <template>
-  <BasicDialog name="EpisodeEditorDialog" gravityX="center" gravityY="center">
+  <BasicDialog
+    name="EpisodeEditorDialog"
+    gravityX="center"
+    gravityY="center"
+    @show="onShowDialog()"
+  >
     <ProgressOverlay :isLoading="isLoadingEpisode">
       <PopupHeader :title="headerTitle" />
 
@@ -59,7 +64,7 @@
         </div>
         <input
           type="submit"
-          value="Save Changes"
+          value="Save Episode"
           class="clickable focus button save"
           @click="onClickSaveChanges"
         />
@@ -79,6 +84,7 @@ import RequestState from '../../common/utils/RequestState';
 import TextInput from '@/common/components/TextInput.vue';
 import AutocompleteTextInput from '@/common/components/AutocompleteTextInput.vue';
 import EpisodeUtils from '../../common/utils/EpisodeUtils';
+import Browser from '../../common/utils/Browser';
 
 const CREATE_NEW_SHOW_ID = 'new-show-id';
 const CREATE_NEW_SHOW_TITLE = '+ New show';
@@ -105,12 +111,14 @@ export default class EpisodeEditorDialog extends Vue {
 
   @Action() searchShows!: (name: string) => void;
   @Action() searchEpisodes!: (name: string) => void;
+  @Action() createEpisodeData!: (payload: CreateEpisodeDataPayload) => void;
+  @Action() showDialog!: (dialog?: string) => void;
 
-  public showSearch = '';
+  public showSearch: string = '';
   public showSearchTimeout: any = undefined;
   public selectedShowId: string | undefined = undefined;
 
-  public episodeSearch = '';
+  public episodeSearch: string = '';
   public episodeSearchTimeout: any = undefined;
   public selectedEpisodeId: string | undefined = undefined;
 
@@ -119,6 +127,19 @@ export default class EpisodeEditorDialog extends Vue {
   public editableSeasonNumber = '';
   public editableEpisodeNumber = '';
   public editableAbsoluteNumber = '';
+
+  public onShowDialog() {
+    const episodeUrl = this.episodeUrl;
+    this.showSearch = episodeUrl?.episode.show?.name ?? '';
+    this.selectedShowId = episodeUrl?.episode.show?.id;
+    this.episodeSearch = episodeUrl?.episode.name ?? '';
+    this.selectedEpisodeId = episodeUrl?.episode.id;
+    this.editableShowName = this.showSearch;
+    this.editableEpisodeName = this.episodeSearch;
+    this.editableSeasonNumber = String(episodeUrl?.episode.season ?? '');
+    this.editableEpisodeNumber = String(episodeUrl?.episode.number ?? '');
+    this.editableAbsoluteNumber = String(episodeUrl?.episode.absoluteNumber ?? '');
+  }
 
   public get headerTitle() {
     if (this.isLoadingEpisode) {
@@ -162,12 +183,7 @@ export default class EpisodeEditorDialog extends Vue {
   }
 
   @Watch('showSearch')
-  public onChangeShowSearch(showSearch: any) {
-    this.showSearch = showSearch;
-    this.selectedShowId = this.showSearchListItems.find(item => item.title === showSearch)?.id;
-    this.episodeSearch = '';
-    this.selectedEpisodeId = undefined;
-
+  public onChangeShowSearch(showSearch: string) {
     if (this.showSearchTimeout) {
       clearTimeout(this.showSearchTimeout);
     }
@@ -179,19 +195,23 @@ export default class EpisodeEditorDialog extends Vue {
   }
 
   public onFocusShowSearch(isFocused: boolean) {
-    if (this.showSearch === CREATE_NEW_SHOW_TITLE) {
+    if (isFocused && this.showSearch === CREATE_NEW_SHOW_TITLE) {
       this.showSearch = '';
       this.selectedShowId = undefined;
+    }
+    if (!isFocused) {
+      const selectedShowId = this.showSearchListItems.find(item => item.title === this.showSearch)
+        ?.id;
+      if (selectedShowId !== this.selectedShowId) {
+        this.selectedShowId = selectedShowId;
+        this.episodeSearch = '';
+        this.selectedEpisodeId = undefined;
+      }
     }
   }
 
   @Watch('episodeSearch')
   public onChangeEpisodeSearch(episodeSearch: string) {
-    this.episodeSearch = episodeSearch;
-    const episode = this.episodeSearchListItems.find(item => item.title === episodeSearch);
-    const fullEpisode = this.searchEpisodesResult.find(item => item.id === episode?.id);
-    this.selectedEpisodeId = fullEpisode?.id;
-
     if (this.episodeSearchTimeout) {
       clearTimeout(this.episodeSearchTimeout);
     }
@@ -203,9 +223,13 @@ export default class EpisodeEditorDialog extends Vue {
   }
 
   public onFocusEpisodeSearch(isFocused: boolean) {
-    if (this.episodeSearch === CREATE_NEW_EPISODE_TITLE) {
+    if (isFocused && this.episodeSearch === CREATE_NEW_EPISODE_TITLE) {
       this.episodeSearch = '';
       this.selectedEpisodeId = undefined;
+    }
+    if (!isFocused) {
+      const episode = this.episodeSearchListItems.find(item => item.title === this.episodeSearch);
+      this.selectedEpisodeId = episode?.id;
     }
   }
 
@@ -219,7 +243,7 @@ export default class EpisodeEditorDialog extends Vue {
     return this.selectedShowId === CREATE_NEW_SHOW_ID;
   }
   public isShowSearchSearchable(): boolean {
-    return this.showSearch.trim().length > 2;
+    return this.showSearch.trim().length >= 2;
   }
 
   public isEpisodeSearchValid(): boolean {
@@ -245,17 +269,16 @@ export default class EpisodeEditorDialog extends Vue {
   }
 
   public onClickShowResult(id: string, index: number) {
-    (document.activeElement as any).blur();
     const item = this.showSearchListItems[index];
     this.selectedShowId = id;
     this.showSearch = item.title;
     if (id !== CREATE_NEW_SHOW_ID) {
       this.editableShowName = item.title;
     }
+    (document.activeElement as any).blur();
   }
 
   public onClickEpisodeResult(id: string, index: number) {
-    (document.activeElement as any).blur();
     const item = this.episodeSearchListItems[index];
     const fullItem = this.searchEpisodesResult.find(i => i.id === item?.id);
     this.selectedEpisodeId = id;
@@ -266,10 +289,67 @@ export default class EpisodeEditorDialog extends Vue {
       this.editableSeasonNumber = String(fullItem.season ?? '');
       this.editableAbsoluteNumber = String(fullItem.absoluteNumber ?? '');
     }
+    (document.activeElement as any).blur();
+  }
+
+  public isShowChanged(): boolean {
+    return this.editableShowName.trim() !== this.episodeUrl?.episode.show?.name;
+  }
+
+  public isEpisodeChanged(): boolean {
+    const existingEpisode = this.episodeUrl?.episode;
+    return (
+      this.editableEpisodeName.trim() !== existingEpisode?.name ||
+      this.editableEpisodeNumber.trim() !==
+        (existingEpisode?.number ? String(existingEpisode.number) : undefined) ||
+      this.editableSeasonNumber.trim() !==
+        (existingEpisode?.season ? String(existingEpisode.season) : undefined) ||
+      this.editableAbsoluteNumber.trim() !==
+        (existingEpisode?.absoluteNumber ? String(existingEpisode.absoluteNumber) : undefined)
+    );
   }
 
   public onClickSaveChanges() {
-    console.log('Saved changes', this);
+    // Creating Data
+    if (this.selectedShowId === CREATE_NEW_SHOW_ID) {
+      console.log('Create show, create episode, create episode url');
+      return;
+    }
+    if (this.selectedEpisodeId === CREATE_NEW_EPISODE_ID) {
+      console.log('create episode, create episode url');
+      return;
+    }
+    if (
+      this.selectedEpisodeId !== CREATE_NEW_EPISODE_ID &&
+      this.selectedShowId !== CREATE_NEW_SHOW_ID &&
+      this.episodeUrl == null
+    ) {
+      this.createEpisodeData({
+        show: { create: false, showId: this.selectedShowId! },
+        episode: { create: false, episodeId: this.selectedEpisodeId! },
+        episodeUrl: {
+          create: true,
+          data: { url: Browser.getURL() },
+        },
+      });
+      return;
+    }
+
+    // Updating existing data
+    if (this.isShowChanged() && this.isEpisodeChanged()) {
+      console.log('updated show and episode info');
+      return;
+    }
+    if (this.isShowChanged()) {
+      console.log('updated show info');
+      return;
+    }
+    if (this.isEpisodeChanged()) {
+      console.log('updated episode info');
+      return;
+    }
+
+    this.showDialog(undefined);
   }
 }
 </script>
@@ -279,7 +359,7 @@ $width: 450px;
 $borderRadius: 3px;
 
 #EpisodeEditorDialog {
-  padding-bottom: $toolbarHeight + 4px + 8px;
+  margin-bottom: $toolbarHeight + 4px + 8px;
 
   .dialog-root-container {
     overflow-y: visible;

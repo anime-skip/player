@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { Mutation, Getter, Action } from '@/common/utils/VuexDecorators';
 
 @Component
@@ -31,6 +31,11 @@ export default class BasicDialog extends Vue {
 
   public get isVisible(): boolean {
     return this.name === this.activeDialog;
+  }
+
+  @Watch('isVisible')
+  public onChangeIsVisible(isVisible: boolean) {
+    this.$emit(isVisible ? 'show' : 'hide');
   }
 
   public dismiss(): void {

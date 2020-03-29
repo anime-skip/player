@@ -8,6 +8,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import Popup from '@/popup/Popup.vue';
 import BasicDialog from './BasicDialog.vue';
+import { Getter } from '../../common/utils/VuexDecorators';
 
 @Component({
   components: {
@@ -15,13 +16,15 @@ import BasicDialog from './BasicDialog.vue';
     Popup,
   },
 })
-export default class AccountDialog extends Vue {}
+export default class AccountDialog extends Vue {
+  @Getter() public activeDialog?: string;
+}
 </script>
 
 <style lang="scss">
 #AccountDialog {
   padding-right: 16px;
-  padding-bottom: $toolbarHeight + 4px + 8px;
+  margin-bottom: $toolbarHeight + 4px + 8px;
 
   .dialog-root-container {
     max-height: 300px;

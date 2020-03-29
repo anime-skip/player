@@ -19,6 +19,9 @@ export default as<Api.Implementation>({
   searchEpisodes(name) {
     return messenger.send('searchEpisodes', name);
   },
+  createEpisodeUrl(data, episodeId) {
+    return messenger.send('createEpisodeUrl', { data, episodeId });
+  },
   fetchEpisodeByUrl(url) {
     return messenger.send('fetchEpisodeByUrl', url);
   },
