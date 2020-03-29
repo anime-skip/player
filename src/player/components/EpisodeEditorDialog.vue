@@ -234,7 +234,6 @@ export default class EpisodeEditorDialog extends Vue {
   }
 
   public onFocusShowSearch(isFocused: boolean) {
-    console.log('onFocusShowSearch', { isFocused });
     if (isFocused && this.selectedShowId === CREATE_NEW_SHOW_ID) {
       this.showSearch = '';
       this.selectedShowId = undefined;

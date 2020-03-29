@@ -8,7 +8,6 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import Popup from '@/popup/Popup.vue';
 import BasicDialog from './BasicDialog.vue';
-import { Getter } from '../../common/utils/VuexDecorators';
 
 @Component({
   components: {
@@ -16,9 +15,7 @@ import { Getter } from '../../common/utils/VuexDecorators';
     Popup,
   },
 })
-export default class AccountDialog extends Vue {
-  @Getter() public activeDialog?: string;
-}
+export default class AccountDialog extends Vue {}
 </script>
 
 <style lang="scss">
