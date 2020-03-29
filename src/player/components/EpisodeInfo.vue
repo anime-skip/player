@@ -13,6 +13,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Getter } from '@/common/utils/VuexDecorators';
 import RequestState from '@/common/utils/RequestState';
+import EpisodeUtils from '@/common/utils/EpisodeUtils';
 
 @Component
 export default class EpisodeInfo extends Vue {
@@ -39,26 +40,7 @@ export default class EpisodeInfo extends Vue {
   }
 
   public get episodeDetails(): string {
-    if (!this.episodeUrl) return '';
-
-    const { absoluteNumber, number, season } = this.episodeUrl?.episode;
-
-    if (absoluteNumber != null && number != null && season != null && number === absoluteNumber) {
-      return `Season ${season}, Episode ${number}`;
-    }
-    if (absoluteNumber != null && number != null && season != null) {
-      return `Season ${season}, Episode ${number} (#${absoluteNumber})`;
-    }
-    if (absoluteNumber != null && season != null) {
-      return `Season ${season} (#${absoluteNumber})`;
-    }
-    if (number != null && season != null) {
-      return `Season ${season}, Episode ${number}`;
-    }
-    if (absoluteNumber != null) {
-      return `Episode #${absoluteNumber}`;
-    }
-    return '';
+    return EpisodeUtils.seasonAndNumberFromEpisodeUrl(this.episodeUrl);
   }
 }
 </script>

@@ -1,12 +1,23 @@
 {
-    "[vue]": {
-        "editor.tabSize": 2,
-        "editor.formatOnSave": true,
-        "editor.formatOnPaste": false
-    },
-    "[typescript]": {
-        "editor.tabSize": 2,
-        "editor.formatOnSave": true,
-        "editor.formatOnPaste": false
-    },
+  "[vue]": {
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": false
+  },
+  "[typescript]": {
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": false
+  },
+  "sqltools.connections": [
+    {
+      "database": "anime_skip_local",
+      "dialect": "PostgreSQL",
+      "name": "Anime Skip (Local)",
+      "password": "password",
+      "port": 5432,
+      "server": "localhost",
+      "username": "postgres"
+    }
+  ]
 }

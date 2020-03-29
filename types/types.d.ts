@@ -6,29 +6,6 @@ interface VideoInjection {
   setMuted: (isMuted: boolean) => void;
 }
 
-declare type MessageType = keyof Api.Implementation;
-declare type MessageTypeListenerMap<T> = Partial<{ [type in MessageType]: T }>;
-declare type MessageTypeMap<T> = Record<MessageType, T>;
-
-declare interface MessagePayload extends Implements<MessageTypeMap<any>, MessagePayload> {
-  fetchEpisodeByUrl: string;
-  loginManual: { username: string; password: string };
-  loginRefresh: string;
-  updatePreferences: Api.Preferences;
-}
-
-declare interface MessageResponse extends Implements<MessageTypeMap<any>, MessageResponse> {
-  fetchEpisodeByUrl: Api.EpisodeUrl;
-  loginManual: Api.LoginResponse;
-  loginRefresh: Api.LoginResponse;
-  updatePreferences: void;
-}
-
-declare type MessageListener<T extends MessageType> = (
-  payload: MessagePayload[T]
-) => Promise<MessageResponse[T]>;
-declare type MessageListeners = { [type in MessageType]: MessageListener<type> };
-
 declare interface LoginManualPayload {
   username: string;
   password: string;
@@ -62,3 +39,33 @@ declare interface PlaybackRate {
 
 type ValueOf<T> = T[keyof T];
 type Implements<T, U extends T> = {};
+
+interface CreateEpisodeDataPayload {
+  show:
+    | {
+        create: false;
+        showId: string;
+      }
+    | {
+        create: true;
+        name: string;
+      };
+  episode:
+    | {
+        create: false;
+        episodeId: string;
+      }
+    | {
+        create: true;
+        data: Api.InputEpisode;
+      };
+  episodeUrl:
+    | {
+        create: false;
+        url: string;
+      }
+    | {
+        create: true;
+        data: Api.InputEpisodeUrl;
+      };
+}

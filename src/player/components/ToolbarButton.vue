@@ -2,6 +2,7 @@
   <div class="ToolbarButton" v-ripple>
     <slot v-if="icon == null" />
     <WebExtImg v-else :src="icon" :draggable="false" />
+    <p v-if="title" class="title">{{ title }}</p>
   </div>
 </template>
 
@@ -14,6 +15,7 @@ import WebExtImg from '@/common/components/WebExtImg.vue';
 })
 export default class ToolbarButton extends Vue {
   @Prop(String) public icon?: string;
+  @Prop(String) public title?: string;
 }
 </script>
 
@@ -26,11 +28,22 @@ export default class ToolbarButton extends Vue {
   transition: 200ms;
   transition-property: background-color;
   cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
   &:hover {
     background-color: rgba($color: #ffffff, $alpha: 0.06);
   }
   &:hover:active {
     background-color: rgba($color: #ffffff, $alpha: 0.12);
+  }
+
+  .title {
+    color: $textPrimary;
+    font-size: 15px;
+    margin-left: 8px;
+    padding-top: 4px;
   }
 }
 </style>

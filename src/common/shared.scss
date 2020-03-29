@@ -59,6 +59,21 @@ a {
   box-shadow: 0 0 0 0 #0b0d10;
 }
 
+.clickable.invalid {
+  background-color: $red500;
+  box-shadow: 0 3px 0 0 $red700;
+}
+
+.clickable.invalid *::placeholder {
+  color: white !important;
+}
+
+.clickable.invalid.down,
+.clickable.invalid.focus:active {
+  transform: translateY(0);
+  box-shadow: 0 0 0 0 $red500;
+}
+
 .clickable.transparent {
   opacity: 0.48;
 }
@@ -72,4 +87,10 @@ a {
   color: $red400;
   font-size: 15px;
   font-weight: 500;
+}
+
+h2.section-header {
+  font-size: 14px;
+  color: $textPrimary;
+  margin-top: 16px;
 }

@@ -1,8 +1,10 @@
 export default class Messenger {
   public listeners?: MessageListeners;
+  public source: string;
 
-  public constructor(listeners?: MessageListeners) {
+  public constructor(source: string, listeners?: MessageListeners) {
     this.listeners = listeners;
+    this.source = source;
     // @ts-ignore
     browser.runtime.onMessage.addListener(this.onReceiveMessage);
   }
@@ -26,7 +28,7 @@ export default class Messenger {
     type: MessageType;
     payload: MessagePayload[T];
   }): Promise<any> => {
-    console.log('Received Message', { type, payload });
+    console.log('Received Message on ' + this.source, { type, payload }, this.listeners);
     if (!this.listeners) return;
 
     const callback = (this.listeners[type] as unknown) as MessageListener<T>;

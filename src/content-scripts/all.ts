@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+console.clear(); // clear console from hot reload
 console.info('INJECTED content-scripts/all.ts');
 
 const videoCallbacks: ((video: HTMLVideoElement) => void)[] = [];
@@ -11,13 +12,23 @@ global.getVideo = (): HTMLVideoElement => {
   return document.querySelector(global.getVideoQuery()) as HTMLVideoElement;
 };
 
-let oldVideo: HTMLVideoElement | undefined;
+let oldVideoSrc: string | undefined;
 function checkVideoChanged(): void {
   const newVideo = global.getVideo();
-  if (newVideo != null && (newVideo !== oldVideo || newVideo.src !== oldVideo.src)) {
-    videoCallbacks.forEach(callback => callback(newVideo));
+  if (newVideo?.src !== oldVideoSrc) {
+    console.log('Video changed, calling callbacks:', {
+      oldVideo: oldVideoSrc,
+      newVideo: newVideo.src,
+    });
+    videoCallbacks.forEach(callback => {
+      try {
+        callback(newVideo);
+      } catch (err) {
+        console.error('onVideoChangedCallback failed', err);
+      }
+    });
+    oldVideoSrc = newVideo.src;
   }
-  oldVideo = newVideo;
 }
 
 setInterval(checkVideoChanged, 1000);

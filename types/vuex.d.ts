@@ -1,13 +1,22 @@
 declare interface VuexState {
   activeDialog?: string;
   playbackRate: number;
+  isEditing: boolean;
+
   token?: string;
   tokenExpiresAt?: number;
   refreshToken?: string;
   refreshTokenExpiresAt?: number;
   loginRequestState: RequestState;
+
   account?: Api.Account;
   preferencesRequestState?: RequestState;
+
+  searchShowsResult: Api.ShowSearchResult[];
+  searchShowsRequestState: RequestState;
+
+  searchEpisodesResult: Api.EpisodeSearchResult[];
+  searchEpisodesRequestState: RequestState;
   episodeUrl?: Api.EpisodeUrl;
   episodeRequestState: RequestState;
 }

@@ -29,7 +29,6 @@ function changePlaybackRate(state: VuexState, playbackRate: RequestState): void 
 
   const video = global.getVideo();
   if (video) {
-    console.log('Changing video to:', { playbackRate });
     video.playbackRate = playbackRate || 1;
   }
 }
@@ -46,6 +45,9 @@ export default as<
     state.activeDialog = dialogName;
   },
   [types.changePlaybackRate]: changePlaybackRate,
+  [types.toggleEditMode](state, isEditing: boolean) {
+    state.isEditing = isEditing;
+  },
 
   // Storage
   [types.restoreState](
@@ -55,7 +57,7 @@ export default as<
     for (const field in changes) {
       if (state.hasOwnProperty(field)) {
         if (field === 'playbackRate') {
-          const playbackRate = changes[field] as number;
+          const playbackRate = (changes[field] as number) || 1;
           changePlaybackRate(state, playbackRate);
         } else {
           // @ts-ignore
@@ -109,7 +111,21 @@ export default as<
     state.preferencesRequestState = requestState;
   },
 
+  // Shows
+  [types.searchShowsResult](state, shows: Api.ShowSearchResult[] = []) {
+    state.searchShowsResult = shows;
+  },
+  [types.searchShowsRequestState](state, requestState: RequestState) {
+    state.searchShowsRequestState = requestState;
+  },
+
   // Episodes
+  [types.searchEpisodesResult](state, episodes: Api.EpisodeSearchResult[] = []) {
+    state.searchEpisodesResult = episodes;
+  },
+  [types.searchEpisodesRequestState](state, requestState: RequestState) {
+    state.searchEpisodesRequestState = requestState;
+  },
   [types.setEpisodeInfo](state, episode: Api.EpisodeUrl) {
     state.episodeUrl = episode;
   },

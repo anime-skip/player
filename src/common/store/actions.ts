@@ -136,8 +136,83 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
   },
 
   // Shows
+  async [types.searchShows]({ commit }, name: string) {
+    console.info('actions.searchShows', { name });
+    try {
+      commit(mutationTypes.searchShowsRequestState, RequestState.LOADING);
+      const results = await global.Api.searchShows(name);
+      commit(mutationTypes.searchShowsRequestState, RequestState.SUCCESS);
+      commit(mutationTypes.searchShowsResult, results);
+      console.trace('types.searchShows');
+    } catch (err) {
+      console.error('actions.searchShows', err);
+      commit(mutationTypes.searchShowsRequestState, RequestState.FAILURE);
+    }
+  },
 
   // Episodes
+  async [types.createEpisodeData](
+    { commit, dispatch },
+    { show: showData, episode: episodeData, episodeUrl: episodeUrlData }: CreateEpisodeDataPayload
+  ) {
+    console.info('actions.createEpisodeData', { showData, episodeData, episodeUrlData });
+    try {
+      // Setup
+      dispatch(types.showDialog, undefined);
+      commit(mutationTypes.episodeRequestState, RequestState.LOADING);
+
+      // Show
+      let showId: string;
+      if (showData.create) {
+        const result = await global.Api.createShow({ name: showData.name });
+        showId = result.id;
+      } else {
+        showId = showData.showId;
+      }
+
+      // Episode
+      let episodeId: string;
+      if (episodeData.create) {
+        const result = await global.Api.createEpisode(episodeData.data, showId);
+        episodeId = result.id;
+      } else {
+        episodeId = episodeData.episodeId;
+      }
+
+      // EpisodeUrl
+      let episodeUrl: string;
+      if (episodeUrlData.create) {
+        episodeUrl = episodeUrlData.data.url;
+        try {
+          await global.Api.deleteEpisodeUrl(episodeUrl);
+        } catch (err) {}
+        await global.Api.createEpisodeUrl(episodeUrlData.data, episodeId);
+      } else {
+        episodeUrl = episodeUrlData.url;
+      }
+
+      console.log('Created Episode Data:', { showId, episodeId, episodeUrl });
+
+      // Update the data
+      dispatch(types.fetchEpisodeByUrl, episodeUrl);
+      commit(mutationTypes.episodeRequestState, RequestState.SUCCESS);
+    } catch (err) {
+      console.error(err);
+      commit(mutationTypes.episodeRequestState, RequestState.FAILURE);
+    }
+  },
+  async [types.searchEpisodes]({ commit }, name: string) {
+    console.info('actions.searchEpisodes', { name });
+    try {
+      commit(mutationTypes.searchEpisodesRequestState, RequestState.LOADING);
+      const results = await global.Api.searchEpisodes(name);
+      commit(mutationTypes.searchEpisodesRequestState, RequestState.SUCCESS);
+      commit(mutationTypes.searchEpisodesResult, results);
+    } catch (err) {
+      console.error('actions.searchEpisodes', err);
+      commit(mutationTypes.searchEpisodesRequestState, RequestState.FAILURE);
+    }
+  },
   async [types.fetchEpisodeByUrl]({ commit }, url) {
     console.info('actions.fetchEpisodeByUrl', { url });
     try {

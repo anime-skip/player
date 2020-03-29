@@ -7,5 +7,9 @@ export default {
 
   updatePreferences: '@preferences/updatePreferences' as const,
 
+  searchShows: '@shows/searchShows' as const,
+
+  createEpisodeData: '@episodes/createEpisodeData' as const,
   fetchEpisodeByUrl: '@episodes/fetchEpisodeByUrl' as const,
+  searchEpisodes: '@episodes/searchEpisodes' as const,
 };
