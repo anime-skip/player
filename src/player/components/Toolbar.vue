@@ -75,7 +75,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Mixins } from 'vue-property-decorator';
 import Timeline from './Timeline.vue';
 import ToolbarButton from './ToolbarButton.vue';
 import AccountDialog from './AccountDialog.vue';
@@ -85,8 +85,9 @@ import VolumeButton from './animations/VolumeButton.vue';
 import Utils from '@/common/utils/Utils';
 import Browser from '@/common/utils/Browser';
 import { Getter, Action, Mutation } from '@/common/utils/VuexDecorators';
-import VideoUtils from '../VideoUtils';
 import WebExtImg from '@/common/components/WebExtImg.vue';
+import VideoControllerMixin from '@/common/mixins/VideoController';
+import KeyboardShortcutMixin from '../../common/mixins/KeyboardShortcuts';
 
 @Component({
   components: {
@@ -99,7 +100,7 @@ import WebExtImg from '@/common/components/WebExtImg.vue';
     WebExtImg,
   },
 })
-export default class ToolBar extends Vue {
+export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortcutMixin) {
   @Prop(Object) public playerState!: PlayerState;
 
   public currentTime: number = 0;
@@ -107,7 +108,6 @@ export default class ToolBar extends Vue {
   public isFullscreenCount: number = 0;
   public Utils = Utils;
   public duration: string = 'Loading...';
-  public togglePlayPause = VideoUtils.togglePlayPause;
   public isFullscreenEnabled = document.fullscreenEnabled;
   public service = global.service;
 
@@ -127,8 +127,6 @@ export default class ToolBar extends Vue {
     global.onVideoChanged(video => {
       video.ontimeupdate = () => this.updateTime(video.currentTime);
     });
-    VideoUtils.nextTimestamp = this.nextTimestamp;
-    VideoUtils.previousTimestamp = this.previousTimestamp;
     document.addEventListener('fullscreenchange', () => {
       this.isFullscreen = Utils.isFullscreen();
       this.isFullscreenCount++;
@@ -154,7 +152,7 @@ export default class ToolBar extends Vue {
 
   public updateTime(newTime: number, updateVideo?: boolean) {
     if (updateVideo) {
-      VideoUtils.setCurrentTime(newTime);
+      this.setCurrentTime(newTime);
     }
     this.currentTime = newTime;
   }
@@ -186,6 +184,24 @@ export default class ToolBar extends Vue {
     } else {
       this.updateTime(0, true);
     }
+  }
+
+  // prettier-ignore
+  keyboardShortcuts: { [combination: string]: () => void } = {
+    // General Controls
+    'D': () => this.togglePlayPause(),
+    // Advance Time
+    'L': () => this.addTime(1 / 24),
+    'V': () => this.addTime(2),
+    'F': () => this.addTime(5),
+    'R': () => this.addTime(90),
+    'E': () => this.nextTimestamp(),
+    // Rewind Time
+    'J': () => this.addTime(-1 / 24),
+    'X': () => this.addTime(-2),
+    'S': () => this.addTime(-5),
+    'W': () => this.addTime(-85),
+    'C': () => this.previousTimestamp(),
   }
 
   public toggleAccountDialog(): void {

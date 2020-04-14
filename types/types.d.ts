@@ -1,11 +1,3 @@
-interface VideoInjection {
-  addTime: (seconds: number) => void;
-  togglePlayPause: () => void;
-  nextTimestamp: () => void;
-  previousTimestamp: () => void;
-  setMuted: (isMuted: boolean) => void;
-}
-
 declare interface LoginManualPayload {
   username: string;
   password: string;
@@ -17,7 +9,6 @@ declare interface LoginRefreshPayload {
 
 declare interface PlayerState {
   isActive: boolean;
-  isEditing: boolean;
   isBuffering: boolean;
   isLoadingEpisodeInfo: boolean;
   isPaused: boolean;

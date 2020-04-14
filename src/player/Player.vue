@@ -25,27 +25,25 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Mixins } from 'vue-property-decorator';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import Loading from '@/common/components/Loading.vue';
 import ToolBar from './components/Toolbar.vue';
 import EpisodeInfo from './components/EpisodeInfo.vue';
 import AccountDialog from './components/AccountDialog.vue';
 import EpisodeEditorDialog from './components/EpisodeEditorDialog.vue';
-import KeyboardShortcuts from '@/common/mixins/KeyboardShortcuts';
+import KeyboardShortcutMixin from '@/common/mixins/KeyboardShortcuts';
 import { Action, Mutation, Getter } from '@/common/utils/VuexDecorators';
 import Browser from '@/common/utils/Browser';
-import VideoUtils from './VideoUtils';
 import Messenger from '@/common/utils/Messenger';
+import VideoControllerMixin from '../common/mixins/VideoController';
 
 @Component({
   components: { WebExtImg, ToolBar, EpisodeInfo, AccountDialog, EpisodeEditorDialog, Loading },
-  mixins: [KeyboardShortcuts],
 })
-export default class Player extends Vue {
+export default class Player extends Mixins(KeyboardShortcutMixin, VideoControllerMixin) {
   public playerState: PlayerState = {
     isActive: false,
-    isEditing: false,
     isBuffering: false,
     isPaused: global.getVideo().paused,
     isLoadingEpisodeInfo: false,
@@ -54,10 +52,10 @@ export default class Player extends Vue {
   };
   public activeTimer?: any;
   public activeTimeout: number = 2000;
-  public togglePlayPause = VideoUtils.togglePlayPause;
   public buffering = false;
 
   @Getter() playbackRate!: number;
+  @Getter() isEditing!: boolean;
 
   @Mutation() public restoreState!: (payload: { changes: any; callback?: () => void }) => void;
   @Mutation() public changePlaybackRate!: (playbackRate: number) => void;
@@ -96,6 +94,11 @@ export default class Player extends Vue {
   public fetchEpisodeInfo(): void {
     this.fetchEpisodeByUrl(Browser.getURL());
   }
+
+  // TODO - Implement
+  // public get canAddTimestamps(): boolean {
+  //   return this.isEditing && ;
+  // }
 
   public toggleActive(isActive: boolean) {
     Vue.set(this.playerState, 'isActive', isActive);
