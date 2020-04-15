@@ -23,41 +23,18 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Mixins } from 'vue-property-decorator';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import VueSlider from 'vue-slider-component';
 import ToolbarButton from '../ToolbarButton.vue';
 import '../../scss/VolumeSlider.scss';
-import VideoUtils from '../../VideoUtils';
+import VideoControllerMixin from '../../../common/mixins/VideoController';
 
 @Component({
   components: { WebExtImg, VueSlider, ToolbarButton },
 })
-export default class VolumeButton extends Vue {
-  public isMuted: boolean = global.getVideo().muted;
-  public level: number = global.getVideo().volume;
+export default class VolumeButton extends Mixins(VideoControllerMixin) {
   public isDragging: boolean = false;
-
-  public constructor() {
-    super();
-    global.onVideoChanged(video => {
-      video.onvolumechange = () => {
-        this.level = this.isMuted ? 0 : video.volume;
-      };
-      this.isMuted = video.muted;
-      this.level = this.isMuted ? 0 : video.volume;
-    });
-  }
-
-  public setMuted(isMuted: boolean) {
-    this.isMuted = isMuted;
-    this.level = this.isMuted ? 0 : global.getVideo().volume;
-    VideoUtils.setMuted(isMuted);
-  }
-
-  public toggleMuted() {
-    this.setMuted(!this.isMuted);
-  }
 
   public get volumeClass(): string {
     if (this.isMuted) {
@@ -71,8 +48,6 @@ export default class VolumeButton extends Vue {
     }
     return 'high';
   }
-
-  public setVolume = VideoUtils.setVolume;
 }
 </script>
 

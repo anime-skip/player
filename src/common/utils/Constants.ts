@@ -8,6 +8,36 @@ export const persistedKeys = [
   'playbackRate' as const,
 ];
 
+export const ACCEPTED_KEYS: { [keyCode: number]: string } = {
+  13: 'ENTER',
+  32: 'SPACE',
+  37: 'LEFT',
+  38: 'UP',
+  39: 'RIGHT',
+  40: 'DOWN',
+  65: 'A',
+  67: 'C',
+  68: 'D',
+  69: 'E',
+  70: 'F',
+  73: 'I',
+  74: 'J',
+  75: 'K',
+  76: 'L',
+  77: 'M',
+  79: 'O',
+  81: 'Q',
+  82: 'R',
+  83: 'S',
+  86: 'V',
+  87: 'W',
+  88: 'X',
+  90: 'Z',
+  188: ',',
+  219: '[',
+  221: ']',
+};
+
 export const PLAYBACK_SPEEDS: PlaybackRate[] = [
   {
     value: 0.5,
