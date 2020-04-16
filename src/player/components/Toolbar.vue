@@ -62,7 +62,11 @@
           @click.native="toggleEditMode(false)"
         />
         <div v-if="isLoggedIn" class="divider margin-left" />
-        <ToolbarButton class="margin-left" icon="ic_more.svg" @click.native="toggleAccountDialog" />
+        <ToolbarButton
+          class="margin-left margin-right"
+          icon="ic_more.svg"
+          @click.native="toggleAccountDialog"
+        />
         <ToolbarButton
           v-if="isFullscreenEnabled"
           @click.native="setFullscreen(!Utils.isFullscreen())"

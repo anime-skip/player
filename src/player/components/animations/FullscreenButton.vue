@@ -13,6 +13,7 @@ import AnimatedIcon from './AnimatedIcon.vue';
 @Component
 export default class FullscreenButton extends AnimatedIcon {
   public getPath(): [[number, number], [number, number]][][] {
+    // prettier-ignore
     return [
       [
         [[7, 5], [9, 5]],
@@ -53,5 +54,6 @@ export default class FullscreenButton extends AnimatedIcon {
 
 <style lang="scss" scoped>
 .FullscreenButton {
+  height: 24px;
 }
 </style>

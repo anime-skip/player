@@ -20,7 +20,6 @@ This will install and open firefox. To open another browser, more changes will h
 #### Optinoal
 
 - Error on timeline drag
-- Play button not centered vertically
 
 ## Keyboard shortcut plans
 
