@@ -1,6 +1,6 @@
 # Anime Skip - Web Extension
 
-Inject a custom player over the top of the certain web players (`VRV`, `Funimation`).
+Inject a custom player over the top of the certain web players (`VRV`, `Funimation`, more to come).
 
 ## Development
 
@@ -9,7 +9,17 @@ yarn install
 yarn watch:dev
 ```
 
-This will install and open firefox. To open another browser, more changes will have to be made.
+This will install and open Firefox. To open another browser, more changes will have to be made.
+
+## Deployment
+
+To package the application, run `yarn package`.
+
+To deploy, go to the consoles:
+- [Chrome Web Store](https://chrome.google.com/webstore/devconsole/331629b9-cf31-4391-ad30-77dd0a36958d?hl=en)
+- [Firefox Add-On Developer Hub](https://addons.mozilla.org/en-US/developers/addons)
+- ~~Edge~~ - [TODO](https://docs.microsoft.com/en-us/microsoft-edge/extensions-chromium/publish/publish-extension)
+- ~~Opera~~ - [TODO](https://dev.opera.com/extensions/publishing-guidelines/)
 
 ## TODO
 
