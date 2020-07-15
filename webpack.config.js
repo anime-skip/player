@@ -108,6 +108,7 @@ const config = {
       { from: 'assets', to: 'assets', ignore: ['icon.xcf'] },
       { from: 'popup/index.html', to: 'popup/index.html', transform: transformHtml },
       { from: 'options/index.html', to: 'options/index.html', transform: transformHtml },
+      { from: '.web-extension-id' },
       {
         from: 'manifest.json',
         to: 'manifest.json',
@@ -123,16 +124,6 @@ const config = {
         },
       },
     ]),
-    new WebpackShellPluginNext({
-      onBuildEnd: {
-        scripts: [
-          `yarn web-ext --config=.web-ext.config.js run --url ${example} --url about:debugging#/runtime/this-firefox --url about:addons`,
-          "echo -e \x1b[1m\x1b[95mOpening Firefox...\x1b[0m"
-        ],
-        blocking: false,
-        parallel: true
-      },
-    })
   ],
   devServer: {
     stats: {
@@ -162,6 +153,17 @@ if (config.mode === 'production') {
       },
     }),
   ]);
+} else {
+  config.plugins.push(new WebpackShellPluginNext({
+    onBuildEnd: {
+      scripts: [
+        `yarn web-ext --config=.web-ext.config.js run --url ${example} --url about:debugging#/runtime/this-firefox --url about:addons`,
+        "echo -e \x1b[1m\x1b[95mOpening Firefox...\x1b[0m"
+      ],
+      blocking: false,
+      parallel: true
+    },
+  }))
 }
 
 if (process.env.HMR === 'true') {
