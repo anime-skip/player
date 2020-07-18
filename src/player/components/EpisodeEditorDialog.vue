@@ -14,7 +14,7 @@
         label="Find Show"
         v-model="showSearch"
         :isValid="isShowSelected()"
-        :isShowingSuggestions="isShowSearchSearchable()"
+        isShowingSuggestion
         @focus="onFocusShowSearch(true)"
         @blur="onFocusShowSearch(false)"
       >
@@ -36,7 +36,7 @@
         label="Find Episode"
         v-model="episodeSearch"
         :isValid="isEpisodeSelected()"
-        :isShowingSuggestions="isEpisodeSearchSearchable()"
+        isShowingSuggestions
         @focus="onFocusEpisodeSearch(true)"
         @blur="onFocusEpisodeSearch(false)"
       >
@@ -226,11 +226,9 @@ export default class EpisodeEditorDialog extends Vue {
     if (this.showSearchTimeout) {
       clearTimeout(this.showSearchTimeout);
     }
-    if (this.isShowSearchSearchable()) {
-      this.showSearchTimeout = setTimeout(() => {
-        this.searchShows(this.showSearch.trim());
-      }, 500);
-    }
+    this.showSearchTimeout = setTimeout(() => {
+      this.searchShows(this.showSearch.trim());
+    }, 500);
   }
 
   public onFocusShowSearch(isFocused: boolean) {
@@ -254,11 +252,9 @@ export default class EpisodeEditorDialog extends Vue {
     if (this.episodeSearchTimeout) {
       clearTimeout(this.episodeSearchTimeout);
     }
-    if (this.isEpisodeSearchSearchable()) {
-      this.episodeSearchTimeout = setTimeout(() => {
-        this.searchEpisodes({ name: this.episodeSearch.trim(), showId: this.selectedShowId });
-      }, 500);
-    }
+    this.episodeSearchTimeout = setTimeout(() => {
+      this.searchEpisodes({ name: this.episodeSearch.trim(), showId: this.selectedShowId });
+    }, 500);
   }
 
   public onFocusEpisodeSearch(isFocused: boolean) {
@@ -281,21 +277,12 @@ export default class EpisodeEditorDialog extends Vue {
   public isCreatingNewShow(): boolean {
     return this.selectedShowId === CREATE_NEW_SHOW_ID;
   }
-  public isShowSearchSearchable(): boolean {
-    return true; //this.showSearch.trim().length ;
-  }
 
-  public isEpisodeSearchValid(): boolean {
-    return true; //!!this.episodeSearch;
-  }
   public isEpisodeSelected(): boolean {
     return this.selectedEpisodeId != null;
   }
   public isCreatingNewEpisode(): boolean {
     return this.selectedEpisodeId === CREATE_NEW_EPISODE_ID;
-  }
-  public isEpisodeSearchSearchable(): boolean {
-    return true; // this.episodeSearch.trim().length > 1;
   }
 
   public isShowingEditSection(): boolean {
