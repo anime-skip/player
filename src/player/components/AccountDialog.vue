@@ -21,7 +21,7 @@ export default class AccountDialog extends Vue {}
 <style lang="scss">
 #AccountDialog {
   padding-right: 16px;
-  margin-bottom: $toolbarHeight + 4px + 8px;
+  padding-bottom: $toolbarHeight + 4px + 8px;
 
   .dialog-root-container {
     max-height: 300px;
