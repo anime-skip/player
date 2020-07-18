@@ -1,3 +1,5 @@
+import { as } from './GlobalUtils';
+
 export const persistedKeys = [
   'token' as const,
   'tokenExpiresAt' as const,
@@ -61,6 +63,14 @@ export const PLAYBACK_SPEEDS: PlaybackRate[] = [
     display: '2.0',
   },
 ];
+
+export const TIMESTAMP_TYPES = {
+  mustWatch: as<Api.TimestmampType>({
+    id: '9edc0037-fa4e-47a7-a29a-d9c43368daa8',
+    name: '',
+    description: '',
+  }),
+};
 
 /**
  * The content to show in the skipped prefereces section

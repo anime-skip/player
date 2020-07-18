@@ -14,7 +14,7 @@
         label="Find Show"
         v-model="showSearch"
         :isValid="isShowSelected()"
-        :isShowingSuggestions="isShowSearchSearchable()"
+        isShowingSuggestion
         @focus="onFocusShowSearch(true)"
         @blur="onFocusShowSearch(false)"
       >
@@ -36,7 +36,7 @@
         label="Find Episode"
         v-model="episodeSearch"
         :isValid="isEpisodeSelected()"
-        :isShowingSuggestions="isEpisodeSearchSearchable()"
+        isShowingSuggestions
         @focus="onFocusEpisodeSearch(true)"
         @blur="onFocusEpisodeSearch(false)"
       >
@@ -55,9 +55,9 @@
 
       <div class="edit-section" v-if="isShowingEditSection()">
         <h2 class="section-header">Edit Episode Info</h2>
-        <h2 v-if="isTempEditingDisabled || selectedShowId !== 'new-show-id'" class="section-header">
-          (Editing an existing data is not supported yet)
-        </h2>
+        <p v-if="isTempEditingDisabled || selectedShowId !== 'new-show-id'" class="disabled-label">
+          (Editing existing data is not supported yet)
+        </p>
         <TextInput
           class="row"
           label="Show Name"
@@ -143,7 +143,7 @@ export default class EpisodeEditorDialog extends Vue {
   @Mutation('searchEpisodesResult') clearEpisodeSearchResults!: () => void;
 
   @Action() searchShows!: (name: string) => void;
-  @Action() searchEpisodes!: (name: string) => void;
+  @Action() searchEpisodes!: (payload: { name: string; showId?: string }) => void;
   @Action() createEpisodeData!: (payload: CreateEpisodeDataPayload) => void;
   @Action() showDialog!: (dialog?: string) => void;
 
@@ -226,11 +226,9 @@ export default class EpisodeEditorDialog extends Vue {
     if (this.showSearchTimeout) {
       clearTimeout(this.showSearchTimeout);
     }
-    if (this.isShowSearchSearchable()) {
-      this.showSearchTimeout = setTimeout(() => {
-        this.searchShows(this.showSearch.trim());
-      }, 500);
-    }
+    this.showSearchTimeout = setTimeout(() => {
+      this.searchShows(this.showSearch.trim());
+    }, 500);
   }
 
   public onFocusShowSearch(isFocused: boolean) {
@@ -254,11 +252,9 @@ export default class EpisodeEditorDialog extends Vue {
     if (this.episodeSearchTimeout) {
       clearTimeout(this.episodeSearchTimeout);
     }
-    if (this.isEpisodeSearchSearchable()) {
-      this.episodeSearchTimeout = setTimeout(() => {
-        this.searchEpisodes(this.episodeSearch.trim());
-      }, 500);
-    }
+    this.episodeSearchTimeout = setTimeout(() => {
+      this.searchEpisodes({ name: this.episodeSearch.trim(), showId: this.selectedShowId });
+    }, 500);
   }
 
   public onFocusEpisodeSearch(isFocused: boolean) {
@@ -281,21 +277,12 @@ export default class EpisodeEditorDialog extends Vue {
   public isCreatingNewShow(): boolean {
     return this.selectedShowId === CREATE_NEW_SHOW_ID;
   }
-  public isShowSearchSearchable(): boolean {
-    return this.showSearch.trim().length >= 2;
-  }
 
-  public isEpisodeSearchValid(): boolean {
-    return !!this.episodeSearch;
-  }
   public isEpisodeSelected(): boolean {
     return this.selectedEpisodeId != null;
   }
   public isCreatingNewEpisode(): boolean {
     return this.selectedEpisodeId === CREATE_NEW_EPISODE_ID;
-  }
-  public isEpisodeSearchSearchable(): boolean {
-    return this.episodeSearch.trim().length > 1;
   }
 
   public isShowingEditSection(): boolean {
@@ -504,6 +491,12 @@ $borderRadius: 3px;
   .edit-section {
     display: flex;
     flex-direction: column;
+
+    .disabled-label {
+      margin-top: 8px;
+      font-size: 14px;
+      color: rgba($color: #ff7777, $alpha: 0.7);
+    }
   }
 
   .row {

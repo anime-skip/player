@@ -52,7 +52,7 @@
           class="margin-left"
           icon="ic_edit.svg"
           title="Edit Episode Info"
-          @click.native="openEpisodeEditorDialog"
+          @click.native="toggleEditEpisodeDialog"
         />
         <ToolbarButton
           v-if="isEditing"
@@ -62,7 +62,11 @@
           @click.native="toggleEditMode(false)"
         />
         <div v-if="isLoggedIn" class="divider margin-left" />
-        <ToolbarButton class="margin-left" icon="ic_more.svg" @click.native="toggleAccountDialog" />
+        <ToolbarButton
+          class="margin-left margin-right"
+          icon="ic_more.svg"
+          @click.native="toggleAccountDialog"
+        />
         <ToolbarButton
           v-if="isFullscreenEnabled"
           @click.native="setFullscreen(!Utils.isFullscreen())"
@@ -223,12 +227,13 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   public startEditMode() {
     this.toggleEditMode(true);
     if (!this.episodeUrl) {
-      this.openEpisodeEditorDialog();
+      this.toggleEditEpisodeDialog();
     }
   }
 
-  public openEpisodeEditorDialog() {
-    this.showDialog('EpisodeEditorDialog');
+  public toggleEditEpisodeDialog() {
+    const dialogId = 'EpisodeEditorDialog';
+    this.showDialog(this.activeDialog === dialogId ? undefined : dialogId);
   }
 }
 </script>

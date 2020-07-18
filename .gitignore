@@ -1,6 +1,7 @@
 node_modules/
 dist/
-dist-zip/
+artifacts/
 
 *.log
 example/video.mp4
+.env

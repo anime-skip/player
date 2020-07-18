@@ -18,7 +18,7 @@ new Messenger('background', {
   searchShows: global.Api.searchShows,
 
   createEpisode: ({ data, showId }) => global.Api.createEpisode(data, showId),
-  searchEpisodes: global.Api.searchEpisodes,
+  searchEpisodes: ({ name, showId }) => global.Api.searchEpisodes(name, showId),
 
   createEpisodeUrl: ({ data, episodeId }) => global.Api.createEpisodeUrl(data, episodeId),
   deleteEpisodeUrl: global.Api.deleteEpisodeUrl,

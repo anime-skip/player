@@ -15,7 +15,7 @@ declare namespace Api {
     searchShows(name: string): Promise<Api.ShowSearchResult[]>;
 
     createEpisode(data: Api.InputEpisode, showId: string): Promise<Api.EpisodeSearchResult>;
-    searchEpisodes(name: string): Promise<Api.EpisodeSearchResult[]>;
+    searchEpisodes(name: string, showId?: string): Promise<Api.EpisodeSearchResult[]>;
 
     createEpisodeUrl(data: Api.InputEpisodeUrl, episodeId: string): Promise<Api.EpisodeUrl>;
     deleteEpisodeUrl(episodeUrl: string): Promise<Api.EpisodeUrlNoEpisode>;
@@ -96,10 +96,23 @@ declare namespace Api {
     timestamps: Timestamp[];
   }
 
-  interface Timestamp {
-    id: number;
+  interface InputTimestamp {
     at: number;
     typeId: number;
+  }
+
+  interface AmbigousTimestamp extends InputTimestamp {
+    id?: string;
+  }
+
+  interface Timestamp extends AmbigousTimestamp {
+    id: string;
+  }
+
+  interface TimestmampType {
+    id: string;
+    name: string;
+    description: string;
   }
 
   interface LoginResponse {

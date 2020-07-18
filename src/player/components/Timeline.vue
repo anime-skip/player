@@ -44,6 +44,7 @@
       :dotSize="isFlipped ? 3 : 11"
       @change="onSeek"
     />
+    <EditTimestampHandle v-if="isEditing" :style="{ left: `${(currentTime / duration) * 100}%` }" />
   </div>
 </template>
 
@@ -55,6 +56,7 @@ import VueSlider from 'vue-slider-component';
 import '../scss/VideoSlider.scss';
 import Utils from '@/common/utils/Utils';
 import { Getter } from '@/common/utils/VuexDecorators';
+import EditTimestampHandle from '@/player/components/EditTimestampHandle.vue';
 
 interface SectionData {
   timestamp: Api.Timestamp;
@@ -63,7 +65,7 @@ interface SectionData {
 }
 
 @Component({
-  components: { Section, WebExtImg, VueSlider },
+  components: { Section, WebExtImg, VueSlider, EditTimestampHandle },
 })
 export default class Timeline extends Vue {
   @Prop(Boolean) public isFlipped?: boolean;
@@ -79,6 +81,8 @@ export default class Timeline extends Vue {
   public seekingTime: number = 0;
   public skippedFromZero: boolean = false;
   public service = global.service;
+
+  @Getter() isEditing!: boolean;
 
   public constructor() {
     super();
@@ -134,15 +138,15 @@ export default class Timeline extends Vue {
 
   public get unknownTimestamp(): Api.Timestamp {
     return {
+      id: 'unknown',
       at: 0,
-      id: -2,
       typeId: -2,
     };
   }
 
   public get endTimestamp(): Api.Timestamp {
     return {
-      id: -1,
+      id: 'end',
       at: this.duration || 0,
       typeId: -1,
     };

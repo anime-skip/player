@@ -13,6 +13,7 @@ import AnimatedIcon from './AnimatedIcon.vue';
 @Component
 export default class PlayPauseButton extends AnimatedIcon {
   public getPath(): [[number, number], [number, number]][][] {
+    // prettier-ignore
     return [
       [
         [[6, 5], [7, 5]],
@@ -33,5 +34,6 @@ export default class PlayPauseButton extends AnimatedIcon {
 
 <style lang="scss" scoped>
 .PlayPauseButton {
+  height: 24px;
 }
 </style>

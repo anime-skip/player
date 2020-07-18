@@ -50,7 +50,7 @@ export default class AutocompleteTextInput extends Vue {
   private wasEscPressed: boolean = false;
 
   public get shouldShowSuggestions(): boolean {
-    return !!this.inputValue && !this.wasEscPressed && (this.isFocused || this.isMouseOver);
+    return !this.wasEscPressed && (this.isFocused || this.isMouseOver);
   }
 
   public onFocusInput() {
