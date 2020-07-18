@@ -444,8 +444,6 @@ $width: 450px;
 $borderRadius: 3px;
 
 #EpisodeEditorDialog {
-  margin-bottom: $toolbarHeight + 4px + 8px;
-
   .dialog-root-container {
     overflow-y: visible;
     width: $width;
