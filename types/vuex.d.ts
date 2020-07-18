@@ -2,6 +2,7 @@ declare interface VuexState {
   activeDialog?: string;
   playbackRate: number;
   isEditing: boolean;
+  selectedTimestamp?: Api.AmbigousTimestamp;
 
   token?: string;
   tokenExpiresAt?: number;

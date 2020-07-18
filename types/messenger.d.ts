@@ -12,7 +12,7 @@ declare interface MessagePayload extends Implements<MessageTypeMap<any>, Message
   searchShows: string;
 
   createEpisode: { data: Api.InputEpisode; showId: string };
-  searchEpisodes: string;
+  searchEpisodes: { name: string; showId?: string };
 
   createEpisodeUrl: { episodeId: string; data: Api.InputEpisodeUrl };
   deleteEpisodeUrl: string;

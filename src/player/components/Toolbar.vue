@@ -52,7 +52,7 @@
           class="margin-left"
           icon="ic_edit.svg"
           title="Edit Episode Info"
-          @click.native="openEpisodeEditorDialog"
+          @click.native="toggleEditEpisodeDialog"
         />
         <ToolbarButton
           v-if="isEditing"
@@ -227,12 +227,13 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   public startEditMode() {
     this.toggleEditMode(true);
     if (!this.episodeUrl) {
-      this.openEpisodeEditorDialog();
+      this.toggleEditEpisodeDialog();
     }
   }
 
-  public openEpisodeEditorDialog() {
-    this.showDialog('EpisodeEditorDialog');
+  public toggleEditEpisodeDialog() {
+    const dialogId = 'EpisodeEditorDialog';
+    this.showDialog(this.activeDialog === dialogId ? undefined : dialogId);
   }
 }
 </script>

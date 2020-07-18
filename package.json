@@ -1,6 +1,6 @@
 {
   "name": "anime-skip-web-ext",
-  "version": "0.0.1.4",
+  "version": "0.0.1-nightly",
   "private": true,
   "author": "Aaron Klinker <aaronklinker1@gmail.com>",
   "engines": {
@@ -9,12 +9,12 @@
   "scripts": {
     "lint": "eslint --ext .ts,.vue src",
     "prettier": "prettier \"src/**/*.{ts,vue}\"",
-    "prettier:write": "npm run prettier -- --write",
+    "prettier:write": "yarn prettier -- --write",
     "build": "cross-env NODE_ENV=production webpack --hide-modules",
     "build:dev": "cross-env NODE_ENV=development webpack --hide-modules",
     "package": "node scripts/package.js",
-    "watch": "npm run build -- --watch",
-    "watch:dev": "cross-env HMR=true npm run build:dev -- --watch"
+    "watch": "yarn build -- --watch",
+    "watch:dev": "cross-env HMR=true yarn build:dev -- --watch"
   },
   "husky": {
     "hooks": {

@@ -55,9 +55,9 @@
 
       <div class="edit-section" v-if="isShowingEditSection()">
         <h2 class="section-header">Edit Episode Info</h2>
-        <h2 v-if="isTempEditingDisabled || selectedShowId !== 'new-show-id'" class="section-header">
-          (Editing an existing data is not supported yet)
-        </h2>
+        <p v-if="isTempEditingDisabled || selectedShowId !== 'new-show-id'" class="disabled-label">
+          (Editing existing data is not supported yet)
+        </p>
         <TextInput
           class="row"
           label="Show Name"
@@ -143,7 +143,7 @@ export default class EpisodeEditorDialog extends Vue {
   @Mutation('searchEpisodesResult') clearEpisodeSearchResults!: () => void;
 
   @Action() searchShows!: (name: string) => void;
-  @Action() searchEpisodes!: (name: string) => void;
+  @Action() searchEpisodes!: (payload: { name: string; showId?: string }) => void;
   @Action() createEpisodeData!: (payload: CreateEpisodeDataPayload) => void;
   @Action() showDialog!: (dialog?: string) => void;
 
@@ -256,7 +256,7 @@ export default class EpisodeEditorDialog extends Vue {
     }
     if (this.isEpisodeSearchSearchable()) {
       this.episodeSearchTimeout = setTimeout(() => {
-        this.searchEpisodes(this.episodeSearch.trim());
+        this.searchEpisodes({ name: this.episodeSearch.trim(), showId: this.selectedShowId });
       }, 500);
     }
   }
@@ -282,11 +282,11 @@ export default class EpisodeEditorDialog extends Vue {
     return this.selectedShowId === CREATE_NEW_SHOW_ID;
   }
   public isShowSearchSearchable(): boolean {
-    return this.showSearch.trim().length >= 2;
+    return true; //this.showSearch.trim().length ;
   }
 
   public isEpisodeSearchValid(): boolean {
-    return !!this.episodeSearch;
+    return true; //!!this.episodeSearch;
   }
   public isEpisodeSelected(): boolean {
     return this.selectedEpisodeId != null;
@@ -295,7 +295,7 @@ export default class EpisodeEditorDialog extends Vue {
     return this.selectedEpisodeId === CREATE_NEW_EPISODE_ID;
   }
   public isEpisodeSearchSearchable(): boolean {
-    return this.episodeSearch.trim().length > 1;
+    return true; // this.episodeSearch.trim().length > 1;
   }
 
   public isShowingEditSection(): boolean {
@@ -504,6 +504,12 @@ $borderRadius: 3px;
   .edit-section {
     display: flex;
     flex-direction: column;
+
+    .disabled-label {
+      margin-top: 8px;
+      font-size: 14px;
+      color: rgba($color: #ff7777, $alpha: 0.7);
+    }
   }
 
   .row {

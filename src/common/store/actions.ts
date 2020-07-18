@@ -201,11 +201,11 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       commit(mutationTypes.episodeRequestState, RequestState.FAILURE);
     }
   },
-  async [types.searchEpisodes]({ commit }, name: string) {
-    console.info('actions.searchEpisodes', { name });
+  async [types.searchEpisodes]({ commit }, { name, showId }: { name: string; showId: string }) {
+    console.info('actions.searchEpisodes', { name, showId });
     try {
       commit(mutationTypes.searchEpisodesRequestState, RequestState.LOADING);
-      const results = await global.Api.searchEpisodes(name);
+      const results = await global.Api.searchEpisodes(name, showId);
       commit(mutationTypes.searchEpisodesRequestState, RequestState.SUCCESS);
       commit(mutationTypes.searchEpisodesResult, results);
     } catch (err) {

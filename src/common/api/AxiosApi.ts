@@ -204,9 +204,13 @@ export default as<Api.Implementation>({
     const response = await sendGraphql<'createEpisode', Api.EpisodeSearchResult>(m);
     return response.data.createEpisode;
   },
-  async searchEpisodes(name: string): Promise<Api.EpisodeSearchResult[]> {
+  async searchEpisodes(name: string, showId?: string): Promise<Api.EpisodeSearchResult[]> {
+    const params: string[] = [`search: "${name}"`, 'limit: 5'];
+    if (showId != null) {
+      params.push(`showId: "${showId}"`);
+    }
     const q = query(`{
-      searchEpisodes(search: "${name}", limit: 5) {
+      searchEpisodes(${params.join(', ')}) {
         ${episodeSearchData}
       }
     }`);

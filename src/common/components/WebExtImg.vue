@@ -1,5 +1,5 @@
 <template>
-  <img :src="resolvedSrc" :draggable="draggable" />
+  <img :src="resolvedSrc" :draggable="draggable" ondragstart="return false;" />
 </template>
 
 <script lang="ts">

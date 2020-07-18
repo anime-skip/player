@@ -16,12 +16,21 @@ export default class VideoControllerMixin extends Vue {
     const video = global.getVideo();
     video.paused ? video.play() : video.pause();
   }
+  play(): void {
+    global.getVideo().play();
+  }
+  pause(): void {
+    global.getVideo().pause();
+  }
 
   addTime(seconds: number): void {
     global.getVideo().currentTime += seconds;
   }
   setCurrentTime(seconds: number): void {
     global.getVideo().currentTime = seconds;
+  }
+  getCurrentTime(): number {
+    return global.getVideo().currentTime;
   }
 
   isMuted: boolean = global.getVideo().muted;
