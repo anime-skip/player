@@ -117,7 +117,7 @@ declare namespace Api {
     id: number | string;
   }
 
-  interface TimestmampType {
+  interface TimestampType {
     id: string;
     name: string;
     description: string;

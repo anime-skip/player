@@ -294,10 +294,7 @@ export default as<Api.Implementation>({
       }`,
       {
         timestampId: id,
-        data: {
-          at,
-          typeId,
-        },
+        data: { at, typeId },
       }
     );
     const response = await sendGraphql<'createTimestamp', Api.Timestamp>(m);

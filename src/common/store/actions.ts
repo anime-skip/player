@@ -90,6 +90,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     }
   },
   async [types.startEditing]({ state, commit }) {
+    console.log('startEditing');
     commit(mutations.toggleEditMode, true);
     commit(mutations.setDraftTimestamps, state.episodeUrl?.episode.timestamps ?? []);
   },

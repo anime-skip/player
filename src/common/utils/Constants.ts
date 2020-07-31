@@ -67,7 +67,7 @@ export const PLAYBACK_SPEEDS: PlaybackRate[] = [
   },
 ];
 
-export const TIMESTAMP_TYPES: Api.TimestmampType[] = [
+export const TIMESTAMP_TYPES: Api.TimestampType[] = [
   {
     name: 'Canon',
     id: '9edc0037-fa4e-47a7-a29a-d9c43368daa8',

@@ -109,11 +109,6 @@ export default class Timeline extends Vue {
     this.updateSections();
   }
 
-  @Watch('draftTimestamps')
-  public onDraftTimestampsChange(): void {
-    console.info('timeline', arguments);
-  }
-
   @Watch('currentTime')
   public onChangeCurrentTime(newTime: number, oldTime: number): void {
     if (this.timestamps.length > 0 && Math.abs(oldTime - newTime) < 1) {
@@ -134,9 +129,9 @@ export default class Timeline extends Vue {
   }
 
   public get activeTimestamps(): Api.Timestamp[] {
-    if (this.isEditing) {
-      return this.draftTimestamps;
-    }
+    // if (this.isEditing) {
+    //   return this.draftTimestamps;
+    // }
     return this.timestamps;
   }
 

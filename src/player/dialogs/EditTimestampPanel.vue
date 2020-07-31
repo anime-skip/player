@@ -91,7 +91,7 @@ export default class EditTimestampPanel extends Mixins(
   @Getter() public editTimestampMode?: 'add' | 'edit';
 
   public typeFilter = '';
-  public selectedType?: Api.TimestmampType;
+  public selectedType?: Api.TimestampType;
 
   mounted() {
     this.reset();
@@ -134,7 +134,7 @@ export default class EditTimestampPanel extends Mixins(
     return this.activeTimestamp == null || this.selectedType == null || this.episodeUrl == null;
   }
 
-  public get matchingTypes(): Api.TimestmampType[] {
+  public get matchingTypes(): Api.TimestampType[] {
     const filter = this.typeFilter.trim();
     if (filter == '') return TIMESTAMP_TYPES;
 
@@ -142,7 +142,7 @@ export default class EditTimestampPanel extends Mixins(
     return results.map(item => item.obj);
   }
 
-  public typeRadioIcon(type: Api.TimestmampType): string {
+  public typeRadioIcon(type: Api.TimestampType): string {
     if (this.selectedType == null || type.id !== this.selectedType?.id) {
       return 'ic_radio_deselected.svg';
     }
@@ -150,13 +150,13 @@ export default class EditTimestampPanel extends Mixins(
   }
 
   @Watch('matchingTypes')
-  onChangeMatchingTypes(current: Api.TimestmampType[], old: Api.TimestmampType[]) {
+  onChangeMatchingTypes(current: Api.TimestampType[], old: Api.TimestampType[]) {
     if (current.length === 1) {
       this.selectType(current[0]);
     }
   }
 
-  public selectType(type: Api.TimestmampType) {
+  public selectType(type: Api.TimestampType) {
     this.selectedType = type;
     this.$forceUpdate();
   }
