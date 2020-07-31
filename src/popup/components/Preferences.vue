@@ -20,7 +20,7 @@
         -->
       </div>
 
-      <h2 class="section-header">Skipped Sections</h2>
+      <h2 class="section-header">What do you want to skip?</h2>
       <div class="input-grid" :class="{ small }">
         <Checkbox
           v-for="preference in SKIPPABLE_PREFERENCES"

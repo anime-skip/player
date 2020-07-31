@@ -3,15 +3,15 @@
     class="ToolBar"
     :class="{
       vrv: service === 'vrv',
-      active: playerState.isActive,
+      active: isActive,
       paused: playerState.isPaused,
     }"
     @click.stop
   >
-    <div class="gradient"></div>
+    <div class="gradient" />
     <div class="content">
       <Timeline
-        :isFlipped="!playerState.isPaused && !playerState.isActive"
+        :isFlipped="!playerState.isPaused && !isActive"
         :currentTime="currentTime"
         :updateTime="updateTime"
         :prefs="preferences"
@@ -50,16 +50,16 @@
         <ToolbarButton
           v-if="isEditing"
           class="margin-left"
-          icon="ic_edit.svg"
-          title="Edit Episode Info"
-          @click.native="toggleEditEpisodeDialog"
+          icon="ic_save_changes.svg"
+          title="Save Timestamps"
+          @click.native="stopEditing()"
         />
         <ToolbarButton
           v-if="isEditing"
           class="margin-left"
-          icon="ic_save_changes.svg"
-          title="Save Timestamps"
-          @click.native="toggleEditMode(false)"
+          icon="ic_discard_changes.svg"
+          title="Discard Changes"
+          @click.native="stopEditing(true)"
         />
         <div v-if="isLoggedIn" class="divider margin-left" />
         <ToolbarButton
@@ -82,7 +82,7 @@
 import { Component, Prop, Vue, Mixins } from 'vue-property-decorator';
 import Timeline from './Timeline.vue';
 import ToolbarButton from './ToolbarButton.vue';
-import AccountDialog from './AccountDialog.vue';
+import AccountDialog from '../dialogs/AccountDialog.vue';
 import PlayPauseButton from './animations/PlayPauseButton.vue';
 import FullscreenButton from './animations/FullscreenButton.vue';
 import VolumeButton from './animations/VolumeButton.vue';
@@ -92,6 +92,7 @@ import { Getter, Action, Mutation } from '@/common/utils/VuexDecorators';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import VideoControllerMixin from '@/common/mixins/VideoController';
 import KeyboardShortcutMixin from '../../common/mixins/KeyboardShortcuts';
+import { FRAME } from '../../common/utils/Constants';
 
 @Component({
   components: {
@@ -122,13 +123,17 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   @Getter() public episodeUrl!: boolean;
   @Getter() public isLoggedIn?: boolean;
 
-  @Mutation() public toggleEditMode!: (isEditing: boolean) => void;
+  @Action() public startEditing!: () => void;
+  @Action() public stopEditing!: (discard: boolean) => void;
 
   @Action() public showDialog!: (dialogName?: string) => void;
+  @Mutation() public setActiveTimestamp!: (timestamp: Api.AmbigousTimestamp) => void;
+  @Mutation() public setEditTimestampMode!: (mode: 'add' | 'edit' | undefined) => void;
 
   constructor() {
     super();
     global.onVideoChanged(video => {
+      this.updateTime(video.currentTime);
       video.ontimeupdate = () => this.updateTime(video.currentTime);
     });
     document.addEventListener('fullscreenchange', () => {
@@ -136,6 +141,10 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
       this.isFullscreenCount++;
     });
     Utils.waitForVideoLoad().then(this.updateDuration);
+  }
+
+  public get isActive(): boolean {
+    return this.playerState.isActive || this.isEditing;
   }
 
   public setFullscreen(isFullscreen: boolean): void {
@@ -151,7 +160,7 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
     if (duration === 0) {
       this.duration = 'Loading...';
     }
-    this.duration = this.formatSeconds(duration, this.playerState.isPaused ? 2 : 0);
+    this.duration = Utils.formatSeconds(duration, false);
   }
 
   public updateTime(newTime: number, updateVideo?: boolean) {
@@ -170,6 +179,12 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
     const video = global.getVideo();
     if (nextTimestamp) {
       this.updateTime(nextTimestamp.at, true);
+      if (this.isEditing) {
+        this.pause();
+        this.setActiveTimestamp(nextTimestamp);
+        this.setEditTimestampMode('edit');
+        this.showDialog('EditTimestampPanel');
+      }
     } else if (video.duration) {
       this.updateTime(video.duration, true);
     } else {
@@ -185,6 +200,12 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
       .pop();
     if (previousTimestamp) {
       this.updateTime(previousTimestamp.at, true);
+      if (this.isEditing) {
+        this.pause();
+        this.setActiveTimestamp(previousTimestamp);
+        this.setEditTimestampMode('edit');
+        this.showDialog('EditTimestampPanel');
+      }
     } else {
       this.updateTime(0, true);
     }
@@ -194,14 +215,21 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   keyboardShortcuts: { [combination: string]: () => void } = {
     // General Controls
     'D': () => this.togglePlayPause(),
+    'ESC': this.showDialog,
     // Advance Time
-    'L': () => this.addTime(1 / 24),
+    'L': () => {
+      this.addTime(FRAME);
+      return true;
+    },
     'V': () => this.addTime(2),
     'F': () => this.addTime(5),
     'R': () => this.addTime(90),
     'E': () => this.nextTimestamp(),
     // Rewind Time
-    'J': () => this.addTime(-1 / 24),
+    'J': () => {
+      this.addTime(-FRAME);
+      return true;
+      },
     'X': () => this.addTime(-2),
     'S': () => this.addTime(-5),
     'W': () => this.addTime(-85),
@@ -212,20 +240,15 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
     this.showDialog(this.activeDialog === 'AccountDialog' ? undefined : 'AccountDialog');
   }
 
-  public formatSeconds(seconds: number, decimalPlaces: number) {
-    const mins = Math.floor(seconds / 60);
-    const secs = parseFloat((seconds % 60).toFixed(decimalPlaces));
-    return mins + ':' + (secs < 10 ? '0' : '') + secs;
-  }
-
   public get formattedTime(): string {
-    return this.formatSeconds(this.currentTime, this.playerState.isPaused ? 2 : 0);
+    return Utils.formatSeconds(this.currentTime, this.playerState.isPaused);
   }
 
   // Edit Mode
 
   public startEditMode() {
-    this.toggleEditMode(true);
+    this.startEditing();
+
     if (!this.episodeUrl) {
       this.toggleEditEpisodeDialog();
     }
@@ -268,7 +291,7 @@ $offsetActiveVrv: 3px;
     transition: 200ms;
     transition-property: opacity;
     opacity: 0;
-    background: linear-gradient(transparent, rgba($color: $background500, $alpha: 0.75));
+    background: linear-gradient(transparent, rgba($color: $background500, $alpha: 0.6));
   }
   &.active {
     .gradient {

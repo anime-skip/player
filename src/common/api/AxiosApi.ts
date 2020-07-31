@@ -82,6 +82,7 @@ const episodeData = `
 `;
 
 const episodeUrlNoEpisodeData = `
+  url
   createdAt
 `;
 
@@ -90,6 +91,12 @@ const episodeUrlData = `
   episode {
     ${episodeData}
   }
+`;
+
+const timestampData = `
+  id
+  at
+  typeId
 `;
 
 /* eslint-disable no-console */
@@ -258,5 +265,56 @@ export default as<Api.Implementation>({
     );
     const response = await sendGraphql<'findEpisodeUrl', Api.EpisodeUrl>(q);
     return response.data.findEpisodeUrl;
+  },
+
+  async createTimestamp(
+    episodeId: string,
+    { at, typeId }: Api.InputTimestamp
+  ): Promise<Api.Timestamp> {
+    const m = mutation(
+      `mutation CreateTimestamp($data: InputTimestamp!, $episodeId: ID!) {
+        createTimestamp(timestampInput: $data, episodeId: $episodeId) {
+          ${timestampData}
+        }
+      }`,
+      {
+        episodeId,
+        data: { at, typeId },
+      }
+    );
+    const response = await sendGraphql<'createTimestamp', Api.Timestamp>(m);
+    return response.data.createTimestamp;
+  },
+  async updateTimestamp({ id, at, typeId }: Api.Timestamp): Promise<Api.Timestamp> {
+    const m = mutation(
+      `mutation UpdateTimestamp($data: InputTimestamp!, $timestampId: ID!) {
+        updateTimestamp(newTimestamp: $data, timestampId: $timestampId) {
+          ${timestampData}
+        }
+      }`,
+      {
+        timestampId: id,
+        data: {
+          at,
+          typeId,
+        },
+      }
+    );
+    const response = await sendGraphql<'createTimestamp', Api.Timestamp>(m);
+    return response.data.createTimestamp;
+  },
+  async deleteTimestamp(timestampId: string): Promise<Api.Timestamp> {
+    const m = mutation(
+      `mutation DeleteTimestamp($timestampId: ID!) {
+        deleteTimestamp(timestampId: $timestampId) {
+          ${timestampData}
+        }
+      }`,
+      {
+        timestampId,
+      }
+    );
+    const response = await sendGraphql<'createTimestamp', Api.Timestamp>(m);
+    return response.data.createTimestamp;
   },
 });

@@ -38,4 +38,14 @@ export default as<Api.Implementation>({
   fetchEpisodeByUrl(url) {
     return messenger.send('fetchEpisodeByUrl', url);
   },
+
+  createTimestamp(episodeId, data) {
+    return messenger.send('createTimestamp', { episodeId, data });
+  },
+  updateTimestamp(data) {
+    return messenger.send('updateTimestamp', data);
+  },
+  deleteTimestamp(timestampId) {
+    return messenger.send('deleteTimestamp', timestampId);
+  },
 });

@@ -48,13 +48,13 @@ a {
 } */
 
 .clickable.down,
-.clickable.focus:active {
+.clickable.focus:active:hover {
   transform: translateY(0);
   box-shadow: 0 0 0 0 #135dc1;
 }
 
 .clickable.dark.down,
-.clickable.dark.focus:active {
+.clickable.dark.focus:active:hover {
   transform: translateY(0);
   box-shadow: 0 0 0 0 #0b0d10;
 }
@@ -69,7 +69,7 @@ a {
 }
 
 .clickable.invalid.down,
-.clickable.invalid.focus:active {
+.clickable.invalid.focus:active:hover {
   transform: translateY(0);
   box-shadow: 0 0 0 0 $red500;
 }

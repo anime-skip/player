@@ -1,6 +1,5 @@
 import AxiosApi from '@/common/api/AxiosApi';
 import Messenger from '@/common/utils/Messenger';
-import { globalAgent } from 'http';
 
 // Setup Globals
 
@@ -23,5 +22,9 @@ new Messenger('background', {
   createEpisodeUrl: ({ data, episodeId }) => global.Api.createEpisodeUrl(data, episodeId),
   deleteEpisodeUrl: global.Api.deleteEpisodeUrl,
   fetchEpisodeByUrl: global.Api.fetchEpisodeByUrl,
+
+  createTimestamp: ({ episodeId, data }) => global.Api.createTimestamp(episodeId, data),
+  updateTimestamp: global.Api.updateTimestamp,
+  deleteTimestamp: global.Api.deleteTimestamp,
 });
-console.info('Started messenger on the background script');
+console.log('Started messenger on the background script');

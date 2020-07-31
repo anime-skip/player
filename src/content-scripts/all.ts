@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 console.clear(); // clear console from hot reload
-console.info('INJECTED content-scripts/all.ts');
+console.log('INJECTED content-scripts/all.ts');
 
 const videoCallbacks: ((video: HTMLVideoElement) => void)[] = [];
 

@@ -5,6 +5,7 @@ import { Mutation } from 'vuex';
 import types from './mutationTypes';
 import { as } from '../utils/GlobalUtils';
 import RequestState from '../utils/RequestState';
+import Utils from '../utils/Utils';
 
 // Helpers /////////////////////////////////////////////////////////////////////
 
@@ -131,5 +132,35 @@ export default as<
   },
   [types.episodeRequestState](state, requestState: RequestState) {
     state.episodeRequestState = requestState;
+  },
+
+  // Timestamps
+  [types.setActiveTimestamp](state, timestamp: Api.AmbigousTimestamp) {
+    state.activeTimestamp = timestamp;
+  },
+  [types.clearActiveTimestamp](state) {
+    state.activeTimestamp = undefined;
+  },
+  [types.updateDraftTimestamp](state, newTimestamp: Api.AmbigousTimestamp) {
+    const index = state.draftTimestamps.findIndex(
+      draftTimestamp => draftTimestamp.id === newTimestamp.id
+    );
+    let unsortedTimestamps: Api.AmbigousTimestamp[];
+    if (index == -1) {
+      unsortedTimestamps = [...state.draftTimestamps, newTimestamp];
+    } else {
+      unsortedTimestamps = [...state.draftTimestamps];
+      unsortedTimestamps[index] = newTimestamp;
+    }
+    state.draftTimestamps = unsortedTimestamps.sort(Utils.timestampSorter);
+  },
+  [types.setDraftTimestamps](state, timestamps: Api.AmbigousTimestamp[]) {
+    state.draftTimestamps = [...timestamps].sort(Utils.timestampSorter);
+  },
+  [types.clearEditTimestampMode](state) {
+    state.editTimestampMode = undefined;
+  },
+  [types.setEditTimestampMode](state, editMode: 'add' | 'edit' | undefined) {
+    state.editTimestampMode = editMode;
   },
 });

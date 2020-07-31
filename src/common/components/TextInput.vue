@@ -14,6 +14,7 @@
         @blur="onBlur"
         :autocomplete="autocomplete || 'off'"
         @keypress.esc="onPressEsc"
+        @keyup.enter="$emit('submit')"
       />
     </div>
     <span v-if="errorMessage" class="error-message">{{ errorMessage }}</span>
@@ -83,7 +84,6 @@ $inputHeight: 48px;
 
   .input-wrapper {
     display: flex;
-    flex-direction: row;
     align-items: center;
     height: $inputHeight;
     border-radius: 3px;
@@ -100,7 +100,6 @@ $inputHeight: 48px;
       }
     }
     .input {
-      flex: 1;
       background-color: transparent;
       border: none;
       outline: none;
@@ -112,6 +111,7 @@ $inputHeight: 48px;
       line-height: $inputHeight;
       caret-color: $primary500;
       color: $textPrimary;
+      min-width: 0;
       &::placeholder {
         color: $textSecondary;
       }

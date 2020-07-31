@@ -79,7 +79,7 @@ export default class EpisodeInfo extends Vue {
   h3 {
     font-size: 20px;
     font-weight: 400;
-    color: $textSecondarySolid;
+    color: $textSecondary;
   }
 }
 </style>
