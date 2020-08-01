@@ -26,7 +26,7 @@ export default class Utils {
 
   public static isSkipped(
     { typeId: _typeId }: Api.Timestamp,
-    preferences?: Api.Preferences
+    preferences: Api.Preferences | undefined
   ): boolean {
     if (!preferences) return false;
     if (!preferences.enableAutoSkip) return false;

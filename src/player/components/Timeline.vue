@@ -132,7 +132,7 @@ export default class Timeline extends Vue {
     // Skip timestamp at 0:00 if we haven't yet
     const wasAtBeginning = oldTime === 0;
     const haveNotSkippedFromBeginning = !this.skippedFromZero;
-    const shouldSkipFirstTimestamp = Utils.isSkipped(this.timestamps[0]);
+    const shouldSkipFirstTimestamp = Utils.isSkipped(this.timestamps[0], this.prefs);
     if (wasAtBeginning && haveNotSkippedFromBeginning && shouldSkipFirstTimestamp) {
       this.skippedFromZero = true;
       this.goToNextTimestampOnTimeChange(newTime);
@@ -150,18 +150,6 @@ export default class Timeline extends Vue {
     if (jumpedDirectlyToTimestamp) {
       return;
     }
-
-    console.log('skip', {
-      jumpedDirectlyToTimestamp,
-      didNotPastATimestamp,
-      notSkippingThePassedTimestamp,
-      help: {
-        oldTime,
-        newTime,
-        timestamps: this.timestamps,
-        oldNext,
-      },
-    });
 
     this.goToNextTimestampOnTimeChange(newTime);
   }
