@@ -174,8 +174,15 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
     this.updateTime((this.currentTime += seconds), true);
   }
 
+  public get activeTimestamps(): Api.AmbigousTimestamp[] {
+    if (this.isEditing) {
+      return this.$store.getters.draftTimestamps;
+    }
+    return this.timestamps;
+  }
+
   public nextTimestamp(): void {
-    const nextTimestamp = this.timestamps.find(timestamp => timestamp.at > this.currentTime);
+    const nextTimestamp = this.activeTimestamps.find(timestamp => timestamp.at > this.currentTime);
     const video = global.getVideo();
     if (nextTimestamp) {
       this.updateTime(nextTimestamp.at, true);
@@ -195,7 +202,7 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   }
 
   public previousTimestamp(): void {
-    const previousTimestamp = this.timestamps
+    const previousTimestamp = this.activeTimestamps
       .filter(timestamp => timestamp.at < this.currentTime - 1)
       .pop();
     if (previousTimestamp) {
@@ -250,13 +257,12 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
     this.startEditing();
 
     if (!this.episodeUrl) {
-      this.toggleEditEpisodeDialog();
+      this.showEditEpisodeDialog();
     }
   }
 
-  public toggleEditEpisodeDialog() {
-    const dialogId = 'EpisodeEditorDialog';
-    this.showDialog(this.activeDialog === dialogId ? undefined : dialogId);
+  public showEditEpisodeDialog() {
+    this.showDialog('EpisodeEditorDialog');
   }
 }
 </script>

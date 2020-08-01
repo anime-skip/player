@@ -10,6 +10,8 @@ const path = require('path');
 
 const example = path.resolve(__dirname, 'example', 'index.html');
 
+require('dotenv').config({ path: '.env.firefox' });
+
 const config = {
   mode: process.env.NODE_ENV,
   context: __dirname + '/src',
@@ -31,7 +33,7 @@ const config = {
     extensions: ['.js', '.ts', '.vue'],
     alias: {
       '@': path.resolve(__dirname, 'src'),
-    }
+    },
   },
   module: {
     rules: [
@@ -50,7 +52,7 @@ const config = {
         exclude: /node_modules/,
         options: {
           appendTsSuffixTo: [/\.vue$/],
-        }
+        },
       },
       {
         test: /\.css$/,
@@ -67,7 +69,7 @@ const config = {
               data: `
                 @import "@/common/_variables.scss";
                 @import "@/common/_mixins.scss";
-              `
+              `,
             },
           },
         ],
@@ -112,12 +114,13 @@ const config = {
       {
         from: 'manifest.json',
         to: 'manifest.json',
-        transform: (content) => {
+        transform: content => {
           const jsonContent = JSON.parse(content);
           jsonContent.version = version;
 
           if (config.mode === 'development') {
-            jsonContent['content_security_policy'] = "script-src 'self' 'unsafe-eval'; object-src 'self'";
+            jsonContent['content_security_policy'] =
+              "script-src 'self' 'unsafe-eval'; object-src 'self'";
           }
 
           return JSON.stringify(jsonContent, null, 2);
@@ -140,8 +143,8 @@ const config = {
       errors: false,
       errorDetails: false,
       warnings: false,
-      publicPath: false
-    }
+      publicPath: false,
+    },
   },
 };
 
@@ -154,16 +157,21 @@ if (config.mode === 'production') {
     }),
   ]);
 } else {
-  config.plugins.push(new WebpackShellPluginNext({
-    onBuildEnd: {
-      scripts: [
-        `yarn web-ext --config=.web-ext.config.js run --url ${example} --url about:debugging#/runtime/this-firefox --url about:addons`,
-        "echo -e \x1b[1m\x1b[95mOpening Firefox...\x1b[0m"
-      ],
-      blocking: false,
-      parallel: true
-    },
-  }))
+  const customProfile = process.env.BROWSER_PROFILE_PATH
+    ? `--firefox-profile=${process.env.BROWSER_PROFILE_PATH}`
+    : '';
+  config.plugins.push(
+    new WebpackShellPluginNext({
+      onBuildEnd: {
+        scripts: [
+          `yarn web-ext --config=.web-ext.config.js run --url ${example} --url about:debugging#/runtime/this-firefox --url about:addons ${customProfile}`,
+          'echo -e \x1b[1m\x1b[95mOpening Firefox...\x1b[0m',
+        ],
+        blocking: false,
+        parallel: true,
+      },
+    })
+  );
 }
 
 if (process.env.HMR === 'true') {
@@ -175,7 +183,7 @@ if (process.env.HMR === 'true') {
 }
 
 function transformHtml(content) {
-  return ejs.render(content.toString().replace(".ts", ".js"), {
+  return ejs.render(content.toString().replace('.ts', '.js'), {
     ...process.env,
   });
 }

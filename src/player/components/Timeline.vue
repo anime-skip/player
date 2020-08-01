@@ -28,7 +28,7 @@
     />
     <WebExtImg
       v-for="timestamp of activeTimestamps"
-      :key="timestamp.id"
+      :key="`t${timestamp.id}`"
       class="Timestamp"
       :src="isEditing ? 'ic_timestamp_draft.svg' : 'ic_timestamp.svg'"
       :style="{ left: `${(timestamp.at / duration) * 100}%` }"
@@ -109,9 +109,14 @@ export default class Timeline extends Vue {
     this.updateSections();
   }
 
+  @Watch('isEditing')
+  public onIsEditingChange(): void {
+    this.updateSections();
+  }
+
   @Watch('currentTime')
   public onChangeCurrentTime(newTime: number, oldTime: number): void {
-    if (this.timestamps.length > 0 && Math.abs(oldTime - newTime) < 1) {
+    if (this.timestamps.length > 0 && Math.abs(oldTime - newTime) < 1 && !this.isEditing) {
       const next = Utils.nextTimestamp(oldTime, this.timestamps);
       if (
         (oldTime === 0 && !this.skippedFromZero) ||
@@ -129,9 +134,9 @@ export default class Timeline extends Vue {
   }
 
   public get activeTimestamps(): Api.Timestamp[] {
-    // if (this.isEditing) {
-    //   return this.draftTimestamps;
-    // }
+    if (this.isEditing) {
+      return this.draftTimestamps;
+    }
     return this.timestamps;
   }
 

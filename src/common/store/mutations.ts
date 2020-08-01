@@ -142,6 +142,7 @@ export default as<
     state.activeTimestamp = undefined;
   },
   [types.updateDraftTimestamp](state, newTimestamp: Api.AmbigousTimestamp) {
+    console.info('Before: ', state.draftTimestamps);
     const index = state.draftTimestamps.findIndex(
       draftTimestamp => draftTimestamp.id === newTimestamp.id
     );
@@ -153,6 +154,12 @@ export default as<
       unsortedTimestamps[index] = newTimestamp;
     }
     state.draftTimestamps = unsortedTimestamps.sort(Utils.timestampSorter);
+    console.info('After: ', state.draftTimestamps);
+  },
+  [types.deleteDraftTimestamp](state, deletedTimestamp: Api.AmbigousTimestamp) {
+    state.draftTimestamps = state.draftTimestamps.filter(item => {
+      return item.id !== deletedTimestamp.id;
+    });
   },
   [types.setDraftTimestamps](state, timestamps: Api.AmbigousTimestamp[]) {
     state.draftTimestamps = [...timestamps].sort(Utils.timestampSorter);

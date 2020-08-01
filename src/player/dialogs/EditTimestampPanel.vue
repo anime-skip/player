@@ -38,8 +38,11 @@
         type="submit"
         value="Delete"
         class="clickable focus invalid button delete"
+        @click="onClickDelete()"
+        :class="{ 'disabled transparent': isSaveDisabled() }"
       />
       <input
+        v-else
         type="submit"
         value="Cancel"
         class="clickable dark focus button cancel"
@@ -85,6 +88,7 @@ export default class EditTimestampPanel extends Mixins(
   @Mutation() clearEditTimestampMode!: () => void;
   @Mutation() setActiveTimestamp!: (timestamp: Api.AmbigousTimestamp) => void;
   @Mutation() updateDraftTimestamp!: (newTimestamp: Api.AmbigousTimestamp) => void;
+  @Mutation() deleteDraftTimestamp!: (deletedTimestamp: Api.AmbigousTimestamp) => void;
   @Getter() activeTimestamp?: Api.AmbigousTimestamp;
   @Action('showDialog') hideDialog!: () => void;
   @Getter() public episodeUrl?: Api.EpisodeUrl;
@@ -99,6 +103,17 @@ export default class EditTimestampPanel extends Mixins(
 
   reset() {
     this.selectedType = TIMESTAMP_TYPES.find(type => type.id === this.activeTimestamp?.typeId);
+    this.typeFilter = '';
+  }
+
+  @Watch('activeTimestamp')
+  public onChangeActiveTimestamp(
+    newTimestamp: Api.AmbigousTimestamp,
+    oldTimestamp: Api.AmbigousTimestamp
+  ) {
+    if (newTimestamp && newTimestamp.id !== oldTimestamp?.id) {
+      this.reset();
+    }
   }
 
   onHide() {
@@ -194,6 +209,11 @@ export default class EditTimestampPanel extends Mixins(
     this.hideDialog();
     this.play();
   }
+
+  public onClickDelete() {
+    this.deleteDraftTimestamp(this.activeTimestamp!);
+    this.hideDialog();
+  }
 }
 </script>
 
@@ -208,7 +228,7 @@ export default class EditTimestampPanel extends Mixins(
   }
 
   .dialog-root-container {
-    width: 250px;
+    width: 300px;
     min-height: 500px;
     height: 70%;
     max-height: 800px;
