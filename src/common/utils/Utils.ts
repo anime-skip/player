@@ -11,11 +11,11 @@ export default class Utils {
    *          next timestamp. Timestamps at a time equal to the `currentTime` will not be
    *          returned (thus exclusive).
    */
-  public static nextTimestamp(
+  public static nextTimestamp<T extends Api.AmbigousTimestamp>(
     currentTime: number,
-    timestamps: Api.Timestamp[],
+    timestamps: T[],
     preferences: Api.Preferences | undefined
-  ): Api.Timestamp | undefined {
+  ): T | undefined {
     if (!preferences) {
       return timestamps.find(timestamp => timestamp.at > currentTime);
     }
@@ -24,8 +24,21 @@ export default class Utils {
     );
   }
 
+  public static previousTimestamp<T extends Api.AmbigousTimestamp>(
+    time: number,
+    timestamps: T[],
+    preferences: Api.Preferences | undefined
+  ): T | undefined {
+    if (!preferences) {
+      return timestamps.filter(timestamp => timestamp.at < time - 0.1).pop();
+    }
+    return timestamps
+      .filter(timestamp => !Utils.isSkipped(timestamp, preferences) && timestamp.at < time - 0.1)
+      .pop();
+  }
+
   public static isSkipped(
-    { typeId: _typeId }: Api.Timestamp,
+    { typeId: _typeId }: Api.AmbigousTimestamp,
     preferences: Api.Preferences | undefined
   ): boolean {
     if (!preferences) return false;

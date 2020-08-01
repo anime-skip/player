@@ -118,6 +118,14 @@ export default class Timeline extends Vue {
   public onChangeCurrentTime(newTime: number, oldTime: number): void {
     this.completedSections = this.getCompletedSections();
 
+    // Do nothing
+    const currentTimestamp = Utils.previousTimestamp(oldTime, this.timestamps, undefined);
+    const insideSkippedSection =
+      currentTimestamp != null && Utils.isSkipped(currentTimestamp, this.prefs);
+    if (insideSkippedSection) {
+      return;
+    }
+
     // Get the next timestamp AFTER the oldTime, regardless of if it's skipped
     const oldNext = Utils.nextTimestamp(oldTime, this.timestamps, undefined);
 
