@@ -142,7 +142,8 @@ export default class Timeline extends Vue {
       return;
     }
 
-    // Update the time to the next timestamp or the end of the video if there is no next timestamp
+    // Get the timestamp to go to, then go there or the end of the video if there isn't another time
+    // stamp to go to
     const newNext = Utils.nextTimestamp(newTime, this.timestamps, this.prefs);
     this.updateTime(newNext?.at ?? this.duration, true);
   }
