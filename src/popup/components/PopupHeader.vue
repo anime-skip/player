@@ -23,6 +23,8 @@ export default class PopupHeader extends Vue {
     color: $textPrimary;
     font-size: 22px;
     font-weight: 700;
+    padding: 0;
+    margin: 0;
 
     &.small {
       font-size: 18px;

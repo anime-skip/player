@@ -94,9 +94,6 @@
           type="submit"
           value="Save Episode"
           class="clickable focus button save"
-          :class="{
-            'disabled transparent': isTempEditingDisabled,
-          }"
           @click="onClickSaveChanges"
         />
       </div>
@@ -493,6 +490,8 @@ $borderRadius: 3px;
     flex-direction: column;
 
     .disabled-label {
+      padding: 0;
+      margin: 0;
       margin-top: 8px;
       font-size: 14px;
       color: rgba($color: #ff7777, $alpha: 0.7);

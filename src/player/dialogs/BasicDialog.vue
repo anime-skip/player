@@ -71,6 +71,11 @@ export default class BasicDialog extends Vue {
   bottom: 0;
   cursor: pointer;
   overflow: visible;
+  & * {
+    padding: 0;
+    margin: 0;
+    text-align: left;
+  }
 
   .row {
     display: flex;

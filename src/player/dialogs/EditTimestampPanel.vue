@@ -221,6 +221,7 @@ export default class EditTimestampPanel extends Mixins(
 #EditTimestampPanel {
   pointer-events: none;
   color: $textPrimarySolid;
+  text-align: start;
 
   .section-header {
     margin-top: 0px;
@@ -295,6 +296,8 @@ export default class EditTimestampPanel extends Mixins(
       display: flex;
       flex-direction: column;
       overflow-y: auto;
+      padding: 0;
+      margin: 0;
       padding-top: 8px;
 
       li {
@@ -314,6 +317,7 @@ export default class EditTimestampPanel extends Mixins(
         }
 
         .name {
+          margin: 0;
           margin-left: 8px;
           font-size: 15px;
         }
