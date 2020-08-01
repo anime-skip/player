@@ -12,6 +12,7 @@ declare interface VuexState {
 
   account?: Api.Account;
   preferencesRequestState?: RequestState;
+  preferencesLastUpdatedAt: number;
 
   searchShowsResult: Api.ShowSearchResult[];
   searchShowsRequestState: RequestState;

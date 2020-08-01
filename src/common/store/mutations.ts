@@ -66,6 +66,7 @@ export default as<
         }
       }
     }
+    state.preferencesLastUpdatedAt = Date.now();
     if (callback) callback();
   },
   [types.persistPreferences](state, payload: Api.Preferences) {
@@ -107,6 +108,7 @@ export default as<
       return;
     }
     Vue.set(state.account.preferences, change.pref, change.value);
+    state.preferencesLastUpdatedAt = Date.now();
   },
   [types.preferencesRequestState](state, requestState: RequestState) {
     state.preferencesRequestState = requestState;

@@ -52,6 +52,9 @@ export default as<GetterTree<VuexState, VuexState>>({
   hasPreferenceError({ preferencesRequestState }): boolean {
     return preferencesRequestState === RequestState.FAILURE;
   },
+  preferencesLastUpdatedAt({ preferencesLastUpdatedAt }): number {
+    return preferencesLastUpdatedAt;
+  },
 
   // Shows
   searchShowsResult({ searchShowsResult }): Api.ShowSearchResult[] {
