@@ -165,6 +165,7 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
 
   public updateTime(newTime: number, updateVideo?: boolean) {
     if (updateVideo) {
+      console.log('Setting time to: ' + newTime);
       this.setCurrentTime(newTime);
     }
     this.currentTime = newTime;
@@ -182,7 +183,11 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   }
 
   public nextTimestamp(): void {
-    const nextTimestamp = this.activeTimestamps.find(timestamp => timestamp.at > this.currentTime);
+    const nextTimestamp = Utils.nextTimestamp(
+      this.currentTime + 0.1,
+      this.activeTimestamps,
+      undefined
+    );
     const video = global.getVideo();
     if (nextTimestamp) {
       this.updateTime(nextTimestamp.at, true);
@@ -202,9 +207,11 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   }
 
   public previousTimestamp(): void {
-    const previousTimestamp = this.activeTimestamps
-      .filter(timestamp => timestamp.at < this.currentTime - 1)
-      .pop();
+    const previousTimestamp = Utils.previousTimestamp(
+      this.currentTime,
+      this.activeTimestamps,
+      undefined
+    );
     if (previousTimestamp) {
       this.updateTime(previousTimestamp.at, true);
       if (this.isEditing) {

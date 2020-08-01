@@ -116,21 +116,59 @@ export default class Timeline extends Vue {
 
   @Watch('currentTime')
   public onChangeCurrentTime(newTime: number, oldTime: number): void {
-    if (this.timestamps.length > 0 && Math.abs(oldTime - newTime) < 1 && !this.isEditing) {
-      const next = Utils.nextTimestamp(oldTime, this.timestamps);
-      if (
-        (oldTime === 0 && !this.skippedFromZero) ||
-        (next && next.at < newTime && next.at >= oldTime)
-      ) {
-        if (oldTime === 0) {
-          this.skippedFromZero = true;
-        }
-        const future = Utils.nextTimestamp(oldTime, this.timestamps, this.prefs);
-        const skipToTime = future ? future.at : global.getVideo().duration;
-        this.updateTime(skipToTime, true);
-      }
-    }
     this.completedSections = this.getCompletedSections();
+
+    // Do nothing
+    const currentTimestamp = Utils.previousTimestamp(oldTime, this.timestamps, undefined);
+    const insideSkippedSection =
+      currentTimestamp != null && Utils.isSkipped(currentTimestamp, this.prefs);
+    if (insideSkippedSection) {
+      return;
+    }
+
+    // Get the next timestamp AFTER the oldTime, regardless of if it's skipped
+    const oldNext = Utils.nextTimestamp(oldTime, this.timestamps, undefined);
+
+    // Do nothing
+    const hasNoMoreTimestamsps = oldNext == null;
+    const isSeeking = Math.abs(oldTime - newTime) > 1;
+    const isAtEnd = newTime >= this.duration;
+    if (hasNoMoreTimestamsps || isSeeking || isAtEnd || this.isEditing) {
+      return;
+    }
+
+    // Skip timestamp at 0:00 if we haven't yet
+    const wasAtBeginning = oldTime === 0;
+    const haveNotSkippedFromBeginning = !this.skippedFromZero;
+    const shouldSkipFirstTimestamp = Utils.isSkipped(this.timestamps[0], this.prefs);
+    if (wasAtBeginning && haveNotSkippedFromBeginning && shouldSkipFirstTimestamp) {
+      this.skippedFromZero = true;
+      this.goToNextTimestampOnTimeChange(newTime);
+      return;
+    }
+
+    // Do nothing
+    const didNotPastATimestamp = oldNext!.at > newTime;
+    const notSkippingThePassedTimestamp = !Utils.isSkipped(oldNext!, this.prefs);
+    if (didNotPastATimestamp || notSkippingThePassedTimestamp) {
+      return;
+    }
+    const jumpedDirectlyToTimestamp =
+      this.timestamps.find(timestamp => Math.abs(timestamp.at - oldTime) < 0.0001) != null;
+    if (jumpedDirectlyToTimestamp) {
+      return;
+    }
+
+    this.goToNextTimestampOnTimeChange(newTime);
+  }
+
+  /**
+   * Get the timestamp to go to, then go there or the end of the video if there isn't another time
+   * stamp to go to
+   */
+  public goToNextTimestampOnTimeChange(newTime: number) {
+    const newNext = Utils.nextTimestamp(newTime, this.timestamps, this.prefs);
+    this.updateTime(newNext?.at ?? this.duration, true);
   }
 
   public get activeTimestamps(): Api.Timestamp[] {
@@ -209,6 +247,7 @@ export default class Timeline extends Vue {
 <style lang="scss" scoped>
 $translationDefault: 4px;
 $translationInactiveSliderDefault: 4px;
+
 $translationVrv: 0px;
 $translationInactiveSliderVrv: 3px;
 
@@ -255,6 +294,7 @@ $translationInactiveSliderVrv: 3px;
 .Timeline.vrv {
   transform: scaleY(1) translateY($translationVrv);
   &.flipped {
+    transform: scaleY(-1) translateY(-7px);
     .slider {
       transform: translateY($translationInactiveSliderVrv);
     }

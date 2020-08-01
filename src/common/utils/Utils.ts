@@ -1,9 +1,21 @@
 export default class Utils {
-  public static nextTimestamp(
+  /**
+   * @param currentTime The time to begin looking for timestamps after
+   * @param timestamps The list of timestamps, sorted by `timestamp.at`
+   * @param preferences The user's preferences to decide what sections are skipped. NOTE - this
+   *                    argument is not optional, but `undefined` can be passed. This is done to
+   *                    make sure you don't forget to pass this, and to make what is passed here an
+   *                    explict decision
+   * @returns The next EXCLUSIVE timestamp that comes after the `currentTime` and is not skipped. If
+   *          no preferences are passed, no sections are considered skipped so this just returns the
+   *          next timestamp. Timestamps at a time equal to the `currentTime` will not be
+   *          returned (thus exclusive).
+   */
+  public static nextTimestamp<T extends Api.AmbigousTimestamp>(
     currentTime: number,
-    timestamps: Api.Timestamp[],
-    preferences?: Api.Preferences
-  ): Api.Timestamp | undefined {
+    timestamps: T[],
+    preferences: Api.Preferences | undefined
+  ): T | undefined {
     if (!preferences) {
       return timestamps.find(timestamp => timestamp.at > currentTime);
     }
@@ -12,9 +24,22 @@ export default class Utils {
     );
   }
 
+  public static previousTimestamp<T extends Api.AmbigousTimestamp>(
+    time: number,
+    timestamps: T[],
+    preferences: Api.Preferences | undefined
+  ): T | undefined {
+    if (!preferences) {
+      return timestamps.filter(timestamp => timestamp.at < time - 0.1).pop();
+    }
+    return timestamps
+      .filter(timestamp => !Utils.isSkipped(timestamp, preferences) && timestamp.at < time - 0.1)
+      .pop();
+  }
+
   public static isSkipped(
-    { typeId: _typeId }: Api.Timestamp,
-    preferences?: Api.Preferences
+    { typeId: _typeId }: Api.AmbigousTimestamp,
+    preferences: Api.Preferences | undefined
   ): boolean {
     if (!preferences) return false;
     if (!preferences.enableAutoSkip) return false;
