@@ -1,4 +1,16 @@
 export default class Utils {
+  /**
+   * @param currentTime The time to begin looking for timestamps after
+   * @param timestamps The list of timestamps, sorted by `timestamp.at`
+   * @param preferences The user's preferences to decide what sections are skipped. NOTE - this
+   *                    argument is not optional, but `undefined` can be passed. This is done to
+   *                    make sure you don't forget to pass this, and to make what is passed here an
+   *                    explict decision
+   * @returns The next EXCLUSIVE timestamp that comes after the `currentTime` and is not skipped. If
+   *          no preferences are passed, no sections are considered skipped so this just returns the
+   *          next timestamp. Timestamps at a time equal to the `currentTime` will not be
+   *          returned (thus exclusive).
+   */
   public static nextTimestamp(
     currentTime: number,
     timestamps: Api.Timestamp[],

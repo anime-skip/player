@@ -19,5 +19,6 @@
       "server": "localhost",
       "username": "postgres"
     }
-  ]
+  ],
+  "editor.rulers": [100]
 }
