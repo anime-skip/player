@@ -5,7 +5,7 @@ import store from '@/common/store';
 import Ripple from 'vue-ripple-directive';
 import MessengerApi from '@/common/api/MessengerApi';
 
-console.info('INJECTED player/index.ts');
+console.log('INJECTED player/index.ts');
 
 // Setup Globals
 
@@ -20,7 +20,7 @@ global.onVideoChanged(video => {
 
 let existingPlayers = document.querySelectorAll('#AnimeSkipPlayer');
 if (existingPlayers.length > 0) {
-  console.info('Player already added, removing');
+  console.log('Player already added, removing');
   existingPlayers.forEach(player => {
     player.remove();
   });
@@ -29,7 +29,7 @@ if (existingPlayers.length > 0) {
 // Inject DOM
 
 const rootQuery = global.getRootQuery();
-console.info(`Adding player to ${rootQuery}`);
+console.log(`Adding player to ${rootQuery}`);
 
 // Set the style to hide all the old elements
 document.body.classList.add('hide-for-anime-skip');

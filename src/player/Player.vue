@@ -2,7 +2,7 @@
   <div
     id="AnimeSkipPlayer"
     :class="{
-      active: playerState.isActive,
+      active: isActive,
       paused: playerState.isPaused,
       buffering: playerState.isBuffering,
     }"
@@ -18,6 +18,7 @@
     <ToolBar class="bottom-content" :playerState="playerState" />
 
     <!-- Dialogs -->
+    <EditTimestampPanel />
     <AccountDialog />
     <EpisodeEditorDialog />
     <Loading v-if="buffering" class="buffer-loading-container" />
@@ -30,8 +31,9 @@ import WebExtImg from '@/common/components/WebExtImg.vue';
 import Loading from '@/common/components/Loading.vue';
 import ToolBar from './components/Toolbar.vue';
 import EpisodeInfo from './components/EpisodeInfo.vue';
-import AccountDialog from './components/AccountDialog.vue';
-import EpisodeEditorDialog from './components/EpisodeEditorDialog.vue';
+import AccountDialog from './dialogs/AccountDialog.vue';
+import EditTimestampPanel from './dialogs/EditTimestampPanel.vue';
+import EpisodeEditorDialog from './dialogs/EpisodeEditorDialog.vue';
 import KeyboardShortcutMixin from '@/common/mixins/KeyboardShortcuts';
 import { Action, Mutation, Getter } from '@/common/utils/VuexDecorators';
 import Browser from '@/common/utils/Browser';
@@ -39,7 +41,15 @@ import Messenger from '@/common/utils/Messenger';
 import VideoControllerMixin from '../common/mixins/VideoController';
 
 @Component({
-  components: { WebExtImg, ToolBar, EpisodeInfo, AccountDialog, EpisodeEditorDialog, Loading },
+  components: {
+    WebExtImg,
+    ToolBar,
+    EpisodeInfo,
+    AccountDialog,
+    EpisodeEditorDialog,
+    Loading,
+    EditTimestampPanel,
+  },
 })
 export default class Player extends Mixins(KeyboardShortcutMixin, VideoControllerMixin) {
   public playerState: PlayerState = {
@@ -91,14 +101,13 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
     });
   }
 
+  public get isActive(): boolean {
+    return this.playerState.isActive || this.isEditing;
+  }
+
   public fetchEpisodeInfo(): void {
     this.fetchEpisodeByUrl(Browser.getURL());
   }
-
-  // TODO - Implement
-  // public get canAddTimestamps(): boolean {
-  //   return this.isEditing && ;
-  // }
 
   public toggleActive(isActive: boolean) {
     Vue.set(this.playerState, 'isActive', isActive);
@@ -143,7 +152,7 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
   }
   &.paused,
   &.buffering {
-    background-color: rgba($color: $input700, $alpha: 0.75);
+    background-color: rgba($color: $input700, $alpha: 0.48);
   }
   * {
     font-family: 'Overpass', sans-serif;

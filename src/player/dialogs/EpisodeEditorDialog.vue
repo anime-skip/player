@@ -6,8 +6,6 @@
     @show="onShowDialog()"
   >
     <ProgressOverlay :isLoading="isLoadingEpisode">
-      <PopupHeader :title="headerTitle" />
-
       <h2 class="section-header">Find Existing Epiosde</h2>
       <AutocompleteTextInput
         class="row"
@@ -54,7 +52,7 @@
       </AutocompleteTextInput>
 
       <div class="edit-section" v-if="isShowingEditSection()">
-        <h2 class="section-header">Edit Episode Info</h2>
+        <h2 class="section-header pre-section-spacing">Edit Episode Info</h2>
         <p v-if="isTempEditingDisabled || selectedShowId !== 'new-show-id'" class="disabled-label">
           (Editing existing data is not supported yet)
         </p>
@@ -453,6 +451,10 @@ $borderRadius: 3px;
   }
 
   .section-header {
+    margin-top: 0px;
+  }
+
+  .pre-section-spacing {
     margin-top: 24px;
   }
 

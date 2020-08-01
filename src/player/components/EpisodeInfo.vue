@@ -6,19 +6,32 @@
     </h2>
     <h1>{{ episodeTitle }}</h1>
     <h3>{{ episodeDetails }}</h3>
+    <ToolbarButton
+      v-if="isEditing"
+      class="edit-button"
+      icon="ic_edit.svg"
+      title="Edit Episode Info"
+      @click.stop.native="showEditDialog"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Getter } from '@/common/utils/VuexDecorators';
+import { Getter, Action } from '@/common/utils/VuexDecorators';
 import RequestState from '@/common/utils/RequestState';
 import EpisodeUtils from '@/common/utils/EpisodeUtils';
+import ToolbarButton from '@/player/components/ToolbarButton.vue';
 
-@Component
+@Component({
+  components: { ToolbarButton },
+})
 export default class EpisodeInfo extends Vue {
+  @Action() public showDialog!: (dialogName?: string) => void;
+
   @Getter() public episodeUrl?: Api.EpisodeUrl;
   @Getter() public episodeRequestState!: RequestState;
+  @Getter() public isEditing!: boolean;
 
   public get hasTriedLoadingEpisodeInfo(): boolean {
     return (
@@ -42,6 +55,10 @@ export default class EpisodeInfo extends Vue {
   public get episodeDetails(): string {
     return EpisodeUtils.seasonAndNumberFromEpisodeUrl(this.episodeUrl);
   }
+
+  public showEditDialog() {
+    this.showDialog('EpisodeEditorDialog');
+  }
 }
 </script>
 
@@ -50,6 +67,9 @@ export default class EpisodeInfo extends Vue {
   opacity: 0;
   transition: 250ms;
   transition-property: opacity;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 
   &.visible {
     opacity: 1;
@@ -79,7 +99,13 @@ export default class EpisodeInfo extends Vue {
   h3 {
     font-size: 20px;
     font-weight: 400;
-    color: $textSecondarySolid;
+    color: $textSecondary;
+  }
+
+  .edit-button {
+    margin-top: 8px;
+    background-color: rgba($color: white, $alpha: 0.12);
+    padding-right: 12px;
   }
 }
 </style>

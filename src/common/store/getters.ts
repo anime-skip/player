@@ -76,4 +76,13 @@ export default as<GetterTree<VuexState, VuexState>>({
     }
     return state.episodeUrl.episode.timestamps;
   },
+  activeTimestamp(state): Api.AmbigousTimestamp | undefined {
+    return state.activeTimestamp;
+  },
+  draftTimestamps(state): Api.AmbigousTimestamp[] {
+    return state.draftTimestamps;
+  },
+  editTimestampMode(state): 'edit' | 'add' | undefined {
+    return state.editTimestampMode;
+  },
 });

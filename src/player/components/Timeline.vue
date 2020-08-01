@@ -6,6 +6,7 @@
       vrv: service === 'vrv',
       flipped: isFlipped,
       seeking: isSeeking,
+      'add-margin': isEditing,
     }"
   >
     <Section
@@ -26,10 +27,10 @@
       completed
     />
     <WebExtImg
-      v-for="timestamp of timestamps"
-      :key="timestamp.id"
+      v-for="timestamp of activeTimestamps"
+      :key="`t${timestamp.id}`"
       class="Timestamp"
-      src="ic_timestamp.svg"
+      :src="isEditing ? 'ic_timestamp_draft.svg' : 'ic_timestamp.svg'"
       :style="{ left: `${(timestamp.at / duration) * 100}%` }"
     />
     <VueSlider
@@ -44,7 +45,10 @@
       :dotSize="isFlipped ? 3 : 11"
       @change="onSeek"
     />
-    <EditTimestampHandle v-if="isEditing" :style="{ left: `${(currentTime / duration) * 100}%` }" />
+    <EditTimestampHandle
+      v-if="canAddTimestamp"
+      :style="{ left: `${(currentTime / duration) * 100}%` }"
+    />
   </div>
 </template>
 
@@ -83,6 +87,8 @@ export default class Timeline extends Vue {
   public service = global.service;
 
   @Getter() isEditing!: boolean;
+  @Getter() activeTimestamp?: Api.Timestamp;
+  @Getter() draftTimestamps!: Api.Timestamp[];
 
   public constructor() {
     super();
@@ -103,9 +109,14 @@ export default class Timeline extends Vue {
     this.updateSections();
   }
 
+  @Watch('isEditing')
+  public onIsEditingChange(): void {
+    this.updateSections();
+  }
+
   @Watch('currentTime')
   public onChangeCurrentTime(newTime: number, oldTime: number): void {
-    if (this.timestamps.length > 0 && Math.abs(oldTime - newTime) < 1) {
+    if (this.timestamps.length > 0 && Math.abs(oldTime - newTime) < 1 && !this.isEditing) {
       const next = Utils.nextTimestamp(oldTime, this.timestamps);
       if (
         (oldTime === 0 && !this.skippedFromZero) ||
@@ -120,6 +131,17 @@ export default class Timeline extends Vue {
       }
     }
     this.completedSections = this.getCompletedSections();
+  }
+
+  public get activeTimestamps(): Api.Timestamp[] {
+    if (this.isEditing) {
+      return this.draftTimestamps;
+    }
+    return this.timestamps;
+  }
+
+  public get canAddTimestamp(): boolean {
+    return this.isEditing && this.activeTimestamp == null;
   }
 
   public onSeek(newTime: number) {
@@ -140,7 +162,7 @@ export default class Timeline extends Vue {
     return {
       id: 'unknown',
       at: 0,
-      typeId: -2,
+      typeId: 'unknown',
     };
   }
 
@@ -148,16 +170,16 @@ export default class Timeline extends Vue {
     return {
       id: 'end',
       at: this.duration || 0,
-      typeId: -1,
+      typeId: 'end',
     };
   }
 
   public getSections(): SectionData[] {
-    if (this.timestamps.length === 0) {
+    if (this.timestamps.length === 0 || this.isEditing) {
       return [
         {
           timestamp: this.unknownTimestamp,
-          endTime: Number.MAX_SAFE_INTEGER / 2,
+          endTime: this.duration,
           isSkipped: false,
         },
       ];
@@ -195,6 +217,8 @@ $translationInactiveSliderVrv: 3px;
   position: relative;
   cursor: pointer;
   transform: scaleY(1) translateY($translationDefault);
+  transition: 200ms;
+
   &.flipped {
     transform: scaleY(-1);
     .slider {
@@ -203,6 +227,10 @@ $translationInactiveSliderVrv: 3px;
   }
   & > * {
     position: absolute;
+  }
+  &.add-margin {
+    margin-left: 24px;
+    margin-right: 24px;
   }
 
   .slider {

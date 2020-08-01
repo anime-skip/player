@@ -20,6 +20,10 @@ declare namespace Api {
     createEpisodeUrl(data: Api.InputEpisodeUrl, episodeId: string): Promise<Api.EpisodeUrl>;
     deleteEpisodeUrl(episodeUrl: string): Promise<Api.EpisodeUrlNoEpisode>;
     fetchEpisodeByUrl(url: string): Promise<Api.EpisodeUrl>;
+
+    createTimestamp(episodeId: string, timestamp: Api.InputTimestamp): Promise<Api.Timestamp>;
+    updateTimestamp(newTimestamp: Api.Timestamp): Promise<Api.Timestamp>;
+    deleteTimestamp(timestampId: string): Promise<Api.Timestamp>;
   }
 
   interface Preferences {
@@ -65,6 +69,7 @@ declare namespace Api {
   }
 
   interface EpisodeUrlNoEpisode {
+    url: string;
     createdAt: number;
   }
 
@@ -98,18 +103,21 @@ declare namespace Api {
 
   interface InputTimestamp {
     at: number;
-    typeId: number;
+    typeId: string;
   }
 
-  interface AmbigousTimestamp extends InputTimestamp {
-    id?: string;
-  }
-
-  interface Timestamp extends AmbigousTimestamp {
+  interface Timestamp extends InputTimestamp {
     id: string;
   }
 
-  interface TimestmampType {
+  interface AmbigousTimestamp extends InputTimestamp {
+    /**
+     * It is a number when it is local, randomly generated. It is remote when the id is a string (GUID)
+     */
+    id: number | string;
+  }
+
+  interface TimestampType {
     id: string;
     name: string;
     description: string;

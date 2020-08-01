@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import './style.scss';
 
-console.info('INJECTED content-scripts/vrv/index.ts');
+console.log('INJECTED content-scripts/vrv/index.ts');
 
 global.service = 'vrv';
 global.getRootQuery = (): string => {

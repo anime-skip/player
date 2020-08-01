@@ -5,7 +5,7 @@
         class="add"
         src="ic_add_timestamp.svg"
         :draggable="false"
-        @click.native="pause()"
+        @click.native="onClick"
       />
     </div>
   </div>
@@ -15,18 +15,41 @@
 import { Component, Vue, Prop, Watch, Mixins } from 'vue-property-decorator';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import VideoControllerMixin from '../../common/mixins/VideoController';
+import KeyboardShortcutsMixin from '../../common/mixins/KeyboardShortcuts';
+import { Action, Mutation, Getter } from '../../common/utils/VuexDecorators';
+import Utils from '../../common/utils/Utils';
 
 @Component({
   components: { WebExtImg },
 })
-export default class EditTimestampHandle extends Mixins(VideoControllerMixin) {
-  createNewTimestamp(): void {
+export default class EditTimestampHandle extends Mixins(
+  VideoControllerMixin,
+  KeyboardShortcutsMixin
+) {
+  @Getter() activeTimestamp?: Api.AmbigousTimestamp;
+  @Action() showDialog!: (dialog: string) => void;
+  @Mutation() setActiveTimestamp!: (timestamp: Api.AmbigousTimestamp) => void;
+  @Mutation() setEditTimestampMode!: (mode: 'add' | 'edit' | undefined) => void;
+
+  onClick(): void {
     this.pause();
-    const newTimestamp: Api.InputTimestamp = {
+    this.setActiveTimestamp({
       at: this.getCurrentTime(),
-      typeId: 0,
-    };
+      typeId: '',
+      id: Utils.randomId(),
+    });
+    this.setEditTimestampMode('add');
+    this.showDialog('EditTimestampPanel');
   }
+
+  keyboardShortcuts = {
+    K: () => {
+      if (this.activeTimestamp == null) {
+        this.onClick();
+      }
+      return true;
+    },
+  };
 }
 </script>
 

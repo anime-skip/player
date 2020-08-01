@@ -8,8 +8,7 @@ export default class Utils {
       return timestamps.find(timestamp => timestamp.at > currentTime);
     }
     return timestamps.find(
-      timestamp =>
-        timestamp.at > currentTime && !Utils.isSkipped(timestamp, preferences)
+      timestamp => timestamp.at > currentTime && !Utils.isSkipped(timestamp, preferences)
     );
   }
 
@@ -20,27 +19,31 @@ export default class Utils {
     if (!preferences) return false;
     if (!preferences.enableAutoSkip) return false;
     switch (_typeId) {
-      case 0:
+      case '9edc0037-fa4e-47a7-a29a-d9c43368daa8':
         return preferences.skipCanon;
-      case 2:
+      case '97e3629a-95e5-4b1a-9411-73a47c0d0e25':
         return preferences.skipBranding;
-      case 3:
+      case '14550023-2589-46f0-bfb4-152976506b4c':
         return preferences.skipIntros;
-      case 4:
+      case 'cbb42238-d285-4c88-9e91-feab4bb8ae0a':
+        return preferences.skipMixedIntros;
+      case '679fb610-ff3c-4cf4-83c0-75bcc7fe8778':
         return preferences.skipNewIntros;
-      case 5:
+      case 'f38ac196-0d49-40a9-8fcf-f3ef2f40f127':
         return preferences.skipRecaps;
-      case 6:
+      case 'c48f1dce-1890-4394-8ce6-c3f5b2f95e5e':
         return preferences.skipFiller;
-      case 7:
+      case '9f0c6532-ccae-4238-83ec-a2804fe5f7b0':
         return preferences.skipTransitions;
-      case 8:
+      case '2a730a51-a601-439b-bc1f-7b94a640ffb9':
         return preferences.skipCredits;
-      case 9:
+      case '6c4ade53-4fee-447f-89e4-3bb29184e87a':
         return preferences.skipMixedCredits;
-      case 10:
+      case 'd839cdb1-21b3-455d-9c21-7ffeb37adbec':
+        return preferences.skipNewCredits;
+      case 'c7b1eddb-defa-4bc6-a598-f143081cfe4b':
         return preferences.skipPreview;
-      case 11:
+      case '67321535-a4ea-4f21-8bed-fb3c8286b510':
         return preferences.skipTitleCard;
       default:
         return false;
@@ -118,6 +121,12 @@ export default class Utils {
     return this._videoLoadPromise;
   }
 
+  public static formatSeconds(seconds: number, includeDecimals: boolean) {
+    const mins = Math.floor(seconds / 60);
+    const secs = parseFloat((seconds % 60).toFixed(includeDecimals ? 2 : 0));
+    return mins + ':' + (secs < 10 ? '0' : '') + secs;
+  }
+
   public static formatGraphql(data: string): string {
     const lines = data
       .split('\n')
@@ -141,5 +150,44 @@ export default class Utils {
     });
 
     return tabbedLines.join('\n');
+  }
+
+  public static randomId(): number {
+    return Math.random() * Number.MAX_SAFE_INTEGER;
+  }
+
+  public static arrayIncludes<T>(array: T[], idKey: keyof T, value: T): boolean {
+    return array.some(item => item[idKey] === value[idKey]);
+  }
+
+  public static computeTimestampDiffs(
+    oldTimestamps: Api.Timestamp[],
+    newTimestamps: Api.AmbigousTimestamp[]
+  ): { toCreate: Api.AmbigousTimestamp[]; toUpdate: Api.Timestamp[]; toDelete: Api.Timestamp[] } {
+    const intersect = newTimestamps.filter(newItem =>
+      Utils.arrayIncludes(oldTimestamps, 'id', newItem)
+    ) as Api.Timestamp[];
+
+    // Remove unchanged items
+    const oldItemMap: { [id: string]: Api.Timestamp } = {};
+    oldTimestamps.forEach(item => {
+      oldItemMap[item.id] = item;
+    });
+    const toUpdate: Api.Timestamp[] = intersect.filter(newItem => {
+      return (
+        newItem.at !== oldItemMap[newItem.id].at || newItem.typeId !== oldItemMap[newItem.id].typeId
+      );
+    });
+
+    // prettier-ignore
+    return {
+      toCreate: newTimestamps.filter(newItem => !Utils.arrayIncludes(oldTimestamps, "id", newItem)),
+      toUpdate,
+      toDelete: oldTimestamps.filter(oldItem => !Utils.arrayIncludes(newTimestamps, "id", oldItem))
+    };
+  }
+
+  public static timestampSorter(l: Api.AmbigousTimestamp, r: Api.AmbigousTimestamp): number {
+    return l.at - r.at;
   }
 }

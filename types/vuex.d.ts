@@ -20,4 +20,8 @@ declare interface VuexState {
   searchEpisodesRequestState: RequestState;
   episodeUrl?: Api.EpisodeUrl;
   episodeRequestState: RequestState;
+
+  editTimestampMode?: 'add' | 'edit';
+  activeTimestamp?: Api.AmbigousTimestamp;
+  draftTimestamps: Api.AmbigousTimestamp[];
 }

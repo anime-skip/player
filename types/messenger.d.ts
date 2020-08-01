@@ -17,6 +17,10 @@ declare interface MessagePayload extends Implements<MessageTypeMap<any>, Message
   createEpisodeUrl: { episodeId: string; data: Api.InputEpisodeUrl };
   deleteEpisodeUrl: string;
   fetchEpisodeByUrl: string;
+
+  createTimestamp: { episodeId: string; data: Api.InputTimestamp };
+  updateTimestamp: Api.Timestamp;
+  deleteTimestamp: string;
 }
 
 declare interface MessageResponse extends Implements<MessageTypeMap<any>, MessageResponse> {
@@ -34,6 +38,10 @@ declare interface MessageResponse extends Implements<MessageTypeMap<any>, Messag
   createEpisodeUrl: Api.EpisodeUrl;
   deleteEpisodeUrl: Api.EpisodeUrlNoEpisode;
   fetchEpisodeByUrl: Api.EpisodeUrl;
+
+  createTimestamp: Api.Timestamp;
+  updateTimestamp: Api.Timestamp;
+  deleteTimestamp: Api.Timestamp;
 }
 
 declare type MessageListener<T extends MessageType> = (

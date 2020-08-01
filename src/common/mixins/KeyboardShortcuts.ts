@@ -39,12 +39,14 @@ export default class KeyboardShortcutMixin extends Vue {
     const combination = ctrlKey ? 'ctrl+' + key : key;
     console.log('KeyboardShortcutMixin: Pressed ' + combination, this.keyboardShortcuts);
     if (this.keyboardShortcuts[combination] == null) return;
-    (this.keyboardShortcuts[combination] as Function).apply(this);
+    const allowEventToPropagate = (this.keyboardShortcuts[combination] as Function).apply(this);
 
-    // Stop if it finds a function to run
-    preventDefault();
-    stopImmediatePropagation();
-    stopPropagation();
+    // Stop if it finds a function to run, and that function doesn't return true
+    if (allowEventToPropagate) {
+      preventDefault();
+      stopImmediatePropagation();
+      stopPropagation();
+    }
   }
-  keyboardShortcuts: { [combination: string]: () => void } = {};
+  keyboardShortcuts: { [combination: string]: () => boolean | void } = {};
 }

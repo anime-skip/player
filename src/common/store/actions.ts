@@ -7,6 +7,7 @@ import types from './actionTypes';
 import RequestState from '../utils/RequestState';
 import { AssertionError } from 'assert';
 import mutationTypes from './mutationTypes';
+import Utils from '../utils/Utils';
 
 // TODO make everything async
 
@@ -18,7 +19,7 @@ async function loginRefresh(
   { commit }: ActionContext<VuexState, VuexState>,
   { refreshToken }: LoginRefreshPayload
 ): Promise<void> {
-  console.info('actions.loginRefresh', { refreshToken });
+  console.log('actions.loginRefresh', { refreshToken });
   try {
     commit(mutations.loginRequestState, RequestState.LOADING);
     const loginData = await global.Api.loginRefresh(refreshToken);
@@ -44,7 +45,7 @@ function assertLoggedIn(
 export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState> }>({
   // General
   async [types.initialLoad](context, callback?: () => void) {
-    console.info('actions.initialLoad', { callback });
+    console.log('actions.initialLoad', { callback });
     try {
       const newState = await Browser.storage.getAll<Partial<VuexState>>(persistedKeys);
       context.commit(mutations.restoreState, { changes: newState });
@@ -77,7 +78,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     }
   },
   async [types.showDialog]({ state, commit }, dialogName?: string) {
-    console.info('actions.showDialog', { dialogName });
+    console.log('actions.showDialog', { dialogName });
     if (state.activeDialog === dialogName) return;
 
     if (state.activeDialog) {
@@ -88,10 +89,29 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       commit(mutations.activeDialog, dialogName);
     }
   },
+  async [types.startEditing]({ state, commit }) {
+    console.log('startEditing');
+    commit(mutations.toggleEditMode, true);
+    commit(mutations.setDraftTimestamps, state.episodeUrl?.episode.timestamps ?? []);
+  },
+  async [types.stopEditing]({ state, commit, dispatch }, discardChanges?: boolean) {
+    console.log('stopEditing', { discardChanges });
+    if (!discardChanges) {
+      const oldTimestamps = state.episodeUrl!.episode.timestamps;
+      const newTimestamps = state.draftTimestamps;
+      dispatch(types.updateTimestamps, {
+        oldTimestamps,
+        newTimestamps,
+        episodeUrl: state.episodeUrl!,
+      });
+    }
+    commit(mutations.toggleEditMode, false);
+    commit(mutations.setDraftTimestamps, []);
+  },
 
   // Auth
   async [types.loginManual]({ commit }, { username, password }: LoginManualPayload) {
-    console.info('actions.loginManual', { username });
+    console.log('actions.loginManual', { username });
     try {
       commit(mutations.loginRequestState, RequestState.LOADING);
       const loginData = await global.Api.loginManual(username, password);
@@ -106,7 +126,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
 
   // Preferences
   async [types.updatePreferences](context, pref: keyof Api.Preferences) {
-    console.info('actions.updatePreferences', { pref });
+    console.log('actions.updatePreferences', { pref });
     const { commit } = context;
     try {
       assertLoggedIn(context);
@@ -137,7 +157,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
 
   // Shows
   async [types.searchShows]({ commit }, name: string) {
-    console.info('actions.searchShows', { name });
+    console.log('actions.searchShows', { name });
     try {
       commit(mutationTypes.searchShowsRequestState, RequestState.LOADING);
       const results = await global.Api.searchShows(name);
@@ -155,7 +175,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     { commit, dispatch },
     { show: showData, episode: episodeData, episodeUrl: episodeUrlData }: CreateEpisodeDataPayload
   ) {
-    console.info('actions.createEpisodeData', { showData, episodeData, episodeUrlData });
+    console.log('actions.createEpisodeData', { showData, episodeData, episodeUrlData });
     try {
       // Setup
       dispatch(types.showDialog, undefined);
@@ -202,7 +222,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     }
   },
   async [types.searchEpisodes]({ commit }, { name, showId }: { name: string; showId: string }) {
-    console.info('actions.searchEpisodes', { name, showId });
+    console.log('actions.searchEpisodes', { name, showId });
     try {
       commit(mutationTypes.searchEpisodesRequestState, RequestState.LOADING);
       const results = await global.Api.searchEpisodes(name, showId);
@@ -214,7 +234,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     }
   },
   async [types.fetchEpisodeByUrl]({ commit }, url) {
-    console.info('actions.fetchEpisodeByUrl', { url });
+    console.log('actions.fetchEpisodeByUrl', { url });
     try {
       commit(mutationTypes.episodeRequestState, RequestState.LOADING);
       const episodeUrl = await global.Api.fetchEpisodeByUrl(url);
@@ -224,5 +244,37 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       console.error('actions.fetchEpisodeByUrl', err);
       commit(mutationTypes.episodeRequestState, RequestState.FAILURE);
     }
+  },
+
+  // Timestamps
+  async [types.updateTimestamps](
+    { dispatch },
+    {
+      oldTimestamps,
+      newTimestamps,
+      episodeUrl,
+    }: {
+      oldTimestamps: Api.Timestamp[];
+      newTimestamps: Api.AmbigousTimestamp[];
+      episodeUrl: Api.EpisodeUrl;
+    }
+  ) {
+    console.log('updateTimestamps', { oldTimestamps, newTimestamps, episodeUrl });
+    const { toCreate, toUpdate, toDelete } = Utils.computeTimestampDiffs(
+      oldTimestamps,
+      newTimestamps
+    );
+
+    for (const toCreateItem of toCreate) {
+      await global.Api.createTimestamp(episodeUrl.episode.id, toCreateItem);
+    }
+    for (const toUpdateItem of toUpdate) {
+      await global.Api.updateTimestamp(toUpdateItem);
+    }
+    for (const toDeleteItem of toDelete) {
+      await global.Api.deleteTimestamp(toDeleteItem.id);
+    }
+
+    dispatch(types.fetchEpisodeByUrl, episodeUrl.url);
   },
 });

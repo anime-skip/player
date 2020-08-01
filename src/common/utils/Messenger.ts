@@ -28,7 +28,11 @@ export default class Messenger {
     type: MessageType;
     payload: MessagePayload[T];
   }): Promise<any> => {
-    console.log('Received Message on ' + this.source, { type, payload }, this.listeners);
+    console.log(
+      'Received Message on ' + this.source,
+      { type, payload },
+      { listeners: this.listeners }
+    );
     if (!this.listeners) return;
 
     const callback = (this.listeners[type] as unknown) as MessageListener<T>;

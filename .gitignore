@@ -4,4 +4,4 @@ artifacts/
 
 *.log
 example/video.mp4
-.env
+.env*
