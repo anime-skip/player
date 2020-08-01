@@ -116,14 +116,12 @@ export default class Timeline extends Vue {
   @Watch('currentTime')
   public onChangeCurrentTime(newTime: number, oldTime: number): void {
     this.completedSections = this.getCompletedSections();
-    console.log('Change time: ', { newTime, oldTime });
 
     // Do nothing
     const hasNoTimestamsps = this.timestamps.length === 0;
     const isSeeking = Math.abs(oldTime - newTime) > 1;
     const isAtEnd = newTime >= this.duration;
     if (hasNoTimestamsps || isSeeking || isAtEnd || this.isEditing) {
-      console.log('return 1');
       return;
     }
 
@@ -134,7 +132,6 @@ export default class Timeline extends Vue {
     const noMoreTimestamps = oldNext == null;
     if (noMoreTimestamps) {
       this.updateTime(this.duration, true);
-      console.log('return 2');
       return;
     }
 
@@ -142,7 +139,6 @@ export default class Timeline extends Vue {
     const movedPastATimestamp = oldNext!.at > newTime;
     const notSkippingThatTimestamp = !Utils.isSkipped(oldNext!, this.prefs);
     if (movedPastATimestamp || notSkippingThatTimestamp) {
-      console.log('################ return 3', { newTime, oldNext });
       return;
     }
 
