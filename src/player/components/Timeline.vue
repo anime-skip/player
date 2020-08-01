@@ -139,13 +139,6 @@ export default class Timeline extends Vue {
       return;
     }
 
-    // Go to the end
-    const noMoreTimestamps = oldNext == null;
-    if (noMoreTimestamps) {
-      this.updateTime(this.duration, true);
-      return;
-    }
-
     // Do nothing
     const didNotPastATimestamp = oldNext!.at > newTime;
     const notSkippingThePassedTimestamp = !Utils.isSkipped(oldNext!, this.prefs);
