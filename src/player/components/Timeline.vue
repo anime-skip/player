@@ -246,7 +246,7 @@ $translationInactiveSliderVrv: 3px;
   .Timestamp {
     height: 6px;
     width: 12px;
-    top: 0;
+    top: 4px;
     transform: translateX(-50%);
   }
 }
