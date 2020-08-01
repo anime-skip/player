@@ -7,7 +7,7 @@
     <h1>{{ episodeTitle }}</h1>
     <h3>{{ episodeDetails }}</h3>
     <ToolbarButton
-      v-if="isEditing"
+      v-if="activeDialog != 'EpisodeEditorDialog'"
       class="edit-button"
       icon="ic_edit.svg"
       title="Edit Episode Info"
@@ -32,6 +32,7 @@ export default class EpisodeInfo extends Vue {
   @Getter() public episodeUrl?: Api.EpisodeUrl;
   @Getter() public episodeRequestState!: RequestState;
   @Getter() public isEditing!: boolean;
+  @Getter() public activeDialog?: string;
 
   public get hasTriedLoadingEpisodeInfo(): boolean {
     return (
