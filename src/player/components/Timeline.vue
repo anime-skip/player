@@ -76,7 +76,6 @@ export default class Timeline extends Vue {
   @Prop(Number) public currentTime!: number;
   @Prop(Function) public updateTime!: (newTime: number, updatePlayer?: boolean) => void;
   @Prop(Array) public timestamps!: Api.Timestamp[];
-  @Prop(Object) public prefs?: Api.Preferences;
 
   public duration: number = 0;
   public sections: SectionData[] = [];
@@ -89,6 +88,8 @@ export default class Timeline extends Vue {
   @Getter() isEditing!: boolean;
   @Getter() activeTimestamp?: Api.Timestamp;
   @Getter() draftTimestamps!: Api.Timestamp[];
+  @Getter('preferences') prefs?: Api.Preferences;
+  @Getter() preferencesLastUpdatedAt!: number;
 
   public constructor() {
     super();
@@ -99,8 +100,9 @@ export default class Timeline extends Vue {
     });
   }
 
-  @Watch('perfs')
+  @Watch('preferencesLastUpdatedAt')
   public onPrefsChange(): void {
+    console.info('Update sections');
     this.updateSections();
   }
 

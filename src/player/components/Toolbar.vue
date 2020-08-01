@@ -14,7 +14,6 @@
         :isFlipped="!playerState.isPaused && !isActive"
         :currentTime="currentTime"
         :updateTime="updateTime"
-        :prefs="preferences"
         :timestamps="timestamps"
       />
       <div class="buttons">

@@ -13,6 +13,7 @@ export const initialState: VuexState = {
 
   account: undefined,
   preferencesRequestState: RequestState.NOT_REQUESTED,
+  preferencesLastUpdatedAt: 0,
 
   searchShowsResult: [],
   searchShowsRequestState: RequestState.NOT_REQUESTED,
