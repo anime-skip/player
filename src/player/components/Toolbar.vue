@@ -108,7 +108,7 @@ import { FRAME } from '../../common/utils/Constants';
 export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortcutMixin) {
   @Prop(Object) public playerState!: PlayerState;
 
-  public currentTime: number = 0;
+  public currentTime: number = -0.01;
   public isFullscreen: boolean = false;
   public isFullscreenCount: number = 0;
   public Utils = Utils;
@@ -165,6 +165,7 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
 
   public updateTime(newTime: number, updateVideo?: boolean) {
     if (updateVideo) {
+      console.info('Setting time to: ' + newTime);
       this.setCurrentTime(newTime);
     }
     this.currentTime = newTime;
@@ -248,7 +249,7 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   }
 
   public get formattedTime(): string {
-    return Utils.formatSeconds(this.currentTime, this.playerState.isPaused);
+    return Utils.formatSeconds(Math.max(this.currentTime, 0), this.playerState.isPaused);
   }
 
   // Edit Mode

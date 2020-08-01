@@ -2,7 +2,7 @@ export default class Utils {
   public static nextTimestamp(
     currentTime: number,
     timestamps: Api.Timestamp[],
-    preferences?: Api.Preferences
+    preferences: Api.Preferences | undefined
   ): Api.Timestamp | undefined {
     if (!preferences) {
       return timestamps.find(timestamp => timestamp.at > currentTime);

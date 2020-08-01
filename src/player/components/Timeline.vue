@@ -83,7 +83,6 @@ export default class Timeline extends Vue {
   public completedSections: SectionData[] = [];
   public isSeeking: boolean = false;
   public seekingTime: number = 0;
-  public skippedFromZero: boolean = false;
   public service = global.service;
 
   @Getter() isEditing!: boolean;
@@ -116,21 +115,40 @@ export default class Timeline extends Vue {
 
   @Watch('currentTime')
   public onChangeCurrentTime(newTime: number, oldTime: number): void {
-    if (this.timestamps.length > 0 && Math.abs(oldTime - newTime) < 1 && !this.isEditing) {
-      const next = Utils.nextTimestamp(oldTime, this.timestamps);
-      if (
-        (oldTime === 0 && !this.skippedFromZero) ||
-        (next && next.at < newTime && next.at >= oldTime)
-      ) {
-        if (oldTime === 0) {
-          this.skippedFromZero = true;
-        }
-        const future = Utils.nextTimestamp(oldTime, this.timestamps, this.prefs);
-        const skipToTime = future ? future.at : global.getVideo().duration;
-        this.updateTime(skipToTime, true);
-      }
-    }
     this.completedSections = this.getCompletedSections();
+    console.log('Change time: ', { newTime, oldTime });
+
+    // Do nothing
+    const hasNoTimestamsps = this.timestamps.length === 0;
+    const isSeeking = Math.abs(oldTime - newTime) > 1;
+    const isAtEnd = newTime >= this.duration;
+    if (hasNoTimestamsps || isSeeking || isAtEnd || this.isEditing) {
+      console.log('return 1');
+      return;
+    }
+
+    // Get the next timestamp AFTER the oldTime, regardless of if it's skipped
+    const oldNext = Utils.nextTimestamp(oldTime, this.timestamps, undefined);
+
+    // Go to the end
+    const noMoreTimestamps = oldNext == null;
+    if (noMoreTimestamps) {
+      this.updateTime(this.duration, true);
+      console.log('return 2');
+      return;
+    }
+
+    // Do nothing
+    const movedPastATimestamp = oldNext!.at > newTime;
+    const notSkippingThatTimestamp = !Utils.isSkipped(oldNext!, this.prefs);
+    if (movedPastATimestamp || notSkippingThatTimestamp) {
+      console.log('################ return 3', { newTime, oldNext });
+      return;
+    }
+
+    // Update the time to the next timestamp or the end of the video if there is no next timestamp
+    const newNext = Utils.nextTimestamp(newTime, this.timestamps, this.prefs);
+    this.updateTime(newNext?.at ?? this.duration, true);
   }
 
   public get activeTimestamps(): Api.Timestamp[] {
