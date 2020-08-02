@@ -56,7 +56,7 @@ export default class Browser {
     if (browser) browser.browserAction.openPopup();
   }
 
-  public static getURL(): string {
+  public static getInitialUrl(): string {
     return window.location != window.parent.location ? document.referrer : document.location.href;
   }
 }

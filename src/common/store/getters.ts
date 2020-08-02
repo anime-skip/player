@@ -16,6 +16,9 @@ export default as<GetterTree<VuexState, VuexState>>({
   isEditing({ isEditing }): boolean {
     return isEditing;
   },
+  tabUrl({ tabUrl }): string {
+    return tabUrl;
+  },
 
   // Login
   isLoggingIn({ loginRequestState }): boolean {

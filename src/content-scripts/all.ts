@@ -19,6 +19,7 @@ function checkVideoChanged(): void {
     console.log('Video changed, calling callbacks:', {
       oldVideo: oldVideoSrc,
       newVideo: newVideo.src,
+      videoCallbacks,
     });
     videoCallbacks.forEach(callback => {
       try {

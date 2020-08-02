@@ -49,6 +49,9 @@ export default as<
   [types.toggleEditMode](state, isEditing: boolean) {
     state.isEditing = isEditing;
   },
+  [types.setTabUrl](state, tabUrl) {
+    state.tabUrl = tabUrl;
+  },
 
   // Storage
   [types.restoreState](

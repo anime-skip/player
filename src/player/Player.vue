@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Mixins } from 'vue-property-decorator';
+import { Component, Vue, Mixins, Watch } from 'vue-property-decorator';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import Loading from '@/common/components/Loading.vue';
 import ToolBar from './components/Toolbar.vue';
@@ -66,9 +66,11 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
 
   @Getter() playbackRate!: number;
   @Getter() isEditing!: boolean;
+  @Getter() tabUrl!: string;
 
   @Mutation() public restoreState!: (payload: { changes: any; callback?: () => void }) => void;
   @Mutation() public changePlaybackRate!: (playbackRate: number) => void;
+  @Mutation() public setTabUrl!: (url: string) => void;
 
   @Action() public initialLoad!: (callback?: () => void) => void;
   @Action() public fetchEpisodeByUrl!: (url: string) => void;
@@ -85,9 +87,11 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
   }
 
   public mounted(): void {
+    console.info('Initial URL: ' + this.tabUrl);
+    this.fetchEpisodeInfo();
+
     global.onVideoChanged(video => {
       this.changePlaybackRate(this.playbackRate);
-      this.fetchEpisodeInfo();
       video.onplay = () => this.onPlay();
       video.onpause = () => this.onPause();
 
@@ -99,14 +103,29 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
         this.buffering = true;
       };
     });
+
+    browser.runtime.onMessage.addListener(this.onReceiveMessage);
+  }
+
+  public destroyed() {
+    browser.runtime.onMessage.removeListener(this.onReceiveMessage);
   }
 
   public get isActive(): boolean {
     return this.playerState.isActive || this.isEditing;
   }
 
+  public onReceiveMessage({ type, payload: url }: any) {
+    if (type != 'changeUrl') return;
+
+    console.log('Change URL: ' + url);
+    this.setTabUrl(url);
+  }
+
+  @Watch('tabUrl')
   public fetchEpisodeInfo(): void {
-    this.fetchEpisodeByUrl(Browser.getURL());
+    console.info('Fetching episode: ' + this.tabUrl);
+    this.fetchEpisodeByUrl(this.tabUrl);
   }
 
   public toggleActive(isActive: boolean) {

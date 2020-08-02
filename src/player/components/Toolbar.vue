@@ -13,8 +13,10 @@
       <Timeline
         :isFlipped="!playerState.isPaused && !isActive"
         :currentTime="currentTime"
+        :duration="duration"
         :updateTime="updateTime"
         :timestamps="timestamps"
+        @seek="onSeek"
       />
       <div class="buttons">
         <ToolbarButton class="margin-right" @click.native="togglePlayPause()">
@@ -37,7 +39,7 @@
         />
         <div class="divider margin-right" v-if="timestamps.length > 0" />
         <p class="current-time">
-          {{ formattedTime }}&ensp;/&ensp;<span>{{ duration }}</span>
+          {{ formattedTime }}&ensp;/&ensp;<span>{{ displayDuration }}</span>
         </p>
         <div class="space" />
         <ToolbarButton
@@ -111,7 +113,8 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   public isFullscreen: boolean = false;
   public isFullscreenCount: number = 0;
   public Utils = Utils;
-  public duration: string = 'Loading...';
+  public displayDuration: string = 'Loading...';
+  public duration: number = 0;
   public isFullscreenEnabled = document.fullscreenEnabled;
   public service = global.service;
 
@@ -132,8 +135,13 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   constructor() {
     super();
     global.onVideoChanged(video => {
+      video.addEventListener('durationchange', (event: Event) => {
+        this.updateDuration((event.target as HTMLVideoElement).duration);
+      });
       this.updateTime(video.currentTime);
-      video.ontimeupdate = () => this.updateTime(video.currentTime);
+      video.ontimeupdate = () => {
+        this.updateTime(video.currentTime);
+      };
     });
     document.addEventListener('fullscreenchange', () => {
       this.isFullscreen = Utils.isFullscreen();
@@ -156,10 +164,11 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   }
 
   public updateDuration(duration: number) {
+    this.duration = duration;
     if (duration === 0) {
-      this.duration = 'Loading...';
+      this.displayDuration = 'Loading...';
     }
-    this.duration = Utils.formatSeconds(duration, false);
+    this.displayDuration = Utils.formatSeconds(duration, false);
   }
 
   public updateTime(newTime: number, updateVideo?: boolean) {
@@ -168,6 +177,11 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
       this.setCurrentTime(newTime);
     }
     this.currentTime = newTime;
+  }
+
+  public onSeek(newTime: number) {
+    this.currentTime = newTime;
+    this.updateTime(newTime, true);
   }
 
   public addTime(seconds: number): void {

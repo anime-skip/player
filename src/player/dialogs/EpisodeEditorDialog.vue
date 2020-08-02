@@ -133,6 +133,7 @@ export default class EpisodeEditorDialog extends Vue {
   @Getter() episodeRequestState?: RequestState;
   @Getter() searchShowsResult!: Api.ShowSearchResult[];
   @Getter() searchEpisodesResult!: Api.EpisodeSearchResult[];
+  @Getter() tabUrl!: string;
 
   @Mutation('searchShowsResult') clearShowSearchResults!: () => void;
   @Mutation('searchEpisodesResult') clearEpisodeSearchResults!: () => void;
@@ -362,7 +363,7 @@ export default class EpisodeEditorDialog extends Vue {
         },
         episodeUrl: {
           create: true,
-          data: { url: Browser.getURL() },
+          data: { url: this.tabUrl },
         },
       });
     }
@@ -378,7 +379,7 @@ export default class EpisodeEditorDialog extends Vue {
         },
         episodeUrl: {
           create: true,
-          data: { url: Browser.getURL() },
+          data: { url: this.tabUrl },
         },
       });
       return;
@@ -399,7 +400,7 @@ export default class EpisodeEditorDialog extends Vue {
         },
         episodeUrl: {
           create: true,
-          data: { url: Browser.getURL() },
+          data: { url: this.tabUrl },
         },
       });
       return;

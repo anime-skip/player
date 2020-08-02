@@ -1,5 +1,6 @@
 import AxiosApi from '@/common/api/AxiosApi';
 import Messenger from '@/common/utils/Messenger';
+import { url } from 'inspector';
 
 // Setup Globals
 
@@ -28,3 +29,11 @@ new Messenger('background', {
   deleteTimestamp: global.Api.deleteTimestamp,
 });
 console.log('Started messenger on the background script');
+
+// Setup tab listener messenging
+
+browser.tabs.onUpdated.addListener(function(tabId, { url }, _tabInfo) {
+  if (url == null) return;
+  console.log('Tab url changed:', { tabId, url });
+  browser.tabs.sendMessage(tabId, { type: 'changeUrl', payload: url });
+});

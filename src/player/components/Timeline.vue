@@ -8,6 +8,7 @@
       seeking: isSeeking,
       'add-margin': isEditing,
     }"
+    @click.stop
   >
     <Section
       v-for="section of sections"
@@ -34,15 +35,18 @@
       :style="{ left: `${(timestamp.at / duration) * 100}%` }"
     />
     <VueSlider
+      v-if="duration > 0"
       class="slider"
-      v-model="currentTime"
+      :value="normalizedTime"
       height="3"
-      silent
-      :max="duration"
-      :interval="0.5"
+      :min="0"
+      :max="100"
+      :interval="0.01"
       :duration="0"
       tooltip="none"
       :dotSize="isFlipped ? 3 : 11"
+      dragOnClick
+      :useKeyboard="false"
       @change="onSeek"
     />
     <EditTimestampHandle
@@ -74,10 +78,10 @@ interface SectionData {
 export default class Timeline extends Vue {
   @Prop(Boolean) public isFlipped?: boolean;
   @Prop(Number) public currentTime!: number;
+  @Prop(Number) public duration!: number;
   @Prop(Function) public updateTime!: (newTime: number, updatePlayer?: boolean) => void;
   @Prop(Array) public timestamps!: Api.Timestamp[];
 
-  public duration: number = 0;
   public sections: SectionData[] = [];
   public completedSections: SectionData[] = [];
   public isSeeking: boolean = false;
@@ -91,29 +95,8 @@ export default class Timeline extends Vue {
   @Getter('preferences') prefs?: Api.Preferences;
   @Getter() preferencesLastUpdatedAt!: number;
 
-  public constructor() {
-    super();
-    global.onVideoChanged(video => {
-      Utils.waitForVideoLoad().then(duration => {
-        this.onChangeDuration(duration);
-      });
-    });
-  }
-
-  @Watch('preferencesLastUpdatedAt')
-  public onPrefsChange(): void {
-    console.info('Update sections');
-    this.updateSections();
-  }
-
-  @Watch('timestamps')
-  public onTimestampsChange(): void {
-    this.updateSections();
-  }
-
-  @Watch('isEditing')
-  public onIsEditingChange(): void {
-    this.updateSections();
+  public get normalizedTime(): number {
+    return Math.max(0, Math.min(100, (this.currentTime / this.duration) * 100));
   }
 
   @Watch('currentTime')
@@ -185,7 +168,7 @@ export default class Timeline extends Vue {
   }
 
   public onSeek(newTime: number) {
-    this.updateTime(newTime, true);
+    this.$emit('seek', (newTime / 100) * this.duration);
   }
 
   public onChangeDuration(newDuration?: number) {
@@ -193,9 +176,15 @@ export default class Timeline extends Vue {
     this.updateSections();
   }
 
+  @Watch('timestamps')
+  @Watch('duration')
+  @Watch('isEditing')
+  @Watch('preferencesLastUpdatedAt')
   public updateSections(): void {
+    console.log('Updating sections');
     this.sections = this.getSections();
     this.completedSections = this.getCompletedSections();
+    this.$forceUpdate();
   }
 
   public get unknownTimestamp(): Api.Timestamp {
