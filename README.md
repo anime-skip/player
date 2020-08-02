@@ -15,21 +15,34 @@ This will install and open Firefox. To open another browser, more changes will h
 
 To package the application, run `yarn package`.
 
+> Make sure you have the .env file present with the signing config, it should look something like this:
+>
+> ```bash
+> export FIREFOX_SIGNING_ISSUER="<issuer>"
+> export FIREFOX_SIGNING_SECRET="<secret>"
+> export FIREFOX_SIGNING_ID="<signing-id>"
+> ```
+
 To deploy, go to the consoles:
+
 - [Chrome Web Store](https://chrome.google.com/webstore/devconsole/331629b9-cf31-4391-ad30-77dd0a36958d?hl=en)
 - [Firefox Add-On Developer Hub](https://addons.mozilla.org/en-US/developers/addons)
 - ~~Edge~~ - [TODO](https://docs.microsoft.com/en-us/microsoft-edge/extensions-chromium/publish/publish-extension)
 - ~~Opera~~ - [TODO](https://dev.opera.com/extensions/publishing-guidelines/)
 
-## TODO
+### Developing with a Profile
 
-#### Necessary
+Add a `.env.firefox` file to the project root, next to the `.env` file. It should contain the path to your profile (found at <about:profile>):
 
-- Edit Timestamps
+```
+BROWSER_PROFILE_PATH=/home/aklinker1/.mozilla/firefox/lrgdkj3i.default-release
+```
 
-#### Optinoal
+<br/>
 
-- Error on timeline drag
+---
+
+<br/>
 
 ## Keyboard shortcut plans
 
@@ -58,8 +71,11 @@ w  e  r           i  o
 `J` - go back 1 frame<br />
 `K` - Stop and place timestamp<br />
 `L` - go forward 1 frame<br />
+
+<!--
 `I` - Cycle through timestamp types<br />
 `O` - Cycle through timestamp types<br />
 `M` - Switch timestamp being edited to the previous one<br />
 `,` - Switch timestamp being edited to the next one<br />
 `⏎` - Stop editing current timestamp and resume the video<br />
+-->
