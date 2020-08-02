@@ -37,7 +37,6 @@ trap 'onFailure' EXIT
 
 # SETUP ################################
 PACKAGE_VERSION=$(node -e 'console.log(require("./package.json").version)')
-PACKAGE_VERSION_NAME=$(node -e 'console.log(require("./package.json").version_name)')
 PACKAGE_NAME=$(node -e 'console.log(require("./package.json").name)')
 OUTPUT_DIRECTORY="artifacts"
 LOG_DIRECTORY="$OUTPUT_DIRECTORY/logs"
@@ -47,13 +46,12 @@ OUTPUT_NAME="$OUTPUT_DIRECTORY/$PACKAGE_NAME-$PACKAGE_VERSION"
 echo -e "\n${BOLD}Packaging Web Extension${RESET}"
 
 title   "Build Info"
-echo -e "  ${DIM}PACKAGE_VERSION:      ${RESET}${BOLD}$PACKAGE_VERSION${RESET}"
-echo -e "  ${DIM}PACKAGE_VERSION_NAME: ${RESET}${BOLD}$PACKAGE_VERSION_NAME${RESET}"
-echo -e "  ${DIM}PACKAGE_NAME:         ${RESET}${BOLD}$PACKAGE_NAME${RESET}"
-echo -e "  ${DIM}OUTPUT_DIRECTORY:     ${RESET}${BOLD}$OUTPUT_DIRECTORY${RESET}"
-echo -e "  ${DIM}LOG_DIRECTORY:        ${RESET}${BOLD}$LOG_DIRECTORY${RESET}"
-echo -e "  ${DIM}LOG_FILE:             ${RESET}${BOLD}$LOG_FILE${RESET}"
-echo -e "  ${DIM}OUTPUT_NAME:          ${RESET}${BOLD}$OUTPUT_NAME${RESET}"
+echo -e "  ${DIM}PACKAGE_VERSION:  ${RESET}${BOLD}$PACKAGE_VERSION${RESET}"
+echo -e "  ${DIM}PACKAGE_NAME:     ${RESET}${BOLD}$PACKAGE_NAME${RESET}"
+echo -e "  ${DIM}OUTPUT_DIRECTORY: ${RESET}${BOLD}$OUTPUT_DIRECTORY${RESET}"
+echo -e "  ${DIM}LOG_DIRECTORY:    ${RESET}${BOLD}$LOG_DIRECTORY${RESET}"
+echo -e "  ${DIM}LOG_FILE:         ${RESET}${BOLD}$LOG_FILE${RESET}"
+echo -e "  ${DIM}OUTPUT_NAME:      ${RESET}${BOLD}$OUTPUT_NAME${RESET}"
 
 # CLEANUP ##############################
 title "Prepare Output Directories"
