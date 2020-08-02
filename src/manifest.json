@@ -1,6 +1,6 @@
 {
   "name": "Anime Skip",
-  "description": "Allows users to skip intros, credits, filler and more",
+  "description": "Skip intros, credits, filler and more on supported services",
   "manifest_version": 2,
   "permissions": ["activeTab", "storage", "tabs"],
   "browser_action": {
