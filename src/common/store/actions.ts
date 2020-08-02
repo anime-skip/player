@@ -163,7 +163,6 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       const results = await global.Api.searchShows(name);
       commit(mutationTypes.searchShowsRequestState, RequestState.SUCCESS);
       commit(mutationTypes.searchShowsResult, results);
-      console.trace('types.searchShows');
     } catch (err) {
       console.error('actions.searchShows', err);
       commit(mutationTypes.searchShowsRequestState, RequestState.FAILURE);

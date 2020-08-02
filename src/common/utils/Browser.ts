@@ -56,7 +56,15 @@ export default class Browser {
     if (browser) browser.browserAction.openPopup();
   }
 
-  public static getURL(): string {
+  /**
+   * Return the the url of the webpage this is ran in. Most of the time it is in a Iframe, but
+   * sometimes not.
+   *
+   * - If we are in an iframe, we will return the referrer (the url that instancated the iframe).
+   *   Note that if the page uses HTML5 history mode, url changes are not reflected in this field.
+   * - If we are not in an iframe, then just return the URL of the document
+   */
+  public static getIframeReferrer(): string {
     return window.location != window.parent.location ? document.referrer : document.location.href;
   }
 }

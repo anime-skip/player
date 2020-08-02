@@ -3,6 +3,7 @@ declare interface VuexState {
   playbackRate: number;
   isEditing: boolean;
   selectedTimestamp?: Api.AmbigousTimestamp;
+  tabUrl: string;
 
   token?: string;
   tokenExpiresAt?: number;

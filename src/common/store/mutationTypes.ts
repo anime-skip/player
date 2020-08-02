@@ -2,6 +2,7 @@ export default {
   activeDialog: '@@general/activeDialog',
   changePlaybackRate: '@@general/changePlaybackRate',
   toggleEditMode: '@@general/toggleEditMode',
+  setTabUrl: '@@general/setTabUrl',
 
   restoreState: '@@storage/restoreState' as const,
   persistPreferences: '@@storage/persistPreferences' as const,

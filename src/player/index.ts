@@ -13,7 +13,7 @@ global.Api = MessengerApi;
 
 global.onVideoChanged(video => {
   video.controls = false;
-  video.autoplay = false;
+  video.autoplay = true;
 });
 
 // Clean DOM

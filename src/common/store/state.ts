@@ -1,9 +1,11 @@
 import RequestState from '../utils/RequestState';
+import Browser from '../utils/Browser';
 
 export const initialState: VuexState = {
   activeDialog: undefined,
   playbackRate: 1,
   isEditing: false,
+  tabUrl: Browser.getIframeReferrer(),
 
   token: undefined,
   tokenExpiresAt: undefined,
