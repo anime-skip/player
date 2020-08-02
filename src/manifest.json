@@ -1,7 +1,6 @@
 {
   "name": "Anime Skip",
-  "version": "0.1.0",
-  "description": "Allows users to skip fillers/intro/recaps on VRV.",
+  "description": "Allows users to skip intros, credits, filler and more",
   "manifest_version": 2,
   "permissions": ["activeTab", "storage", "tabs"],
   "browser_action": {
