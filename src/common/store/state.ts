@@ -5,7 +5,7 @@ export const initialState: VuexState = {
   activeDialog: undefined,
   playbackRate: 1,
   isEditing: false,
-  tabUrl: Browser.getInitialUrl(),
+  tabUrl: Browser.getIframeReferrer(),
 
   token: undefined,
   tokenExpiresAt: undefined,

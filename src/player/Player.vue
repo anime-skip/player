@@ -87,7 +87,6 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
   }
 
   public mounted(): void {
-    console.info('Initial URL: ' + this.tabUrl);
     this.fetchEpisodeInfo();
 
     global.onVideoChanged(video => {
@@ -124,7 +123,7 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
 
   @Watch('tabUrl')
   public fetchEpisodeInfo(): void {
-    console.info('Fetching episode: ' + this.tabUrl);
+    console.log('Fetching episode: ' + this.tabUrl);
     this.fetchEpisodeByUrl(this.tabUrl);
   }
 

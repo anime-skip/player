@@ -184,7 +184,6 @@ export default class Timeline extends Vue {
     console.log('Updating sections');
     this.sections = this.getSections();
     this.completedSections = this.getCompletedSections();
-    this.$forceUpdate();
   }
 
   public get unknownTimestamp(): Api.Timestamp {
