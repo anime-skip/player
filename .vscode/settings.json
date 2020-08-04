@@ -9,16 +9,5 @@
     "editor.formatOnSave": true,
     "editor.formatOnPaste": false
   },
-  "sqltools.connections": [
-    {
-      "database": "anime_skip_local",
-      "dialect": "PostgreSQL",
-      "name": "Anime Skip (Local)",
-      "password": "password",
-      "port": 5432,
-      "server": "localhost",
-      "username": "postgres"
-    }
-  ],
   "editor.rulers": [100]
 }
