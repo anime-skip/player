@@ -15,6 +15,7 @@ export const HOURS = 60 * MINUTES;
 export const DAYS = 24 * HOURS;
 export const ACCESS_TOKEN_DURATION = 12 * HOURS;
 export const REFRESH_TOKEN_DURATION = 7 * DAYS;
+export const UNAUTHORIZED_ERROR_MESSAGE = 'unauthorized - log out';
 
 export const ACCEPTED_KEYS: { [keyCode: number]: string } = {
   13: 'ENTER',

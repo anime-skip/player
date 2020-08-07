@@ -1,6 +1,6 @@
 import Browser from '@/common/utils/Browser';
 import { ActionContext, Action } from 'vuex';
-import { persistedKeys } from '@/common/utils/Constants';
+import { persistedKeys, UNAUTHORIZED_ERROR_MESSAGE } from '@/common/utils/Constants';
 import mutations from './mutationTypes';
 import { as, sleep } from '../utils/GlobalUtils';
 import types from './actionTypes';
@@ -8,6 +8,7 @@ import RequestState from '../utils/RequestState';
 import { AssertionError } from 'assert';
 import mutationTypes from './mutationTypes';
 import Utils from '../utils/Utils';
+import actionTypes from './actionTypes';
 
 // TODO make everything async
 
@@ -21,6 +22,21 @@ function assertLoggedIn(
   if (context.state.account == null) {
     context.commit(mutations.loginRequestState, RequestState.NOT_REQUESTED);
     throw new AssertionError({ message: 'state.account does not exist, log in again' });
+  }
+}
+
+async function callApi<A extends any[], R>(
+  commit: ActionContext<VuexState, VuexState>['commit'],
+  apiMethod: (...args: A) => Promise<R>,
+  ...args: A
+): Promise<R> {
+  try {
+    return await apiMethod(...args);
+  } catch (err) {
+    if (err.message == UNAUTHORIZED_ERROR_MESSAGE) {
+      commit(mutationTypes.logOut);
+    }
+    throw err;
   }
 }
 
@@ -70,7 +86,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     console.log('actions.loginManual', { username });
     try {
       commit(mutations.loginRequestState, RequestState.LOADING);
-      const loginData = await global.Api.loginManual(username, password);
+      const loginData = await callApi(commit, global.Api.loginManual, username, password);
       commit(mutations.login, loginData);
       commit(mutations.loginRequestState, RequestState.SUCCESS);
     } catch (err) {
@@ -95,7 +111,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
         };
         commit(mutations.preferencesRequestState, RequestState.LOADING);
         commit(mutations.togglePref, { pref, value: newValue });
-        await global.Api.updatePreferences(newPreferences);
+        await callApi(commit, global.Api.updatePreferences, newPreferences);
         commit(mutations.preferencesRequestState, RequestState.SUCCESS);
         commit(mutations.persistPreferences, newPreferences);
       } catch (err) {
@@ -115,7 +131,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     console.log('actions.searchShows', { name });
     try {
       commit(mutationTypes.searchShowsRequestState, RequestState.LOADING);
-      const results = await global.Api.searchShows(name);
+      const results = await callApi(commit, global.Api.searchShows, name);
       commit(mutationTypes.searchShowsRequestState, RequestState.SUCCESS);
       commit(mutationTypes.searchShowsResult, results);
     } catch (err) {
@@ -138,7 +154,9 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       // Show
       let showId: string;
       if (showData.create) {
-        const result = await global.Api.createShow({ name: showData.name });
+        const result = await await callApi(commit, global.Api.createShow, {
+          name: showData.name,
+        });
         showId = result.id;
       } else {
         showId = showData.showId;
@@ -147,7 +165,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       // Episode
       let episodeId: string;
       if (episodeData.create) {
-        const result = await global.Api.createEpisode(episodeData.data, showId);
+        const result = await callApi(commit, global.Api.createEpisode, episodeData.data, showId);
         episodeId = result.id;
       } else {
         episodeId = episodeData.episodeId;
@@ -158,9 +176,9 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       if (episodeUrlData.create) {
         episodeUrl = episodeUrlData.data.url;
         try {
-          await global.Api.deleteEpisodeUrl(episodeUrl);
+          await callApi(commit, global.Api.deleteEpisodeUrl, episodeUrl);
         } catch (err) {}
-        await global.Api.createEpisodeUrl(episodeUrlData.data, episodeId);
+        await callApi(commit, global.Api.createEpisodeUrl, episodeUrlData.data, episodeId);
       } else {
         episodeUrl = episodeUrlData.url;
       }
@@ -179,7 +197,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     console.log('actions.searchEpisodes', { name, showId });
     try {
       commit(mutationTypes.searchEpisodesRequestState, RequestState.LOADING);
-      const results = await global.Api.searchEpisodes(name, showId);
+      const results = await callApi(commit, global.Api.searchEpisodes, name, showId);
       commit(mutationTypes.searchEpisodesRequestState, RequestState.SUCCESS);
       commit(mutationTypes.searchEpisodesResult, results);
     } catch (err) {
@@ -191,7 +209,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     console.log('actions.fetchEpisodeByUrl', { url });
     try {
       commit(mutationTypes.episodeRequestState, RequestState.LOADING);
-      const episodeUrl = await global.Api.fetchEpisodeByUrl(url);
+      const episodeUrl = await callApi(commit, global.Api.fetchEpisodeByUrl, url);
       commit(mutationTypes.episodeRequestState, RequestState.SUCCESS);
       commit(mutationTypes.setEpisodeInfo, episodeUrl);
     } catch (err) {
@@ -202,7 +220,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
 
   // Timestamps
   async [types.updateTimestamps](
-    { dispatch },
+    { commit, dispatch },
     {
       oldTimestamps,
       newTimestamps,
@@ -220,13 +238,13 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     );
 
     for (const toCreateItem of toCreate) {
-      await global.Api.createTimestamp(episodeUrl.episode.id, toCreateItem);
+      await callApi(commit, global.Api.createTimestamp, episodeUrl.episode.id, toCreateItem);
     }
     for (const toUpdateItem of toUpdate) {
-      await global.Api.updateTimestamp(toUpdateItem);
+      await callApi(commit, global.Api.updateTimestamp, toUpdateItem);
     }
     for (const toDeleteItem of toDelete) {
-      await global.Api.deleteTimestamp(toDeleteItem.id);
+      await callApi(commit, global.Api.deleteTimestamp, toDeleteItem.id);
     }
 
     dispatch(types.fetchEpisodeByUrl, episodeUrl.url);

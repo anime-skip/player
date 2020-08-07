@@ -1,4 +1,9 @@
-import { persistedKeys, REFRESH_TOKEN_DURATION, ACCESS_TOKEN_DURATION } from './Constants';
+import {
+  persistedKeys,
+  REFRESH_TOKEN_DURATION,
+  ACCESS_TOKEN_DURATION,
+  UNAUTHORIZED_ERROR_MESSAGE,
+} from './Constants';
 
 function prepareChangedStorage(object: any): Partial<VuexState> {
   for (const key in object) {
@@ -35,7 +40,7 @@ export default class Browser {
       return newToken;
     }
 
-    throw Error('unauthorized - log out');
+    throw Error(UNAUTHORIZED_ERROR_MESSAGE);
   }
 
   public static storage = {

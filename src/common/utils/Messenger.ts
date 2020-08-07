@@ -18,6 +18,9 @@ export default class Messenger {
       type,
       payload,
     });
+    if (response.errorMessage != null) {
+      throw Error(response.errorMessage);
+    }
     return response;
   };
 
@@ -37,7 +40,12 @@ export default class Messenger {
 
     const callback = (this.listeners[type] as unknown) as MessageListener<T>;
     if (callback) {
-      const response = await callback(payload);
+      let response;
+      try {
+        response = await callback(payload);
+      } catch (error) {
+        response = { errorMessage: error.message };
+      }
       console.log('sendResponse', { response });
       return response;
     }
