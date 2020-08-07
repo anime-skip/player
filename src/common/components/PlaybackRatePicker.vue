@@ -1,7 +1,7 @@
 <template>
   <div class="PlaybackRatePicker">
     <div class="container clickable dark down">
-      <WebExtImg src="ic-playback-speed.svg" class="image" />
+      <WebExtImg src="ic_playback_speed.svg" class="image" />
       <div
         v-for="speed in PLAYBACK_SPEEDS"
         :key="speed.value"
