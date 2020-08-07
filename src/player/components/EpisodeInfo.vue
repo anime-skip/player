@@ -65,6 +65,9 @@ export default class EpisodeInfo extends Vue {
 
 <style lang="scss" scoped>
 .EpisodeInfo {
+  max-width: 1100px;
+  width: 75%;
+  min-width: 400px;
   opacity: 0;
   transition: 250ms;
   transition-property: opacity;

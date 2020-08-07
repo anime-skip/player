@@ -10,9 +10,6 @@ export default class EpisodeUtils {
     number,
     season,
   }: Api.EpisodeSearchResult): string {
-    if (absoluteNumber != null && number != null && season != null && number === absoluteNumber) {
-      return `Season ${season}, Episode ${number}`;
-    }
     if (absoluteNumber != null && number != null && season != null) {
       return `Season ${season}, Episode ${number} (#${absoluteNumber})`;
     }
@@ -22,8 +19,14 @@ export default class EpisodeUtils {
     if (number != null && season != null) {
       return `Season ${season}, Episode ${number}`;
     }
+    if (season != null) {
+      return `Season ${season}`;
+    }
+    if (number != null) {
+      return `Episode ${number}`;
+    }
     if (absoluteNumber != null) {
-      return `Episode #${absoluteNumber}`;
+      return `#${absoluteNumber}`;
     }
     return '';
   }

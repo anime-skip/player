@@ -439,6 +439,11 @@ export default class EpisodeEditorDialog extends Vue {
 $width: 450px;
 $borderRadius: 3px;
 
+* {
+  padding: 0;
+  margin: 0;
+}
+
 #EpisodeEditorDialog {
   .dialog-root-container {
     overflow-y: visible;
@@ -491,8 +496,6 @@ $borderRadius: 3px;
     flex-direction: column;
 
     .disabled-label {
-      padding: 0;
-      margin: 0;
       margin-top: 8px;
       font-size: 14px;
       color: rgba($color: #ff7777, $alpha: 0.7);
