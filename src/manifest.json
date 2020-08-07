@@ -29,8 +29,20 @@
   "content_scripts": [
     {
       "matches": ["file:///*/example/index.html"],
+      "js": ["content-scripts/keyboard-blocker.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["file:///*/example/index.html"],
       "js": ["content-scripts/all.js", "content-scripts/example/index.js", "player/index.js"],
       "css": ["player/index.css", "content-scripts/example/index.css"]
+    },
+
+    {
+      "matches": ["https://static.vrv.co/*"],
+      "js": ["content-scripts/keyboard-blocker.js"],
+      "run_at": "document_start",
+      "all_frames": true
     },
     {
       "matches": ["https://static.vrv.co/*"],

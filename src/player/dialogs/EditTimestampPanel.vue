@@ -135,14 +135,13 @@ export default class EditTimestampPanel extends Mixins(
     X: this.updateTimestamp,
   };
 
-  public updateTimestamp(): boolean {
+  public updateTimestamp(): void {
     if (this.activeTimestamp != null) {
       this.setActiveTimestamp({
         ...this.activeTimestamp,
         at: this.getCurrentTime(),
       });
     }
-    return true;
   }
 
   public isSaveDisabled(): boolean {

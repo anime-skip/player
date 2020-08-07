@@ -1,19 +1,31 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Test Overlay</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Test Overlay</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
-</head>
+  <body>
+    <div class="video-container">
+      <div class="glass"></div>
+      <video id="video" src="video.mp4" controls></video>
+    </div>
+    <p id="key-press"></p>
+  </body>
 
-<body>
-  <div class="video-container">
-    <div class="glass"></div>
-    <video id="video" src="video.mp4" controls></video>
-  </div>
-</body>
-
+  <script>
+    console.log("added key listener")
+    const keyPress = document.getElementById('key-press');
+    document.addEventListener('keydown', function(event) {
+      console.log("pressed key: " + event.key);
+      keyPress.innerText = event.key;
+    });
+    document.onkeydown = function (event) {
+      console.log("onkeydown");
+      keyPress.innerText = event.key;
+    }
+  </script>
 </html>
