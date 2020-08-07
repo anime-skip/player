@@ -47,7 +47,6 @@ export default class EditTimestampHandle extends Mixins(
       if (this.activeTimestamp == null) {
         this.onClick();
       }
-      return true;
     },
   };
 }
