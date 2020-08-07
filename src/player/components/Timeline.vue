@@ -115,8 +115,9 @@ export default class Timeline extends Vue {
     const oldNext = Utils.nextTimestamp(oldTime, this.timestamps, undefined);
 
     // Do nothing
+    const timeDiff = Math.abs(oldTime - newTime);
     const hasNoMoreTimestamsps = oldNext == null;
-    const isSeeking = Math.abs(oldTime - newTime) > 1;
+    const isSeeking = timeDiff > 1;
     const isAtEnd = newTime >= this.duration;
     if (hasNoMoreTimestamsps || isSeeking || isAtEnd || this.isEditing) {
       return;
@@ -133,9 +134,9 @@ export default class Timeline extends Vue {
     }
 
     // Do nothing
-    const didNotPastATimestamp = oldNext!.at > newTime;
+    const willNotPastATimestamp = oldNext!.at > newTime + timeDiff; // look forward 1/2 a time update so we don't show the user a frame of the skipped section
     const notSkippingThePassedTimestamp = !Utils.isSkipped(oldNext!, this.prefs);
-    if (didNotPastATimestamp || notSkippingThePassedTimestamp) {
+    if (willNotPastATimestamp || notSkippingThePassedTimestamp) {
       return;
     }
     const jumpedDirectlyToTimestamp =
