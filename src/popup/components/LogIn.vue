@@ -4,14 +4,14 @@
       <PopupHeader title="Log In" class="header" :small="small" />
       <TextInput
         class="flex row"
-        leftIcon="ic-account.svg"
+        leftIcon="ic_account.svg"
         label="Username"
         autocomplete="username"
         v-model="username"
       />
       <TextInput
         class="flex row"
-        leftIcon="ic-password.svg"
+        leftIcon="ic_password.svg"
         label="Password"
         :errorMessage="isLogInError ? 'Username or password is incorrect' : undefined"
         autocomplete="current-password"

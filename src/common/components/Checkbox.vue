@@ -23,7 +23,7 @@ export default class Checkbox extends Vue {
   @Prop(String) public tooltip!: string;
 
   public getIcon(): string {
-    return `ic-${this.isChecked ? 'checked' : 'unchecked'}.svg`;
+    return `ic_${this.isChecked ? 'checked' : 'unchecked'}.svg`;
   }
 }
 </script>

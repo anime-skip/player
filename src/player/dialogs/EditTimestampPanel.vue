@@ -20,7 +20,7 @@
       <TextInput
         ref="filterInput"
         class="flex row"
-        leftIcon="ic-filter.svg"
+        leftIcon="ic_filter.svg"
         label="Filter..."
         v-model="typeFilter"
         @submit="onClickSave()"
