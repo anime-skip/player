@@ -71,7 +71,6 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
   @Mutation() public changePlaybackRate!: (playbackRate: number) => void;
   @Mutation() public setTabUrl!: (url: string) => void;
 
-  @Action() public initialLoad!: (callback?: () => void) => void;
   @Action() public fetchEpisodeByUrl!: (url: string) => void;
 
   constructor() {
@@ -79,10 +78,6 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
     Browser.storage.addListener((changes: Partial<VuexState>) => {
       this.restoreState({ changes });
     });
-  }
-
-  public created(): void {
-    this.initialLoad();
   }
 
   public mounted(): void {
