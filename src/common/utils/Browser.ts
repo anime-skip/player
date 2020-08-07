@@ -1,3 +1,5 @@
+import { persistedKeys, REFRESH_TOKEN_DURATION, ACCESS_TOKEN_DURATION } from './Constants';
+
 function prepareChangedStorage(object: any): Partial<VuexState> {
   for (const key in object) {
     object[key] = JSON.parse(object[key].newValue);
@@ -6,6 +8,36 @@ function prepareChangedStorage(object: any): Partial<VuexState> {
 }
 
 export default class Browser {
+  public static async getAccessToken(): Promise<string> {
+    const {
+      token,
+      tokenExpiresAt,
+      refreshToken,
+      refreshTokenExpiresAt,
+    } = await Browser.storage.getAll<Partial<VuexState>>(persistedKeys);
+    const now = Date.now();
+
+    if (tokenExpiresAt != null && token != null && now <= tokenExpiresAt) {
+      return token;
+    }
+
+    if (refreshTokenExpiresAt != null && refreshToken != null && now <= refreshTokenExpiresAt) {
+      const { authToken: newToken, refreshToken: newRefreshToken } = await global.Api.loginRefresh(
+        refreshToken
+      );
+      const newNow = Date.now();
+      await Promise.all([
+        Browser.storage.setItem('token', newToken),
+        Browser.storage.setItem('tokenExpiresAt', newNow + ACCESS_TOKEN_DURATION),
+        Browser.storage.setItem('refreshToken', newRefreshToken),
+        Browser.storage.setItem('refreshTokenExpiresAt', newNow + REFRESH_TOKEN_DURATION),
+      ]);
+      return newToken;
+    }
+
+    throw Error('unauthorized - log out');
+  }
+
   public static storage = {
     getItem: async <T>(key: string): Promise<T | undefined> => {
       // @ts-ignore

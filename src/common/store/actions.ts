@@ -15,22 +15,6 @@ type VuexStateWithAccount = VuexState & { account: Api.Account };
 
 // Helpers /////////////////////////////////////////////////////////////////////
 
-async function loginRefresh(
-  { commit }: ActionContext<VuexState, VuexState>,
-  { refreshToken }: LoginRefreshPayload
-): Promise<void> {
-  console.log('actions.loginRefresh', { refreshToken });
-  try {
-    commit(mutations.loginRequestState, RequestState.LOADING);
-    const loginData = await global.Api.loginRefresh(refreshToken);
-    commit(mutations.login, loginData);
-    commit(mutations.loginRequestState, RequestState.SUCCESS);
-  } catch (err) {
-    console.error('actions.loginRefresh');
-    commit(mutations.loginRequestState, RequestState.FAILURE);
-  }
-}
-
 function assertLoggedIn(
   context: ActionContext<VuexState, VuexState>
 ): asserts context is ActionContext<VuexStateWithAccount, VuexStateWithAccount> {
@@ -46,36 +30,8 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
   // General
   async [types.initialLoad](context, callback?: () => void) {
     console.log('actions.initialLoad', { callback });
-    try {
-      const newState = await Browser.storage.getAll<Partial<VuexState>>(persistedKeys);
-      context.commit(mutations.restoreState, { changes: newState });
-
-      if (!newState.token) {
-        context.commit(mutations.loginRequestState, RequestState.NOT_REQUESTED);
-        return;
-      }
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      if (Date.now() <= newState.tokenExpiresAt!) {
-        context.commit(mutations.loginRequestState, RequestState.SUCCESS);
-        return;
-      }
-      if (newState.refreshToken == null) {
-        context.commit(mutations.loginRequestState, RequestState.NOT_REQUESTED);
-        return;
-      }
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      if (Date.now() > newState.refreshTokenExpiresAt!) {
-        context.commit(mutations.loginRequestState, RequestState.NOT_REQUESTED);
-        return;
-      }
-
-      await loginRefresh(context, { refreshToken: newState.refreshToken });
-
-      if (callback) callback();
-    } catch (err) {
-      console.error('actions.initialLoad', err);
-      context.commit(mutations.loginRequestState, RequestState.NOT_REQUESTED);
-    }
+    const newState = await Browser.storage.getAll<Partial<VuexState>>(persistedKeys);
+    context.commit(mutations.restoreState, { changes: newState });
   },
   async [types.showDialog]({ state, commit }, dialogName?: string) {
     console.log('actions.showDialog', { dialogName });
@@ -122,7 +78,6 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       commit(mutations.loginRequestState, RequestState.FAILURE);
     }
   },
-  [types.loginRefresh]: loginRefresh,
 
   // Preferences
   async [types.updatePreferences](context, pref: keyof Api.Preferences) {

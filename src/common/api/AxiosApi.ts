@@ -65,6 +65,10 @@ const loginData = `
   }
 `;
 
+const loginRefreshData = `
+  authToken refreshToken
+`;
+
 const showSearchData = `id name originalName`;
 
 const showData = `id name originalName website image`;
@@ -100,9 +104,18 @@ const timestampData = `
 `;
 
 /* eslint-disable no-console */
-async function sendGraphql<Q extends string, D>(data: any): Promise<{ data: { [field in Q]: D } }> {
+async function sendUnauthorizedGraphql<Q extends string, D>(
+  data: any
+): Promise<{ data: { [field in Q]: D } }> {
+  return await sendGraphql(data, true);
+}
+
+async function sendGraphql<Q extends string, D>(
+  data: any,
+  skipAuth = false
+): Promise<{ data: { [field in Q]: D } }> {
   try {
-    const token = await Browser.storage.getItem<string>('token');
+    const token = skipAuth ? undefined : await Browser.getAccessToken();
     const response = await axios.post('graphql', data, {
       headers: {
         Authorization: token ? `Bearer ${token}` : undefined,
@@ -142,20 +155,20 @@ export default as<Api.Implementation>({
         }
       }`
     );
-    const response = await sendGraphql<'login', Api.LoginResponse>(q);
+    const response = await sendUnauthorizedGraphql<'login', Api.LoginResponse>(q);
     return response.data.login;
   },
 
-  async loginRefresh(refreshToken): Promise<Api.LoginResponse> {
+  async loginRefresh(refreshToken): Promise<Api.LoginRefreshResponse> {
     const q = query(
       `{
         loginRefresh(refreshToken: "${refreshToken}") {
-          ${loginData}
+          ${loginRefreshData}
         }
       }`
     );
-    const response = await sendGraphql<'login', Api.LoginResponse>(q);
-    return response.data.login;
+    const response = await sendUnauthorizedGraphql<'loginRefresh', Api.LoginRefreshResponse>(q);
+    return response.data.loginRefresh;
   },
 
   async updatePreferences(prefs): Promise<void> {
@@ -222,7 +235,7 @@ export default as<Api.Implementation>({
       }
     }`);
     console.log({ q });
-    const response = await sendGraphql<'searchEpisodes', Api.EpisodeSearchResult[]>(q);
+    const response = await sendUnauthorizedGraphql<'searchEpisodes', Api.EpisodeSearchResult[]>(q);
     return response.data.searchEpisodes;
   },
 
@@ -263,7 +276,7 @@ export default as<Api.Implementation>({
         }
       }`
     );
-    const response = await sendGraphql<'findEpisodeUrl', Api.EpisodeUrl>(q);
+    const response = await sendUnauthorizedGraphql<'findEpisodeUrl', Api.EpisodeUrl>(q);
     return response.data.findEpisodeUrl;
   },
 

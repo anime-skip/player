@@ -1,4 +1,8 @@
-import { persistedKeys } from '@/common/utils/Constants';
+import {
+  persistedKeys,
+  REFRESH_TOKEN_DURATION,
+  ACCESS_TOKEN_DURATION,
+} from '@/common/utils/Constants';
 import Browser from '@/common/utils/Browser';
 import Vue from 'vue';
 import { Mutation } from 'vuex';
@@ -83,11 +87,14 @@ export default as<
 
   // Login
   [types.login](state, loginPayload: Api.LoginResponse) {
+    const now = Date.now();
+
     state.token = loginPayload.authToken;
-    state.tokenExpiresAt = Date.now() + 43200000; // 12 hours
+    state.tokenExpiresAt = now + ACCESS_TOKEN_DURATION;
     state.refreshToken = loginPayload.refreshToken;
-    state.refreshTokenExpiresAt = Date.now() + 604800000; // 7 days
+    state.refreshTokenExpiresAt = now + REFRESH_TOKEN_DURATION;
     state.account = loginPayload.account;
+
     loginRequestState(state, RequestState.SUCCESS);
     persistAccount(state);
   },

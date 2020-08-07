@@ -25,7 +25,7 @@ declare interface MessagePayload extends Implements<MessageTypeMap<any>, Message
 
 declare interface MessageResponse extends Implements<MessageTypeMap<any>, MessageResponse> {
   loginManual: Api.LoginResponse;
-  loginRefresh: Api.LoginResponse;
+  loginRefresh: Api.LoginRefreshResponse;
 
   updatePreferences: void;
 

@@ -1,5 +1,3 @@
-import { as } from './GlobalUtils';
-
 export const persistedKeys = [
   'token' as const,
   'tokenExpiresAt' as const,
@@ -11,6 +9,12 @@ export const persistedKeys = [
 ];
 
 export const FRAME = 1 / 12;
+export const SECONDS = 1000;
+export const MINUTES = 60 * SECONDS;
+export const HOURS = 60 * MINUTES;
+export const DAYS = 24 * HOURS;
+export const ACCESS_TOKEN_DURATION = 12 * HOURS;
+export const REFRESH_TOKEN_DURATION = 7 * DAYS;
 
 export const ACCEPTED_KEYS: { [keyCode: number]: string } = {
   13: 'ENTER',
