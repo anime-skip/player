@@ -1,12 +1,7 @@
 <template>
   <div class="wrapper">
-    <div class="EditTimestampHandle" v-ripple>
-      <WebExtImg
-        class="add"
-        src="ic_add_timestamp.svg"
-        :draggable="false"
-        @click.native="onClick"
-      />
+    <div class="EditTimestampHandle" v-ripple @click="onClick">
+      <WebExtImg class="add" src="ic_add_timestamp.svg" :draggable="false" />
     </div>
   </div>
 </template>
