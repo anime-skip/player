@@ -70,25 +70,18 @@ $duration: 1.4s;
     stroke-dasharray: $offset;
     stroke-dashoffset: 0;
     transform-origin: center;
-    animation: dash $duration ease-in-out infinite,
-      colors ($duration * 4) ease-in-out infinite;
+    animation: dash $duration ease-in-out infinite, colors ($duration * 4) ease-in-out infinite;
   }
 
   @keyframes colors {
     0% {
-      stroke: #4285f4;
-    }
-    25% {
-      stroke: #de3e35;
+      stroke: #2b78e0;
     }
     50% {
-      stroke: #f7c223;
-    }
-    75% {
-      stroke: #1b9a59;
+      stroke: #673ab7;
     }
     100% {
-      stroke: #4285f4;
+      stroke: #2b78e0;
     }
   }
 
