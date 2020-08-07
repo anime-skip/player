@@ -11,6 +11,7 @@
     @mousemove.prevent="toggleActive(true)"
     @click="togglePlayPause()"
   >
+    <Loading v-if="playerState.isBuffering" class="buffer-loading-container" />
     <div class="left-content">
       <EpisodeInfo />
     </div>
@@ -21,7 +22,6 @@
     <EditTimestampPanel />
     <AccountDialog />
     <EpisodeEditorDialog />
-    <Loading v-if="playerState.isBuffering" class="buffer-loading-container" />
   </div>
 </template>
 
@@ -180,6 +180,7 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
 
   .left-content {
     opacity: 0;
+    pointer-events: none;
     grid-area: left-content;
     transition: 200ms;
     transition-property: opacity;
@@ -190,6 +191,7 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
   &.paused {
     .left-content {
       opacity: 1;
+      pointer-events: unset;
     }
   }
 
