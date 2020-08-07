@@ -33,6 +33,12 @@
       "css": ["player/index.css", "content-scripts/example/index.css"]
     },
     {
+      "matches": ["file:///*/example/index.html"],
+      "js": ["content-scripts/keyboard-blocker.js"],
+      "run_at": "document_start"
+    },
+
+    {
       "matches": ["https://static.vrv.co/*"],
       "js": ["content-scripts/all.js", "content-scripts/vrv/index.js", "player/index.js"],
       "css": ["player/index.css", "content-scripts/vrv/index.css"],
