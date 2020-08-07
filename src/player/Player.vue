@@ -21,7 +21,7 @@
     <EditTimestampPanel />
     <AccountDialog />
     <EpisodeEditorDialog />
-    <Loading v-if="buffering" class="buffer-loading-container" />
+    <Loading v-if="playerState.isBuffering" class="buffer-loading-container" />
   </div>
 </template>
 
@@ -62,7 +62,6 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
   };
   public activeTimer?: any;
   public activeTimeout: number = 2000;
-  public buffering = false;
 
   @Getter() playbackRate!: number;
   @Getter() isEditing!: boolean;
@@ -93,13 +92,14 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
       this.changePlaybackRate(this.playbackRate);
       video.onplay = () => this.onPlay();
       video.onpause = () => this.onPause();
+      this.playerState.isPaused = video.paused;
 
       // Managing the buffer
       video.onplaying = () => {
-        this.buffering = false;
+        this.playerState.isBuffering = false;
       };
       video.onwaiting = () => {
-        this.buffering = true;
+        this.playerState.isBuffering = true;
       };
     });
 
