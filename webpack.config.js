@@ -24,6 +24,7 @@ const config = {
     'content-scripts/example/index': './content-scripts/example/index.ts',
     'content-scripts/vrv/index': './content-scripts/vrv/index.ts',
     'content-scripts/all': './content-scripts/all.ts',
+    'content-scripts/keyboard-blocker': './content-scripts/keyboard-blocker.ts',
   },
   output: {
     path: __dirname + '/dist',
@@ -110,7 +111,6 @@ const config = {
       { from: 'assets', to: 'assets', ignore: ['icon.xcf'] },
       { from: 'popup/index.html', to: 'popup/index.html', transform: transformHtml },
       { from: 'options/index.html', to: 'options/index.html', transform: transformHtml },
-      { from: '.web-extension-id' },
       {
         from: 'manifest.json',
         to: 'manifest.json',
