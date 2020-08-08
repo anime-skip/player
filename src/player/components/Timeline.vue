@@ -63,7 +63,7 @@ import WebExtImg from '@/common/components/WebExtImg.vue';
 import VueSlider from 'vue-slider-component';
 import '../scss/VideoSlider.scss';
 import Utils from '@/common/utils/Utils';
-import { Getter } from '@/common/utils/VuexDecorators';
+import { Getter, Mutation } from '@/common/utils/VuexDecorators';
 import EditTimestampHandle from '@/player/components/EditTimestampHandle.vue';
 
 interface SectionData {
@@ -86,7 +86,6 @@ export default class Timeline extends Vue {
   public completedSections: SectionData[] = [];
   public isSeeking: boolean = false;
   public seekingTime: number = 0;
-  public skippedFromZero: boolean = false;
   public service = global.service;
 
   @Getter() isEditing!: boolean;
@@ -94,6 +93,9 @@ export default class Timeline extends Vue {
   @Getter() draftTimestamps!: Api.Timestamp[];
   @Getter('preferences') prefs?: Api.Preferences;
   @Getter() preferencesLastUpdatedAt!: number;
+  @Getter() hasSkippedFromZero!: boolean;
+
+  @Mutation() setHasSkippedFromZero!: (newValue: boolean) => void;
 
   public get normalizedTime(): number {
     return Math.max(0, Math.min(100, (this.currentTime / this.duration) * 100));
@@ -125,10 +127,10 @@ export default class Timeline extends Vue {
 
     // Skip timestamp at 0:00 if we haven't yet
     const wasAtBeginning = oldTime === 0;
-    const haveNotSkippedFromBeginning = !this.skippedFromZero;
+    const haveNotSkippedFromBeginning = !this.hasSkippedFromZero;
     const shouldSkipFirstTimestamp = Utils.isSkipped(this.timestamps[0], this.prefs);
     if (wasAtBeginning && haveNotSkippedFromBeginning && shouldSkipFirstTimestamp) {
-      this.skippedFromZero = true;
+      this.setHasSkippedFromZero(true);
       this.goToNextTimestampOnTimeChange(newTime);
       return;
     }

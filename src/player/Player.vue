@@ -70,6 +70,7 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
   @Mutation() public restoreState!: (payload: { changes: any; callback?: () => void }) => void;
   @Mutation() public changePlaybackRate!: (playbackRate: number) => void;
   @Mutation() public setTabUrl!: (url: string) => void;
+  @Mutation() public setHasSkippedFromZero!: (newValue: boolean) => void;
 
   @Action() public fetchEpisodeByUrl!: (url: string) => void;
 
@@ -114,6 +115,7 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
 
     console.log('Change URL: ' + url);
     this.setTabUrl(url);
+    this.setHasSkippedFromZero(false);
   }
 
   @Watch('tabUrl')
