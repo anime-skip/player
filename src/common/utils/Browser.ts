@@ -104,4 +104,45 @@ export default class Browser {
   public static getIframeReferrer(): string {
     return window.location != window.parent.location ? document.referrer : document.location.href;
   }
+
+  // prettier-ignore
+  /**
+   * https://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser
+   */
+  public static detect(): BrowserType {
+    // Opera 8.0+
+    // @ts-ignore
+    if ((!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0)
+      return "opera";
+
+    // Firefox 1.0+
+    // @ts-ignore
+    if (typeof InstallTrigger !== 'undefined')
+      return "firefox";
+
+    // Safari 3.0+ "[object HTMLElementConstructor]" 
+    // @ts-ignore
+    if (/constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification)))
+      return "safari";
+
+    // Internet Explorer 6-11
+    // @ts-ignore
+    var isIe = /*@cc_on!@*/false || !!document.documentMode;
+    // Edge 20+
+    if (!isIe && !!window.StyleMedia)
+      return "edge";
+    if (isIe)
+      return "ie";
+
+    // Chrome 1 - 79
+    // @ts-ignore
+    var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+    // Edge (based on chromium) detection
+    if (isChrome && (navigator.userAgent.indexOf("Edg") != -1))
+      return "edgechromium";
+    if (isChrome)
+      return "chrome";
+
+    return "unsupported"
+  }
 }
