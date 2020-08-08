@@ -3,6 +3,7 @@
     class="ToolBar"
     :class="{
       vrv: service === 'vrv',
+      chrome: browserType === 'chrome',
       active: isActive,
       paused: playerState.isPaused,
     }"
@@ -124,6 +125,7 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   @Getter() public isEditing!: boolean;
   @Getter() public episodeUrl!: boolean;
   @Getter() public isLoggedIn?: boolean;
+  @Getter() public browserType!: BrowserType;
 
   @Action() public startEditing!: () => void;
   @Action() public stopEditing!: (discard: boolean) => void;
@@ -291,6 +293,7 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
 $offsetInactiveDefault: 6px;
 $offsetActiveDefault: 0px;
 $offsetInactiveVrv: 6px;
+$offsetInactiveVrvChrome: 13px;
 $offsetActiveVrv: 0px;
 
 .ToolBar {
@@ -375,6 +378,10 @@ $offsetActiveVrv: 0px;
 // VRV specific styles
 .ToolBar.vrv {
   transform: translateY($toolbarHeight - $offsetInactiveVrv);
+
+  &.chrome {
+    transform: translateY($toolbarHeight - $offsetInactiveVrvChrome);
+  }
 
   &.active,
   &.paused {
