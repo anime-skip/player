@@ -298,6 +298,20 @@ export default class EditTimestampPanel extends Mixins(
       padding: 0;
       margin: 0;
       padding-top: 8px;
+      scrollbar-width: thin;
+      scrollbar-color: $divider #00000000;
+
+      &::-webkit-scrollbar {
+        width: 8px;
+        padding: 1px;
+      }
+      &::-webkit-scrollbar-track {
+        background-color: transparent;
+      }
+      &::-webkit-scrollbar-thumb {
+        background-color: #484848;
+        border-radius: 5px;
+      }
 
       li {
         display: flex;
