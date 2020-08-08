@@ -37,10 +37,19 @@ import { PLAYBACK_SPEEDS } from '../../common/utils/Constants';
   components: { WebExtImg },
 })
 export default class PlaybackRatePicker extends Vue {
-  public customRate = '';
   @Prop(Boolean) public showLess?: string;
+
+  public customRate = '';
+
   @Getter() public playbackRate!: number;
+
   @Mutation() public changePlaybackRate!: (speed: number) => void;
+
+  public mounted() {
+    if (!this.isConstantSelected()) {
+      this.customRate = String(this.playbackRate);
+    }
+  }
 
   public data() {
     return {
