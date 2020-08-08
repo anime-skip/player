@@ -78,7 +78,8 @@ mv "$OUTPUT_NAME/anime_skip-$PACKAGE_VERSION-an+fx.xpi" "$OUTPUT_NAME/firefox.xp
 # TODO - Edge & Opera
 
 # DEPLOY ###############################
-run "Create and push V$PACKAGE_JSON_VERSION tag" "git tag 'v$PACKAGE_VERSION' & git push --tags"
+title "Deploying"
+run "Create and push v$PACKAGE_VERSION tag" "git tag 'v$PACKAGE_VERSION' & git push --tags &> /dev/null"
 # TODO
 
 # CLEANUP ##############################
