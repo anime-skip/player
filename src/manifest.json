@@ -14,15 +14,6 @@
     "default_title": "Anime Skip",
     "default_popup": "popup/index.html"
   },
-  "page_action": {
-    "default_popup": "popup/index.html",
-    "default_icon": {
-      "16": "assets/extension-logo/16.png",
-      "32": "assets/extension-logo/32.png",
-      "48": "assets/extension-logo/48.png",
-      "128": "assets/extension-logo/128.png"
-    }
-  },
   "options_ui": {
     "page": "options/index.html"
   },
@@ -34,7 +25,7 @@
     },
     {
       "matches": ["file:///*/example/index.html"],
-      "js": ["content-scripts/all.js", "content-scripts/example/index.js", "player/index.js"],
+      "js": ["browser-polyfill.js", "content-scripts/all.js", "content-scripts/example/index.js", "player/index.js"],
       "css": ["player/index.css", "content-scripts/example/index.css"]
     },
 
@@ -46,13 +37,13 @@
     },
     {
       "matches": ["https://static.vrv.co/*"],
-      "js": ["content-scripts/all.js", "content-scripts/vrv/index.js", "player/index.js"],
+      "js": ["browser-polyfill.js", "content-scripts/all.js", "content-scripts/vrv/index.js", "player/index.js"],
       "css": ["player/index.css", "content-scripts/vrv/index.css"],
       "all_frames": true
     }
   ],
   "background": {
-    "scripts": ["background/index.js"]
+    "scripts": ["browser-polyfill.js", "background/index.js"]
   },
   "icons": {
     "16": "assets/extension-logo/16.png",
