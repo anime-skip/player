@@ -79,7 +79,7 @@ mv "$OUTPUT_NAME/anime_skip-$PACKAGE_VERSION-an+fx.xpi" "$OUTPUT_NAME/firefox.xp
 
 # DEPLOY ###############################
 title "Deploying"
-run "Create and push v$PACKAGE_VERSION tag" "git tag 'v$PACKAGE_VERSION' & git push --tags &> /dev/null"
+run "Create and push ${CODE}v$PACKAGE_VERSION${RESET} tag" "git tag 'v$PACKAGE_VERSION' & git push --tags &> /dev/null"
 # TODO
 
 # CLEANUP ##############################
