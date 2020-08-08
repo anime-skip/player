@@ -4,6 +4,8 @@ declare interface VuexState {
   isEditing: boolean;
   selectedTimestamp?: Api.AmbigousTimestamp;
   tabUrl: string;
+  browserType: BrowserType;
+  hasSkippedFromZero: boolean;
 
   token?: string;
   tokenExpiresAt?: number;
