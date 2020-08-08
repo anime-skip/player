@@ -292,8 +292,7 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
 <style lang="scss" scoped>
 $offsetInactiveDefault: 6px;
 $offsetActiveDefault: 0px;
-$offsetInactiveVrv: 6px;
-$offsetInactiveVrvChrome: 13px;
+$offsetInactiveVrv: 13px;
 $offsetActiveVrv: 0px;
 
 .ToolBar {
@@ -378,10 +377,6 @@ $offsetActiveVrv: 0px;
 // VRV specific styles
 .ToolBar.vrv {
   transform: translateY($toolbarHeight - $offsetInactiveVrv);
-
-  &.chrome {
-    transform: translateY($toolbarHeight - $offsetInactiveVrvChrome);
-  }
 
   &.active,
   &.paused {
