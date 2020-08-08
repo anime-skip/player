@@ -108,6 +108,7 @@ const config = {
       filename: '[name].css',
     }),
     new CopyPlugin([
+      { from: '../node_modules/webextension-polyfill/dist/browser-polyfill.js' },
       { from: 'assets', to: 'assets', ignore: ['icon.xcf'] },
       { from: 'popup/index.html', to: 'popup/index.html', transform: transformHtml },
       { from: 'options/index.html', to: 'options/index.html', transform: transformHtml },

@@ -27,3 +27,9 @@ export default class Popup extends Vue {
   @Getter() public isLoggingIn?: boolean;
 }
 </script>
+
+<style lang="scss" scoped>
+.Popup {
+  min-width: 250px;
+}
+</style>

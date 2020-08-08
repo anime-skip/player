@@ -23,8 +23,8 @@ import { Mutation, Getter, Action } from '@/common/utils/VuexDecorators';
 @Component
 export default class BasicDialog extends Vue {
   @Prop(String) public name!: string;
-  @Prop({ type: String, default: 'center' }) public gravityX!: 'center' | 'start' | 'end';
-  @Prop({ type: String, default: 'center' }) public gravityY!: 'center' | 'start' | 'end';
+  @Prop({ type: String, default: 'center' }) public gravityX!: 'center' | 'flex-start' | 'flex-end';
+  @Prop({ type: String, default: 'center' }) public gravityY!: 'center' | 'flex-start' | 'flex-end';
 
   @Getter() activeDialog?: string;
 
@@ -96,6 +96,18 @@ export default class BasicDialog extends Vue {
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: $divider #00000000;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+      padding: 1px;
+    }
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: #484848;
+      border-radius: 5px;
+    }
   }
 }
 </style>

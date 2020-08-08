@@ -1,7 +1,7 @@
 <template>
   <BasicDialog
     name="EditTimestampPanel"
-    gravityX="end"
+    gravityX="flex-end"
     gravityY="center"
     @hide="onHide"
     @show="reset()"

@@ -1,5 +1,5 @@
 <template>
-  <BasicDialog name="AccountDialog" gravityX="end" gravityY="end">
+  <BasicDialog name="AccountDialog" gravityX="flex-end" gravityY="flex-end">
     <Popup small />
   </BasicDialog>
 </template>
