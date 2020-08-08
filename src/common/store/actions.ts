@@ -215,6 +215,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     } catch (err) {
       console.error('actions.fetchEpisodeByUrl', err);
       commit(mutationTypes.episodeRequestState, RequestState.FAILURE);
+      commit(mutationTypes.setEpisodeInfo, undefined);
     }
   },
 
