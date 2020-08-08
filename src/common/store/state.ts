@@ -6,6 +6,8 @@ export const initialState: VuexState = {
   playbackRate: 1,
   isEditing: false,
   tabUrl: Browser.getIframeReferrer(),
+  browserType: Browser.detect(),
+  hasSkippedFromZero: false,
 
   token: undefined,
   tokenExpiresAt: undefined,

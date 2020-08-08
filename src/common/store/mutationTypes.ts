@@ -1,8 +1,9 @@
 export default {
-  activeDialog: '@@general/activeDialog',
-  changePlaybackRate: '@@general/changePlaybackRate',
-  toggleEditMode: '@@general/toggleEditMode',
-  setTabUrl: '@@general/setTabUrl',
+  activeDialog: '@@general/activeDialog' as const,
+  changePlaybackRate: '@@general/changePlaybackRate' as const,
+  toggleEditMode: '@@general/toggleEditMode' as const,
+  setTabUrl: '@@general/setTabUrl' as const,
+  setHasSkippedFromZero: '@@general/setHasSkippedFromZero' as const,
 
   restoreState: '@@storage/restoreState' as const,
   persistPreferences: '@@storage/persistPreferences' as const,

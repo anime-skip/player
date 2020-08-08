@@ -70,6 +70,7 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
   @Mutation() public restoreState!: (payload: { changes: any; callback?: () => void }) => void;
   @Mutation() public changePlaybackRate!: (playbackRate: number) => void;
   @Mutation() public setTabUrl!: (url: string) => void;
+  @Mutation() public setHasSkippedFromZero!: (newValue: boolean) => void;
 
   @Action() public fetchEpisodeByUrl!: (url: string) => void;
 
@@ -114,6 +115,7 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
 
     console.log('Change URL: ' + url);
     this.setTabUrl(url);
+    this.setHasSkippedFromZero(false);
   }
 
   @Watch('tabUrl')
@@ -173,7 +175,24 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
     -moz-osx-font-smoothing: grayscale;
   }
 
+  .buffer-loading-container {
+    position: absolute;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba($color: $background500, $alpha: 0.5);
+
+    * {
+      background-color: transparent;
+    }
+  }
+
   .left-content {
+    z-index: 1;
     opacity: 0;
     pointer-events: none;
     grid-area: left-content;
@@ -191,27 +210,13 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
   }
 
   .right-content {
+    z-index: 1;
     grid-area: right-content;
   }
 
   .bottom-content {
+    z-index: 1;
     grid-area: toolbar;
-  }
-
-  .buffer-loading-container {
-    position: absolute;
-    z-index: 0;
-    display: flex;
-    flex-direction: column;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    background-color: rgba($color: $background500, $alpha: 0.5);
-
-    * {
-      background-color: transparent;
-    }
   }
 }
 </style>

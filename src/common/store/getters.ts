@@ -19,6 +19,12 @@ export default as<GetterTree<VuexState, VuexState>>({
   tabUrl({ tabUrl }): string {
     return tabUrl;
   },
+  browserType({ browserType }) {
+    return browserType;
+  },
+  hasSkippedFromZero({ hasSkippedFromZero }) {
+    return hasSkippedFromZero;
+  },
 
   // Login
   isLoggingIn({ loginRequestState }): boolean {

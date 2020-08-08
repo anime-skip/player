@@ -13,12 +13,11 @@ export default class Messenger {
     type: T,
     payload: MessagePayload[T]
   ): Promise<MessageResponse[T]> => {
-    // @ts-ignore
     const response = await browser.runtime.sendMessage({
       type,
       payload,
     });
-    if (response.errorMessage != null) {
+    if (response?.errorMessage != null) {
       throw Error(response.errorMessage);
     }
     return response;

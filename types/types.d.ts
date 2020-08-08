@@ -60,3 +60,13 @@ interface CreateEpisodeDataPayload {
         data: Api.InputEpisodeUrl;
       };
 }
+
+type BrowserType =
+  | 'chrome'
+  | 'firefox'
+  | 'safari'
+  | 'opera'
+  | 'ie'
+  | 'edge'
+  | 'edgechromium'
+  | 'unsupported';

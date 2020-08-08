@@ -56,6 +56,10 @@ export default as<
   [types.setTabUrl](state, tabUrl) {
     state.tabUrl = tabUrl;
   },
+  [types.setHasSkippedFromZero](state, hasSkippedFromZero) {
+    console.info('setHasSkippedFromZero', hasSkippedFromZero);
+    state.hasSkippedFromZero = hasSkippedFromZero;
+  },
 
   // Storage
   [types.restoreState](
