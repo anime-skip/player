@@ -291,7 +291,7 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
 $offsetInactiveDefault: 6px;
 $offsetActiveDefault: 0px;
 $offsetInactiveVrv: 6px;
-$offsetActiveVrv: 3px;
+$offsetActiveVrv: 0px;
 
 .ToolBar {
   position: relative;
