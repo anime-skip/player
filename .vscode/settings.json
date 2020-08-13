@@ -9,5 +9,9 @@
     "editor.formatOnSave": true,
     "editor.formatOnPaste": false
   },
-  "editor.rulers": [100]
+  "editor.rulers": [100],
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": false,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true
 }
