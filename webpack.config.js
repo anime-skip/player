@@ -25,7 +25,7 @@ const config = {
     'content-scripts/vrv/index': './content-scripts/vrv/index.ts',
     'content-scripts/all': './content-scripts/all.ts',
     'content-scripts/keyboard-blocker': './content-scripts/keyboard-blocker.ts',
-    'content-scripts/anime-skip': './content-scripts/anime-skip/index.ts',
+    'content-scripts/anime-skip/index': './content-scripts/anime-skip/index.ts',
   },
   output: {
     path: __dirname + '/dist',
