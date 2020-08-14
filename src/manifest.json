@@ -23,9 +23,20 @@
       "js": ["content-scripts/keyboard-blocker.js"],
       "run_at": "document_start"
     },
+
+    {
+      "matches": ["http://localhost:8080/get-started*", "https://*anime-skip.com/get-started*"],
+      "js": ["browser-polyfill.js", "content-scripts/anime-skip.js"]
+    },
+
     {
       "matches": ["file:///*/example/index.html"],
-      "js": ["browser-polyfill.js", "content-scripts/all.js", "content-scripts/example/index.js", "player/index.js"],
+      "js": [
+        "browser-polyfill.js",
+        "content-scripts/all.js",
+        "content-scripts/example/index.js",
+        "player/index.js"
+      ],
       "css": ["player/index.css", "content-scripts/example/index.css"]
     },
 
@@ -35,9 +46,15 @@
       "run_at": "document_start",
       "all_frames": true
     },
+
     {
       "matches": ["https://static.vrv.co/*"],
-      "js": ["browser-polyfill.js", "content-scripts/all.js", "content-scripts/vrv/index.js", "player/index.js"],
+      "js": [
+        "browser-polyfill.js",
+        "content-scripts/all.js",
+        "content-scripts/vrv/index.js",
+        "player/index.js"
+      ],
       "css": ["player/index.css", "content-scripts/vrv/index.css"],
       "all_frames": true
     }
