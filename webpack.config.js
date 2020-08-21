@@ -23,6 +23,7 @@ const config = {
     'player/index': './player/index.ts',
     'content-scripts/example/index': './content-scripts/example/index.ts',
     'content-scripts/vrv/index': './content-scripts/vrv/index.ts',
+    'content-scripts/funimation/index': './content-scripts/funimation/index.ts',
     'content-scripts/all': './content-scripts/all.ts',
     'content-scripts/keyboard-blocker': './content-scripts/keyboard-blocker.ts',
     'content-scripts/anime-skip/index': './content-scripts/anime-skip/index.ts',
