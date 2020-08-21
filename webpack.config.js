@@ -116,16 +116,15 @@ const config = {
       {
         from: 'manifest.json',
         to: 'manifest.json',
-        transform: content => {
-          const jsonContent = JSON.parse(content);
-          jsonContent.version = version;
+        transform: _ => {
+          const content = require('./src/manifest');
 
           if (config.mode === 'development') {
-            jsonContent['content_security_policy'] =
+            content['content_security_policy'] =
               "script-src 'self' 'unsafe-eval'; object-src 'self'";
           }
 
-          return JSON.stringify(jsonContent, null, 2);
+          return JSON.stringify(content, null, 2);
         },
       },
     ]),
