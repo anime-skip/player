@@ -39,6 +39,9 @@ services.forEach(service => {
     css: ['player/index.css', `content-scripts/${service.folder}/index.css`],
     all_frames: true,
   });
+
+  // Add urls to the page_action
+  manifest.page_action.show_matches.push(...service.matches);
 });
 
 module.exports = manifest;
