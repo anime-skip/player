@@ -244,6 +244,7 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   keyboardShortcuts: { [combination: string]: () => void } = {
     // General Controls
     'D': () => this.togglePlayPause(),
+    'SPACE': () => this.togglePlayPause(),
     'ESC': this.showDialog,
     // Advance Time
     'L': () => {
