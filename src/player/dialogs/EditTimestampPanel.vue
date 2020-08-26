@@ -6,7 +6,7 @@
     @hide="onHide"
     @show="reset()"
   >
-    <div class="top-container">
+    <div class="top-container scroll">
       <h2 class="section-header">{{ title }}</h2>
       <div class="clickable down button dark time-selector">
         <WebExtImg class="icon" src="ic_clock.svg" :draggable="false" />
@@ -241,6 +241,14 @@ export default class EditTimestampPanel extends Mixins(
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
 
+    @media screen and(max-height: 600px) {
+      min-height: unset;
+      height: 100%;
+      max-height: unset;
+      margin-bottom: 60px;
+      border-top-left-radius: 0px;
+    }
+
     & > * {
       padding: 14px 16px;
     }
@@ -260,7 +268,7 @@ export default class EditTimestampPanel extends Mixins(
       display: flex;
       flex-direction: row;
       align-items: center;
-      height: 40px;
+      min-height: 40px;
       padding: 0px;
       align-self: flex-start;
       cursor: not-allowed;
@@ -294,24 +302,9 @@ export default class EditTimestampPanel extends Mixins(
       flex-basis: 0;
       display: flex;
       flex-direction: column;
-      overflow-y: auto;
       padding: 0;
       margin: 0;
       padding-top: 8px;
-      scrollbar-width: thin;
-      scrollbar-color: $divider #00000000;
-
-      &::-webkit-scrollbar {
-        width: 8px;
-        padding: 1px;
-      }
-      &::-webkit-scrollbar-track {
-        background-color: transparent;
-      }
-      &::-webkit-scrollbar-thumb {
-        background-color: #484848;
-        border-radius: 5px;
-      }
 
       li {
         display: flex;
@@ -335,6 +328,26 @@ export default class EditTimestampPanel extends Mixins(
           font-size: 15px;
         }
       }
+    }
+  }
+
+  .scroll {
+    flex-shrink: 1;
+    flex-basis: 0;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: $divider #00000000;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+      padding: 1px;
+    }
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: #484848;
+      border-radius: 5px;
     }
   }
 
