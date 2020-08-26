@@ -7,6 +7,7 @@ const { VueLoaderPlugin } = require('vue-loader');
 const { version } = require('./package.json');
 const WebpackShellPluginNext = require('webpack-shell-plugin-next');
 const path = require('path');
+const { services } = require('./src/manifest');
 
 const example = path.resolve(__dirname, 'example', 'index.html');
 
@@ -21,12 +22,17 @@ const config = {
     'options/index': './options/index.ts',
 
     'player/index': './player/index.ts',
-    'content-scripts/example/index': './content-scripts/example/index.ts',
-    'content-scripts/vrv/index': './content-scripts/vrv/index.ts',
-    'content-scripts/funimation/index': './content-scripts/funimation/index.ts',
     'content-scripts/all': './content-scripts/all.ts',
     'content-scripts/keyboard-blocker': './content-scripts/keyboard-blocker.ts',
     'content-scripts/anime-skip/index': './content-scripts/anime-skip/index.ts',
+
+    ...services.reduce(
+      (map, service) => ({
+        ...map,
+        [`content-scripts/${service.folder}/index`]: `./content-scripts/${service.folder}/index.ts`,
+      }),
+      {}
+    ),
   },
   output: {
     path: __dirname + '/dist',
@@ -118,14 +124,14 @@ const config = {
         from: 'manifest.json',
         to: 'manifest.json',
         transform: _ => {
-          const content = require('./src/manifest');
+          const { manifest } = require('./src/manifest');
 
           if (config.mode === 'development') {
-            content['content_security_policy'] =
+            manifest['manifest_security_policy'] =
               "script-src 'self' 'unsafe-eval'; object-src 'self'";
           }
 
-          return JSON.stringify(content, null, 2);
+          return JSON.stringify(manifest, null, 2);
         },
       },
     ]),

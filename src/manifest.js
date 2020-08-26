@@ -47,4 +47,7 @@ services.forEach(service => {
   manifest.page_action.show_matches.push(...service.page_matches);
 });
 
-module.exports = manifest;
+module.exports = {
+  manifest,
+  services,
+};
