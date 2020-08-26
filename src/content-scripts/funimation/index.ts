@@ -5,10 +5,10 @@ console.log('INJECTED content-scripts/funimation/index.ts');
 
 global.service = 'funimation';
 global.getRootQuery = (): string => {
-  return 'body>div';
+  return 'body #funimation-player';
 };
 global.getVideoQuery = (): string => {
-  return 'video';
+  return '#brightcove-player > video';
 };
 
 document.body.classList.add('hide-for-anime-skip');

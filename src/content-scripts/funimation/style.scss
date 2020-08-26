@@ -1,3 +1,9 @@
-.hide-for-anime-skip * {
-  display: none !important;
+.hide-for-anime-skip {
+  .vjs-poster,
+  .vjs-text-track-display,
+  #funimation-gradient,
+  .vjs-dock-shelf,
+  .vjs-dock-text {
+    display: none !important;
+  }
 }

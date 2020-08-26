@@ -3,7 +3,11 @@
   "description": "Skip intros, credits, filler and more on supported services",
   "manifest_version": 2,
   "permissions": ["storage", "tabs"],
-  "browser_action": {
+  "page_action": {
+    "show_matches": [
+      "https://www.anime-skip.com/get-started*",
+      "https://anime-skip.com/get-started*"
+    ],
     "browser_style": true,
     "default_icon": {
       "16": "assets/extension-logo/16.png",

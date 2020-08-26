@@ -7,14 +7,17 @@ const services = [
   {
     folder: 'example',
     matches: ['file:///*/example/index.html'],
+    page_matches: ['file:///*/example/index.html'],
   },
   {
     folder: 'vrv',
     matches: ['https://static.vrv.co/*'],
+    page_matches: ['https://vrv.co/*'],
   },
   {
     folder: 'funimation',
-    matches: ['https://www.funimation.com/*'],
+    matches: ['https://www.funimation.com/player/*'],
+    page_matches: ['https://www.funimation.com/*'],
   },
 ];
 
@@ -39,6 +42,12 @@ services.forEach(service => {
     css: ['player/index.css', `content-scripts/${service.folder}/index.css`],
     all_frames: true,
   });
+
+  // Add urls to the page_action
+  manifest.page_action.show_matches.push(...service.page_matches);
 });
 
-module.exports = manifest;
+module.exports = {
+  manifest,
+  services,
+};
