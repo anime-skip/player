@@ -64,22 +64,22 @@ run "mkdir ${CODE}$OUTPUT_NAME" "mkdir -p '$OUTPUT_NAME'"
 # PREPACKAGE ###########################
 title "Pre-package"
 run "Install dependencies" "yarn install"
-run "Build ${CODE}dist/"   "yarn build"
+run "Build ${CODE}dist/"   "PACKAGING=true yarn build"
 run "Verify manifest"      "yarn web-ext --config=.web-ext.config.js lint"
 
 # PACKAGE ##############################
 title "Packaging Artifacts"
+run "Create ${CODE}extension.zip" "yarn web-ext --config=.web-ext.config.js build -a '$OUTPUT_NAME' -n 'extension.zip'"
 # Chrome
 run "Create ${CODE}chrome.zip" "zip -r '$OUTPUT_NAME/chrome.zip' dist/*"
 # Firefox
-run "Create ${CODE}firefox.zip" "yarn web-ext --config=.web-ext.config.js build -a '$OUTPUT_NAME' -n 'firefox.zip'"
 run "Signing ${CODE}firefox.xpi" "yarn web-ext --config=.web-ext.config.js sign -a '$OUTPUT_NAME' -n 'firefox.xpi' --api-key '$FIREFOX_SIGNING_ISSUER' --api-secret '$FIREFOX_SIGNING_SECRET' --id='$FIREFOX_SIGNING_ID'"
 mv "$OUTPUT_NAME/anime_skip-$PACKAGE_VERSION-an+fx.xpi" "$OUTPUT_NAME/firefox.xpi"
 # TODO - Edge & Opera
 
 # DEPLOY ###############################
 title "Deploying"
-run "Create and push ${CODE}v$PACKAGE_VERSION${RESET} tag" "git tag 'v$PACKAGE_VERSION' & git push --tags &> /dev/null"
+run "Create and push ${CODE}v$PACKAGE_VERSION${RESET} tag" "git tag 'v$PACKAGE_VERSION' && git push --tags &> /dev/null"
 # TODO
 
 # CLEANUP ##############################
