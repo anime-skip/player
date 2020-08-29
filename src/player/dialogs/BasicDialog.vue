@@ -1,7 +1,7 @@
 <template>
   <transition name="dialog">
     <div
-      v-if="isVisible"
+      v-if="name === activeDialog"
       class="BasicDialog"
       :id="name"
       :style="`align-items: ${gravityX}`"
@@ -22,7 +22,7 @@ import { Mutation, Getter, Action } from '@/common/utils/VuexDecorators';
 
 @Component
 export default class BasicDialog extends Vue {
-  @Prop(String) public name!: string;
+  @Prop({ type: String, required: true }) public name!: string;
   @Prop({ type: String, default: 'center' }) public gravityX!: 'center' | 'flex-start' | 'flex-end';
   @Prop({ type: String, default: 'center' }) public gravityY!: 'center' | 'flex-start' | 'flex-end';
 
@@ -30,13 +30,16 @@ export default class BasicDialog extends Vue {
 
   @Action('showDialog') hideDialog!: () => void;
 
-  public get isVisible(): boolean {
-    return this.name === this.activeDialog;
-  }
+  @Watch('activeDialog')
+  public onChangeActiveDialog(currentDialog: string, prevDialog: string) {
+    console.log('[BasicDialog] onChangeActiveDialog', { currentDialog, prevDialog });
+    if (currentDialog === prevDialog) return;
 
-  @Watch('isVisible')
-  public onChangeIsVisible(isVisible: boolean) {
-    this.$emit(isVisible ? 'show' : 'hide');
+    if (this.name === currentDialog && this.name !== prevDialog) {
+      this.$emit('show');
+    } else if (this.name === prevDialog && this.name !== currentDialog) {
+      this.$emit('hide');
+    }
   }
 
   public dismiss(): void {
