@@ -23,6 +23,8 @@
         label="Filter..."
         v-model="typeFilter"
         @submit="onClickSave()"
+        @keydown.native.up.stop.prevent="onPressUp"
+        @keydown.native.down.stop.prevent="onPressDown"
       />
       <ul class="type-list">
         <li v-for="t of matchingTypes" :key="t.id" v-ripple @click="selectType(t)">
@@ -220,6 +222,24 @@ export default class EditTimestampPanel extends Mixins(
   public onClickDelete() {
     this.deleteDraftTimestamp(this.activeTimestamp!);
     this.hideDialog();
+  }
+
+  public onPressUp() {
+    const types = this.matchingTypes;
+    if (types.length === 0) return;
+
+    const index = types.findIndex(type => type.id === this.selectedType?.id);
+    const newIndex = (types.length + index - 1) % types.length;
+    this.selectType(types[newIndex]);
+  }
+
+  public onPressDown() {
+    const types = this.matchingTypes;
+    if (types.length === 0) return;
+
+    const index = types.findIndex(type => type.id === this.selectedType?.id);
+    const newIndex = (index + 1) % types.length;
+    this.selectType(types[newIndex]);
   }
 }
 </script>
