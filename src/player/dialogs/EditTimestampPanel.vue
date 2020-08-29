@@ -116,7 +116,6 @@ export default class EditTimestampPanel extends Mixins(
     this.reset();
 
     const interval = setInterval(() => {
-      console.log('[EditTimestampPanel] onShow', this.$refs.timeSelect);
       if (this.$refs.timeSelect != null) {
         (this.$refs.timeSelect as any).focus();
         clearInterval(interval);

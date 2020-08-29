@@ -103,7 +103,6 @@ export default class EditEpisodeDialog extends Vue {
   }
 
   public onChangeSelectedEpisode(currentValue: any) {
-    console.log('[EditEpisodeDialog] onChangeSelectedEpisode');
     const episode = this.searchEpisodesResult.find(result => result.id === currentValue.id);
     this.editableSeasonNumber = String(episode?.season ?? '');
     this.editableEpisodeNumber = String(episode?.number ?? '');
@@ -119,7 +118,6 @@ export default class EditEpisodeDialog extends Vue {
           subtitle: this.episodeUrl.episode.show.originalName,
         };
       }
-      console.log('Episode', JSON.parse(JSON.stringify(this.episodeUrl)));
       this.selectedEpisodeOption = {
         id: this.episodeUrl.episode.id,
         title: this.episodeUrl.episode.name ?? '',

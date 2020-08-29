@@ -32,7 +32,6 @@ export default class BasicDialog extends Vue {
 
   @Watch('activeDialog')
   public onChangeActiveDialog(currentDialog: string, prevDialog: string) {
-    console.log('[BasicDialog] onChangeActiveDialog', { currentDialog, prevDialog });
     if (currentDialog === prevDialog) return;
 
     if (this.name === currentDialog && this.name !== prevDialog) {

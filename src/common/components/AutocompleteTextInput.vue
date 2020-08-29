@@ -83,17 +83,10 @@ export default class AutocompleteTextInput extends Vue {
       this.$emit('search', this.searchValue.trim());
     }
     this.highlightedIndex = -1;
-    console.log('[Autocomplete] mounted', {
-      searchValue: this.searchValue,
-      value: JSON.parse(JSON.stringify(this.value)),
-      options: this.options,
-    });
   }
 
   @Watch('searchValue')
   public onChangeSearchValue(): void {
-    console.log(`[Autocomplete] onChangeSearchValue(${this.searchValue})`);
-
     // Setup search timeout
     if (this.searchTimeout) {
       clearTimeout(this.searchTimeout);
@@ -123,7 +116,6 @@ export default class AutocompleteTextInput extends Vue {
   public onBlurInput() {
     this.isFocused = false;
     this.$emit('blur');
-    console.log('[AutocompleteTextInput] onBlurInput', this.searchValue, this.inputValue);
     setTimeout(() => {
       if (this.searchValue !== this.inputValue.title) {
         this.inputValue = {
@@ -134,14 +126,12 @@ export default class AutocompleteTextInput extends Vue {
   }
 
   public onClickOption(option: AutocompleteItem) {
-    console.log('[Autocomplete] onClickOption', option);
     this.inputValue = option;
     this.onPressEsc();
     this.$emit('select', option);
   }
 
   public onPressEsc() {
-    console.log('[Autocomplete] onPressEsc');
     this.wasEscPressed = true;
     (document.activeElement as any).blur();
   }
@@ -164,13 +154,11 @@ export default class AutocompleteTextInput extends Vue {
     return this.value;
   }
   public set inputValue(value: AutocompleteItem) {
-    console.log('[Autocomplete] set inputValue', value);
     this.searchValue = value.title;
     this.$emit('input', value);
   }
 
   public selectUp() {
-    console.log('[Autocomplete] selectUp');
     if (this.options.length === 0) {
       this.highlightedIndex = -1;
     } else {
@@ -181,7 +169,6 @@ export default class AutocompleteTextInput extends Vue {
   }
 
   public selectDown() {
-    console.log('[Autocomplete] selectDown');
     if (this.options.length === 0) {
       this.highlightedIndex = -1;
     } else {

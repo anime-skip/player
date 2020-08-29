@@ -73,7 +73,6 @@ export default class TextInput extends Vue {
   }
 
   public onPressEsc() {
-    console.log('[TextInput] onPressEsc');
     this.$emit('keypress-esc');
   }
 }
