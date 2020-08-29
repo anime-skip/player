@@ -6,14 +6,16 @@
     >
       <WebExtImg class="icon" v-if="leftIcon" :class="{ focused: isFocused }" :src="leftIcon" />
       <input
+        ref="input"
         class="input"
-        :type="type"
         v-model="inputValue"
+        :type="type"
         :placeholder="label"
+        :autocomplete="autocomplete || 'off'"
+        :tabindex="disabled ? -1 : null"
         @focus="onFocus"
         @blur="onBlur"
-        :autocomplete="autocomplete || 'off'"
-        @keypress.esc="onPressEsc"
+        @keydown.esc.stop.prevent="onPressEsc"
         @keyup.enter="$emit('submit')"
       />
     </div>
@@ -22,14 +24,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import WebExtImg from './WebExtImg.vue';
 
 @Component({
   components: { WebExtImg },
 })
 export default class TextInput extends Vue {
-  @Prop(String) private label!: string;
+  @Prop(String) private id?: string;
+  @Prop({ type: String, required: true }) private label!: string;
   @Prop(String) private errorMessage?: string;
   @Prop(String) private autocomplete?: 'username' | 'current-password';
   @Prop(String) private defaultValue?: string;
@@ -39,16 +42,27 @@ export default class TextInput extends Vue {
   @Prop(String) private value?: string;
   @Prop(Boolean) private disabled?: boolean;
 
+  @Watch('value')
+  public onChangeValue(value: string | undefined) {
+    this.inputValue = value ?? '';
+  }
+
   private isFocused: boolean = false;
 
   public onFocus() {
     this.$emit('focus');
     this.isFocused = true;
   }
+  public focus() {
+    (this.$refs.input as HTMLInputElement).focus();
+  }
 
   public onBlur() {
     this.$emit('blur');
     this.isFocused = false;
+  }
+  public blur() {
+    (this.$refs.input as HTMLInputElement).blur();
   }
 
   public get inputValue(): string {
@@ -59,7 +73,6 @@ export default class TextInput extends Vue {
   }
 
   public onPressEsc() {
-    console.log('onPressEsc');
     this.$emit('keypress-esc');
   }
 }
@@ -100,6 +113,9 @@ $inputHeight: 48px;
       }
     }
     .input {
+      flex-basis: 0;
+      flex-shrink: 1;
+      flex-grow: 1;
       background-color: transparent;
       border: none;
       outline: none;

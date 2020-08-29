@@ -4,13 +4,12 @@
     gravityX="flex-end"
     gravityY="center"
     @hide="onHide"
-    @show="reset()"
+    @show="onShow"
   >
     <div class="top-container scroll">
       <h2 class="section-header">{{ title }}</h2>
-      <div class="clickable down button dark time-selector">
+      <div ref="timeSelect" class="focusable button dark time-selector" tabindex="0">
         <WebExtImg class="icon" src="ic_clock.svg" :draggable="false" />
-        <div class="divider" />
         <p class="time">
           {{ formattedAt }}
         </p>
@@ -93,15 +92,12 @@ export default class EditTimestampPanel extends Mixins(
   @Action('showDialog') hideDialog!: () => void;
   @Getter() public episodeUrl?: Api.EpisodeUrl;
   @Getter() public editTimestampMode?: 'add' | 'edit';
+  @Getter() activeDialog?: string;
 
   public typeFilter = '';
   public selectedType?: Api.TimestampType;
 
-  mounted() {
-    this.reset();
-  }
-
-  reset() {
+  public reset() {
     this.selectedType = TIMESTAMP_TYPES.find(type => type.id === this.activeTimestamp?.typeId);
     this.typeFilter = '';
   }
@@ -116,7 +112,18 @@ export default class EditTimestampPanel extends Mixins(
     }
   }
 
-  onHide() {
+  public onShow() {
+    this.reset();
+
+    const interval = setInterval(() => {
+      if (this.$refs.timeSelect != null) {
+        (this.$refs.timeSelect as any).focus();
+        clearInterval(interval);
+      }
+    }, 200);
+  }
+
+  public onHide() {
     this.clearActiveTimestamp();
     this.clearEditTimestampMode();
     this.selectedType = undefined;
@@ -136,6 +143,7 @@ export default class EditTimestampPanel extends Mixins(
   };
 
   public updateTimestamp(): void {
+    (this.$refs.timeSelect as HTMLDivElement).focus();
     if (this.activeTimestamp != null) {
       this.setActiveTimestamp({
         ...this.activeTimestamp,
@@ -271,7 +279,6 @@ export default class EditTimestampPanel extends Mixins(
       min-height: 40px;
       padding: 0px;
       align-self: flex-start;
-      cursor: not-allowed;
 
       .icon {
         width: 40px;
@@ -286,7 +293,12 @@ export default class EditTimestampPanel extends Mixins(
       }
 
       .time {
-        padding: 0 16px;
+        margin-top: 4px;
+        padding-left: 8px;
+        padding-right: 16px;
+        font-size: 18px;
+        font-weight: 500;
+        letter-spacing: 1px;
       }
     }
 

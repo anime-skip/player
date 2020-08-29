@@ -21,7 +21,7 @@
     <!-- Dialogs -->
     <EditTimestampPanel />
     <AccountDialog />
-    <EpisodeEditorDialog />
+    <EditEpisodeDialog />
   </div>
 </template>
 
@@ -33,7 +33,7 @@ import ToolBar from './components/Toolbar.vue';
 import EpisodeInfo from './components/EpisodeInfo.vue';
 import AccountDialog from './dialogs/AccountDialog.vue';
 import EditTimestampPanel from './dialogs/EditTimestampPanel.vue';
-import EpisodeEditorDialog from './dialogs/EpisodeEditorDialog.vue';
+import EditEpisodeDialog from './dialogs/EditEpisodeDialog.vue';
 import KeyboardShortcutMixin from '@/common/mixins/KeyboardShortcuts';
 import { Action, Mutation, Getter } from '@/common/utils/VuexDecorators';
 import Browser from '@/common/utils/Browser';
@@ -46,7 +46,7 @@ import VideoControllerMixin from '../common/mixins/VideoController';
     ToolBar,
     EpisodeInfo,
     AccountDialog,
-    EpisodeEditorDialog,
+    EditEpisodeDialog,
     Loading,
     EditTimestampPanel,
   },
