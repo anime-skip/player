@@ -7,7 +7,7 @@
     <h1>{{ episodeTitle }}</h1>
     <h3>{{ episodeDetails }}</h3>
     <ToolbarButton
-      v-if="activeDialog !== 'EpisodeEditorDialog' && isLoggedIn"
+      v-if="activeDialog !== 'EditEpisodeDialog' && isLoggedIn"
       class="edit-button"
       icon="ic_edit.svg"
       title="Edit Episode Info"
@@ -59,7 +59,7 @@ export default class EpisodeInfo extends Vue {
   }
 
   public showEditDialog() {
-    this.showDialog('EpisodeEditorDialog');
+    this.showDialog('EditEpisodeDialog');
   }
 }
 </script>

@@ -285,7 +285,7 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   }
 
   public showEditEpisodeDialog() {
-    this.showDialog('EpisodeEditorDialog');
+    this.showDialog('EditEpisodeDialog');
   }
 }
 </script>

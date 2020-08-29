@@ -1,10 +1,5 @@
 <template>
-  <BasicDialog
-    name="EpisodeEditorDialog"
-    gravityX="center"
-    gravityY="center"
-    @show="onShowDialog()"
-  >
+  <BasicDialog name="EditEpisodeDialog" gravityX="center" gravityY="center" @show="onShowDialog()">
     <ProgressOverlay :isLoading="isLoadingEpisode">
       <h2 class="section-header">Find Existing Episode</h2>
       <AutocompleteTextInput
@@ -72,7 +67,7 @@ import Browser from '../../common/utils/Browser';
 @Component({
   components: { BasicDialog, PopupHeader, ProgressOverlay, TextInput, AutocompleteTextInput },
 })
-export default class EpisodeEditorDialog extends Vue {
+export default class EditEpisodeDialog extends Vue {
   @Getter() episodeUrl?: Api.EpisodeUrl;
   @Getter() episodeRequestState?: RequestState;
   @Getter() searchShowsResult!: Api.ShowSearchResult[];
@@ -108,7 +103,7 @@ export default class EpisodeEditorDialog extends Vue {
   }
 
   public onChangeSelectedEpisode(currentValue: any) {
-    console.log('[EpisodeEditorDialog] onChangeSelectedEpisode');
+    console.log('[EditEpisodeDialog] onChangeSelectedEpisode');
     const episode = this.searchEpisodesResult.find(result => result.id === currentValue.id);
     this.editableSeasonNumber = String(episode?.season ?? '');
     this.editableEpisodeNumber = String(episode?.number ?? '');
@@ -312,7 +307,7 @@ $borderRadius: 3px;
   margin: 0;
 }
 
-#EpisodeEditorDialog {
+#EditEpisodeDialog {
   .dialog-root-container {
     overflow-y: auto;
     max-height: 70%;
