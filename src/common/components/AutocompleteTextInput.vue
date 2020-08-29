@@ -14,7 +14,12 @@
       @keydown.down.native.prevent.stop="selectDown"
     />
     <!-- @mousedown.prevent: prevent input from losing focus when clicking on an item -->
-    <div v-if="shouldShowSuggestions && options.length > 0" class="suggestions" @mousedown.prevent>
+    <div
+      v-if="shouldShowSuggestions && options.length > 0"
+      class="suggestions"
+      @mousedown.prevent
+      @mouseover="onHoverOptions"
+    >
       <div
         v-for="(option, index) of options"
         :key="option.id"
@@ -29,11 +34,11 @@
       </div>
     </div>
     <div
-      v-if="shouldShowSuggestions && options.length === 0"
+      v-if="shouldShowSuggestions && options.length === 0 && !!searchValue"
       class="suggestions"
       @mousedown.prevent
     >
-      <p>noOptionsMessage</p>
+      <p class="no-results">{{ noOptionsMessage }}</p>
     </div>
   </div>
 </template>
@@ -52,13 +57,18 @@ interface AutocompleteItem {
   components: { TextInput },
 })
 export default class AutocompleteTextInput extends Vue {
-  @Prop(Object) private value?: AutocompleteItem;
+  @Prop({ type: Object, required: true }) private value!: AutocompleteItem;
   @Prop(String) private label!: string;
   @Prop(String) private errorMessage?: string;
   @Prop({ type: String, default: 'No results' }) private noOptionsMessage!: string;
   @Prop({ type: Array, required: true }) private options!: AutocompleteItem[];
   @Prop(String) private leftIcon?: string;
   @Prop({ type: Number, default: 300 }) private searchDelay?: number;
+
+  @Watch('value')
+  public onChangeValue(value: AutocompleteItem) {
+    this.inputValue = value;
+  }
 
   private searchValue = '';
   private searchTimeout?: any;
@@ -73,7 +83,11 @@ export default class AutocompleteTextInput extends Vue {
       this.$emit('search', this.searchValue.trim());
     }
     this.highlightedIndex = -1;
-    console.log('[Autocomplete] mounted', this.searchValue, this.inputValue, this.options);
+    console.log('[Autocomplete] mounted', {
+      searchValue: this.searchValue,
+      value: JSON.parse(JSON.stringify(this.value)),
+      options: this.options,
+    });
   }
 
   @Watch('searchValue')
@@ -89,7 +103,11 @@ export default class AutocompleteTextInput extends Vue {
     }, this.searchDelay);
 
     // highlight index
-    this.highlightedIndex = this.searchValue.trim() == '' ? -1 : 0;
+    this.highlightedIndex = this.searchValue.trim() ? -1 : 0;
+  }
+
+  public onHoverOptions() {
+    this.highlightedIndex = -1;
   }
 
   public get shouldShowSuggestions(): boolean {
@@ -105,19 +123,27 @@ export default class AutocompleteTextInput extends Vue {
   public onBlurInput() {
     this.isFocused = false;
     this.$emit('blur');
+    console.log('[AutocompleteTextInput] onBlurInput', this.searchValue, this.inputValue);
+    setTimeout(() => {
+      if (this.searchValue !== this.inputValue.title) {
+        this.inputValue = {
+          title: this.searchValue,
+        };
+      }
+    }, 100);
   }
 
   public onClickOption(option: AutocompleteItem) {
     console.log('[Autocomplete] onClickOption', option);
     this.inputValue = option;
     this.onPressEsc();
+    this.$emit('select', option);
   }
 
   public onPressEsc() {
     console.log('[Autocomplete] onPressEsc');
     this.wasEscPressed = true;
     (document.activeElement as any).blur();
-    // (this.$refs.input as TextInput).blur();
   }
 
   public selectHightlightedOption() {
@@ -131,16 +157,15 @@ export default class AutocompleteTextInput extends Vue {
           ' options'
       );
     }
-    this.inputValue = newSelection;
-    this.onPressEsc();
+    this.onClickOption(newSelection);
   }
 
-  public get inputValue(): AutocompleteItem | undefined {
+  public get inputValue(): AutocompleteItem {
     return this.value;
   }
-  public set inputValue(value: AutocompleteItem | undefined) {
+  public set inputValue(value: AutocompleteItem) {
     console.log('[Autocomplete] set inputValue', value);
-    this.searchValue = value?.title ?? '';
+    this.searchValue = value.title;
     this.$emit('input', value);
   }
 
@@ -177,14 +202,15 @@ $optionHeight: 48px;
     position: absolute;
     left: 0;
     right: 0;
-    top: 48px - $borderRadius;
+    top: 48px - 1px;
     background-color: $input500;
     border-bottom-left-radius: $borderRadius;
     border-bottom-right-radius: $borderRadius;
-    padding-top: $borderRadius;
+    // padding-top: $borderRadius;
     overflow-y: auto;
     z-index: 100;
     max-height: 6 * $optionHeight;
+    filter: drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.48));
 
     &.invalid {
       background-color: $red500;
@@ -209,7 +235,8 @@ $optionHeight: 48px;
     transition: 200ms;
 
     &.selected {
-      background-color: rgba($color: white, $alpha: 0.06);
+      border-top: 1px solid transparent;
+      background-color: $divider;
     }
 
     &:hover,
@@ -232,6 +259,13 @@ $optionHeight: 48px;
       margin-top: -1px;
       font-size: 13px;
     }
+  }
+
+  .no-results {
+    color: $textPrimary;
+    padding: 16px;
+    background-color: $input700;
+    text-align: center;
   }
 }
 </style>
