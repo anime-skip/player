@@ -12,6 +12,7 @@
         :type="type"
         :placeholder="label"
         :autocomplete="autocomplete || 'off'"
+        :tabindex="disabled ? -1 : null"
         @focus="onFocus"
         @blur="onBlur"
         @keydown.esc.stop.prevent="onPressEsc"
@@ -23,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import WebExtImg from './WebExtImg.vue';
 
 @Component({
@@ -40,6 +41,11 @@ export default class TextInput extends Vue {
   @Prop({ type: Boolean, required: false, default: true }) isValid!: boolean;
   @Prop(String) private value?: string;
   @Prop(Boolean) private disabled?: boolean;
+
+  @Watch('value')
+  public onChangeValue(value: string | undefined) {
+    this.inputValue = value ?? '';
+  }
 
   private isFocused: boolean = false;
 
