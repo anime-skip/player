@@ -99,6 +99,11 @@ export default class AutocompleteTextInput extends Vue {
     this.highlightedIndex = this.searchValue.trim() ? -1 : 0;
   }
 
+  @Watch('options')
+  public onChangeOptions(options: AutocompleteItem[]) {
+    this.highlightedIndex = options.length === 0 ? -1 : 0;
+  }
+
   public onHoverOptions() {
     this.highlightedIndex = -1;
   }
