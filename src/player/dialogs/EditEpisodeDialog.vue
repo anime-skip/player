@@ -44,7 +44,8 @@
         type="submit"
         value="Save Episode"
         class="clickable focus button save"
-        :disabled="true"
+        :class="{ 'disabled transparent down': !isSubmitEnabled }"
+        :disabled="!isSubmitEnabled"
         @click="onClickSaveChanges"
       />
     </ProgressOverlay>
@@ -192,6 +193,17 @@ export default class EditEpisodeDialog extends Vue {
     );
   }
 
+  public get isSubmitEnabled(): boolean {
+    return (
+      // An existing show and episode are selected
+      (this.selectedShowOption.id && this.selectedEpisodeOption.id) ||
+      // An existing show but new episode is entered
+      (this.selectedShowOption.id && this.selectedShowOption.title) ||
+      // A new show and new episode are entered
+      (this.selectedShowOption.title && this.selectedEpisodeOption.title)
+    );
+  }
+
   public onClickSaveChanges() {
     // Prepare data
     const episodeName = this.selectedEpisodeOption.title;
@@ -212,7 +224,7 @@ export default class EditEpisodeDialog extends Vue {
     };
 
     // Creating Data
-    if (this.selectedShowOption.id === null) {
+    if (this.selectedShowOption.id == null) {
       this.createEpisodeData({
         show: {
           create: true,
@@ -228,7 +240,7 @@ export default class EditEpisodeDialog extends Vue {
         },
       });
     }
-    if (this.selectedEpisodeOption.id === null) {
+    if (this.selectedEpisodeOption.id == null) {
       this.createEpisodeData({
         show: {
           create: false,

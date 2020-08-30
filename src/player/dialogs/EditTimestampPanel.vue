@@ -175,7 +175,7 @@ export default class EditTimestampPanel extends Mixins(
 
   @Watch('matchingTypes')
   onChangeMatchingTypes(current: Api.TimestampType[], old: Api.TimestampType[]) {
-    if (current.length === 1) {
+    if (current.length > 0) {
       this.selectType(current[0]);
     }
   }
