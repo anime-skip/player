@@ -44,6 +44,8 @@
         type="submit"
         value="Save Episode"
         class="clickable focus button save"
+        :class="{ 'disabled transparent down': !isSubmitEnabled }"
+        :disabled="!isSubmitEnabled"
         @click="onClickSaveChanges"
       />
     </ProgressOverlay>
@@ -188,6 +190,17 @@ export default class EditEpisodeDialog extends Vue {
         (existingEpisode?.season ? String(existingEpisode.season) : undefined) ||
       this.editableAbsoluteNumber.trim() !==
         (existingEpisode?.absoluteNumber ? String(existingEpisode.absoluteNumber) : undefined)
+    );
+  }
+
+  public get isSubmitEnabled(): boolean {
+    return (
+      // An existing show and episode are selected
+      (this.selectedShowOption.id && this.selectedEpisodeOption.id) ||
+      // An existing show but new episode is entered
+      (this.selectedShowOption.id && this.selectedShowOption.title) ||
+      // A new show and new episode are entered
+      (this.selectedShowOption.title && this.selectedEpisodeOption.title)
     );
   }
 
