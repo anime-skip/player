@@ -44,7 +44,6 @@
         type="submit"
         value="Save Episode"
         class="clickable focus button save"
-        :disabled="true"
         @click="onClickSaveChanges"
       />
     </ProgressOverlay>
@@ -212,7 +211,7 @@ export default class EditEpisodeDialog extends Vue {
     };
 
     // Creating Data
-    if (this.selectedShowOption.id === null) {
+    if (this.selectedShowOption.id == null) {
       this.createEpisodeData({
         show: {
           create: true,
@@ -228,7 +227,7 @@ export default class EditEpisodeDialog extends Vue {
         },
       });
     }
-    if (this.selectedEpisodeOption.id === null) {
+    if (this.selectedEpisodeOption.id == null) {
       this.createEpisodeData({
         show: {
           create: false,
