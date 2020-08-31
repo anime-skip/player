@@ -64,7 +64,7 @@ run "mkdir ${CODE}$OUTPUT_NAME" "mkdir -p '$OUTPUT_NAME'"
 # PREPACKAGE ###########################
 title "Pre-package"
 run "Install dependencies" "yarn install"
-run "Build ${CODE}dist/"   "PACKAGING=true yarn build"
+run "Build ${CODE}dist/"   "PACKAGING=true yarn build:prod"
 run "Verify manifest"      "yarn web-ext --config=.web-ext.config.js lint"
 
 # PACKAGE ##############################
