@@ -2,14 +2,24 @@
 #
 # https://developer.chrome.com/webstore/using_webstore_api
 # 
-# Usage: ./scripts/chrome-publish.sh artifacts/anime-skip-web-ext-1.0.6/chrome.zip
+# Usage: source .env && ./scripts/chrome-publish.sh artifacts/anime-skip-web-ext-1.0.6/chrome.zip
+
+set -e 
 
 ARTIFACT="$1"
 
 # Get new access token
+echo ""
+echo "Authenticating..."
+echo "CHROME_CLIENT_ID: $CHROME_CLIENT_ID"
+echo "CHROME_CLIENT_SECRET: $CHROME_CLIENT_SECRET"
+echo "CHROME_REFRESH_TOKEN: $CHROME_REFRESH_TOKEN"
 ACCESS_TOKEN=$(curl "https://oauth2.googleapis.com/token" -d "client_id=${CHROME_CLIENT_ID}&client_secret=${CHROME_CLIENT_SECRET}&refresh_token=${CHROME_REFRESH_TOKEN}&grant_type=refresh_token&redirect_uri=urn:ietf:wg:oauth:2.0:oob" | jq -r .access_token)
+echo "Token: $ACCESS_TOKEN"
 
 # Upload artifact
+echo ""
+echo "Uploading zip..."
 curl \
   -H "Authorization: Bearer $ACCESS_TOKEN"  \
   -H "x-goog-api-version: 2" \
@@ -20,6 +30,8 @@ curl \
 
 # Publish
 # TODO - Remove `?publishTarget=trustedTesters` when ready to go public
+echo ""
+echo "Submit for review..."
 curl \
   -X POST \
   -H "Authorization: Bearer $ACCESS_TOKEN"  \

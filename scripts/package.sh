@@ -70,15 +70,18 @@ run "Verify manifest"      "yarn web-ext --config=.web-ext.config.js lint"
 # PACKAGE ##############################
 title "Packaging Artifacts"
 run "Create ${CODE}extension.zip" "yarn web-ext --config=.web-ext.config.js build -a '$OUTPUT_NAME' -n 'extension.zip'"
+# TODO Create Firefox Sources
 # Chrome
 run "Create ${CODE}chrome.zip" "zip -r '$OUTPUT_NAME/chrome.zip' dist/*"
-# Firefox
-run "Signing ${CODE}firefox.xpi" "yarn web-ext --config=.web-ext.config.js sign -a '$OUTPUT_NAME' -n 'firefox.xpi' --api-key '$FIREFOX_SIGNING_ISSUER' --api-secret '$FIREFOX_SIGNING_SECRET' --id='$FIREFOX_SIGNING_ID'"
-mv "$OUTPUT_NAME/anime_skip-$PACKAGE_VERSION-an+fx.xpi" "$OUTPUT_NAME/firefox.xpi"
 # TODO - Edge & Opera
 
 # DEPLOY ###############################
 title "Deploying"
+# Firefox
+run "Signing and uploading ${CODE}firefox.xpi" "yarn web-ext --config=.web-ext.config.js sign -a '$OUTPUT_NAME' -n 'firefox.xpi' --api-key '$FIREFOX_SIGNING_ISSUER' --api-secret '$FIREFOX_SIGNING_SECRET' --id='$FIREFOX_SIGNING_ID'"
+mv "$OUTPUT_NAME/anime_skip-$PACKAGE_VERSION-an+fx.xpi" "$OUTPUT_NAME/firefox.xpi"
+# Chrome
+run "Submit ${CODE}chrome.zip${RESET} for review" "./scripts/chrome-publish.sh '$OUTPUT_NAME/chrome.zip'"
 run "Create and push ${CODE}v$PACKAGE_VERSION${RESET} tag" "git tag 'v$PACKAGE_VERSION' && git push --tags &> /dev/null"
 # TODO
 
