@@ -93,6 +93,7 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
 
   @Getter() isEditing!: boolean;
   @Getter() hasEpisode!: boolean;
+  @Getter() isLoggedIn!: boolean;
   @Getter() activeTimestamp?: Api.Timestamp;
   @Getter() draftTimestamps!: Api.Timestamp[];
   @Getter('preferences') prefs?: Api.Preferences;
@@ -105,6 +106,7 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
   @Mutation() toggleEditMode!: (isEditing: boolean) => void;
 
   @Action() showDialog!: (dialog: string) => void;
+  @Action() startEditing!: () => void;
 
   public get normalizedTime(): number {
     return Math.max(0, Math.min(100, (this.currentTime / this.duration) * 100));
@@ -160,9 +162,16 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
   }
 
   public onClickTimestampHandle(): void {
+    if (!this.isLoggedIn) {
+      this.showDialog('AccountDialog');
+      return;
+    }
+
     this.pause();
+    if (!this.isEditing) {
+      this.startEditing();
+    }
     if (this.hasEpisode) {
-      this.toggleEditMode(true);
       this.setActiveTimestamp({
         at: this.getCurrentTime(),
         typeId: '',
