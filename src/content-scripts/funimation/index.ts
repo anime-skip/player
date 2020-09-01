@@ -4,6 +4,7 @@ import './style.scss';
 console.log('INJECTED content-scripts/funimation/index.ts');
 
 global.service = 'funimation';
+global.serviceDisplayName = 'Funimation';
 global.getRootQuery = (): string => {
   return 'body #funimation-player';
 };
