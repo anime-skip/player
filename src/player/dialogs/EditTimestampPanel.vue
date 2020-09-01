@@ -7,7 +7,12 @@
     @show="onShow"
   >
     <div class="top-container scroll">
-      <h1 class="section-header">{{ title }}</h1>
+      <h1 class="section-header">
+        {{ title }}
+        <div v-ripple class="img-button" title="Discard Changes (ESC)" @click="hideDialog()">
+          <WebExtImg src="ic_close.svg" />
+        </div>
+      </h1>
       <h2 class="section-header">Timestamp Starts At</h2>
       <div ref="timeSelect" class="focusable button dark time-selector" tabindex="0">
         <WebExtImg class="icon" src="ic_clock.svg" :draggable="false" />
@@ -23,7 +28,7 @@
         leftIcon="ic_filter.svg"
         label="Filter..."
         v-model="typeFilter"
-        @submit="onClickSave()"
+        @submit="onClickDone()"
         @keydown.native.up.stop.prevent="onPressUp"
         @keydown.native.down.stop.prevent="onPressDown"
       />
@@ -36,26 +41,19 @@
     </div>
     <div class="bottom-container">
       <input
+        type="submit"
+        value="Done"
+        class="clickable focus button save"
+        @click="onClickDone()"
+        :class="{ disabled: isSaveDisabled() }"
+      />
+      <input
         v-if="shouldShowDelete()"
         type="submit"
         value="Delete"
         class="clickable focus invalid button delete"
         @click="onClickDelete()"
-        :class="{ 'disabled transparent': isSaveDisabled() }"
-      />
-      <input
-        v-else
-        type="submit"
-        value="Cancel"
-        class="clickable dark focus button cancel"
-        @click="hideDialog()"
-      />
-      <input
-        type="submit"
-        value="Done"
-        class="clickable focus button save"
-        @click="onClickSave()"
-        :class="{ 'disabled transparent': isSaveDisabled() }"
+        :class="{ disabled: isSaveDisabled() }"
       />
     </div>
   </BasicDialog>
@@ -198,13 +196,14 @@ export default class EditTimestampPanel extends Mixins(
   }
 
   public get title(): string {
+    console.log('get title', this.editTimestampMode, this.activeTimestamp);
     if (this.editTimestampMode == null) {
       return 'ERROR';
     }
     if (this.editTimestampMode === 'add') {
       return 'Create a Timestamp';
     }
-    return 'Edit Timestamp At';
+    return 'Edit Timestamp';
   }
 
   public onClickDone() {
@@ -253,7 +252,33 @@ export default class EditTimestampPanel extends Mixins(
 
   h1 {
     font-weight: 500;
-    font-size: 24px;
+    font-size: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: -8px;
+
+    .img-button {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    img {
+      opacity: 0.48;
+      transition: 250ms opacity;
+
+      &:hover {
+        opacity: 0.7;
+      }
+      &:hover:active {
+        opacity: 1;
+      }
+    }
   }
 
   .section-header {
@@ -390,20 +415,11 @@ export default class EditTimestampPanel extends Mixins(
   }
 
   .bottom-container {
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    grid-template-columns: auto;
-    grid-template-areas: 'cancel delete save';
-    column-gap: 16px;
+    display: flex;
+    flex-direction: row-reverse;
 
-    .cancel {
-      grid-area: cancel;
-    }
-    .delete {
-      grid-area: delete;
-    }
     .save {
-      grid-area: save;
+      margin-left: 24px;
     }
 
     .row {
