@@ -20,6 +20,18 @@ yarn prettier:write
 
 This will install and open Firefox. To open another browser, more changes will have to be made.
 
+> When running `yarn start` or `yarn start:prod`, you will be taken to the local `/example/index.html` page. For this page's video to load, you need to add a file call `/exmaple/video.mp4`. Note that this file is ignored by git. You can choose whatever video you want
+
+### Developing with a Firefox Profile
+
+When running `yarn start` and `yarn start:prod`, it will normally open in a "private" firefox window. If you want all your user preferences, addons, history, etc, you need to setup the command to run on a Firefox Profile.
+
+Add a `.env.firefox` file to the project root, next to the `.env` file. It should contain the path to your profile (found at <about:profile>):
+
+```
+BROWSER_PROFILE_PATH=/home/aklinker1/.mozilla/firefox/lrgdkj3i.default-release
+```
+
 ## Deployment
 
 To package the application, run `yarn package`.
@@ -47,13 +59,3 @@ To moniter deployments, go to the consoles:
 > Chrome is fully automated when running the `yarn deploy` command. Firefox does not support full automation yet, but the command will upload the `xpi` file so that you just need to fill out the release info then manually release it.
 >
 > In the future, `yarn deploy` will be ran when pushing a tag to github
-
-### Developing with a Firefox Profile
-
-When running `yarn start` and `yarn start:prod`, it will normally open in a "private" firefox window. If you want all your user preferences, addons, history, etc, you need to setup the command to run on a Firefox Profile.
-
-Add a `.env.firefox` file to the project root, next to the `.env` file. It should contain the path to your profile (found at <about:profile>):
-
-```
-BROWSER_PROFILE_PATH=/home/aklinker1/.mozilla/firefox/lrgdkj3i.default-release
-```
