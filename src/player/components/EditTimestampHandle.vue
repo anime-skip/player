@@ -17,33 +17,10 @@ import Utils from '../../common/utils/Utils';
 @Component({
   components: { WebExtImg },
 })
-export default class EditTimestampHandle extends Mixins(
-  VideoControllerMixin,
-  KeyboardShortcutsMixin
-) {
-  @Getter() activeTimestamp?: Api.AmbigousTimestamp;
-  @Action() showDialog!: (dialog: string) => void;
-  @Mutation() setActiveTimestamp!: (timestamp: Api.AmbigousTimestamp) => void;
-  @Mutation() setEditTimestampMode!: (mode: 'add' | 'edit' | undefined) => void;
-
+export default class EditTimestampHandle extends Vue {
   onClick(): void {
-    this.pause();
-    this.setActiveTimestamp({
-      at: this.getCurrentTime(),
-      typeId: '',
-      id: Utils.randomId(),
-    });
-    this.setEditTimestampMode('add');
-    this.showDialog('EditTimestampPanel');
+    this.$emit('click');
   }
-
-  keyboardShortcuts = {
-    K: () => {
-      if (this.activeTimestamp == null) {
-        this.onClick();
-      }
-    },
-  };
 }
 </script>
 

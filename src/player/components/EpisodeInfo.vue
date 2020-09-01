@@ -7,7 +7,7 @@
     <h1>{{ episodeTitle }}</h1>
     <h3>{{ episodeDetails }}</h3>
     <ToolbarButton
-      v-if="activeDialog !== 'EditEpisodeDialog' && isLoggedIn"
+      v-if="shouldShowEditButton"
       class="edit-button"
       icon="ic_edit.svg"
       title="Edit Episode Info"
@@ -33,7 +33,7 @@ export default class EpisodeInfo extends Vue {
   @Getter() public episodeRequestState!: RequestState;
   @Getter() public isEditing!: boolean;
   @Getter() public activeDialog?: string;
-  @Getter() public isLoggedIn?: string;
+  @Getter() public isLoggedIn!: boolean;
 
   public get hasTriedLoadingEpisodeInfo(): boolean {
     return (
@@ -60,6 +60,10 @@ export default class EpisodeInfo extends Vue {
 
   public showEditDialog() {
     this.showDialog('EditEpisodeDialog');
+  }
+
+  public get shouldShowEditButton(): boolean {
+    return this.activeDialog == null && this.isLoggedIn;
   }
 }
 </script>

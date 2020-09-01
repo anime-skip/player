@@ -7,14 +7,15 @@
     @show="onShow"
   >
     <div class="top-container scroll">
-      <h2 class="section-header">{{ title }}</h2>
+      <h1 class="section-header">{{ title }}</h1>
+      <h2 class="section-header">Timestamp Starts At</h2>
       <div ref="timeSelect" class="focusable button dark time-selector" tabindex="0">
         <WebExtImg class="icon" src="ic_clock.svg" :draggable="false" />
         <p class="time">
           {{ formattedAt }}
         </p>
       </div>
-      <p class="label">Use J and L keys to adjust where the timestamp is at</p>
+      <p class="label">Use J and L keys to adjust where the timestamp starts at</p>
       <h2 class="section-header section-header-spacing">Timestamp Type</h2>
       <TextInput
         ref="filterInput"
@@ -47,11 +48,11 @@
         type="submit"
         value="Cancel"
         class="clickable dark focus button cancel"
-        @click="hideDialog"
+        @click="hideDialog()"
       />
       <input
         type="submit"
-        value="Save"
+        value="Done"
         class="clickable focus button save"
         @click="onClickSave()"
         :class="{ 'disabled transparent': isSaveDisabled() }"
@@ -201,12 +202,12 @@ export default class EditTimestampPanel extends Mixins(
       return 'ERROR';
     }
     if (this.editTimestampMode === 'add') {
-      return 'Add Timestamp At';
+      return 'Create a Timestamp';
     }
     return 'Edit Timestamp At';
   }
 
-  public onClickSave() {
+  public onClickDone() {
     if (this.isSaveDisabled()) return;
 
     const base = this.activeTimestamp!;
@@ -249,6 +250,11 @@ export default class EditTimestampPanel extends Mixins(
   pointer-events: none;
   color: $textPrimarySolid;
   text-align: start;
+
+  h1 {
+    font-weight: 500;
+    font-size: 24px;
+  }
 
   .section-header {
     margin-top: 0px;
