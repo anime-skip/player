@@ -13,8 +13,8 @@
     "package": "./scripts/package.sh",
     "build": "cross-env NODE_ENV=development webpack --hide-modules",
     "build:prod": "cross-env NODE_ENV=production webpack --hide-modules",
-    "start": "cross-env HMR=true yarn build:dev -- --watch",
-    "start:prod": "cross-env HMR=true yarn build -- --watch",
+    "start": "cross-env HMR=true yarn build -- --watch",
+    "start:prod": "cross-env HMR=true yarn build:prod -- --watch",
     "test": "jest --runInBand",
     "test:watch": "yarn test --watch"
   },
