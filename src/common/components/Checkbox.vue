@@ -2,7 +2,7 @@
   <div
     class="Checkbox clickable"
     :title="tooltip"
-    :class="{ 'dark down': !isChecked, 'transparent disabled': isDisabled }"
+    :class="{ 'dark down': !isChecked, disabled: isDisabled }"
   >
     <WebExtImg class="checkmark" :src="getIcon()" />
     <span class="text" :class="{ selected: isChecked }">{{ text }}</span>
