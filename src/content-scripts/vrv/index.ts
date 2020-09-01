@@ -4,6 +4,7 @@ import './style.scss';
 console.log('INJECTED content-scripts/vrv/index.ts');
 
 global.service = 'vrv';
+global.serviceDisplayName = 'VRV';
 global.getRootQuery = (): string => {
   return 'body>div';
 };

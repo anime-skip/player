@@ -2,7 +2,7 @@
   <div class="EpisodeInfo" :class="{ visible: hasTriedLoadingEpisodeInfo }">
     <h2>
       {{ showTitle }}
-      <span>&ensp;&bull;&ensp;Anime Skip</span>
+      <span>&ensp;&bull;&ensp;{{ serviceDisplayName }}</span>
     </h2>
     <h1>{{ episodeTitle }}</h1>
     <h3>{{ episodeDetails }}</h3>
@@ -34,6 +34,8 @@ export default class EpisodeInfo extends Vue {
   @Getter() public isEditing!: boolean;
   @Getter() public activeDialog?: string;
   @Getter() public isLoggedIn!: boolean;
+
+  public serviceDisplayName = global.serviceDisplayName ?? 'Unknown';
 
   public get hasTriedLoadingEpisodeInfo(): boolean {
     return (

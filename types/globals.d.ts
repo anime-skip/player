@@ -5,6 +5,7 @@ declare interface ServiceHelpers {
   onVideoChanged(callback: (video: HTMLVideoElement) => void): void;
   Api: Api.Implementation;
   service: 'vrv' | 'funimation' | 'example' | undefined;
+  serviceDisplayName: 'VRV' | 'Funimation' | 'Example' | undefined;
 
   // keyboard-blocker.ts
   addKeyDownListener: (callback: (event: KeyboardEvent) => void) => void;
