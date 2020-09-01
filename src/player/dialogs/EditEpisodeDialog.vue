@@ -40,14 +40,17 @@
           :disabled="shouldDisableEpisodeNumbers"
         />
       </div>
-      <input
-        type="submit"
-        value="Save Episode"
-        class="clickable focus button save"
-        :class="{ 'disabled transparent down': !isSubmitEnabled }"
-        :disabled="!isSubmitEnabled"
-        @click="onClickSaveChanges"
-      />
+      <div class="button-row">
+        <input
+          type="submit"
+          value="Save Episode"
+          class="clickable focus button"
+          :class="{ disabled: !isSubmitEnabled }"
+          :disabled="!isSubmitEnabled"
+          @click="onClickSaveChanges"
+        />
+        <button class="clickable dark focus button" @click="showDialog(undefined)">Cancel</button>
+      </div>
     </ProgressOverlay>
   </BasicDialog>
 </template>
@@ -198,7 +201,7 @@ export default class EditEpisodeDialog extends Vue {
       // An existing show and episode are selected
       (this.selectedShowOption.id && this.selectedEpisodeOption.id) ||
       // An existing show but new episode is entered
-      (this.selectedShowOption.id && this.selectedShowOption.title) ||
+      (this.selectedShowOption.id && this.selectedEpisodeOption.title) ||
       // A new show and new episode are entered
       (this.selectedShowOption.title && this.selectedEpisodeOption.title)
     );
@@ -355,9 +358,11 @@ $borderRadius: 3px;
     width: 8px;
   }
 
-  .save {
-    margin-top: 18px;
-    align-self: flex-end;
+  .button-row {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    margin-top: 24px;
   }
 }
 </style>

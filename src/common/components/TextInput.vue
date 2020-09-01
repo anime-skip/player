@@ -2,7 +2,7 @@
   <div class="TextInput">
     <div
       class="input-wrapper clickable dark"
-      :class="{ down: isFocused || value, invalid: !isValid, 'disabled transparent': disabled }"
+      :class="{ down: isFocused || value, invalid: !isValid, disabled }"
     >
       <WebExtImg class="icon" v-if="leftIcon" :class="{ focused: isFocused }" :src="leftIcon" />
       <input

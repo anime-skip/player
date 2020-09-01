@@ -255,7 +255,7 @@ $optionHeight: 48px;
 
   .no-results {
     color: $textPrimary;
-    padding: 16px;
+    padding: 8px 16px;
     background-color: $input700;
     text-align: center;
   }
