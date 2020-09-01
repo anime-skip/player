@@ -52,19 +52,22 @@
     <EditTimestampHandle
       v-if="canAddTimestamp"
       :style="{ left: `${(currentTime / duration) * 100}%` }"
+      @click="onClickTimestampHandle"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
+import { Component, Vue, Prop, Watch, Mixins } from 'vue-property-decorator';
 import Section from './Section.vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import VueSlider from 'vue-slider-component';
 import '../scss/VideoSlider.scss';
 import Utils from '@/common/utils/Utils';
-import { Getter, Mutation } from '@/common/utils/VuexDecorators';
+import { Getter, Mutation, Action } from '@/common/utils/VuexDecorators';
 import EditTimestampHandle from '@/player/components/EditTimestampHandle.vue';
+import VideoControllerMixin from '@/common/mixins/VideoController';
+import KeyboardShortcutMixin from '@/common/mixins/KeyboardShortcuts';
 
 interface SectionData {
   timestamp: Api.Timestamp;
@@ -75,7 +78,7 @@ interface SectionData {
 @Component({
   components: { Section, WebExtImg, VueSlider, EditTimestampHandle },
 })
-export default class Timeline extends Vue {
+export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShortcutMixin) {
   @Prop(Boolean) public isFlipped?: boolean;
   @Prop(Number) public currentTime!: number;
   @Prop(Number) public duration!: number;
@@ -89,13 +92,19 @@ export default class Timeline extends Vue {
   public service = global.service;
 
   @Getter() isEditing!: boolean;
+  @Getter() hasEpisode!: boolean;
   @Getter() activeTimestamp?: Api.Timestamp;
   @Getter() draftTimestamps!: Api.Timestamp[];
   @Getter('preferences') prefs?: Api.Preferences;
   @Getter() preferencesLastUpdatedAt!: number;
   @Getter() hasSkippedFromZero!: boolean;
 
+  @Mutation() setActiveTimestamp!: (timestamp: Api.AmbigousTimestamp) => void;
+  @Mutation() setEditTimestampMode!: (mode: 'add' | 'edit' | undefined) => void;
   @Mutation() setHasSkippedFromZero!: (newValue: boolean) => void;
+  @Mutation() toggleEditMode!: (isEditing: boolean) => void;
+
+  @Action() showDialog!: (dialog: string) => void;
 
   public get normalizedTime(): number {
     return Math.max(0, Math.min(100, (this.currentTime / this.duration) * 100));
@@ -149,6 +158,30 @@ export default class Timeline extends Vue {
 
     this.goToNextTimestampOnTimeChange(newTime);
   }
+
+  public onClickTimestampHandle(): void {
+    this.pause();
+    if (this.hasEpisode) {
+      this.toggleEditMode(true);
+      this.setActiveTimestamp({
+        at: this.getCurrentTime(),
+        typeId: '',
+        id: Utils.randomId(),
+      });
+      this.setEditTimestampMode('add');
+      this.showDialog('EditTimestampPanel');
+    } else {
+      this.showDialog('EditEpisodeDialog');
+    }
+  }
+
+  public keyboardShortcuts: { [combination: string]: () => void } = {
+    K: () => {
+      if (this.activeTimestamp == null) {
+        this.onClickTimestampHandle();
+      }
+    },
+  };
 
   /**
    * Get the timestamp to go to, then go there or the end of the video if there isn't another time

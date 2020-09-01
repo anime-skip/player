@@ -80,6 +80,9 @@ export default as<GetterTree<VuexState, VuexState>>({
   episodeRequestState({ episodeRequestState }): RequestState {
     return episodeRequestState;
   },
+  hasEpisode({ episodeUrl }): boolean {
+    return episodeUrl != null;
+  },
 
   // Timestamps
   timestamps(state): Api.Timestamp[] {

@@ -48,16 +48,17 @@
           class="margin-left"
           icon="ic_edit.svg"
           @click.native="startEditMode"
+          title="Edit Timestamps"
         />
         <ToolbarButton
-          v-if="isEditing"
+          v-if="shouldShowSaveDiscardChanges"
           class="margin-left"
           icon="ic_save_changes.svg"
-          title="Save Timestamps"
+          title="Submit Timestamps"
           @click.native="stopEditing()"
         />
         <ToolbarButton
-          v-if="isEditing"
+          v-if="shouldShowSaveDiscardChanges"
           class="margin-left"
           icon="ic_discard_changes.svg"
           title="Discard Changes"
@@ -126,6 +127,7 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   @Getter() public episodeUrl!: boolean;
   @Getter() public isLoggedIn?: boolean;
   @Getter() public browserType!: BrowserType;
+  @Getter() public activeTimestamp?: Api.AmbigousTimestamp;
 
   @Action() public startEditing!: () => void;
   @Action() public stopEditing!: (discard: boolean) => void;
@@ -259,7 +261,7 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
     'J': () => {
       this.addTime(-FRAME);
       return true;
-      },
+    },
     'X': () => this.addTime(-2),
     'S': () => this.addTime(-5),
     'W': () => this.addTime(-85),
@@ -282,6 +284,10 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
     if (!this.episodeUrl) {
       this.showEditEpisodeDialog();
     }
+  }
+
+  public get shouldShowSaveDiscardChanges(): boolean {
+    return this.activeDialog == null && this.isEditing;
   }
 
   public showEditEpisodeDialog() {
