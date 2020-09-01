@@ -196,7 +196,6 @@ export default class EditTimestampPanel extends Mixins(
   }
 
   public get title(): string {
-    console.log('get title', this.editTimestampMode, this.activeTimestamp);
     if (this.editTimestampMode == null) {
       return 'ERROR';
     }
