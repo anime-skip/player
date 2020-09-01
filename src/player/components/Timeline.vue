@@ -162,12 +162,13 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
   }
 
   public onClickTimestampHandle(): void {
+    this.pause();
+
     if (!this.isLoggedIn) {
       this.showDialog('AccountDialog');
       return;
     }
 
-    this.pause();
     if (!this.isEditing) {
       this.startEditing();
     }
