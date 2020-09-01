@@ -84,16 +84,16 @@ declare namespace Api {
   interface EpisodeSearchResult {
     id: string;
     name?: string;
-    season?: number;
-    absoluteNumber?: number;
-    number?: number;
+    season?: string;
+    absoluteNumber?: string;
+    number?: string;
   }
 
   interface InputEpisode {
     name?: string;
-    season?: number;
-    number?: number;
-    absoluteNumber?: number;
+    season?: string;
+    number?: string;
+    absoluteNumber?: string;
   }
 
   interface Episode extends EpisodeSearchResult {
