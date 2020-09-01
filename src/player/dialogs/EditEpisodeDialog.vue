@@ -210,15 +210,9 @@ export default class EditEpisodeDialog extends Vue {
   public onClickSaveChanges() {
     // Prepare data
     const episodeName = this.selectedEpisodeOption.title;
-    const number = isFinite(Number(this.editableEpisodeNumber))
-      ? Number(this.editableEpisodeNumber)
-      : undefined;
-    const season = isFinite(Number(this.editableSeasonNumber))
-      ? Number(this.editableSeasonNumber)
-      : undefined;
-    const absoluteNumber = isFinite(Number(this.editableAbsoluteNumber))
-      ? Number(this.editableAbsoluteNumber)
-      : undefined;
+    const number = this.editableEpisodeNumber.trim() || undefined;
+    const absoluteNumber = this.editableAbsoluteNumber.trim() || undefined;
+    const season = this.editableSeasonNumber.trim() || undefined;
     const episodeData: Api.InputEpisode = {
       name: episodeName,
       number,
