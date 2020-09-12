@@ -26,13 +26,12 @@ const config = {
     'content-scripts/keyboard-blocker': './content-scripts/keyboard-blocker.ts',
     'content-scripts/anime-skip/index': './content-scripts/anime-skip/index.ts',
 
-    ...services.reduce(
-      (map, service) => ({
-        ...map,
-        [`content-scripts/${service.folder}/index`]: `./content-scripts/${service.folder}/index.ts`,
-      }),
-      {}
-    ),
+    ...services.reduce((map, service) => {
+      const path = `content-scripts/${service.folder}`;
+      map[`${path}/index`] = `./${path}/index.ts`;
+      map[`${path}/parent`] = `./${path}/parent.ts`;
+      return map;
+    }, {}),
   },
   output: {
     path: __dirname + '/dist',

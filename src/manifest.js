@@ -7,16 +7,19 @@ const services = [
   {
     folder: 'example',
     matches: ['file:///*/example/index.html'],
+    parent_matches: ['file:///*/example/index.html'],
     page_matches: ['file:///*/example/index.html'],
   },
   {
     folder: 'vrv',
     matches: ['https://static.vrv.co/*'],
+    parent_matches: ['https://vrv.co/watch/*'],
     page_matches: ['https://vrv.co/*'],
   },
   {
     folder: 'funimation',
     matches: ['https://www.funimation.com/player/*'],
+    parent_matches: ['https://vrv.co/watch/*'],
     page_matches: ['https://www.funimation.com/*'],
   },
 ];
@@ -28,6 +31,12 @@ services.forEach(service => {
     js: ['content-scripts/keyboard-blocker.js'],
     run_at: 'document_start',
     all_frames: true,
+  });
+
+  // Parent for each service
+  manifest.content_scripts.push({
+    matches: service.parent_matches,
+    js: ['browser-polyfill.js', `content-scripts/${service.folder}/parent.js`],
   });
 
   // Player for each service
