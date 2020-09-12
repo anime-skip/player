@@ -1,7 +1,7 @@
 import EpisodeUtils from '../EpisodeUtils';
 
 describe('EpisodeUtils', () => {
-  describe('seasonAndNumberFromSearchResult', () => {
+  describe('seasonAndNumberDisplay', () => {
     it('should return all the values when they are passed', () => {
       const input = {
         season: '0',
@@ -10,7 +10,7 @@ describe('EpisodeUtils', () => {
       } as Api.EpisodeSearchResult;
       const expected = 'Season 0, Episode 0 (#0)';
 
-      const actual = EpisodeUtils.seasonAndNumberFromSearchResult(input);
+      const actual = EpisodeUtils.seasonAndNumberDisplay(input);
 
       expect(actual).toBe(expected);
     });
@@ -23,7 +23,7 @@ describe('EpisodeUtils', () => {
       } as Api.EpisodeSearchResult;
       const expected = 'Season 0, Episode 0';
 
-      const actual = EpisodeUtils.seasonAndNumberFromSearchResult(input);
+      const actual = EpisodeUtils.seasonAndNumberDisplay(input);
 
       expect(actual).toBe(expected);
     });
@@ -36,7 +36,7 @@ describe('EpisodeUtils', () => {
       } as Api.EpisodeSearchResult;
       const expected = 'Season 0 (#0)';
 
-      const actual = EpisodeUtils.seasonAndNumberFromSearchResult(input);
+      const actual = EpisodeUtils.seasonAndNumberDisplay(input);
 
       expect(actual).toBe(expected);
     });
@@ -49,7 +49,7 @@ describe('EpisodeUtils', () => {
       } as Api.EpisodeSearchResult;
       const expected = 'Season 0';
 
-      const actual = EpisodeUtils.seasonAndNumberFromSearchResult(input);
+      const actual = EpisodeUtils.seasonAndNumberDisplay(input);
 
       expect(actual).toBe(expected);
     });
@@ -62,7 +62,7 @@ describe('EpisodeUtils', () => {
       } as Api.EpisodeSearchResult;
       const expected = 'Episode 0';
 
-      const actual = EpisodeUtils.seasonAndNumberFromSearchResult(input);
+      const actual = EpisodeUtils.seasonAndNumberDisplay(input);
 
       expect(actual).toBe(expected);
     });
@@ -75,7 +75,7 @@ describe('EpisodeUtils', () => {
       } as Api.EpisodeSearchResult;
       const expected = '#0';
 
-      const actual = EpisodeUtils.seasonAndNumberFromSearchResult(input);
+      const actual = EpisodeUtils.seasonAndNumberDisplay(input);
 
       expect(actual).toBe(expected);
     });

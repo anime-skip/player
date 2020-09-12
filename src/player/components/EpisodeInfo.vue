@@ -57,7 +57,7 @@ export default class EpisodeInfo extends Vue {
   }
 
   public get episodeDetails(): string {
-    return EpisodeUtils.seasonAndNumberFromEpisodeUrl(this.episodeUrl);
+    return EpisodeUtils.seasonAndNumberFromEpisodeInfo(this.episodeInfo);
   }
 
   public showEditDialog() {
