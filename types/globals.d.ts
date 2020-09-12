@@ -2,6 +2,7 @@ declare interface ServiceHelpers {
   getRootQuery(): string;
   getVideoQuery(): string;
   getVideo(): HTMLVideoElement;
+  inferEpisodeInfo(): Promise<InferredEpisodeInfo>;
   onVideoChanged(callback: (video: HTMLVideoElement) => void): void;
   Api: Api.Implementation;
   service: 'vrv' | 'funimation' | 'example' | undefined;
