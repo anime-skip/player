@@ -1,5 +1,11 @@
 <template>
-  <BasicDialog name="EditEpisodeDialog" gravityX="center" gravityY="center" @show="onShowDialog()">
+  <BasicDialog
+    name="EditEpisodeDialog"
+    gravityX="center"
+    gravityY="center"
+    @show="onShowDialog()"
+    @hide="onHideDialog()"
+  >
     <ProgressOverlay :isLoading="isLoadingEpisode">
       <h2 class="section-header">Find Existing Episode</h2>
       <AutocompleteTextInput
@@ -74,6 +80,7 @@ import Browser from '../../common/utils/Browser';
 })
 export default class EditEpisodeDialog extends Vue {
   @Getter() episodeUrl?: Api.EpisodeUrl;
+  @Getter() episodeInfo?: Api.EpisodeUrl;
   @Getter() episodeRequestState?: RequestState;
   @Getter() searchShowsResult!: Api.ShowSearchResult[];
   @Getter() searchEpisodesResult!: Api.EpisodeSearchResult[];
@@ -86,6 +93,7 @@ export default class EditEpisodeDialog extends Vue {
   @Action() searchEpisodes!: (payload: { name: string; showId?: string }) => void;
   @Action() createEpisodeData!: (payload: CreateEpisodeDataPayload) => void;
   @Action() showDialog!: (dialog?: string) => void;
+  @Action() stopEditing!: (discard: boolean) => void;
 
   public selectedShowOption: any = {
     title: '',
@@ -141,6 +149,12 @@ export default class EditEpisodeDialog extends Vue {
     this.editableAbsoluteNumber = String(this.episodeUrl?.episode.absoluteNumber ?? '');
   }
 
+  public onHideDialog() {
+    if (this.episodeUrl == null) {
+      this.stopEditing(true);
+    }
+  }
+
   public get showSearchListItems() {
     return this.searchShowsResult.map(item => ({
       id: item.id,
@@ -153,7 +167,7 @@ export default class EditEpisodeDialog extends Vue {
     return this.searchEpisodesResult.map(item => ({
       id: item.id,
       title: item.name || '(No title)',
-      subtitle: EpisodeUtils.seasonAndNumberFromSearchResult(item),
+      subtitle: EpisodeUtils.seasonAndNumberDisplay(item),
     }));
   }
 
