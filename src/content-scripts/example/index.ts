@@ -8,6 +8,10 @@ global.serviceDisplayName = 'Anime Skip Example';
 global.getRootQuery = (): string => {
   return '.video-container';
 };
+global.inferEpisodeInfo = async (): Promise<InferredEpisodeInfo> => {
+  console.log('example.inferEpisodeInfo');
+  return await browser.runtime.sendMessage({ type: '@anime-skip/inferEpisodeInfo' });
+};
 global.getVideoQuery = (): string => {
   return '#video';
 };
