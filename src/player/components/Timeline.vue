@@ -177,6 +177,7 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
         at: this.getCurrentTime(),
         typeId: '',
         id: Utils.randomId(),
+        source: 'ANIME_SKIP',
       });
       this.setEditTimestampMode('add');
       this.showDialog('EditTimestampPanel');
@@ -237,6 +238,7 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
       id: 'unknown',
       at: 0,
       typeId: 'unknown',
+      source: 'ANIME_SKIP',
     };
   }
 
@@ -245,6 +247,7 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
       id: 'end',
       at: this.duration || 0,
       typeId: 'end',
+      source: 'ANIME_SKIP',
     };
   }
 

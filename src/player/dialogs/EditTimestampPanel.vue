@@ -213,6 +213,7 @@ export default class EditTimestampPanel extends Mixins(
       at: base.at,
       typeId: this.selectedType!.id,
       id: base.id,
+      source: base.source,
     });
     this.hideDialog();
     this.play();

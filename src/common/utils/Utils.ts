@@ -198,11 +198,19 @@ export default class Utils {
     oldTimestamps.forEach(item => {
       oldItemMap[item.id] = item;
     });
-    const toUpdate: Api.Timestamp[] = intersect.filter(newItem => {
-      return (
-        newItem.at !== oldItemMap[newItem.id].at || newItem.typeId !== oldItemMap[newItem.id].typeId
-      );
-    });
+    const toUpdate = intersect
+      .filter(newItem => {
+        return (
+          newItem.at !== oldItemMap[newItem.id].at ||
+          newItem.typeId !== oldItemMap[newItem.id].typeId
+        );
+      })
+      .map<Api.Timestamp>(item => ({
+        id: item.id,
+        source: item.source ?? 'ANIME_SKIP',
+        at: item.at,
+        typeId: item.typeId,
+      }));
 
     // prettier-ignore
     return {
