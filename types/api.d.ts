@@ -6,6 +6,8 @@ declare interface GraphQlBody {
 }
 
 declare namespace Api {
+  type TimestampSource = 'ANIME_SKIP' | 'BETTER_VRV';
+
   interface Implementation {
     loginManual(username: string, password: string): Promise<Api.LoginResponse>;
     loginRefresh(refreshToken: string): Promise<Api.LoginRefreshResponse>;
@@ -101,13 +103,25 @@ declare namespace Api {
     timestamps: Timestamp[];
   }
 
+  interface ThirdPartyEpisode {
+    id?: string;
+    season?: String;
+    number?: String;
+    absoluteNumber?: String;
+    name?: String;
+    source?: TimestampSource;
+    timestamps: ThirdPartyTimestamp[];
+  }
+
   interface InputTimestamp {
     at: number;
     typeId: string;
+    source?: TimestampSource;
   }
 
   interface Timestamp extends InputTimestamp {
     id: string;
+    source: TimestampSource;
   }
 
   interface AmbigousTimestamp extends InputTimestamp {
@@ -115,6 +129,13 @@ declare namespace Api {
      * It is a number when it is local, randomly generated. It is remote when the id is a string (GUID)
      */
     id: number | string;
+    source: TimestampSource;
+  }
+
+  interface ThirdPartyTimestamp {
+    id?: string;
+    at: number;
+    typeId: string;
   }
 
   interface TimestampType {
