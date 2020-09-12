@@ -20,7 +20,8 @@ export default {
 
   searchEpisodesRequestState: '@@episodes/searchEpisodesRequestState' as const,
   searchEpisodesResult: '@@episodes/searchEpisodesResult' as const,
-  setEpisodeInfo: '@@episodes/setEpisodeInfo' as const,
+  setEpisodeUrl: '@@episodes/setEpisodeUrl' as const,
+  setInferredEpisodeInfo: '@@episodes/setInferredEpisodeInfo' as const,
   episodeRequestState: '@@episodes/episodeRequestState' as const,
 
   setActiveTimestamp: '@@timestamps/setActiveTimestamp' as const,

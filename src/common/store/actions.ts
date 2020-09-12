@@ -203,17 +203,31 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       commit(mutationTypes.searchEpisodesRequestState, RequestState.FAILURE);
     }
   },
-  async [types.fetchEpisodeByUrl]({ commit }, url) {
+  async [types.fetchEpisodeByUrl]({ commit, dispatch }, url) {
     console.log('actions.fetchEpisodeByUrl', { url });
     try {
       commit(mutationTypes.episodeRequestState, RequestState.LOADING);
       const episodeUrl = await callApi(commit, global.Api.fetchEpisodeByUrl, url);
       commit(mutationTypes.episodeRequestState, RequestState.SUCCESS);
-      commit(mutationTypes.setEpisodeInfo, episodeUrl);
+      commit(mutationTypes.setEpisodeUrl, episodeUrl);
+    } catch (err) {
+      console.warn('actions.fetchEpisodeByUrl', err);
+      commit(mutationTypes.setEpisodeUrl, undefined);
+      await dispatch(types.inferEpisodeInfo);
+    }
+  },
+  async [types.inferEpisodeInfo]({ commit }) {
+    console.log('actions.inferEpisodeInfo');
+    try {
+      commit(mutationTypes.episodeRequestState, RequestState.LOADING);
+      const episodeInfo = await global.inferEpisodeInfo();
+      if (episodeInfo == null) throw new Error('Could not infer episode info');
+      commit(mutationTypes.episodeRequestState, RequestState.SUCCESS);
+      commit(mutationTypes.setInferredEpisodeInfo, episodeInfo);
     } catch (err) {
       console.warn('actions.inferEpisodeInfo', err);
       commit(mutationTypes.episodeRequestState, RequestState.FAILURE);
-      commit(mutationTypes.setEpisodeInfo, undefined);
+      commit(mutationTypes.setEpisodeUrl, undefined);
     }
   },
 

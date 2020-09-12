@@ -77,6 +77,16 @@ export default as<GetterTree<VuexState, VuexState>>({
   episodeUrl({ episodeUrl }): Api.EpisodeUrl | undefined {
     return episodeUrl;
   },
+  episodeInfo(state): DisplayEpisodeInfo {
+    const { episodeUrl, inferredEpisodeInfo } = state;
+    return {
+      absoluteNumber: episodeUrl?.episode.absoluteNumber || inferredEpisodeInfo?.absoluteNumber,
+      number: episodeUrl?.episode.number || inferredEpisodeInfo?.number,
+      name: episodeUrl?.episode.name || inferredEpisodeInfo?.name || 'Unknown Episode',
+      season: episodeUrl?.episode.season || inferredEpisodeInfo?.season,
+      show: episodeUrl?.episode.show?.name || inferredEpisodeInfo?.name || 'Unknown Show',
+    };
+  },
   episodeRequestState({ episodeRequestState }): RequestState {
     return episodeRequestState;
   },

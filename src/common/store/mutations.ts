@@ -142,8 +142,11 @@ export default as<
   [types.searchEpisodesRequestState](state, requestState: RequestState) {
     state.searchEpisodesRequestState = requestState;
   },
-  [types.setEpisodeInfo](state, episode: Api.EpisodeUrl) {
+  [types.setEpisodeUrl](state, episode: Api.EpisodeUrl) {
     state.episodeUrl = episode;
+  },
+  [types.setInferredEpisodeInfo](state, episode: InferredEpisodeInfo) {
+    state.inferredEpisodeInfo = episode;
   },
   [types.episodeRequestState](state, requestState: RequestState) {
     state.episodeRequestState = requestState;
