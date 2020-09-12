@@ -15,6 +15,7 @@
         label="Find Episode"
         v-model="selectedEpisodeOption"
         :options="episodeSearchListItems"
+        :disabled="shouldDisableEpisode"
         @select="onChangeSelectedEpisode"
         @search="onSearchEpisodes"
       />
@@ -154,6 +155,11 @@ export default class EditEpisodeDialog extends Vue {
       title: item.name || '(No title)',
       subtitle: EpisodeUtils.seasonAndNumberFromSearchResult(item),
     }));
+  }
+
+  public get shouldDisableEpisode(): boolean {
+    console.info(JSON.parse(JSON.stringify(this.selectedShowOption)));
+    return this.selectedShowOption.id == null && !this.selectedShowOption.title;
   }
 
   public get shouldDisableEpisodeNumbers(): boolean {
