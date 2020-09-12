@@ -24,7 +24,7 @@ function checkVideoChanged(): void {
       try {
         callback(newVideo);
       } catch (err) {
-        console.error('onVideoChangedCallback failed', err);
+        console.warn('onVideoChangedCallback failed', err);
       }
     });
     oldVideoSrc = newVideo.src;

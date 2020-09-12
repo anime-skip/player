@@ -158,7 +158,6 @@ export default class EditEpisodeDialog extends Vue {
   }
 
   public get shouldDisableEpisode(): boolean {
-    console.info(JSON.parse(JSON.stringify(this.selectedShowOption)));
     return this.selectedShowOption.id == null && !this.selectedShowOption.title;
   }
 

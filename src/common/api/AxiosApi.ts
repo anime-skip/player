@@ -134,7 +134,7 @@ async function sendGraphql<Q extends string, D>(
 
     return response.data;
   } catch (err) {
-    console.error(err.message, {
+    console.warn(err.message, {
       status: err.response?.status,
       headers: err.response?.headers,
       errors: err.response?.data?.errors,

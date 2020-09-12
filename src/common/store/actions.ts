@@ -90,7 +90,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       commit(mutations.login, loginData);
       commit(mutations.loginRequestState, RequestState.SUCCESS);
     } catch (err) {
-      console.error('actions.loginManual', err);
+      console.warn('actions.loginManual', err);
       commit(mutations.loginRequestState, RequestState.FAILURE);
     }
   },
@@ -122,7 +122,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
         throw err;
       }
     } catch (err) {
-      console.error('actions.updatePreferences', err);
+      console.warn('actions.updatePreferences', err);
     }
   },
 
@@ -135,7 +135,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       commit(mutationTypes.searchShowsRequestState, RequestState.SUCCESS);
       commit(mutationTypes.searchShowsResult, results);
     } catch (err) {
-      console.error('actions.searchShows', err);
+      console.warn('actions.searchShows', err);
       commit(mutationTypes.searchShowsRequestState, RequestState.FAILURE);
     }
   },
@@ -183,13 +183,11 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
         episodeUrl = episodeUrlData.url;
       }
 
-      console.log('Created Episode Data:', { showId, episodeId, episodeUrl });
-
       // Update the data
       dispatch(types.fetchEpisodeByUrl, episodeUrl);
       commit(mutationTypes.episodeRequestState, RequestState.SUCCESS);
     } catch (err) {
-      console.error(err);
+      console.warn('actions.createEpisodeData', err);
       commit(mutationTypes.episodeRequestState, RequestState.FAILURE);
     }
   },
@@ -201,7 +199,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       commit(mutationTypes.searchEpisodesRequestState, RequestState.SUCCESS);
       commit(mutationTypes.searchEpisodesResult, results);
     } catch (err) {
-      console.error('actions.searchEpisodes', err);
+      console.warn('actions.searchEpisodes', err);
       commit(mutationTypes.searchEpisodesRequestState, RequestState.FAILURE);
     }
   },
@@ -213,7 +211,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       commit(mutationTypes.episodeRequestState, RequestState.SUCCESS);
       commit(mutationTypes.setEpisodeInfo, episodeUrl);
     } catch (err) {
-      console.error('actions.fetchEpisodeByUrl', err);
+      console.warn('actions.inferEpisodeInfo', err);
       commit(mutationTypes.episodeRequestState, RequestState.FAILURE);
       commit(mutationTypes.setEpisodeInfo, undefined);
     }

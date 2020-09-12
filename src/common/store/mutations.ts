@@ -57,7 +57,6 @@ export default as<
     state.tabUrl = tabUrl;
   },
   [types.setHasSkippedFromZero](state, hasSkippedFromZero) {
-    console.info('setHasSkippedFromZero', hasSkippedFromZero);
     state.hasSkippedFromZero = hasSkippedFromZero;
   },
 
@@ -158,7 +157,6 @@ export default as<
     state.activeTimestamp = undefined;
   },
   [types.updateDraftTimestamp](state, newTimestamp: Api.AmbigousTimestamp) {
-    console.info('Before: ', state.draftTimestamps);
     const index = state.draftTimestamps.findIndex(
       draftTimestamp => draftTimestamp.id === newTimestamp.id
     );
@@ -170,7 +168,6 @@ export default as<
       unsortedTimestamps[index] = newTimestamp;
     }
     state.draftTimestamps = unsortedTimestamps.sort(Utils.timestampSorter);
-    console.info('After: ', state.draftTimestamps);
   },
   [types.deleteDraftTimestamp](state, deletedTimestamp: Api.AmbigousTimestamp) {
     state.draftTimestamps = state.draftTimestamps.filter(item => {
