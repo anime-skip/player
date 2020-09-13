@@ -77,6 +77,19 @@ export default as<GetterTree<VuexState, VuexState>>({
   episodeUrl({ episodeUrl }): Api.EpisodeUrl | undefined {
     return episodeUrl;
   },
+  displayEpisodeInfo(state): DisplayEpisodeInfo {
+    const { episodeUrl, inferredEpisodeInfo } = state;
+    return {
+      absoluteNumber: episodeUrl?.episode.absoluteNumber || inferredEpisodeInfo?.absoluteNumber,
+      number: episodeUrl?.episode.number || inferredEpisodeInfo?.number,
+      name: episodeUrl?.episode.name || inferredEpisodeInfo?.name || 'Unknown Episode',
+      season: episodeUrl?.episode.season || inferredEpisodeInfo?.season,
+      show: episodeUrl?.episode.show?.name || inferredEpisodeInfo?.show || 'Unknown Show',
+    };
+  },
+  inferredEpisodeInfo({ inferredEpisodeInfo }): InferredEpisodeInfo | undefined {
+    return inferredEpisodeInfo;
+  },
   episodeRequestState({ episodeRequestState }): RequestState {
     return episodeRequestState;
   },
@@ -85,11 +98,8 @@ export default as<GetterTree<VuexState, VuexState>>({
   },
 
   // Timestamps
-  timestamps(state): Api.Timestamp[] {
-    if (state.episodeUrl == null) {
-      return [];
-    }
-    return state.episodeUrl.episode.timestamps;
+  timestamps({ timestamps }): Api.AmbigousTimestamp[] {
+    return timestamps;
   },
   activeTimestamp(state): Api.AmbigousTimestamp | undefined {
     return state.activeTimestamp;
@@ -99,5 +109,13 @@ export default as<GetterTree<VuexState, VuexState>>({
   },
   editTimestampMode(state): 'edit' | 'add' | undefined {
     return state.editTimestampMode;
+  },
+  canEditTimestamps(_, getters): boolean {
+    const episodeInfo: DisplayEpisodeInfo = getters.episodeInfo;
+    if (episodeInfo == null) return false;
+    const { name, show } = episodeInfo;
+    if (!name || !show) return false;
+    if (name === 'Unknown Episode' || show === 'Unknown Show') return false;
+    return true;
   },
 });

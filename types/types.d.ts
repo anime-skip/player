@@ -70,3 +70,25 @@ type BrowserType =
   | 'edge'
   | 'edgechromium'
   | 'unsupported';
+
+/**
+ * Episode data pulled from the parent webpage
+ */
+interface InferredEpisodeInfo {
+  name?: string;
+  number?: string;
+  absoluteNumber?: string;
+  season?: string;
+  show?: string;
+}
+
+/**
+ * Episode info that is displayed in the top left of the player
+ */
+interface DisplayEpisodeInfo {
+  name: string;
+  number?: string;
+  absoluteNumber?: string;
+  season?: string;
+  show: string;
+}

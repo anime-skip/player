@@ -47,7 +47,7 @@
           v-if="!isEditing && isLoggedIn"
           class="margin-left"
           icon="ic_edit.svg"
-          @click.native="startEditMode"
+          @click.native="startEditing"
           title="Edit Timestamps"
         />
         <ToolbarButton
@@ -120,7 +120,7 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   public isFullscreenEnabled = document.fullscreenEnabled;
   public service = global.service;
 
-  @Getter() public timestamps!: Api.Timestamp[];
+  @Getter() public timestamps!: Api.AmbigousTimestamp[];
   @Getter() public preferences?: Api.Preferences;
   @Getter() public activeDialog?: string;
   @Getter() public isEditing!: boolean;
@@ -277,14 +277,6 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   }
 
   // Edit Mode
-
-  public startEditMode() {
-    this.startEditing();
-
-    if (!this.episodeUrl) {
-      this.showEditEpisodeDialog();
-    }
-  }
 
   public get shouldShowSaveDiscardChanges(): boolean {
     return this.activeDialog == null && this.isEditing;

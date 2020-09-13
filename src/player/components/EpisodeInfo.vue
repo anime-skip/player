@@ -29,7 +29,7 @@ import ToolbarButton from '@/player/components/ToolbarButton.vue';
 export default class EpisodeInfo extends Vue {
   @Action() public showDialog!: (dialogName?: string) => void;
 
-  @Getter() public episodeUrl?: Api.EpisodeUrl;
+  @Getter() public displayEpisodeInfo?: DisplayEpisodeInfo;
   @Getter() public episodeRequestState!: RequestState;
   @Getter() public isEditing!: boolean;
   @Getter() public activeDialog?: string;
@@ -49,15 +49,15 @@ export default class EpisodeInfo extends Vue {
   }
 
   public get showTitle(): string {
-    return this.episodeUrl?.episode?.show?.name ?? 'Unknown Show';
+    return this.displayEpisodeInfo?.show ?? '';
   }
 
   public get episodeTitle(): string {
-    return this.episodeUrl?.episode?.name ?? 'Unknown Episode';
+    return this.displayEpisodeInfo?.name ?? '';
   }
 
   public get episodeDetails(): string {
-    return EpisodeUtils.seasonAndNumberFromEpisodeUrl(this.episodeUrl);
+    return EpisodeUtils.seasonAndNumberFromEpisodeInfo(this.displayEpisodeInfo);
   }
 
   public showEditDialog() {

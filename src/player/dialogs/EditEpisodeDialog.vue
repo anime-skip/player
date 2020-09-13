@@ -1,5 +1,11 @@
 <template>
-  <BasicDialog name="EditEpisodeDialog" gravityX="center" gravityY="center" @show="onShowDialog()">
+  <BasicDialog
+    name="EditEpisodeDialog"
+    gravityX="center"
+    gravityY="center"
+    @show="onShowDialog()"
+    @hide="onHideDialog()"
+  >
     <ProgressOverlay :isLoading="isLoadingEpisode">
       <h2 class="section-header">Find Existing Episode</h2>
       <AutocompleteTextInput
@@ -15,6 +21,7 @@
         label="Find Episode"
         v-model="selectedEpisodeOption"
         :options="episodeSearchListItems"
+        :disabled="shouldDisableEpisode"
         @select="onChangeSelectedEpisode"
         @search="onSearchEpisodes"
       />
@@ -73,10 +80,12 @@ import Browser from '../../common/utils/Browser';
 })
 export default class EditEpisodeDialog extends Vue {
   @Getter() episodeUrl?: Api.EpisodeUrl;
+  @Getter() inferredEpisodeInfo?: DisplayEpisodeInfo;
   @Getter() episodeRequestState?: RequestState;
   @Getter() searchShowsResult!: Api.ShowSearchResult[];
   @Getter() searchEpisodesResult!: Api.EpisodeSearchResult[];
   @Getter() tabUrl!: string;
+  @Getter() canEditTimestamps!: boolean;
 
   @Mutation('searchShowsResult') clearShowSearchResults!: () => void;
   @Mutation('searchEpisodesResult') clearSearchEpisodeResults!: () => void;
@@ -85,6 +94,7 @@ export default class EditEpisodeDialog extends Vue {
   @Action() searchEpisodes!: (payload: { name: string; showId?: string }) => void;
   @Action() createEpisodeData!: (payload: CreateEpisodeDataPayload) => void;
   @Action() showDialog!: (dialog?: string) => void;
+  @Action() stopEditing!: (discard: boolean) => void;
 
   public selectedShowOption: any = {
     title: '',
@@ -96,6 +106,7 @@ export default class EditEpisodeDialog extends Vue {
   public editableSeasonNumber = '';
   public editableEpisodeNumber = '';
   public editableAbsoluteNumber = '';
+  public fetchingIds = RequestState.NOT_REQUESTED;
 
   public onChangeSelectedShow() {
     this.selectedEpisodeOption = {
@@ -127,6 +138,10 @@ export default class EditEpisodeDialog extends Vue {
         title: this.episodeUrl.episode.name ?? '',
         subtitle: EpisodeUtils.seasonAndNumberFromEpisodeUrl(this.episodeUrl),
       };
+    } else if (this.inferredEpisodeInfo) {
+      // Show loading and fetch the show & episode
+      this.fetchingIds = RequestState.LOADING;
+      this.fetchInferredData();
     } else {
       this.selectedShowOption = {
         title: '',
@@ -138,6 +153,12 @@ export default class EditEpisodeDialog extends Vue {
     this.editableSeasonNumber = String(this.episodeUrl?.episode.season ?? '');
     this.editableEpisodeNumber = String(this.episodeUrl?.episode.number ?? '');
     this.editableAbsoluteNumber = String(this.episodeUrl?.episode.absoluteNumber ?? '');
+  }
+
+  public onHideDialog() {
+    if (!this.canEditTimestamps) {
+      this.stopEditing(true);
+    }
   }
 
   public get showSearchListItems() {
@@ -152,8 +173,12 @@ export default class EditEpisodeDialog extends Vue {
     return this.searchEpisodesResult.map(item => ({
       id: item.id,
       title: item.name || '(No title)',
-      subtitle: EpisodeUtils.seasonAndNumberFromSearchResult(item),
+      subtitle: EpisodeUtils.seasonAndNumberDisplay(item),
     }));
+  }
+
+  public get shouldDisableEpisode(): boolean {
+    return this.selectedShowOption.id == null && !this.selectedShowOption.title;
   }
 
   public get shouldDisableEpisodeNumbers(): boolean {
@@ -172,10 +197,53 @@ export default class EditEpisodeDialog extends Vue {
     });
   }
 
+  public async fetchInferredData(): Promise<void> {
+    try {
+      const possibleShows = await global.Api.searchShows(this.inferredEpisodeInfo!.show);
+      const matchingShows = possibleShows.filter(
+        show => show.name === this.inferredEpisodeInfo!.show
+      );
+      if (matchingShows.length === 0) throw new Error('No matching episodes');
+      const firstShow = matchingShows.shift()!;
+      this.selectedShowOption = {
+        id: firstShow.id,
+        title: firstShow.name,
+      };
+      // this.otherShowOptions = matchingShows;
+
+      try {
+        const possibleEpisodes = await global.Api.searchEpisodes(this.inferredEpisodeInfo!.name);
+        const matchingEpisodes = possibleEpisodes.filter(
+          episode => episode.name === this.inferredEpisodeInfo
+        );
+        if (matchingEpisodes.length === 0) throw new Error('No matching episodes');
+        const firstEpisode = matchingEpisodes.shift()!;
+        this.selectedEpisodeOption = {
+          id: firstEpisode.id,
+          title: firstEpisode.name,
+        };
+        // this.otherEpisodeOptions = matchingEpisodes;
+      } catch (err) {
+        this.selectedEpisodeOption = {
+          title: this.inferredEpisodeInfo!.name,
+        };
+      }
+
+      // Couldn't fetch show
+    } catch (err) {
+      this.selectedShowOption = {
+        title: this.inferredEpisodeInfo!.show,
+      };
+      this.selectedEpisodeOption = {
+        title: this.inferredEpisodeInfo!.name,
+      };
+    }
+    this.fetchingIds = RequestState.SUCCESS;
+  }
+
   public get isLoadingEpisode(): boolean {
     return (
-      this.episodeRequestState === RequestState.LOADING ||
-      this.episodeRequestState === RequestState.NOT_REQUESTED
+      this.episodeRequestState === RequestState.LOADING || this.fetchingIds === RequestState.LOADING
     );
   }
 

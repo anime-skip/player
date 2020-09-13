@@ -2,14 +2,24 @@ export default class EpisodeUtils {
   public static seasonAndNumberFromEpisodeUrl(episodeUrl?: Api.EpisodeUrl): string {
     if (episodeUrl?.episode == null) return '';
 
-    return EpisodeUtils.seasonAndNumberFromSearchResult(episodeUrl.episode);
+    return EpisodeUtils.seasonAndNumberDisplay(episodeUrl.episode);
   }
 
-  public static seasonAndNumberFromSearchResult({
+  public static seasonAndNumberFromEpisodeInfo(episodeInfo?: DisplayEpisodeInfo): string {
+    if (episodeInfo == null) return '';
+
+    return EpisodeUtils.seasonAndNumberDisplay(episodeInfo);
+  }
+
+  public static seasonAndNumberDisplay({
     absoluteNumber,
     number,
     season,
-  }: Api.EpisodeSearchResult): string {
+  }: {
+    absoluteNumber?: string;
+    number?: string;
+    season?: string;
+  }): string {
     if (absoluteNumber != null && number != null && season != null) {
       return `Season ${season}, Episode ${number} (#${absoluteNumber})`;
     }

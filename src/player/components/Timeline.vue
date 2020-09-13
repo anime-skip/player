@@ -99,6 +99,7 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
   @Getter('preferences') prefs?: Api.Preferences;
   @Getter() preferencesLastUpdatedAt!: number;
   @Getter() hasSkippedFromZero!: boolean;
+  @Getter() playbackRate!: number;
 
   @Mutation() setActiveTimestamp!: (timestamp: Api.AmbigousTimestamp) => void;
   @Mutation() setEditTimestampMode!: (mode: 'add' | 'edit' | undefined) => void;
@@ -130,7 +131,7 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
     // Do nothing
     const timeDiff = Math.abs(oldTime - newTime);
     const hasNoMoreTimestamsps = oldNext == null;
-    const isSeeking = timeDiff > 1;
+    const isSeeking = timeDiff > 1 * this.playbackRate; // Multiple the base number, 1s, by the speed so that high playback rates don't "skip" over timestamps
     const isAtEnd = newTime >= this.duration;
     if (hasNoMoreTimestamsps || isSeeking || isAtEnd || this.isEditing) {
       return;
@@ -147,7 +148,7 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
     }
 
     // Do nothing
-    const willNotPastATimestamp = oldNext!.at > newTime + timeDiff; // look forward 1/2 a time update so we don't show the user a frame of the skipped section
+    const willNotPastATimestamp = oldNext!.at > newTime + timeDiff; // look forward a time update so we don't show the user a frame of the skipped section
     const notSkippingThePassedTimestamp = !Utils.isSkipped(oldNext!, this.prefs);
     if (willNotPastATimestamp || notSkippingThePassedTimestamp) {
       return;
@@ -162,27 +163,7 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
   }
 
   public onClickTimestampHandle(): void {
-    this.pause();
-
-    if (!this.isLoggedIn) {
-      this.showDialog('AccountDialog');
-      return;
-    }
-
-    if (!this.isEditing) {
-      this.startEditing();
-    }
-    if (this.hasEpisode) {
-      this.setActiveTimestamp({
-        at: this.getCurrentTime(),
-        typeId: '',
-        id: Utils.randomId(),
-      });
-      this.setEditTimestampMode('add');
-      this.showDialog('EditTimestampPanel');
-    } else {
-      this.showDialog('EditEpisodeDialog');
-    }
+    this.startEditing();
   }
 
   public keyboardShortcuts: { [combination: string]: () => void } = {
@@ -227,7 +208,6 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
   @Watch('isEditing')
   @Watch('preferencesLastUpdatedAt')
   public updateSections(): void {
-    console.log('Updating sections');
     this.sections = this.getSections();
     this.completedSections = this.getCompletedSections();
   }
@@ -237,6 +217,7 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
       id: 'unknown',
       at: 0,
       typeId: 'unknown',
+      source: 'ANIME_SKIP',
     };
   }
 
@@ -245,6 +226,7 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
       id: 'end',
       at: this.duration || 0,
       typeId: 'end',
+      source: 'ANIME_SKIP',
     };
   }
 

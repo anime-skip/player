@@ -6,6 +6,7 @@
       :errorMessage="errorMessage"
       :leftIcon="leftIcon"
       v-model="searchValue"
+      :disabled="disabled"
       @focus="onFocusInput"
       @blur="onBlurInput"
       @keypress-esc="onPressEsc"
@@ -64,6 +65,7 @@ export default class AutocompleteTextInput extends Vue {
   @Prop({ type: Array, required: true }) private options!: AutocompleteItem[];
   @Prop(String) private leftIcon?: string;
   @Prop({ type: Number, default: 300 }) private searchDelay?: number;
+  @Prop(Boolean) private disabled?: boolean;
 
   @Watch('value')
   public onChangeValue(value: AutocompleteItem) {
@@ -97,6 +99,13 @@ export default class AutocompleteTextInput extends Vue {
 
     // highlight index
     this.highlightedIndex = this.searchValue.trim() ? -1 : 0;
+
+    // Update parent
+    if (this.searchValue !== this.inputValue.title) {
+      this.inputValue = {
+        title: this.searchValue,
+      };
+    }
   }
 
   @Watch('options')
@@ -127,7 +136,7 @@ export default class AutocompleteTextInput extends Vue {
           title: this.searchValue,
         };
       }
-    }, 100);
+    }, 0);
   }
 
   public onClickOption(option: AutocompleteItem) {

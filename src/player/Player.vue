@@ -11,7 +11,10 @@
     @mousemove.prevent="toggleActive(true)"
     @click="togglePlayPause()"
   >
-    <Loading v-if="playerState.isBuffering" class="buffer-loading-container" />
+    <Loading
+      v-if="playerState.isBuffering && !playerState.isPaused"
+      class="buffer-loading-container"
+    />
     <div class="left-content">
       <EpisodeInfo />
     </div>
@@ -72,7 +75,7 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
   @Mutation() public setTabUrl!: (url: string) => void;
   @Mutation() public setHasSkippedFromZero!: (newValue: boolean) => void;
 
-  @Action() public fetchEpisodeByUrl!: (url: string) => void;
+  @Action() public loadAllEpisodeData!: (url: string) => void;
 
   constructor() {
     super();
@@ -82,7 +85,7 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
   }
 
   public mounted(): void {
-    this.fetchEpisodeInfo();
+    this.loadAllEpisodeData(this.tabUrl);
 
     global.onVideoChanged(video => {
       this.changePlaybackRate(this.playbackRate);
@@ -111,17 +114,12 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
   }
 
   public onReceiveMessage({ type, payload: url }: any) {
-    if (type != 'changeUrl') return;
+    if (type != '@anime-skip/changeUrl') return;
 
     console.log('Change URL: ' + url);
     this.setTabUrl(url);
     this.setHasSkippedFromZero(false);
-  }
-
-  @Watch('tabUrl')
-  public fetchEpisodeInfo(): void {
-    console.log('Fetching episode: ' + this.tabUrl);
-    this.fetchEpisodeByUrl(this.tabUrl);
+    this.loadAllEpisodeData(url);
   }
 
   public toggleActive(isActive: boolean) {

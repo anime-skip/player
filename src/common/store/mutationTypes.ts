@@ -20,12 +20,14 @@ export default {
 
   searchEpisodesRequestState: '@@episodes/searchEpisodesRequestState' as const,
   searchEpisodesResult: '@@episodes/searchEpisodesResult' as const,
-  setEpisodeInfo: '@@episodes/setEpisodeInfo' as const,
+  setEpisodeUrl: '@@episodes/setEpisodeUrl' as const,
+  setInferredEpisodeInfo: '@@episodes/setInferredEpisodeInfo' as const,
   episodeRequestState: '@@episodes/episodeRequestState' as const,
 
   setActiveTimestamp: '@@timestamps/setActiveTimestamp' as const,
   clearActiveTimestamp: '@@timestamps/clearActiveTimestamp' as const,
   setDraftTimestamps: '@@timestamps/setDraftTimestamps' as const,
+  setTimestamps: '@@timestamps/setTimestamps' as const,
   updateDraftTimestamp: '@@timestamps/updateDraftTimestamp' as const,
   deleteDraftTimestamp: '@@timestamps/deleteDraftTimestamp' as const,
   clearEditTimestampMode: '@@timestamps/clearEditTimestampMode' as const,

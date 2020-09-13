@@ -57,7 +57,6 @@ export default as<
     state.tabUrl = tabUrl;
   },
   [types.setHasSkippedFromZero](state, hasSkippedFromZero) {
-    console.info('setHasSkippedFromZero', hasSkippedFromZero);
     state.hasSkippedFromZero = hasSkippedFromZero;
   },
 
@@ -143,8 +142,12 @@ export default as<
   [types.searchEpisodesRequestState](state, requestState: RequestState) {
     state.searchEpisodesRequestState = requestState;
   },
-  [types.setEpisodeInfo](state, episode: Api.EpisodeUrl) {
-    state.episodeUrl = episode;
+  [types.setEpisodeUrl](state, episodeUrl?: Api.EpisodeUrl) {
+    state.episodeUrl = episodeUrl;
+    state.timestamps = (episodeUrl?.episode?.timestamps || []).sort(Utils.timestampSorter);
+  },
+  [types.setInferredEpisodeInfo](state, episode?: InferredEpisodeInfo) {
+    state.inferredEpisodeInfo = episode;
   },
   [types.episodeRequestState](state, requestState: RequestState) {
     state.episodeRequestState = requestState;
@@ -158,7 +161,6 @@ export default as<
     state.activeTimestamp = undefined;
   },
   [types.updateDraftTimestamp](state, newTimestamp: Api.AmbigousTimestamp) {
-    console.info('Before: ', state.draftTimestamps);
     const index = state.draftTimestamps.findIndex(
       draftTimestamp => draftTimestamp.id === newTimestamp.id
     );
@@ -170,7 +172,6 @@ export default as<
       unsortedTimestamps[index] = newTimestamp;
     }
     state.draftTimestamps = unsortedTimestamps.sort(Utils.timestampSorter);
-    console.info('After: ', state.draftTimestamps);
   },
   [types.deleteDraftTimestamp](state, deletedTimestamp: Api.AmbigousTimestamp) {
     state.draftTimestamps = state.draftTimestamps.filter(item => {
@@ -179,6 +180,9 @@ export default as<
   },
   [types.setDraftTimestamps](state, timestamps: Api.AmbigousTimestamp[]) {
     state.draftTimestamps = [...timestamps].sort(Utils.timestampSorter);
+  },
+  [types.setTimestamps](state, timestamps: Api.AmbigousTimestamp[]) {
+    state.timestamps = [...timestamps].sort(Utils.timestampSorter);
   },
   [types.clearEditTimestampMode](state) {
     state.editTimestampMode = undefined;

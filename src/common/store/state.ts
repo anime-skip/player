@@ -25,9 +25,12 @@ export const initialState: VuexState = {
   searchEpisodesResult: [],
   searchEpisodesRequestState: RequestState.NOT_REQUESTED,
   episodeUrl: undefined,
+  inferredEpisodeInfo: undefined,
   episodeRequestState: RequestState.NOT_REQUESTED,
 
   editTimestampMode: undefined,
   activeTimestamp: undefined,
+  timestamps: [],
   draftTimestamps: [],
+  selectedTimestamp: undefined,
 };

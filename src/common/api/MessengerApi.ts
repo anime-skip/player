@@ -1,7 +1,12 @@
 import { as } from '../utils/GlobalUtils';
 import Messenger from '../utils/Messenger';
 
-const messenger = new Messenger('content-script');
+const messenger = new Messenger<
+  ApiMessageTypes,
+  ApiMessageListenerMap,
+  ApiMessagePayloadMap,
+  ApiMessageResponseMap
+>('content-script');
 
 export default as<Api.Implementation>({
   loginManual(username, password) {
@@ -37,6 +42,9 @@ export default as<Api.Implementation>({
   },
   fetchEpisodeByUrl(url) {
     return messenger.send('fetchEpisodeByUrl', url);
+  },
+  fetchEpisodeByName(name) {
+    return messenger.send('fetchEpisodeByName', name);
   },
 
   createTimestamp(episodeId, data) {
