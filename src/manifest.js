@@ -57,6 +57,11 @@ services.forEach(service => {
   manifest.page_action.show_matches.push(...service.page_matches);
 });
 
+if (process.env.NODE_ENV !== 'production') {
+  manifest.name += ' Nightly';
+  manifest.description = 'Development Build - ' + manifest.description;
+}
+
 module.exports = {
   manifest,
   services,
