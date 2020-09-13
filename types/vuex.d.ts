@@ -1,5 +1,8 @@
 declare interface VuexState {
   activeDialog: string | undefined;
+  /**
+   * A number from 0 to 4. This is not a percentage, but a mulitpier
+   */
   playbackRate: number;
   isEditing: boolean;
   selectedTimestamp: Api.AmbigousTimestamp | undefined;
