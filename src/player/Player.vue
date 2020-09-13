@@ -11,7 +11,10 @@
     @mousemove.prevent="toggleActive(true)"
     @click="togglePlayPause()"
   >
-    <Loading v-if="playerState.isBuffering" class="buffer-loading-container" />
+    <Loading
+      v-if="playerState.isBuffering && !playerState.isPaused"
+      class="buffer-loading-container"
+    />
     <div class="left-content">
       <EpisodeInfo />
     </div>
