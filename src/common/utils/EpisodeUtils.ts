@@ -36,7 +36,7 @@ export default class EpisodeUtils {
       return `Episode ${number}`;
     }
     if (absoluteNumber != null) {
-      return `#${absoluteNumber}`;
+      return `Episode #${absoluteNumber}`;
     }
     return '';
   }

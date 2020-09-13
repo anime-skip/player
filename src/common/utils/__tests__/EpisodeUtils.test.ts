@@ -73,7 +73,7 @@ describe('EpisodeUtils', () => {
         number: undefined,
         absoluteNumber: '0',
       } as Api.EpisodeSearchResult;
-      const expected = '#0';
+      const expected = 'Episode #0';
 
       const actual = EpisodeUtils.seasonAndNumberDisplay(input);
 
