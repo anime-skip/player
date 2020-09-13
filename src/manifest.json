@@ -20,7 +20,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://www.anime-skip.com/get-started*", "https://anime-skip.com/get-started*"],
+      "matches": ["https://www.anime-skip.com/*", "https://anime-skip.com/*"],
       "js": ["browser-polyfill.js", "content-scripts/anime-skip/index.js"]
     }
   ],
