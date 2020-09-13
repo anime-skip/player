@@ -142,10 +142,11 @@ export default as<
   [types.searchEpisodesRequestState](state, requestState: RequestState) {
     state.searchEpisodesRequestState = requestState;
   },
-  [types.setEpisodeUrl](state, episode: Api.EpisodeUrl) {
-    state.episodeUrl = episode;
+  [types.setEpisodeUrl](state, episodeUrl?: Api.EpisodeUrl) {
+    state.episodeUrl = episodeUrl;
+    state.timestamps = (episodeUrl?.episode?.timestamps || []).sort(Utils.timestampSorter);
   },
-  [types.setInferredEpisodeInfo](state, episode: InferredEpisodeInfo) {
+  [types.setInferredEpisodeInfo](state, episode?: InferredEpisodeInfo) {
     state.inferredEpisodeInfo = episode;
   },
   [types.episodeRequestState](state, requestState: RequestState) {
@@ -179,6 +180,9 @@ export default as<
   },
   [types.setDraftTimestamps](state, timestamps: Api.AmbigousTimestamp[]) {
     state.draftTimestamps = [...timestamps].sort(Utils.timestampSorter);
+  },
+  [types.setTimestamps](state, timestamps: Api.AmbigousTimestamp[]) {
+    state.timestamps = [...timestamps].sort(Utils.timestampSorter);
   },
   [types.clearEditTimestampMode](state) {
     state.editTimestampMode = undefined;

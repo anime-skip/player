@@ -42,8 +42,8 @@ axios.interceptors.request.use((config): any => {
   return config;
 });
 
-function query(q: string): GraphQlBody {
-  return { query: q };
+function query(q: string, vars?: { [variableName: string]: any }): GraphQlBody {
+  return { query: q, variables: vars };
 }
 
 function mutation(mutationString: string, vars: { [variableName: string]: any }): GraphQlBody {
@@ -75,19 +75,44 @@ const showData = `id name originalName website image`;
 
 const episodeSearchData = `id name season number absoluteNumber`;
 
+const episodeUrlNoEpisodeData = `
+  url
+  createdAt
+`;
+
+const timestampData = `
+  id
+  at
+  typeId
+  source
+`;
+
+const timestampWithoutSourceData = `
+  id
+  at
+  typeId
+`;
+
+const thirdPartyEpisodeData = `
+  id
+  name
+  season
+  number
+  absoluteNumber
+  source
+  timestamps {
+    ${timestampWithoutSourceData}
+  }
+`;
+
 const episodeData = `
   id absoluteNumber number season name 
   timestamps {
-    id at typeId
+    ${timestampData}
   }
   show { 
     ${showData} 
   }
-`;
-
-const episodeUrlNoEpisodeData = `
-  url
-  createdAt
 `;
 
 const episodeUrlData = `
@@ -95,12 +120,6 @@ const episodeUrlData = `
   episode {
     ${episodeData}
   }
-`;
-
-const timestampData = `
-  id
-  at
-  typeId
 `;
 
 /* eslint-disable no-console */
@@ -279,10 +298,22 @@ export default as<Api.Implementation>({
     const response = await sendUnauthorizedGraphql<'findEpisodeUrl', Api.EpisodeUrl>(q);
     return response.data.findEpisodeUrl;
   },
+  async fetchEpisodeByName(name): Promise<Api.ThirdPartyEpisode[]> {
+    const q = query(
+      `query findEpisodeByName($name: String!) {
+        findEpisodeByName(name: $name) {
+          ${thirdPartyEpisodeData}
+        }
+      }`,
+      { name }
+    );
+    const response = await sendUnauthorizedGraphql<'findEpisodeByName', Api.ThirdPartyEpisode[]>(q);
+    return response.data.findEpisodeByName;
+  },
 
   async createTimestamp(
     episodeId: string,
-    { at, typeId }: Api.InputTimestamp
+    { at, typeId, source }: Api.InputTimestamp
   ): Promise<Api.Timestamp> {
     const m = mutation(
       `mutation CreateTimestamp($data: InputTimestamp!, $episodeId: ID!) {
@@ -292,13 +323,13 @@ export default as<Api.Implementation>({
       }`,
       {
         episodeId,
-        data: { at, typeId },
+        data: { at, typeId, source },
       }
     );
     const response = await sendGraphql<'createTimestamp', Api.Timestamp>(m);
     return response.data.createTimestamp;
   },
-  async updateTimestamp({ id, at, typeId }: Api.Timestamp): Promise<Api.Timestamp> {
+  async updateTimestamp({ id, at, typeId, source }: Api.Timestamp): Promise<Api.Timestamp> {
     const m = mutation(
       `mutation UpdateTimestamp($data: InputTimestamp!, $timestampId: ID!) {
         updateTimestamp(newTimestamp: $data, timestampId: $timestampId) {
@@ -307,7 +338,7 @@ export default as<Api.Implementation>({
       }`,
       {
         timestampId: id,
-        data: { at, typeId },
+        data: { at, typeId, source },
       }
     );
     const response = await sendGraphql<'createTimestamp', Api.Timestamp>(m);

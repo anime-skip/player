@@ -27,6 +27,7 @@ export default {
   setActiveTimestamp: '@@timestamps/setActiveTimestamp' as const,
   clearActiveTimestamp: '@@timestamps/clearActiveTimestamp' as const,
   setDraftTimestamps: '@@timestamps/setDraftTimestamps' as const,
+  setTimestamps: '@@timestamps/setTimestamps' as const,
   updateDraftTimestamp: '@@timestamps/updateDraftTimestamp' as const,
   deleteDraftTimestamp: '@@timestamps/deleteDraftTimestamp' as const,
   clearEditTimestampMode: '@@timestamps/clearEditTimestampMode' as const,

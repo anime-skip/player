@@ -61,10 +61,30 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       commit(mutations.activeDialog, dialogName);
     }
   },
-  async [types.startEditing]({ state, commit }) {
-    console.log('startEditing');
-    commit(mutations.toggleEditMode, true);
-    commit(mutations.setDraftTimestamps, state.episodeUrl?.episode.timestamps ?? []);
+  async [types.startEditing]({ state, commit, dispatch, getters }) {
+    global.getVideo().pause();
+
+    if (!getters.isLoggedIn) {
+      await dispatch(types.showDialog, 'AccountDialog');
+      return;
+    }
+
+    if (!getters.isEditing) {
+      commit(mutations.toggleEditMode, true);
+      commit(mutations.setDraftTimestamps, getters.timestamps);
+    }
+    if (getters.hasEpisode) {
+      commit(mutationTypes.setActiveTimestamp, {
+        at: global.getVideo().currentTime,
+        typeId: '',
+        id: Utils.randomId(),
+        source: 'ANIME_SKIP',
+      });
+      commit(mutationTypes.setEditTimestampMode, 'add');
+      await dispatch(types.showDialog, 'EditTimestampPanel');
+    } else {
+      await dispatch(types.showDialog, 'EditEpisodeDialog');
+    }
   },
   async [types.stopEditing]({ state, commit, dispatch }, discardChanges?: boolean) {
     console.log('stopEditing', { discardChanges });
@@ -142,7 +162,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
 
   // Episodes
   async [types.createEpisodeData](
-    { commit, dispatch },
+    { state, commit, dispatch, getters },
     { show: showData, episode: episodeData, episodeUrl: episodeUrlData }: CreateEpisodeDataPayload
   ) {
     console.log('actions.createEpisodeData', { showData, episodeData, episodeUrlData });
@@ -172,15 +192,31 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       }
 
       // EpisodeUrl
-      let episodeUrl: string;
+      let episodeUrl: Api.EpisodeUrl;
       if (episodeUrlData.create) {
-        episodeUrl = episodeUrlData.data.url;
         try {
-          await callApi(commit, global.Api.deleteEpisodeUrl, episodeUrl);
+          await callApi(commit, global.Api.deleteEpisodeUrl, episodeUrlData.data.url);
         } catch (err) {}
-        await callApi(commit, global.Api.createEpisodeUrl, episodeUrlData.data, episodeId);
+        episodeUrl = await callApi(
+          commit,
+          global.Api.createEpisodeUrl,
+          episodeUrlData.data,
+          episodeId
+        );
       } else {
-        episodeUrl = episodeUrlData.url;
+        episodeUrl = state.episodeUrl!;
+      }
+
+      if (getters.timestamps.length > 0) {
+        try {
+          const oldTimestamps = state.episodeUrl?.episode.timestamps || [];
+          const newTimestamps: Api.AmbigousTimestamp[] = getters.timestamps;
+          await dispatch(types.updateTimestamps, {
+            oldTimestamps,
+            newTimestamps,
+            episodeUrl,
+          });
+        } catch (err) {}
       }
 
       // Update the data
@@ -196,11 +232,25 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     try {
       commit(mutationTypes.searchEpisodesRequestState, RequestState.LOADING);
       const results = await callApi(commit, global.Api.searchEpisodes, name, showId);
-      commit(mutationTypes.searchEpisodesRequestState, RequestState.SUCCESS);
       commit(mutationTypes.searchEpisodesResult, results);
+      commit(mutationTypes.searchEpisodesRequestState, RequestState.SUCCESS);
     } catch (err) {
       console.warn('actions.searchEpisodes', err);
       commit(mutationTypes.searchEpisodesRequestState, RequestState.FAILURE);
+    }
+  },
+  async [types.loadAllEpisodeData]({ commit, dispatch, state }) {
+    commit(mutationTypes.setTimestamps, []);
+    commit(mutationTypes.setEpisodeUrl, undefined);
+    commit(mutationTypes.setInferredEpisodeInfo, undefined);
+
+    await Promise.all([
+      dispatch(types.inferEpisodeInfo),
+      dispatch(types.fetchEpisodeByUrl, state.tabUrl),
+    ]);
+
+    if (state.episodeUrl == null && state.inferredEpisodeInfo?.name != null) {
+      await dispatch(types.fetchThirdPartyEpisode, state.inferredEpisodeInfo.name);
     }
   },
   async [types.fetchEpisodeByUrl]({ commit, dispatch }, url) {
@@ -208,12 +258,11 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     try {
       commit(mutationTypes.episodeRequestState, RequestState.LOADING);
       const episodeUrl = await callApi(commit, global.Api.fetchEpisodeByUrl, url);
-      commit(mutationTypes.episodeRequestState, RequestState.SUCCESS);
       commit(mutationTypes.setEpisodeUrl, episodeUrl);
+      commit(mutationTypes.episodeRequestState, RequestState.SUCCESS);
     } catch (err) {
       console.warn('actions.fetchEpisodeByUrl', err);
       commit(mutationTypes.setEpisodeUrl, undefined);
-      await dispatch(types.inferEpisodeInfo);
     }
   },
   async [types.inferEpisodeInfo]({ commit }) {
@@ -227,6 +276,31 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     } catch (err) {
       console.warn('actions.inferEpisodeInfo', err);
       commit(mutationTypes.episodeRequestState, RequestState.FAILURE);
+      commit(mutationTypes.setEpisodeUrl, undefined);
+    }
+  },
+  async [types.fetchThirdPartyEpisode]({ commit }, name: string) {
+    console.log('actions.fetchThirdPartyEpisode', { name });
+    try {
+      commit(mutationTypes.episodeRequestState, RequestState.LOADING);
+      const episodes: Api.ThirdPartyEpisode[] = await callApi(
+        commit,
+        global.Api.fetchEpisodeByName,
+        name
+      );
+      const episodesWithTimestamps = episodes.filter(episode => episode.timestamps.length > 0);
+      if (episodesWithTimestamps.length > 0) {
+        const episode = episodesWithTimestamps[0];
+        const timestamps = episode.timestamps.map<Api.AmbigousTimestamp>(timestamp => ({
+          ...timestamp,
+          id: timestamp.id ?? Utils.randomId(),
+          source: episode.source ?? 'ANIME_SKIP',
+        }));
+        commit(mutationTypes.setTimestamps, timestamps);
+      }
+      commit(mutationTypes.episodeRequestState, RequestState.SUCCESS);
+    } catch (err) {
+      console.warn('actions.fetchEpisodeByUrl', err);
       commit(mutationTypes.setEpisodeUrl, undefined);
     }
   },

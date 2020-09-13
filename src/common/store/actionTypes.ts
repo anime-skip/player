@@ -12,8 +12,10 @@ export default {
 
   createEpisodeData: '@episodes/createEpisodeData' as const,
   fetchEpisodeByUrl: '@episodes/fetchEpisodeByUrl' as const,
+  loadAllEpisodeData: '@episodes/loadAllEpisodeData' as const,
   searchEpisodes: '@episodes/searchEpisodes' as const,
   inferEpisodeInfo: '@episodes/inferEpisodeInfo' as const,
+  fetchThirdPartyEpisode: '@episodes/getThirdPartyEpisode' as const,
 
   updateTimestamps: '@timestamps/updateTimestamps' as const,
 };

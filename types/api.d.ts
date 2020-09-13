@@ -22,6 +22,7 @@ declare namespace Api {
     createEpisodeUrl(data: Api.InputEpisodeUrl, episodeId: string): Promise<Api.EpisodeUrl>;
     deleteEpisodeUrl(episodeUrl: string): Promise<Api.EpisodeUrlNoEpisode>;
     fetchEpisodeByUrl(url: string): Promise<Api.EpisodeUrl>;
+    fetchEpisodeByName(name: string): Promise<Api.ThirdPartyEpisode[]>;
 
     createTimestamp(episodeId: string, timestamp: Api.InputTimestamp): Promise<Api.Timestamp>;
     updateTimestamp(newTimestamp: Api.Timestamp): Promise<Api.Timestamp>;

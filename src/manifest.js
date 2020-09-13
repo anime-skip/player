@@ -13,13 +13,13 @@ const services = [
   {
     folder: 'vrv',
     matches: ['https://static.vrv.co/*'],
-    parent_matches: ['https://vrv.co/watch/*'],
+    parent_matches: ['https://vrv.co/watch/*/*'],
     page_matches: ['https://vrv.co/*'],
   },
   {
     folder: 'funimation',
     matches: ['https://www.funimation.com/player/*'],
-    parent_matches: ['https://vrv.co/watch/*'],
+    parent_matches: ['https://www.funimation.com/shows/*'],
     page_matches: ['https://www.funimation.com/*'],
   },
 ];
@@ -37,6 +37,7 @@ services.forEach(service => {
   manifest.content_scripts.push({
     matches: service.parent_matches,
     js: ['browser-polyfill.js', `content-scripts/${service.folder}/parent.js`],
+    all_frames: false,
   });
 
   // Player for each service

@@ -8,7 +8,7 @@ global.Api = AxiosApi;
 
 // Setup Messaging
 
-new Messenger<ApiMessageTypes, ApiMessageListenerMap>(
+const messenger = new Messenger<ApiMessageTypes, ApiMessageListenerMap>(
   'background',
   {
     loginManual: ({ username, password }) => global.Api.loginManual(username, password),
@@ -25,6 +25,7 @@ new Messenger<ApiMessageTypes, ApiMessageListenerMap>(
     createEpisodeUrl: ({ data, episodeId }) => global.Api.createEpisodeUrl(data, episodeId),
     deleteEpisodeUrl: global.Api.deleteEpisodeUrl,
     fetchEpisodeByUrl: global.Api.fetchEpisodeByUrl,
+    fetchEpisodeByName: global.Api.fetchEpisodeByName,
 
     createTimestamp: ({ episodeId, data }) => global.Api.createTimestamp(episodeId, data),
     updateTimestamp: global.Api.updateTimestamp,
@@ -38,6 +39,9 @@ console.log('Started messenger on the background script');
 
 browser.tabs.onUpdated.addListener(function(tabId, { url }, _tabInfo) {
   if (url == null) return;
-  console.log('Tab url changed:', { tabId, url });
-  browser.tabs.sendMessage(tabId, { type: 'changeUrl', payload: url });
+  try {
+    messenger.send('@anime-skip/changeUrl', url, tabId);
+  } catch (err) {
+    console.error('Tab url change update failed', err);
+  }
 });
