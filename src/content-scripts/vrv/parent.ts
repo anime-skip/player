@@ -2,7 +2,7 @@ console.log('INJECTED content-scripts/vrv/parent.ts');
 
 import Messenger from '../../common/utils/Messenger';
 
-// VRV doesn't update imediately, so we track the url to know if it worked
+// VRV doesn't update imediately, so we track the url to know if we should be expecting a different episode
 let previousUrl: string | undefined;
 let previousEpisodeName: string | undefined;
 

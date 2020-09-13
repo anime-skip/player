@@ -8,7 +8,12 @@ global.Api = AxiosApi;
 
 // Setup Messaging
 
-const messenger = new Messenger<ApiMessageTypes, ApiMessageListenerMap>(
+const messenger = new Messenger<
+  ApiMessageTypes,
+  ApiMessageListenerMap,
+  ApiMessagePayloadMap,
+  ApiMessageResponseMap
+>(
   'background',
   {
     loginManual: ({ username, password }) => global.Api.loginManual(username, password),
@@ -33,7 +38,6 @@ const messenger = new Messenger<ApiMessageTypes, ApiMessageListenerMap>(
   },
   ['@anime-skip/inferEpisodeInfo']
 );
-console.log('Started messenger on the background script');
 
 // Setup tab listener messenging
 

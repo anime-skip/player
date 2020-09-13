@@ -16,6 +16,7 @@ export default class Messenger<
     if (listeners != null || forwardTypes != null) {
       // @ts-ignore
       browser.runtime.onMessage.addListener(this.onReceiveMessage);
+      console.log(`Started ${source} messenger`);
     }
   }
 
