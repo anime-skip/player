@@ -220,7 +220,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       }
 
       // Update the data
-      dispatch(types.fetchEpisodeByUrl, episodeUrl);
+      dispatch(types.fetchEpisodeByUrl, episodeUrl.url);
       commit(mutationTypes.episodeRequestState, RequestState.SUCCESS);
     } catch (err) {
       console.warn('actions.createEpisodeData', err);
@@ -323,17 +323,21 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       oldTimestamps,
       newTimestamps
     );
+    commit(mutationTypes.setTimestamps, newTimestamps);
 
-    for (const toCreateItem of toCreate) {
-      await callApi(commit, global.Api.createTimestamp, episodeUrl.episode.id, toCreateItem);
+    try {
+      for (const toCreateItem of toCreate) {
+        await callApi(commit, global.Api.createTimestamp, episodeUrl.episode.id, toCreateItem);
+      }
+      for (const toUpdateItem of toUpdate) {
+        await callApi(commit, global.Api.updateTimestamp, toUpdateItem);
+      }
+      for (const toDeleteItem of toDelete) {
+        await callApi(commit, global.Api.deleteTimestamp, toDeleteItem.id);
+      }
+    } catch (err) {
+      commit(mutationTypes.setTimestamps, oldTimestamps);
     }
-    for (const toUpdateItem of toUpdate) {
-      await callApi(commit, global.Api.updateTimestamp, toUpdateItem);
-    }
-    for (const toDeleteItem of toDelete) {
-      await callApi(commit, global.Api.deleteTimestamp, toDeleteItem.id);
-    }
-
     dispatch(types.fetchEpisodeByUrl, episodeUrl.url);
   },
 });
