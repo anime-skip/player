@@ -39,7 +39,7 @@ export default class Messenger<
     if (response?.errorMessage != null) {
       throw Error(response.errorMessage);
     }
-    console.info(this.source + ' got response', { type, payload, response });
+    console.log(this.source + ' got response', { type, payload, response });
     return response;
   };
 

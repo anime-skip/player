@@ -207,7 +207,6 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
   @Watch('isEditing')
   @Watch('preferencesLastUpdatedAt')
   public updateSections(): void {
-    console.log('Updating sections');
     this.sections = this.getSections();
     this.completedSections = this.getCompletedSections();
   }

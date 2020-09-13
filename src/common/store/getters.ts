@@ -99,7 +99,6 @@ export default as<GetterTree<VuexState, VuexState>>({
 
   // Timestamps
   timestamps({ timestamps }): Api.AmbigousTimestamp[] {
-    console.info({ timestamps });
     return timestamps;
   },
   activeTimestamp(state): Api.AmbigousTimestamp | undefined {
