@@ -9,12 +9,12 @@
   "scripts": {
     "lint": "eslint --ext .ts,.vue src",
     "prettier": "prettier \"src/**/*.{ts,vue}\"",
-    "prettier:write": "yarn prettier -- --write",
+    "prettier:write": "yarn prettier --write",
     "package": "./scripts/package.sh",
     "build": "cross-env NODE_ENV=development webpack --hide-modules",
     "build:prod": "cross-env NODE_ENV=production webpack --hide-modules",
-    "start": "cross-env HMR=true yarn build -- --watch",
-    "start:prod": "cross-env HMR=true yarn build:prod -- --watch",
+    "start": "cross-env HMR=true yarn build --watch",
+    "start:prod": "cross-env HMR=true yarn build:prod --watch",
     "test": "jest --runInBand",
     "test:watch": "yarn test --watch"
   },
