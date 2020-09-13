@@ -168,11 +168,12 @@ async function sendGraphql<Q extends string, D>(
 export default as<Api.Implementation>({
   async loginManual(username, password): Promise<Api.LoginResponse> {
     const q = query(
-      `{
-        login(usernameEmail: "${username}", passwordHash: "${md5(password)}") {
+      `query LoginManual($username: String!, $passwordHash: String!) {
+        login(usernameEmail: $username, passwordHash: $passwordHash) {
           ${loginData}
         }
-      }`
+      }`,
+      { username, passwordHash: md5(password) }
     );
     const response = await sendUnauthorizedGraphql<'login', Api.LoginResponse>(q);
     return response.data.login;
@@ -180,11 +181,12 @@ export default as<Api.Implementation>({
 
   async loginRefresh(refreshToken): Promise<Api.LoginRefreshResponse> {
     const q = query(
-      `{
-        loginRefresh(refreshToken: "${refreshToken}") {
+      `query LoginRefresh($refreshToken: String!) {
+        loginRefresh(refreshToken: $refreshToken) {
           ${loginRefreshData}
         }
-      }`
+      }`,
+      { refreshToken }
     );
     const response = await sendUnauthorizedGraphql<'loginRefresh', Api.LoginRefreshResponse>(q);
     return response.data.loginRefresh;
@@ -219,11 +221,14 @@ export default as<Api.Implementation>({
     return response.data.createShow;
   },
   async searchShows(name): Promise<Api.ShowSearchResult[]> {
-    const q = query(`{
-      searchShows(search: "${name}", limit: 5) {
-        ${showSearchData}
-      }
-    }`);
+    const q = query(
+      `query SearchShows($name: String!, $limit: Int) {
+        searchShows(search: $name, limit: $limit) {
+          ${showSearchData}
+        }
+      }`,
+      { name, limit: 5 }
+    );
     const response = await sendGraphql<'searchShows', Api.ShowSearchResult[]>(q);
     return response.data.searchShows;
   },
@@ -248,11 +253,14 @@ export default as<Api.Implementation>({
     if (showId != null) {
       params.push(`showId: "${showId}"`);
     }
-    const q = query(`{
-      searchEpisodes(${params.join(', ')}) {
-        ${episodeSearchData}
-      }
-    }`);
+    const q = query(
+      `query SearchEpisodes($name: String!, $showId: ID, $limit: Int) {
+        searchEpisodes(search: $name, limit: $limit, showId: $showId) {
+          ${episodeSearchData}
+        }
+      }`,
+      { name, limit: 5, showId }
+    );
     console.log({ q });
     const response = await sendUnauthorizedGraphql<'searchEpisodes', Api.EpisodeSearchResult[]>(q);
     return response.data.searchEpisodes;
@@ -289,18 +297,19 @@ export default as<Api.Implementation>({
   },
   async fetchEpisodeByUrl(url): Promise<Api.EpisodeUrl> {
     const q = query(
-      `{
-        findEpisodeUrl(episodeUrl: "${url}") {
+      `query FindEpisodeByUrl($url: String!) {
+        findEpisodeUrl(episodeUrl: $url) {
           ${episodeUrlData}
         }
-      }`
+      }`,
+      { url }
     );
     const response = await sendUnauthorizedGraphql<'findEpisodeUrl', Api.EpisodeUrl>(q);
     return response.data.findEpisodeUrl;
   },
   async fetchEpisodeByName(name): Promise<Api.ThirdPartyEpisode[]> {
     const q = query(
-      `query findEpisodeByName($name: String!) {
+      `query FindEpisodeByName($name: String!) {
         findEpisodeByName(name: $name) {
           ${thirdPartyEpisodeData}
         }
