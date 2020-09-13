@@ -9,38 +9,45 @@ const axios = Axios.create({
     process.env.NODE_ENV === 'production' ? 'http://api.anime-skip.com/' : 'http://localhost:8000/',
 });
 
-axios.interceptors.request.use((config): any => {
-  /* eslint-disable no-console */
-  console.groupCollapsed(
-    `%cAPI  %c/${config.url}`,
-    'font-weight: 600; color: default;',
-    'font-weight: 400; color: black;'
-  );
-  console.log(`URL: %c${config.baseURL}${config.url}`, 'color: #137AF8');
-  const headers = {
-    ...config.headers,
-    ...config.headers.common,
-    ...config.headers[config.method || 'get'],
-  };
-  delete headers.get;
-  delete headers.post;
-  delete headers.put;
-  delete headers.delete;
-  delete headers.patch;
-  delete headers.head;
-  console.log('Headers: ', headers);
-  if (config.params) {
-    console.log('Parameters: ', config.params);
-  }
-  if (config.data) {
-    console.log(`GraphQL:\n%c${Utils.formatGraphql(config.data.query)}`, 'color: #137AF8');
-    if (config.data.variables) {
-      console.log('Variables: ', config.data.variables);
+if (process.env.NODE_ENV !== 'production') {
+  axios.interceptors.request.use((config): any => {
+    const formattedGraphql = Utils.formatGraphql(config.data.query);
+    const type = formattedGraphql
+      .split('\n')[0]
+      ?.replace('{', '')
+      .trim();
+    /* eslint-disable no-console */
+    console.groupCollapsed(
+      `%cAPI  %c/${config.url} ${type}`,
+      'font-weight: 600; color: default;',
+      'font-weight: 400; color: default;'
+    );
+    console.log(`URL: %c${config.baseURL}${config.url}`, 'color: #137AF8');
+    const headers = {
+      ...config.headers,
+      ...config.headers.common,
+      ...config.headers[config.method || 'get'],
+    };
+    delete headers.get;
+    delete headers.post;
+    delete headers.put;
+    delete headers.delete;
+    delete headers.patch;
+    delete headers.head;
+    console.log('Headers: ', headers);
+    if (config.params) {
+      console.log('Parameters: ', config.params);
     }
-  }
-  /* eslint-enable no-console */
-  return config;
-});
+    if (config.data) {
+      console.log(`GraphQL:\n%c${formattedGraphql}`, 'color: #137AF8');
+      if (config.data.variables) {
+        console.log('Variables: ', config.data.variables);
+      }
+    }
+    /* eslint-enable no-console */
+    return config;
+  });
+}
 
 function query(q: string, vars?: { [variableName: string]: any }): GraphQlBody {
   return { query: q, variables: vars };
