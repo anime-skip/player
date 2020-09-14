@@ -214,7 +214,7 @@ export default class EditEpisodeDialog extends Vue {
       try {
         const possibleEpisodes = await global.Api.searchEpisodes(this.inferredEpisodeInfo!.name);
         const matchingEpisodes = possibleEpisodes.filter(
-          episode => episode.name === this.inferredEpisodeInfo
+          episode => episode.name === this.inferredEpisodeInfo!.name
         );
         if (matchingEpisodes.length === 0) throw new Error('No matching episodes');
         const firstEpisode = matchingEpisodes.shift()!;
@@ -227,9 +227,6 @@ export default class EditEpisodeDialog extends Vue {
         this.selectedEpisodeOption = {
           title: this.inferredEpisodeInfo!.name,
         };
-        this.editableSeasonNumber = this.inferredEpisodeInfo!.season ?? '';
-        this.editableEpisodeNumber = this.inferredEpisodeInfo!.number ?? '';
-        this.editableAbsoluteNumber = this.inferredEpisodeInfo!.absoluteNumber ?? '';
       }
 
       // Couldn't fetch show
@@ -240,6 +237,7 @@ export default class EditEpisodeDialog extends Vue {
       this.selectedEpisodeOption = {
         title: this.inferredEpisodeInfo!.name,
       };
+    } finally {
       this.editableSeasonNumber = this.inferredEpisodeInfo!.season ?? '';
       this.editableEpisodeNumber = this.inferredEpisodeInfo!.number ?? '';
       this.editableAbsoluteNumber = this.inferredEpisodeInfo!.absoluteNumber ?? '';
