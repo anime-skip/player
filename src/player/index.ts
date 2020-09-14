@@ -26,21 +26,33 @@ if (existingPlayers.length > 0) {
   });
 }
 
+async function sleep(ms: number): Promise<void> {
+  return new Promise(res => setTimeout(res, ms));
+}
+
 // Inject DOM
 
-const rootQuery = global.getRootQuery();
-console.log(`Adding player to ${rootQuery}`);
+(async function injectPlayer() {
+  const rootQuery = global.getRootQuery();
+  console.log(`Adding player to ${rootQuery}`);
 
-// Set the style to hide all the old elements
-document.body.classList.add('hide-for-anime-skip');
+  while (document.querySelector(rootQuery) == null) {
+    console.log("Player's root node not found, trying again");
+    await sleep(100);
+  }
+  console.log(`Added player to ${rootQuery}`);
 
-Ripple.color = 'rgba(255, 255, 255, 0.12)';
-Vue.directive('ripple', Ripple);
-Vue.config.productionTip = false;
+  // Set the style to hide all the old elements
+  document.body.classList.add('hide-for-anime-skip');
 
-const vue = new Vue({
-  store,
-  render: h => h(Player),
-}).$mount();
-const parent = document.querySelector(rootQuery) as HTMLElement;
-parent.appendChild(vue.$el);
+  Ripple.color = 'rgba(255, 255, 255, 0.12)';
+  Vue.directive('ripple', Ripple);
+  Vue.config.productionTip = false;
+
+  const vue = new Vue({
+    store,
+    render: h => h(Player),
+  }).$mount();
+  const parent = document.querySelector(rootQuery) as HTMLElement;
+  parent.appendChild(vue.$el);
+})();
