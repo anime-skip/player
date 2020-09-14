@@ -11,7 +11,7 @@ new Messenger<
   ParentMessageListenerMap,
   ParentMessagePayloadMap,
   ParentMessageResponseMap
->('example parent', {
+>('vrv parent', {
   '@anime-skip/inferEpisodeInfo': async () => {
     const currentUrl: string = window.location.href;
     let episode: InferredEpisodeInfo;
