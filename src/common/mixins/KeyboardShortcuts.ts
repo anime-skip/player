@@ -14,14 +14,14 @@ export default class KeyboardShortcutMixin extends Vue {
 
   onKeyDown(event: KeyboardEvent): void {
     const { keyCode, ctrlKey } = event;
-    console.log(`[${this.$options.name}] key down`, {
-      keyCode,
-      activeTag: document.activeElement?.tagName,
-    });
     // Prevent triggers from firing while typing
     if (document.activeElement?.tagName === 'INPUT') {
       return;
     }
+    console.log(`[${this.$options.name}] key down`, {
+      keyCode,
+      activeTag: document.activeElement?.tagName,
+    });
 
     const key = ACCEPTED_KEYS[keyCode];
     if (!key) return;
