@@ -227,6 +227,9 @@ export default class EditEpisodeDialog extends Vue {
         this.selectedEpisodeOption = {
           title: this.inferredEpisodeInfo!.name,
         };
+        this.editableSeasonNumber = this.inferredEpisodeInfo!.season ?? '';
+        this.editableEpisodeNumber = this.inferredEpisodeInfo!.number ?? '';
+        this.editableAbsoluteNumber = this.inferredEpisodeInfo!.absoluteNumber ?? '';
       }
 
       // Couldn't fetch show
@@ -237,6 +240,9 @@ export default class EditEpisodeDialog extends Vue {
       this.selectedEpisodeOption = {
         title: this.inferredEpisodeInfo!.name,
       };
+      this.editableSeasonNumber = this.inferredEpisodeInfo!.season ?? '';
+      this.editableEpisodeNumber = this.inferredEpisodeInfo!.number ?? '';
+      this.editableAbsoluteNumber = this.inferredEpisodeInfo!.absoluteNumber ?? '';
     }
     this.fetchingIds = RequestState.SUCCESS;
   }
