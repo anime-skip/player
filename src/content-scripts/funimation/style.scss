@@ -1,9 +1,10 @@
 .hide-for-anime-skip {
-  .vjs-poster,
-  .vjs-text-track-display,
+  #funimation-spinner,
   #funimation-gradient,
+  .vjs-poster,
   .vjs-dock-shelf,
-  .vjs-dock-text {
+  .vjs-dock-text,
+  .vjs-control-bar {
     display: none !important;
   }
 }
