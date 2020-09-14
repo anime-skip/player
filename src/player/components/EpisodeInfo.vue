@@ -94,6 +94,8 @@ export default class EpisodeInfo extends Vue {
   h1 {
     font-size: 64px;
     font-weight: 400;
+    line-height: 64px;
+    margin-bottom: 4px;
     color: $textPrimarySolid;
   }
 
@@ -101,6 +103,7 @@ export default class EpisodeInfo extends Vue {
     font-size: 26px;
     font-weight: 600;
     color: $primary300;
+    margin-bottom: 16px;
     span {
       color: $textSecondary;
       font-weight: 400;
