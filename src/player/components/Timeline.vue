@@ -162,8 +162,21 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
     this.goToNextTimestampOnTimeChange(newTime);
   }
 
-  public onClickTimestampHandle(): void {
-    this.startEditing();
+  public async onClickTimestampHandle(): Promise<void> {
+    if (!this.isEditing) {
+      await this.startEditing();
+    } else {
+      this.pause();
+    }
+
+    this.setActiveTimestamp({
+      at: this.currentTime,
+      typeId: '',
+      id: Utils.randomId(),
+      source: 'ANIME_SKIP',
+    });
+    this.setEditTimestampMode('add');
+    this.showDialog('EditTimestampPanel');
   }
 
   public keyboardShortcuts: { [combination: string]: () => void } = {
