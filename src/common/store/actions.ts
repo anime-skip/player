@@ -73,16 +73,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       commit(mutations.toggleEditMode, true);
       commit(mutations.setDraftTimestamps, getters.timestamps);
     }
-    if (getters.hasEpisode) {
-      commit(mutationTypes.setActiveTimestamp, {
-        at: global.getVideo().currentTime,
-        typeId: '',
-        id: Utils.randomId(),
-        source: 'ANIME_SKIP',
-      });
-      commit(mutationTypes.setEditTimestampMode, 'add');
-      await dispatch(types.showDialog, 'EditTimestampPanel');
-    } else {
+    if (!getters.hasEpisode) {
       await dispatch(types.showDialog, 'EditEpisodeDialog');
     }
   },
@@ -240,6 +231,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     }
   },
   async [types.loadAllEpisodeData]({ commit, dispatch, state }) {
+    console.log('actions.loadAllEpisodeData', { state: JSON.parse(JSON.stringify(state)) });
     commit(mutationTypes.setTimestamps, []);
     commit(mutationTypes.setEpisodeUrl, undefined);
     commit(mutationTypes.setInferredEpisodeInfo, undefined);

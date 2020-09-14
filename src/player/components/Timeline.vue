@@ -92,6 +92,7 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
   public service = global.service;
 
   @Getter() isEditing!: boolean;
+  @Getter() activeDialog!: boolean;
   @Getter() hasEpisode!: boolean;
   @Getter() isLoggedIn!: boolean;
   @Getter() activeTimestamp?: Api.Timestamp;
@@ -162,8 +163,23 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
     this.goToNextTimestampOnTimeChange(newTime);
   }
 
-  public onClickTimestampHandle(): void {
-    this.startEditing();
+  public async onClickTimestampHandle(): Promise<void> {
+    if (!this.isEditing) {
+      await this.startEditing();
+    } else {
+      this.pause();
+    }
+
+    if (this.activeDialog == null) {
+      this.setActiveTimestamp({
+        at: this.currentTime,
+        typeId: '',
+        id: Utils.randomId(),
+        source: 'ANIME_SKIP',
+      });
+      this.setEditTimestampMode('add');
+      this.showDialog('EditTimestampPanel');
+    }
   }
 
   public keyboardShortcuts: { [combination: string]: () => void } = {

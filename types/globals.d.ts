@@ -3,6 +3,12 @@ declare interface ServiceHelpers {
   getVideoQuery(): string;
   getVideo(): HTMLVideoElement;
   inferEpisodeInfo(): Promise<InferredEpisodeInfo>;
+
+  /**
+   * Convert a raw URL string to one that can be used with Anime Skip (remove query params, etc)
+   * @param inputUrl The raw URL
+   */
+  transformServiceUrl(inputUrl: string): string;
   onVideoChanged(callback: (video: HTMLVideoElement) => void): void;
   Api: Api.Implementation;
   service: 'vrv' | 'funimation' | 'example' | undefined;

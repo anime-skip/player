@@ -21,6 +21,13 @@ export default class VideoControllerMixin extends Vue {
   }
   pause(): void {
     global.getVideo().pause();
+    // TODO - #85
+    // if (global.service === 'funimation') {
+    //   setTimeout(() => {
+    //     console.log('[Funimation] secondary pause');
+    //     global.getVideo().pause();
+    //   }, 10);
+    // }
   }
 
   addTime(seconds: number): void {

@@ -5,11 +5,20 @@ console.log('INJECTED content-scripts/funimation/index.ts');
 
 global.service = 'funimation';
 global.serviceDisplayName = 'Funimation';
+
 global.getRootQuery = (): string => {
   return 'body #funimation-player';
 };
+
 global.getVideoQuery = (): string => {
   return '#brightcove-player > video';
+};
+
+global.inferEpisodeInfo = async (): Promise<InferredEpisodeInfo> => {
+  console.log('funimation.inferEpisodeInfo');
+  return await browser.runtime.sendMessage({
+    type: '@anime-skip/inferEpisodeInfo',
+  });
 };
 
 document.body.classList.add('hide-for-anime-skip');

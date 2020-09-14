@@ -102,7 +102,16 @@ export default class Browser {
    * - If we are not in an iframe, then just return the URL of the document
    */
   public static getIframeReferrer(): string {
-    return window.location != window.parent.location ? document.referrer : document.location.href;
+    let url: string;
+    // Try and get the parent's url if the iframe is the same domain as the website
+    try {
+      url = window.parent.location.href;
+    } catch (err) {
+      console.warn('getIframeReferrer', err);
+      url = window.location != window.parent.location ? document.referrer : document.location.href;
+    }
+
+    return global.transformServiceUrl(url);
   }
 
   // prettier-ignore
