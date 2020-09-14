@@ -16,11 +16,6 @@ new Messenger<
       ?.replace('Episode', '')
       ?.trim();
     const name = document.querySelector('h2.episode-headline')?.textContent ?? undefined;
-    console.log('parent.inferEpisodeInfo', {
-      show,
-      number,
-      name,
-    });
     return {
       show,
       number,

@@ -110,13 +110,6 @@ export default class Browser {
       console.warn('getIframeReferrer', err);
       url = window.location != window.parent.location ? document.referrer : document.location.href;
     }
-    console.log('getIframeReferrer', {
-      url: global.transformServiceUrl(url),
-      window: window.location,
-      parentWindow: window.parent.location,
-      referrer: document.referrer,
-      href: document.location.href,
-    });
 
     return global.transformServiceUrl(url);
   }
