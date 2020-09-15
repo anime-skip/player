@@ -11,17 +11,6 @@ global.getVideo = (): HTMLVideoElement => {
   return document.querySelector(global.getVideoQuery()) as HTMLVideoElement;
 };
 
-// Default, can be overriden in content-scripts/<service>/index.ts
-global.transformServiceUrl = (inputUrl: string): string => {
-  // Remove query params
-  return inputUrl.split('?', 1)[0];
-};
-
-// Default, can be overriden in content-scripts/<service>/index.ts
-global.getPlayerOptions = (): PlayerOptionGroup[] => {
-  return [];
-};
-
 let oldVideoSrc: string | undefined;
 function checkVideoChanged(): void {
   const newVideo = global.getVideo();

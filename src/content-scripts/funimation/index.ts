@@ -14,6 +14,11 @@ global.getVideoQuery = (): string => {
   return '#brightcove-player > video';
 };
 
+global.transformServiceUrl = (inputUrl: string): string => {
+  // Remove query params
+  return inputUrl.split('?', 1)[0];
+};
+
 global.inferEpisodeInfo = async (): Promise<InferredEpisodeInfo> => {
   console.log('funimation.inferEpisodeInfo');
   return await browser.runtime.sendMessage({

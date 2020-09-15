@@ -14,6 +14,11 @@ global.getVideoQuery = (): string => {
   return 'video';
 };
 
+global.transformServiceUrl = (inputUrl: string): string => {
+  // Remove query params
+  return inputUrl.split('?', 1)[0];
+};
+
 global.inferEpisodeInfo = async (): Promise<InferredEpisodeInfo> => {
   console.log('vrv.inferEpisodeInfo');
   return await browser.runtime.sendMessage({
