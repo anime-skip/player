@@ -134,7 +134,7 @@ export default class Preferences extends Vue {
 
   public get playerOptions(): PlayerOptionGroup[] {
     const options = (global.getPlayerOptions && global.getPlayerOptions()) || [];
-    return options.filter(group => group.options.length > 0);
+    return options.filter(group => group.options.length > 1);
   }
 
   public onClickOptionGroup(optionGroup: PlayerOptionGroup): void {
