@@ -111,7 +111,7 @@ export default class Browser {
       url = window.location != window.parent.location ? document.referrer : document.location.href;
     }
 
-    return global.transformServiceUrl(url);
+    return (global.transformServiceUrl && global.transformServiceUrl(url)) || url;
   }
 
   // prettier-ignore
