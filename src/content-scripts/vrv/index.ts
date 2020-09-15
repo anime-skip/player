@@ -41,7 +41,7 @@ global.getPlayerOptions = (): PlayerOptionGroup[] => {
         options: options.map<PlayerOption>(option => ({
           isSelected: option.classList.contains('selected'),
           node: option as HTMLElement,
-          title: option.textContent?.replace(/  /g, ' ').trim() ?? 'Unknown Quality',
+          title: option.textContent?.replace(/  /g, ' ').trim() ?? 'Unknown',
         })),
       });
     }
@@ -59,7 +59,7 @@ global.getPlayerOptions = (): PlayerOptionGroup[] => {
         options: options.map<PlayerOption>(option => ({
           isSelected: option.classList.contains('selected'),
           node: option as HTMLElement,
-          title: option.textContent ?? 'Unknown Language',
+          title: option.textContent ?? 'Unknown',
         })),
       });
     }
