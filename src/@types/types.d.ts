@@ -92,3 +92,15 @@ interface DisplayEpisodeInfo {
   season?: string;
   show: string;
 }
+
+interface PlayerOptionGroup {
+  title: string;
+  icon: string;
+  options: PlayerOption[];
+}
+
+interface PlayerOption {
+  title: string;
+  isSelected: boolean;
+  node: HTMLElement;
+}

@@ -1,23 +1,27 @@
 <template>
-  <ProgressOverlay :isLoading="isLoggingIn" class="Preferences">
+  <ProgressOverlay v-if="!isPlayerOptionPicker" :isLoading="isLoggingIn" class="Preferences">
     <div class="column">
       <PopupHeader title="Preferences" class="header" :small="small" />
 
       <h2 class="section-header">General</h2>
       <div class="input-grid input-grid--2" :class="{ small }">
+        <PlaybackRatePicker :showLess="!small" />
+        <div
+          v-for="optionGroup of playerOptions"
+          :key="optionGroup.title"
+          class="option-group-button clickable dark focus button"
+          @click="onClickOptionGroup(optionGroup)"
+        >
+          <WebExtImg :src="optionGroup.icon" class="left" />
+          <span class="label">{{ optionGroup.title }}</span>
+          <span class="value">{{ getSelectedOption(optionGroup) }}</span>
+          <WebExtImg src="ic_chevron_right.svg" class="right" />
+        </div>
         <Checkbox
           :isChecked="getPref('enableAutoSkip')"
           text="Auto-skip Sections"
           @click.native="updatePreferences('enableAutoSkip')"
         />
-        <PlaybackRatePicker :showLess="!small" />
-        <!--
-        <Checkbox
-          :isChecked="getPref('enableAutoPlay')"
-          text="Force video auto-play"
-          @click.native="onClickAutoPlay"
-        />
-        -->
       </div>
 
       <h2 class="section-header">What do you want to skip?</h2>
@@ -40,6 +44,21 @@
       </div>
     </div>
   </ProgressOverlay>
+  <div v-else class="Preferences player-options column">
+    <h3 class="player-option-title" @click="onClickOptionGroupBack">
+      <WebExtImg src="ic_chevron_left.svg" />
+      <span>{{ activePlayerOption.title }}</span>
+    </h3>
+    <div
+      v-for="option of activePlayerOption.options"
+      :key="option.title"
+      class="player-option button clickable focus"
+      :class="{ dark: !option.isSelected }"
+      @click="onClickOption(option)"
+    >
+      <span>{{ option.title }}</span>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -48,12 +67,13 @@ import ProgressOverlay from '@/common/components/ProgressOverlay.vue';
 import PopupHeader from './PopupHeader.vue';
 import Checkbox from '@/common/components/Checkbox.vue';
 import TextInput from '@/common/components/TextInput.vue';
+import WebExtImg from '@/common/components/WebExtImg.vue';
 import PlaybackRatePicker from '@/common/components/PlaybackRatePicker.vue';
 import { Getter, Action, Mutation } from '@/common/utils/VuexDecorators';
 import { SKIPPABLE_PREFERENCES } from '../../common/utils/Constants';
 
 @Component({
-  components: { ProgressOverlay, PopupHeader, Checkbox, TextInput, PlaybackRatePicker },
+  components: { ProgressOverlay, PopupHeader, Checkbox, TextInput, PlaybackRatePicker, WebExtImg },
 })
 export default class Preferences extends Vue {
   @Prop(Boolean) public small?: string;
@@ -63,8 +83,25 @@ export default class Preferences extends Vue {
   @Getter() public hasPreferenceError!: boolean;
 
   @Action() public updatePreferences!: (pref: keyof Api.Preferences) => void;
+  @Action('showDialog') public hideDialog!: () => void;
 
   @Mutation() public logOut!: () => void;
+
+  public activePlayerOption?: PlayerOptionGroup;
+
+  public constructor() {
+    super();
+  }
+
+  public mounted(): void {
+    this.playerOptions;
+  }
+
+  public data() {
+    return {
+      activePlayerOption: undefined,
+    };
+  }
 
   public get SKIPPABLE_PREFERENCES(): SkippablePreference[] {
     return SKIPPABLE_PREFERENCES;
@@ -84,6 +121,44 @@ export default class Preferences extends Vue {
 
   public onClickPreference(preferenceKey: keyof Api.Preferences): void {
     this.updatePreferences(preferenceKey);
+  }
+
+  public get hasPlayerOptions(): boolean {
+    return !!global.getPlayerOptions;
+  }
+
+  public get isPlayerOptionPicker(): boolean {
+    console.log('isPlayerOptionPicker', { activeOption: this.activePlayerOption });
+    return this.activePlayerOption != null;
+  }
+
+  public get playerOptions(): PlayerOptionGroup[] {
+    const options = (global.getPlayerOptions && global.getPlayerOptions()) || [];
+    return options.filter(group => group.options.length > 1);
+  }
+
+  public onClickOptionGroup(optionGroup: PlayerOptionGroup): void {
+    console.info('CLICK', optionGroup);
+    Vue.set(this, 'activePlayerOption', optionGroup);
+    this.activePlayerOption = optionGroup;
+    console.info('CLICK', this.activePlayerOption);
+  }
+
+  public getSelectedOption(optionGroup: PlayerOptionGroup): string {
+    const selected = optionGroup.options.filter(option => option.isSelected);
+    console.log({ optionGroup, selected });
+    if (selected.length === 0) return '';
+
+    return selected[0].title;
+  }
+
+  public onClickOptionGroupBack(): void {
+    Vue.set(this, 'activePlayerOption', undefined);
+  }
+
+  public onClickOption(option: PlayerOption): void {
+    option.node.click();
+    this.hideDialog();
   }
 }
 </script>
@@ -124,6 +199,65 @@ export default class Preferences extends Vue {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+  }
+
+  .option-group-button {
+    height: 38px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    img.left {
+      margin-right: 16px;
+    }
+
+    span {
+      text-transform: none;
+
+      &.label {
+        margin-right: 8px;
+      }
+      &.value {
+        flex: 1;
+        text-align: right;
+        font-weight: 400;
+        opacity: 0.64;
+      }
+    }
+
+    img.right {
+      margin-left: 8px;
+      opacity: 0.48;
+    }
+  }
+
+  .player-option-title {
+    cursor: pointer;
+    margin-top: 4px;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    span {
+      color: $textPrimary;
+    }
+
+    img {
+      margin-right: 8px;
+      opacity: 0.64;
+    }
+  }
+
+  .player-option {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    img {
+      margin-right: 16px;
+    }
   }
 }
 </style>

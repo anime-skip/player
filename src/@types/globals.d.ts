@@ -8,7 +8,14 @@ declare interface ServiceHelpers {
    * Convert a raw URL string to one that can be used with Anime Skip (remove query params, etc)
    * @param inputUrl The raw URL
    */
-  transformServiceUrl(inputUrl: string): string;
+  transformServiceUrl: (inputUrl: string) => string | undefined;
+
+  /**
+   * Get the options the the player provides (quality, subtitles, etc). Return enough info to
+   * display the items (icon, name), as well as the actual HTML node so that it can be clicked on to
+   * trigger the change
+   */
+  getPlayerOptions: () => PlayerOptionGroup[] | undefined;
   onVideoChanged(callback: (video: HTMLVideoElement) => void): void;
   Api: Api.Implementation;
   service: 'vrv' | 'funimation' | 'example' | undefined;
