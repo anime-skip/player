@@ -123,18 +123,19 @@ export default class EditEpisodeDialog extends Vue {
   }
 
   public onShowDialog() {
-    if (this.episodeUrl) {
-      if (this.episodeUrl?.episode.show) {
+    const episodeUrl = this.episodeUrl;
+    if (episodeUrl) {
+      if (episodeUrl?.episode.show) {
         this.selectedShowOption = {
-          id: this.episodeUrl.episode.show.id,
-          title: this.episodeUrl.episode.show.name,
-          subtitle: this.episodeUrl.episode.show.originalName,
+          id: episodeUrl.episode.show.id,
+          title: episodeUrl.episode.show.name,
+          subtitle: episodeUrl.episode.show.originalName,
         };
       }
       this.selectedEpisodeOption = {
-        id: this.episodeUrl.episode.id,
-        title: this.episodeUrl.episode.name ?? '',
-        subtitle: EpisodeUtils.seasonAndNumberFromEpisodeUrl(this.episodeUrl),
+        id: episodeUrl.episode.id,
+        title: episodeUrl.episode.name ?? '',
+        subtitle: EpisodeUtils.seasonAndNumberFromEpisodeUrl(episodeUrl),
       };
     } else if (this.inferredEpisodeInfo) {
       // Show loading and fetch the show & episode
@@ -148,9 +149,9 @@ export default class EditEpisodeDialog extends Vue {
         title: '',
       };
     }
-    this.editableSeasonNumber = String(this.episodeUrl?.episode.season ?? '');
-    this.editableEpisodeNumber = String(this.episodeUrl?.episode.number ?? '');
-    this.editableAbsoluteNumber = String(this.episodeUrl?.episode.absoluteNumber ?? '');
+    this.editableSeasonNumber = String(episodeUrl?.episode.season ?? '');
+    this.editableEpisodeNumber = String(episodeUrl?.episode.number ?? '');
+    this.editableAbsoluteNumber = String(episodeUrl?.episode.absoluteNumber ?? '');
   }
 
   public onHideDialog() {
@@ -218,7 +219,7 @@ export default class EditEpisodeDialog extends Vue {
         const firstEpisode = matchingEpisodes.shift()!;
         this.selectedEpisodeOption = {
           id: firstEpisode.id,
-          title: firstEpisode.name,
+          title: firstEpisode.name || '',
         };
         // this.otherEpisodeOptions = matchingEpisodes;
       } catch (err) {
@@ -267,13 +268,15 @@ export default class EditEpisodeDialog extends Vue {
   }
 
   public get isSubmitEnabled(): boolean {
-    return (
+    return !!(
       // An existing show and episode are selected
-      (this.selectedShowOption.id && this.selectedEpisodeOption.id) ||
-      // An existing show but new episode is entered
-      (this.selectedShowOption.id && this.selectedEpisodeOption.title) ||
-      // A new show and new episode are entered
-      (this.selectedShowOption.title && this.selectedEpisodeOption.title)
+      (
+        (this.selectedShowOption.id && this.selectedEpisodeOption.id) ||
+        // An existing show but new episode is entered
+        (this.selectedShowOption.id && this.selectedEpisodeOption.title) ||
+        // A new show and new episode are entered
+        (this.selectedShowOption.title && this.selectedEpisodeOption.title)
+      )
     );
   }
 
@@ -306,8 +309,7 @@ export default class EditEpisodeDialog extends Vue {
           data: { url: this.tabUrl },
         },
       });
-    }
-    if (this.selectedEpisodeOption.id == null) {
+    } else if (this.selectedEpisodeOption.id == null) {
       this.createEpisodeData({
         show: {
           create: false,
@@ -323,8 +325,7 @@ export default class EditEpisodeDialog extends Vue {
         },
       });
       return;
-    }
-    if (
+    } else if (
       this.selectedEpisodeOption.id != null &&
       this.selectedShowOption.id != null &&
       this.episodeUrl == null
