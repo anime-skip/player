@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Axios, { AxiosError } from 'axios';
 import Utils from '@/common/utils/Utils';
 import Browser from '@/common/utils/Browser';
@@ -130,12 +131,6 @@ const episodeUrlData = `
 `;
 
 /* eslint-disable no-console */
-async function sendUnauthorizedGraphql<Q extends string, D>(
-  data: any
-): Promise<{ data: { [field in Q]: D } }> {
-  return await sendGraphql(data, true);
-}
-
 async function sendGraphql<Q extends string, D>(
   data: any,
   skipAuth = false
@@ -169,6 +164,12 @@ async function sendGraphql<Q extends string, D>(
     console.groupEnd();
     throw err;
   }
+}
+
+async function sendUnauthorizedGraphql<Q extends string, D>(
+  data: any
+): Promise<{ data: { [field in Q]: D } }> {
+  return await sendGraphql(data, true);
 }
 /* eslint-enable no-console */
 

@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Mixins } from 'vue-property-decorator';
+import { Component, Mixins } from 'vue-property-decorator';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import VueSlider from 'vue-slider-component';
 import ToolbarButton from '../ToolbarButton.vue';
@@ -34,7 +34,7 @@ import VideoControllerMixin from '../../../common/mixins/VideoController';
   components: { WebExtImg, VueSlider, ToolbarButton },
 })
 export default class VolumeButton extends Mixins(VideoControllerMixin) {
-  public isDragging: boolean = false;
+  public isDragging = false;
 
   public get volumeClass(): string {
     if (this.isMuted) {

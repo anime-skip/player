@@ -66,6 +66,7 @@ export default as<
     { changes, callback }: { changes: Partial<VuexState>; callback?: () => void }
   ) {
     for (const field in changes) {
+      /* eslint-disable-next-line no-prototype-builtins */
       if (state.hasOwnProperty(field)) {
         if (field === 'playbackRate') {
           const playbackRate = (changes[field] as number) || 1;
@@ -115,7 +116,7 @@ export default as<
   },
 
   // Preferences
-  [types.togglePref](state, change: { pref: keyof Api.Preferences; value: any }) {
+  [types.togglePref](state, change: { pref: keyof Api.Preferences; value: boolean }) {
     if (!state.account) {
       console.warn('togglePref() called without account in the store');
       return;

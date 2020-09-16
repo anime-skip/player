@@ -82,7 +82,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Mixins } from 'vue-property-decorator';
+import { Component, Prop, Mixins } from 'vue-property-decorator';
 import Timeline from './Timeline.vue';
 import ToolbarButton from './ToolbarButton.vue';
 import AccountDialog from '../dialogs/AccountDialog.vue';
@@ -90,7 +90,6 @@ import PlayPauseButton from './animations/PlayPauseButton.vue';
 import FullscreenButton from './animations/FullscreenButton.vue';
 import VolumeButton from './animations/VolumeButton.vue';
 import Utils from '@/common/utils/Utils';
-import Browser from '@/common/utils/Browser';
 import { Getter, Action, Mutation } from '@/common/utils/VuexDecorators';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import VideoControllerMixin from '@/common/mixins/VideoController';
@@ -111,12 +110,12 @@ import { FRAME } from '../../common/utils/Constants';
 export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortcutMixin) {
   @Prop(Object) public playerState!: PlayerState;
 
-  public currentTime: number = 0;
-  public isFullscreen: boolean = false;
-  public isFullscreenCount: number = 0;
+  public currentTime = 0;
+  public isFullscreen = false;
+  public isFullscreenCount = 0;
   public Utils = Utils;
-  public displayDuration: string = 'Loading...';
-  public duration: number = 0;
+  public displayDuration = 'Loading...';
+  public duration = 0;
   public isFullscreenEnabled = document.fullscreenEnabled;
   public service = global.service;
 

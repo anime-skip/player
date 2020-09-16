@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createDecorator, VueDecorator } from 'vue-class-component';
 import mutationTypes from '@/common/store/mutationTypes';
 import actionTypes from '@/common/store/actionTypes';

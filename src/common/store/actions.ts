@@ -8,7 +8,6 @@ import RequestState from '../utils/RequestState';
 import { AssertionError } from 'assert';
 import mutationTypes from './mutationTypes';
 import Utils from '../utils/Utils';
-import actionTypes from './actionTypes';
 
 // TODO make everything async
 
@@ -25,6 +24,7 @@ function assertLoggedIn(
   }
 }
 
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 async function callApi<A extends any[], R>(
   commit: ActionContext<VuexState, VuexState>['commit'],
   apiMethod: (...args: A) => Promise<R>,
@@ -61,7 +61,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       commit(mutations.activeDialog, dialogName);
     }
   },
-  async [types.startEditing]({ state, commit, dispatch, getters }) {
+  async [types.startEditing]({ commit, dispatch, getters }) {
     global.getVideo().pause();
 
     if (!getters.isLoggedIn) {
@@ -80,7 +80,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
   async [types.stopEditing]({ state, commit, dispatch }, discardChanges?: boolean) {
     console.log('stopEditing', { discardChanges });
     if (!discardChanges) {
-      const oldTimestamps = state.episodeUrl!.episode.timestamps;
+      const oldTimestamps = state.episodeUrl?.episode.timestamps ?? [];
       const newTimestamps = state.draftTimestamps;
       dispatch(types.updateTimestamps, {
         oldTimestamps,
@@ -187,7 +187,9 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       if (episodeUrlData.create) {
         try {
           await callApi(commit, global.Api.deleteEpisodeUrl, episodeUrlData.data.url);
-        } catch (err) {}
+        } catch (err) {
+          // Do nothing
+        }
         episodeUrl = await callApi(
           commit,
           global.Api.createEpisodeUrl,
@@ -207,7 +209,9 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
             newTimestamps,
             episodeUrl,
           });
-        } catch (err) {}
+        } catch (err) {
+          // Do nothing
+        }
       }
 
       // Update the data
@@ -245,7 +249,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       await dispatch(types.fetchThirdPartyEpisode, state.inferredEpisodeInfo.name);
     }
   },
-  async [types.fetchEpisodeByUrl]({ commit, dispatch }, url) {
+  async [types.fetchEpisodeByUrl]({ commit }, url) {
     console.log('actions.fetchEpisodeByUrl', { url });
     try {
       commit(mutationTypes.episodeRequestState, RequestState.LOADING);

@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch, Mixins } from 'vue-property-decorator';
+import { Component, Watch, Mixins } from 'vue-property-decorator';
 import Popup from '@/popup/Popup.vue';
 import VideoControllerMixin from '../../common/mixins/VideoController';
 import KeyboardShortcutsMixin from '../../common/mixins/KeyboardShortcuts';
@@ -118,7 +118,7 @@ export default class EditTimestampPanel extends Mixins(
 
     const interval = setInterval(() => {
       if (this.$refs.timeSelect != null) {
-        (this.$refs.timeSelect as any).focus();
+        (this.$refs.timeSelect as HTMLElement | undefined)?.focus();
         clearInterval(interval);
       }
     }, 200);
@@ -144,7 +144,7 @@ export default class EditTimestampPanel extends Mixins(
   };
 
   public updateTimestamp(): void {
-    (this.$refs.timeSelect as HTMLDivElement).focus();
+    (this.$refs.timeSelect as HTMLDivElement | undefined)?.focus();
     if (this.activeTimestamp != null) {
       this.setActiveTimestamp({
         ...this.activeTimestamp,
@@ -173,7 +173,7 @@ export default class EditTimestampPanel extends Mixins(
   }
 
   @Watch('matchingTypes')
-  onChangeMatchingTypes(current: Api.TimestampType[], old: Api.TimestampType[]) {
+  onChangeMatchingTypes(current: Api.TimestampType[], _old: Api.TimestampType[]) {
     if (current.length > 0) {
       this.selectType(current[0]);
     }

@@ -75,7 +75,7 @@ title "Pre-package"
 run "Install dependencies"  "yarn install"
 run "Check for type errors" "yarn compile"
 run "Check formatting"      "yarn prettier"
-# run "Lint"                  "yarn lint"
+run "Lint"                  "yarn lint"
 run "Run Tests"             "yarn test --ci"
 run "Run Integration Tests" "yarn test:integration --ci"
 run "Run E2E Tests"         "yarn test:e2e --ci"
@@ -101,8 +101,6 @@ SOURCES="$SOURCES tsconfig.json"
 SOURCES="$SOURCES webpack.config.js"
 SOURCES="$SOURCES yarn.lock"
 run "Creating ${CODE}sources.zip" "zip -r '$OUTPUT_NAME/sources.zip' $SOURCES"
-
-# TODO - Create source.zip
 
 # Firefox
 run "Building for ${CODE}firefox" "yarn build:prod"

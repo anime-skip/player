@@ -7,12 +7,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch, Mixins } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import WebExtImg from '@/common/components/WebExtImg.vue';
-import VideoControllerMixin from '../../common/mixins/VideoController';
-import KeyboardShortcutsMixin from '../../common/mixins/KeyboardShortcuts';
-import { Action, Mutation, Getter } from '../../common/utils/VuexDecorators';
-import Utils from '../../common/utils/Utils';
 
 @Component({
   components: { WebExtImg },

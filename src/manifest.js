@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 const manifest = {
   ...require('./manifest.json'),
   version: require('../package.json').version,
@@ -74,7 +75,6 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Filter fields for the given browser
-
 const browser = (process.env.BUILD_FOR || '').toLowerCase();
 if (!browser) throw "Include a 'BUILD_FOR=firefox|chrome' environment variable";
 const filteredManifest = Object.keys(manifest).reduce((newManifest, key) => {

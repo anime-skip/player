@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import Popup from '@/popup/Popup.vue';
 import BasicDialog from './BasicDialog.vue';
 

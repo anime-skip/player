@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { Mutation, Getter, Action } from '@/common/utils/VuexDecorators';
+import { Getter, Action } from '@/common/utils/VuexDecorators';
 
 @Component
 export default class BasicDialog extends Vue {

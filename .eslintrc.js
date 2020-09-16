@@ -7,11 +7,9 @@ module.exports = {
     },
   },
   env: {
+    node: true,
     browser: true,
     webextensions: true,
-  },
-  globals: {
-    global: false,
   },
   extends: [
     'eslint:recommended',
@@ -20,13 +18,15 @@ module.exports = {
     '@vue/prettier/@typescript-eslint',
   ],
   // required to lint *.vue files
-  plugins: ['vue', '@typescript-eslint', 'prettier'],
+  plugins: ['vue', '@typescript-eslint', 'prettier', 'only-warn'],
   // add your custom rules here
   rules: {
     // allow async-await
     'generator-star-spacing': 'off',
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/ban-ts-ignore': 'off',
   },

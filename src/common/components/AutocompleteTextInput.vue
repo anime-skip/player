@@ -48,12 +48,6 @@
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import TextInput from './TextInput.vue';
 
-interface AutocompleteItem {
-  id?: string;
-  title: string;
-  subtitle?: string;
-}
-
 @Component({
   components: { TextInput },
 })
@@ -73,11 +67,12 @@ export default class AutocompleteTextInput extends Vue {
   }
 
   private searchValue = '';
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   private searchTimeout?: any;
-  private isFocused: boolean = false;
-  private isMouseOver: boolean = false;
-  private wasEscPressed: boolean = false;
-  private highlightedIndex: number = -1;
+  private isFocused = false;
+  private isMouseOver = false;
+  private wasEscPressed = false;
+  private highlightedIndex = -1;
 
   public mounted(): void {
     if (this.value) {
@@ -147,7 +142,7 @@ export default class AutocompleteTextInput extends Vue {
 
   public onPressEsc() {
     this.wasEscPressed = true;
-    (document.activeElement as any).blur();
+    (document.activeElement as HTMLElement | undefined)?.blur();
   }
 
   public selectHightlightedOption() {

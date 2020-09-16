@@ -19,9 +19,10 @@ export default class FullscreenButton extends Vue {
   public maxState: number = this.state;
   public minState: number = this.state;
 
-  public animating: boolean = false;
-  public percent: number = 1;
-  public startedAtMs: number = 0;
+  public animating = false;
+  public percent = 1;
+  public startedAtMs = 0;
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   public timeout?: any;
 
   @Watch('state')
