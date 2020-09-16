@@ -25,6 +25,7 @@ export default class Messenger<
     payload: AllMessagePayloads[T],
     tabId?: number
   ): Promise<AllMessageResponses[T]> => {
+    console.log(`${this.source} sending message: ${type}`, { payload, tabId });
     let response;
     if (tabId != null) {
       response = await browser.tabs.sendMessage(tabId, {
