@@ -136,7 +136,7 @@ export default class Browser {
 
     // Internet Explorer 6-11
     // @ts-ignore
-    var isIe = /*@cc_on!@*/false || !!document.documentMode;
+    const isIe = /*@cc_on!@*/false || !!document.documentMode;
     // Edge 20+
     if (!isIe && !!window.StyleMedia)
       return "edge";
@@ -145,7 +145,7 @@ export default class Browser {
 
     // Chrome 1 - 79
     // @ts-ignore
-    var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+    const isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
     // Edge (based on chromium) detection
     if (isChrome && (navigator.userAgent.indexOf("Edg") != -1))
       return "edgechromium";

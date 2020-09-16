@@ -1,5 +1,6 @@
 console.log('INJECTED content-scripts/keyboard-blocker.ts');
 
+/* eslint-disable-next-line no-var */
 var keyboardListeners: Array<(event: KeyboardEvent) => void> = [];
 
 global.addKeyDownListener = function(callback) {

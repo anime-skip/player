@@ -37,9 +37,9 @@ import PopupHeader from './PopupHeader.vue';
   components: { TextInput, ProgressOverlay, PopupHeader },
 })
 export default class LogIn extends Vue {
-  public isError: boolean = false;
-  public username: string = '';
-  public password: string = '';
+  public isError = false;
+  public username = '';
+  public password = '';
 
   @Prop(Boolean) public small?: string;
 

@@ -165,7 +165,7 @@ if (config.mode === 'production') {
   ]);
 }
 
-if (process.env.PACKAGING != 'true') {
+if (process.env.BUILD_ONLY !== 'true') {
   const customProfile = process.env.BROWSER_PROFILE_PATH
     ? `--firefox-profile=${process.env.BROWSER_PROFILE_PATH}`
     : '';
