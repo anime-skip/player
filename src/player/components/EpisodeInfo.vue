@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import { Getter, Action } from '@/common/utils/VuexDecorators';
 import RequestState from '@/common/utils/RequestState';
 import EpisodeUtils from '@/common/utils/EpisodeUtils';

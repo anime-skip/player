@@ -110,6 +110,7 @@ export default class Utils {
       console.warn('Not in full screen mode, tried to exit');
       return;
     }
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     const d = document as any;
     if (document.exitFullscreen) {
       document.exitFullscreen();

@@ -71,6 +71,12 @@ type BrowserType =
   | 'edgechromium'
   | 'unsupported';
 
+interface AutocompleteItem {
+  id?: string;
+  title: string;
+  subtitle?: string;
+}
+
 /**
  * Episode data pulled from the parent webpage
  */

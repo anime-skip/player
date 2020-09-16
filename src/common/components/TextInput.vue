@@ -47,7 +47,7 @@ export default class TextInput extends Vue {
     this.inputValue = value ?? '';
   }
 
-  private isFocused: boolean = false;
+  private isFocused = false;
 
   public onFocus() {
     this.$emit('focus');

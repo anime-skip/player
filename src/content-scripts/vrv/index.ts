@@ -41,7 +41,7 @@ global.getPlayerOptions = (): PlayerOptionGroup[] => {
         options: options.map<PlayerOption>(option => ({
           isSelected: option.classList.contains('selected'),
           node: option as HTMLElement,
-          title: option.textContent?.replace(/  /g, ' ').trim() ?? 'Unknown',
+          title: option.textContent?.replace(/ {2}/g, ' ').trim() ?? 'Unknown',
         })),
       });
     }

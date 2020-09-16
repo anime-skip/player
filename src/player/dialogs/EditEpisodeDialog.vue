@@ -63,8 +63,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import Popup from '@/popup/Popup.vue';
+import { Component, Vue } from 'vue-property-decorator';
 import BasicDialog from './BasicDialog.vue';
 import PopupHeader from '@/popup/components/PopupHeader.vue';
 import ProgressOverlay from '@/common/components/ProgressOverlay.vue';
@@ -73,7 +72,6 @@ import RequestState from '../../common/utils/RequestState';
 import TextInput from '@/common/components/TextInput.vue';
 import AutocompleteTextInput from '@/common/components/AutocompleteTextInput.vue';
 import EpisodeUtils from '../../common/utils/EpisodeUtils';
-import Browser from '../../common/utils/Browser';
 
 @Component({
   components: { BasicDialog, PopupHeader, ProgressOverlay, TextInput, AutocompleteTextInput },
@@ -96,10 +94,10 @@ export default class EditEpisodeDialog extends Vue {
   @Action() showDialog!: (dialog?: string) => void;
   @Action() stopEditing!: (discard: boolean) => void;
 
-  public selectedShowOption: any = {
+  public selectedShowOption: AutocompleteItem = {
     title: '',
   };
-  public selectedEpisodeOption: any = {
+  public selectedEpisodeOption: AutocompleteItem = {
     title: '',
   };
 
@@ -117,7 +115,7 @@ export default class EditEpisodeDialog extends Vue {
     this.onChangeSelectedEpisode(this.selectedEpisodeOption);
   }
 
-  public onChangeSelectedEpisode(currentValue: any) {
+  public onChangeSelectedEpisode(currentValue: AutocompleteItem) {
     const episode = this.searchEpisodesResult.find(result => result.id === currentValue.id);
     this.editableSeasonNumber = String(episode?.season ?? '');
     this.editableEpisodeNumber = String(episode?.number ?? '');

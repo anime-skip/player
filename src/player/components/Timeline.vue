@@ -58,7 +58,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch, Mixins } from 'vue-property-decorator';
+import { Component, Prop, Watch, Mixins } from 'vue-property-decorator';
 import Section from './Section.vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import VueSlider from 'vue-slider-component';
@@ -87,8 +87,8 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
 
   public sections: SectionData[] = [];
   public completedSections: SectionData[] = [];
-  public isSeeking: boolean = false;
-  public seekingTime: number = 0;
+  public isSeeking = false;
+  public seekingTime = 0;
   public service = global.service;
 
   @Getter() isEditing!: boolean;

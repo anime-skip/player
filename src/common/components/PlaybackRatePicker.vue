@@ -40,6 +40,7 @@ export default class PlaybackRatePicker extends Vue {
   @Prop(Boolean) public showLess?: string;
 
   public customRate = '';
+  public PLAYBACK_SPEEDS = PLAYBACK_SPEEDS.filter(speed => !speed.hideWhenSmall || !this.showLess);
 
   @Getter() public playbackRate!: number;
 
@@ -51,16 +52,8 @@ export default class PlaybackRatePicker extends Vue {
     }
   }
 
-  public data() {
-    return {
-      PLAYBACK_SPEEDS: PLAYBACK_SPEEDS.filter(speed => !speed.hideWhenSmall || !this.showLess),
-    };
-  }
-
   public isConstantSelected(): boolean {
-    return !!(this as any).PLAYBACK_SPEEDS.find(
-      (speed: PlaybackRate) => speed.value === this.playbackRate
-    );
+    return !!this.PLAYBACK_SPEEDS.find((speed: PlaybackRate) => speed.value === this.playbackRate);
   }
 
   public get isCustomError(): boolean {

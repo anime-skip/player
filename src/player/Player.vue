@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Mixins, Watch } from 'vue-property-decorator';
+import { Component, Vue, Mixins } from 'vue-property-decorator';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import Loading from '@/common/components/Loading.vue';
 import ToolBar from './components/Toolbar.vue';
@@ -40,7 +40,6 @@ import EditEpisodeDialog from './dialogs/EditEpisodeDialog.vue';
 import KeyboardShortcutMixin from '@/common/mixins/KeyboardShortcuts';
 import { Action, Mutation, Getter } from '@/common/utils/VuexDecorators';
 import Browser from '@/common/utils/Browser';
-import Messenger from '@/common/utils/Messenger';
 import VideoControllerMixin from '../common/mixins/VideoController';
 
 @Component({
@@ -63,13 +62,16 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
     isFullscreen: false,
     isMuted: global.getVideo().muted,
   };
+
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   public activeTimer?: any;
-  public activeTimeout: number = 2000;
+  public activeTimeout = 2000;
 
   @Getter() playbackRate!: number;
   @Getter() isEditing!: boolean;
   @Getter() tabUrl!: string;
 
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   @Mutation() public restoreState!: (payload: { changes: any; callback?: () => void }) => void;
   @Mutation() public changePlaybackRate!: (playbackRate: number) => void;
   @Mutation() public setTabUrl!: (url: string) => void;
@@ -113,6 +115,7 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
     return this.playerState.isActive || this.isEditing;
   }
 
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   public onReceiveMessage({ type, payload: url }: any) {
     if (type != '@anime-skip/changeUrl') return;
 

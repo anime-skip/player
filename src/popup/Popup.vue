@@ -11,7 +11,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import Loading from '@/common/components/Loading.vue';
 import LogIn from './components/LogIn.vue';
 import Preferences from './components/Preferences.vue';
-import { Getter, Action } from '@/common/utils/VuexDecorators';
+import { Getter } from '@/common/utils/VuexDecorators';
 
 @Component({
   components: {
