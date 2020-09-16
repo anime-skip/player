@@ -74,7 +74,6 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Filter fields for the given browser
-
 const browser = (process.env.BUILD_FOR || '').toLowerCase();
 if (!browser) throw "Include a 'BUILD_FOR=firefox|chrome' environment variable";
 const filteredManifest = Object.keys(manifest).reduce((newManifest, key) => {
