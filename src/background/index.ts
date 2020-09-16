@@ -43,9 +43,8 @@ const messenger = new Messenger<
 
 browser.tabs.onUpdated.addListener(function(tabId, { url }, _tabInfo) {
   if (url == null) return;
-  try {
-    messenger.send('@anime-skip/changeUrl', url, tabId);
-  } catch (err) {
-    console.error('Tab url change update failed', err);
-  }
+
+  messenger.send('@anime-skip/changeUrl', url, tabId).catch(err => {
+    console.warn('Tab url change update failed', err);
+  });
 });
