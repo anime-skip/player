@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+set -o pipefail # Forward failure through the | operator
 source ./.env
 
 ESC="\x1b"
@@ -23,8 +24,9 @@ step() {
 run() {
     step "$1"
     echo -e "##### $1 #####\n" | sed 's/\x1B\[[0-9;]\+[A-Za-z]//g' >> "$LOG_FILE"
-    eval "$2 2>&1 >> '$LOG_FILE'"
-    echo -e "\n" >> "$LOG_FILE"
+    # Add logs to log file without progress bars, and hide output on main process
+    eval "$2 |& tee >(awk '!/\r/' >> '$LOG_FILE') > /dev/null"
+    echo -e "Done!\n" >> "$LOG_FILE"
 }
 
 onFailure() {
@@ -73,10 +75,10 @@ title "Pre-package"
 run "Install dependencies"  "yarn install"
 run "Check for type errors" "yarn compile"
 run "Check formatting"      "yarn prettier"
-run "Lint"                  "yarn lint"
-run "Run Tests"             "yarn test"
-run "Run Integration Tests" "yarn test:integration"
-run "Run E2E Tests"         "yarn test:e2e"
+# run "Lint"                  "yarn lint"
+run "Run Tests"             "yarn test --ci"
+run "Run Integration Tests" "yarn test:integration --ci"
+run "Run E2E Tests"         "yarn test:e2e --ci"
 run "Verify manifest"       "yarn check-manifest"
 
 
@@ -85,15 +87,30 @@ run "Verify manifest"       "yarn check-manifest"
 title "Packaging Artifacts"
 
 # All
+SOURCES="src"
+SOURCES="$SOURCES package.json"
+SOURCES="$SOURCES .babelrc"
+SOURCES="$SOURCES .eslintrc.js"
+SOURCES="$SOURCES .gitignore"
+SOURCES="$SOURCES .prettierrc"
+SOURCES="$SOURCES .web-ext.config.js"
+SOURCES="$SOURCES jest.config.js"
+SOURCES="$SOURCES postcss.config.js"
+SOURCES="$SOURCES README.md"
+SOURCES="$SOURCES tsconfig.json"
+SOURCES="$SOURCES webpack.config.js"
+SOURCES="$SOURCES yarn.lock"
+run "Creating ${CODE}sources.zip" "zip -r '$OUTPUT_NAME/sources.zip' $SOURCES"
+
 # TODO - Create source.zip
 
 # Firefox
 run "Building for ${CODE}firefox" "yarn build:prod"
-run "Create ${CODE}firefox.zip" "(cd dist && zip -r '$OUTPUT_NAME/firefox.zip' .)"
+run "Create ${CODE}firefox.zip" "(cd dist && zip -r '../$OUTPUT_NAME/firefox.zip' .)"
 
 # Chrome
 run "Building for ${CODE}chrome" "yarn build:chrome:prod"
-run "Create ${CODE}chrome.zip" "(cd dist && zip -r '$OUTPUT_NAME/chrome.zip' .)"
+run "Create ${CODE}chrome.zip" "(cd dist && zip -r '../$OUTPUT_NAME/chrome.zip' .)"
 
 
 # DEPLOY ###############################
