@@ -80,7 +80,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
   async [types.stopEditing]({ state, commit, dispatch }, discardChanges?: boolean) {
     console.log('stopEditing', { discardChanges });
     if (!discardChanges) {
-      const oldTimestamps = state.episodeUrl!.episode.timestamps;
+      const oldTimestamps = state.episodeUrl?.episode.timestamps ?? [];
       const newTimestamps = state.draftTimestamps;
       dispatch(types.updateTimestamps, {
         oldTimestamps,

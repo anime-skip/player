@@ -118,7 +118,7 @@ export default class EditTimestampPanel extends Mixins(
 
     const interval = setInterval(() => {
       if (this.$refs.timeSelect != null) {
-        (this.$refs.timeSelect as HTMLElement).focus();
+        (this.$refs.timeSelect as HTMLElement | undefined)?.focus();
         clearInterval(interval);
       }
     }, 200);

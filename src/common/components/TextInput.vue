@@ -54,7 +54,7 @@ export default class TextInput extends Vue {
     this.isFocused = true;
   }
   public focus() {
-    (this.$refs.input as HTMLInputElement).focus();
+    (this.$refs.input as HTMLInputElement | undefined)?.focus();
   }
 
   public onBlur() {
@@ -62,7 +62,7 @@ export default class TextInput extends Vue {
     this.isFocused = false;
   }
   public blur() {
-    (this.$refs.input as HTMLInputElement).blur();
+    (this.$refs.input as HTMLInputElement | undefined)?.blur();
   }
 
   public get inputValue(): string {
