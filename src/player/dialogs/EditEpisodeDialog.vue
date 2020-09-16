@@ -310,7 +310,9 @@ export default class EditEpisodeDialog extends Vue {
           data: { url: this.tabUrl },
         },
       });
-    } else if (this.selectedEpisodeOption.id == null) {
+      return;
+    }
+    if (this.selectedEpisodeOption.id == null) {
       this.createEpisodeData({
         show: {
           create: false,
@@ -326,7 +328,8 @@ export default class EditEpisodeDialog extends Vue {
         },
       });
       return;
-    } else if (
+    }
+    if (
       this.selectedEpisodeOption.id != null &&
       this.selectedShowOption.id != null &&
       this.episodeUrl == null
