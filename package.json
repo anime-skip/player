@@ -7,16 +7,22 @@
     "node": ">=10"
   },
   "scripts": {
-    "lint": "eslint --ext .ts,.vue src",
-    "prettier": "prettier \"src/**/*.{ts,vue}\"",
+    "compile": "tsc -p . --noEmit",
+    "lint": "eslint --ext .js,.ts,.vue src",
+    "prettier": "prettier --check \"src/**/*.{js,ts,vue}\"",
     "prettier:write": "yarn prettier --write",
+    "check-manifest": "yarn build:prod && yarn web-ext --config=.web-ext.config.js lint && yarn build:chrome:prod && yarn web-ext --config=.web-ext.config.js lint",
     "package": "./scripts/package.sh",
-    "build": "cross-env NODE_ENV=development webpack --hide-modules",
-    "build:prod": "cross-env NODE_ENV=production webpack --hide-modules",
-    "start": "cross-env HMR=true yarn build --watch",
-    "start:prod": "cross-env HMR=true yarn build:prod --watch",
+    "build": "cross-env BUILD_ONLY=true BUILD_FOR=firefox NODE_ENV=development webpack --hide-modules --watch",
+    "build:prod": "cross-env BUILD_ONLY=true BUILD_FOR=firefox NODE_ENV=production webpack --hide-modules",
+    "build:chrome": "cross-env BUILD_ONLY=true BUILD_FOR=chrome NODE_ENV=development webpack --hide-modules --watch",
+    "build:chrome:prod": "cross-env BUILD_ONLY=true BUILD_FOR=chrome NODE_ENV=production webpack --hide-modules",
+    "start": "cross-env HMR=true BUILD_FOR=firefox NODE_ENV=development webpack --hide-modules --watch",
+    "start:prod": "cross-env BUILD_FOR=firefox NODE_ENV=production webpack --hide-modules",
     "test": "jest --runInBand",
-    "test:watch": "yarn test --watch"
+    "test:watch": "yarn test --watchAll",
+    "test:integration": "echo 'TODO'",
+    "test:e2e": "echo 'TODO'"
   },
   "husky": {
     "hooks": {
@@ -49,7 +55,6 @@
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^5.0.2",
     "archiver": "^3.0.0",
-    "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.2",
     "copy-webpack-plugin": "^5.1.1",
     "core-js": "^3.0.1",

@@ -3,7 +3,18 @@
   "description": "Skip intros, credits, filler and more on supported services",
   "manifest_version": 2,
   "permissions": ["storage", "tabs"],
-  "page_action": {
+  "{{chrome}}.browser_action": {
+    "browser_style": true,
+    "default_icon": {
+      "16": "assets/extension-logo/16.png",
+      "32": "assets/extension-logo/32.png",
+      "48": "assets/extension-logo/48.png",
+      "128": "assets/extension-logo/128.png"
+    },
+    "default_title": "Anime Skip",
+    "default_popup": "popup/index.html"
+  },
+  "{{firefox}}.page_action": {
     "show_matches": ["https://www.anime-skip.com/*", "https://anime-skip.com/*"],
     "browser_style": true,
     "default_icon": {

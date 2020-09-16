@@ -62,15 +62,29 @@ services.forEach(service => {
   });
 
   // Add urls to the page_action
-  manifest.page_action.show_matches.push(...service.page_matches);
+  manifest['{{firefox}}.page_action'].show_matches.push(...service.page_matches);
 });
 
-if (process.env.NODE_ENV !== 'production') {
+// Update dev stuff
+if (process.env.NODE_ENV === 'development') {
+  manifest['{{chrome}}.browser_action'].default_title += ' Nightly';
+  manifest['{{firefox}}.page_action'].default_title += ' Nightly';
   manifest.name += ' Nightly';
   manifest.description = 'Development Build - ' + manifest.description;
 }
 
+// Filter fields for the given browser
+
+const browser = (process.env.BUILD_FOR || '').toLowerCase();
+if (!browser) throw "Include a 'BUILD_FOR=firefox|chrome' environment variable";
+const filteredManifest = Object.keys(manifest).reduce((newManifest, key) => {
+  if (!key.startsWith('{{') || key.startsWith(`{{${browser}}}.`)) {
+    newManifest[key.replace(`{{${browser}}}.`, '')] = manifest[key];
+  }
+  return newManifest;
+}, {});
+
 module.exports = {
-  manifest,
+  manifest: filteredManifest,
   services,
 };
