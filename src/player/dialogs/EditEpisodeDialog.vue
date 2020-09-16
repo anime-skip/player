@@ -268,9 +268,10 @@ export default class EditEpisodeDialog extends Vue {
   }
 
   public get isSubmitEnabled(): boolean {
+    // prettier-ignore
     return !!(
-      // An existing show and episode are selected
       (
+        // An existing show and episode are selected
         (this.selectedShowOption.id && this.selectedEpisodeOption.id) ||
         // An existing show but new episode is entered
         (this.selectedShowOption.id && this.selectedEpisodeOption.title) ||

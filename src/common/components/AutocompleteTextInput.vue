@@ -142,7 +142,7 @@ export default class AutocompleteTextInput extends Vue {
 
   public onPressEsc() {
     this.wasEscPressed = true;
-    (document.activeElement as HTMLElement).blur();
+    (document.activeElement as HTMLElement | undefined)?.blur();
   }
 
   public selectHightlightedOption() {

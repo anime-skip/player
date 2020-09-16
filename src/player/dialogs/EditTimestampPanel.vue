@@ -144,7 +144,7 @@ export default class EditTimestampPanel extends Mixins(
   };
 
   public updateTimestamp(): void {
-    (this.$refs.timeSelect as HTMLDivElement).focus();
+    (this.$refs.timeSelect as HTMLDivElement | undefined)?.focus();
     if (this.activeTimestamp != null) {
       this.setActiveTimestamp({
         ...this.activeTimestamp,

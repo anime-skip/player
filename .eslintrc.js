@@ -11,9 +11,6 @@ module.exports = {
     browser: true,
     webextensions: true,
   },
-  globals: {
-    // global: false,
-  },
   extends: [
     'eslint:recommended',
     '@vue/typescript/recommended',
