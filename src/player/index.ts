@@ -18,7 +18,7 @@ global.onVideoChanged(video => {
 
 // Clean DOM
 
-let existingPlayers = document.querySelectorAll('#AnimeSkipPlayer');
+const existingPlayers = document.querySelectorAll('#AnimeSkipPlayer');
 if (existingPlayers.length > 0) {
   console.log('Player already added, removing');
   existingPlayers.forEach(player => {
