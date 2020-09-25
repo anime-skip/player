@@ -86,7 +86,7 @@ export default class Browser {
     if (browser) getURL = browser.runtime.getURL;
     // @ts-ignore
     else if (chrome) getURL = chrome.runtime.getURL;
-    return getURL('assets/' + extUrl);
+    return getURL(extUrl);
   }
 
   public static openPopup(): void {
