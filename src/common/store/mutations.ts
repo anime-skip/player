@@ -2,6 +2,8 @@ import {
   persistedKeys,
   REFRESH_TOKEN_DURATION,
   ACCESS_TOKEN_DURATION,
+  DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS,
+  DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS,
 } from '@/common/utils/Constants';
 import Browser from '@/common/utils/Browser';
 import Vue from 'vue';
@@ -86,6 +88,36 @@ export default as<
       return;
     }
     Vue.set(state.account, 'preferences', payload);
+    persistAccount(state);
+  },
+
+  // Keyboard
+  [types.setPrimaryKeyboardShortcut](
+    state,
+    { type, value }: { type: KeyboardShortcutAction; value: string | undefined }
+  ) {
+    if (state.primaryKeyboardShortcuts == null) {
+      state.primaryKeyboardShortcuts = {
+        ...DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS,
+        [type]: value,
+      };
+    } else {
+      Vue.set(state.primaryKeyboardShortcuts, type, value);
+    }
+    persistAccount(state);
+  },
+  [types.setSecondaryKeyboardShortcut](
+    state,
+    { type, value }: { type: KeyboardShortcutAction; value: string | undefined }
+  ) {
+    if (state.secondaryKeyboardShortcuts == null) {
+      state.secondaryKeyboardShortcuts = {
+        ...DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS,
+        [type]: value,
+      };
+    } else {
+      Vue.set(state.secondaryKeyboardShortcuts, type, value);
+    }
     persistAccount(state);
   },
 

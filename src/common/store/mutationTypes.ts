@@ -8,6 +8,9 @@ export default {
   restoreState: '@@storage/restoreState' as const,
   persistPreferences: '@@storage/persistPreferences' as const,
 
+  setPrimaryKeyboardShortcut: '@@keyboard/setPrimaryShortcut' as const,
+  setSecondaryKeyboardShortcut: '@@keyboard/setSecondaryShortcut' as const,
+
   login: '@@auth/login' as const,
   logOut: '@@auth/logOut' as const,
   loginRequestState: '@@auth/loginRequestState' as const,

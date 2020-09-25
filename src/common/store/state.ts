@@ -19,6 +19,9 @@ export const initialState: VuexState = {
   preferencesRequestState: RequestState.NOT_REQUESTED,
   preferencesLastUpdatedAt: 0,
 
+  primaryKeyboardShortcuts: undefined,
+  secondaryKeyboardShortcuts: undefined,
+
   searchShowsResult: [],
   searchShowsRequestState: RequestState.NOT_REQUESTED,
 

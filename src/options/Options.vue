@@ -1,18 +1,208 @@
 <template>
   <div class="Options">
-    <p>Vue Options Page!</p>
+    <div class="column">
+      <PopupHeader title="Keyboard Shortcuts" />
+      <h4 class="header">
+        <span class="column1">General</span>
+        <span class="column2">Primary</span>
+        <span class="column3">Secondary</span>
+      </h4>
+      <div>
+        <KeyboardShortcutItem
+          name="Play/Pause"
+          :shortcuts="getShortcutsFor('playPause')"
+          v-on="{
+            updatePrimary: updatePrimaryShortcut('playPause'),
+            updateSecondary: updateSecondaryShortcut('playPause'),
+          }"
+        />
+        <KeyboardShortcutItem
+          name="Close Dialog"
+          :shortcuts="getShortcutsFor('hideDialog')"
+          v-on="{
+            updatePrimary: updatePrimaryShortcut('hideDialog'),
+            updateSecondary: updateSecondaryShortcut('hideDialog'),
+          }"
+        />
+      </div>
+      <h4 class="header">Fast Forward</h4>
+      <div>
+        <KeyboardShortcutItem
+          name="Advance 2 second"
+          :shortcuts="getShortcutsFor('advanceSmall')"
+          v-on="{
+            updatePrimary: updatePrimaryShortcut('advanceSmall'),
+            updateSecondary: updateSecondaryShortcut('advanceSmall'),
+          }"
+        />
+        <KeyboardShortcutItem
+          name="Advance 5 seconds"
+          :shortcuts="getShortcutsFor('advanceMedium')"
+          v-on="{
+            updatePrimary: updatePrimaryShortcut('advanceMedium'),
+            updateSecondary: updateSecondaryShortcut('advanceMedium'),
+          }"
+        />
+        <KeyboardShortcutItem
+          name="Advance 90 seconds"
+          :shortcuts="getShortcutsFor('advanceLarge')"
+          v-on="{
+            updatePrimary: updatePrimaryShortcut('advanceLarge'),
+            updateSecondary: updateSecondaryShortcut('advanceLarge'),
+          }"
+        />
+      </div>
+      <h4 class="header">Rewind</h4>
+      <div>
+        <KeyboardShortcutItem
+          name="Rewind 2 second"
+          :shortcuts="getShortcutsFor('rewindSmall')"
+          v-on="{
+            updatePrimary: updatePrimaryShortcut('rewindSmall'),
+            updateSecondary: updateSecondaryShortcut('rewindSmall'),
+          }"
+        />
+        <KeyboardShortcutItem
+          name="Rewind 5 seconds"
+          :shortcuts="getShortcutsFor('rewindMedium')"
+          v-on="{
+            updatePrimary: updatePrimaryShortcut('rewindMedium'),
+            updateSecondary: updateSecondaryShortcut('rewindMedium'),
+          }"
+        />
+        <KeyboardShortcutItem
+          name="Rewind 90 seconds"
+          :shortcuts="getShortcutsFor('rewindLarge')"
+          v-on="{
+            updatePrimary: updatePrimaryShortcut('rewindLarge'),
+            updateSecondary: updateSecondaryShortcut('rewindLarge'),
+          }"
+        />
+      </div>
+      <h4 class="header">Editing</h4>
+      <div>
+        <KeyboardShortcutItem
+          name="Frame Rewind"
+          :shortcuts="getShortcutsFor('rewindFrame')"
+          v-on="{
+            updatePrimary: updatePrimaryShortcut('rewindFrame'),
+            updateSecondary: updateSecondaryShortcut('rewindFrame'),
+          }"
+        />
+        <KeyboardShortcutItem
+          name="Create Timestamp"
+          :shortcuts="getShortcutsFor('createTimestamp')"
+          v-on="{
+            updatePrimary: updatePrimaryShortcut('createTimestamp'),
+            updateSecondary: updateSecondaryShortcut('createTimestamp'),
+          }"
+        />
+        <KeyboardShortcutItem
+          name="Frame Advance"
+          :shortcuts="getShortcutsFor('advanceFrame')"
+          v-on="{
+            updatePrimary: updatePrimaryShortcut('advanceFrame'),
+            updateSecondary: updateSecondaryShortcut('advanceFrame'),
+          }"
+        />
+      </div>
+      <div class="help">
+        <WebExtImg src="ic_help.svg" />
+        <p>
+          Keyboard shortcuts only work inside the Anime Skip video player. If you click outside the
+          player then try and use one, it will not work
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import Vue from 'vue';
+import PopupHeader from '@/popup/components/PopupHeader.vue';
+import KeyboardShortcutItem from './components/KeyboardShortcutItem.vue';
+import WebExtImg from '@/common/components/WebExtImg.vue';
+import mutationTypes from '@/common/store/mutationTypes';
 
-@Component
-export default class Options extends Vue {}
+export default Vue.extend({
+  components: { KeyboardShortcutItem, PopupHeader, WebExtImg },
+  methods: {
+    updatePrimaryShortcut(type: KeyboardShortcutAction): (value: string) => void {
+      return (value: string | undefined): void => {
+        this.$store.commit(mutationTypes.setPrimaryKeyboardShortcut, { type, value });
+      };
+    },
+    updateSecondaryShortcut(type: KeyboardShortcutAction): (value: string) => void {
+      return (value: string | undefined): void => {
+        this.$store.commit(mutationTypes.setSecondaryKeyboardShortcut, { type, value });
+      };
+    },
+    getShortcutsFor(type: string): { primary: string | undefined; secondary: string | undefined } {
+      return {
+        primary: this.$store.getters.primaryKeyboardShortcuts[type],
+        secondary: this.$store.getters.secondaryKeyboardShortcuts[type],
+      };
+    },
+  },
+});
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .Options {
-  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+
+  .column {
+    width: 100%;
+    max-width: 900px;
+    align-self: center;
+    & > * {
+      margin-bottom: 16px;
+    }
+  }
+
+  .help {
+    display: flex;
+    flex-direction: row;
+    border-radius: 8px;
+    padding: 16px;
+    background-color: $background300;
+    align-items: center;
+    margin-top: 48px;
+
+    img {
+      width: 24px;
+      height: 24px;
+      margin-right: 24px;
+      opacity: 64%;
+    }
+
+    p {
+      flex: 1;
+    }
+  }
+
+  .header {
+    color: $textSecondary;
+    display: flex;
+    flex-direction: row;
+    padding-top: 16px;
+  }
+
+  .column1 {
+    flex-grow: 3;
+    flex-basis: 0;
+  }
+  .column2 {
+    flex-grow: 1;
+    flex-basis: 0;
+    text-align: center;
+  }
+  .column3 {
+    flex-grow: 1;
+    flex-basis: 0;
+    text-align: center;
+  }
 }
 </style>

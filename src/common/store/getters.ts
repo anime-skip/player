@@ -1,6 +1,10 @@
 import { as } from '../utils/GlobalUtils';
 import { GetterTree } from 'vuex';
 import RequestState from '../utils/RequestState';
+import {
+  DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS,
+  DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS,
+} from '../utils/Constants';
 
 export default as<GetterTree<VuexState, VuexState>>({
   // General
@@ -63,6 +67,14 @@ export default as<GetterTree<VuexState, VuexState>>({
   },
   preferencesLastUpdatedAt({ preferencesLastUpdatedAt }): number {
     return preferencesLastUpdatedAt;
+  },
+
+  // Keyboard shortcusts
+  primaryKeyboardShortcuts({ primaryKeyboardShortcuts }): any {
+    return primaryKeyboardShortcuts ?? DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS;
+  },
+  secondaryKeyboardShortcuts({ secondaryKeyboardShortcuts }): any {
+    return secondaryKeyboardShortcuts ?? DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS;
   },
 
   // Shows
