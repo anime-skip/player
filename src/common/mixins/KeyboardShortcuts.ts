@@ -1,5 +1,6 @@
 import { ACCEPTED_KEYS } from '../utils/Constants';
 import { Vue, Component } from 'vue-property-decorator';
+import Utils from '../utils/Utils';
 
 @Component
 export default class KeyboardShortcutMixin extends Vue {
@@ -13,23 +14,26 @@ export default class KeyboardShortcutMixin extends Vue {
   }
 
   onKeyDown(event: KeyboardEvent): void {
-    const { keyCode, ctrlKey } = event;
     // Prevent triggers from firing while typing
-    if (document.activeElement?.tagName === 'INPUT') {
+    if (document.activeElement?.tagName === 'INPUT' || !Utils.isKeyComboAllowed(event)) {
       return;
     }
-    console.log(`[${this.$options.name}] key down`, {
-      keyCode,
-      activeTag: document.activeElement?.tagName,
-    });
 
-    const key = ACCEPTED_KEYS[keyCode];
-    if (!key) return;
+    const keyCombo = Utils.keyComboFromEvent(event);
+    let keyAction = Utils.findShortcutAction(
+      keyCombo,
+      this.$store.getters.primaryKeyboardShortcuts
+    );
+    if (keyAction == null) {
+      keyAction = Utils.findShortcutAction(
+        keyCombo,
+        this.$store.getters.secondaryKeyboardShortcuts
+      );
+    }
 
-    const combination = ctrlKey ? 'ctrl+' + key : key;
-    console.log(`[${this.$options.name}] Pressed ${combination}`);
-    if (this.keyboardShortcuts[combination] == null) return;
-    (this.keyboardShortcuts[combination] as Function).apply(this);
+    console.log(`[${this.$options.name}] Pressed ${keyCombo} -> ${keyAction}`);
+    if (keyAction == null || this.keyboardShortcuts[keyAction] == null) return;
+    (this.keyboardShortcuts[keyAction] as Function).apply(this);
   }
-  keyboardShortcuts: { [combination: string]: () => void } = {};
+  keyboardShortcuts: { [action in KeyboardShortcutAction]?: () => void } = {};
 }
