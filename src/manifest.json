@@ -27,7 +27,10 @@
     "default_popup": "popup/index.html"
   },
   "options_ui": {
-    "page": "options/index.html"
+    "page": "options/index.html",
+    "open_in_tab": true,
+    "{{firefox}}.browser_style": false,
+    "{{chrome}}.chrome_style": false
   },
   "content_scripts": [
     {
