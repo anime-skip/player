@@ -15,7 +15,7 @@ export default class WebExtImg extends Vue {
   @Prop(Boolean) public draggable?: boolean;
 
   public get resolvedSrc(): string {
-    return Browser.resolveUrl(this.src);
+    return Browser.resolveUrl('assets/' + this.src);
   }
 }
 </script>
