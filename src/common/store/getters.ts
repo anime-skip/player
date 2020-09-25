@@ -76,6 +76,27 @@ export default as<GetterTree<VuexState, VuexState>>({
   secondaryKeyboardShortcuts({ secondaryKeyboardShortcuts }): any {
     return secondaryKeyboardShortcuts ?? DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS;
   },
+  keyComboCountMap({
+    primaryKeyboardShortcuts,
+    secondaryKeyboardShortcuts,
+  }): { [keyCombo: string]: number | undefined } {
+    const map: { [keyCombo: string]: number | undefined } = {};
+    Object.values(primaryKeyboardShortcuts ?? DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS).forEach(
+      keyCombo => {
+        if (keyCombo) {
+          map[keyCombo] = (map[keyCombo] ?? 0) + 1;
+        }
+      }
+    );
+    Object.values(secondaryKeyboardShortcuts ?? DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS).forEach(
+      keyCombo => {
+        if (keyCombo) {
+          map[keyCombo] = (map[keyCombo] ?? 0) + 1;
+        }
+      }
+    );
+    return map;
+  },
 
   // Shows
   searchShowsResult({ searchShowsResult }): Api.ShowSearchResult[] {
