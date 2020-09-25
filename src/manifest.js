@@ -77,12 +77,27 @@ if (process.env.NODE_ENV === 'development') {
 // Filter fields for the given browser
 const browser = (process.env.BUILD_FOR || '').toLowerCase();
 if (!browser) throw "Include a 'BUILD_FOR=firefox|chrome' environment variable";
-const filteredManifest = Object.keys(manifest).reduce((newManifest, key) => {
-  if (!key.startsWith('{{') || key.startsWith(`{{${browser}}}.`)) {
-    newManifest[key.replace(`{{${browser}}}.`, '')] = manifest[key];
+
+/**
+ * Address all `{{browser}}.` prefixes, removing fields for other browesers and removing that tag
+ * for fields for the specified browser
+ */
+function resolveBrowserTagsInObject(object) {
+  if (Array.isArray(object)) {
+    return object.map(item => resolveBrowserTagsInObject(item));
+  } else if (typeof object === 'object') {
+    return Object.keys(object).reduce((newObject, key) => {
+      if (!key.startsWith('{{') || key.startsWith(`{{${browser}}}.`)) {
+        newObject[key.replace(`{{${browser}}}.`, '')] = resolveBrowserTagsInObject(object[key]);
+      }
+      return newObject;
+    }, {});
+  } else {
+    return object;
   }
-  return newManifest;
-}, {});
+}
+
+const filteredManifest = resolveBrowserTagsInObject(manifest);
 
 module.exports = {
   manifest: filteredManifest,
