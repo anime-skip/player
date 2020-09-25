@@ -1,31 +1,24 @@
 <template>
   <div class="KeyboardShortcutItem">
     <p class="column1">{{ name }}</p>
-    <KeyboardShortcutChooser
-      class="column2"
-      :shortcut="shortcuts.primary"
-      @update="updatePrimary"
-    />
+    <KeyboardShortcutChooser class="column2" :shortcut="shortcut.primary" @update="updatePrimary" />
     <KeyboardShortcutChooser
       class="column3"
-      :shortcut="shortcuts.secondary"
+      :shortcut="shortcut.secondary"
       @update="updateSecondary"
     />
   </div>
 </template>
 
 <script lang="ts">
-import Vue, { PropOptions } from 'vue';
+import Vue from 'vue';
 import KeyboardShortcutChooser from '@/options/components/KeyboardShortcutChooser.vue';
 
 export default Vue.extend({
   components: { KeyboardShortcutChooser },
   props: {
     name: { type: String, required: true },
-    shortcuts: { type: Object, required: true } as PropOptions<{
-      primary: string | undefined;
-      secondary: string | undefined;
-    }>,
+    actionName: { type: String, required: true },
   },
   methods: {
     updatePrimary(value: string | undefined) {
@@ -35,6 +28,14 @@ export default Vue.extend({
     updateSecondary(value: string | undefined) {
       console.log('2');
       this.$emit('updateSecondary', value);
+    },
+  },
+  computed: {
+    shortcut(): { primary: string | undefined; secondary: string | undefined } {
+      return {
+        primary: this.$store.getters.primaryKeyboardShortcuts[this.actionName],
+        secondary: this.$store.getters.secondaryKeyboardShortcuts[this.actionName],
+      };
     },
   },
 });

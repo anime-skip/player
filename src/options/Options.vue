@@ -10,7 +10,7 @@
       <div>
         <KeyboardShortcutItem
           name="Play/Pause"
-          :shortcuts="getShortcutsFor('playPause')"
+          actionName="playPause"
           v-on="{
             updatePrimary: updatePrimaryShortcut('playPause'),
             updateSecondary: updateSecondaryShortcut('playPause'),
@@ -18,7 +18,7 @@
         />
         <KeyboardShortcutItem
           name="Close Dialog"
-          :shortcuts="getShortcutsFor('hideDialog')"
+          actionName="hideDialog"
           v-on="{
             updatePrimary: updatePrimaryShortcut('hideDialog'),
             updateSecondary: updateSecondaryShortcut('hideDialog'),
@@ -29,7 +29,7 @@
       <div>
         <KeyboardShortcutItem
           name="Advance 2 second"
-          :shortcuts="getShortcutsFor('advanceSmall')"
+          actionName="advanceSmall"
           v-on="{
             updatePrimary: updatePrimaryShortcut('advanceSmall'),
             updateSecondary: updateSecondaryShortcut('advanceSmall'),
@@ -37,7 +37,7 @@
         />
         <KeyboardShortcutItem
           name="Advance 5 seconds"
-          :shortcuts="getShortcutsFor('advanceMedium')"
+          actionName="advanceMedium"
           v-on="{
             updatePrimary: updatePrimaryShortcut('advanceMedium'),
             updateSecondary: updateSecondaryShortcut('advanceMedium'),
@@ -45,7 +45,7 @@
         />
         <KeyboardShortcutItem
           name="Advance 90 seconds"
-          :shortcuts="getShortcutsFor('advanceLarge')"
+          actionName="advanceLarge"
           v-on="{
             updatePrimary: updatePrimaryShortcut('advanceLarge'),
             updateSecondary: updateSecondaryShortcut('advanceLarge'),
@@ -56,7 +56,7 @@
       <div>
         <KeyboardShortcutItem
           name="Rewind 2 second"
-          :shortcuts="getShortcutsFor('rewindSmall')"
+          actionName="rewindSmall"
           v-on="{
             updatePrimary: updatePrimaryShortcut('rewindSmall'),
             updateSecondary: updateSecondaryShortcut('rewindSmall'),
@@ -64,7 +64,7 @@
         />
         <KeyboardShortcutItem
           name="Rewind 5 seconds"
-          :shortcuts="getShortcutsFor('rewindMedium')"
+          actionName="rewindMedium"
           v-on="{
             updatePrimary: updatePrimaryShortcut('rewindMedium'),
             updateSecondary: updateSecondaryShortcut('rewindMedium'),
@@ -72,7 +72,7 @@
         />
         <KeyboardShortcutItem
           name="Rewind 90 seconds"
-          :shortcuts="getShortcutsFor('rewindLarge')"
+          actionName="rewindLarge"
           v-on="{
             updatePrimary: updatePrimaryShortcut('rewindLarge'),
             updateSecondary: updateSecondaryShortcut('rewindLarge'),
@@ -83,7 +83,7 @@
       <div>
         <KeyboardShortcutItem
           name="Frame Rewind"
-          :shortcuts="getShortcutsFor('rewindFrame')"
+          actionName="rewindFrame"
           v-on="{
             updatePrimary: updatePrimaryShortcut('rewindFrame'),
             updateSecondary: updateSecondaryShortcut('rewindFrame'),
@@ -91,7 +91,7 @@
         />
         <KeyboardShortcutItem
           name="Create Timestamp"
-          :shortcuts="getShortcutsFor('createTimestamp')"
+          actionName="createTimestamp"
           v-on="{
             updatePrimary: updatePrimaryShortcut('createTimestamp'),
             updateSecondary: updateSecondaryShortcut('createTimestamp'),
@@ -99,7 +99,7 @@
         />
         <KeyboardShortcutItem
           name="Frame Advance"
-          :shortcuts="getShortcutsFor('advanceFrame')"
+          actionName="advanceFrame"
           v-on="{
             updatePrimary: updatePrimaryShortcut('advanceFrame'),
             updateSecondary: updateSecondaryShortcut('advanceFrame'),
@@ -135,12 +135,6 @@ export default Vue.extend({
     updateSecondaryShortcut(type: KeyboardShortcutAction): (value: string) => void {
       return (value: string | undefined): void => {
         this.$store.commit(mutationTypes.setSecondaryKeyboardShortcut, { type, value });
-      };
-    },
-    getShortcutsFor(type: string): { primary: string | undefined; secondary: string | undefined } {
-      return {
-        primary: this.$store.getters.primaryKeyboardShortcuts[type],
-        secondary: this.$store.getters.secondaryKeyboardShortcuts[type],
       };
     },
   },
