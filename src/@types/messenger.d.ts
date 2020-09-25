@@ -1,14 +1,16 @@
-type AllMessageTypes = MessageTypes | ApiMessageTypes | ParentMessageTypes;
+type AllMessageTypes = MessageTypes | ApiMessageTypes | ParentMessageTypes | RuntimeMessageTypes;
 
 interface AllMessagePayloads
   extends MessagePayloadMap<AllMessageTypes>,
     ApiMessagePayloadMap,
-    ParentMessagePayloadMap {}
+    ParentMessagePayloadMap,
+    RuntimeMessagePayloadMap {}
 
 interface AllMessageResponses
   extends MessageResponseMap<AllMessageTypes>,
     ApiMessageResponseMap,
-    ParentMessageResponseMap {}
+    ParentMessageResponseMap,
+    RuntimeMessageResponseMap {}
 
 //#region Generic Messenger
 
@@ -99,5 +101,25 @@ type ParentMessageListener<T extends ParentMessageTypes> = (
 ) => Promise<ParentMessageResponseMap[T]>;
 
 type ParentMessageListenerMap = { [type in ParentMessageTypes]: ParentMessageListener<type> };
+
+//#endregion
+
+//#region Runtime Messenger
+
+type RuntimeMessageTypes = '@anime-skip/openOptions';
+
+interface RuntimeMessagePayloadMap extends MessagePayloadMap<RuntimeMessageTypes> {
+  '@anime-skip/openOptions': undefined;
+}
+
+interface RuntimeMessageResponseMap extends MessageResponseMap<RuntimeMessageTypes> {
+  '@anime-skip/openOptions': void;
+}
+
+type RuntimeMessageListener<T extends RuntimeMessageTypes> = (
+  payload: RuntimeMessagePayloadMap[T]
+) => Promise<RuntimeMessageResponseMap[T]>;
+
+type RuntimeMessageListenerMap = { [type in RuntimeMessageTypes]: RuntimeMessageListener<type> };
 
 //#endregion
