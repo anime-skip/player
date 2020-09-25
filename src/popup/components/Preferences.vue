@@ -38,6 +38,11 @@
       <span v-if="hasPreferenceError" class="error-message">
         Could not save preferences, please try again later
       </span>
+      <h2 class="section-header">Other Settings</h2>
+      <div class="clickable dark focus button other-setting" @click="onClickKeyboardShortcuts">
+        <span>Edit Keyboard Shortcuts</span>
+        <WebExtImg src="ic_chevron_right.svg" />
+      </div>
       <div class="bottom-row">
         <a class="link" href>Need help?</a>
         <a class="link" href="#" @click.prevent="logOut()">Log out</a>
@@ -71,6 +76,7 @@ import WebExtImg from '@/common/components/WebExtImg.vue';
 import PlaybackRatePicker from '@/common/components/PlaybackRatePicker.vue';
 import { Getter, Action, Mutation } from '@/common/utils/VuexDecorators';
 import { SKIPPABLE_PREFERENCES } from '../../common/utils/Constants';
+import Messenger from '@/common/utils/Messenger';
 
 @Component({
   components: { ProgressOverlay, PopupHeader, Checkbox, TextInput, PlaybackRatePicker, WebExtImg },
@@ -123,6 +129,10 @@ export default class Preferences extends Vue {
     this.updatePreferences(preferenceKey);
   }
 
+  public onClickKeyboardShortcuts(): void {
+    new Messenger('preferences').send('@anime-skip/openOptions', undefined).then(this.hideDialog);
+  }
+
   public get hasPlayerOptions(): boolean {
     return !!global.getPlayerOptions;
   }
@@ -138,10 +148,8 @@ export default class Preferences extends Vue {
   }
 
   public onClickOptionGroup(optionGroup: PlayerOptionGroup): void {
-    console.info('CLICK', optionGroup);
     Vue.set(this, 'activePlayerOption', optionGroup);
     this.activePlayerOption = optionGroup;
-    console.info('CLICK', this.activePlayerOption);
   }
 
   public getSelectedOption(optionGroup: PlayerOptionGroup): string {
@@ -257,6 +265,19 @@ export default class Preferences extends Vue {
 
     img {
       margin-right: 16px;
+    }
+  }
+
+  .other-setting {
+    display: flex;
+    flex-direction: row;
+    margin-top: 16px;
+    align-self: flex-start;
+    text-transform: none;
+    align-items: center;
+
+    img {
+      margin-left: 8px;
     }
   }
 }

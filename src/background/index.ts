@@ -8,10 +8,10 @@ global.Api = AxiosApi;
 // Setup Messaging
 
 const messenger = new Messenger<
-  ApiMessageTypes,
-  ApiMessageListenerMap,
-  ApiMessagePayloadMap,
-  ApiMessageResponseMap
+  ApiMessageTypes & RuntimeMessageTypes,
+  ApiMessageListenerMap & RuntimeMessageListenerMap,
+  ApiMessagePayloadMap & RuntimeMessagePayloadMap,
+  ApiMessageResponseMap & RuntimeMessageResponseMap
 >(
   'background',
   {
@@ -34,6 +34,10 @@ const messenger = new Messenger<
     createTimestamp: ({ episodeId, data }) => global.Api.createTimestamp(episodeId, data),
     updateTimestamp: global.Api.updateTimestamp,
     deleteTimestamp: global.Api.deleteTimestamp,
+
+    '@anime-skip/openOptions': async () => {
+      await browser.runtime.openOptionsPage();
+    },
   },
   ['@anime-skip/inferEpisodeInfo']
 );
@@ -47,3 +51,20 @@ browser.tabs.onUpdated.addListener(function(tabId, { url }, _tabInfo) {
     console.warn('Tab url change update failed', err);
   });
 });
+
+// Generic Listeners
+
+window.onmessage = function(event: MessageEvent) {
+  console.info('got message', { event });
+  if (event.data === '@anime-skip/open-options') {
+    browser.runtime.openOptionsPage();
+  }
+};
+
+// new Messenger<
+//   RuntimeMessageTypes,
+//   RuntimeMessageListenerMap,
+//   RuntimeMessagePayloadMap,
+//   RuntimeMessageResponseMap
+// >('runtime-manager', {
+// });
