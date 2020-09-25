@@ -1,6 +1,8 @@
 <template>
   <div class="KeyboardShortcutChooser noselect">
-    <pre v-if="shortcut" tabindex="0" @click="showEditor">{{ shortcut }}</pre>
+    <pre v-if="shortcut" tabindex="0" @click="showEditor" :class="{ duplicate }">{{
+      shortcut
+    }}</pre>
     <pre v-else class="unset" tabindex="0" @click="showEditor">unset</pre>
 
     <div v-if="isShowingEditor" class="fullscreen-overlay noselect">
@@ -69,6 +71,13 @@ export default Vue.extend({
       }
     },
   },
+  computed: {
+    duplicate(): boolean {
+      if (this.shortcut == null) return false;
+      const count: number | undefined = this.$store.getters.keyComboCountMap[this.shortcut];
+      return count != null && count > 1;
+    },
+  },
 });
 </script>
 
@@ -93,6 +102,17 @@ export default Vue.extend({
     }
     &:hover:active {
       background-color: rgba($color: white, $alpha: 0.24);
+    }
+
+    &.duplicate {
+      background-color: $red700;
+      &:hover {
+        background-color: $red500;
+      }
+      &:hover:active {
+        background-color: $red500;
+        filter: brightness(120%);
+      }
     }
   }
 
