@@ -182,8 +182,8 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
     }
   }
 
-  public keyboardShortcuts: { [combination: string]: () => void } = {
-    K: () => {
+  keyboardShortcuts: { [action in KeyboardShortcutAction]?: () => void } = {
+    createTimestamp: () => {
       if (this.activeTimestamp == null) {
         this.onClickTimestampHandle();
       }

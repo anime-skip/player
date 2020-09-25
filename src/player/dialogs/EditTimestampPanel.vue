@@ -130,17 +130,16 @@ export default class EditTimestampPanel extends Mixins(
     this.selectedType = undefined;
   }
 
-  keyboardShortcuts = {
-    J: this.updateTimestamp,
-    L: this.updateTimestamp,
+  keyboardShortcuts: { [action in KeyboardShortcutAction]?: () => void } = {
+    advanceFrame: this.updateTimestamp,
+    advanceSmall: this.updateTimestamp,
+    advanceMedium: this.updateTimestamp,
+    advanceLarge: this.updateTimestamp,
 
-    R: this.updateTimestamp,
-    F: this.updateTimestamp,
-    V: this.updateTimestamp,
-
-    W: this.updateTimestamp,
-    S: this.updateTimestamp,
-    X: this.updateTimestamp,
+    rewindFrame: this.updateTimestamp,
+    rewindSmall: this.updateTimestamp,
+    rewindMedium: this.updateTimestamp,
+    rewindLarge: this.updateTimestamp,
   };
 
   public updateTimestamp(): void {

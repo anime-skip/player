@@ -20,6 +20,9 @@ declare interface VuexState {
   preferencesRequestState: RequestState | undefined;
   preferencesLastUpdatedAt: number;
 
+  primaryKeyboardShortcuts: KeyboardShortcutsMap | undefined;
+  secondaryKeyboardShortcuts: KeyboardShortcutsMap | undefined;
+
   searchShowsResult: Api.ShowSearchResult[];
   searchShowsRequestState: RequestState;
 

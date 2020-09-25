@@ -224,4 +224,58 @@ export default class Utils {
   public static timestampSorter(l: Api.AmbigousTimestamp, r: Api.AmbigousTimestamp): number {
     return l.at - r.at;
   }
+
+  public static isKeyComboAllowed(event: KeyboardEvent): boolean {
+    switch (event.key) {
+      case 'Escape':
+      case 'Enter':
+      case 'Backspace':
+      case 'Control':
+      case 'Alt':
+      case 'Shift':
+      case 'Meta':
+      case 'PageUp':
+      case 'PageDown':
+      case 'Home':
+      case 'End':
+      case 'Insert':
+      case 'Delete':
+      case 'Tab':
+      case 'Pause':
+      case 'NumLock':
+      case 'CapsLock':
+      case 'ScrollLock':
+      case 'ContextMenu':
+        return false;
+    }
+    return true;
+  }
+
+  public static keyComboFromEvent(event: KeyboardEvent): string {
+    let key = event.key;
+    if (key === ' ') key = 'Space';
+    else if (key === 'ArrowRight') key = '→';
+    else if (key === 'ArrowLeft') key = '←';
+    else if (key === 'ArrowUp') key = '↑';
+    else if (key === 'ArrowDown') key = '↓';
+    else key = key.toUpperCase();
+
+    if (event.ctrlKey) key = `ctrl+${key}`;
+    if (event.altKey) key = `alt+${key}`;
+    if (event.shiftKey) key = `shift+${key}`;
+    if (event.metaKey) key = `meta+${key}`;
+    return key;
+  }
+
+  public static findShortcutAction(
+    keyCombo: string,
+    keyMapping: KeyboardShortcutsMap
+  ): KeyboardShortcutAction | undefined {
+    for (const action in keyMapping) {
+      if (keyMapping[action as KeyboardShortcutAction] === keyCombo) {
+        return action as KeyboardShortcutAction;
+      }
+    }
+    return undefined;
+  }
 }

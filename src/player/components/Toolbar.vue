@@ -129,7 +129,7 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   @Getter() public activeTimestamp?: Api.AmbigousTimestamp;
 
   @Action() public startEditing!: () => void;
-  @Action() public stopEditing!: (discard: boolean) => void;
+  @Action() public stopEditing!: (discard?: boolean) => void;
 
   @Action() public showDialog!: (dialogName?: string) => void;
   @Mutation() public setActiveTimestamp!: (timestamp: Api.AmbigousTimestamp) => void;
@@ -241,31 +241,23 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
     }
   }
 
-  // prettier-ignore
-  keyboardShortcuts: { [combination: string]: () => void } = {
+  keyboardShortcuts: { [action in KeyboardShortcutAction]?: () => void } = {
     // General Controls
-    'D': () => this.togglePlayPause(),
-    'SPACE': () => this.togglePlayPause(),
-    'ESC': this.showDialog,
+    playPause: () => this.togglePlayPause(),
+    hideDialog: this.showDialog,
+    nextTimestamp: () => this.nextTimestamp(),
+    previousTimestamp: () => this.previousTimestamp(),
     // Advance Time
-    'L': () => {
-      this.addTime(FRAME);
-      return true;
-    },
-    'V': () => this.addTime(2),
-    'F': () => this.addTime(5),
-    'R': () => this.addTime(90),
-    'E': () => this.nextTimestamp(),
+    advanceFrame: () => this.addTime(FRAME),
+    advanceSmall: () => this.addTime(2),
+    advanceMedium: () => this.addTime(5),
+    advanceLarge: () => this.addTime(90),
     // Rewind Time
-    'J': () => {
-      this.addTime(-FRAME);
-      return true;
-    },
-    'X': () => this.addTime(-2),
-    'S': () => this.addTime(-5),
-    'W': () => this.addTime(-85),
-    'C': () => this.previousTimestamp(),
-  }
+    rewindFrame: () => this.addTime(-FRAME),
+    rewindSmall: () => this.addTime(-2),
+    rewindMedium: () => this.addTime(-5),
+    rewindLarge: () => this.addTime(-85),
+  };
 
   public toggleAccountDialog(): void {
     this.showDialog(this.activeDialog === 'AccountDialog' ? undefined : 'AccountDialog');

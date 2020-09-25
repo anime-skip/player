@@ -6,6 +6,8 @@ export const persistedKeys = [
   'loginRequestState' as const,
   'account' as const,
   'playbackRate' as const,
+  'primaryKeyboardShortcuts' as const,
+  'secondaryKeyboardShortcuts' as const,
 ];
 
 export const FRAME = 1 / 12;
@@ -71,6 +73,28 @@ export const PLAYBACK_SPEEDS: PlaybackRate[] = [
     display: '2.0',
   },
 ];
+
+export const DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS: KeyboardShortcutsMap = {
+  playPause: 'D',
+  hideDialog: '`',
+  nextTimestamp: 'E',
+  previousTimestamp: 'C',
+  advanceFrame: 'L',
+  advanceSmall: 'V',
+  advanceMedium: 'F',
+  advanceLarge: 'R',
+  rewindFrame: 'J',
+  rewindSmall: 'X',
+  rewindMedium: 'S',
+  rewindLarge: 'W',
+  createTimestamp: 'K',
+};
+
+export const DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS: KeyboardShortcutsMap = {
+  playPause: 'Space',
+  advanceMedium: '→',
+  rewindMedium: '←',
+};
 
 export const TIMESTAMP_TYPES: Api.TimestampType[] = [
   {

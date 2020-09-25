@@ -110,3 +110,20 @@ interface PlayerOption {
   isSelected: boolean;
   node: HTMLElement;
 }
+
+type KeyboardShortcutAction =
+  | 'playPause'
+  | 'hideDialog'
+  | 'nextTimestamp'
+  | 'previousTimestamp'
+  | 'advanceFrame'
+  | 'advanceSmall'
+  | 'advanceMedium'
+  | 'advanceLarge'
+  | 'rewindFrame'
+  | 'rewindSmall'
+  | 'rewindMedium'
+  | 'rewindLarge'
+  | 'createTimestamp';
+
+type KeyboardShortcutsMap = { [keyCombo in KeyboardShortcutAction]?: string };
