@@ -86,6 +86,8 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 0 4px;
+
   & > pre {
     font-family: monospace;
     font-size: 16px;
