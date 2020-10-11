@@ -19,6 +19,8 @@
     "build:chrome:prod": "cross-env BUILD_ONLY=true BUILD_FOR=chrome NODE_ENV=production webpack --hide-modules",
     "start": "cross-env HMR=true BUILD_FOR=firefox NODE_ENV=development webpack --hide-modules --watch",
     "start:prod": "cross-env BUILD_FOR=firefox NODE_ENV=production webpack --hide-modules",
+    "start:chrome": "cross-env HMR=true BUILD_FOR=chrome NODE_ENV=development webpack --hide-modules --watch",
+    "start:chrome:prod": "cross-env BUILD_FOR=chrome NODE_ENV=production webpack --hide-modules",
     "test": "jest --runInBand",
     "test:watch": "yarn test --watchAll",
     "test:integration": "echo 'TODO'",

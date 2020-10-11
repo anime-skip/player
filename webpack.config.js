@@ -4,7 +4,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const ExtensionReloader = require('webpack-extension-reloader');
 const { VueLoaderPlugin } = require('vue-loader');
-const { version } = require('./package.json');
 const WebpackShellPluginNext = require('webpack-shell-plugin-next');
 const path = require('path');
 const { services } = require('./src/manifest');
@@ -166,15 +165,32 @@ if (config.mode === 'production') {
 }
 
 if (process.env.BUILD_ONLY !== 'true') {
-  const customProfile = process.env.BROWSER_PROFILE_PATH
-    ? `--firefox-profile=${process.env.BROWSER_PROFILE_PATH}`
-    : '';
+  const profile = process.env.BROWSER_PROFILE_PATH;
+  let args;
+  if (process.env.BUILD_FOR === 'firefox') {
+    args = [
+      '--target firefox-desktop',
+      profile ? `--firefox-profile=${profile}` : '',
+      `--url ${example}`,
+      '--url about:debugging#/runtime/this-firefox',
+      '--url about:addons',
+    ];
+  } else {
+    args = [
+      '--target chromium',
+      '--chromium-binary google-chrome',
+      profile ? `--chromium-profile=${profile}` : '',
+      `--url ${example}`,
+      '--url chrome://extensions',
+    ];
+  }
+
   config.plugins.push(
     new WebpackShellPluginNext({
       onBuildEnd: {
         scripts: [
-          `yarn web-ext --config=.web-ext.config.js run --url ${example} --url about:debugging#/runtime/this-firefox --url about:addons ${customProfile}`,
-          'echo -e \x1b[1m\x1b[95mOpening Firefox...\x1b[0m',
+          `yarn web-ext --config=.web-ext.config.js run ${args.join(' ')}`,
+          `echo -e \x1b[1m\x1b[95mOpening ${process.env.BUILD_FOR}...\x1b[0m`,
         ],
         blocking: false,
         parallel: true,
