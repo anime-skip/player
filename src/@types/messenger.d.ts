@@ -106,14 +106,16 @@ type ParentMessageListenerMap = { [type in ParentMessageTypes]: ParentMessageLis
 
 //#region Runtime Messenger
 
-type RuntimeMessageTypes = '@anime-skip/openOptions';
+type RuntimeMessageTypes = '@anime-skip/open-options' | '@anime-skip/open-popup';
 
 interface RuntimeMessagePayloadMap extends MessagePayloadMap<RuntimeMessageTypes> {
-  '@anime-skip/openOptions': undefined;
+  '@anime-skip/open-options': undefined;
+  '@anime-skip/open-popup': undefined;
 }
 
 interface RuntimeMessageResponseMap extends MessageResponseMap<RuntimeMessageTypes> {
-  '@anime-skip/openOptions': void;
+  '@anime-skip/open-options': void;
+  '@anime-skip/open-popup': void;
 }
 
 type RuntimeMessageListener<T extends RuntimeMessageTypes> = (
