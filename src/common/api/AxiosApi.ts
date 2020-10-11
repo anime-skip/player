@@ -7,7 +7,7 @@ import { as } from '../utils/GlobalUtils';
 
 const axios = Axios.create({
   baseURL:
-    process.env.NODE_ENV === 'production' ? 'http://api.anime-skip.com/' : 'http://localhost:8000/',
+    process.env.NODE_ENV === 'production' ? 'http://api.anime-skip.com/' : 'http://localhost:8081/',
 });
 
 if (process.env.NODE_ENV !== 'production') {

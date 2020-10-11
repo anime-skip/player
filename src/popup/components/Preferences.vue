@@ -130,7 +130,7 @@ export default class Preferences extends Vue {
   }
 
   public onClickKeyboardShortcuts(): void {
-    new Messenger('preferences').send('@anime-skip/openOptions', undefined).then(this.hideDialog);
+    new Messenger('preferences').send('@anime-skip/open-options', undefined).then(this.hideDialog);
   }
 
   public get hasPlayerOptions(): boolean {

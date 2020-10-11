@@ -35,14 +35,17 @@ const messenger = new Messenger<
     updateTimestamp: global.Api.updateTimestamp,
     deleteTimestamp: global.Api.deleteTimestamp,
 
-    '@anime-skip/openOptions': async () => {
+    '@anime-skip/open-options': async () => {
       await browser.runtime.openOptionsPage();
+    },
+    '@anime-skip/open-popup': async () => {
+      await browser.tabs.create({ url: 'popup/index.html' });
     },
   },
   ['@anime-skip/inferEpisodeInfo']
 );
 
-// Setup tab listener messenging
+// Setup tab listener messaging
 
 browser.tabs.onUpdated.addListener(function(tabId, { url }, _tabInfo) {
   if (url == null) return;
@@ -51,20 +54,3 @@ browser.tabs.onUpdated.addListener(function(tabId, { url }, _tabInfo) {
     console.warn('Tab url change update failed', err);
   });
 });
-
-// Generic Listeners
-
-window.onmessage = function(event: MessageEvent) {
-  console.info('got message', { event });
-  if (event.data === '@anime-skip/open-options') {
-    browser.runtime.openOptionsPage();
-  }
-};
-
-// new Messenger<
-//   RuntimeMessageTypes,
-//   RuntimeMessageListenerMap,
-//   RuntimeMessagePayloadMap,
-//   RuntimeMessageResponseMap
-// >('runtime-manager', {
-// });

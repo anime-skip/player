@@ -149,7 +149,7 @@ export default Vue.extend({
 
   .column {
     width: 100%;
-    max-width: 500px;
+    max-width: 700px;
     align-self: center;
     & > * {
       margin-bottom: 16px;
