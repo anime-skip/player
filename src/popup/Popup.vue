@@ -31,5 +31,7 @@ export default class Popup extends Vue {
 <style lang="scss" scoped>
 .Popup {
   min-width: 250px;
+  max-width: 700px;
+  margin: 0 auto;
 }
 </style>
