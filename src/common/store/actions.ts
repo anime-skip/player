@@ -45,12 +45,10 @@ async function callApi<A extends any[], R>(
 export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState> }>({
   // General
   async [types.initialLoad](context, callback?: () => void) {
-    console.log('actions.initialLoad', { callback });
     const newState = await Browser.storage.getAll<Partial<VuexState>>(persistedKeys);
     context.commit(mutations.restoreState, { changes: newState });
   },
   async [types.showDialog]({ state, commit }, dialogName?: string) {
-    console.log('actions.showDialog', { dialogName });
     if (state.activeDialog === dialogName) return;
 
     if (state.activeDialog) {
@@ -78,7 +76,6 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     }
   },
   async [types.stopEditing]({ state, commit, dispatch }, discardChanges?: boolean) {
-    console.log('stopEditing', { discardChanges });
     if (!discardChanges) {
       const oldTimestamps = state.episodeUrl?.episode.timestamps ?? [];
       const newTimestamps = state.draftTimestamps;
@@ -94,7 +91,6 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
 
   // Auth
   async [types.loginManual]({ commit }, { username, password }: LoginManualPayload) {
-    console.log('actions.loginManual', { username });
     try {
       commit(mutations.loginRequestState, RequestState.LOADING);
       const loginData = await callApi(commit, global.Api.loginManual, username, password);
@@ -108,7 +104,6 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
 
   // Preferences
   async [types.updatePreferences](context, pref: keyof Api.Preferences) {
-    console.log('actions.updatePreferences', { pref });
     const { commit } = context;
     try {
       assertLoggedIn(context);
@@ -139,7 +134,6 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
 
   // Shows
   async [types.searchShows]({ commit }, name: string) {
-    console.log('actions.searchShows', { name });
     try {
       commit(mutationTypes.searchShowsRequestState, RequestState.LOADING);
       const results = await callApi(commit, global.Api.searchShows, name);
@@ -156,7 +150,6 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     { state, commit, dispatch, getters },
     { show: showData, episode: episodeData, episodeUrl: episodeUrlData }: CreateEpisodeDataPayload
   ) {
-    console.log('actions.createEpisodeData', { showData, episodeData, episodeUrlData });
     try {
       // Setup
       dispatch(types.showDialog, undefined);
@@ -223,7 +216,6 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     }
   },
   async [types.searchEpisodes]({ commit }, { name, showId }: { name: string; showId: string }) {
-    console.log('actions.searchEpisodes', { name, showId });
     try {
       commit(mutationTypes.searchEpisodesRequestState, RequestState.LOADING);
       const results = await callApi(commit, global.Api.searchEpisodes, name, showId);
@@ -235,7 +227,6 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     }
   },
   async [types.loadAllEpisodeData]({ commit, dispatch, state }) {
-    console.log('actions.loadAllEpisodeData', { state: JSON.parse(JSON.stringify(state)) });
     commit(mutationTypes.setTimestamps, []);
     commit(mutationTypes.setEpisodeUrl, undefined);
     commit(mutationTypes.setInferredEpisodeInfo, undefined);
@@ -250,7 +241,6 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     }
   },
   async [types.fetchEpisodeByUrl]({ commit }, url) {
-    console.log('actions.fetchEpisodeByUrl', { url });
     try {
       commit(mutationTypes.episodeRequestState, RequestState.LOADING);
       const episodeUrl = await callApi(commit, global.Api.fetchEpisodeByUrl, url);
@@ -262,7 +252,6 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     }
   },
   async [types.inferEpisodeInfo]({ commit }) {
-    console.log('actions.inferEpisodeInfo');
     try {
       commit(mutationTypes.episodeRequestState, RequestState.LOADING);
       const episodeInfo = await global.inferEpisodeInfo();
@@ -276,7 +265,6 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     }
   },
   async [types.fetchThirdPartyEpisode]({ commit }, name: string) {
-    console.log('actions.fetchThirdPartyEpisode', { name });
     try {
       commit(mutationTypes.episodeRequestState, RequestState.LOADING);
       const episodes: Api.ThirdPartyEpisode[] = await callApi(
@@ -314,7 +302,6 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       episodeUrl: Api.EpisodeUrl;
     }
   ) {
-    console.log('updateTimestamps', { oldTimestamps, newTimestamps, episodeUrl });
     const { toCreate, toUpdate, toDelete } = Utils.computeTimestampDiffs(
       oldTimestamps,
       newTimestamps

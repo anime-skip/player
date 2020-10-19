@@ -5,6 +5,7 @@ import actions from './actions';
 import getters from './getters';
 import { initialState } from './state';
 import actionTypes from './actionTypes';
+import createLogger from 'vuex/dist/logger';
 
 Vue.use(Vuex);
 
@@ -13,6 +14,7 @@ const store = new Vuex.Store({
   mutations,
   actions,
   getters,
+  plugins: [createLogger()],
 });
 store.dispatch(actionTypes.initialLoad);
 
