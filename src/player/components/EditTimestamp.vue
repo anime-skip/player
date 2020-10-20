@@ -104,12 +104,10 @@ export default class EditTimestamp extends Mixins(VideoControllerMixin, Keyboard
   ) {
     if (newTimestamp && newTimestamp.id !== oldTimestamp?.id) {
       this.reset();
-      console.log('forceUpdate');
     }
   }
 
   public mounted() {
-    console.log({ initialTab: this.initialTab });
     this.reset();
     // Because this happens after the render, we have to render again, otherwise when you click edit
     // on the list ite, it will not start with a type selected on this component. This should be
@@ -125,7 +123,6 @@ export default class EditTimestamp extends Mixins(VideoControllerMixin, Keyboard
   }
 
   public destroyed() {
-    console.log('Destroyed');
     this.clearActiveTimestamp();
     this.clearEditTimestampMode();
     this.selectedType = undefined;
@@ -203,7 +200,6 @@ export default class EditTimestamp extends Mixins(VideoControllerMixin, Keyboard
 
   public leaveDialog(): void {
     this.play();
-    console.log(this.initialTab);
     if (this.initialTab === 'edit') {
       this.hideDialog();
     } else {
