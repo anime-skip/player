@@ -1,0 +1,345 @@
+<template>
+  <div class="TimestampDetails">
+    <header>
+      <h1 class="section-header">
+        Timestamps
+        <div v-ripple class="img-button" title="Close dialog" @click="hideDialog()">
+          <WebExtImg src="ic_close.svg" />
+        </div>
+      </h1>
+    </header>
+    <ul>
+      <li
+        class="noselect"
+        v-for="timestamp of activeTimestamps"
+        :key="timestamp.id"
+        @click="onClickTimestamp(timestamp)"
+        v-ripple
+      >
+        <div class="left">
+          <span class="title">{{ itemTitle(timestamp) }}</span>
+          <span class="subtitle">{{ itemSubtitle(timestamp) }}</span>
+        </div>
+        <div v-if="canEditTimestamps" class="right" @click.stop.prevent @mousedown.stop.prevent>
+          <div
+            v-ripple
+            class="right-button delete"
+            @click.stop.prevent="deleteTimestamp(timestamp)"
+          >
+            <WebExtImg src="ic_delete.svg" />
+          </div>
+          <div v-ripple class="right-button edit" @click="editTimestamp(timestamp)">
+            <WebExtImg src="ic_edit.svg" />
+          </div>
+        </div>
+      </li>
+    </ul>
+    <footer v-if="!isLoggedIn" class="warning">
+      <WebExtImg src="ic_warning.svg" />
+      <p>
+        You must <a href="#" @click.stop.prevent="onClickLogin">log in</a> before you can edit
+        timestamps
+      </p>
+    </footer>
+    <footer v-else-if="!canEditTimestamps && episodeUrl == null" class="warning">
+      <WebExtImg src="ic_warning.svg" />
+      <p>
+        You have to
+        <a href="#" @click.stop.prevent="onClickProvideEpisodeInfo">provide episode info</a>
+        before editing timestamps
+      </p>
+    </footer>
+    <footer v-else class="editing">
+      <ToolbarButton
+        v-if="canEditTimestamps"
+        class="add-new"
+        title="New Timestamp"
+        icon="ic_add_timestamp.svg"
+        @click.native="onClickAddNew"
+      />
+      <div v-if="false" class="warning">
+        <WebExtImg src="ic_warning.svg" />
+        <p>
+          You have to
+          <a href="#" @click.stop.prevent="onClickProvideEpisodeInfo">provide episode info</a>
+          before editing timestamps
+        </p>
+      </div>
+      <div v-if="isEditing" class="buttons">
+        <button class="button clickable" @click="onClickSave">Save Changes</button>
+        <button class="button clickable invalid" @click="onClickDiscard">Discard</button>
+      </div>
+      <div v-else class="buttons">
+        <button class="button clickable" @click="startEditing">Start Editing</button>
+      </div>
+    </footer>
+  </div>
+</template>
+
+<script lang="ts">
+import Utils from '@/common/utils/Utils';
+import { Action, Getter, Mutation } from '@/common/utils/VuexDecorators';
+import { Component, Mixins } from 'vue-property-decorator';
+import { TIMESTAMP_TYPES, TIMESTAMP_SOURCES } from '../../common/utils/Constants';
+import WebExtImg from '../../common/components/WebExtImg.vue';
+import ToolbarButton from './ToolbarButton.vue';
+import VideoControllerMixin from '@/common/mixins/VideoController';
+
+@Component({
+  components: { WebExtImg, ToolbarButton },
+})
+export default class TimestampDetails extends Mixins(VideoControllerMixin) {
+  @Getter() public activeTimestamps!: Api.AmbigousTimestamp[];
+  @Getter() canEditTimestamps!: boolean;
+  @Getter() isLoggedIn!: boolean;
+  @Getter() isEditing!: boolean;
+  @Getter() public episodeUrl?: Api.EpisodeUrl;
+
+  @Mutation() deleteDraftTimestamp!: (deletedTimestamp: Api.AmbigousTimestamp) => void;
+  @Mutation() setActiveTimestamp!: (timestamp: Api.AmbigousTimestamp) => void;
+  @Mutation() setEditTimestampMode!: (mode: 'add' | 'edit' | undefined) => void;
+
+  @Action() public startEditing!: () => void;
+  @Action() public stopEditing!: (discard?: boolean) => void;
+  @Action('showDialog') public hideDialog!: () => void;
+  @Action() public showDialog!: (dialog: string) => void;
+  @Action() public createNewTimestamp!: () => Promise<void>;
+
+  public timestampTypeMap = TIMESTAMP_TYPES.reduce<{ [typeId: string]: Api.TimestampType }>(
+    (map, timestamp) => {
+      map[timestamp.id] = timestamp;
+      return map;
+    },
+    {}
+  );
+  public timestampSourceMap = TIMESTAMP_SOURCES;
+
+  public itemTitle(timestamp: Api.AmbigousTimestamp): string {
+    return this.timestampTypeMap[timestamp.typeId ?? '']?.name ?? 'Unknown';
+  }
+
+  public itemSubtitle(timestamp: Api.AmbigousTimestamp): string {
+    const source = this.timestampSourceMap[timestamp.source];
+    const at = Utils.formatSeconds(timestamp.at, true);
+    if (source == null) {
+      return at;
+    }
+
+    // Using the &ensp; character
+    /* eslint-disable-next-line no-irregular-whitespace */
+    return `${at} • ${source ?? 'Unknown Source'}`;
+  }
+
+  public async editTimestamp(timestamp: Api.AmbigousTimestamp): Promise<void> {
+    await this.startEditing();
+    this.setEditTimestampMode('edit');
+    this.setActiveTimestamp(timestamp);
+    this.setCurrentTime(timestamp.at);
+  }
+
+  public async deleteTimestamp(timestamp: Api.AmbigousTimestamp): Promise<void> {
+    await this.startEditing();
+    this.deleteDraftTimestamp(timestamp);
+  }
+
+  public onClickTimestamp(timestamp: Api.AmbigousTimestamp): void {
+    this.setCurrentTime(timestamp.at);
+  }
+
+  public onClickLogin(): void {
+    this.showDialog('AccountDialog');
+  }
+
+  public onClickProvideEpisodeInfo(): void {
+    this.showDialog('EditEpisodeDialog');
+  }
+
+  public async onClickAddNew(): Promise<void> {
+    await this.createNewTimestamp();
+  }
+
+  public async onClickSave(): Promise<void> {
+    await this.stopEditing();
+    this.hideDialog();
+  }
+
+  public async onClickDiscard(): Promise<void> {
+    await this.stopEditing(true);
+    this.hideDialog();
+  }
+}
+</script>
+
+<style scoped lang="scss">
+.TimestampDetails {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+
+  header {
+    flex-shrink: 0;
+    border-bottom: 1px solid $divider;
+    margin: 0 -16px;
+    padding: 0 16px;
+    padding-bottom: 8px;
+
+    h1 {
+      font-weight: 500;
+      font-size: 20px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin-right: -4px;
+
+      .img-button {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      img {
+        opacity: 0.48;
+        transition: 250ms opacity;
+
+        &:hover {
+          opacity: 0.7;
+        }
+        &:hover:active {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  ul {
+    list-style: none;
+    margin-top: 0;
+    margin-bottom: -1px; // No double border at bottom
+    margin-right: -16px;
+    margin-left: -16px;
+    flex: 1;
+    border-bottom: 1px solid $divider;
+    overflow-y: auto;
+
+    li {
+      display: flex;
+      flex-direction: row;
+      height: 64px;
+      align-items: center;
+      border-top: 1px solid $divider;
+      cursor: pointer;
+      padding-left: 16px;
+      padding-right: 8px;
+      &:first-child {
+        border-top: none;
+      }
+
+      .title {
+        padding-top: 6px;
+        font-family: 'Overpass', sans-serif;
+        color: $textPrimary;
+        font-size: 17px;
+      }
+
+      .subtitle {
+        color: $textSecondary;
+        font-size: 15px;
+        font-family: sans-serif;
+        margin-top: 0px;
+      }
+
+      .left {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .right {
+        display: flex;
+        flex-direction: row;
+
+        .right-button {
+          width: 42px;
+          height: 42px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0.12;
+          border-radius: 24px;
+          transition: 200ms;
+          &:hover {
+            opacity: 0.92;
+          }
+          &:hover:active {
+            opacity: 1;
+          }
+          &.delete {
+            opacity: 0;
+          }
+        }
+      }
+
+      &:hover {
+        .right {
+          .right-button {
+            opacity: 0.48;
+            &:hover {
+              opacity: 0.8;
+              background-color: $divider;
+            }
+            &:hover:active {
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  footer {
+    padding-top: 16px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: row;
+
+    &.warning,
+    .warning {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+
+      img {
+        margin-right: 16px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+    .warning {
+      margin-bottom: 16px;
+    }
+
+    .add-new {
+      align-self: flex-start;
+      margin-bottom: 16px;
+    }
+
+    &.editing {
+      flex-direction: column;
+    }
+
+    .buttons {
+      button {
+        margin-right: 16px;
+        &:last-child {
+          margin-right: 0px;
+        }
+      }
+    }
+  }
+}
+</style>
