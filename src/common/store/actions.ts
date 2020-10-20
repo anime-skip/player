@@ -48,7 +48,7 @@ async function callApi<A extends any[], R>(
 
 export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState> }>({
   // General
-  async [types.initialLoad](context, callback?: () => void) {
+  async [types.initialLoad](context) {
     const newState = await Browser.storage.getAll<Partial<VuexState>>(persistedKeys);
     context.commit(mutations.restoreState, { changes: newState });
   },
@@ -92,7 +92,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     commit(mutations.toggleEditMode, false);
     commit(mutations.setDraftTimestamps, []);
   },
-  async [types.createNewTimestamp]({ state, commit, dispatch }) {
+  async [types.createNewTimestamp]({ commit, dispatch }) {
     const at = global.getVideo().currentTime;
     await dispatch(types.startEditing);
     commit(mutationTypes.setEditTimestampMode, 'add');

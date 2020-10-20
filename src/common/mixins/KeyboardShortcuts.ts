@@ -1,4 +1,3 @@
-import { ACCEPTED_KEYS } from '../utils/Constants';
 import { Vue, Component } from 'vue-property-decorator';
 import Utils from '../utils/Utils';
 

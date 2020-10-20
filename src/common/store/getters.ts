@@ -70,9 +70,11 @@ export default as<GetterTree<VuexState, VuexState>>({
   },
 
   // Keyboard shortcusts
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   primaryKeyboardShortcuts({ primaryKeyboardShortcuts }): any {
     return primaryKeyboardShortcuts ?? DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS;
   },
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   secondaryKeyboardShortcuts({ secondaryKeyboardShortcuts }): any {
     return secondaryKeyboardShortcuts ?? DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS;
   },
