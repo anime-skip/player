@@ -31,6 +31,7 @@
           label="Season"
           v-model="editableSeasonNumber"
           :disabled="shouldDisableEpisodeNumbers"
+          @submit="onClickSaveChanges"
         />
         <div class="column-space" />
         <TextInput
@@ -38,6 +39,7 @@
           label="Episode #"
           v-model="editableEpisodeNumber"
           :disabled="shouldDisableEpisodeNumbers"
+          @submit="onClickSaveChanges"
         />
         <div class="column-space" />
         <TextInput
@@ -45,17 +47,18 @@
           label="Overall #"
           v-model="editableAbsoluteNumber"
           :disabled="shouldDisableEpisodeNumbers"
+          @submit="onClickSaveChanges"
         />
       </div>
       <div class="button-row">
-        <input
-          type="submit"
-          value="Save Episode"
+        <button
           class="clickable focus button"
           :class="{ disabled: !isSubmitEnabled }"
           :disabled="!isSubmitEnabled"
           @click="onClickSaveChanges"
-        />
+        >
+          Save Episode
+        </button>
         <button class="clickable dark focus button" @click="showDialog(undefined)">Cancel</button>
       </div>
     </ProgressOverlay>
