@@ -20,7 +20,7 @@ global.transformServiceUrl = (inputUrl: string): string => {
 };
 
 global.inferEpisodeInfo = async (): Promise<InferredEpisodeInfo> => {
-  console.log('vrv.inferEpisodeInfo');
+  console.debug('vrv.inferEpisodeInfo');
   return await browser.runtime.sendMessage({
     type: '@anime-skip/inferEpisodeInfo',
   });

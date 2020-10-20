@@ -189,7 +189,7 @@ export default class Utils {
   public static computeTimestampDiffs(
     oldTimestamps: Api.Timestamp[],
     newTimestamps: Api.AmbigousTimestamp[]
-  ): { toCreate: Api.AmbigousTimestamp[]; toUpdate: Api.Timestamp[]; toDelete: Api.Timestamp[] } {
+  ): { toCreate: Api.InputTimestamp[]; toUpdate: Api.Timestamp[]; toDelete: Api.Timestamp[] } {
     const intersect = newTimestamps.filter(newItem =>
       Utils.arrayIncludes(oldTimestamps, 'id', newItem)
     ) as Api.Timestamp[];
@@ -215,7 +215,7 @@ export default class Utils {
 
     // prettier-ignore
     return {
-      toCreate: newTimestamps.filter(newItem => !Utils.arrayIncludes(oldTimestamps, "id", newItem)),
+      toCreate: newTimestamps.filter(newItem => !Utils.arrayIncludes(oldTimestamps, "id", newItem)) as Api.InputTimestamp[],
       toUpdate,
       toDelete: oldTimestamps.filter(oldItem => !Utils.arrayIncludes(newTimestamps, "id", oldItem))
     };

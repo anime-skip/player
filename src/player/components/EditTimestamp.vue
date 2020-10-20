@@ -1,19 +1,13 @@
 <template>
-  <BasicDialog
-    name="EditTimestampPanel"
-    gravityX="flex-end"
-    gravityY="center"
-    @hide="onHide"
-    @show="onShow"
-  >
-    <div class="top-container scroll">
+  <div class="EditTimestamp">
+    <header>
       <h1 class="section-header">
-        {{ title }}
-        <div v-ripple class="img-button" title="Discard Changes (ESC)" @click="hideDialog()">
-          <WebExtImg src="ic_close.svg" />
+        <div v-ripple class="img-button" title="Discard changes" @click="clearActiveTimestamp">
+          <WebExtImg src="ic_chevron_left.svg" />
         </div>
+        {{ title }}
       </h1>
-      <h2 class="section-header">Timestamp Starts At</h2>
+      <h2 class="section-header">Starts At</h2>
       <div ref="timeSelect" class="focusable button dark time-selector" tabindex="0">
         <WebExtImg class="icon" src="ic_clock.svg" :draggable="false" />
         <p class="time">
@@ -32,6 +26,8 @@
         @keydown.native.up.stop.prevent="onPressUp"
         @keydown.native.down.stop.prevent="onPressDown"
       />
+    </header>
+    <div class="middle-container scroll">
       <ul class="type-list">
         <li v-for="t of matchingTypes" :key="t.id" v-ripple @click="selectType(t)">
           <WebExtImg class="icon" :src="typeRadioIcon(t)" />
@@ -39,7 +35,7 @@
         </li>
       </ul>
     </div>
-    <div class="bottom-container">
+    <footer class="bottom-container">
       <input
         type="submit"
         value="Done"
@@ -55,45 +51,42 @@
         @click="onClickDelete()"
         :class="{ disabled: isSaveDisabled() }"
       />
-    </div>
-  </BasicDialog>
+    </footer>
+  </div>
 </template>
 
 <script lang="ts">
-import { Component, Watch, Mixins } from 'vue-property-decorator';
-import Popup from '@/popup/Popup.vue';
+import { Component, Watch, Mixins, Prop } from 'vue-property-decorator';
 import VideoControllerMixin from '../../common/mixins/VideoController';
 import KeyboardShortcutsMixin from '../../common/mixins/KeyboardShortcuts';
-import BasicDialog from './BasicDialog.vue';
 import { Mutation, Getter, Action } from '../../common/utils/VuexDecorators';
 import TextInput from '../../common/components/TextInput.vue';
 import Utils from '../../common/utils/Utils';
 import WebExtImg from '../../common/components/WebExtImg.vue';
-import { TIMESTAMP_TYPES } from '../../common/utils/Constants';
+import { TIMESTAMP_TYPES, TIMESTAMP_TYPE_NOT_SELECTED } from '../../common/utils/Constants';
 import fuzzysort from 'fuzzysort';
 
 @Component({
   components: {
-    BasicDialog,
-    Popup,
     WebExtImg,
     TextInput,
   },
 })
-export default class EditTimestampPanel extends Mixins(
-  VideoControllerMixin,
-  KeyboardShortcutsMixin
-) {
+export default class EditTimestamp extends Mixins(VideoControllerMixin, KeyboardShortcutsMixin) {
+  @Prop({ type: String, required: true }) readonly initialTab!: 'edit' | 'details';
+
+  @Getter() activeTimestamp?: Api.AmbigousTimestamp;
+  @Getter() public episodeUrl?: Api.EpisodeUrl;
+  @Getter() public editTimestampMode?: 'add' | 'edit';
+  @Getter() activeDialog?: string;
+
   @Mutation() clearActiveTimestamp!: () => void;
   @Mutation() clearEditTimestampMode!: () => void;
   @Mutation() setActiveTimestamp!: (timestamp: Api.AmbigousTimestamp) => void;
   @Mutation() updateDraftTimestamp!: (newTimestamp: Api.AmbigousTimestamp) => void;
   @Mutation() deleteDraftTimestamp!: (deletedTimestamp: Api.AmbigousTimestamp) => void;
-  @Getter() activeTimestamp?: Api.AmbigousTimestamp;
+
   @Action('showDialog') hideDialog!: () => void;
-  @Getter() public episodeUrl?: Api.EpisodeUrl;
-  @Getter() public editTimestampMode?: 'add' | 'edit';
-  @Getter() activeDialog?: string;
 
   public typeFilter = '';
   public selectedType?: Api.TimestampType;
@@ -101,6 +94,7 @@ export default class EditTimestampPanel extends Mixins(
   public reset() {
     this.selectedType = TIMESTAMP_TYPES.find(type => type.id === this.activeTimestamp?.typeId);
     this.typeFilter = '';
+    console.info('Reset', this.selectedType);
   }
 
   @Watch('activeTimestamp')
@@ -113,8 +107,12 @@ export default class EditTimestampPanel extends Mixins(
     }
   }
 
-  public onShow() {
+  public mounted() {
     this.reset();
+    // Because this happens after the render, we have to render again, otherwise when you click edit
+    // on the list ite, it will not start with a type selected on this component. This should be
+    // solved by vue3/composition
+    this.$forceUpdate();
 
     const interval = setInterval(() => {
       if (this.$refs.timeSelect != null) {
@@ -124,23 +122,11 @@ export default class EditTimestampPanel extends Mixins(
     }, 200);
   }
 
-  public onHide() {
+  public destroyed() {
     this.clearActiveTimestamp();
     this.clearEditTimestampMode();
     this.selectedType = undefined;
   }
-
-  keyboardShortcuts: { [action in KeyboardShortcutAction]?: () => void } = {
-    advanceFrame: this.updateTimestamp,
-    advanceSmall: this.updateTimestamp,
-    advanceMedium: this.updateTimestamp,
-    advanceLarge: this.updateTimestamp,
-
-    rewindFrame: this.updateTimestamp,
-    rewindSmall: this.updateTimestamp,
-    rewindMedium: this.updateTimestamp,
-    rewindLarge: this.updateTimestamp,
-  };
 
   public updateTimestamp(): void {
     (this.$refs.timeSelect as HTMLDivElement | undefined)?.focus();
@@ -153,7 +139,15 @@ export default class EditTimestampPanel extends Mixins(
   }
 
   public isSaveDisabled(): boolean {
-    return this.activeTimestamp == null || this.selectedType == null || this.episodeUrl == null;
+    // Don't have the info to save it
+    if (this.activeTimestamp == null || this.episodeUrl == null) {
+      return true;
+    }
+
+    if (typeof this.activeTimestamp.id === 'number') {
+      return this.selectedType == null;
+    }
+    return this.activeTimestamp.typeId == TIMESTAMP_TYPE_NOT_SELECTED;
   }
 
   public get matchingTypes(): Api.TimestampType[] {
@@ -204,9 +198,16 @@ export default class EditTimestampPanel extends Mixins(
     return 'Edit Timestamp';
   }
 
-  public onClickDone() {
-    if (this.isSaveDisabled()) return;
+  public leaveDialog(): void {
+    this.play();
+    if (this.initialTab === 'edit') {
+      this.hideDialog();
+    } else {
+      this.clearActiveTimestamp();
+    }
+  }
 
+  public onClickDone() {
     const base = this.activeTimestamp!;
     this.updateDraftTimestamp({
       at: base.at,
@@ -214,13 +215,12 @@ export default class EditTimestampPanel extends Mixins(
       id: base.id,
       source: base.source,
     });
-    this.hideDialog();
-    this.play();
+    this.leaveDialog();
   }
 
   public onClickDelete() {
     this.deleteDraftTimestamp(this.activeTimestamp!);
-    this.hideDialog();
+    this.leaveDialog();
   }
 
   public onPressUp() {
@@ -243,83 +243,57 @@ export default class EditTimestampPanel extends Mixins(
 }
 </script>
 
-<style lang="scss">
-#EditTimestampPanel {
-  pointer-events: none;
-  color: $textPrimarySolid;
+<style scoped lang="scss">
+.EditTimestamp {
   text-align: start;
-
-  h1 {
-    font-weight: 500;
-    font-size: 20px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-right: -8px;
-
-    .img-button {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    img {
-      opacity: 0.48;
-      transition: 250ms opacity;
-
-      &:hover {
-        opacity: 0.7;
-      }
-      &:hover:active {
-        opacity: 1;
-      }
-    }
-  }
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 
   .section-header {
     margin-top: 0px;
     margin-bottom: 16px;
   }
 
-  .dialog-root-container {
-    width: 300px;
-    min-height: 500px;
-    height: 70%;
-    max-height: 800px;
-    margin-bottom: 36px;
-    background-color: rgba($color: $background500, $alpha: 0.9);
-    box-shadow: none;
-    pointer-events: auto;
-    display: flex;
-    flex-direction: column;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
-
-    @media screen and(max-height: 600px) {
-      min-height: unset;
-      height: 100%;
-      max-height: unset;
-      margin-bottom: 60px;
-      border-top-left-radius: 0px;
-    }
-
-    & > * {
-      padding: 14px 16px;
-    }
+  .section-header-spacing {
+    margin-top: 16px;
   }
 
-  .top-container {
+  header {
     display: flex;
     flex-direction: column;
-    flex: 1;
+    flex-shrink: 0;
     padding-bottom: 0;
 
-    .section-header-spacing {
-      margin-top: 16px;
+    h1 {
+      font-weight: 500;
+      font-size: 20px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-left: -8px;
+
+      .img-button {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 6px;
+        margin-right: 6px;
+      }
+
+      img {
+        opacity: 0.9;
+        transition: 200ms opacity;
+
+        &:hover:active {
+          opacity: 1;
+        }
+      }
     }
 
     .time-selector {
@@ -358,10 +332,12 @@ export default class EditTimestampPanel extends Mixins(
       color: $textSecondary;
       flex-wrap: wrap;
     }
+  }
+
+  .middle-container {
+    flex: 1;
 
     .type-list {
-      flex-grow: 1;
-      flex-basis: 0;
       display: flex;
       flex-direction: column;
       padding: 0;
@@ -394,8 +370,6 @@ export default class EditTimestampPanel extends Mixins(
   }
 
   .scroll {
-    flex-shrink: 1;
-    flex-basis: 0;
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: $divider #00000000;
@@ -413,9 +387,11 @@ export default class EditTimestampPanel extends Mixins(
     }
   }
 
-  .bottom-container {
+  footer {
     display: flex;
     flex-direction: row-reverse;
+    flex-shrink: 0;
+    padding-top: 16px;
 
     .save {
       margin-left: 24px;

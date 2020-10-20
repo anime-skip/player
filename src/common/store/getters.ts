@@ -140,11 +140,15 @@ export default as<GetterTree<VuexState, VuexState>>({
   draftTimestamps(state): Api.AmbigousTimestamp[] {
     return state.draftTimestamps;
   },
+  activeTimestamps(_, getters): Api.AmbigousTimestamp[] {
+    return getters.isEditing ? getters.draftTimestamps : getters.timestamps;
+  },
   editTimestampMode(state): 'edit' | 'add' | undefined {
     return state.editTimestampMode;
   },
   canEditTimestamps(_, getters): boolean {
-    const episodeInfo: DisplayEpisodeInfo = getters.episodeInfo;
+    if (!getters.isLoggedIn) return false;
+    const episodeInfo: DisplayEpisodeInfo = getters.displayEpisodeInfo;
     if (episodeInfo == null) return false;
     const { name, show } = episodeInfo;
     if (!name || !show) return false;

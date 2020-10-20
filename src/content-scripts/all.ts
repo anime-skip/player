@@ -14,7 +14,7 @@ let oldVideoSrc: string | undefined;
 function checkVideoChanged(): void {
   const newVideo = global.getVideo();
   if (newVideo?.src !== oldVideoSrc) {
-    console.log('Video changed, calling callbacks:', {
+    console.debug('Video changed, calling callbacks:', {
       oldVideo: oldVideoSrc,
       newVideo: newVideo.src,
       videoCallbacks,

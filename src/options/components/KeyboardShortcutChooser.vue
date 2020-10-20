@@ -44,7 +44,7 @@ export default Vue.extend({
         case 'Escape':
           return this.hideEditor();
         case 'Enter':
-          console.log('emitting', this.editKey);
+          console.debug('emitting', this.editKey);
           if (this.editKey) this.$emit('update', this.editKey);
           return this.hideEditor();
         case 'Backspace':

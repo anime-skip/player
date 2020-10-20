@@ -44,27 +44,12 @@
         </p>
         <div class="space" />
         <ToolbarButton
-          v-if="!isEditing && isLoggedIn"
           class="margin-left"
-          icon="ic_edit.svg"
-          @click.native="startEditing"
-          title="Edit Timestamps"
+          icon="ic_timestamps.svg"
+          title="Timestamps"
+          @click.native="toggleTimestampsDialog"
         />
-        <ToolbarButton
-          v-if="shouldShowSaveDiscardChanges"
-          class="margin-left"
-          icon="ic_save_changes.svg"
-          title="Submit Timestamps"
-          @click.native="stopEditing()"
-        />
-        <ToolbarButton
-          v-if="shouldShowSaveDiscardChanges"
-          class="margin-left"
-          icon="ic_discard_changes.svg"
-          title="Discard Changes"
-          @click.native="stopEditing(true)"
-        />
-        <div v-if="isLoggedIn" class="divider margin-left" />
+        <div class="divider margin-left" />
         <ToolbarButton
           class="margin-left margin-right"
           icon="ic_more.svg"
@@ -124,16 +109,14 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   @Getter() public activeDialog?: string;
   @Getter() public isEditing!: boolean;
   @Getter() public episodeUrl!: boolean;
-  @Getter() public isLoggedIn?: boolean;
   @Getter() public browserType!: BrowserType;
   @Getter() public activeTimestamp?: Api.AmbigousTimestamp;
 
-  @Action() public startEditing!: () => void;
-  @Action() public stopEditing!: (discard?: boolean) => void;
-
-  @Action() public showDialog!: (dialogName?: string) => void;
   @Mutation() public setActiveTimestamp!: (timestamp: Api.AmbigousTimestamp) => void;
   @Mutation() public setEditTimestampMode!: (mode: 'add' | 'edit' | undefined) => void;
+
+  @Action() public showDialog!: (dialogName?: string) => void;
+  @Action() public createNewTimestamp!: () => Promise<void>;
 
   constructor() {
     super();
@@ -176,7 +159,6 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
 
   public updateTime(newTime: number, updateVideo?: boolean) {
     if (updateVideo) {
-      console.log('Setting time to: ' + newTime);
       this.setCurrentTime(newTime);
     }
     this.currentTime = newTime;
@@ -211,7 +193,7 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
         this.pause();
         this.setActiveTimestamp(nextTimestamp);
         this.setEditTimestampMode('edit');
-        this.showDialog('EditTimestampPanel');
+        this.showDialog('TimestampsPanel');
       }
     } else if (video.duration) {
       this.updateTime(video.duration, true);
@@ -234,7 +216,7 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
         this.pause();
         this.setActiveTimestamp(previousTimestamp);
         this.setEditTimestampMode('edit');
-        this.showDialog('EditTimestampPanel');
+        this.showDialog('TimestampsPanel');
       }
     } else {
       this.updateTime(0, true);
@@ -247,6 +229,11 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
     hideDialog: this.showDialog,
     nextTimestamp: () => this.nextTimestamp(),
     previousTimestamp: () => this.previousTimestamp(),
+    createTimestamp: () => {
+      if (this.activeTimestamp == null) {
+        this.createNewTimestamp();
+      }
+    },
     // Advance Time
     advanceFrame: () => this.addTime(FRAME),
     advanceSmall: () => this.addTime(2),
@@ -263,18 +250,12 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
     this.showDialog(this.activeDialog === 'AccountDialog' ? undefined : 'AccountDialog');
   }
 
+  public toggleTimestampsDialog(): void {
+    this.showDialog(this.activeDialog === 'TimestampsPanel' ? undefined : 'TimestampsPanel');
+  }
+
   public get formattedTime(): string {
     return Utils.formatSeconds(this.currentTime, this.playerState.isPaused);
-  }
-
-  // Edit Mode
-
-  public get shouldShowSaveDiscardChanges(): boolean {
-    return this.activeDialog == null && this.isEditing;
-  }
-
-  public showEditEpisodeDialog() {
-    this.showDialog('EditEpisodeDialog');
   }
 }
 </script>

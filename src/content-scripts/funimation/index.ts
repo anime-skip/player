@@ -70,13 +70,13 @@ global.getPlayerOptions = (): PlayerOptionGroup[] => {
     }
   }
 
-  console.log('funimation.getPlayerOptions', optionGroups);
+  console.debug('funimation.getPlayerOptions', optionGroups);
 
   return optionGroups;
 };
 
 global.inferEpisodeInfo = async (): Promise<InferredEpisodeInfo> => {
-  console.log('funimation.inferEpisodeInfo');
+  console.debug('funimation.inferEpisodeInfo');
   return await browser.runtime.sendMessage({
     type: '@anime-skip/inferEpisodeInfo',
   });

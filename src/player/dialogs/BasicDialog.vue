@@ -4,13 +4,11 @@
       v-if="name === activeDialog"
       class="BasicDialog"
       :id="name"
-      :style="`align-items: ${gravityX}`"
+      :style="`align-items: ${gravityX}; justify-content: ${gravityY}`"
       @click.stop="dismiss()"
     >
-      <div class="row" :style="`justify-content: ${gravityY}`">
-        <div class="dialog-root-container" @click.stop>
-          <slot />
-        </div>
+      <div class="dialog-root-container" @click.stop>
+        <slot />
       </div>
     </div>
   </transition>

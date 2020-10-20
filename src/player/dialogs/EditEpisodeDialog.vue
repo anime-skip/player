@@ -155,6 +155,7 @@ export default class EditEpisodeDialog extends Vue {
   }
 
   public onHideDialog() {
+    // TODO: Check to see if this still behaves as I'd like it to
     if (!this.canEditTimestamps) {
       this.stopEditing(true);
     }
@@ -353,25 +354,25 @@ export default class EditEpisodeDialog extends Vue {
 
     // Change relationships
     if (this.episodeUrl?.episode.show?.id !== this.selectedShowOption.id) {
-      console.log('Update episode.showId');
+      console.info('Update episode.showId');
       return;
     }
     if (this.episodeUrl?.episode.id !== this.selectedEpisodeOption.id) {
-      console.log('Update episodeUrl.episodeId');
+      console.info('Update episodeUrl.episodeId');
       return;
     }
 
     // Updating existing data
     if (this.isShowChanged() && this.isEpisodeChanged()) {
-      console.log('updated show and episode info');
+      console.info('updated show and episode info');
       return;
     }
     if (this.isShowChanged()) {
-      console.log('updated show info');
+      console.info('updated show info');
       return;
     }
     if (this.isEpisodeChanged()) {
-      console.log('updated episode info');
+      console.info('updated episode info');
       return;
     }
 
