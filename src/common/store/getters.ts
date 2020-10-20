@@ -147,7 +147,8 @@ export default as<GetterTree<VuexState, VuexState>>({
     return state.editTimestampMode;
   },
   canEditTimestamps(_, getters): boolean {
-    const episodeInfo: DisplayEpisodeInfo = getters.episodeInfo;
+    if (!getters.isLoggedIn) return false;
+    const episodeInfo: DisplayEpisodeInfo = getters.displayEpisodeInfo;
     if (episodeInfo == null) return false;
     const { name, show } = episodeInfo;
     if (!name || !show) return false;
