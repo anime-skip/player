@@ -112,12 +112,21 @@ export default as<GetterTree<VuexState, VuexState>>({
   },
   displayEpisodeInfo(state): DisplayEpisodeInfo {
     const { episodeUrl, inferredEpisodeInfo } = state;
+    if (episodeUrl != null) {
+      return {
+        absoluteNumber: episodeUrl.episode.absoluteNumber,
+        number: episodeUrl.episode.number,
+        name: episodeUrl.episode.name || 'Unknown Episode',
+        season: episodeUrl.episode.season,
+        show: episodeUrl.episode.show?.name || 'Unknown Show',
+      };
+    }
     return {
-      absoluteNumber: episodeUrl?.episode.absoluteNumber || inferredEpisodeInfo?.absoluteNumber,
-      number: episodeUrl?.episode.number || inferredEpisodeInfo?.number,
-      name: episodeUrl?.episode.name || inferredEpisodeInfo?.name || 'Unknown Episode',
-      season: episodeUrl?.episode.season || inferredEpisodeInfo?.season,
-      show: episodeUrl?.episode.show?.name || inferredEpisodeInfo?.show || 'Unknown Show',
+      absoluteNumber: inferredEpisodeInfo?.absoluteNumber,
+      number: inferredEpisodeInfo?.number,
+      name: inferredEpisodeInfo?.name || 'Unknown Episode',
+      season: inferredEpisodeInfo?.season,
+      show: inferredEpisodeInfo?.show || 'Unknown Show',
     };
   },
   inferredEpisodeInfo({ inferredEpisodeInfo }): InferredEpisodeInfo | undefined {
