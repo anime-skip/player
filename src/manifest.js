@@ -8,7 +8,9 @@ const manifest = {
  * `player_matches` - The URLs that the player interface should be injected onto. This also dictates
  *                    where the keyboard shortcut blocker is injected at since the player is where
  *                    those get added by the service
- * `parent_matches` - The URLs that the parent.ts file should be injected onto
+ * `parent_matches` - The URLs that the parent.ts file should be injected onto. For sites like VRV
+ *                    that use HTML5 History Mode, this has to be a page that is loaded before the
+ *                    page with the player (ie: `https://vrv.co/*` not `https://vrv.co/watch/*`)
  * `page_matches`   - The URLs that the anime skip page_action button should appear when you are
  *                    visiting
  */
@@ -22,7 +24,7 @@ const services = [
   {
     folder: 'vrv',
     player_matches: ['https://static.vrv.co/*'],
-    parent_matches: ['https://vrv.co/watch/*/*'],
+    parent_matches: ['https://vrv.co/*'],
     page_matches: ['https://vrv.co/*'],
   },
   {
