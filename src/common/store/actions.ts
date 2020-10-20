@@ -1,6 +1,10 @@
 import Browser from '@/common/utils/Browser';
 import { ActionContext, Action } from 'vuex';
-import { persistedKeys, UNAUTHORIZED_ERROR_MESSAGE } from '@/common/utils/Constants';
+import {
+  persistedKeys,
+  TIMESTAMP_TYPE_NOT_SELECTED,
+  UNAUTHORIZED_ERROR_MESSAGE,
+} from '@/common/utils/Constants';
 import mutations from './mutationTypes';
 import { as, sleep } from '../utils/GlobalUtils';
 import types from './actionTypes';
@@ -79,7 +83,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     if (!discardChanges) {
       const oldTimestamps = state.episodeUrl?.episode.timestamps ?? [];
       const newTimestamps = state.draftTimestamps;
-      dispatch(types.updateTimestamps, {
+      await dispatch(types.updateTimestamps, {
         oldTimestamps,
         newTimestamps,
         episodeUrl: state.episodeUrl!,
@@ -87,6 +91,18 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     }
     commit(mutations.toggleEditMode, false);
     commit(mutations.setDraftTimestamps, []);
+  },
+  async [types.createNewTimestamp]({ state, commit, dispatch }) {
+    const at = global.getVideo().currentTime;
+    await dispatch(types.startEditing);
+    commit(mutationTypes.setEditTimestampMode, 'add');
+    commit(mutationTypes.setActiveTimestamp, {
+      at,
+      typeId: TIMESTAMP_TYPE_NOT_SELECTED,
+      id: Utils.randomId(),
+      source: 'ANIME_SKIP',
+    });
+    dispatch(types.showDialog, 'TimestampsPanel');
   },
 
   // Auth
