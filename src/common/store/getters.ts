@@ -140,6 +140,9 @@ export default as<GetterTree<VuexState, VuexState>>({
   draftTimestamps(state): Api.AmbigousTimestamp[] {
     return state.draftTimestamps;
   },
+  activeTimestamps(_, getters): Api.AmbigousTimestamp[] {
+    return getters.isEditing ? getters.draftTimestamps : getters.timestamps;
+  },
   editTimestampMode(state): 'edit' | 'add' | undefined {
     return state.editTimestampMode;
   },

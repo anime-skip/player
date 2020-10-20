@@ -49,11 +49,6 @@
       :useKeyboard="false"
       @change="onSeek"
     />
-    <EditTimestampHandle
-      v-if="canAddTimestamp"
-      :style="{ left: `${(currentTime / duration) * 100}%` }"
-      @click="onClickTimestampHandle"
-    />
   </div>
 </template>
 
@@ -64,8 +59,7 @@ import WebExtImg from '@/common/components/WebExtImg.vue';
 import VueSlider from 'vue-slider-component';
 import '../scss/VideoSlider.scss';
 import Utils from '@/common/utils/Utils';
-import { Getter, Mutation, Action } from '@/common/utils/VuexDecorators';
-import EditTimestampHandle from '@/player/components/EditTimestampHandle.vue';
+import { Getter, Mutation } from '@/common/utils/VuexDecorators';
 import VideoControllerMixin from '@/common/mixins/VideoController';
 import KeyboardShortcutMixin from '@/common/mixins/KeyboardShortcuts';
 
@@ -76,7 +70,7 @@ interface SectionData {
 }
 
 @Component({
-  components: { Section, WebExtImg, VueSlider, EditTimestampHandle },
+  components: { Section, WebExtImg, VueSlider },
 })
 export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShortcutMixin) {
   @Prop(Boolean) public isFlipped?: boolean;
@@ -92,23 +86,18 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
   public service = global.service;
 
   @Getter() isEditing!: boolean;
-  @Getter() activeDialog!: boolean;
   @Getter() hasEpisode!: boolean;
   @Getter() isLoggedIn!: boolean;
-  @Getter() activeTimestamp?: Api.Timestamp;
-  @Getter() draftTimestamps!: Api.Timestamp[];
+  @Getter() activeTimestamp?: Api.AmbigousTimestamp;
+  @Getter() draftTimestamps!: Api.AmbigousTimestamp[];
   @Getter('preferences') prefs?: Api.Preferences;
   @Getter() preferencesLastUpdatedAt!: number;
   @Getter() hasSkippedFromZero!: boolean;
   @Getter() playbackRate!: number;
+  @Getter() activeTimestamps!: Api.AmbigousTimestamp[];
 
-  @Mutation() setActiveTimestamp!: (timestamp: Api.AmbigousTimestamp) => void;
-  @Mutation() setEditTimestampMode!: (mode: 'add' | 'edit' | undefined) => void;
   @Mutation() setHasSkippedFromZero!: (newValue: boolean) => void;
   @Mutation() toggleEditMode!: (isEditing: boolean) => void;
-
-  @Action() showDialog!: (dialog: string) => void;
-  @Action() startEditing!: () => void;
 
   public get normalizedTime(): number {
     return Math.max(0, Math.min(100, (this.currentTime / this.duration) * 100));
@@ -163,33 +152,6 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
     this.goToNextTimestampOnTimeChange(newTime);
   }
 
-  public async onClickTimestampHandle(): Promise<void> {
-    if (!this.isEditing) {
-      await this.startEditing();
-    } else {
-      this.pause();
-    }
-
-    if (this.activeDialog == null) {
-      this.setActiveTimestamp({
-        at: this.currentTime,
-        typeId: '',
-        id: Utils.randomId(),
-        source: 'ANIME_SKIP',
-      });
-      this.setEditTimestampMode('add');
-      this.showDialog('EditTimestampPanel');
-    }
-  }
-
-  keyboardShortcuts: { [action in KeyboardShortcutAction]?: () => void } = {
-    createTimestamp: () => {
-      if (this.activeTimestamp == null) {
-        this.onClickTimestampHandle();
-      }
-    },
-  };
-
   /**
    * Get the timestamp to go to, then go there or the end of the video if there isn't another time
    * stamp to go to
@@ -197,13 +159,6 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
   public goToNextTimestampOnTimeChange(newTime: number) {
     const newNext = Utils.nextTimestamp(newTime, this.timestamps, this.prefs);
     this.updateTime(newNext?.at ?? this.duration, true);
-  }
-
-  public get activeTimestamps(): Api.Timestamp[] {
-    if (this.isEditing) {
-      return this.draftTimestamps;
-    }
-    return this.timestamps;
   }
 
   public get canAddTimestamp(): boolean {
