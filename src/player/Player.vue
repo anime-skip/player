@@ -119,7 +119,7 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
   public onReceiveMessage({ type, payload: url }: any) {
     if (type != '@anime-skip/changeUrl') return;
 
-    console.log('Change URL: ' + url);
+    console.debug('Change URL: ' + url);
     this.setTabUrl(url);
     this.setHasSkippedFromZero(false);
     this.loadAllEpisodeData(url);

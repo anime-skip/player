@@ -23,7 +23,7 @@ if (process.env.NODE_ENV !== 'production') {
       'font-weight: 600; color: default;',
       'font-weight: 400; color: default;'
     );
-    console.log(`URL: %c${config.baseURL}${config.url}`, 'color: #137AF8');
+    console.debug(`URL: %c${config.baseURL}${config.url}`, 'color: #137AF8');
     const headers = {
       ...config.headers,
       ...config.headers.common,
@@ -35,14 +35,14 @@ if (process.env.NODE_ENV !== 'production') {
     delete headers.delete;
     delete headers.patch;
     delete headers.head;
-    console.log('Headers: ', headers);
+    console.debug('Headers: ', headers);
     if (config.params) {
-      console.log('Parameters: ', config.params);
+      console.debug('Parameters: ', config.params);
     }
     if (config.data) {
-      console.log(`GraphQL:\n%c${formattedGraphql}`, 'color: #137AF8');
+      console.debug(`GraphQL:\n%c${formattedGraphql}`, 'color: #137AF8');
       if (config.data.variables) {
-        console.log('Variables: ', config.data.variables);
+        console.debug('Variables: ', config.data.variables);
       }
     }
     /* eslint-enable no-console */
@@ -150,7 +150,7 @@ async function sendGraphql<Q extends string, D>(
       throw error;
     }
 
-    console.log('Response: ', response.data);
+    console.debug('Response: ', response.data);
     console.groupEnd();
 
     return response.data;
@@ -269,7 +269,7 @@ export default as<Api.Implementation>({
       }`,
       { name, limit: 5, showId }
     );
-    console.log({ q });
+    console.debug({ q });
     const response = await sendUnauthorizedGraphql<'searchEpisodes', Api.EpisodeSearchResult[]>(q);
     return response.data.searchEpisodes;
   },

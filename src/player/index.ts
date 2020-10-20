@@ -20,7 +20,7 @@ global.onVideoChanged(video => {
 
 const existingPlayers = document.querySelectorAll('#AnimeSkipPlayer');
 if (existingPlayers.length > 0) {
-  console.log('Player already added, removing');
+  console.debug('Player already added, removing');
   existingPlayers.forEach(player => {
     player.remove();
   });
@@ -34,13 +34,13 @@ async function sleep(ms: number): Promise<void> {
 
 (async function injectPlayer() {
   const rootQuery = global.getRootQuery();
-  console.log(`Adding player to ${rootQuery}`);
+  console.debug(`Adding player to ${rootQuery}`);
 
   while (document.querySelector(rootQuery) == null) {
-    console.log("Player's root node not found, trying again");
+    console.debug("Player's root node not found, trying again");
     await sleep(100);
   }
-  console.log(`Added player to ${rootQuery}`);
+  console.debug(`Added player to ${rootQuery}`);
 
   // Set the style to hide all the old elements
   document.body.classList.add('hide-for-anime-skip');

@@ -5,7 +5,7 @@ import Utils from '../utils/Utils';
 @Component
 export default class KeyboardShortcutMixin extends Vue {
   created(): void {
-    console.log(`[${this.$options.name}] KeyboardShortcutMixin.created()`);
+    console.debug(`[${this.$options.name}] KeyboardShortcutMixin.created()`);
     global.addKeyDownListener(this.onKeyDown);
   }
 
@@ -31,7 +31,7 @@ export default class KeyboardShortcutMixin extends Vue {
       );
     }
 
-    console.log(`[${this.$options.name}] Pressed ${keyCombo} -> ${keyAction}`);
+    console.debug(`[${this.$options.name}] Pressed ${keyCombo} -> ${keyAction}`);
     if (keyAction == null || this.keyboardShortcuts[keyAction] == null) return;
     (this.keyboardShortcuts[keyAction] as Function).apply(this);
   }

@@ -22,11 +22,9 @@ export default Vue.extend({
   },
   methods: {
     updatePrimary(value: string | undefined) {
-      console.log('1');
       this.$emit('updatePrimary', value);
     },
     updateSecondary(value: string | undefined) {
-      console.log('2');
       this.$emit('updateSecondary', value);
     },
   },

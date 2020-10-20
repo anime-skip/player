@@ -16,7 +16,7 @@ export default class Messenger<
     if (listeners != null || forwardTypes != null) {
       // @ts-ignore
       browser.runtime.onMessage.addListener(this.onReceiveMessage);
-      console.log(`Started ${source} messenger`);
+      console.debug(`Started ${source} messenger`);
     }
   }
 
@@ -25,7 +25,7 @@ export default class Messenger<
     payload: AllMessagePayloads[T],
     tabId?: number
   ): Promise<AllMessageResponses[T]> => {
-    console.log(`${this.source} sending message: ${type}`, { payload, tabId });
+    console.debug(`${this.source} sending message: ${type}`, { payload, tabId });
     let response;
     if (tabId != null) {
       response = await browser.tabs.sendMessage(tabId, {
@@ -41,7 +41,7 @@ export default class Messenger<
     if (response?.errorMessage != null) {
       throw Error(response.errorMessage);
     }
-    console.log(this.source + ' got response', { type, payload, response });
+    console.debug(this.source + ' got response', { type, payload, response });
     return response;
   };
 
@@ -49,7 +49,7 @@ export default class Messenger<
     { type, payload }: { type: K; payload: P[K] },
     sender: browser.runtime.MessageSender
   ): Promise<R[K] | void> => {
-    console.log(
+    console.debug(
       'Received Message on ' + this.source,
       { type, payload },
       { listeners: this.listeners }
@@ -64,7 +64,7 @@ export default class Messenger<
       } catch (error) {
         response = { errorMessage: error.message };
       }
-      console.log('sendResponse', { response });
+      console.debug('sendResponse', { response });
       return response;
     } else if (sender.tab?.id != null && this.forwardTypes?.includes(type)) {
       return this.send(type, payload, sender.tab.id);

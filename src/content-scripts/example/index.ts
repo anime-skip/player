@@ -11,7 +11,7 @@ global.getRootQuery = (): string => {
 };
 
 global.inferEpisodeInfo = async (): Promise<InferredEpisodeInfo> => {
-  console.log('example.inferEpisodeInfo');
+  console.debug('example.inferEpisodeInfo');
   return await browser.runtime.sendMessage({ type: '@anime-skip/inferEpisodeInfo' });
 };
 

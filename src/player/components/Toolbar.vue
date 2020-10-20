@@ -176,7 +176,6 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
 
   public updateTime(newTime: number, updateVideo?: boolean) {
     if (updateVideo) {
-      console.log('Setting time to: ' + newTime);
       this.setCurrentTime(newTime);
     }
     this.currentTime = newTime;

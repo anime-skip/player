@@ -138,7 +138,6 @@ export default class Preferences extends Vue {
   }
 
   public get isPlayerOptionPicker(): boolean {
-    console.log('isPlayerOptionPicker', { activeOption: this.activePlayerOption });
     return this.activePlayerOption != null;
   }
 
@@ -154,7 +153,6 @@ export default class Preferences extends Vue {
 
   public getSelectedOption(optionGroup: PlayerOptionGroup): string {
     const selected = optionGroup.options.filter(option => option.isSelected);
-    console.log({ optionGroup, selected });
     if (selected.length === 0) return '';
 
     return selected[0].title;
