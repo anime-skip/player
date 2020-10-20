@@ -102,12 +102,12 @@ export const TIMESTAMP_TYPES: Api.TimestampType[] = [
     id: '9edc0037-fa4e-47a7-a29a-d9c43368daa8',
     description: 'New plot that has not been revealed',
   },
-  {
-    name: 'Must Watch',
-    id: 'e384759b-3cd2-4824-9569-128363b4452b',
-    description:
-      'A non-canon section of the episode that should not be skipped. (I.E. The Chika Dance https://youtu.be/6xKAsZZgskg)',
-  },
+  // {
+  //   name: 'Must Watch',
+  //   id: 'e384759b-3cd2-4824-9569-128363b4452b',
+  //   description:
+  //     'A non-canon section of the episode that should not be skipped. (I.E. The Chika Dance https://youtu.be/6xKAsZZgskg)',
+  // },
   {
     name: 'Branding',
     id: '97e3629a-95e5-4b1a-9411-73a47c0d0e25',
@@ -172,6 +172,18 @@ export const TIMESTAMP_TYPES: Api.TimestampType[] = [
       'A short section of the episode that just displays the name of the episode, where no plot development takes place',
   },
 ];
+
+export const TIMESTAMP_TYPE_NOT_SELECTED = '';
+
+/**
+ * `string` return type is the string that should be displayed
+ * `null` return type means nothing should be displayed
+ * `undefined` return type means the source was unknown, and "Unknown Source" should be displayed
+ */
+export const TIMESTAMP_SOURCES: { [source in Api.TimestampSource]: string | undefined | null } = {
+  ANIME_SKIP: null,
+  BETTER_VRV: 'BetterVRV',
+};
 
 /**
  * The content to show in the skipped prefereces section
