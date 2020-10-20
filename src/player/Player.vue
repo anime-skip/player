@@ -22,7 +22,7 @@
     <ToolBar class="bottom-content" :playerState="playerState" />
 
     <!-- Dialogs -->
-    <EditTimestampPanel />
+    <TimestampsPanel />
     <AccountDialog />
     <EditEpisodeDialog />
   </div>
@@ -35,7 +35,7 @@ import Loading from '@/common/components/Loading.vue';
 import ToolBar from './components/Toolbar.vue';
 import EpisodeInfo from './components/EpisodeInfo.vue';
 import AccountDialog from './dialogs/AccountDialog.vue';
-import EditTimestampPanel from './dialogs/EditTimestampPanel.vue';
+import TimestampsPanel from './dialogs/TimestampsPanel.vue';
 import EditEpisodeDialog from './dialogs/EditEpisodeDialog.vue';
 import KeyboardShortcutMixin from '@/common/mixins/KeyboardShortcuts';
 import { Action, Mutation, Getter } from '@/common/utils/VuexDecorators';
@@ -50,7 +50,7 @@ import VideoControllerMixin from '../common/mixins/VideoController';
     AccountDialog,
     EditEpisodeDialog,
     Loading,
-    EditTimestampPanel,
+    TimestampsPanel,
   },
 })
 export default class Player extends Mixins(KeyboardShortcutMixin, VideoControllerMixin) {
