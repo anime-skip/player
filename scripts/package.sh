@@ -102,10 +102,6 @@ SOURCES="$SOURCES webpack.config.js"
 SOURCES="$SOURCES yarn.lock"
 run "Creating ${CODE}sources.zip" "zip -r '$OUTPUT_NAME/sources.zip' $SOURCES"
 
-# Generic
-run "Building for ${CODE}generic browser" "yarn build:prod"
-run "Create ${CODE}extension.zip" "(cd dist && zip -r '../$OUTPUT_NAME/extension.zip' .)"
-
 # Firefox
 run "Building for ${CODE}firefox" "yarn build:prod"
 run "Create ${CODE}firefox.zip" "(cd dist && zip -r '../$OUTPUT_NAME/firefox.zip' .)"
