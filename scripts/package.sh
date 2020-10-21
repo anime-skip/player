@@ -102,20 +102,20 @@ SOURCES="$SOURCES webpack.config.js"
 SOURCES="$SOURCES yarn.lock"
 run "Creating ${CODE}sources.zip" "zip -r '$OUTPUT_NAME/sources.zip' $SOURCES"
 
-# Firefox
-run "Building for ${CODE}firefox" "yarn build:prod"
-run "Create ${CODE}firefox.zip" "(cd dist && zip -r '../$OUTPUT_NAME/firefox.zip' .)"
-
 # Chrome
 run "Building for ${CODE}chrome" "yarn build:chrome:prod"
 run "Create ${CODE}chrome.zip" "(cd dist && zip -r '../$OUTPUT_NAME/chrome.zip' .)"
 
+# Firefox
+run "Building for ${CODE}firefox" "yarn build:prod"
+run "Create ${CODE}firefox.zip" "(cd dist && zip -r '../$OUTPUT_NAME/firefox.zip' .)"
 
 # DEPLOY ###############################
 
 title "Deploying"
 
 # Firefox
+# NOTE THE dist/ folder needs to have firefox output before running this command
 run "Signing and uploading ${CODE}firefox.xpi" "yarn web-ext --config=.web-ext.config.js sign -a '$OUTPUT_NAME' -n 'firefox.xpi' --api-key '$FIREFOX_SIGNING_ISSUER' --api-secret '$FIREFOX_SIGNING_SECRET' --id='$FIREFOX_SIGNING_ID'"
 mv "$OUTPUT_NAME/anime_skip-$PACKAGE_VERSION-an+fx.xpi" "$OUTPUT_NAME/firefox.xpi"
 
