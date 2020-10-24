@@ -167,8 +167,6 @@ export default class Utils {
     } else {
       return `${mins}:${secStr}`;
     }
-    // return mins + ':' + (secs < 10 ? '0' : '') + secs;
-    // return `${mins}:${Utils.padLeft(seconds, 2)}`;
   }
 
   public static padLeft(value: number | string, size: number, char = '0'): string {

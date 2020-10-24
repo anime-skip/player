@@ -120,18 +120,19 @@ export default class EditEpisodeDialog extends Vue {
   }
 
   public onShowDialog() {
-    if (this.episodeUrl) {
-      if (this.episodeUrl?.episode.show) {
+    const episodeUrl = this.episodeUrl;
+    if (episodeUrl) {
+      if (episodeUrl?.episode.show) {
         this.selectedShowOption = {
-          id: this.episodeUrl.episode.show.id,
-          title: this.episodeUrl.episode.show.name,
-          subtitle: this.episodeUrl.episode.show.originalName,
+          id: episodeUrl.episode.show.id,
+          title: episodeUrl.episode.show.name,
+          subtitle: episodeUrl.episode.show.originalName,
         };
       }
       this.selectedEpisodeOption = {
-        id: this.episodeUrl.episode.id,
-        title: this.episodeUrl.episode.name ?? '',
-        subtitle: EpisodeUtils.seasonAndNumberFromEpisodeUrl(this.episodeUrl),
+        id: episodeUrl.episode.id,
+        title: episodeUrl.episode.name ?? '',
+        subtitle: EpisodeUtils.seasonAndNumberFromEpisodeUrl(episodeUrl),
       };
     } else if (this.inferredEpisodeInfo) {
       // Show loading and fetch the show & episode
@@ -145,9 +146,9 @@ export default class EditEpisodeDialog extends Vue {
         title: '',
       };
     }
-    this.editableSeasonNumber = String(this.episodeUrl?.episode.season ?? '');
-    this.editableEpisodeNumber = String(this.episodeUrl?.episode.number ?? '');
-    this.editableAbsoluteNumber = String(this.episodeUrl?.episode.absoluteNumber ?? '');
+    this.editableSeasonNumber = String(episodeUrl?.episode.season ?? '');
+    this.editableEpisodeNumber = String(episodeUrl?.episode.number ?? '');
+    this.editableAbsoluteNumber = String(episodeUrl?.episode.absoluteNumber ?? '');
   }
 
   public get showSearchListItems() {
