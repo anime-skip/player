@@ -103,7 +103,6 @@ export default class Browser {
    * - If we are not in an iframe, then just return the URL of the document
    */
   public static getIframeReferrer(): string {
-    let url: string;
     // Try and get the parent's url if the iframe is the same domain as the website
     try {
       return window.parent.location.href;
