@@ -1,5 +1,5 @@
 <template>
-  <div class="TimestampDetails">
+  <ProgressOverlay class="TimestampDetails" :isLoading="isSavingTimestamps">
     <header>
       <h1 class="section-header">
         Timestamps
@@ -66,14 +66,14 @@
         </p>
       </div>
       <div v-if="isEditing" class="buttons">
-        <button class="button clickable" @click="onClickSave">Save Changes</button>
-        <button class="button clickable invalid" @click="onClickDiscard">Discard</button>
+        <button class="clickable focus button" @click="onClickSave">Save Changes</button>
+        <button class="clickable focus button invalid" @click="onClickDiscard">Discard</button>
       </div>
       <div v-else class="buttons">
-        <button class="button clickable" @click="startEditing">Start Editing</button>
+        <button class="clickable focus button" @click="startEditing">Start Editing</button>
       </div>
     </footer>
-  </div>
+  </ProgressOverlay>
 </template>
 
 <script lang="ts">
@@ -82,11 +82,12 @@ import { Action, Getter, Mutation } from '@/common/utils/VuexDecorators';
 import { Component, Mixins } from 'vue-property-decorator';
 import { TIMESTAMP_TYPES, TIMESTAMP_SOURCES } from '../../common/utils/Constants';
 import WebExtImg from '../../common/components/WebExtImg.vue';
+import ProgressOverlay from '../../common/components/ProgressOverlay.vue';
 import ToolbarButton from './ToolbarButton.vue';
 import VideoControllerMixin from '@/common/mixins/VideoController';
 
 @Component({
-  components: { WebExtImg, ToolbarButton },
+  components: { WebExtImg, ToolbarButton, ProgressOverlay },
 })
 export default class TimestampDetails extends Mixins(VideoControllerMixin) {
   @Getter() public activeTimestamps!: Api.AmbigousTimestamp[];
@@ -94,12 +95,13 @@ export default class TimestampDetails extends Mixins(VideoControllerMixin) {
   @Getter() isLoggedIn!: boolean;
   @Getter() isEditing!: boolean;
   @Getter() public episodeUrl?: Api.EpisodeUrl;
+  @Getter() public isSavingTimestamps!: boolean;
 
   @Mutation() deleteDraftTimestamp!: (deletedTimestamp: Api.AmbigousTimestamp) => void;
   @Mutation() setActiveTimestamp!: (timestamp: Api.AmbigousTimestamp) => void;
   @Mutation() setEditTimestampMode!: (mode: 'add' | 'edit' | undefined) => void;
 
-  @Action() public startEditing!: () => void;
+  @Action() public startEditing!: (onStartedEditing?: () => void) => void;
   @Action() public stopEditing!: (discard?: boolean) => void;
   @Action('showDialog') public hideDialog!: () => void;
   @Action() public showDialog!: (dialog: string) => void;
@@ -131,15 +133,18 @@ export default class TimestampDetails extends Mixins(VideoControllerMixin) {
   }
 
   public async editTimestamp(timestamp: Api.AmbigousTimestamp): Promise<void> {
-    await this.startEditing();
-    this.setEditTimestampMode('edit');
-    this.setActiveTimestamp(timestamp);
-    this.setCurrentTime(timestamp.at);
+    this.pause();
+    await this.startEditing(() => {
+      this.setEditTimestampMode('edit');
+      this.setActiveTimestamp(timestamp);
+      this.setCurrentTime(timestamp.at);
+    });
   }
 
   public async deleteTimestamp(timestamp: Api.AmbigousTimestamp): Promise<void> {
-    await this.startEditing();
-    this.deleteDraftTimestamp(timestamp);
+    await this.startEditing(() => {
+      this.deleteDraftTimestamp(timestamp);
+    });
   }
 
   public onClickTimestamp(timestamp: Api.AmbigousTimestamp): void {
@@ -315,8 +320,8 @@ export default class TimestampDetails extends Mixins(VideoControllerMixin) {
 
       img {
         margin-right: 16px;
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
       }
     }
     .warning {

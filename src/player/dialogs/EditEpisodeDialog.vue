@@ -1,11 +1,5 @@
 <template>
-  <BasicDialog
-    name="EditEpisodeDialog"
-    gravityX="center"
-    gravityY="center"
-    @show="onShowDialog()"
-    @hide="onHideDialog()"
-  >
+  <BasicDialog name="EditEpisodeDialog" gravityX="center" gravityY="center" @show="onShowDialog()">
     <ProgressOverlay :isLoading="isLoadingEpisode">
       <h2 class="section-header">Find Existing Episode</h2>
       <AutocompleteTextInput
@@ -155,13 +149,6 @@ export default class EditEpisodeDialog extends Vue {
     this.editableSeasonNumber = String(episodeUrl?.episode.season ?? '');
     this.editableEpisodeNumber = String(episodeUrl?.episode.number ?? '');
     this.editableAbsoluteNumber = String(episodeUrl?.episode.absoluteNumber ?? '');
-  }
-
-  public onHideDialog() {
-    // TODO: Check to see if this still behaves as I'd like it to
-    if (!this.canEditTimestamps) {
-      this.stopEditing(true);
-    }
   }
 
   public get showSearchListItems() {

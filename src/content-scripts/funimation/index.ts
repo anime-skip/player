@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import Utils from '@/common/utils/Utils';
 import './style.scss';
 
 console.log('INJECTED content-scripts/funimation/index.ts');
@@ -14,10 +15,7 @@ global.getVideoQuery = (): string => {
   return '#brightcove-player > video';
 };
 
-global.transformServiceUrl = (inputUrl: string): string => {
-  // Remove query params
-  return inputUrl.split('?', 1)[0];
-};
+global.transformServiceUrl = Utils.stripUrl;
 
 global.getPlayerOptions = (): PlayerOptionGroup[] => {
   const optionGroups: PlayerOptionGroup[] = [];

@@ -36,4 +36,5 @@ declare interface VuexState {
   activeTimestamp: Api.AmbigousTimestamp | undefined;
   timestamps: Api.AmbigousTimestamp[];
   draftTimestamps: Api.AmbigousTimestamp[];
+  saveTimestampsRequestState: RequestState;
 }

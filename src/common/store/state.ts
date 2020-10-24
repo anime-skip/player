@@ -5,7 +5,7 @@ export const initialState: VuexState = {
   activeDialog: undefined,
   playbackRate: 1,
   isEditing: false,
-  tabUrl: Browser.getIframeReferrer(),
+  tabUrl: Browser.transformServiceUrl(Browser.getIframeReferrer()),
   browserType: Browser.detect(),
   hasSkippedFromZero: false,
 
@@ -36,4 +36,5 @@ export const initialState: VuexState = {
   timestamps: [],
   draftTimestamps: [],
   selectedTimestamp: undefined,
+  saveTimestampsRequestState: RequestState.NOT_REQUESTED,
 };

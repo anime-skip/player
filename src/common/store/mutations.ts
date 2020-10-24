@@ -56,7 +56,7 @@ export default as<
     state.isEditing = isEditing;
   },
   [types.setTabUrl](state, tabUrl) {
-    state.tabUrl = tabUrl;
+    state.tabUrl = Browser.transformServiceUrl(tabUrl);
   },
   [types.setHasSkippedFromZero](state, hasSkippedFromZero) {
     state.hasSkippedFromZero = hasSkippedFromZero;
@@ -222,5 +222,8 @@ export default as<
   },
   [types.setEditTimestampMode](state, editMode: 'add' | 'edit' | undefined) {
     state.editTimestampMode = editMode;
+  },
+  [types.setSaveTimestampRequestState](state, requestState: RequestState) {
+    state.saveTimestampsRequestState = requestState;
   },
 });

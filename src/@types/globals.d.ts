@@ -8,7 +8,7 @@ declare interface ServiceHelpers {
    * Convert a raw URL string to one that can be used with Anime Skip (remove query params, etc)
    * @param inputUrl The raw URL
    */
-  transformServiceUrl: (inputUrl: string) => string | undefined;
+  transformServiceUrl?: (inputUrl: string) => string;
 
   /**
    * Get the options the the player provides (quality, subtitles, etc). Return enough info to
