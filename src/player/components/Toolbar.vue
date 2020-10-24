@@ -49,6 +49,12 @@
           title="Timestamps"
           @click.native="toggleTimestampsDialog"
         />
+        <ToolbarButton
+          v-if="isEditing && !isSavingTimestamps"
+          class="margin-left"
+          icon="ic_save_timestamps.svg"
+          @click.native="saveChanges()"
+        />
         <div class="divider margin-left" />
         <ToolbarButton
           class="margin-left margin-right"
@@ -111,12 +117,14 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   @Getter() public episodeUrl!: boolean;
   @Getter() public browserType!: BrowserType;
   @Getter() public activeTimestamp?: Api.AmbigousTimestamp;
+  @Getter() public isSavingTimestamps!: boolean;
 
   @Mutation() public setActiveTimestamp!: (timestamp: Api.AmbigousTimestamp) => void;
   @Mutation() public setEditTimestampMode!: (mode: 'add' | 'edit' | undefined) => void;
 
   @Action() public showDialog!: (dialogName?: string) => void;
   @Action() public createNewTimestamp!: () => Promise<void>;
+  @Action('stopEditing') public saveChanges!: () => Promise<void>;
 
   constructor() {
     super();

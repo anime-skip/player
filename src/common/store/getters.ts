@@ -5,6 +5,7 @@ import {
   DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS,
   DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS,
 } from '../utils/Constants';
+import Browser from '../utils/Browser';
 
 export default as<GetterTree<VuexState, VuexState>>({
   // General
@@ -21,7 +22,7 @@ export default as<GetterTree<VuexState, VuexState>>({
     return isEditing;
   },
   tabUrl({ tabUrl }): string {
-    return tabUrl;
+    return Browser.transformServiceUrl(tabUrl);
   },
   browserType({ browserType }) {
     return browserType;
@@ -159,11 +160,14 @@ export default as<GetterTree<VuexState, VuexState>>({
   },
   canEditTimestamps(_, getters): boolean {
     if (!getters.isLoggedIn) return false;
-    const episodeInfo: DisplayEpisodeInfo = getters.displayEpisodeInfo;
+    const episodeInfo: Api.EpisodeUrl = getters.episodeUrl;
     if (episodeInfo == null) return false;
-    const { name, show } = episodeInfo;
-    if (!name || !show) return false;
-    if (name === 'Unknown Episode' || show === 'Unknown Show') return false;
+    const { name, show } = episodeInfo.episode;
+    if (!name || !show?.name) return false;
+    if (name === 'Unknown Episode' || show?.name === 'Unknown Show') return false;
     return true;
+  },
+  isSavingTimestamps(state): boolean {
+    return state.saveTimestampsRequestState === RequestState.LOADING;
   },
 });

@@ -147,10 +147,40 @@ export default class Utils {
     return this._videoLoadPromise;
   }
 
+  /**
+   * Strip out hashes and query params from a url
+   * @param url The input url
+   */
+  public static stripUrl(url: string): string {
+    const urlDetails = new URL(url);
+    return `${urlDetails.protocol}//${urlDetails.hostname}${urlDetails.pathname}`;
+  }
+
   public static formatSeconds(seconds: number, includeDecimals: boolean) {
     const mins = Math.floor(seconds / 60);
-    const secs = parseFloat((seconds % 60).toFixed(includeDecimals ? 2 : 0));
-    return mins + ':' + (secs < 10 ? '0' : '') + secs;
+    const secs = seconds % 60;
+    const secStr = Utils.padLeft(Math.floor(secs), 2);
+    if (includeDecimals) {
+      let decimal = Math.round((secs - Math.floor(secs)) * 100);
+      if (decimal === 100) decimal = 99;
+      return `${mins}:${secStr}.${Utils.padLeft(decimal, 2)}`;
+    } else {
+      return `${mins}:${secStr}`;
+    }
+    // return mins + ':' + (secs < 10 ? '0' : '') + secs;
+    // return `${mins}:${Utils.padLeft(seconds, 2)}`;
+  }
+
+  public static padLeft(value: number | string, size: number, char = '0'): string {
+    let num = value.toString();
+    while (num.length < size) num = char + num;
+    return num;
+  }
+
+  public static padRight(value: number | string, size: number, char = '0'): string {
+    let num = value.toString();
+    while (num.length < size) num += char;
+    return num;
   }
 
   public static formatGraphql(data: string): string {

@@ -1,11 +1,5 @@
 <template>
-  <BasicDialog
-    name="EditEpisodeDialog"
-    gravityX="center"
-    gravityY="center"
-    @show="onShowDialog()"
-    @hide="onHideDialog()"
-  >
+  <BasicDialog name="EditEpisodeDialog" gravityX="center" gravityY="center" @show="onShowDialog()">
     <ProgressOverlay :isLoading="isLoadingEpisode">
       <h2 class="section-header">Find Existing Episode</h2>
       <AutocompleteTextInput
@@ -126,19 +120,18 @@ export default class EditEpisodeDialog extends Vue {
   }
 
   public onShowDialog() {
-    const episodeUrl = this.episodeUrl;
-    if (episodeUrl) {
-      if (episodeUrl?.episode.show) {
+    if (this.episodeUrl) {
+      if (this.episodeUrl?.episode.show) {
         this.selectedShowOption = {
-          id: episodeUrl.episode.show.id,
-          title: episodeUrl.episode.show.name,
-          subtitle: episodeUrl.episode.show.originalName,
+          id: this.episodeUrl.episode.show.id,
+          title: this.episodeUrl.episode.show.name,
+          subtitle: this.episodeUrl.episode.show.originalName,
         };
       }
       this.selectedEpisodeOption = {
-        id: episodeUrl.episode.id,
-        title: episodeUrl.episode.name ?? '',
-        subtitle: EpisodeUtils.seasonAndNumberFromEpisodeUrl(episodeUrl),
+        id: this.episodeUrl.episode.id,
+        title: this.episodeUrl.episode.name ?? '',
+        subtitle: EpisodeUtils.seasonAndNumberFromEpisodeUrl(this.episodeUrl),
       };
     } else if (this.inferredEpisodeInfo) {
       // Show loading and fetch the show & episode
@@ -152,16 +145,9 @@ export default class EditEpisodeDialog extends Vue {
         title: '',
       };
     }
-    this.editableSeasonNumber = String(episodeUrl?.episode.season ?? '');
-    this.editableEpisodeNumber = String(episodeUrl?.episode.number ?? '');
-    this.editableAbsoluteNumber = String(episodeUrl?.episode.absoluteNumber ?? '');
-  }
-
-  public onHideDialog() {
-    // TODO: Check to see if this still behaves as I'd like it to
-    if (!this.canEditTimestamps) {
-      this.stopEditing(true);
-    }
+    this.editableSeasonNumber = String(this.episodeUrl?.episode.season ?? '');
+    this.editableEpisodeNumber = String(this.episodeUrl?.episode.number ?? '');
+    this.editableAbsoluteNumber = String(this.episodeUrl?.episode.absoluteNumber ?? '');
   }
 
   public get showSearchListItems() {

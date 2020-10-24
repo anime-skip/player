@@ -63,11 +63,13 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       commit(mutations.activeDialog, dialogName);
     }
   },
-  async [types.startEditing]({ commit, dispatch, getters }) {
-    global.getVideo().pause();
-
+  async [types.startEditing]({ commit, dispatch, getters }, onStartedEditing?: () => void) {
     if (!getters.isLoggedIn) {
       await dispatch(types.showDialog, 'AccountDialog');
+      return;
+    }
+    if (!getters.hasEpisode) {
+      await dispatch(types.showDialog, 'EditEpisodeDialog');
       return;
     }
 
@@ -75,8 +77,8 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       commit(mutations.toggleEditMode, true);
       commit(mutations.setDraftTimestamps, getters.timestamps);
     }
-    if (!getters.hasEpisode) {
-      await dispatch(types.showDialog, 'EditEpisodeDialog');
+    if (onStartedEditing != null) {
+      onStartedEditing();
     }
   },
   async [types.stopEditing]({ state, commit, dispatch }, discardChanges?: boolean) {
@@ -93,16 +95,19 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     commit(mutations.setDraftTimestamps, []);
   },
   async [types.createNewTimestamp]({ commit, dispatch }) {
-    const at = global.getVideo().currentTime;
-    await dispatch(types.startEditing);
-    commit(mutationTypes.setEditTimestampMode, 'add');
-    commit(mutationTypes.setActiveTimestamp, {
-      at,
-      typeId: TIMESTAMP_TYPE_NOT_SELECTED,
-      id: Utils.randomId(),
-      source: 'ANIME_SKIP',
+    const video = global.getVideo();
+    video.pause();
+
+    await dispatch(types.startEditing, () => {
+      commit(mutationTypes.setEditTimestampMode, 'add');
+      commit(mutationTypes.setActiveTimestamp, {
+        at: video.currentTime,
+        typeId: TIMESTAMP_TYPE_NOT_SELECTED,
+        id: Utils.randomId(),
+        source: 'ANIME_SKIP',
+      });
+      dispatch(types.showDialog, 'TimestampsPanel');
     });
-    dispatch(types.showDialog, 'TimestampsPanel');
   },
 
   // Auth
@@ -242,14 +247,14 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       commit(mutationTypes.searchEpisodesRequestState, RequestState.FAILURE);
     }
   },
-  async [types.loadAllEpisodeData]({ commit, dispatch, state }) {
+  async [types.loadAllEpisodeData]({ commit, dispatch, state }, tabUrl = state.tabUrl) {
     commit(mutationTypes.setTimestamps, []);
     commit(mutationTypes.setEpisodeUrl, undefined);
     commit(mutationTypes.setInferredEpisodeInfo, undefined);
 
     await Promise.all([
       dispatch(types.inferEpisodeInfo),
-      dispatch(types.fetchEpisodeByUrl, state.tabUrl),
+      dispatch(types.fetchEpisodeByUrl, tabUrl),
     ]);
 
     if (state.episodeUrl == null && state.inferredEpisodeInfo?.name != null) {
@@ -318,6 +323,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       episodeUrl: Api.EpisodeUrl;
     }
   ) {
+    commit(mutationTypes.setSaveTimestampRequestState, RequestState.LOADING);
     const { toCreate, toUpdate, toDelete } = Utils.computeTimestampDiffs(
       oldTimestamps,
       newTimestamps
@@ -334,7 +340,9 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       for (const toDeleteItem of toDelete) {
         await callApi(commit, global.Api.deleteTimestamp, toDeleteItem.id);
       }
+      commit(mutationTypes.setSaveTimestampRequestState, RequestState.SUCCESS);
     } catch (err) {
+      commit(mutationTypes.setSaveTimestampRequestState, RequestState.FAILURE);
       commit(mutationTypes.setTimestamps, oldTimestamps);
     }
     dispatch(types.fetchEpisodeByUrl, episodeUrl.url);

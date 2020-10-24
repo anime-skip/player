@@ -106,13 +106,11 @@ export default class Browser {
     let url: string;
     // Try and get the parent's url if the iframe is the same domain as the website
     try {
-      url = window.parent.location.href;
+      return window.parent.location.href;
     } catch (err) {
       console.warn('getIframeReferrer', err);
-      url = window.location != window.parent.location ? document.referrer : document.location.href;
+      return window.location != window.parent.location ? document.referrer : document.location.href;
     }
-
-    return (global.transformServiceUrl && global.transformServiceUrl(url)) || url;
   }
 
   // prettier-ignore
@@ -154,5 +152,9 @@ export default class Browser {
       return "chrome";
 
     return "unsupported"
+  }
+
+  public static transformServiceUrl(tabUrl: string): string {
+    return (global.transformServiceUrl && global.transformServiceUrl(tabUrl)) ?? tabUrl;
   }
 }

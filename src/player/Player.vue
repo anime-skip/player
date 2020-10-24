@@ -77,7 +77,7 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
   @Mutation() public setTabUrl!: (url: string) => void;
   @Mutation() public setHasSkippedFromZero!: (newValue: boolean) => void;
 
-  @Action() public loadAllEpisodeData!: (url: string) => void;
+  @Action() public loadAllEpisodeData!: (url?: string) => void;
 
   constructor() {
     super();
@@ -87,7 +87,7 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
   }
 
   public mounted(): void {
-    this.loadAllEpisodeData(this.tabUrl);
+    this.loadAllEpisodeData();
 
     global.onVideoChanged(video => {
       this.changePlaybackRate(this.playbackRate);
@@ -122,7 +122,7 @@ export default class Player extends Mixins(KeyboardShortcutMixin, VideoControlle
     console.debug('Change URL: ' + url);
     this.setTabUrl(url);
     this.setHasSkippedFromZero(false);
-    this.loadAllEpisodeData(url);
+    this.loadAllEpisodeData();
   }
 
   public toggleActive(isActive: boolean) {

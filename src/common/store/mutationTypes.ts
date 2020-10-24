@@ -35,4 +35,5 @@ export default {
   deleteDraftTimestamp: '@@timestamps/deleteDraftTimestamp' as const,
   clearEditTimestampMode: '@@timestamps/clearEditTimestampMode' as const,
   setEditTimestampMode: '@@timestamps/setEditTimestampMode' as const,
+  setSaveTimestampRequestState: '@@timestamps/setSaveTimestampRequestState' as const,
 };

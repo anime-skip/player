@@ -7,7 +7,7 @@
     <h1>{{ episodeTitle }}</h1>
     <h3>{{ episodeDetails }}</h3>
     <ToolbarButton
-      v-if="shouldShowEditButton"
+      v-if="!isEditing"
       class="edit-button"
       icon="ic_edit.svg"
       title="Edit Episode Info"
@@ -17,16 +17,17 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Mixins } from 'vue-property-decorator';
 import { Getter, Action } from '@/common/utils/VuexDecorators';
 import RequestState from '@/common/utils/RequestState';
 import EpisodeUtils from '@/common/utils/EpisodeUtils';
 import ToolbarButton from '@/player/components/ToolbarButton.vue';
+import VideoControllerMixin from '@/common/mixins/VideoController';
 
 @Component({
   components: { ToolbarButton },
 })
-export default class EpisodeInfo extends Vue {
+export default class EpisodeInfo extends Mixins(VideoControllerMixin) {
   @Action() public showDialog!: (dialogName?: string) => void;
 
   @Getter() public displayEpisodeInfo?: DisplayEpisodeInfo;
@@ -61,11 +62,8 @@ export default class EpisodeInfo extends Vue {
   }
 
   public showEditDialog() {
+    this.pause();
     this.showDialog('EditEpisodeDialog');
-  }
-
-  public get shouldShowEditButton(): boolean {
-    return this.activeDialog == null && this.isLoggedIn;
   }
 }
 </script>
