@@ -49,13 +49,13 @@ To package the application, run `yarn package`.
 > export CHROME_APP_ID="..."
 > ```
 
-To moniter deployments, go to the consoles:
+To monitor deployments, go to the consoles:
 
 - [Chrome Web Store](https://chrome.google.com/webstore/devconsole/331629b9-cf31-4391-ad30-77dd0a36958d?hl=en)
 - [Firefox Add-On Developer Hub](https://addons.mozilla.org/en-US/developers/addons)
 - ~~Edge~~ - [TODO](https://docs.microsoft.com/en-us/microsoft-edge/extensions-chromium/publish/publish-extension)
 - ~~Opera~~ - [TODO](https://dev.opera.com/extensions/publishing-guidelines/)
 
-> Chrome is fully automated when running the `yarn deploy` command. Firefox does not support full automation yet, but the command will upload the `xpi` file so that you just need to fill out the release info then manually release it.
+> Chrome is fully automated when running the `yarn package` command. Firefox does not support full automation yet, but the command will upload the `xpi` file so that you just need to fill out the release info then manually release it.
 >
-> In the future, `yarn deploy` will be ran when pushing a tag to github
+> In the future, `yarn package` will be ran when pushing a tag to github
