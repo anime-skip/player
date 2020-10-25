@@ -8,7 +8,7 @@ module.exports = async function buildChrome(OUTPUT_DIR) {
   const chromeZip = path.join(OUTPUT_DIR, 'chrome.zip');
   const dist = path.join(__dirname, '..', 'dist');
 
-  await run(`Building ${CODE}dist/${RESET} for Chrome`, () => bash('yarn build:prod'));
+  await run(`Building ${CODE}dist/${RESET} for Chrome`, () => bash('yarn build:chrome:prod'));
 
   await run(`Creating ${CODE}chrome.zip`, () => zip(dist, chromeZip));
 };
