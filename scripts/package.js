@@ -5,14 +5,15 @@ const fs = require('fs-extra');
 
 function readEnv() {
   require('dotenv').config();
-  console.log(process.argv, process.argv.length);
   let doFirefox = process.argv.includes('--firefox');
   let doChrome = process.argv.includes('--chrome');
   let doTag = process.argv.includes('--tag');
-  if (!doFirefox && !doChrome && !doTag) {
+  let doChecks = process.argv.includes('--checks');
+  if (!doFirefox && !doChrome && !doTag && !doChecks) {
     doFirefox = true;
     doChrome = true;
     doTag = true;
+    doChecks = true;
   }
 
   const env = {
@@ -41,6 +42,8 @@ function readEnv() {
 
     DO_FIREFOX: doFirefox,
     DO_CHROME: doChrome,
+    DO_TAG: doTag,
+    DO_CHECKS: doChecks,
   };
 
   return { env, buildVars };
@@ -74,18 +77,20 @@ script(async () => {
     fs.emptyDirSync(buildVars.OUTPUT_DIR)
   );
 
-  title('Run Checks');
-  // prettier-ignore
-  await (async () => {
-    await run('Install dependencies',    () => bash('yarn install'));
-    await run('Compile TypeScript',      () => bash('yarn compile'));
-    await run('Ensure formatting',       () => bash('yarn prettier'));
-    await run('Lint source code',        () => bash('yarn lint'));
-    await run('Run tests',               () => bash('yarn test'));
-    await run('Run integration tests',   () => bash('yarn test:integration'));
-    await run('Run E2E tests',           () => bash('yarn test:e2e'));
-    await run('Scan extension manifest', () => bash('yarn check-manifest'));
-  })()
+  if (buildVars.DO_CHECKS) {
+    title('Run Checks');
+    // prettier-ignore
+    await (async () => {
+      await run('Install dependencies',    () => bash('yarn install'));
+      await run('Compile TypeScript',      () => bash('yarn compile'));
+      await run('Ensure formatting',       () => bash('yarn prettier'));
+      await run('Lint source code',        () => bash('yarn lint'));
+      await run('Run tests',               () => bash('yarn test'));
+      await run('Run integration tests',   () => bash('yarn test:integration'));
+      await run('Run E2E tests',           () => bash('yarn test:e2e'));
+      await run('Scan extension manifest', () => bash('yarn check-manifest'));
+    })()
+  }
 
   await require('./zip-sources')(buildVars.OUTPUT_DIR);
   if (buildVars.DO_FIREFOX) await require('./build-firefox')(buildVars.OUTPUT_DIR);
