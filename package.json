@@ -1,5 +1,5 @@
 {
-  "name": "anime-skip-web-ext",
+  "name": "anime-skip-player",
   "version": "1.0.15",
   "private": true,
   "author": "Aaron Klinker <aaronklinker1@gmail.com>",
@@ -12,7 +12,8 @@
     "prettier": "prettier --check \"src/**/*.{js,ts,vue}\"",
     "prettier:write": "yarn prettier --write",
     "check-manifest": "yarn build:prod && yarn web-ext --config=.web-ext.config.js lint && yarn build:chrome:prod && yarn web-ext --config=.web-ext.config.js lint",
-    "package": "./scripts/package.sh",
+    "package": "node scripts/package.js",
+    "package:dry": "cross-env DRY_RUN=true yarn package",
     "build": "cross-env BUILD_ONLY=true BUILD_FOR=firefox NODE_ENV=development webpack --hide-modules --watch",
     "build:prod": "cross-env BUILD_ONLY=true BUILD_FOR=firefox NODE_ENV=production webpack --hide-modules",
     "build:chrome": "cross-env BUILD_ONLY=true BUILD_FOR=chrome NODE_ENV=development webpack --hide-modules --watch",
@@ -49,6 +50,7 @@
     "@babel/plugin-proposal-optional-chaining": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/runtime-corejs3": "^7.4.0",
+    "@types/fs-extra": "^9.0.2",
     "@types/jest": "^26.0.7",
     "@types/md5": "^2.1.33",
     "@types/node": "^13.9.1",
@@ -77,6 +79,7 @@
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-vue": "^6.0.1",
     "file-loader": "^5.0.2",
+    "fs-extra": "^9.0.1",
     "husky": "^2.4.0",
     "jest": "^26.2.1",
     "jest-mocha-reporter": "^1.0.1",
@@ -95,6 +98,7 @@
     "webpack": "^4.20.2",
     "webpack-cli": "^3.3.10",
     "webpack-extension-reloader": "^1.1.0",
-    "webpack-shell-plugin-next": "^1.1.5"
+    "webpack-shell-plugin-next": "^1.1.5",
+    "zip-a-folder": "^0.0.12"
   }
 }
