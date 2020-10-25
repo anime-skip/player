@@ -42,16 +42,15 @@ function subStep(message) {
  */
 function clearLine() {
   let backspaces = '';
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 120; i++) {
     backspaces += '\b';
   }
   process.stdout.write(backspaces);
-  // nodeClearLine(process.stdout);
-  // moveCursor(process.stdout, -process.stdout.columns, 0);
 }
 
 /**
  * @param {() => Promise<void>} runner The scripts main function to run
+ * @returns {Promise<void>}
  */
 async function script(runner) {
   let code = 0;
@@ -70,6 +69,7 @@ async function script(runner) {
 /**
  * @param {string} message The string to print as a step
  * @param {() => Promise<void> | undefined} runner The scripts main function to run
+ * @returns {Promise<void>}
  */
 async function run(message, runner) {
   try {
@@ -88,15 +88,20 @@ async function run(message, runner) {
   }
 }
 
-async function delay(ms) {
-  return new Promise(res => setTimeout(res, ms));
-}
-
+/**
+ * @param {() => Promise<void>} runner The function to run when NOT doing a dry run
+ * @returns {Promise<void>}
+ */
 async function skipForDryRuns(runner) {
   if (process.env.DRY_RUN === 'true') return;
   await runner();
 }
 
+/**
+ * @param {string} command The bash command to run
+ * @param {any}    env The environment variables it has access to
+ * @returns {Promise<void>}
+ */
 async function bash(command, env) {
   try {
     execSync(`${command} 2>&1`, { cwd: path.join(__dirname, '..'), env });
