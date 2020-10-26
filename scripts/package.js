@@ -17,6 +17,8 @@ function readEnv() {
   }
 
   const env = {
+    BETA: process.env.BETA === 'true',
+
     // Firefox Signing
     FIREFOX_SIGNING_ISSUER: process.env.FIREFOX_SIGNING_ISSUER,
     FIREFOX_SIGNING_SECRET: process.env.FIREFOX_SIGNING_SECRET,
@@ -30,7 +32,7 @@ function readEnv() {
   };
 
   const package = require('../package.json');
-  const buildName = `${package.name}-${package.version}`;
+  const buildName = `${package.name}-${package.version}${env.BETA ? '-beta' : ''}`;
   const artifactsDir = ['artifacts'];
   const buildVars = {
     PACKAGE_VERSION: package.version,
@@ -96,5 +98,5 @@ script(async () => {
   if (buildVars.DO_FIREFOX) await require('./build-firefox')(buildVars.OUTPUT_DIR);
   if (buildVars.DO_CHROME) await require('./build-chrome')(buildVars.OUTPUT_DIR);
 
-  await require('./deploy')(false, buildVars, env);
+  await require('./deploy')(buildVars, env);
 });

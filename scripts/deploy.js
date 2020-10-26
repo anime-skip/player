@@ -1,16 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const axios = require('axios').default;
-const {
-  bash,
-  run,
-  subStep,
-  skipForDryRuns,
-  CODE,
-  RESET,
-  UNDERLINE,
-  title,
-  delay,
-} = require('./utils');
+const { bash, run, subStep, skipForDryRuns, CODE, RESET, UNDERLINE, title } = require('./utils');
 const fs = require('fs-extra');
 const path = require('path');
 
@@ -18,22 +8,34 @@ const path = require('path');
  *
  * @param {boolean} prod Is the deployment to production?
  */
-module.exports = async function chromePublish(isBeta, buildVars, env) {
+module.exports = async function chromePublish(buildVars, env) {
+  const firefoxDist = path.join(buildVars.OUTPUT_DIR, '.firefox-dist');
+  const firefoxSigningEnv = env.BETA
+    ? {
+        WEB_EXT_ARTIFACTS_DIR: buildVars.OUTPUT_DIR,
+        WEB_EXT_API_KEY: env.FIREFOX_BETA_SIGNING_ISSUER,
+        WEB_EXT_API_SECRET: env.FIREFOX_BETA_SIGNING_SECRET,
+        WEB_EXT_ID: env.FIREFOX_BETA_SIGNING_ID,
+        WEB_EXT_CHANNEL: 'unlisted',
+        WEB_EXT_SOURCE_DIR: firefoxDist,
+      }
+    : {
+        WEB_EXT_ARTIFACTS_DIR: buildVars.OUTPUT_DIR,
+        WEB_EXT_API_KEY: env.FIREFOX_SIGNING_ISSUER,
+        WEB_EXT_API_SECRET: env.FIREFOX_SIGNING_SECRET,
+        WEB_EXT_ID: env.FIREFOX_SIGNING_ID,
+        WEB_EXT_CHANNEL: 'listed',
+        WEB_EXT_SOURCE_DIR: firefoxDist,
+      };
+  const chromeAppId = env.BETA ? env.CHROME_BETA_APP_ID : env.CHROME_APP_ID;
+  const chromeReviewQueryParams = env.BETA ? { publishTarget: 'trustedTesters' } : undefined;
+
   if (buildVars.DO_FIREFOX) {
-    const firefoxDist = path.join(buildVars.OUTPUT_DIR, '.firefox-dist');
     title('Deploy');
 
     await run(`Signing and downloading ${CODE}firefox.xpi`, () =>
       skipForDryRuns(
-        async () =>
-          await bash(`yarn web-ext --no-config-discovery sign`, {
-            WEB_EXT_ARTIFACTS_DIR: buildVars.OUTPUT_DIR,
-            WEB_EXT_API_KEY: env.FIREFOX_SIGNING_ISSUER,
-            WEB_EXT_API_SECRET: env.FIREFOX_SIGNING_SECRET,
-            WEB_EXT_ID: env.FIREFOX_SIGNING_ID,
-            WEB_EXT_CHANNEL: isBeta ? 'unlisted' : 'listed',
-            WEB_EXT_SOURCE_DIR: firefoxDist,
-          })
+        async () => await bash(`yarn web-ext --no-config-discovery sign`, firefoxSigningEnv)
       )
     );
     subStep(
@@ -77,7 +79,7 @@ module.exports = async function chromePublish(isBeta, buildVars, env) {
           fs.createReadStream(path.join(buildVars.OUTPUT_DIR, 'chrome.zip'))
         );
         await axios.put(
-          `https://www.googleapis.com/upload/chromewebstore/v1.1/items/${env.CHROME_APP_ID}`,
+          `https://www.googleapis.com/upload/chromewebstore/v1.1/items/${chromeAppId}`,
           formData,
           {
             headers: {
@@ -90,10 +92,10 @@ module.exports = async function chromePublish(isBeta, buildVars, env) {
 
         // Submit for review
         await axios.post(
-          `https://www.googleapis.com/chromewebstore/v1.1/items/${env.CHROME_APP_ID}/publish`,
+          `https://www.googleapis.com/chromewebstore/v1.1/items/${chromeAppId}/publish`,
           undefined,
           {
-            params: isBeta ? { publishTarget: 'trustedTesters' } : undefined,
+            params: chromeReviewQueryParams,
             headers: {
               Authorization,
               'x-goog-api-version': 2,

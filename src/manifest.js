@@ -76,6 +76,11 @@ if (process.env.NODE_ENV === 'development') {
   manifest.description = 'Development Build - ' + manifest.description;
 }
 
+// Add "(Beta)" if build is for beta
+if (process.env.BETA === 'true') {
+  manifest.name += ' (Beta)';
+}
+
 // Filter fields for the given browser
 const browser = (process.env.BUILD_FOR || '').toLowerCase();
 if (!browser) throw "Include a 'BUILD_FOR=firefox|chrome' environment variable";
