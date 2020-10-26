@@ -76,8 +76,8 @@ if (process.env.NODE_ENV === 'development') {
   manifest.description = 'Development Build - ' + manifest.description;
 }
 
-// Add "(Beta)" if build is for beta
-if (process.env.BETA === 'true') {
+// Add "(Beta)" if build is for beta. For now, always add it
+if (process.env.BETA === 'true' || true) {
   manifest.name += ' (Beta)';
 }
 
