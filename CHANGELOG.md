@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.0.16-beta2
+
+### Changelog
+
+- Fix missing icon
+- Fixed bug where the wrong timestamps would be shown
+
+### Breaking Changes
+
+- Renamed manifest name to be "Anime Skip Player"
+
+### Enhancements
+
+- None
+
+### Fixes
+
+- Resolve missing icon
+- Infer based on show name and episode name when looking for timestamps
+
 ## 1.0.15-beta1
 
 First beta releases! Blew through a few version numbers trying to get it published publicly, but it's available!
