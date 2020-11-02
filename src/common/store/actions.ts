@@ -257,8 +257,16 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       dispatch(types.fetchEpisodeByUrl, tabUrl),
     ]);
 
-    if (state.episodeUrl == null && state.inferredEpisodeInfo?.name != null) {
-      await dispatch(types.fetchThirdPartyEpisode, state.inferredEpisodeInfo.name);
+    if (
+      state.episodeUrl == null &&
+      state.inferredEpisodeInfo?.name != null &&
+      state.inferredEpisodeInfo?.show != null
+    ) {
+      console.log({ inferred: state.inferredEpisodeInfo });
+      await dispatch(types.fetchThirdPartyEpisode, {
+        name: state.inferredEpisodeInfo.name,
+        showName: state.inferredEpisodeInfo.show,
+      });
     }
   },
   async [types.fetchEpisodeByUrl]({ commit }, url) {
@@ -285,13 +293,18 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       commit(mutationTypes.setEpisodeUrl, undefined);
     }
   },
-  async [types.fetchThirdPartyEpisode]({ commit }, name: string) {
+  async [types.fetchThirdPartyEpisode](
+    { commit },
+    { name, showName }: { name: string; showName: string }
+  ) {
+    console.log({ name, showName });
     try {
       commit(mutationTypes.episodeRequestState, RequestState.LOADING);
       const episodes: Api.ThirdPartyEpisode[] = await callApi(
         commit,
         global.Api.fetchEpisodeByName,
-        name
+        name,
+        showName
       );
       const episodesWithTimestamps = episodes.filter(episode => episode.timestamps.length > 0);
       if (episodesWithTimestamps.length > 0) {

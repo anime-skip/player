@@ -49,6 +49,7 @@ interface ApiMessagePayloadMap extends MessagePayloadMap<ApiMessageTypes> {
   createEpisodeUrl: { episodeId: string; data: Api.InputEpisodeUrl };
   deleteEpisodeUrl: string;
   fetchEpisodeByUrl: string;
+  fetchEpisodeByName: { name: string; showName: string };
 
   createTimestamp: { episodeId: string; data: Api.InputTimestamp };
   updateTimestamp: Api.Timestamp;
@@ -70,6 +71,7 @@ interface ApiMessageResponseMap extends MessageResponseMap<ApiMessageTypes> {
   createEpisodeUrl: Api.EpisodeUrl;
   deleteEpisodeUrl: Api.EpisodeUrlNoEpisode;
   fetchEpisodeByUrl: Api.EpisodeUrl;
+  fetchEpisodeByName: Api.ThirdPartyEpisode[];
 
   createTimestamp: Api.Timestamp;
   updateTimestamp: Api.Timestamp;
