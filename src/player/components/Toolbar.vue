@@ -52,7 +52,8 @@
         <ToolbarButton
           v-if="isEditing && !isSavingTimestamps"
           class="margin-left"
-          icon="ic_save_timestamps.svg"
+          icon="ic_save_changes.svg"
+          title="Save Changes"
           @click.native="saveChanges()"
         />
         <div class="divider margin-left" />
