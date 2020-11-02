@@ -29,7 +29,7 @@ const messenger = new Messenger<
     createEpisodeUrl: ({ data, episodeId }) => global.Api.createEpisodeUrl(data, episodeId),
     deleteEpisodeUrl: global.Api.deleteEpisodeUrl,
     fetchEpisodeByUrl: global.Api.fetchEpisodeByUrl,
-    fetchEpisodeByName: global.Api.fetchEpisodeByName,
+    fetchEpisodeByName: ({ name, showName }) => global.Api.fetchEpisodeByName(name, showName),
 
     createTimestamp: ({ episodeId, data }) => global.Api.createTimestamp(episodeId, data),
     updateTimestamp: global.Api.updateTimestamp,

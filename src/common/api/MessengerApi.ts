@@ -43,8 +43,8 @@ export default as<Api.Implementation>({
   fetchEpisodeByUrl(url) {
     return messenger.send('fetchEpisodeByUrl', url);
   },
-  fetchEpisodeByName(name) {
-    return messenger.send('fetchEpisodeByName', name);
+  fetchEpisodeByName(name, showName) {
+    return messenger.send('fetchEpisodeByName', { name, showName });
   },
 
   createTimestamp(episodeId, data) {

@@ -111,6 +111,7 @@ const thirdPartyEpisodeData = `
   timestamps {
     ${timestampWithoutSourceData}
   }
+  show { name }
 `;
 
 const episodeData = `
@@ -315,7 +316,7 @@ export default as<Api.Implementation>({
     const response = await sendUnauthorizedGraphql<'findEpisodeUrl', Api.EpisodeUrl>(q);
     return response.data.findEpisodeUrl;
   },
-  async fetchEpisodeByName(name): Promise<Api.ThirdPartyEpisode[]> {
+  async fetchEpisodeByName(name, showName): Promise<Api.ThirdPartyEpisode[]> {
     const q = query(
       `query FindEpisodeByName($name: String!) {
         findEpisodeByName(name: $name) {
@@ -325,7 +326,7 @@ export default as<Api.Implementation>({
       { name }
     );
     const response = await sendUnauthorizedGraphql<'findEpisodeByName', Api.ThirdPartyEpisode[]>(q);
-    return response.data.findEpisodeByName;
+    return response.data.findEpisodeByName.filter(episode => episode.show.name === showName);
   },
 
   async createTimestamp(
