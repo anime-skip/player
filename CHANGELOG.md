@@ -1,11 +1,14 @@
 # Changelog
 
-## `1.0.16-beta2`
+## `1.0.18-beta2`
+
+`v1.0.16` and `v1.0.17` were blown through working on CI/CD.
 
 ### Changelog
 
 - Fix missing icon
 - Fixed bug where the wrong timestamps would be shown
+- Improved timestamps suggestions
 
 ### Breaking Changes
 

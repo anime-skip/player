@@ -94,5 +94,5 @@ script(async () => {
   if (buildVars.DO_FIREFOX) await require('./build-firefox')(buildVars.OUTPUT_DIR);
   if (buildVars.DO_CHROME) await require('./build-chrome')(buildVars.OUTPUT_DIR);
 
-  // await require('./deploy')(buildVars, env);
+  await require('./deploy')(buildVars, env);
 });
