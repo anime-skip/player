@@ -1,0 +1,75 @@
+name: Prod Release
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  verify:
+    name: Verify & Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@anime-skip'
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - run: yarn install
+        env:
+          CI: true
+          NODE_AUTH_TOKEN: ${{ secrets.ANIME_SKIP_PACKAGES_TOKEN }}
+      - name: Package Extensions
+        run: yarn package
+        env:
+          DRY_RUN: false
+          CI: true
+          NODE_AUTH_TOKEN: ${{ secrets.ANIME_SKIP_PACKAGES_TOKEN }}
+          FIREFOX_SIGNING_ISSUER: ${{ secrets.FIREFOX_SIGNING_ISSUER }}
+          FIREFOX_SIGNING_SECRET: ${{ secrets.FIREFOX_SIGNING_SECRET }}
+          FIREFOX_SIGNING_ID: ${{ secrets.FIREFOX_SIGNING_ID }}
+          CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
+          CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
+          CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
+          CHROME_APP_ID: ${{ secrets.CHROME_APP_ID }}
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Upload firefox.zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/firefox.zip
+          asset_name: firefox.zip
+          asset_content_type: application/zip
+      - name: Upload sources.zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/sources.zip
+          asset_name: sources.zip
+          asset_content_type: application/zip
+      - name: Upload chrome.zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/chrome.zip
+          asset_name: chrome.zip
+          asset_content_type: application/zip

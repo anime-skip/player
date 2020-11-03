@@ -77,6 +77,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Add "(Beta)" if build is for beta. For now, always add it
+// eslint-disable-next-line no-constant-condition
 if (process.env.BETA === 'true' || true) {
   manifest.name += ' (Beta)';
 }

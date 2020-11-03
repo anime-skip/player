@@ -4,15 +4,12 @@ const path = require('path');
 const fs = require('fs-extra');
 
 function readEnv() {
-  require('dotenv').config();
   let doFirefox = process.argv.includes('--firefox');
   let doChrome = process.argv.includes('--chrome');
-  let doTag = process.argv.includes('--tag');
   let doChecks = process.argv.includes('--checks');
-  if (!doFirefox && !doChrome && !doTag && !doChecks) {
+  if (!doFirefox && !doChrome && !doChecks) {
     doFirefox = true;
     doChrome = true;
-    doTag = true;
     doChecks = true;
   }
 
@@ -39,12 +36,11 @@ function readEnv() {
     PACKAGE_NAME: package.name,
 
     BUILD_NAME: buildName,
-    OUTPUT_DIR: path.join(process.cwd(), ...artifactsDir, buildName),
-    OUTPUT_DIR_DISPLAY: path.join('.', ...artifactsDir, buildName),
+    OUTPUT_DIR: path.join(process.cwd(), ...artifactsDir),
+    OUTPUT_DIR_DISPLAY: path.join('.', ...artifactsDir),
 
     DO_FIREFOX: doFirefox,
     DO_CHROME: doChrome,
-    DO_TAG: doTag,
     DO_CHECKS: doChecks,
   };
 
@@ -98,5 +94,5 @@ script(async () => {
   if (buildVars.DO_FIREFOX) await require('./build-firefox')(buildVars.OUTPUT_DIR);
   if (buildVars.DO_CHROME) await require('./build-chrome')(buildVars.OUTPUT_DIR);
 
-  await require('./deploy')(buildVars, env);
+  // await require('./deploy')(buildVars, env);
 });

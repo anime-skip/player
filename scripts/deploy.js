@@ -3,6 +3,7 @@ const axios = require('axios').default;
 const { bash, run, subStep, skipForDryRuns, CODE, RESET, UNDERLINE, title } = require('./utils');
 const fs = require('fs-extra');
 const path = require('path');
+const FormData = require('form-data');
 
 /**
  *
@@ -34,24 +35,25 @@ module.exports = async function chromePublish(buildVars, env) {
     title('Deploy');
 
     await run(`Signing and downloading ${CODE}firefox.xpi`, () =>
-      skipForDryRuns(
-        async () => await bash(`yarn web-ext --no-config-discovery sign`, firefoxSigningEnv)
-      )
+      skipForDryRuns(async () => {
+        try {
+          await bash(`yarn web-ext --no-config-discovery sign`, firefoxSigningEnv);
+        } catch (err) {
+          if (!err.message.includes('Your add-on has been submitted for review')) {
+            throw err;
+          }
+        }
+      })
     );
+    subStep(`Your add-on has been submitted for review`);
     subStep(
-      `Submit new version manually: ${UNDERLINE}https://addons.mozilla.org/en-US/developers/addon/anime-skip/versions`
+      `Finish submission: ${UNDERLINE}https://addons.mozilla.org/en-US/developers/addon/anime-skip/versions`
     );
 
     await run(`Removing firefox ${CODE}dist/${RESET} cache`, () => {
       fs.emptyDirSync(firefoxDist);
       fs.rmdirSync(firefoxDist);
     });
-
-    await run(`Renaming signed artifact to ${CODE}firefox.xpi${RESET}`, () =>
-      skipForDryRuns(async () =>
-        bash(`mv "${buildVars.OUTPUT_DIR}"/*.xpi "${buildVars.OUTPUT_DIR}/firefox.xpi"`)
-      )
-    );
   }
 
   if (buildVars.DO_CHROME) {
@@ -70,23 +72,22 @@ module.exports = async function chromePublish(buildVars, env) {
       ).data.access_token;
       const Authorization = `Bearer ${accessToken}`;
 
+      // Upload the zip as a draft
+      const formData = new FormData();
+      formData.append(
+        'image',
+        fs.createReadStream(path.join(buildVars.OUTPUT_DIR, 'chrome.zip')),
+        'chrome.zip'
+      );
       await skipForDryRuns(async () => {
-        // Upload the zip as a draft
-        const formData = new FormData();
-        formData.append(
-          'image',
-          'chrome.zip',
-          fs.createReadStream(path.join(buildVars.OUTPUT_DIR, 'chrome.zip'))
-        );
         await axios.put(
           `https://www.googleapis.com/upload/chromewebstore/v1.1/items/${chromeAppId}`,
           formData,
           {
-            headers: {
+            headers: formData.getHeaders({
               Authorization,
-              'Content-Type': 'multipart/form-data',
               'x-goog-api-version': 2,
-            },
+            }),
           }
         );
 
@@ -105,11 +106,5 @@ module.exports = async function chromePublish(buildVars, env) {
         );
       });
     });
-  }
-
-  if (buildVars.DO_TAG) {
-    await run(`Create and push ${CODE}v${buildVars.PACKAGE_VERSION}${RESET} tag`, () =>
-      skipForDryRuns(() => bash(`git tag 'v${buildVars.PACKAGE_VERSION}' && git push --tags`))
-    );
   }
 };

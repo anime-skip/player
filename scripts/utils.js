@@ -135,6 +135,5 @@ module.exports = {
   subStep,
   title,
   bash,
-  delay,
   skipForDryRuns,
 };

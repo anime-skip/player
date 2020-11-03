@@ -1,6 +1,6 @@
 {
   "name": "anime-skip-player",
-  "version": "1.0.16",
+  "version": "1.0.18",
   "private": true,
   "author": "Aaron Klinker <aaronklinker1@gmail.com>",
   "engines": {
@@ -79,6 +79,7 @@
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-vue": "^6.0.1",
     "file-loader": "^5.0.2",
+    "form-data": "^3.0.0",
     "fs-extra": "^9.0.1",
     "husky": "^4.3.0",
     "jest": "^26.2.1",
