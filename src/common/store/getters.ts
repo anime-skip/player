@@ -6,6 +6,7 @@ import {
   DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS,
 } from '../utils/Constants';
 import Browser from '../utils/Browser';
+import Utils from '../utils/Utils';
 
 export default as<GetterTree<VuexState, VuexState>>({
   // General
@@ -29,6 +30,9 @@ export default as<GetterTree<VuexState, VuexState>>({
   },
   hasSkippedFromZero({ hasSkippedFromZero }) {
     return hasSkippedFromZero;
+  },
+  duration({ duration }) {
+    return duration || undefined;
   },
 
   // Login
@@ -143,8 +147,14 @@ export default as<GetterTree<VuexState, VuexState>>({
   },
 
   // Timestamps
-  timestamps({ timestamps }): Api.AmbigousTimestamp[] {
-    return timestamps;
+  timestamps({ timestamps, episodeUrl, duration }): Api.AmbigousTimestamp[] {
+    return timestamps.map(timestamp => {
+      const at = Utils.applyTimestampsOffset(episodeUrl?.timestampsOffset, timestamp.at);
+      return {
+        ...timestamp,
+        at: duration == null ? at : Utils.boundedNumber(at, [0, duration]),
+      };
+    });
   },
   activeTimestamp(state): Api.AmbigousTimestamp | undefined {
     return state.activeTimestamp;

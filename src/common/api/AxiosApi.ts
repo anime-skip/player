@@ -86,6 +86,8 @@ const episodeSearchData = `id name season number absoluteNumber`;
 const episodeUrlNoEpisodeData = `
   url
   createdAt
+  duration
+  timestampsOffset
 `;
 
 const timestampData = `
@@ -115,7 +117,7 @@ const thirdPartyEpisodeData = `
 `;
 
 const episodeData = `
-  id absoluteNumber number season name 
+  id absoluteNumber number season name baseDuration
   timestamps {
     ${timestampData}
   }
@@ -274,6 +276,21 @@ export default as<Api.Implementation>({
     const response = await sendUnauthorizedGraphql<'searchEpisodes', Api.EpisodeSearchResult[]>(q);
     return response.data.searchEpisodes;
   },
+  async updateEpisode(episodeId, newEpisode): Promise<Api.Episode> {
+    const m = mutation(
+      `mutation UpdateEpisode($episodeId: ID!, $newEpisode: InputEpisode!) {
+        updateEpisode(episodeId: $episodeId, newEpisode: $newEpisode) {
+          ${episodeData}
+        }
+      }`,
+      {
+        newEpisode,
+        episodeId,
+      }
+    );
+    const response = await sendGraphql<'updateEpisode', Api.Episode>(m);
+    return response.data.updateEpisode;
+  },
 
   async createEpisodeUrl(data, episodeId): Promise<Api.EpisodeUrl> {
     const m = mutation(
@@ -327,6 +344,21 @@ export default as<Api.Implementation>({
     );
     const response = await sendUnauthorizedGraphql<'findEpisodeByName', Api.ThirdPartyEpisode[]>(q);
     return response.data.findEpisodeByName.filter(episode => episode.show.name === showName);
+  },
+  async updateEpisodeUrl(episodeUrl, newEpisodeUrl): Promise<Api.EpisodeUrlNoEpisode> {
+    const m = mutation(
+      `mutation UpdateEpisodeUrl($newEpisodeUrl: InputEpisodeUrl!, $episodeUrl: String!) {
+        updateEpisodeUrl(episodeUrl: $episodeUrl, newEpisodeUrl: $newEpisodeUrl) {
+          ${episodeUrlNoEpisodeData}
+        }
+      }`,
+      {
+        newEpisodeUrl,
+        episodeUrl,
+      }
+    );
+    const response = await sendGraphql<'updateEpisodeUrl', Api.EpisodeUrlNoEpisode>(m);
+    return response.data.updateEpisodeUrl;
   },
 
   async createTimestamp(

@@ -71,10 +71,11 @@ type BrowserType =
   | 'edgechromium'
   | 'unsupported';
 
-interface AutocompleteItem {
+interface AutocompleteItem<T = any> {
   id?: string;
   title: string;
   subtitle?: string;
+  data?: T;
 }
 
 /**

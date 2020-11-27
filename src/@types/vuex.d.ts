@@ -9,6 +9,7 @@ declare interface VuexState {
   tabUrl: string;
   browserType: BrowserType;
   hasSkippedFromZero: boolean;
+  duration?: number;
 
   token: string | undefined;
   tokenExpiresAt: number | undefined;

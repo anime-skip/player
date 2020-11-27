@@ -18,11 +18,13 @@ declare namespace Api {
 
     createEpisode(data: Api.InputEpisode, showId: string): Promise<Api.EpisodeSearchResult>;
     searchEpisodes(name: string, showId?: string): Promise<Api.EpisodeSearchResult[]>;
+    updateEpisode(id: string, input: Api.InputEpisode): Promise<Api.Episode>;
 
     createEpisodeUrl(data: Api.InputEpisodeUrl, episodeId: string): Promise<Api.EpisodeUrl>;
     deleteEpisodeUrl(episodeUrl: string): Promise<Api.EpisodeUrlNoEpisode>;
     fetchEpisodeByUrl(url: string): Promise<Api.EpisodeUrl>;
     fetchEpisodeByName(name: string, showName: string): Promise<Api.ThirdPartyEpisode[]>;
+    updateEpisodeUrl(url: string, inputUrl: Api.InputEpisodeUrl): Promise<Api.EpisodeUrlNoEpisode>;
 
     createTimestamp(episodeId: string, timestamp: Api.InputTimestamp): Promise<Api.Timestamp>;
     updateTimestamp(newTimestamp: Api.Timestamp): Promise<Api.Timestamp>;
@@ -78,6 +80,8 @@ declare namespace Api {
   interface EpisodeUrlNoEpisode {
     url: string;
     createdAt: number;
+    duration?: number;
+    timestampsOffset?: number;
   }
 
   interface EpisodeUrl extends EpisodeUrlNoEpisode {
@@ -86,6 +90,8 @@ declare namespace Api {
 
   interface InputEpisodeUrl {
     url: string;
+    duration?: number;
+    timestampsOffset?: number;
   }
 
   interface EpisodeSearchResult {
@@ -94,6 +100,7 @@ declare namespace Api {
     season?: string;
     absoluteNumber?: string;
     number?: string;
+    baseDuration?: number;
   }
 
   interface InputEpisode {
@@ -101,6 +108,7 @@ declare namespace Api {
     season?: string;
     number?: string;
     absoluteNumber?: string;
+    baseDuration?: number;
   }
 
   interface Episode extends EpisodeSearchResult {

@@ -8,6 +8,7 @@ export const initialState: VuexState = {
   tabUrl: Browser.transformServiceUrl(Browser.getIframeReferrer()),
   browserType: Browser.detect(),
   hasSkippedFromZero: false,
+  duration: undefined,
 
   token: undefined,
   tokenExpiresAt: undefined,

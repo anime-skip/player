@@ -33,6 +33,9 @@ export default as<Api.Implementation>({
   searchEpisodes(name, showId) {
     return messenger.send('searchEpisodes', { name, showId });
   },
+  updateEpisode(episodeId, newEpisode) {
+    return messenger.send('updateEpisode', { episodeId, newEpisode });
+  },
 
   createEpisodeUrl(data, episodeId) {
     return messenger.send('createEpisodeUrl', { data, episodeId });
@@ -45,6 +48,9 @@ export default as<Api.Implementation>({
   },
   fetchEpisodeByName(name, showName) {
     return messenger.send('fetchEpisodeByName', { name, showName });
+  },
+  updateEpisodeUrl(episodeUrl, newEpisodeUrl) {
+    return messenger.send('updateEpisodeUrl', { episodeUrl, newEpisodeUrl });
   },
 
   createTimestamp(episodeId, data) {

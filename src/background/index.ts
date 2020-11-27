@@ -25,11 +25,14 @@ const messenger = new Messenger<
 
     createEpisode: ({ data, showId }) => global.Api.createEpisode(data, showId),
     searchEpisodes: ({ name, showId }) => global.Api.searchEpisodes(name, showId),
+    updateEpisode: ({ episodeId, newEpisode }) => global.Api.updateEpisode(episodeId, newEpisode),
 
     createEpisodeUrl: ({ data, episodeId }) => global.Api.createEpisodeUrl(data, episodeId),
     deleteEpisodeUrl: global.Api.deleteEpisodeUrl,
     fetchEpisodeByUrl: global.Api.fetchEpisodeByUrl,
     fetchEpisodeByName: ({ name, showName }) => global.Api.fetchEpisodeByName(name, showName),
+    updateEpisodeUrl: ({ episodeUrl, newEpisodeUrl }) =>
+      global.Api.updateEpisodeUrl(episodeUrl, newEpisodeUrl),
 
     createTimestamp: ({ episodeId, data }) => global.Api.createTimestamp(episodeId, data),
     updateTimestamp: global.Api.updateTimestamp,

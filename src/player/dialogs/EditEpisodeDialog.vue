@@ -69,6 +69,7 @@ import RequestState from '../../common/utils/RequestState';
 import TextInput from '@/common/components/TextInput.vue';
 import AutocompleteTextInput from '@/common/components/AutocompleteTextInput.vue';
 import EpisodeUtils from '../../common/utils/EpisodeUtils';
+import Utils from '@/common/utils/Utils';
 
 @Component({
   components: { BasicDialog, PopupHeader, ProgressOverlay, TextInput, AutocompleteTextInput },
@@ -91,16 +92,17 @@ export default class EditEpisodeDialog extends Vue {
   @Action() showDialog!: (dialog?: string) => void;
   @Action() stopEditing!: (discard: boolean) => void;
 
-  public selectedShowOption: AutocompleteItem = {
+  public selectedShowOption: AutocompleteItem<Api.ShowSearchResult> = {
     title: '',
   };
-  public selectedEpisodeOption: AutocompleteItem = {
+  public selectedEpisodeOption: AutocompleteItem<Api.EpisodeSearchResult> = {
     title: '',
   };
 
   public editableSeasonNumber = '';
   public editableEpisodeNumber = '';
   public editableAbsoluteNumber = '';
+  public editableBaseDuration?: number;
   public fetchingIds = RequestState.NOT_REQUESTED;
 
   public onChangeSelectedShow() {
@@ -117,6 +119,7 @@ export default class EditEpisodeDialog extends Vue {
     this.editableSeasonNumber = String(episode?.season ?? '');
     this.editableEpisodeNumber = String(episode?.number ?? '');
     this.editableAbsoluteNumber = String(episode?.absoluteNumber ?? '');
+    this.editableBaseDuration = episode?.baseDuration;
   }
 
   public onShowDialog() {
@@ -149,21 +152,24 @@ export default class EditEpisodeDialog extends Vue {
     this.editableSeasonNumber = String(episodeUrl?.episode.season ?? '');
     this.editableEpisodeNumber = String(episodeUrl?.episode.number ?? '');
     this.editableAbsoluteNumber = String(episodeUrl?.episode.absoluteNumber ?? '');
+    this.editableBaseDuration = episodeUrl?.episode.baseDuration;
   }
 
-  public get showSearchListItems() {
+  public get showSearchListItems(): AutocompleteItem<Api.ShowSearchResult>[] {
     return this.searchShowsResult.map(item => ({
       id: item.id,
       title: item.name,
       subtitle: item.originalName,
+      data: item,
     }));
   }
 
-  public get episodeSearchListItems() {
+  public get episodeSearchListItems(): AutocompleteItem<Api.EpisodeSearchResult>[] {
     return this.searchEpisodesResult.map(item => ({
       id: item.id,
       title: item.name || '(No title)',
       subtitle: EpisodeUtils.seasonAndNumberDisplay(item),
+      data: item,
     }));
   }
 
@@ -278,11 +284,24 @@ export default class EditEpisodeDialog extends Vue {
     const number = this.editableEpisodeNumber.trim() || undefined;
     const absoluteNumber = this.editableAbsoluteNumber.trim() || undefined;
     const season = this.editableSeasonNumber.trim() || undefined;
+    const duration = global.getVideo()?.duration;
+    const baseDuration = this.selectedEpisodeOption?.data?.baseDuration;
+    let timestampsOffset: number | undefined;
+    if (baseDuration != null) {
+      timestampsOffset = Utils.computeTimestampsOffset(baseDuration, duration);
+    }
+
     const episodeData: Api.InputEpisode = {
       name: episodeName,
       number,
       season,
       absoluteNumber,
+      baseDuration,
+    };
+    const episodeUrlData: Api.InputEpisodeUrl = {
+      url: this.tabUrl,
+      duration: duration,
+      timestampsOffset,
     };
 
     // Creating Data
@@ -298,7 +317,7 @@ export default class EditEpisodeDialog extends Vue {
         },
         episodeUrl: {
           create: true,
-          data: { url: this.tabUrl },
+          data: episodeUrlData,
         },
       });
       return;
@@ -315,7 +334,7 @@ export default class EditEpisodeDialog extends Vue {
         },
         episodeUrl: {
           create: true,
-          data: { url: this.tabUrl },
+          data: episodeUrlData,
         },
       });
       return;
@@ -336,7 +355,7 @@ export default class EditEpisodeDialog extends Vue {
         },
         episodeUrl: {
           create: true,
-          data: { url: this.tabUrl },
+          data: episodeUrlData,
         },
       });
       return;
