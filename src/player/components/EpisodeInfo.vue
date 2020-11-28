@@ -7,7 +7,7 @@
     <h1>{{ episodeTitle }}</h1>
     <h3>{{ episodeDetails }}</h3>
     <ToolbarButton
-      v-if="!isEditing"
+      v-if="isLoggedIn && !isEditing"
       class="edit-button"
       icon="ic_edit.svg"
       title="Edit Episode Info"
