@@ -306,4 +306,31 @@ export default class Utils {
     }
     return undefined;
   }
+
+  public static computeTimestampsOffset(baseDuration: number, duration: number): number {
+    return duration - baseDuration;
+  }
+
+  public static applyTimestampsOffset(
+    timestampsOffset: number | undefined,
+    timestampAt: number
+  ): number {
+    return (timestampsOffset ?? 0) + timestampAt;
+  }
+
+  public static undoTimestampOffset(
+    timestampsOffset: number | undefined,
+    timestampAt: number
+  ): number {
+    return timestampAt - (timestampsOffset ?? 0);
+  }
+
+  public static boundedNumber(
+    value: number,
+    [lowBound, highBound]: [number | undefined, number | undefined]
+  ): number {
+    if (lowBound != null && value < lowBound) return lowBound;
+    if (highBound != null && value > highBound) return highBound;
+    return value;
+  }
 }

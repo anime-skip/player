@@ -2,6 +2,7 @@ import Browser from '@/common/utils/Browser';
 import { ActionContext, Action } from 'vuex';
 import {
   persistedKeys,
+  SUPPORTED_THIRD_PARTY_SERVICES,
   TIMESTAMP_TYPE_NOT_SELECTED,
   UNAUTHORIZED_ERROR_MESSAGE,
 } from '@/common/utils/Constants';
@@ -306,7 +307,13 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
         name,
         showName
       );
-      const episodesWithTimestamps = episodes.filter(episode => episode.timestamps.length > 0);
+      const episodesWithTimestamps = episodes.filter(episode => {
+        const hasTimestamps = episode.timestamps.length > 0;
+        const isFromSupportedService = SUPPORTED_THIRD_PARTY_SERVICES[global.service].includes(
+          episode.source
+        );
+        return hasTimestamps && isFromSupportedService;
+      });
       if (episodesWithTimestamps.length > 0) {
         const episode = episodesWithTimestamps[0];
         const timestamps = episode.timestamps.map<Api.AmbigousTimestamp>(timestamp => ({
@@ -318,17 +325,68 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       }
       commit(mutationTypes.episodeRequestState, RequestState.SUCCESS);
     } catch (err) {
-      console.warn('actions.fetchEpisodeByUrl', err);
+      console.warn('actions.fetchThirdPartyEpisode', err);
       commit(mutationTypes.setEpisodeUrl, undefined);
+    }
+  },
+  async [types.addMissingDurations]({ commit, state, getters }, duration: number) {
+    if (!getters.isLoggedIn || !duration) return;
+
+    const episodeUrl = state.episodeUrl;
+    const episode = episodeUrl?.episode;
+
+    if (episodeUrl == null || episode == null) {
+      console.log('Did not update durations, episode or url was undefined', {
+        episode,
+        episodeUrl,
+      });
+    } else {
+      const newBaseDuration = episode.baseDuration ?? duration;
+      const newUrlDuration = episodeUrl.duration ?? duration;
+      const newTimestampsOffset =
+        episodeUrl.timestampsOffset ??
+        Utils.computeTimestampsOffset(newBaseDuration, newUrlDuration);
+
+      let newEpisode: Api.Episode = { ...episode };
+      if (newBaseDuration != episode.baseDuration) {
+        newEpisode = await callApi(commit, global.Api.updateEpisode, episode.id, {
+          absoluteNumber: episode.absoluteNumber,
+          baseDuration: newBaseDuration,
+          name: episode.name,
+          number: episode.number,
+          season: episode.season,
+        });
+      }
+      let newEpisodeUrlNoEpisode: Api.EpisodeUrlNoEpisode = { ...episodeUrl };
+      if (
+        newUrlDuration != episodeUrl.duration ||
+        newTimestampsOffset != episodeUrl.timestampsOffset
+      ) {
+        newEpisodeUrlNoEpisode = await callApi(
+          commit,
+          global.Api.updateEpisodeUrl,
+          episodeUrl.url,
+          {
+            url: episodeUrl.url,
+            duration: newUrlDuration,
+            timestampsOffset: newTimestampsOffset,
+          }
+        );
+      }
+      const newEpisodeUrl: Api.EpisodeUrl = {
+        ...newEpisodeUrlNoEpisode,
+        episode: newEpisode,
+      };
+      commit(mutationTypes.setEpisodeUrl, newEpisodeUrl);
     }
   },
 
   // Timestamps
   async [types.updateTimestamps](
-    { commit, dispatch },
+    { commit, dispatch, state },
     {
-      oldTimestamps,
-      newTimestamps,
+      oldTimestamps: offsetOldTimestamps,
+      newTimestamps: offsetNewTimestamps,
       episodeUrl,
     }: {
       oldTimestamps: Api.Timestamp[];
@@ -336,6 +394,15 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       episodeUrl: Api.EpisodeUrl;
     }
   ) {
+    const removeOffset = <T extends Api.AmbigousTimestamp>(timestamp: T): T => {
+      const at = Utils.undoTimestampOffset(state.episodeUrl?.timestampsOffset, timestamp.at);
+      return {
+        ...timestamp,
+        at,
+      };
+    };
+    const oldTimestamps: Api.Timestamp[] = offsetOldTimestamps.map(removeOffset);
+    const newTimestamps: Api.AmbigousTimestamp[] = offsetNewTimestamps.map(removeOffset);
     commit(mutationTypes.setSaveTimestampRequestState, RequestState.LOADING);
     const { toCreate, toUpdate, toDelete } = Utils.computeTimestampDiffs(
       oldTimestamps,

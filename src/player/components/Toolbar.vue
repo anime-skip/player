@@ -107,7 +107,6 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   public isFullscreenCount = 0;
   public Utils = Utils;
   public displayDuration = 'Loading...';
-  public duration = 0;
   public isFullscreenEnabled = document.fullscreenEnabled;
   public service = global.service;
 
@@ -119,13 +118,16 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   @Getter() public browserType!: BrowserType;
   @Getter() public activeTimestamp?: Api.AmbigousTimestamp;
   @Getter() public isSavingTimestamps!: boolean;
+  @Getter() public duration?: number;
 
   @Mutation() public setActiveTimestamp!: (timestamp: Api.AmbigousTimestamp) => void;
   @Mutation() public setEditTimestampMode!: (mode: 'add' | 'edit' | undefined) => void;
+  @Mutation() public setDuration!: (duration?: number) => void;
 
   @Action() public showDialog!: (dialogName?: string) => void;
   @Action() public createNewTimestamp!: () => Promise<void>;
   @Action('stopEditing') public saveChanges!: () => Promise<void>;
+  @Action() public addMissingDurations!: (duration: number) => Promise<void>;
 
   constructor() {
     super();
@@ -159,27 +161,29 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   }
 
   public updateDuration(duration: number) {
-    this.duration = duration;
+    this.setDuration(duration);
     if (duration === 0) {
       this.displayDuration = 'Loading...';
     }
     this.displayDuration = Utils.formatSeconds(duration, false);
+    this.addMissingDurations(duration);
   }
 
   public updateTime(newTime: number, updateVideo?: boolean) {
     if (updateVideo) {
       this.setCurrentTime(newTime);
     }
-    this.currentTime = newTime;
+    this.currentTime = Utils.boundedNumber(newTime, [0, this.duration]);
   }
 
   public onSeek(newTime: number) {
-    this.currentTime = newTime;
+    this.currentTime = Utils.boundedNumber(newTime, [0, this.duration]);
     this.updateTime(newTime, true);
   }
 
   public addTime(seconds: number): void {
-    this.updateTime((this.currentTime += seconds), true);
+    this.currentTime = Utils.boundedNumber(this.currentTime + seconds, [0, this.duration]);
+    this.updateTime(this.currentTime, true);
   }
 
   public get activeTimestamps(): Api.AmbigousTimestamp[] {

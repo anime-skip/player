@@ -69,6 +69,27 @@ import RequestState from '../../common/utils/RequestState';
 import TextInput from '@/common/components/TextInput.vue';
 import AutocompleteTextInput from '@/common/components/AutocompleteTextInput.vue';
 import EpisodeUtils from '../../common/utils/EpisodeUtils';
+import Utils from '@/common/utils/Utils';
+
+function mapShowToAutocompleteItem(show: Api.Show): AutocompleteItem<Api.Show> {
+  return {
+    id: show.id,
+    title: show.name,
+    subtitle: show.originalName,
+    data: show,
+  };
+}
+
+function mapEpisodeToAutocompleteItem(
+  episode: Api.EpisodeSearchResult
+): AutocompleteItem<Api.EpisodeSearchResult> {
+  return {
+    id: episode.id,
+    title: episode.name || '(No title)',
+    subtitle: EpisodeUtils.seasonAndNumberDisplay(episode),
+    data: episode,
+  };
+}
 
 @Component({
   components: { BasicDialog, PopupHeader, ProgressOverlay, TextInput, AutocompleteTextInput },
@@ -91,10 +112,10 @@ export default class EditEpisodeDialog extends Vue {
   @Action() showDialog!: (dialog?: string) => void;
   @Action() stopEditing!: (discard: boolean) => void;
 
-  public selectedShowOption: AutocompleteItem = {
+  public selectedShowOption: AutocompleteItem<Api.ShowSearchResult> = {
     title: '',
   };
-  public selectedEpisodeOption: AutocompleteItem = {
+  public selectedEpisodeOption: AutocompleteItem<Api.EpisodeSearchResult> = {
     title: '',
   };
 
@@ -123,17 +144,9 @@ export default class EditEpisodeDialog extends Vue {
     const episodeUrl = this.episodeUrl;
     if (episodeUrl) {
       if (episodeUrl?.episode.show) {
-        this.selectedShowOption = {
-          id: episodeUrl.episode.show.id,
-          title: episodeUrl.episode.show.name,
-          subtitle: episodeUrl.episode.show.originalName,
-        };
+        this.selectedShowOption = mapShowToAutocompleteItem(episodeUrl.episode.show);
       }
-      this.selectedEpisodeOption = {
-        id: episodeUrl.episode.id,
-        title: episodeUrl.episode.name ?? '',
-        subtitle: EpisodeUtils.seasonAndNumberFromEpisodeUrl(episodeUrl),
-      };
+      this.selectedEpisodeOption = mapEpisodeToAutocompleteItem(episodeUrl.episode);
     } else if (this.inferredEpisodeInfo) {
       // Show loading and fetch the show & episode
       this.fetchingIds = RequestState.LOADING;
@@ -151,20 +164,12 @@ export default class EditEpisodeDialog extends Vue {
     this.editableAbsoluteNumber = String(episodeUrl?.episode.absoluteNumber ?? '');
   }
 
-  public get showSearchListItems() {
-    return this.searchShowsResult.map(item => ({
-      id: item.id,
-      title: item.name,
-      subtitle: item.originalName,
-    }));
+  public get showSearchListItems(): AutocompleteItem<Api.ShowSearchResult>[] {
+    return this.searchShowsResult.map(mapShowToAutocompleteItem);
   }
 
-  public get episodeSearchListItems() {
-    return this.searchEpisodesResult.map(item => ({
-      id: item.id,
-      title: item.name || '(No title)',
-      subtitle: EpisodeUtils.seasonAndNumberDisplay(item),
-    }));
+  public get episodeSearchListItems(): AutocompleteItem<Api.EpisodeSearchResult>[] {
+    return this.searchEpisodesResult.map(mapEpisodeToAutocompleteItem);
   }
 
   public get shouldDisableEpisode(): boolean {
@@ -193,12 +198,9 @@ export default class EditEpisodeDialog extends Vue {
       const matchingShows = possibleShows.filter(
         show => show.name === this.inferredEpisodeInfo!.show
       );
-      if (matchingShows.length === 0) throw new Error('No matching episodes');
+      if (matchingShows.length === 0) throw new Error('No matching shows');
       const firstShow = matchingShows.shift()!;
-      this.selectedShowOption = {
-        id: firstShow.id,
-        title: firstShow.name,
-      };
+      this.selectedShowOption = mapShowToAutocompleteItem(firstShow);
       // this.otherShowOptions = matchingShows;
 
       try {
@@ -208,10 +210,7 @@ export default class EditEpisodeDialog extends Vue {
         );
         if (matchingEpisodes.length === 0) throw new Error('No matching episodes');
         const firstEpisode = matchingEpisodes.shift()!;
-        this.selectedEpisodeOption = {
-          id: firstEpisode.id,
-          title: firstEpisode.name || '',
-        };
+        this.selectedEpisodeOption = mapEpisodeToAutocompleteItem(firstEpisode);
         // this.otherEpisodeOptions = matchingEpisodes;
       } catch (err) {
         this.selectedEpisodeOption = {
@@ -228,9 +227,14 @@ export default class EditEpisodeDialog extends Vue {
         title: this.inferredEpisodeInfo!.name,
       };
     } finally {
-      this.editableSeasonNumber = this.inferredEpisodeInfo!.season ?? '';
-      this.editableEpisodeNumber = this.inferredEpisodeInfo!.number ?? '';
-      this.editableAbsoluteNumber = this.inferredEpisodeInfo!.absoluteNumber ?? '';
+      this.editableSeasonNumber =
+        this.selectedEpisodeOption.data?.season ?? this.inferredEpisodeInfo!.season ?? '';
+      this.editableEpisodeNumber =
+        this.selectedEpisodeOption.data?.number ?? this.inferredEpisodeInfo!.number ?? '';
+      this.editableAbsoluteNumber =
+        this.selectedEpisodeOption.data?.absoluteNumber ??
+        this.inferredEpisodeInfo!.absoluteNumber ??
+        '';
     }
     this.fetchingIds = RequestState.SUCCESS;
   }
@@ -278,11 +282,24 @@ export default class EditEpisodeDialog extends Vue {
     const number = this.editableEpisodeNumber.trim() || undefined;
     const absoluteNumber = this.editableAbsoluteNumber.trim() || undefined;
     const season = this.editableSeasonNumber.trim() || undefined;
+    const duration = global.getVideo()?.duration;
+    const baseDuration = this.selectedEpisodeOption?.data?.baseDuration;
+    let timestampsOffset: number | undefined;
+    if (baseDuration != null) {
+      timestampsOffset = Utils.computeTimestampsOffset(baseDuration, duration);
+    }
+
     const episodeData: Api.InputEpisode = {
       name: episodeName,
       number,
       season,
       absoluteNumber,
+      baseDuration,
+    };
+    const episodeUrlData: Api.InputEpisodeUrl = {
+      url: this.tabUrl,
+      duration: duration,
+      timestampsOffset,
     };
 
     // Creating Data
@@ -298,7 +315,7 @@ export default class EditEpisodeDialog extends Vue {
         },
         episodeUrl: {
           create: true,
-          data: { url: this.tabUrl },
+          data: episodeUrlData,
         },
       });
       return;
@@ -315,7 +332,7 @@ export default class EditEpisodeDialog extends Vue {
         },
         episodeUrl: {
           create: true,
-          data: { url: this.tabUrl },
+          data: episodeUrlData,
         },
       });
       return;
@@ -336,7 +353,7 @@ export default class EditEpisodeDialog extends Vue {
         },
         episodeUrl: {
           create: true,
-          data: { url: this.tabUrl },
+          data: episodeUrlData,
         },
       });
       return;

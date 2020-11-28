@@ -17,6 +17,7 @@ export default {
   searchEpisodes: '@episodes/searchEpisodes' as const,
   inferEpisodeInfo: '@episodes/inferEpisodeInfo' as const,
   fetchThirdPartyEpisode: '@episodes/getThirdPartyEpisode' as const,
+  addMissingDurations: '@episodes/addMissingDurations' as const,
 
   updateTimestamps: '@timestamps/updateTimestamps' as const,
 };

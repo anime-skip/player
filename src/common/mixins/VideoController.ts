@@ -1,4 +1,5 @@
 import { Vue, Component } from 'vue-property-decorator';
+import Utils from '../utils/Utils';
 
 @Component
 export default class VideoControllerMixin extends Vue {
@@ -31,10 +32,12 @@ export default class VideoControllerMixin extends Vue {
   }
 
   addTime(seconds: number): void {
-    global.getVideo().currentTime += seconds;
+    const video = global.getVideo();
+    video.currentTime = Utils.boundedNumber(video.currentTime + seconds, [0, video.duration]);
   }
   setCurrentTime(seconds: number): void {
-    global.getVideo().currentTime = seconds;
+    const video = global.getVideo();
+    video.currentTime = Utils.boundedNumber(seconds, [0, video.duration]);
   }
   getCurrentTime(): number {
     return global.getVideo().currentTime;

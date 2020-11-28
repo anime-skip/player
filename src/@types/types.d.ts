@@ -1,3 +1,5 @@
+declare type Service = 'vrv' | 'funimation' | 'example';
+
 declare interface LoginManualPayload {
   username: string;
   password: string;
@@ -71,10 +73,11 @@ type BrowserType =
   | 'edgechromium'
   | 'unsupported';
 
-interface AutocompleteItem {
+interface AutocompleteItem<T = any> {
   id?: string;
   title: string;
   subtitle?: string;
+  data?: T;
 }
 
 /**

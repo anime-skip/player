@@ -61,6 +61,9 @@ export default as<
   [types.setHasSkippedFromZero](state, hasSkippedFromZero) {
     state.hasSkippedFromZero = hasSkippedFromZero;
   },
+  [types.setDuration](state, duration) {
+    state.duration = duration;
+  },
 
   // Storage
   [types.restoreState](
