@@ -227,9 +227,14 @@ export default class EditEpisodeDialog extends Vue {
         title: this.inferredEpisodeInfo!.name,
       };
     } finally {
-      this.editableSeasonNumber = this.inferredEpisodeInfo!.season ?? '';
-      this.editableEpisodeNumber = this.inferredEpisodeInfo!.number ?? '';
-      this.editableAbsoluteNumber = this.inferredEpisodeInfo!.absoluteNumber ?? '';
+      this.editableSeasonNumber =
+        this.selectedEpisodeOption.data?.season ?? this.inferredEpisodeInfo!.season ?? '';
+      this.editableEpisodeNumber =
+        this.selectedEpisodeOption.data?.number ?? this.inferredEpisodeInfo!.number ?? '';
+      this.editableAbsoluteNumber =
+        this.selectedEpisodeOption.data?.absoluteNumber ??
+        this.inferredEpisodeInfo!.absoluteNumber ??
+        '';
     }
     this.fetchingIds = RequestState.SUCCESS;
   }
