@@ -2,6 +2,7 @@ import Browser from '@/common/utils/Browser';
 import { ActionContext, Action } from 'vuex';
 import {
   persistedKeys,
+  SUPPORTED_THIRD_PARTY_SERVICES,
   TIMESTAMP_TYPE_NOT_SELECTED,
   UNAUTHORIZED_ERROR_MESSAGE,
 } from '@/common/utils/Constants';
@@ -306,7 +307,13 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
         name,
         showName
       );
-      const episodesWithTimestamps = episodes.filter(episode => episode.timestamps.length > 0);
+      const episodesWithTimestamps = episodes.filter(episode => {
+        const hasTimestamps = episode.timestamps.length > 0;
+        const isFromSupportedService = SUPPORTED_THIRD_PARTY_SERVICES[global.service].includes(
+          episode.source
+        );
+        return hasTimestamps && isFromSupportedService;
+      });
       if (episodesWithTimestamps.length > 0) {
         const episode = episodesWithTimestamps[0];
         const timestamps = episode.timestamps.map<Api.AmbigousTimestamp>(timestamp => ({
@@ -318,7 +325,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       }
       commit(mutationTypes.episodeRequestState, RequestState.SUCCESS);
     } catch (err) {
-      console.warn('actions.fetchEpisodeByUrl', err);
+      console.warn('actions.fetchThirdPartyEpisode', err);
       commit(mutationTypes.setEpisodeUrl, undefined);
     }
   },

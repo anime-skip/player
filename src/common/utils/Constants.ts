@@ -260,3 +260,12 @@ export const SKIPPABLE_PREFERENCES: SkippablePreference[] = [
     help: 'A short preview of what is to come in the next episode',
   },
 ];
+
+export const SUPPORTED_THIRD_PARTY_SERVICES: Record<
+  Service,
+  Array<Api.TimestampSource | undefined>
+> = {
+  example: ['ANIME_SKIP', 'BETTER_VRV'],
+  vrv: ['ANIME_SKIP', 'BETTER_VRV'],
+  funimation: ['ANIME_SKIP'],
+};

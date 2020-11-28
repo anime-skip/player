@@ -18,7 +18,7 @@ declare interface ServiceHelpers {
   getPlayerOptions: () => PlayerOptionGroup[] | undefined;
   onVideoChanged(callback: (video: HTMLVideoElement) => void): void;
   Api: Api.Implementation;
-  service: 'vrv' | 'funimation' | 'example' | undefined;
+  service: Service;
   serviceDisplayName: 'Anime Skip Example' | 'VRV' | 'Funimation' | undefined;
 
   // keyboard-blocker.ts
