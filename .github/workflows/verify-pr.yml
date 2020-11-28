@@ -43,6 +43,6 @@ jobs:
         env:
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.ANIME_SKIP_PACKAGES_TOKEN  }}
-      - run: yarn build
+      - run: yarn compile
       - run: yarn lint
-      # - run: yarn test:unit
+      - run: yarn test
