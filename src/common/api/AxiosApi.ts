@@ -81,7 +81,7 @@ const showSearchData = `id name originalName`;
 
 const showData = `id name originalName website image`;
 
-const episodeSearchData = `id name season number absoluteNumber`;
+const episodeSearchData = `id name season number absoluteNumber baseDuration`;
 
 const episodeUrlNoEpisodeData = `
   url
