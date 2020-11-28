@@ -330,7 +330,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     }
   },
   async [types.addMissingDurations]({ commit, state, getters }, duration: number) {
-    if (duration === 0 || !getters.isLoggedIn) return;
+    if (!getters.isLoggedIn || !duration) return;
 
     const episodeUrl = state.episodeUrl;
     const episode = episodeUrl?.episode;
