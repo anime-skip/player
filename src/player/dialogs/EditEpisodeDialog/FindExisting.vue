@@ -1,6 +1,6 @@
 <template>
   <form class="FindExisting">
-    <div v-if="hasSuggestions" class="suggestions">
+    <div v-if="isShowingSuggestions" class="suggestions">
       <p class="header horizontal-margin">{{ suggestionsHeader }}</p>
       <div class="list-row">
         <div class="suggestion-list">
@@ -27,43 +27,64 @@
         </div>
         <div class="gradient-borders" />
       </div>
-      <p class="header horizontal-margin">Manual Search</p>
     </div>
-    <AutocompleteTextInput
-      class="horizontal-margin"
-      label="Enter the show name..."
-      v-model="show"
-      :options="showOptions"
-      @select="onSelectShow"
-      @search="searchShows"
-    />
-    <AutocompleteTextInput
-      v-if="isExistingShow"
-      ref="episode"
-      class="row horizontal-margin"
-      label="Enter the episode name..."
-      v-model="episode"
-      :options="episodeOptions"
-      @select="onSelectEpisode"
-      @search="searchEpisodes"
-    />
+    <div v-else>
+      <p class="header horizontal-margin">Manual Search</p>
+      <AutocompleteTextInput
+        class="horizontal-margin"
+        label="Enter the show name..."
+        v-model="show"
+        :options="showOptions"
+        @select="onSelectShow"
+        @search="searchShows"
+      />
+      <AutocompleteTextInput
+        v-if="isExistingShow"
+        ref="episode"
+        class="row horizontal-margin"
+        label="Enter the episode name..."
+        v-model="episode"
+        :options="episodeOptions"
+        @select="onSelectEpisode"
+        @search="searchEpisodes"
+      />
+    </div>
     <div class="buttons row horizontal-margin">
+      <div v-if="!isShowingSuggestions">
+        <button
+          v-if="shouldCreateNew"
+          class="button clickable margin-left"
+          @click.stop.prevent="onClickCreateNew"
+        >
+          Create New
+        </button>
+        <button
+          v-else
+          class="button clickable margin-left"
+          :class="{ disabled: isSaveDisabled }"
+          :disabled="isSaveDisabled"
+          @click.stop.prevent="onClickSave"
+        >
+          Save Episode
+        </button>
+      </div>
       <button
-        v-if="shouldCreateNew"
-        class="button clickable"
-        @click.stop.prevent="onClickCreateNew"
+        v-if="isShowingSuggestions"
+        class="button clickable dark margin-left"
+        @click.stop.prevent="toggleSuggestions(false)"
       >
-        Create New
+        Manual Search
       </button>
       <button
         v-else
-        class="button clickable"
-        :class="{ disabled: isSaveDisabled }"
-        :disabled="isSaveDisabled"
-        @click.stop.prevent="onClickSave"
+        class="button clickable dark margin-left"
+        :class="{ disabled: !hasSuggestions }"
+        :disabled="!hasSuggestions"
+        @click.stop.prevent="toggleSuggestions(true)"
       >
-        Save Episode
+        {{ suggestionsHeader }}
       </button>
+      <div class="space" />
       <button class="button clickable dark" @click.stop.prevent="hideDialog">Cancel</button>
     </div>
   </form>
@@ -94,6 +115,7 @@ export default vueMixins(ShowAutocompleteMixin, EpisodeAutocompleteMixin).extend
       episode: this.prefill?.episode || {
         title: '',
       },
+      isShowingSuggestions: this.suggestions.length > 0,
     };
   },
   computed: {
@@ -142,6 +164,11 @@ export default vueMixins(ShowAutocompleteMixin, EpisodeAutocompleteMixin).extend
       return !!this.suggestions?.length;
     },
   },
+  watch: {
+    suggestions() {
+      this.isShowingSuggestions = this.suggestions.length > 0;
+    },
+  },
   methods: {
     hideDialog(): void {
       this.$store.dispatch(actionTypes.showDialog, undefined);
@@ -162,6 +189,9 @@ export default vueMixins(ShowAutocompleteMixin, EpisodeAutocompleteMixin).extend
         absoluteNumber: this.prefill?.absoluteNumber,
       };
       this.$emit('createNew', prefill);
+    },
+    toggleSuggestions(isShowingSuggestions: boolean): void {
+      this.isShowingSuggestions = isShowingSuggestions;
     },
     onClickSave(): void {
       const show = this.show.data;
@@ -232,7 +262,7 @@ export default vueMixins(ShowAutocompleteMixin, EpisodeAutocompleteMixin).extend
           left: 0;
           width: 16px;
           top: 0;
-          bottom: 12px;
+          bottom: 0;
           background: rgb(0, 0, 0);
           background: linear-gradient(
             90deg,
@@ -246,7 +276,7 @@ export default vueMixins(ShowAutocompleteMixin, EpisodeAutocompleteMixin).extend
           right: 0;
           width: 16px;
           top: 0;
-          bottom: 12px;
+          bottom: 0;
           background: rgb(0, 0, 0);
           background: linear-gradient(
             270deg,
@@ -261,12 +291,11 @@ export default vueMixins(ShowAutocompleteMixin, EpisodeAutocompleteMixin).extend
       display: flex;
       flex-direction: row;
       box-sizing: border-box;
-      margin-bottom: 16px;
       overflow-x: auto;
 
       .suggestion-spacing {
-        padding-left: 8px;
-        padding-bottom: 8px;
+        padding-left: 16px;
+        padding-bottom: 12px;
 
         &:first-child {
           padding-left: 16px;
@@ -318,8 +347,12 @@ export default vueMixins(ShowAutocompleteMixin, EpisodeAutocompleteMixin).extend
     display: flex;
     flex-direction: row-reverse;
 
-    button {
+    .margin-left {
       margin-left: 16px;
+    }
+
+    .space {
+      flex-grow: 1;
     }
   }
 }
