@@ -98,20 +98,20 @@ module.exports = async function chromePublish(buildVars, env) {
 
   if (buildVars.DO_CHROME) {
     await run(`Uploading and submitting ${CODE}chrome.zip${RESET} for review`, async () => {
-      // Get a new access token\
-      const response = await tryApiCall(() =>
-        axios.post('https://oauth2.googleapis.com/token', {
-          /* eslint-disable @typescript-eslint/camelcase */
-          client_id: env.CHROME_CLIENT_ID,
-          client_secret: env.CHROME_CLIENT_SECRET,
-          refresh_token: env.CHROME_REFRESH_TOKEN,
-          grant_type: 'refresh_token',
-          redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
-          /* eslint-enable @typescript-eslint/camelcase */
-        })
-      );
-      console.log('\n\nResponse: ' + JSON.safeStringify(response.toJSON()) + '\n\n');
-      const accessToken = response.data.access_token;
+      // Get a new access token
+      const accessToken = (
+        await tryApiCall(() =>
+          axios.post('https://oauth2.googleapis.com/token', {
+            /* eslint-disable @typescript-eslint/camelcase */
+            client_id: env.CHROME_CLIENT_ID,
+            client_secret: env.CHROME_CLIENT_SECRET,
+            refresh_token: env.CHROME_REFRESH_TOKEN,
+            grant_type: 'refresh_token',
+            redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
+            /* eslint-enable @typescript-eslint/camelcase */
+          })
+        )
+      ).data.access_token;
       const Authorization = `Bearer ${accessToken}`;
 
       // Upload the zip as a draft
