@@ -112,6 +112,10 @@ export default class AutocompleteTextInput extends Vue {
     this.highlightedIndex = -1;
   }
 
+  public focus() {
+    (this.$refs.input as HTMLInputElement).focus();
+  }
+
   public get shouldShowSuggestions(): boolean {
     return !this.wasEscPressed && (this.isFocused || this.isMouseOver);
   }

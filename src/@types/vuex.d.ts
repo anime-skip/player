@@ -29,7 +29,8 @@ declare interface VuexState {
 
   searchEpisodesResult: Api.EpisodeSearchResult[];
   searchEpisodesRequestState: RequestState;
-  episodeUrl: Api.EpisodeUrl | undefined;
+  episodeUrl: Api.EpisodeUrlNoEpisode | undefined;
+  episode: Api.Episode | undefined;
   inferredEpisodeInfo: InferredEpisodeInfo | undefined;
   episodeRequestState: RequestState;
 

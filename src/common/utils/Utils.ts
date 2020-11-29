@@ -1,3 +1,6 @@
+import { Store } from 'vuex';
+import actionTypes from '../store/actionTypes';
+
 export default class Utils {
   /**
    * @param currentTime The time to begin looking for timestamps after
@@ -332,5 +335,13 @@ export default class Utils {
     if (lowBound != null && value < lowBound) return lowBound;
     if (highBound != null && value > highBound) return highBound;
     return value;
+  }
+
+  public static async apiAction<R, A extends unknown[], F extends (...args: A) => Promise<R>>(
+    store: Store<unknown>,
+    apiCall: F,
+    ...args: A
+  ): Promise<R> {
+    return await store.dispatch(actionTypes.apiCall, { apiCall, args });
   }
 }

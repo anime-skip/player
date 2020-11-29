@@ -75,7 +75,7 @@ interface SectionData {
 export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShortcutMixin) {
   @Prop(Boolean) public isFlipped?: boolean;
   @Prop(Number) public currentTime!: number;
-  @Prop(Number) public duration!: number;
+  @Prop(Number) public duration!: Readonly<number>;
   @Prop(Function) public updateTime!: (newTime: number, updatePlayer?: boolean) => void;
   @Prop(Array) public timestamps!: Api.Timestamp[];
 
@@ -99,6 +99,10 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
   @Mutation() setHasSkippedFromZero!: (newValue: boolean) => void;
   @Mutation() toggleEditMode!: (isEditing: boolean) => void;
 
+  public mounted(): void {
+    this.updateSections();
+  }
+
   public get normalizedTime(): number {
     return Math.max(0, Math.min(100, (this.currentTime / this.duration) * 100));
   }
@@ -106,6 +110,7 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
   @Watch('currentTime')
   public onChangeCurrentTime(newTime: number, oldTime: number): void {
     this.completedSections = this.getCompletedSections();
+    console.debug('Sections:', { completed: this.completedSections, all: this.sections });
 
     // Do nothing
     const currentTimestamp = Utils.previousTimestamp(oldTime, this.timestamps, undefined);

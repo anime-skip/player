@@ -12,6 +12,7 @@
     <div class="gradient" />
     <div class="content">
       <Timeline
+        v-if="!!duration"
         :isFlipped="!playerState.isPaused && !isActive"
         :currentTime="currentTime"
         :duration="duration"
@@ -114,7 +115,6 @@ export default class ToolBar extends Mixins(VideoControllerMixin, KeyboardShortc
   @Getter() public preferences?: Api.Preferences;
   @Getter() public activeDialog?: string;
   @Getter() public isEditing!: boolean;
-  @Getter() public episodeUrl!: boolean;
   @Getter() public browserType!: BrowserType;
   @Getter() public activeTimestamp?: Api.AmbigousTimestamp;
   @Getter() public isSavingTimestamps!: boolean;

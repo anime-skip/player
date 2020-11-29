@@ -29,6 +29,7 @@ export const initialState: VuexState = {
   searchEpisodesResult: [],
   searchEpisodesRequestState: RequestState.NOT_REQUESTED,
   episodeUrl: undefined,
+  episode: undefined,
   inferredEpisodeInfo: undefined,
   episodeRequestState: RequestState.NOT_REQUESTED,
 

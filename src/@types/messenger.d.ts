@@ -71,7 +71,7 @@ interface ApiMessageResponseMap extends MessageResponseMap<ApiMessageTypes> {
   searchEpisodes: Api.EpisodeSearchResult[];
   updateEpisode: Api.Episode;
 
-  createEpisodeUrl: Api.EpisodeUrl;
+  createEpisodeUrl: Api.EpisodeUrlNoEpisode;
   deleteEpisodeUrl: Api.EpisodeUrlNoEpisode;
   fetchEpisodeByUrl: Api.EpisodeUrl;
   fetchEpisodeByName: Api.ThirdPartyEpisode[];
