@@ -48,9 +48,9 @@ export default class EpisodeInfo extends Mixins(VideoControllerMixin) {
 
   public get isConnectButtonVisible(): boolean {
     const areDialogsHidden = this.activeDialog == null;
-    const canEdit = this.isLoggedIn && !this.episodeUrl;
+    const episodeUrlIsMissing = !this.episodeUrl;
     const videoIsLoaded = this.duration != null && this.duration > 0;
-    return canEdit && areDialogsHidden && videoIsLoaded;
+    return episodeUrlIsMissing && areDialogsHidden && videoIsLoaded;
   }
 
   public get isLoadingEpisodeInfo(): boolean {
@@ -71,7 +71,11 @@ export default class EpisodeInfo extends Mixins(VideoControllerMixin) {
 
   public showEditDialog() {
     this.pause();
-    this.showDialog('EditEpisodeDialog');
+    if (this.isLoggedIn) {
+      this.showDialog('EditEpisodeDialog');
+    } else {
+      this.showDialog('AccountDialog');
+    }
   }
 }
 </script>
