@@ -73,7 +73,7 @@ export default vueMixins(ShowAutocompleteMixin).extend({
         name: this.name.trim(),
         season: this.season.trim(),
         number: this.number.trim(),
-        absoluteNumber: this.absoluteNumber,
+        absoluteNumber: this.absoluteNumber.trim(),
         baseDuration: duration,
       };
       const episodeUrl: Api.InputEpisodeUrl = {
@@ -82,37 +82,27 @@ export default vueMixins(ShowAutocompleteMixin).extend({
         timestampsOffset: 0,
       };
 
-      if (this.show.data == null) {
-        await this.$store.dispatch(actionTypes.createEpisodeData, {
-          show: {
-            create: true,
-            name: this.show.title,
-          },
-          episode: {
-            create: true,
-            data: episode,
-          },
-          episodeUrl: {
-            create: true,
-            data: episodeUrl,
-          },
-        });
-      } else {
-        await this.$store.dispatch(actionTypes.createEpisodeData, {
-          show: {
-            create: false,
-            showId: this.show.data.id,
-          },
-          episode: {
-            create: true,
-            data: episode,
-          },
-          episodeUrl: {
-            create: true,
-            data: episodeUrl,
-          },
-        });
-      }
+      const payload: CreateEpisodeDataPayload = {
+        show:
+          this.show.data == null
+            ? {
+                create: true,
+                name: this.show.title,
+              }
+            : {
+                create: false,
+                showId: this.show.data.id,
+              },
+        episode: {
+          create: true,
+          data: episode,
+        },
+        episodeUrl: {
+          create: true,
+          data: episodeUrl,
+        },
+      };
+      await this.$store.dispatch(actionTypes.createEpisodeData, payload);
 
       this.hideDialog();
     },

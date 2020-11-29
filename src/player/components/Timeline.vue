@@ -110,7 +110,6 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
   @Watch('currentTime')
   public onChangeCurrentTime(newTime: number, oldTime: number): void {
     this.completedSections = this.getCompletedSections();
-    console.debug('Sections:', { completed: this.completedSections, all: this.sections });
 
     // Do nothing
     const currentTimestamp = Utils.previousTimestamp(oldTime, this.timestamps, undefined);

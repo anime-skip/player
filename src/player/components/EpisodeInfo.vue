@@ -47,10 +47,10 @@ export default class EpisodeInfo extends Mixins(VideoControllerMixin) {
   }
 
   public get isConnectButtonVisible(): boolean {
-    const shouldShowBehindActiveDialog = [undefined, 'TimestampsPanel'].includes(this.activeDialog);
+    const areDialogsHidden = this.activeDialog == null;
     const canEdit = this.isLoggedIn && !this.episodeUrl;
     const videoIsLoaded = this.duration != null && this.duration > 0;
-    return canEdit && shouldShowBehindActiveDialog && videoIsLoaded;
+    return canEdit && areDialogsHidden && videoIsLoaded;
   }
 
   public get isLoadingEpisodeInfo(): boolean {

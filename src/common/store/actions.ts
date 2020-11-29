@@ -178,7 +178,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
   // Episodes
   async [types.linkEpisodeUrl](
     { state, commit, dispatch },
-    episode: Api.EpisodeSearchResult
+    { episode, onSuccess }: { episode: Api.EpisodeSearchResult; onSuccess?: () => void }
   ): Promise<void> {
     commit(mutationTypes.episodeRequestState, RequestState.LOADING);
 
@@ -202,6 +202,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     try {
       await callApi(commit, global.Api.createEpisodeUrl, episodeUrl, episode.id);
       commit(mutationTypes.episodeRequestState, RequestState.SUCCESS);
+      onSuccess?.();
       await dispatch(types.fetchEpisodeByUrl, episodeUrl.url);
     } catch (err) {
       console.warn('Failed to create new EpisodeUrl', err);
@@ -265,7 +266,10 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
   },
   async [types.createEpisodeFromThirdParty](
     { state, commit, dispatch },
-    thirdPartyEpisode: Api.ThirdPartyEpisode
+    {
+      thirdPartyEpisode,
+      onSuccess,
+    }: { thirdPartyEpisode: Api.ThirdPartyEpisode; onSuccess?: () => void }
   ) {
     commit(mutationTypes.episodeRequestState, RequestState.LOADING);
     try {
@@ -335,6 +339,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
           episode: state.episode,
         });
       }
+      onSuccess?.();
       commit(mutationTypes.episodeRequestState, RequestState.SUCCESS);
     } catch (err) {
       console.warn('Failed to create episode from third party data', err);
@@ -479,11 +484,8 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
           }
         );
       }
-      const newEpisodeUrl: Api.EpisodeUrl = {
-        ...newEpisodeUrlNoEpisode,
-        episode: newEpisode,
-      };
-      commit(mutationTypes.setEpisodeUrl, newEpisodeUrl);
+      commit(mutationTypes.setEpisodeUrl, newEpisodeUrlNoEpisode);
+      commit(mutationTypes.setEpisode, newEpisode);
     }
   },
 

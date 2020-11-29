@@ -89,12 +89,6 @@ export default Vue.extend({
         absoluteNumber: this.inferredInfo?.absoluteNumber,
       };
       this.suggestions = [];
-      if (this.inferredInfo?.name == null || this.inferredInfo.show == null) {
-        console.debug('Not loading suggestions since inferred name/show was missing', {
-          inferredInfo: this.inferredInfo,
-        });
-        return;
-      }
 
       this.loadSuggestions();
       this.loadDefaultShowOption();
@@ -109,12 +103,12 @@ export default Vue.extend({
       }
       this.isLoadingSuggestions = true;
       try {
-        const suggestions = (await Utils.apiAction(
+        const suggestions = await Utils.apiAction(
           this.$store,
           global.Api.fetchEpisodeByName,
           this.inferredInfo.name,
           this.inferredInfo.show
-        )) as Api.ThirdPartyEpisode[];
+        );
         this.isLoadingSuggestions = false;
         this.suggestions = suggestions;
         if (suggestions.length === 0) {
@@ -135,11 +129,7 @@ export default Vue.extend({
       let showResult: Api.ShowSearchResult | undefined;
       this.isLoadingDefaultShow = true;
       try {
-        const searchResults = (await Utils.apiAction(
-          this.$store,
-          global.Api.searchShows,
-          showName
-        )) as Api.ShowSearchResult[];
+        const searchResults = await Utils.apiAction(this.$store, global.Api.searchShows, showName);
 
         const results = searchResults.filter(result => result.name === showName);
         if (results.length === 1) {
@@ -154,16 +144,19 @@ export default Vue.extend({
       if (showResult != null) {
         const episodeResult = await this.loadDefaultEpisodeOption(showResult.id);
         const newShow = Mappers.showSearchResultToAutocompleteItem(showResult);
-        const newEpisode =
-          episodeResult == null
-            ? this.prefill.episode
-            : Mappers.episodeSearchResultToAutocompleteItem(episodeResult);
 
-        this.prefill = {
-          ...this.prefill,
-          show: newShow,
-          episode: newEpisode,
-        };
+        if (episodeResult == null) {
+          this.prefill = {
+            ...this.prefill,
+            show: newShow,
+          };
+        } else {
+          this.prefill = {
+            ...this.prefill,
+            show: newShow,
+            episode: Mappers.episodeSearchResultToAutocompleteItem(episodeResult),
+          };
+        }
       }
       this.isLoadingDefaultShow = false;
     },
@@ -177,12 +170,12 @@ export default Vue.extend({
       let episodeResult: Api.EpisodeSearchResult | undefined;
       this.isLoadingDefaultEpisode = true;
       try {
-        const searchResults = (await Utils.apiAction(
+        const searchResults = await Utils.apiAction(
           this.$store,
           global.Api.searchEpisodes,
           episodeName,
           showId
-        )) as Api.EpisodeSearchResult[];
+        );
 
         const results = searchResults.filter(result => result.name === episodeName);
         if (results.length === 1) {

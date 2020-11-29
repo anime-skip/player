@@ -337,9 +337,10 @@ export default class Utils {
     return value;
   }
 
-  public static async apiAction<R, A extends unknown[], F extends (...args: A) => Promise<R>>(
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  public static async apiAction<A extends any[], R>(
     store: Store<unknown>,
-    apiCall: F,
+    apiCall: (...args: A) => Promise<R>,
     ...args: A
   ): Promise<R> {
     return await store.dispatch(actionTypes.apiCall, { apiCall, args });

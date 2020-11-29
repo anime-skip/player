@@ -132,7 +132,7 @@ a {
 } */
 
 .clickable.down,
-.clickable:hover:active,
+.clickable:active:hover,
 .focusable:focus-within,
 .focusable:focus {
   transform: translateY(0);

@@ -1,6 +1,6 @@
 <template>
   <form class="FindExisting">
-    <div v-if="isSuggestions" class="suggestions">
+    <div v-if="hasSuggestions" class="suggestions">
       <p class="header horizontal-margin">{{ suggestionsHeader }}</p>
       <div class="list-row">
         <div class="suggestion-list">
@@ -73,7 +73,6 @@
 import { PropOptions } from 'vue';
 import AutocompleteTextInput from '@/common/components/AutocompleteTextInput.vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
-import Mappers from '@/common/utils/Mappers';
 import actionTypes from '@/common/store/actionTypes';
 import EpisodeUtils from '@/common/utils/EpisodeUtils';
 import { TIMESTAMP_SOURCES } from '@/common/utils/Constants';
@@ -139,14 +138,8 @@ export default vueMixins(ShowAutocompleteMixin, EpisodeAutocompleteMixin).extend
     isSaveDisabled(): boolean {
       return this.show.data == null || this.episode.data == null;
     },
-    isSuggestions(): boolean {
+    hasSuggestions(): boolean {
       return !!this.suggestions?.length;
-    },
-    isExistingEpisode(): boolean {
-      return this.show.data != null;
-    },
-    episodeOptions(): AutocompleteItem<Api.EpisodeSearchResult>[] {
-      return this.episodeSearchResults.map(Mappers.episodeSearchResultToAutocompleteItem);
     },
   },
   methods: {
@@ -185,15 +178,19 @@ export default vueMixins(ShowAutocompleteMixin, EpisodeAutocompleteMixin).extend
     },
     async linkToExistingEpisode(episode: Api.EpisodeSearchResult): Promise<void> {
       try {
-        await this.$store.dispatch(actionTypes.linkEpisodeUrl, episode);
-        this.hideDialog();
+        await this.$store.dispatch(actionTypes.linkEpisodeUrl, {
+          episode,
+          onSuccess: this.hideDialog,
+        });
       } catch (err) {
         // do nothing
       }
     },
     async createFromThirdParty(thirdPartyEpisode: Api.ThirdPartyEpisode) {
-      await this.$store.dispatch(actionTypes.createEpisodeFromThirdParty, thirdPartyEpisode);
-      this.hideDialog();
+      await this.$store.dispatch(actionTypes.createEpisodeFromThirdParty, {
+        thirdPartyEpisode,
+        onSuccess: this.hideDialog,
+      });
     },
   },
 });

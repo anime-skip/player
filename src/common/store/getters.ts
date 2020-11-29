@@ -152,10 +152,8 @@ export default as<GetterTree<VuexState, VuexState>>({
   // Timestamps
   timestamps({ timestamps, episodeUrl, episode, duration }): Api.AmbigousTimestamp[] {
     // Find the offset
-    let timestampsOffset: number | undefined;
-    if (episodeUrl) {
-      timestampsOffset = episodeUrl.timestampsOffset;
-    } else if (episode?.baseDuration != null && duration != null) {
+    let timestampsOffset = episodeUrl?.timestampsOffset;
+    if (timestampsOffset == null && episode?.baseDuration != null && duration != null) {
       timestampsOffset = Utils.computeTimestampsOffset(episode.baseDuration, duration);
     }
 
@@ -169,6 +167,7 @@ export default as<GetterTree<VuexState, VuexState>>({
     });
     if (duration == null) return offsetTimestamps;
 
+    // Remove out of bounds timestamps
     const offsetBoundedTimestamps = offsetTimestamps.filter(
       timestamp => timestamp.at <= duration && timestamp.at >= 0
     );

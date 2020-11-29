@@ -63,11 +63,6 @@ interface CreateEpisodeDataPayload {
       };
 }
 
-type CreateEpisodeDataResults = {
-  episode: Api.Episode;
-  episodeUrl: Api.EpisodeUrlNoEpisode;
-};
-
 type BrowserType =
   | 'chrome'
   | 'firefox'
