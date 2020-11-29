@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Mappers from '../utils/Mappers';
 import Utils from '../utils/Utils';
-import AutocompleteTextInput from '@/common/components/AutocompleteTextInput.vue';
 
 const ShowAutocompleteMixin = Vue.extend({
   data() {
@@ -27,12 +26,12 @@ const ShowAutocompleteMixin = Vue.extend({
       this.show = item;
       const timeout = setTimeout(() => {
         clearTimeout(timeout);
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         clearInterval(interval);
       }, 100);
       const interval = setInterval(() => {
         if (this.$refs.episode != null) {
-          // @ts-expect-error: Can't resolve vue import type
-          (this.$refs.episode as AutocompleteTextInput).focus?.();
+          (this.$refs.episode as HTMLInputElement).focus?.();
           clearTimeout(timeout);
           clearInterval(interval);
         }
