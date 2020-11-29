@@ -99,12 +99,15 @@ async function skipForDryRuns(runner) {
 
 /**
  * @param {string} command The bash command to run
- * @param {any}    env The environment variables it has access to
+ * @param {any}    env The custom environment variables it has access to
  * @returns {Promise<void>}
  */
 async function bash(command, env) {
   try {
-    execSync(`${command} 2>&1`, { cwd: path.join(__dirname, '..'), env });
+    execSync(`${command} 2>&1`, {
+      cwd: path.join(__dirname, '..'),
+      env: { ...process.env, ...env },
+    });
   } catch (err) {
     const status = err.status;
     const output = err.output
