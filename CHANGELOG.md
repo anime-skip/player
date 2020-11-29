@@ -1,5 +1,22 @@
 # Changelog
 
+## `1.0.19-beta3`
+
+Full support for multiple services
+
+### Breaking Changes
+
+- Reworked the "Edit Episode" dialog. Now labeled "Connect to Anime Skip". It should be easier and less buggy to setup
+
+### Enhancements
+
+- **Different services timestamp offsetting** - Full support for multiple services is complete! When the same episode has different durations, the timestamps will be offset by the difference in durations, putting them where they should go on each service
+
+### Fixes
+
+- Hide toolbar when duration is 0 so timestamps aren't in weird places while loading the video
+- Prompt for a login when logged out and you press "Connect to Anime Skip"
+
 ## `1.0.18-beta2`
 
 `v1.0.16` and `v1.0.17` were blown through working on CI/CD.
