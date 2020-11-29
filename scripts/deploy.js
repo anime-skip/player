@@ -5,6 +5,24 @@ const fs = require('fs-extra');
 const path = require('path');
 const FormData = require('form-data');
 
+async function tryApiCall(caller) {
+  try {
+    return await caller();
+  } catch (err) {
+    if (err.response) {
+      throw new Error(
+        `Request failed with status ${err.response.status}:\nResponse:${JSON.stringify(
+          err.response,
+          null,
+          2
+        )}\nRequest: ${JSON.stringify(err.request, null, 2)}`
+      );
+    } else {
+      throw err;
+    }
+  }
+}
+
 /**
  *
  * @param {boolean} prod Is the deployment to production?
@@ -59,8 +77,8 @@ module.exports = async function chromePublish(buildVars, env) {
   if (buildVars.DO_CHROME) {
     await run(`Uploading and submitting ${CODE}chrome.zip${RESET} for review`, async () => {
       // Get a new access token
-      const accessToken = (
-        await axios.post('https://oauth2.googleapis.com/token', {
+      const accessToken = await tryApiCall(() =>
+        axios.post('https://oauth2.googleapis.com/token', {
           /* eslint-disable @typescript-eslint/camelcase */
           client_id: env.CHROME_CLIENT_ID,
           client_secret: env.CHROME_CLIENT_SECRET,
@@ -80,29 +98,33 @@ module.exports = async function chromePublish(buildVars, env) {
         'chrome.zip'
       );
       await skipForDryRuns(async () => {
-        await axios.put(
-          `https://www.googleapis.com/upload/chromewebstore/v1.1/items/${chromeAppId}`,
-          formData,
-          {
-            headers: formData.getHeaders({
-              Authorization,
-              'x-goog-api-version': 2,
-            }),
-          }
+        await tryApiCall(() =>
+          axios.put(
+            `https://www.googleapis.com/upload/chromewebstore/v1.1/items/${chromeAppId}`,
+            formData,
+            {
+              headers: formData.getHeaders({
+                Authorization,
+                'x-goog-api-version': 2,
+              }),
+            }
+          )
         );
 
         // Submit for review
-        await axios.post(
-          `https://www.googleapis.com/chromewebstore/v1.1/items/${chromeAppId}/publish`,
-          undefined,
-          {
-            params: chromeReviewQueryParams,
-            headers: {
-              Authorization,
-              'x-goog-api-version': 2,
-              'Content-Length': 0,
-            },
-          }
+        await tryApiCall(() =>
+          axios.post(
+            `https://www.googleapis.com/chromewebstore/v1.1/items/${chromeAppId}/publish`,
+            undefined,
+            {
+              params: chromeReviewQueryParams,
+              headers: {
+                Authorization,
+                'x-goog-api-version': 2,
+                'Content-Length': 0,
+              },
+            }
+          )
         );
       });
     });
