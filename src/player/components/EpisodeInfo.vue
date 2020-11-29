@@ -7,10 +7,10 @@
     <h1>{{ episodeTitle }}</h1>
     <h3>{{ episodeDetails }}</h3>
     <ToolbarButton
-      v-if="isLoggedIn && !isEditing"
-      class="edit-button"
-      icon="ic_edit.svg"
-      title="Edit Episode Info"
+      v-if="isConnectButtonVisible"
+      class="link-button"
+      icon="ic_link.svg"
+      title="Connect to Anime Skip"
       @click.stop.native="showEditDialog"
     />
   </div>
@@ -32,9 +32,10 @@ export default class EpisodeInfo extends Mixins(VideoControllerMixin) {
 
   @Getter() public displayEpisodeInfo?: DisplayEpisodeInfo;
   @Getter() public episodeRequestState!: RequestState;
-  @Getter() public isEditing!: boolean;
+  @Getter() public episodeUrl!: boolean;
   @Getter() public activeDialog?: string;
   @Getter() public isLoggedIn!: boolean;
+  @Getter() public duration?: number;
 
   public serviceDisplayName = global.serviceDisplayName ?? 'Unknown';
 
@@ -43,6 +44,13 @@ export default class EpisodeInfo extends Mixins(VideoControllerMixin) {
       this.episodeRequestState === RequestState.FAILURE ||
       this.episodeRequestState === RequestState.SUCCESS
     );
+  }
+
+  public get isConnectButtonVisible(): boolean {
+    const areDialogsHidden = this.activeDialog == null;
+    const canEdit = this.isLoggedIn && !this.episodeUrl;
+    const videoIsLoaded = this.duration != null && this.duration > 0;
+    return canEdit && areDialogsHidden && videoIsLoaded;
   }
 
   public get isLoadingEpisodeInfo(): boolean {
@@ -114,7 +122,7 @@ export default class EpisodeInfo extends Mixins(VideoControllerMixin) {
     color: $textSecondary;
   }
 
-  .edit-button {
+  .link-button {
     margin-top: 8px;
     background-color: rgba($color: white, $alpha: 0.12);
     padding-right: 12px;

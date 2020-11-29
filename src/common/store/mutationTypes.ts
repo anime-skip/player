@@ -25,6 +25,7 @@ export default {
   searchEpisodesRequestState: '@@episodes/searchEpisodesRequestState' as const,
   searchEpisodesResult: '@@episodes/searchEpisodesResult' as const,
   setEpisodeUrl: '@@episodes/setEpisodeUrl' as const,
+  setEpisode: '@@episodes/setEpisode' as const,
   setInferredEpisodeInfo: '@@episodes/setInferredEpisodeInfo' as const,
   episodeRequestState: '@@episodes/episodeRequestState' as const,
 

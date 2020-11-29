@@ -76,7 +76,7 @@ export default class EditTimestamp extends Mixins(VideoControllerMixin, Keyboard
   @Prop({ type: String, required: true }) readonly initialTab!: 'edit' | 'details';
 
   @Getter() activeTimestamp?: Api.AmbigousTimestamp;
-  @Getter() public episodeUrl?: Api.EpisodeUrl;
+  @Getter() public episodeUrl?: Api.EpisodeUrlNoEpisode;
   @Getter() public editTimestampMode?: 'add' | 'edit';
   @Getter() activeDialog?: string;
 
@@ -94,7 +94,6 @@ export default class EditTimestamp extends Mixins(VideoControllerMixin, Keyboard
   public reset() {
     this.selectedType = TIMESTAMP_TYPES.find(type => type.id === this.activeTimestamp?.typeId);
     this.typeFilter = '';
-    console.info('Reset', this.selectedType);
   }
 
   @Watch('activeTimestamp')

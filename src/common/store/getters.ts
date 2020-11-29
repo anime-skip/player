@@ -114,18 +114,21 @@ export default as<GetterTree<VuexState, VuexState>>({
   searchEpisodesResult({ searchEpisodesResult }): Api.EpisodeSearchResult[] {
     return searchEpisodesResult;
   },
-  episodeUrl({ episodeUrl }): Api.EpisodeUrl | undefined {
+  episodeUrl({ episodeUrl }): Api.EpisodeUrlNoEpisode | undefined {
     return episodeUrl;
   },
+  episode({ episode }): Api.Episode | undefined {
+    return episode;
+  },
   displayEpisodeInfo(state): DisplayEpisodeInfo {
-    const { episodeUrl, inferredEpisodeInfo } = state;
-    if (episodeUrl != null) {
+    const { inferredEpisodeInfo, episode } = state;
+    if (episode != null) {
       return {
-        absoluteNumber: episodeUrl.episode.absoluteNumber,
-        number: episodeUrl.episode.number,
-        name: episodeUrl.episode.name || 'Unknown Episode',
-        season: episodeUrl.episode.season,
-        show: episodeUrl.episode.show?.name || 'Unknown Show',
+        absoluteNumber: episode.absoluteNumber,
+        number: episode.number,
+        name: episode.name || 'Unknown Episode',
+        season: episode.season,
+        show: episode.show?.name || 'Unknown Show',
       };
     }
     return {
@@ -147,9 +150,16 @@ export default as<GetterTree<VuexState, VuexState>>({
   },
 
   // Timestamps
-  timestamps({ timestamps, episodeUrl, duration }): Api.AmbigousTimestamp[] {
+  timestamps({ timestamps, episodeUrl, episode, duration }): Api.AmbigousTimestamp[] {
+    // Find the offset
+    let timestampsOffset = episodeUrl?.timestampsOffset;
+    if (timestampsOffset == null && episode?.baseDuration != null && duration != null) {
+      timestampsOffset = Utils.computeTimestampsOffset(episode.baseDuration, duration);
+    }
+
+    // Apply the offset
     const offsetTimestamps = timestamps.map(timestamp => {
-      const at = Utils.applyTimestampsOffset(episodeUrl?.timestampsOffset, timestamp.at);
+      const at = Utils.applyTimestampsOffset(timestampsOffset, timestamp.at);
       return {
         ...timestamp,
         at,
@@ -157,6 +167,7 @@ export default as<GetterTree<VuexState, VuexState>>({
     });
     if (duration == null) return offsetTimestamps;
 
+    // Remove out of bounds timestamps
     const offsetBoundedTimestamps = offsetTimestamps.filter(
       timestamp => timestamp.at <= duration && timestamp.at >= 0
     );
@@ -176,9 +187,11 @@ export default as<GetterTree<VuexState, VuexState>>({
   },
   canEditTimestamps(_, getters): boolean {
     if (!getters.isLoggedIn) return false;
-    const episodeInfo: Api.EpisodeUrl = getters.episodeUrl;
+    const episodeInfo: Api.EpisodeUrlNoEpisode = getters.episodeUrl;
     if (episodeInfo == null) return false;
-    const { name, show } = episodeInfo.episode;
+    const episode: Api.Episode = getters.episode;
+    if (episode == null) return false;
+    const { name, show } = episode;
     if (!name || !show?.name) return false;
     if (name === 'Unknown Episode' || show?.name === 'Unknown Show') return false;
     return true;

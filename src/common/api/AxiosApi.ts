@@ -110,6 +110,7 @@ const thirdPartyEpisodeData = `
   number
   absoluteNumber
   source
+  baseDuration
   timestamps {
     ${timestampWithoutSourceData}
   }
@@ -292,11 +293,11 @@ export default as<Api.Implementation>({
     return response.data.updateEpisode;
   },
 
-  async createEpisodeUrl(data, episodeId): Promise<Api.EpisodeUrl> {
+  async createEpisodeUrl(data, episodeId): Promise<Api.EpisodeUrlNoEpisode> {
     const m = mutation(
       `mutation CreateEpisodeUrl($data: InputEpisodeUrl!, $episodeId: ID!) {
         createEpisodeUrl(episodeUrlInput: $data, episodeId: $episodeId) {
-          ${episodeUrlData}
+          ${episodeUrlNoEpisodeData}
         }
       }`,
       {
@@ -304,7 +305,7 @@ export default as<Api.Implementation>({
         episodeId,
       }
     );
-    const response = await sendGraphql<'createEpisodeUrl', Api.EpisodeUrl>(m);
+    const response = await sendGraphql<'createEpisodeUrl', Api.EpisodeUrlNoEpisode>(m);
     return response.data.createEpisodeUrl;
   },
   async deleteEpisodeUrl(episodeUrl: string): Promise<Api.EpisodeUrlNoEpisode> {

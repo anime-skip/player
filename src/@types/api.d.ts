@@ -20,7 +20,10 @@ declare namespace Api {
     searchEpisodes(name: string, showId?: string): Promise<Api.EpisodeSearchResult[]>;
     updateEpisode(id: string, input: Api.InputEpisode): Promise<Api.Episode>;
 
-    createEpisodeUrl(data: Api.InputEpisodeUrl, episodeId: string): Promise<Api.EpisodeUrl>;
+    createEpisodeUrl(
+      data: Api.InputEpisodeUrl,
+      episodeId: string
+    ): Promise<Api.EpisodeUrlNoEpisode>;
     deleteEpisodeUrl(episodeUrl: string): Promise<Api.EpisodeUrlNoEpisode>;
     fetchEpisodeByUrl(url: string): Promise<Api.EpisodeUrl>;
     fetchEpisodeByName(name: string, showName: string): Promise<Api.ThirdPartyEpisode[]>;
@@ -116,16 +119,29 @@ declare namespace Api {
     timestamps: Timestamp[];
   }
 
-  interface ThirdPartyEpisode {
-    id?: string;
-    season?: String;
-    number?: String;
-    absoluteNumber?: String;
-    name?: String;
-    source?: TimestampSource;
-    timestamps: ThirdPartyTimestamp[];
-    show: ThirdPartyShow;
-  }
+  type ThirdPartyEpisode =
+    | {
+        id: string;
+        season?: string;
+        number?: string;
+        absoluteNumber?: string;
+        name?: string;
+        source: 'ANIME_SKIP';
+        baseDuration?: number;
+        timestamps: ThirdPartyTimestamp[];
+        show: ThirdPartyShow;
+      }
+    | {
+        id?: string;
+        season?: string;
+        number?: string;
+        absoluteNumber?: string;
+        name?: string;
+        source: 'BETTER_VRV';
+        baseDuration?: number;
+        timestamps: ThirdPartyTimestamp[];
+        show: ThirdPartyShow;
+      };
 
   interface InputTimestamp {
     at: number;

@@ -132,7 +132,7 @@ a {
 } */
 
 .clickable.down,
-.clickable.focus:active:hover,
+.clickable:active:hover,
 .focusable:focus-within,
 .focusable:focus {
   transform: translateY(0);
@@ -140,7 +140,7 @@ a {
 }
 
 .clickable.dark.down,
-.clickable.dark.focus:active:hover,
+.clickable.dark:active:hover,
 .focusable.dark:focus-within,
 .focusable.dark:focus {
   transform: translateY(0);

@@ -94,7 +94,7 @@ export default class TimestampDetails extends Mixins(VideoControllerMixin) {
   @Getter() canEditTimestamps!: boolean;
   @Getter() isLoggedIn!: boolean;
   @Getter() isEditing!: boolean;
-  @Getter() public episodeUrl?: Api.EpisodeUrl;
+  @Getter() public episodeUrl?: Api.EpisodeUrlNoEpisode;
   @Getter() public isSavingTimestamps!: boolean;
 
   @Mutation() deleteDraftTimestamp!: (deletedTimestamp: Api.AmbigousTimestamp) => void;

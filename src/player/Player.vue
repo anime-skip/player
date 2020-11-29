@@ -36,7 +36,7 @@ import ToolBar from './components/Toolbar.vue';
 import EpisodeInfo from './components/EpisodeInfo.vue';
 import AccountDialog from './dialogs/AccountDialog.vue';
 import TimestampsPanel from './dialogs/TimestampsPanel.vue';
-import EditEpisodeDialog from './dialogs/EditEpisodeDialog.vue';
+import EditEpisodeDialog from './dialogs/EditEpisodeDialog/index.vue';
 import KeyboardShortcutMixin from '@/common/mixins/KeyboardShortcuts';
 import { Action, Mutation, Getter } from '@/common/utils/VuexDecorators';
 import Browser from '@/common/utils/Browser';

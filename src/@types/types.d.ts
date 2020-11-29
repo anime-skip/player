@@ -74,7 +74,6 @@ type BrowserType =
   | 'unsupported';
 
 interface AutocompleteItem<T = any> {
-  id?: string;
   title: string;
   subtitle?: string;
   data?: T;
@@ -112,6 +111,14 @@ interface PlayerOption {
   title: string;
   isSelected: boolean;
   node: HTMLElement;
+}
+
+interface CreateEpisodePrefill {
+  show: AutocompleteItem<Api.ShowSearchResult>;
+  episode: AutocompleteItem<Api.EpisodeSearchResult>;
+  season?: string;
+  number?: string;
+  absoluteNumber?: string;
 }
 
 type KeyboardShortcutAction =

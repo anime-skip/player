@@ -4,6 +4,7 @@ export default {
   startEditing: '@general/startEditing' as const,
   stopEditing: '@general/stopEditing' as const,
   createNewTimestamp: '@general/createNewTimestamp' as const,
+  apiCall: '@general/apiCall' as const,
 
   loginManual: '@auth/loginManual' as const,
 
@@ -11,7 +12,9 @@ export default {
 
   searchShows: '@shows/searchShows' as const,
 
+  linkEpisodeUrl: '@episodes/linkEpisodeUrl' as const,
   createEpisodeData: '@episodes/createEpisodeData' as const,
+  createEpisodeFromThirdParty: '@episodes/createEpisodeFromThirdParty' as const,
   fetchEpisodeByUrl: '@episodes/fetchEpisodeByUrl' as const,
   loadAllEpisodeData: '@episodes/loadAllEpisodeData' as const,
   searchEpisodes: '@episodes/searchEpisodes' as const,

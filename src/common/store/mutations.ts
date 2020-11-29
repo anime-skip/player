@@ -178,9 +178,12 @@ export default as<
   [types.searchEpisodesRequestState](state, requestState: RequestState) {
     state.searchEpisodesRequestState = requestState;
   },
-  [types.setEpisodeUrl](state, episodeUrl?: Api.EpisodeUrl) {
+  [types.setEpisodeUrl](state, episodeUrl?: Api.EpisodeUrlNoEpisode) {
     state.episodeUrl = episodeUrl;
-    state.timestamps = (episodeUrl?.episode?.timestamps || []).sort(Utils.timestampSorter);
+  },
+  [types.setEpisode](state, episode?: Api.Episode) {
+    state.episode = episode;
+    state.timestamps = (episode?.timestamps || []).sort(Utils.timestampSorter);
   },
   [types.setInferredEpisodeInfo](state, episode?: InferredEpisodeInfo) {
     state.inferredEpisodeInfo = episode;
