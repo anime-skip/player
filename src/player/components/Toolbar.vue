@@ -12,7 +12,7 @@
     <div class="gradient" />
     <div class="content">
       <Timeline
-        v-if="!!duration"
+        :class="{ 'timeline-hidden': !duration }"
         :isFlipped="!playerState.isPaused && !isActive"
         :currentTime="currentTime"
         :duration="duration"
@@ -325,6 +325,11 @@ $offsetActiveVrv: 0px;
     top: 0;
     display: flex;
     flex-direction: column;
+    .timeline-hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
     .buttons {
       padding: 0 8px;
       display: flex;
