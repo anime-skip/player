@@ -5,17 +5,39 @@ const fs = require('fs-extra');
 const path = require('path');
 const FormData = require('form-data');
 
+// https://stackoverflow.com/questions/11616630/how-can-i-print-a-circular-structure-in-a-json-like-format#answer-11616993
+JSON.safeStringify = (obj, indent = 2) => {
+  let cache = [];
+  const retVal = JSON.stringify(
+    obj,
+    (_, value) => {
+      if (value instanceof Buffer) {
+        value = value.toString(); // This is in addition to the stack overflow code
+      }
+      return typeof value === 'object' && value !== null
+        ? cache.includes(value)
+          ? undefined // Duplicate reference found, discard key
+          : cache.push(value) && value // Store value in our collection
+        : value;
+    },
+    indent
+  );
+  cache = null;
+  return retVal;
+};
+
 async function tryApiCall(caller) {
   try {
     return await caller();
   } catch (err) {
     if (err.response) {
       throw new Error(
-        `Request failed with status ${err.response.status}:\nResponse:${JSON.stringify(
-          err.response,
-          null,
-          2
-        )}\nRequest: ${JSON.stringify(err.request, null, 2)}`
+        `Request failed with status ${err.response.status}:\nRequest:${JSON.safeStringify(
+          err.config
+        )}\nResponse: ${JSON.safeStringify({
+          data: err.response.data,
+          status: err.response.status,
+        })}`
       );
     } else {
       throw err;
@@ -76,8 +98,8 @@ module.exports = async function chromePublish(buildVars, env) {
 
   if (buildVars.DO_CHROME) {
     await run(`Uploading and submitting ${CODE}chrome.zip${RESET} for review`, async () => {
-      // Get a new access token
-      const accessToken = await tryApiCall(() =>
+      // Get a new access token\
+      const response = await tryApiCall(() =>
         axios.post('https://oauth2.googleapis.com/token', {
           /* eslint-disable @typescript-eslint/camelcase */
           client_id: env.CHROME_CLIENT_ID,
@@ -87,7 +109,9 @@ module.exports = async function chromePublish(buildVars, env) {
           redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
           /* eslint-enable @typescript-eslint/camelcase */
         })
-      ).data.access_token;
+      );
+      console.log('\n\nResponse: ' + JSON.safeStringify(response.toJSON()) + '\n\n');
+      const accessToken = response.data.access_token;
       const Authorization = `Bearer ${accessToken}`;
 
       // Upload the zip as a draft
