@@ -19,14 +19,14 @@ jobs:
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-      - run: yarn install
+      - run: yarn install --frozen-lockfile
         env:
+          NOYARNPOSTINSTALL: 1
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.ANIME_SKIP_PACKAGES_TOKEN }}
       - name: Package Extensions
         run: yarn package
         env:
-          DRY_RUN: false
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.ANIME_SKIP_PACKAGES_TOKEN }}
           FIREFOX_SIGNING_ISSUER: ${{ secrets.FIREFOX_SIGNING_ISSUER }}
