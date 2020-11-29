@@ -5,8 +5,16 @@ on:
       - main
 
 jobs:
-  install:
-    name: Install Dependencies
+  cancel:
+    name: Cancel Previous Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel previous workflows
+        uses: everphone-gmbh/cancel-previous-workflows@v5
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+  verify:
+    name: Verify Code
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-node@v1
@@ -19,30 +27,19 @@ jobs:
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-      - run: yarn install
+      - run: yarn install --frozen-lockfile
+        env:
+          NOYARNPOSTINSTALL: 1
+          CI: true
+          NODE_AUTH_TOKEN: ${{ secrets.ANIME_SKIP_PACKAGES_TOKEN }}
+      - run: yarn package:dry
         env:
           CI: true
-          NODE_AUTH_TOKEN: ${{ secrets.ANIME_SKIP_PACKAGES_TOKEN  }}
-
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    needs: [install]
-    steps:
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '12.x'
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@anime-skip'
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-      - run: yarn install
-        env:
-          CI: true
-          NODE_AUTH_TOKEN: ${{ secrets.ANIME_SKIP_PACKAGES_TOKEN  }}
-      - run: yarn compile
-      - run: yarn lint
-      - run: yarn test
+          NODE_AUTH_TOKEN: ${{ secrets.ANIME_SKIP_PACKAGES_TOKEN }}
+          FIREFOX_SIGNING_ISSUER: ${{ secrets.FIREFOX_SIGNING_ISSUER }}
+          FIREFOX_SIGNING_SECRET: ${{ secrets.FIREFOX_SIGNING_SECRET }}
+          FIREFOX_SIGNING_ID: ${{ secrets.FIREFOX_SIGNING_ID }}
+          CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
+          CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
+          CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
+          CHROME_APP_ID: ${{ secrets.CHROME_APP_ID }}
