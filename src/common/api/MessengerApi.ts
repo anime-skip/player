@@ -1,3 +1,4 @@
+import { SUPPORTED_THIRD_PARTY_SERVICES } from '../utils/Constants';
 import { as } from '../utils/GlobalUtils';
 import Messenger from '../utils/Messenger';
 
@@ -46,8 +47,14 @@ export default as<Api.Implementation>({
   fetchEpisodeByUrl(url) {
     return messenger.send('fetchEpisodeByUrl', url);
   },
-  fetchEpisodeByName(name, showName) {
-    return messenger.send('fetchEpisodeByName', { name, showName });
+  async fetchEpisodeByName(name, showName) {
+    // The axiosApi doesn't have a global.service since it handles all services. Instead, this is
+    // handled here to always pull out unsupported 3rd party services
+    const allServiceResults = await messenger.send('fetchEpisodeByName', { name, showName });
+    const thisServiceResults = allServiceResults.filter(episode =>
+      SUPPORTED_THIRD_PARTY_SERVICES[global.service].includes(episode.source)
+    );
+    return thisServiceResults;
   },
   updateEpisodeUrl(episodeUrl, newEpisodeUrl) {
     return messenger.send('updateEpisodeUrl', { episodeUrl, newEpisodeUrl });
