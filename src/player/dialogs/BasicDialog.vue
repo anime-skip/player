@@ -92,6 +92,7 @@ export default class BasicDialog extends Vue {
     transition: 250ms;
     transition-property: transform, opacity;
     cursor: auto;
+    overflow-x: hidden;
 
     overflow-y: auto;
     scrollbar-width: thin;

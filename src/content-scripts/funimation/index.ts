@@ -20,53 +20,30 @@ global.transformServiceUrl = Utils.stripUrl;
 global.getPlayerOptions = (): PlayerOptionGroup[] => {
   const optionGroups: PlayerOptionGroup[] = [];
 
-  const languageTitleNode = document.querySelector('#funimation-audio > dt');
-  if (languageTitleNode != null) {
-    const options = Array.from(document.querySelectorAll('#funimation-audio a'));
-    if (options.length > 0) {
-      optionGroups.push({
-        title: 'Language',
-        icon: 'ic_player_option_language.svg',
-        options: options.map<PlayerOption>(option => ({
-          isSelected: option.classList.contains('funimation-selected'),
-          node: option as HTMLElement,
-          title: option.textContent?.trim() ?? 'Unknown',
-        })),
-      });
+  function addRadioOptionGroup(id: string, title: string, icon?: string): void {
+    const languageSubMenu = document.getElementById(id);
+    if (languageSubMenu != null) {
+      const options = Array.from(
+        languageSubMenu.querySelectorAll('li.funimation-li-option a.funimation-toggle-option')
+      );
+      if (options.length > 0) {
+        optionGroups.push({
+          title,
+          icon,
+          options: options.map<PlayerOption>(option => ({
+            isSelected: option.classList.contains('funimation-selected'),
+            node: option as HTMLElement,
+            title: option.textContent?.trim() ?? 'Unknown',
+          })),
+        });
+      }
     }
   }
 
-  const subtitlesTitleNode = document.querySelector('#funimation-tracks > dt');
-  if (subtitlesTitleNode != null) {
-    const options = Array.from(document.querySelectorAll('#funimation-tracks a'));
-    if (options.length > 0) {
-      optionGroups.push({
-        title: 'Subtitles',
-        icon: 'ic_player_option_subtitles.svg',
-        options: options.map<PlayerOption>(option => ({
-          isSelected: option.classList.contains('funimation-selected'),
-          node: option as HTMLElement,
-          title: option.textContent?.trim() ?? 'Unknown',
-        })),
-      });
-    }
-  }
-
-  const qualityTitleNode = document.querySelector('#funimation-quality > dt');
-  if (qualityTitleNode != null) {
-    const options = Array.from(document.querySelectorAll('#funimation-quality a'));
-    if (options.length > 0) {
-      optionGroups.push({
-        title: 'Quality',
-        icon: 'ic_player_option_quality.svg',
-        options: options.map<PlayerOption>(option => ({
-          isSelected: option.classList.contains('funimation-selected'),
-          node: option as HTMLElement,
-          title: option.textContent?.trim() ?? 'Unknown',
-        })),
-      });
-    }
-  }
+  addRadioOptionGroup('funimation-audio-sub-menu', 'Language', 'ic_player_option_language.svg');
+  addRadioOptionGroup('funimation-tracks-sub-menu', 'Subtitles', 'ic_player_option_subtitles.svg');
+  addRadioOptionGroup('funimation-quality-sub-menu', 'Quality', 'ic_player_option_quality.svg');
+  addRadioOptionGroup('funimation-version-sub-menu', 'Version');
 
   console.debug('funimation.getPlayerOptions', optionGroups);
 

@@ -103,7 +103,7 @@ interface DisplayEpisodeInfo {
 
 interface PlayerOptionGroup {
   title: string;
-  icon: string;
+  icon?: string;
   options: PlayerOption[];
 }
 
