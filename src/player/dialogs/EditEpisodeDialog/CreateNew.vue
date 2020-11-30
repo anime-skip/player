@@ -70,10 +70,10 @@ export default vueMixins(ShowAutocompleteMixin).extend({
     async onClickCreate(): Promise<void> {
       const duration = this.$store.state.duration;
       const episode: Api.InputEpisode = {
-        name: this.name.trim(),
-        season: this.season.trim(),
-        number: this.number.trim(),
-        absoluteNumber: this.absoluteNumber.trim(),
+        name: this.name.trim() || undefined,
+        season: this.season.trim() || undefined,
+        number: this.number.trim() || undefined,
+        absoluteNumber: this.absoluteNumber.trim() || undefined,
         baseDuration: duration,
       };
       const episodeUrl: Api.InputEpisodeUrl = {
