@@ -1,5 +1,21 @@
 # Changelog
 
+## `[Unreleased]`
+
+### Breaking Changes
+
+- None
+
+### Enhancements
+
+- Added "Version" player option for funimation
+
+### Fixes
+
+- Added missing language icon
+- Remove horizontal scroll from scroll-able player options
+- Fixed Funimation player options after they updated their player
+
 ## `1.0.19-beta3`
 
 Full support for multiple services
