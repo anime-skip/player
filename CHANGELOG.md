@@ -1,6 +1,6 @@
 # Changelog
 
-## `[Unreleased]`
+## `v1.0.20-beta4`
 
 ### Breaking Changes
 
