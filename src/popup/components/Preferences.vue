@@ -1,5 +1,5 @@
 <template>
-  <ProgressOverlay v-if="!isPlayerOptionPicker" :isLoading="isLoggingIn" class="Preferences">
+  <ProgressOverlay v-if="activePlayerOption == null" :isLoading="isLoggingIn" class="Preferences">
     <div class="column">
       <PopupHeader title="Preferences" class="header" :small="small" />
 
@@ -12,7 +12,7 @@
           class="option-group-button clickable dark focus button"
           @click="onClickOptionGroup(optionGroup)"
         >
-          <WebExtImg :src="optionGroup.icon" class="left" />
+          <WebExtImg v-if="optionGroup.icon != null" :src="optionGroup.icon" class="left" />
           <span class="label">{{ optionGroup.title }}</span>
           <span class="value">{{ getSelectedOption(optionGroup) }}</span>
           <WebExtImg src="ic_chevron_right.svg" class="right" />
@@ -44,7 +44,7 @@
         <WebExtImg src="ic_chevron_right.svg" />
       </div>
       <div class="bottom-row">
-        <a class="link" href>Need help?</a>
+        <a class="link" href="https://www.anime-skip.com/support" target="_blank">Need help?</a>
         <a class="link" href="#" @click.prevent="logOut()">Log out</a>
       </div>
     </div>
@@ -54,14 +54,16 @@
       <WebExtImg src="ic_chevron_left.svg" />
       <span>{{ activePlayerOption.title }}</span>
     </h3>
-    <div
-      v-for="option of activePlayerOption.options"
-      :key="option.title"
-      class="player-option button clickable focus"
-      :class="{ dark: !option.isSelected }"
-      @click="onClickOption(option)"
-    >
-      <span>{{ option.title }}</span>
+    <div class="list">
+      <div
+        v-for="option of activePlayerOption.options"
+        :key="option.title"
+        class="player-option button clickable focus"
+        :class="{ dark: !option.isSelected }"
+        @click="onClickOption(option)"
+      >
+        <span>{{ option.title }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -135,10 +137,6 @@ export default class Preferences extends Vue {
 
   public get hasPlayerOptions(): boolean {
     return !!global.getPlayerOptions;
-  }
-
-  public get isPlayerOptionPicker(): boolean {
-    return this.activePlayerOption != null;
   }
 
   public get playerOptions(): PlayerOptionGroup[] {
@@ -237,6 +235,29 @@ export default class Preferences extends Vue {
     }
   }
 
+  .other-setting {
+    display: flex;
+    flex-direction: row;
+    margin-top: 16px;
+    align-self: flex-start;
+    text-transform: none;
+    align-items: center;
+
+    img {
+      margin-left: 8px;
+    }
+  }
+}
+
+.Preferences.player-options {
+  overflow-x: hidden;
+
+  .list {
+    flex-grow: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
   .player-option-title {
     cursor: pointer;
     margin-top: 4px;
@@ -263,19 +284,6 @@ export default class Preferences extends Vue {
 
     img {
       margin-right: 16px;
-    }
-  }
-
-  .other-setting {
-    display: flex;
-    flex-direction: row;
-    margin-top: 16px;
-    align-self: flex-start;
-    text-transform: none;
-    align-items: center;
-
-    img {
-      margin-left: 8px;
     }
   }
 }
