@@ -14,8 +14,9 @@
         v-for="timestamp of activeTimestamps"
         :key="timestamp.id"
         @click="onClickTimestamp(timestamp)"
-        @mouseover.stop.prevent="setHoveredTimestamp(timestamp)"
-        @mouseleave.stop.prevent="clearHoveredTimestamp()"
+        @mouseover.stop.prevent="onHoverTimestamp(timestamp)"
+        @mousemove.stop.prevent="onHoverTimestamp(timestamp)"
+        @mouseleave.stop.prevent="onStopHoverTimestamp()"
         v-ripple
       >
         <div class="left">
@@ -82,7 +83,7 @@
 import Utils from '@/common/utils/Utils';
 import { Action, Getter, Mutation } from '@/common/utils/VuexDecorators';
 import { Component, Mixins } from 'vue-property-decorator';
-import { TIMESTAMP_TYPES, TIMESTAMP_SOURCES } from '../../common/utils/Constants';
+import { TIMESTAMP_TYPES, TIMESTAMP_SOURCES, SECONDS } from '../../common/utils/Constants';
 import WebExtImg from '../../common/components/WebExtImg.vue';
 import ProgressOverlay from '../../common/components/ProgressOverlay.vue';
 import ToolbarButton from './ToolbarButton.vue';
@@ -110,6 +111,10 @@ export default class TimestampDetails extends Mixins(VideoControllerMixin) {
   @Action('showDialog') public hideDialog!: () => void;
   @Action() public showDialog!: (dialog: string) => void;
   @Action() public createNewTimestamp!: () => Promise<void>;
+
+  public unmounted(): void {
+    this.onStopHoverTimestamp();
+  }
 
   public timestampTypeMap = TIMESTAMP_TYPES.reduce<{ [typeId: string]: Api.TimestampType }>(
     (map, timestamp) => {
@@ -175,6 +180,18 @@ export default class TimestampDetails extends Mixins(VideoControllerMixin) {
   public async onClickDiscard(): Promise<void> {
     await this.stopEditing(true);
     this.hideDialog();
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  hoverTimeout?: any;
+  public onHoverTimestamp(timestamp: Api.AmbigousTimestamp): void {
+    if (this.hoverTimeout != null) clearTimeout(this.hoverTimeout);
+    this.setHoveredTimestamp(timestamp);
+    this.hoverTimeout = setTimeout(this.clearHoveredTimestamp, 3 * SECONDS);
+  }
+  public onStopHoverTimestamp(): void {
+    if (this.hoverTimeout != null) clearTimeout(this.hoverTimeout);
+    this.clearHoveredTimestamp();
   }
 }
 </script>
@@ -244,8 +261,12 @@ export default class TimestampDetails extends Mixins(VideoControllerMixin) {
       cursor: pointer;
       padding-left: 16px;
       padding-right: 8px;
+      transition: 200ms background-color;
       &:first-child {
         border-top: none;
+      }
+      &:hover {
+        background-color: rgba($color: white, $alpha: 0.06);
       }
 
       .title {
