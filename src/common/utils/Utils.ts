@@ -214,9 +214,11 @@ export default class Utils {
   }
 
   public static arrayIncludes<K extends string>(
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     array: { [key in K]: any }[],
     idKey: K,
     value: { [key in K]: any } & Record<string, any>
+    /* eslint-enable @typescript-eslint/no-explicit-any */
   ): boolean {
     return array.some(item => item[idKey] === value[idKey]);
   }
