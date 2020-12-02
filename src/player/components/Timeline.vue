@@ -31,7 +31,7 @@
       v-for="timestamp of activeTimestamps"
       :key="`t${timestamp.id}`"
       class="Timestamp"
-      :src="isEditing ? 'ic_timestamp_draft.svg' : 'ic_timestamp.svg'"
+      :class="timestampClass(timestamp)"
       :style="{ left: `${(timestamp.at / duration) * 100}%` }"
     />
     <VueSlider
@@ -154,6 +154,12 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
     }
 
     this.goToNextTimestampOnTimeChange(newTime);
+  }
+
+  public timestampClass(timestamp: Api.AmbigousTimestamp): Record<string, boolean> {
+    return {
+      active: timestamp.id === this.activeTimestamp?.id,
+    };
   }
 
   /**
@@ -280,6 +286,10 @@ $translationInactiveSliderVrv: 3px;
     width: 12px;
     top: 4px;
     transform: translateX(-50%);
+
+    &.active {
+      transform: translateX(-50%) translateY(-12px);
+    }
   }
 }
 
