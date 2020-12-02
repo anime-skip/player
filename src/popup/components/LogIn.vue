@@ -1,5 +1,5 @@
 <template>
-  <ProgressOverlay :isLoading="isLoggingIn">
+  <ProgressOverlay :isLoading="isLoggingIn" class="loading">
     <form class="LogIn" ref="form">
       <PopupHeader title="Log In" class="header" :small="small" />
       <TextInput
@@ -55,18 +55,36 @@ export default class LogIn extends Vue {
   public onSubmit(event: Event) {
     event.preventDefault();
     event.stopPropagation();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const closeAfterLogin = urlParams.get('closeAfterLogin');
+    let callback: (() => void) | undefined;
+    if (closeAfterLogin === 'true') {
+      callback = window.close;
+    }
+
     this.loginManual({
       username: this.username,
       password: this.password,
+      callback,
     });
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.loading {
+  align-self: center;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
 .LogIn {
   display: flex;
   flex-direction: column;
+
   .header {
     margin-bottom: 24px;
   }

@@ -120,12 +120,13 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
   },
 
   // Auth
-  async [types.loginManual]({ commit }, { username, password }: LoginManualPayload) {
+  async [types.loginManual]({ commit }, { username, password, callback }: LoginManualPayload) {
     try {
       commit(mutations.loginRequestState, RequestState.LOADING);
       const loginData = await callApi(commit, global.Api.loginManual, username, password);
       commit(mutations.login, loginData);
       commit(mutations.loginRequestState, RequestState.SUCCESS);
+      callback?.();
     } catch (err) {
       console.warn('actions.loginManual', err);
       commit(mutations.loginRequestState, RequestState.FAILURE);

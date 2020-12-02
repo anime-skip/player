@@ -4,6 +4,7 @@
     <KeyboardShortcutChooser class="column2" :shortcut="shortcut.primary" @update="updatePrimary" />
     <KeyboardShortcutChooser
       class="column3"
+      secondary
       :shortcut="shortcut.secondary"
       @update="updateSecondary"
     />

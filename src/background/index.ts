@@ -1,4 +1,5 @@
 import AxiosApi from '@/common/api/AxiosApi';
+import Browser from '@/common/utils/Browser';
 import Messenger from '@/common/utils/Messenger';
 
 // Setup Globals
@@ -42,7 +43,7 @@ const messenger = new Messenger<
       await browser.runtime.openOptionsPage();
     },
     '@anime-skip/open-popup': async () => {
-      await browser.tabs.create({ url: 'popup/index.html' });
+      await browser.tabs.create({ url: 'popup/index.html?closeAfterLogin=true' });
     },
   },
   ['@anime-skip/inferEpisodeInfo']
