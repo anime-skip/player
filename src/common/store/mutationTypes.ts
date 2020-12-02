@@ -35,7 +35,7 @@ export default {
   clearHoveredTimestamp: '@@timestamps/clearHoveredTimestamp' as const,
   setDraftTimestamps: '@@timestamps/setDraftTimestamps' as const,
   setTimestamps: '@@timestamps/setTimestamps' as const,
-  updateDraftTimestamp: '@@timestamps/updateDraftTimestamp' as const,
+  updateTimestampInDrafts: '@@timestamps/updateDraftTimestamp' as const,
   deleteDraftTimestamp: '@@timestamps/deleteDraftTimestamp' as const,
   clearEditTimestampMode: '@@timestamps/clearEditTimestampMode' as const,
   setEditTimestampMode: '@@timestamps/setEditTimestampMode' as const,
