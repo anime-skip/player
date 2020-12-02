@@ -35,6 +35,7 @@ export const initialState: VuexState = {
 
   editTimestampMode: undefined,
   activeTimestamp: undefined,
+  hoveredTimestamp: undefined,
   timestamps: [],
   draftTimestamps: [],
   selectedTimestamp: undefined,

@@ -14,6 +14,8 @@
         v-for="timestamp of activeTimestamps"
         :key="timestamp.id"
         @click="onClickTimestamp(timestamp)"
+        @mouseover.stop.prevent="setHoveredTimestamp(timestamp)"
+        @mouseleave.stop.prevent="clearHoveredTimestamp()"
         v-ripple
       >
         <div class="left">
@@ -99,6 +101,8 @@ export default class TimestampDetails extends Mixins(VideoControllerMixin) {
 
   @Mutation() deleteDraftTimestamp!: (deletedTimestamp: Api.AmbigousTimestamp) => void;
   @Mutation() setActiveTimestamp!: (timestamp: Api.AmbigousTimestamp) => void;
+  @Mutation() setHoveredTimestamp!: (timestamp: Api.AmbigousTimestamp) => void;
+  @Mutation() clearHoveredTimestamp!: () => void;
   @Mutation() setEditTimestampMode!: (mode: 'add' | 'edit' | undefined) => void;
 
   @Action() public startEditing!: (onStartedEditing?: () => void) => void;

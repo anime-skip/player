@@ -90,6 +90,7 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
   @Getter() hasEpisode!: boolean;
   @Getter() isLoggedIn!: boolean;
   @Getter() activeTimestamp?: Api.AmbigousTimestamp;
+  @Getter() hoveredTimestamp?: Api.AmbigousTimestamp;
   @Getter() draftTimestamps!: Api.AmbigousTimestamp[];
   @Getter('preferences') prefs?: Api.Preferences;
   @Getter() preferencesLastUpdatedAt!: number;
@@ -159,7 +160,8 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
 
   public timestampClass(timestamp: Api.AmbigousTimestamp): Record<string, boolean> {
     return {
-      active: timestamp.id === this.activeTimestamp?.id,
+      active:
+        timestamp.id === this.activeTimestamp?.id || timestamp.id === this.hoveredTimestamp?.id,
     };
   }
 
@@ -293,6 +295,7 @@ $translationInactiveSliderVrv: 3px;
     width: 12px;
     top: 4px;
     transform: translateX(-50%);
+    transition: 250ms ease transform;
 
     &.active {
       transform: translateX(-50%) translateY(-12px);

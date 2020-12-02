@@ -176,6 +176,9 @@ export default as<GetterTree<VuexState, VuexState>>({
   activeTimestamp(state): Api.AmbigousTimestamp | undefined {
     return state.activeTimestamp;
   },
+  hoveredTimestamp(state): Api.AmbigousTimestamp | undefined {
+    return state.hoveredTimestamp;
+  },
   draftTimestamps(state): Api.AmbigousTimestamp[] {
     let drafts = state.draftTimestamps;
     if (state.activeTimestamp != null) {
