@@ -4,8 +4,16 @@
 
 ### Enhancements
 
+- None
+
+## `v1.0.22`
+
+### Enhancements
+
 - Updated color on keyboard shortcut page
 - Close the tab after logging in from get started
+- Fix bug where timestamps where created with unknown type
+- Add timeout to timestamp hover
 
 ## `v1.0.21-beta5`
 
