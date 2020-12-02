@@ -4,7 +4,8 @@
 
 ### Enhancements
 
-- None
+- Updated color on keyboard shortcut page
+- Close the tab after logging in from get started
 
 ## `v1.0.21-beta5`
 
