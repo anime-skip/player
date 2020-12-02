@@ -4,6 +4,12 @@
 
 ### Enhancements
 
+- None
+
+## `v1.0.21-beta5`
+
+### Enhancements
+
 - Improvements to timestamps and editing
   - icon colors for different states (not editing, editing, edited)
   - Offset active one above the timeline
