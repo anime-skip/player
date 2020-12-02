@@ -3,6 +3,7 @@ declare type Service = 'vrv' | 'funimation' | 'example';
 declare interface LoginManualPayload {
   username: string;
   password: string;
+  callback?: () => void;
 }
 
 declare interface LoginRefreshPayload {

@@ -178,7 +178,7 @@ export default Vue.extend({
   }
 
   .header {
-    color: $textSecondary;
+    color: $textPrimary;
     display: flex;
     flex-direction: row;
     padding-top: 16px;

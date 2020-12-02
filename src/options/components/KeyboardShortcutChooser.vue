@@ -1,5 +1,5 @@
 <template>
-  <div class="KeyboardShortcutChooser noselect">
+  <div class="KeyboardShortcutChooser noselect" :class="{ secondary }">
     <pre v-if="shortcut" tabindex="0" @click="showEditor" :class="{ duplicate }">{{
       shortcut
     }}</pre>
@@ -10,9 +10,9 @@
         <pre v-if="!editKey" class="no-selection">[Press a key]</pre>
         <pre v-else>{{ editKey }}</pre>
       </h1>
-      <p class="hint">Press <code>Enter</code> to save</p>
-      <p class="hint">Press <code>Esc</code> to cancel</p>
-      <p class="hint">Press <code>Backspace</code> to remove the shortcut</p>
+      <p class="hint"><code>Enter</code> to save</p>
+      <p class="hint"><code>Esc</code> to cancel</p>
+      <p class="hint"><code>Backspace</code> to remove</p>
     </div>
   </div>
 </template>
@@ -24,6 +24,7 @@ import Vue from 'vue';
 export default Vue.extend({
   props: {
     shortcut: { type: String, required: false },
+    secondary: Boolean,
   },
   data() {
     return {
@@ -91,34 +92,33 @@ export default Vue.extend({
   & > pre {
     font-family: monospace;
     font-size: 16px;
-    background-color: $divider;
+    background-color: $primary300;
     padding: 4px 8px;
     border-radius: 3px;
     font-weight: bold;
-    color: rgba(255, 255, 255, 0.8);
+    color: black;
     cursor: pointer;
     transition: 100ms;
 
     &:hover {
-      background-color: rgba($color: white, $alpha: 0.18);
+      filter: brightness(1.1);
     }
     &:hover:active {
-      background-color: rgba($color: white, $alpha: 0.24);
-    }
-
-    &.duplicate {
-      background-color: $red700;
-      &:hover {
-        background-color: $red500;
-      }
-      &:hover:active {
-        background-color: $red500;
-        filter: brightness(120%);
-      }
+      filter: brightness(1.2);
     }
   }
 
-  .unset {
+  &.secondary > pre {
+    color: rgba($color: white, $alpha: 0.75);
+    background-color: $divider;
+  }
+
+  & > pre.duplicate {
+    color: $textPrimary;
+    background-color: $red700;
+  }
+
+  & > pre.unset {
     color: $textSecondary;
     background-color: transparent;
     font-weight: normal;
@@ -135,7 +135,7 @@ export default Vue.extend({
     right: 0;
     top: 0;
     bottom: 0;
-    background-color: rgba($color: $background300, $alpha: 0.84);
+    background-color: rgba($color: $background300, $alpha: 0.9);
     z-index: 1;
 
     .preview {

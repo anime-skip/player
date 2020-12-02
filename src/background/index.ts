@@ -42,7 +42,7 @@ const messenger = new Messenger<
       await browser.runtime.openOptionsPage();
     },
     '@anime-skip/open-popup': async () => {
-      await browser.tabs.create({ url: 'popup/index.html' });
+      await browser.tabs.create({ url: 'popup/index.html?closeAfterLogin=true' });
     },
   },
   ['@anime-skip/inferEpisodeInfo']

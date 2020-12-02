@@ -169,6 +169,9 @@ export default class Preferences extends Vue {
 
 <style lang="scss" scoped>
 .Preferences {
+  min-width: 250px;
+  max-width: 700px;
+
   .column {
     display: flex;
     flex-direction: column;
