@@ -177,7 +177,17 @@ export default as<GetterTree<VuexState, VuexState>>({
     return state.activeTimestamp;
   },
   draftTimestamps(state): Api.AmbigousTimestamp[] {
-    return state.draftTimestamps;
+    let drafts = state.draftTimestamps;
+    if (state.activeTimestamp != null) {
+      const activeIndex = drafts.findIndex(timestamp => timestamp.id === state.activeTimestamp?.id);
+      const activeIsExisting = activeIndex !== -1;
+      if (activeIsExisting) {
+        drafts.splice(activeIndex, 1, state.activeTimestamp);
+      } else {
+        drafts = [...drafts, state.activeTimestamp].sort(Utils.timestampSorter);
+      }
+    }
+    return drafts;
   },
   activeTimestamps(_, getters): Api.AmbigousTimestamp[] {
     return getters.isEditing ? getters.draftTimestamps : getters.timestamps;
