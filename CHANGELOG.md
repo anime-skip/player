@@ -1,5 +1,13 @@
 # Changelog
 
+## `[Unreleased]`
+
+### Enhancements
+
+- Improvements to timestamps and editing
+  - icon colors for different states (not editing, editing, edited)
+  - Offset active one above the timeline
+
 ## `v1.0.20-beta4`
 
 ### Breaking Changes

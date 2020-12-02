@@ -133,6 +133,7 @@ export default class EditTimestamp extends Mixins(VideoControllerMixin, Keyboard
       this.setActiveTimestamp({
         ...this.activeTimestamp,
         at: this.getCurrentTime(),
+        edited: true,
       });
     }
   }
@@ -213,6 +214,7 @@ export default class EditTimestamp extends Mixins(VideoControllerMixin, Keyboard
       typeId: this.selectedType!.id,
       id: base.id,
       source: base.source,
+      edited: true,
     });
     this.leaveDialog();
   }

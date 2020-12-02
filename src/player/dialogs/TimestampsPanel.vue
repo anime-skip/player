@@ -52,6 +52,7 @@ export default class TimestampsPanel extends Mixins(VideoControllerMixin, Keyboa
       this.setActiveTimestamp({
         ...this.activeTimestamp,
         at: this.getCurrentTime(),
+        edited: true,
       });
     }
   }
