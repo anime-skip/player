@@ -32,13 +32,7 @@
       :key="`t${timestamp.id}`"
       class="Timestamp"
       :class="timestampClass(timestamp)"
-      :src="
-        !isEditing
-          ? 'ic_timestamp.svg'
-          : timestamp.edited
-          ? 'ic_timestamp_draft_edited.svg'
-          : 'ic_timestamp_draft.svg'
-      "
+      :src="timestampIcon(timestamp)"
       :style="{ left: `${(timestamp.at / duration) * 100}%` }"
     />
     <VueSlider
@@ -167,6 +161,12 @@ export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShort
     return {
       active: timestamp.id === this.activeTimestamp?.id,
     };
+  }
+
+  public timestampIcon(timestamp: Api.AmbigousTimestamp): string {
+    if (!this.isEditing) return 'ic_timestamp.svg';
+    if (!timestamp.edited) return 'ic_timestamp_draft.svg';
+    return 'ic_timestamp_draft_edited.svg';
   }
 
   /**
