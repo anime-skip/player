@@ -36,6 +36,7 @@ declare interface VuexState {
 
   editTimestampMode: 'add' | 'edit' | undefined;
   activeTimestamp: Api.AmbigousTimestamp | undefined;
+  hoveredTimestamp: Api.AmbigousTimestamp | undefined;
   timestamps: Api.AmbigousTimestamp[];
   draftTimestamps: Api.AmbigousTimestamp[];
   saveTimestampsRequestState: RequestState;
