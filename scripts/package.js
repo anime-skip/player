@@ -78,16 +78,16 @@ script(async () => {
   if (buildVars.DO_CHECKS) {
     title('Run Checks');
     // prettier-ignore
-    // await (async () => {
-    //   await run('Install dependencies',    () => bash('yarn install'));
-    //   await run('Compile TypeScript',      () => bash('yarn compile'));
-    //   await run('Ensure formatting',       () => bash('yarn prettier'));
-    //   await run('Lint source code',        () => bash('yarn lint'));
-    //   await run('Run tests',               () => bash('yarn test'));
-    //   await run('Run integration tests',   () => bash('yarn test:integration'));
-    //   await run('Run E2E tests',           () => bash('yarn test:e2e'));
-    //   await run('Scan extension manifest', () => bash('yarn check-manifest'));
-    // })()
+    await (async () => {
+      await run('Install dependencies',    () => bash('yarn install'));
+      await run('Compile TypeScript',      () => bash('yarn compile'));
+      await run('Ensure formatting',       () => bash('yarn prettier'));
+      await run('Lint source code',        () => bash('yarn lint'));
+      await run('Run tests',               () => bash('yarn test'));
+      await run('Run integration tests',   () => bash('yarn test:integration'));
+      await run('Run E2E tests',           () => bash('yarn test:e2e'));
+      await run('Scan extension manifest', () => bash('yarn check-manifest'));
+    })()
   }
 
   await require('./zip-sources')(buildVars.OUTPUT_DIR);
