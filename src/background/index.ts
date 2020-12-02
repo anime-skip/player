@@ -1,5 +1,4 @@
 import AxiosApi from '@/common/api/AxiosApi';
-import Browser from '@/common/utils/Browser';
 import Messenger from '@/common/utils/Messenger';
 
 // Setup Globals
