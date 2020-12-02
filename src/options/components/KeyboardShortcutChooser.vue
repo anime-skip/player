@@ -109,10 +109,12 @@ export default Vue.extend({
   }
 
   &.secondary > pre {
-    background-color: $secondary500;
+    color: rgba($color: white, $alpha: 0.75);
+    background-color: $divider;
   }
 
   & > pre.duplicate {
+    color: $textPrimary;
     background-color: $red700;
   }
 
