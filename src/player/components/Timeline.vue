@@ -32,6 +32,13 @@
       :key="`t${timestamp.id}`"
       class="Timestamp"
       :class="timestampClass(timestamp)"
+      :src="
+        !isEditing
+          ? 'ic_timestamp.svg'
+          : timestamp.edited
+          ? 'ic_timestamp_draft_edited.svg'
+          : 'ic_timestamp_draft.svg'
+      "
       :style="{ left: `${(timestamp.at / duration) * 100}%` }"
     />
     <VueSlider

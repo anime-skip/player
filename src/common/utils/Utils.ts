@@ -213,7 +213,11 @@ export default class Utils {
     return Math.random() * Number.MAX_SAFE_INTEGER;
   }
 
-  public static arrayIncludes<T>(array: T[], idKey: keyof T, value: T): boolean {
+  public static arrayIncludes<K extends string>(
+    array: { [key in K]: any }[],
+    idKey: K,
+    value: { [key in K]: any } & Record<string, any>
+  ): boolean {
     return array.some(item => item[idKey] === value[idKey]);
   }
 

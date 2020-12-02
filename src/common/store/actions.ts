@@ -113,6 +113,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
         typeId: TIMESTAMP_TYPE_NOT_SELECTED,
         id: Utils.randomId(),
         source: 'ANIME_SKIP',
+        edited: true,
       });
       dispatch(types.showDialog, 'TimestampsPanel');
     });

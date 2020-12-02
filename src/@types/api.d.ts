@@ -160,6 +160,7 @@ declare namespace Api {
      */
     id: number | string;
     source: TimestampSource;
+    edited?: boolean;
   }
 
   interface ThirdPartyTimestamp {
