@@ -205,7 +205,7 @@ export default as<
   [types.clearHoveredTimestamp](state) {
     state.hoveredTimestamp = undefined;
   },
-  [types.updateDraftTimestamp](state, newTimestamp: Api.AmbigousTimestamp) {
+  [types.updateTimestampInDrafts](state, newTimestamp: Api.AmbigousTimestamp) {
     const index = state.draftTimestamps.findIndex(
       draftTimestamp => draftTimestamp.id === newTimestamp.id
     );

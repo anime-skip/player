@@ -186,7 +186,7 @@ export const TIMESTAMP_SOURCES: { [source in Api.TimestampSource]: string | unde
 };
 
 /**
- * The content to show in the skipped prefereces section
+ * The content to show in the skipped preferences section
  */
 export const SKIPPABLE_PREFERENCES: SkippablePreference[] = [
   {

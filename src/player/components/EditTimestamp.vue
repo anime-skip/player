@@ -83,7 +83,7 @@ export default class EditTimestamp extends Mixins(VideoControllerMixin, Keyboard
   @Mutation() clearActiveTimestamp!: () => void;
   @Mutation() clearEditTimestampMode!: () => void;
   @Mutation() setActiveTimestamp!: (timestamp: Api.AmbigousTimestamp) => void;
-  @Mutation() updateDraftTimestamp!: (newTimestamp: Api.AmbigousTimestamp) => void;
+  @Mutation() updateTimestampInDrafts!: (newTimestamp: Api.AmbigousTimestamp) => void;
   @Mutation() deleteDraftTimestamp!: (deletedTimestamp: Api.AmbigousTimestamp) => void;
 
   @Action('showDialog') hideDialog!: () => void;
@@ -209,13 +209,15 @@ export default class EditTimestamp extends Mixins(VideoControllerMixin, Keyboard
 
   public onClickDone() {
     const base = this.activeTimestamp!;
-    this.updateDraftTimestamp({
+    const updatedTimestamp: Api.AmbigousTimestamp = {
       at: base.at,
       typeId: this.selectedType!.id,
       id: base.id,
       source: base.source,
       edited: true,
-    });
+    };
+    this.setActiveTimestamp(updatedTimestamp);
+    this.updateTimestampInDrafts(updatedTimestamp);
     this.leaveDialog();
   }
 
