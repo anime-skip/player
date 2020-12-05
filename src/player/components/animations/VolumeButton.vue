@@ -23,32 +23,29 @@
 </template>
 
 <script lang="ts">
-import { Component, Mixins } from 'vue-property-decorator';
+import vueMixins from 'vue-typed-mixins';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import VueSlider from 'vue-slider-component';
 import ToolbarButton from '../ToolbarButton.vue';
 import '../../scss/VolumeSlider.scss';
 import VideoControllerMixin from '../../../common/mixins/VideoController';
 
-@Component({
+export default vueMixins(VideoControllerMixin).extend({
   components: { WebExtImg, VueSlider, ToolbarButton },
-})
-export default class VolumeButton extends Mixins(VideoControllerMixin) {
-  public isDragging = false;
-
-  public get volumeClass(): string {
-    if (this.isMuted) {
-      return 'muted';
-    }
-    if (this.level <= 0.05) {
-      return 'low';
-    }
-    if (this.level < 0.6) {
-      return 'medium';
-    }
-    return 'high';
-  }
-}
+  data() {
+    return {
+      isDragging: false,
+    };
+  },
+  computed: {
+    volumeClass(): string {
+      if (this.isMuted) return 'muted';
+      if (this.level <= 0.05) return 'low';
+      if (this.level < 0.6) return 'medium';
+      return 'high';
+    },
+  },
+});
 </script>
 
 <style lang="scss" scoped>
