@@ -24,12 +24,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import Vue from 'vue';
 
-@Component
-export default class ProgressOverlay extends Vue {
-  @Prop(Boolean) public isLoading!: boolean;
-}
+export default Vue.extend({
+  props: {
+    isLoading: { type: Boolean, required: true },
+  },
+});
 </script>
 
 <style lang="scss" scoped>
