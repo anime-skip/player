@@ -8,7 +8,7 @@
       <input
         ref="input"
         class="input"
-        v-model="inputValue"
+        v-model="internalValue"
         :type="type"
         :placeholder="label"
         :autocomplete="autocomplete || 'off'"
@@ -24,66 +24,70 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import Vue from 'vue';
+import { PropValidator } from 'vue/types/options';
 import WebExtImg from './WebExtImg.vue';
 
-@Component({
+export default Vue.extend({
   components: { WebExtImg },
-})
-export default class TextInput extends Vue {
-  @Prop(String) private id?: string;
-  @Prop({ type: String, required: true }) private label!: string;
-  @Prop(String) private errorMessage?: string;
-  @Prop(String) private autocomplete?: 'username' | 'current-password';
-  @Prop(String) private defaultValue?: string;
-  @Prop({ default: 'text' }) private type!: 'text' | 'password';
-  @Prop(String) private leftIcon?: string;
-  @Prop({ type: Boolean, required: false, default: true }) isValid!: boolean;
-  @Prop(String) private value?: string;
-  @Prop(Boolean) private disabled?: boolean;
-
-  @Watch('value')
-  public onChangeValue(value: string | undefined) {
-    this.inputValue = value ?? '';
-  }
-
-  private isFocused = false;
-
-  public onFocus() {
-    this.$emit('focus');
-    this.isFocused = true;
-  }
-  public focus(selectAll = false) {
-    const input = this.$refs.input as HTMLInputElement | undefined;
-    if (input) {
-      if (selectAll) {
-        input.setSelectionRange(0, input.value.length);
+  props: {
+    id: String,
+    label: { type: String, required: true },
+    errorMessage: String,
+    autocomplete: String as PropValidator<'username' | 'current-password'>,
+    defaultValue: String,
+    type: { type: String, default: 'text' } as PropValidator<'text' | 'password'>,
+    leftIcon: String,
+    isValid: { type: Boolean, required: false, default: true },
+    value: String,
+    disabled: Boolean,
+  },
+  // emits: ['focus', 'blur', 'input'],
+  data() {
+    return {
+      internalValue: '',
+      isFocused: false,
+    };
+  },
+  watch: {
+    value(newValue: string | undefined) {
+      this.internalValue = newValue ?? '';
+    },
+    internalValue(newInternalValue: string | undefined) {
+      if (newInternalValue !== this.value) {
+        this.$emit('input', newInternalValue);
       }
-      input.focus();
-    } else {
-      console.warn('Failed to focus on input, ref did not exist');
-    }
-  }
-
-  public onBlur() {
-    this.$emit('blur');
-    this.isFocused = false;
-  }
-  public blur() {
-    (this.$refs.input as HTMLInputElement | undefined)?.blur();
-  }
-
-  public get inputValue(): string {
-    return this.value ?? this.defaultValue ?? '';
-  }
-  public set inputValue(value) {
-    this.$emit('input', value);
-  }
-
-  public onPressEsc() {
-    this.$emit('keypress-esc');
-  }
-}
+    },
+  },
+  methods: {
+    focus(selectAll = false) {
+      const input = this.$refs.input as HTMLInputElement | undefined;
+      if (input) {
+        if (selectAll) input.setSelectionRange(0, input.value.length);
+        input.focus();
+      } else {
+        console.warn('Failed to focus on input, ref did not exist');
+      }
+    },
+    onFocus() {
+      this.$emit('focus');
+      this.isFocused = true;
+    },
+    blur() {
+      (this.$refs.input as HTMLInputElement | undefined)?.blur();
+    },
+    onBlur() {
+      this.$emit('blur');
+      this.isFocused = false;
+    },
+    onPressEsc() {
+      this.$emit('keypress-esc');
+    },
+    setInputValue(value: string) {
+      this.$emit('input', value);
+    },
+  },
+});
 </script>
 
 <style lang="scss">
