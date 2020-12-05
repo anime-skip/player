@@ -14,5 +14,6 @@
   "editor.formatOnPaste": false,
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
-  "cSpell.words": ["camelcase"]
+  "cSpell.words": ["camelcase"],
+  "cSpell.ignoreWords": ["builtins"]
 }

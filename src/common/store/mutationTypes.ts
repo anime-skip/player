@@ -2,6 +2,7 @@ export default {
   activeDialog: '@@general/activeDialog' as const,
   changePlaybackRate: '@@general/changePlaybackRate' as const,
   toggleEditMode: '@@general/toggleEditMode' as const,
+  setIsInitialBuffer: '@@general/setIsInitialBuffer' as const,
   setTabUrl: '@@general/setTabUrl' as const,
   setHasSkippedFromZero: '@@general/setHasSkippedFromZero' as const,
   setDuration: '@@general/setDuration' as const,
@@ -28,6 +29,7 @@ export default {
   setEpisode: '@@episodes/setEpisode' as const,
   setInferredEpisodeInfo: '@@episodes/setInferredEpisodeInfo' as const,
   episodeRequestState: '@@episodes/episodeRequestState' as const,
+  initialVideoDataRequestState: '@@episodes/initialVideoDataRequestState' as const,
 
   setActiveTimestamp: '@@timestamps/setActiveTimestamp' as const,
   clearActiveTimestamp: '@@timestamps/clearActiveTimestamp' as const,

@@ -5,6 +5,7 @@ declare interface VuexState {
    */
   playbackRate: number;
   isEditing: boolean;
+  isInitialBuffer: boolean;
   selectedTimestamp: Api.AmbigousTimestamp | undefined;
   tabUrl: string;
   browserType: BrowserType;
@@ -33,6 +34,7 @@ declare interface VuexState {
   episode: Api.Episode | undefined;
   inferredEpisodeInfo: InferredEpisodeInfo | undefined;
   episodeRequestState: RequestState;
+  initialVideoDataRequestState: RequestState;
 
   editTimestampMode: 'add' | 'edit' | undefined;
   activeTimestamp: Api.AmbigousTimestamp | undefined;
