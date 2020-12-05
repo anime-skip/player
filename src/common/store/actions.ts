@@ -361,19 +361,27 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
   async [types.loadAllEpisodeData]({ commit, dispatch, state }, tabUrl = state.tabUrl) {
     commit(mutationTypes.setTimestamps, []);
     commit(mutationTypes.setEpisodeUrl, undefined);
+    commit(mutationTypes.setEpisode, undefined);
     commit(mutationTypes.setInferredEpisodeInfo, undefined);
+    commit(mutationTypes.setIsInitialBuffer, true);
 
-    await Promise.all([
-      dispatch(types.inferEpisodeInfo),
-      dispatch(types.fetchEpisodeByUrl, tabUrl),
-    ]);
+    commit(mutationTypes.initialVideoDataRequestState, RequestState.LOADING);
+    try {
+      await Promise.all([
+        dispatch(types.inferEpisodeInfo),
+        dispatch(types.fetchEpisodeByUrl, tabUrl),
+      ]);
+      commit(mutationTypes.initialVideoDataRequestState, RequestState.SUCCESS);
+    } catch (err) {
+      commit(mutationTypes.initialVideoDataRequestState, RequestState.FAILURE);
+    }
 
     if (
       state.episodeUrl == null &&
       state.inferredEpisodeInfo?.name != null &&
       state.inferredEpisodeInfo?.show != null
     ) {
-      await dispatch(types.fetchThirdPartyEpisode, {
+      dispatch(types.fetchThirdPartyEpisode, {
         name: state.inferredEpisodeInfo.name,
         showName: state.inferredEpisodeInfo.show,
       });

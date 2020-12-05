@@ -5,6 +5,7 @@
       active: isActive,
       paused: playerState.isPaused,
       buffering: playerState.isBuffering,
+      showing: isEpisodeInfoShowing,
     }"
     @mouseenter.prevent="toggleActive(true)"
     @mouseleave.prevent="toggleActive(false)"
@@ -71,11 +72,8 @@ export default vueMixins(KeyboardShortcutMixin, VideoControllerMixin).extend({
     // TODO: use Vue.set...
     const playerState: PlayerState = {
       isActive: false,
-      isBuffering: false,
-      isPaused: global.getVideo().paused,
-      isLoadingEpisodeInfo: false,
-      isFullscreen: false,
-      isMuted: global.getVideo().muted,
+      isBuffering: true,
+      isPaused: true,
     };
     return {
       playerState,
@@ -95,6 +93,12 @@ export default vueMixins(KeyboardShortcutMixin, VideoControllerMixin).extend({
     isActive(): boolean {
       return this.playerState.isActive || this.isEditing;
     },
+    isEpisodeInfoShowing(): boolean {
+      return (
+        this.playerState.isPaused ||
+        (this.playerState.isBuffering && this.$store.state.isInitialBuffer)
+      );
+    },
   },
   methods: {
     onStorageChanged(changes: Partial<VuexState>): void {
@@ -109,6 +113,7 @@ export default vueMixins(KeyboardShortcutMixin, VideoControllerMixin).extend({
       // Managing the buffer
       video.onplaying = () => {
         Vue.set(this.playerState, 'isBuffering', false);
+        this.$store.commit(mutationTypes.setIsInitialBuffer, false);
       };
       video.onwaiting = () => {
         Vue.set(this.playerState, 'isBuffering', true);
@@ -213,7 +218,7 @@ export default vueMixins(KeyboardShortcutMixin, VideoControllerMixin).extend({
     padding-top: 32px;
     box-sizing: border-box;
   }
-  &.paused {
+  &.showing {
     .left-content {
       opacity: 1;
       pointer-events: unset;

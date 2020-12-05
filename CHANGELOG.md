@@ -4,7 +4,12 @@
 
 ### Enhancements
 
-- None
+- Vue Object Syntax refactor
+- Show episode info during initial buffer/loading
+
+### Fixes
+
+- VRV Episode info sometimes didn't update when going to the next episode
 
 ## `v1.0.22`
 

@@ -64,6 +64,9 @@ export default as<
   [types.setDuration](state, duration) {
     state.duration = duration;
   },
+  [types.setIsInitialBuffer](state, newIsInitialBuffer: boolean) {
+    state.isInitialBuffer = newIsInitialBuffer;
+  },
 
   // Storage
   [types.restoreState](
@@ -190,6 +193,9 @@ export default as<
   },
   [types.episodeRequestState](state, requestState: RequestState) {
     state.episodeRequestState = requestState;
+  },
+  [types.initialVideoDataRequestState](state, requestState: RequestState) {
+    state.initialVideoDataRequestState = requestState;
   },
 
   // Timestamps

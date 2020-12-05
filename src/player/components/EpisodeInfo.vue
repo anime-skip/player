@@ -1,5 +1,5 @@
 <template>
-  <div class="EpisodeInfo" :class="{ visible: hasTriedLoadingEpisodeInfo }">
+  <div class="EpisodeInfo" :class="{ visible: hasLoadedData }">
     <h2>
       {{ showTitle }}
       <span>&ensp;&bull;&ensp;{{ serviceDisplayName }}</span>
@@ -35,8 +35,8 @@ export default vueMixins(VideoControllerMixin).extend({
     displayEpisodeInfo(): DisplayEpisodeInfo | undefined {
       return this.$store.getters.displayEpisodeInfo;
     },
-    episodeRequestState(): RequestState {
-      return this.$store.state.episodeRequestState;
+    initialVideoDataRequestState(): RequestState {
+      return this.$store.state.initialVideoDataRequestState;
     },
     hasEpisodeUrl(): boolean {
       return !!this.$store.state.episodeUrl;
@@ -50,10 +50,10 @@ export default vueMixins(VideoControllerMixin).extend({
     duration(): number | undefined {
       return this.$store.getters.duration;
     },
-    hasTriedLoadingEpisodeInfo(): boolean {
+    hasLoadedData(): boolean {
       return (
-        this.episodeRequestState === RequestState.FAILURE ||
-        this.episodeRequestState === RequestState.SUCCESS
+        this.initialVideoDataRequestState === RequestState.FAILURE ||
+        this.initialVideoDataRequestState === RequestState.SUCCESS
       );
     },
     isConnectButtonVisible(): boolean {
@@ -61,9 +61,6 @@ export default vueMixins(VideoControllerMixin).extend({
       const episodeUrlIsMissing = !this.hasEpisodeUrl;
       const videoIsLoaded = this.duration != null && this.duration > 0;
       return episodeUrlIsMissing && areDialogsHidden && videoIsLoaded;
-    },
-    isLoadingEpisodeInfo(): boolean {
-      return this.episodeRequestState === RequestState.LOADING;
     },
     showTitle(): string {
       return this.displayEpisodeInfo?.show ?? '';
