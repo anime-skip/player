@@ -93,7 +93,7 @@ import actionTypes from '@/common/store/actionTypes';
 export default vueMixins(VideoControllerMixin).extend({
   components: { WebExtImg, ToolbarButton, ProgressOverlay },
   destroyed(): void {
-    this.onStopHoverTimestamp(); // TODO? Does this work not that it's not unmounted?
+    this.onStopHoverTimestamp();
   },
   data() {
     return {
