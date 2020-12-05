@@ -109,8 +109,7 @@ export default Vue.extend({
   },
   computed: {
     shouldShowSuggestions(): boolean {
-      return true
-      // return !this.wasEscPressed && (this.isFocused || this.isMouseOver);
+      return !this.wasEscPressed && (this.isFocused || this.isMouseOver);
     },
     inputValue(): AutocompleteItem {
       return this.value;
