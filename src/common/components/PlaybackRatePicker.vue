@@ -28,71 +28,79 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import Vue from 'vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
-import { Getter, Mutation } from '../utils/VuexDecorators';
 import { PLAYBACK_SPEEDS } from '../../common/utils/Constants';
+import mutationTypes from '../store/mutationTypes';
 
-@Component({
+export default Vue.extend({
   components: { WebExtImg },
-})
-export default class PlaybackRatePicker extends Vue {
-  @Prop(Boolean) public showLess?: string;
-
-  public customRate = '';
-  public PLAYBACK_SPEEDS = PLAYBACK_SPEEDS.filter(speed => !speed.hideWhenSmall || !this.showLess);
-
-  @Getter() public playbackRate!: number;
-
-  @Mutation() public changePlaybackRate!: (speed: number) => void;
-
-  public mounted() {
-    if (!this.isConstantSelected()) {
+  props: {
+    showLess: Boolean,
+  },
+  mounted(): void {
+    if (!this.isConstantSelected) {
       this.customRate = String(this.playbackRate);
     }
-  }
+  },
+  data() {
+    return {
+      customRate: '',
+      PLAYBACK_SPEEDS: PLAYBACK_SPEEDS.filter(speed => !speed.hideWhenSmall || !this.showLess),
+    };
+  },
+  watch: {
+    playbackRate() {
+      this.onChangePlaybackRate();
+    },
+  },
+  computed: {
+    playbackRate(): number {
+      return this.$store.state.playbackRate;
+    },
+    isConstantSelected(): boolean {
+      return !!this.PLAYBACK_SPEEDS.find(
+        (speed: PlaybackRate) => speed.value === this.playbackRate
+      );
+    },
+    isCustomError(): boolean {
+      if (!this.customRate) return false;
 
-  public isConstantSelected(): boolean {
-    return !!this.PLAYBACK_SPEEDS.find((speed: PlaybackRate) => speed.value === this.playbackRate);
-  }
+      const value = Number(this.customRate);
+      if (!isFinite(value)) return true;
 
-  public get isCustomError(): boolean {
-    if (!this.customRate) return false;
-
-    const value = Number(this.customRate);
-    if (!isFinite(value)) return true;
-
-    return value < 0.5 || value > 4;
-  }
-
-  @Watch('playbackRate')
-  public onChangePlaybackRate() {
-    if (!this.isConstantSelected()) {
-      this.customRate = this.playbackRate ? String(this.playbackRate) : '';
-    }
-  }
-
-  public onClickOption(value: number) {
-    this.customRate = '';
-    this.changePlaybackRate(Number(value));
-  }
-
-  public onChangeCustom(event: InputEvent) {
-    const { value } = event.target as HTMLInputElement;
-    this.customRate = value;
-  }
-
-  public onBlurCustom() {
-    const value = this.customRate;
-    this.changePlaybackRate(Number(value));
-    if (this.isConstantSelected()) {
+      return value < 0.5 || value > 4;
+    },
+  },
+  methods: {
+    changePlaybackRate(speed: number): void {
+      this.$store.commit(mutationTypes.changePlaybackRate, speed);
+    },
+    onChangePlaybackRate() {
+      if (!this.isConstantSelected) {
+        this.customRate = this.playbackRate ? String(this.playbackRate) : '';
+      }
+    },
+    onClickOption(value: number) {
       this.customRate = '';
-    }
-    if (this.isCustomError) {
-      return;
-    }
-  }
-}
+      this.changePlaybackRate(Number(value));
+    },
+    onChangeCustom(event: InputEvent) {
+      const { value } = event.target as HTMLInputElement;
+      this.customRate = value;
+    },
+    onBlurCustom() {
+      const value = this.customRate;
+      this.changePlaybackRate(Number(value));
+      if (this.isConstantSelected) {
+        this.customRate = '';
+      }
+      if (this.isCustomError) {
+        return;
+      }
+    },
+  },
+});
 </script>
 
 <style lang="scss" scoped>
