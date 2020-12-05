@@ -120,7 +120,7 @@ export default Vue.extend({
       this.highlightedIndex = -1;
     },
     focus() {
-      // @ts-expect-error: Webpack doesn't like this
+      // @ts-ignore: Webpack doesn't like this
       const input: TextInput | undefined = this.$refs.input;
       input?.focus(true);
     },
