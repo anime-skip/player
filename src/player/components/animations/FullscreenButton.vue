@@ -7,29 +7,29 @@
 </template>
 
 <script lang="ts">
-import { Component } from 'vue-property-decorator';
-import AnimatedIcon from './AnimatedIcon.vue';
+import vueMixins from 'vue-typed-mixins';
+import AnimatedIcon from '@/common/mixins/AnimatedIcon';
 
-@Component
-export default class FullscreenButton extends AnimatedIcon {
-  public getPath(): [[number, number], [number, number]][][] {
-    // prettier-ignore
-    return [
+export default vueMixins(AnimatedIcon).extend({
+  methods: {
+    getPath(): [[number, number], [number, number]][][] {
+      // prettier-ignore
+      return [
       [
-        [[7, 5], [9, 5]],
-        [[9, 5], [9, 7]],
+        [[7, 5],  [9, 5]],
+        [[9, 5],  [9, 7]],
         [[9, 10], [6, 7]],
         [[4, 10], [6, 10]],
-        [[4, 8], [4, 10]],
-        [[7, 8], [4, 5]],
+        [[4, 8],  [4, 10]],
+        [[7, 8],  [4, 5]],
       ],
       [
-        [[17, 8], [20, 5]],
-        [[20, 8], [20, 10]],
+        [[17, 8],  [20, 5]],
+        [[20, 8],  [20, 10]],
         [[20, 10], [18, 10]],
         [[15, 10], [18, 7]],
-        [[15, 5], [15, 7]],
-        [[17, 5], [15, 5]],
+        [[15, 5],  [15, 7]],
+        [[17, 5],  [15, 5]],
       ],
       [
         [[9, 14], [6, 17]],
@@ -48,8 +48,9 @@ export default class FullscreenButton extends AnimatedIcon {
         [[15, 19], [15, 17]],
       ],
     ];
-  }
-}
+    },
+  },
+});
 </script>
 
 <style lang="scss" scoped>
