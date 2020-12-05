@@ -23,9 +23,9 @@
     >
       <div
         v-for="(option, index) of options"
-        :key="option.id"
+        :key="option.key"
         class="default-option"
-        :class="{ selected: option.id === value.id, highlight: index === highlightedIndex }"
+        :class="{ selected: option.key === value.key, highlight: index === highlightedIndex }"
         @click="onClickOption(option)"
       >
         <slot name="option" :option="option" :click="onClickOption">
@@ -45,150 +45,147 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import Vue from 'vue';
+import type { PropValidator } from 'vue/types/options';
 import TextInput from './TextInput.vue';
 
-@Component({
+export default Vue.extend({
   components: { TextInput },
-})
-export default class AutocompleteTextInput extends Vue {
-  @Prop({ type: Object, required: true }) private value!: AutocompleteItem;
-  @Prop(String) private label!: string;
-  @Prop(String) private errorMessage?: string;
-  @Prop({ type: String, default: 'No results' }) private noOptionsMessage!: string;
-  @Prop({ type: Array, required: true }) private options!: AutocompleteItem[];
-  @Prop(String) private leftIcon?: string;
-  @Prop({ type: Number, default: 300 }) private searchDelay?: number;
-  @Prop(Boolean) private disabled?: boolean;
-
-  @Watch('value')
-  public onChangeValue(value: AutocompleteItem) {
-    this.inputValue = value;
-  }
-
-  private searchValue = '';
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  private searchTimeout?: any;
-  private isFocused = false;
-  private isMouseOver = false;
-  private wasEscPressed = false;
-  private highlightedIndex = -1;
-
-  public mounted(): void {
+  props: {
+    value: { type: Object, required: true } as PropValidator<AutocompleteItem>,
+    label: String,
+    errorMessage: String,
+    noOptionsMessage: { type: String, default: 'No results' },
+    options: { type: Array, required: true } as PropValidator<AutocompleteItem[]>,
+    leftIcon: String,
+    searchDelay: { type: Number, default: 300 },
+    disabled: Boolean,
+  },
+  // emits: ["search"],
+  mounted() {
     if (this.value) {
       this.searchValue = this.value.title;
       this.$emit('search', this.searchValue.trim());
     }
     this.highlightedIndex = -1;
-  }
-
-  @Watch('searchValue')
-  public onChangeSearchValue(): void {
-    // Setup search timeout
-    if (this.searchTimeout) {
-      clearTimeout(this.searchTimeout);
-    }
-    this.searchTimeout = setTimeout(() => {
-      this.$emit('search', this.searchValue.trim());
-    }, this.searchDelay);
-
-    // highlight index
-    this.highlightedIndex = this.searchValue.trim() ? -1 : 0;
-
-    // Update parent
-    if (this.searchValue !== this.inputValue.title) {
-      this.inputValue = {
-        title: this.searchValue,
-      };
-    }
-  }
-
-  @Watch('options')
-  public onChangeOptions(options: AutocompleteItem[]) {
-    this.highlightedIndex = options.length === 0 ? -1 : 0;
-  }
-
-  public onHoverOptions() {
-    this.highlightedIndex = -1;
-  }
-
-  public focus() {
-    (this.$refs.input as HTMLInputElement).focus();
-  }
-
-  public get shouldShowSuggestions(): boolean {
-    return !this.wasEscPressed && (this.isFocused || this.isMouseOver);
-  }
-
-  public onFocusInput() {
-    this.wasEscPressed = false;
-    this.isFocused = true;
-    this.$emit('focus');
-  }
-
-  public onBlurInput() {
-    this.isFocused = false;
-    this.$emit('blur');
-    setTimeout(() => {
-      if (this.searchValue !== this.inputValue.title) {
-        this.inputValue = {
-          title: this.searchValue,
-        };
+  },
+  data() {
+    return {
+      searchValue: '',
+      searchTimeout: undefined as number | undefined,
+      isFocused: false,
+      isMouseOver: false,
+      wasEscPressed: false,
+      highlightedIndex: -1,
+    };
+  },
+  watch: {
+    value(value: AutocompleteItem) {
+      this.setInputValue(value);
+    },
+    searchValue() {
+      // Setup search timeout
+      if (this.searchTimeout) {
+        clearTimeout(this.searchTimeout);
       }
-    }, 0);
-  }
+      this.searchTimeout = window.setTimeout(() => {
+        this.$emit('search', this.searchValue.trim());
+      }, this.searchDelay);
 
-  public onClickOption(option: AutocompleteItem) {
-    this.inputValue = option;
-    this.onPressEsc();
-    this.$emit('select', option);
-  }
+      // highlight index
+      this.highlightedIndex = this.searchValue.trim() ? -1 : 0;
 
-  public onPressEsc() {
-    this.wasEscPressed = true;
-    (document.activeElement as HTMLElement | undefined)?.blur();
-  }
-
-  public selectHightlightedOption() {
-    const newSelection = this.options[this.highlightedIndex];
-    if (newSelection == null) {
-      return console.warn(
-        'Could not select index ' +
-          this.highlightedIndex +
-          ' from ' +
-          this.options.length +
-          ' options'
-      );
-    }
-    this.onClickOption(newSelection);
-  }
-
-  public get inputValue(): AutocompleteItem {
-    return this.value;
-  }
-  public set inputValue(value: AutocompleteItem) {
-    this.searchValue = value.title;
-    this.$emit('input', value);
-  }
-
-  public selectUp() {
-    if (this.options.length === 0) {
+      // Update parent
+      if (this.searchValue !== this.inputValue.title) {
+        this.setInputValue({
+            key: '',
+          title: this.searchValue,
+        });
+      }
+    },
+    options(options: AutocompleteItem[]) {
+      this.highlightedIndex = options.length === 0 ? -1 : 0;
+    },
+  },
+  computed: {
+    shouldShowSuggestions(): boolean {
+      return true
+      // return !this.wasEscPressed && (this.isFocused || this.isMouseOver);
+    },
+    inputValue(): AutocompleteItem {
+      return this.value;
+    },
+  },
+  methods: {
+    onHoverOptions() {
       this.highlightedIndex = -1;
-    } else {
-      this.highlightedIndex =
-        (this.highlightedIndex === -1 ? this.options.length - 1 : this.highlightedIndex - 1) %
-        this.options.length;
+    },
+    focus() {
+      (this.$refs.input as TextInput | undefined)?.focus(true);
+    },
+    onFocusInput() {
+      this.wasEscPressed = false;
+      this.isFocused = true;
+      this.$emit('focus');
+    },
+    onBlurInput() {
+      this.isFocused = false;
+      this.$emit('blur');
+      setTimeout(() => {
+        if (this.searchValue !== this.inputValue.title) {
+          this.setInputValue({
+            key: '',
+            title: this.searchValue,
+          });
+        }
+      }, 0);
+    },
+    onPressEsc() {
+      this.wasEscPressed = true;
+      (document.activeElement as HTMLElement | undefined)?.blur();
+    },
+    onClickOption(option: AutocompleteItem) {
+      this.setInputValue(option);
+      this.onPressEsc();
+      this.$emit('select', option);
+    },
+    selectHightlightedOption() {
+      const newSelection = this.options[this.highlightedIndex];
+      if (newSelection == null) {
+        return console.warn(
+          'Could not select index ' +
+            this.highlightedIndex +
+            ' from ' +
+            this.options.length +
+            ' options'
+        );
+      }
+      this.onClickOption(newSelection);
+    },
+    setInputValue(value: AutocompleteItem) {
+      this.searchValue = value.title;
+      if (value !== this.value) {
+        this.$emit('input', value);
+      }
+    },
+    selectUp() {
+      if (this.options.length === 0) {
+        this.highlightedIndex = -1;
+      } else {
+        this.highlightedIndex =
+          (this.highlightedIndex === -1 ? this.options.length - 1 : this.highlightedIndex - 1) %
+          this.options.length;
+      }
+    },
+    selectDown() {
+      if (this.options.length === 0) {
+        this.highlightedIndex = -1;
+      } else {
+        this.highlightedIndex = (this.highlightedIndex + 1) % this.options.length;
+      }
     }
-  }
-
-  public selectDown() {
-    if (this.options.length === 0) {
-      this.highlightedIndex = -1;
-    } else {
-      this.highlightedIndex = (this.highlightedIndex + 1) % this.options.length;
-    }
-  }
-}
+  },
+});
 </script>
 
 <style lang="scss">

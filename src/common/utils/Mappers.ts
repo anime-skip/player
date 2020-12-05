@@ -6,6 +6,7 @@ export default {
     show: Api.ShowSearchResult
   ): AutocompleteItem<Api.ShowSearchResult> {
     return {
+      key: show.id,
       title: show.name,
       subtitle: show.originalName,
       data: show,
@@ -15,6 +16,7 @@ export default {
     episode: Api.EpisodeSearchResult
   ): AutocompleteItem<Api.EpisodeSearchResult> {
     return {
+      key: episode.id,
       title: episode.name || '(No title)',
       subtitle: EpisodeUtils.seasonAndNumberDisplay(episode),
       data: episode,

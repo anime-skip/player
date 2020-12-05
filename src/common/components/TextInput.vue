@@ -53,8 +53,16 @@ export default class TextInput extends Vue {
     this.$emit('focus');
     this.isFocused = true;
   }
-  public focus() {
-    (this.$refs.input as HTMLInputElement | undefined)?.focus();
+  public focus(selectAll = false) {
+    const input = this.$refs.input as HTMLInputElement | undefined;
+    if (input) {
+      if (selectAll) {
+        input.setSelectionRange(0, input.value.length);
+      }
+      input.focus();
+    } else {
+      console.warn('Failed to focus on input, ref did not exist');
+    }
   }
 
   public onBlur() {

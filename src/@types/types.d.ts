@@ -75,6 +75,7 @@ type BrowserType =
   | 'unsupported';
 
 interface AutocompleteItem<T = any> {
+  key?: string;
   title: string;
   subtitle?: string;
   data?: T;
