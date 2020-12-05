@@ -8,13 +8,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import Vue from 'vue';
 
-@Component
-export default class PopupHeader extends Vue {
-  @Prop(String) public title!: string;
-  @Prop(Boolean) public small?: string;
-}
+export default Vue.extend({
+  props: {
+    title: { type: String, required: true },
+    small: Boolean,
+  },
+});
 </script>
 
 <style lang="scss" scoped>
