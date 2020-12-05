@@ -39,10 +39,10 @@ export default vueMixins(VideoControllerMixin).extend({
       return this.$store.state.initialVideoDataRequestState;
     },
     hasEpisodeUrl(): boolean {
-      return !!this.$store.getters.episodeUrl;
+      return !!this.$store.state.episodeUrl;
     },
     activeDialog(): string | undefined {
-      return this.$store.getters.activeDialog;
+      return this.$store.state.activeDialog;
     },
     isLoggedIn(): boolean {
       return this.$store.getters.isLoggedIn;

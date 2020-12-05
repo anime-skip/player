@@ -82,10 +82,10 @@ export default vueMixins(KeyboardShortcutMixin, VideoControllerMixin).extend({
   },
   computed: {
     playbackRate(): number {
-      return this.$store.getters.playbackRate;
+      return this.$store.state.playbackRate;
     },
     isEditing(): boolean {
-      return this.$store.getters.isEditing;
+      return this.$store.state.isEditing;
     },
     tabUrl(): string {
       return this.$store.getters.tabUrl;

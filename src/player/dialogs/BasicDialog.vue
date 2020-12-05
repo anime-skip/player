@@ -15,34 +15,42 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { Getter, Action } from '@/common/utils/VuexDecorators';
+import actionTypes from '@/common/store/actionTypes';
+import Vue from 'vue';
+import { PropValidator } from 'vue/types/options';
 
-@Component
-export default class BasicDialog extends Vue {
-  @Prop({ type: String, required: true }) public name!: string;
-  @Prop({ type: String, default: 'center' }) public gravityX!: 'center' | 'flex-start' | 'flex-end';
-  @Prop({ type: String, default: 'center' }) public gravityY!: 'center' | 'flex-start' | 'flex-end';
+export default Vue.extend({
+  props: {
+    name: { type: String, required: true },
+    gravityX: { type: String, default: 'center' } as PropValidator<
+      'center' | 'flex-start' | 'flex-end'
+    >,
+    gravityY: { type: String, default: 'center' } as PropValidator<
+      'center' | 'flex-start' | 'flex-end'
+    >,
+  },
+  watch: {
+    activeDialog(currentDialog?: string, prevDialog?: string) {
+      if (currentDialog === prevDialog) return;
 
-  @Getter() activeDialog?: string;
-
-  @Action('showDialog') hideDialog!: () => void;
-
-  @Watch('activeDialog')
-  public onChangeActiveDialog(currentDialog: string, prevDialog: string) {
-    if (currentDialog === prevDialog) return;
-
-    if (this.name === currentDialog && this.name !== prevDialog) {
-      this.$emit('show');
-    } else if (this.name === prevDialog && this.name !== currentDialog) {
-      this.$emit('hide');
-    }
-  }
-
-  public dismiss(): void {
-    this.hideDialog();
-  }
-}
+      if (this.name === currentDialog && this.name !== prevDialog) {
+        this.$emit('show');
+      } else if (this.name === prevDialog && this.name !== currentDialog) {
+        this.$emit('hide');
+      }
+    },
+  },
+  computed: {
+    activeDialog(): string | undefined {
+      return this.$store.state.activeDialog;
+    },
+  },
+  methods: {
+    dismiss(): void {
+      this.$store.dispatch(actionTypes.showDialog, undefined);
+    },
+  },
+});
 </script>
 
 <style lang="scss" scoped>

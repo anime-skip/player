@@ -112,16 +112,16 @@ export default vueMixins(VideoControllerMixin, KeyboardShortcutsMixin).extend({
   },
   computed: {
     activeTimestamp(): Api.AmbigousTimestamp | undefined {
-      return this.$store.getters.activeTimestamp;
+      return this.$store.state.activeTimestamp;
     },
     episodeUrl(): Api.EpisodeUrlNoEpisode | undefined {
-      return this.$store.getters.episodeUrl;
+      return this.$store.state.episodeUrl;
     },
     editTimestampMode(): 'add' | 'edit' | undefined {
-      return this.$store.getters.editTimestampMode;
+      return this.$store.state.editTimestampMode;
     },
     activeDialog(): string | undefined {
-      return this.$store.getters.activeDialog;
+      return this.$store.state.activeDialog;
     },
     isSaveDisabled(): boolean {
       // Don't have the info to save it
