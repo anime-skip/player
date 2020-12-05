@@ -364,10 +364,16 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     commit(mutationTypes.setEpisode, undefined);
     commit(mutationTypes.setInferredEpisodeInfo, undefined);
 
-    await Promise.all([
-      dispatch(types.inferEpisodeInfo),
-      dispatch(types.fetchEpisodeByUrl, tabUrl),
-    ]);
+    commit(mutationTypes.initialVideoDataRequestState, RequestState.LOADING);
+    try {
+      await Promise.all([
+        dispatch(types.inferEpisodeInfo),
+        dispatch(types.fetchEpisodeByUrl, tabUrl),
+      ]);
+      commit(mutationTypes.initialVideoDataRequestState, RequestState.SUCCESS);
+    } catch (err) {
+      commit(mutationTypes.initialVideoDataRequestState, RequestState.FAILURE);
+    }
 
     if (
       state.episodeUrl == null &&
@@ -375,7 +381,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       state.inferredEpisodeInfo?.show != null
     ) {
       console.log({ inferred: state.inferredEpisodeInfo });
-      await dispatch(types.fetchThirdPartyEpisode, {
+      dispatch(types.fetchThirdPartyEpisode, {
         name: state.inferredEpisodeInfo.name,
         showName: state.inferredEpisodeInfo.show,
       });

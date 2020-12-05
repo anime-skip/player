@@ -32,6 +32,7 @@ export const initialState: VuexState = {
   episode: undefined,
   inferredEpisodeInfo: undefined,
   episodeRequestState: RequestState.NOT_REQUESTED,
+  initialVideoDataRequestState: RequestState.NOT_REQUESTED,
 
   editTimestampMode: undefined,
   activeTimestamp: undefined,

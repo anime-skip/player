@@ -33,6 +33,7 @@ declare interface VuexState {
   episode: Api.Episode | undefined;
   inferredEpisodeInfo: InferredEpisodeInfo | undefined;
   episodeRequestState: RequestState;
+  initialVideoDataRequestState: RequestState;
 
   editTimestampMode: 'add' | 'edit' | undefined;
   activeTimestamp: Api.AmbigousTimestamp | undefined;

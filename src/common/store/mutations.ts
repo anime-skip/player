@@ -191,6 +191,9 @@ export default as<
   [types.episodeRequestState](state, requestState: RequestState) {
     state.episodeRequestState = requestState;
   },
+  [types.initialVideoDataRequestState](state, requestState: RequestState) {
+    state.initialVideoDataRequestState = requestState;
+  },
 
   // Timestamps
   [types.setActiveTimestamp](state, timestamp: Api.AmbigousTimestamp) {

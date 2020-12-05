@@ -28,6 +28,7 @@ export default {
   setEpisode: '@@episodes/setEpisode' as const,
   setInferredEpisodeInfo: '@@episodes/setInferredEpisodeInfo' as const,
   episodeRequestState: '@@episodes/episodeRequestState' as const,
+  initialVideoDataRequestState: '@@episodes/initialVideoDataRequestState' as const,
 
   setActiveTimestamp: '@@timestamps/setActiveTimestamp' as const,
   clearActiveTimestamp: '@@timestamps/clearActiveTimestamp' as const,
