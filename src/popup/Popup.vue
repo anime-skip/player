@@ -7,25 +7,29 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import Vue from 'vue';
 import Loading from '@/common/components/Loading.vue';
 import LogIn from './components/LogIn.vue';
 import Preferences from './components/Preferences.vue';
-import { Getter } from '@/common/utils/VuexDecorators';
 
-@Component({
+export default Vue.extend({
   components: {
     Loading,
     LogIn,
     Preferences,
   },
-})
-export default class Popup extends Vue {
-  @Prop(Boolean) public small?: string;
-
-  @Getter() public isLoggedIn?: boolean;
-  @Getter() public isLoggingIn?: boolean;
-}
+  props: {
+    small: Boolean,
+  },
+  computed: {
+    isLoggedIn(): boolean {
+      return this.$store.getters.isLoggedIn;
+    },
+    isLoggingIn(): boolean {
+      return this.$store.getters.isLoggingIn;
+    },
+  },
+});
 </script>
 
 <style lang="scss" scoped>
