@@ -12,56 +12,58 @@
 </template>
 
 <script lang="ts">
-import { Component, Mixins } from 'vue-property-decorator';
+import vueMixins from 'vue-typed-mixins';
 import VideoControllerMixin from '../../common/mixins/VideoController';
-import KeyboardShortcutsMixin from '../../common/mixins/KeyboardShortcuts';
+import KeyboardShortcutsMixin, { KeyboardShortcutMap } from '../../common/mixins/KeyboardShortcuts';
 import TimestampDetails from '../components/TimestampDetails.vue';
 import EditTimestamp from '../components/EditTimestamp.vue';
 import BasicDialog from './BasicDialog.vue';
-import { Getter, Mutation } from '../../common/utils/VuexDecorators';
+import mutationTypes from '@/common/store/mutationTypes';
 
-@Component({
-  components: {
-    BasicDialog,
-    TimestampDetails,
-    EditTimestamp,
+export default vueMixins(VideoControllerMixin, KeyboardShortcutsMixin).extend({
+  components: { BasicDialog, TimestampDetails, EditTimestamp },
+  data() {
+    return {
+      initialTab: 'details' as 'edit' | 'details',
+    };
   },
-})
-export default class TimestampsPanel extends Mixins(VideoControllerMixin, KeyboardShortcutsMixin) {
-  @Getter() activeTimestamp?: Api.AmbigousTimestamp;
+  computed: {
+    activeTimestamp(): Api.AmbigousTimestamp | undefined {
+      return this.$store.getters.activeTimestamp;
+    },
+  },
+  methods: {
+    onShow(): void {
+      this.initialTab = this.activeTimestamp == null ? 'details' : 'edit';
+    },
+    setActiveTimestamp(timestamp: Api.AmbigousTimestamp): void {
+      this.$store.commit(mutationTypes.setActiveTimestamp, timestamp);
+    },
+    updateTimestamp(): void {
+      (this.$refs.timeSelect as HTMLDivElement | undefined)?.focus();
+      if (this.activeTimestamp != null) {
+        this.setActiveTimestamp({
+          ...this.activeTimestamp,
+          at: this.getCurrentTime(),
+          edited: true,
+        });
+      }
+    },
+    setupKeyboardShortcuts(): KeyboardShortcutMap {
+      return {
+        advanceFrame: this.updateTimestamp,
+        advanceSmall: this.updateTimestamp,
+        advanceMedium: this.updateTimestamp,
+        advanceLarge: this.updateTimestamp,
 
-  @Mutation() setActiveTimestamp!: (timestamp: Api.AmbigousTimestamp) => void;
-
-  initialTab: 'edit' | 'details' = 'details';
-
-  keyboardShortcuts: { [action in KeyboardShortcutAction]?: () => void } = {
-    // TODO? If I use a keyboardshortcut when the panel is just up, what happens?
-    advanceFrame: this.updateTimestamp,
-    advanceSmall: this.updateTimestamp,
-    advanceMedium: this.updateTimestamp,
-    advanceLarge: this.updateTimestamp,
-
-    rewindFrame: this.updateTimestamp,
-    rewindSmall: this.updateTimestamp,
-    rewindMedium: this.updateTimestamp,
-    rewindLarge: this.updateTimestamp,
-  };
-
-  public updateTimestamp(): void {
-    (this.$refs.timeSelect as HTMLDivElement | undefined)?.focus();
-    if (this.activeTimestamp != null) {
-      this.setActiveTimestamp({
-        ...this.activeTimestamp,
-        at: this.getCurrentTime(),
-        edited: true,
-      });
-    }
-  }
-
-  public onShow(): void {
-    this.initialTab = this.activeTimestamp == null ? 'details' : 'edit';
-  }
-}
+        rewindFrame: this.updateTimestamp,
+        rewindSmall: this.updateTimestamp,
+        rewindMedium: this.updateTimestamp,
+        rewindLarge: this.updateTimestamp,
+      };
+    },
+  },
+});
 </script>
 
 <style lang="scss">
