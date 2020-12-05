@@ -41,22 +41,22 @@
         value="Done"
         class="clickable focus button save"
         @click="onClickDone()"
-        :class="{ disabled: isSaveDisabled() }"
+        :class="{ disabled: isSaveDisabled }"
       />
       <input
-        v-if="shouldShowDelete()"
+        v-if="shouldShowDelete"
         type="submit"
         value="Delete"
         class="clickable focus invalid button delete"
         @click="onClickDelete()"
-        :class="{ disabled: isSaveDisabled() }"
+        :class="{ disabled: isSaveDisabled }"
       />
     </footer>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Watch, Mixins, Prop } from 'vue-property-decorator';
+import vueMixins from 'vue-typed-mixins';
 import VideoControllerMixin from '../../common/mixins/VideoController';
 import KeyboardShortcutsMixin from '../../common/mixins/KeyboardShortcuts';
 import { Mutation, Getter, Action } from '../../common/utils/VuexDecorators';
@@ -65,48 +65,16 @@ import Utils from '../../common/utils/Utils';
 import WebExtImg from '../../common/components/WebExtImg.vue';
 import { TIMESTAMP_TYPES, TIMESTAMP_TYPE_NOT_SELECTED } from '../../common/utils/Constants';
 import fuzzysort from 'fuzzysort';
+import { PropValidator } from 'vue/types/options';
+import actionTypes from '@/common/store/actionTypes';
+import mutationTypes from '@/common/store/mutationTypes';
 
-@Component({
-  components: {
-    WebExtImg,
-    TextInput,
+export default vueMixins(VideoControllerMixin, KeyboardShortcutsMixin).extend({
+  components: { WebExtImg, TextInput },
+  props: {
+    initialTab: { type: String, required: true } as PropValidator<'edit' | 'details'>,
   },
-})
-export default class EditTimestamp extends Mixins(VideoControllerMixin, KeyboardShortcutsMixin) {
-  @Prop({ type: String, required: true }) readonly initialTab!: 'edit' | 'details';
-
-  @Getter() activeTimestamp?: Api.AmbigousTimestamp;
-  @Getter() public episodeUrl?: Api.EpisodeUrlNoEpisode;
-  @Getter() public editTimestampMode?: 'add' | 'edit';
-  @Getter() activeDialog?: string;
-
-  @Mutation() clearActiveTimestamp!: () => void;
-  @Mutation() clearEditTimestampMode!: () => void;
-  @Mutation() setActiveTimestamp!: (timestamp: Api.AmbigousTimestamp) => void;
-  @Mutation() updateTimestampInDrafts!: (newTimestamp: Api.AmbigousTimestamp) => void;
-  @Mutation() deleteDraftTimestamp!: (deletedTimestamp: Api.AmbigousTimestamp) => void;
-
-  @Action('showDialog') hideDialog!: () => void;
-
-  public typeFilter = '';
-  public selectedType?: Api.TimestampType;
-
-  public reset() {
-    this.selectedType = TIMESTAMP_TYPES.find(type => type.id === this.activeTimestamp?.typeId);
-    this.typeFilter = '';
-  }
-
-  @Watch('activeTimestamp')
-  public onChangeActiveTimestamp(
-    newTimestamp: Api.AmbigousTimestamp,
-    oldTimestamp: Api.AmbigousTimestamp
-  ) {
-    if (newTimestamp && newTimestamp.id !== oldTimestamp?.id) {
-      this.reset();
-    }
-  }
-
-  public mounted() {
+  mounted() {
     this.reset();
     // Because this happens after the render, we have to render again, otherwise when you click edit
     // on the list ite, it will not start with a type selected on this component. This should be
@@ -119,131 +87,161 @@ export default class EditTimestamp extends Mixins(VideoControllerMixin, Keyboard
         clearInterval(interval);
       }
     }, 200);
-  }
-
-  public destroyed() {
+  },
+  destroyed() {
     this.clearActiveTimestamp();
     this.clearEditTimestampMode();
     this.selectedType = undefined;
-  }
-
-  public updateTimestamp(): void {
-    (this.$refs.timeSelect as HTMLDivElement | undefined)?.focus();
-    if (this.activeTimestamp != null) {
-      this.setActiveTimestamp({
-        ...this.activeTimestamp,
-        at: this.getCurrentTime(),
-        edited: true,
-      });
-    }
-  }
-
-  public isSaveDisabled(): boolean {
-    // Don't have the info to save it
-    if (this.activeTimestamp == null || this.episodeUrl == null) {
-      return true;
-    }
-
-    if (typeof this.activeTimestamp.id === 'number') {
-      return this.selectedType == null;
-    }
-    return this.activeTimestamp.typeId == TIMESTAMP_TYPE_NOT_SELECTED;
-  }
-
-  public get matchingTypes(): Api.TimestampType[] {
-    const filter = this.typeFilter.trim();
-    if (filter == '') return TIMESTAMP_TYPES;
-
-    const results = fuzzysort.go(this.typeFilter, TIMESTAMP_TYPES, { key: 'name', limit: 5 });
-    return results.map(item => item.obj);
-  }
-
-  public typeRadioIcon(type: Api.TimestampType): string {
-    if (this.selectedType == null || type.id !== this.selectedType?.id) {
-      return 'ic_radio_deselected.svg';
-    }
-    return 'ic_radio_selected.svg';
-  }
-
-  @Watch('matchingTypes')
-  onChangeMatchingTypes(current: Api.TimestampType[], _old: Api.TimestampType[]) {
-    if (current.length > 0) {
-      this.selectType(current[0]);
-    }
-  }
-
-  public selectType(type: Api.TimestampType) {
-    this.selectedType = type;
-    this.$forceUpdate();
-  }
-
-  public get formattedAt(): string {
-    if (this.activeTimestamp == null) {
-      return 'No timestamp selected';
-    }
-    return Utils.formatSeconds(this.activeTimestamp.at, true);
-  }
-
-  public shouldShowDelete(): boolean {
-    return this.editTimestampMode === 'edit';
-  }
-
-  public get title(): string {
-    if (this.editTimestampMode == null) {
-      return 'ERROR';
-    }
-    if (this.editTimestampMode === 'add') {
-      return 'Create a Timestamp';
-    }
-    return 'Edit Timestamp';
-  }
-
-  public leaveDialog(): void {
-    this.play();
-    if (this.initialTab === 'edit') {
-      this.hideDialog();
-    } else {
-      this.clearActiveTimestamp();
-    }
-  }
-
-  public onClickDone() {
-    const base = this.activeTimestamp!;
-    const updatedTimestamp: Api.AmbigousTimestamp = {
-      at: base.at,
-      typeId: this.selectedType!.id,
-      id: base.id,
-      source: base.source,
-      edited: true,
+  },
+  watch: {
+    activeTimestamp(newTimestamp: Api.AmbigousTimestamp, oldTimestamp: Api.AmbigousTimestamp) {
+      if (newTimestamp && newTimestamp.id !== oldTimestamp?.id) {
+        this.reset();
+      }
+    },
+    matchingTypes(current: Api.TimestampType[], _old: Api.TimestampType[]) {
+      if (current.length > 0) {
+        this.selectType(current[0]);
+      }
+    },
+  },
+  data() {
+    return {
+      typeFilter: '',
+      selectedType: undefined as Api.TimestampType | undefined,
     };
-    this.setActiveTimestamp(updatedTimestamp);
-    this.updateTimestampInDrafts(updatedTimestamp);
-    this.leaveDialog();
-  }
+  },
+  computed: {
+    activeTimestamp(): Api.AmbigousTimestamp | undefined {
+      return this.$store.getters.activeTimestamp;
+    },
+    episodeUrl(): Api.EpisodeUrlNoEpisode | undefined {
+      return this.$store.getters.episodeUrl;
+    },
+    editTimestampMode(): 'add' | 'edit' | undefined {
+      return this.$store.getters.editTimestampMode;
+    },
+    activeDialog(): string | undefined {
+      return this.$store.getters.activeDialog;
+    },
+    isSaveDisabled(): boolean {
+      // Don't have the info to save it
+      if (this.activeTimestamp == null || this.episodeUrl == null) {
+        return true;
+      }
+      if (typeof this.activeTimestamp.id === 'number') {
+        return this.selectedType == null;
+      }
+      return this.activeTimestamp.typeId == TIMESTAMP_TYPE_NOT_SELECTED;
+    },
+    matchingTypes(): Api.TimestampType[] {
+      const filter = this.typeFilter.trim();
+      if (filter == '') return TIMESTAMP_TYPES;
 
-  public onClickDelete() {
-    this.deleteDraftTimestamp(this.activeTimestamp!);
-    this.leaveDialog();
-  }
+      const results = fuzzysort.go(this.typeFilter, TIMESTAMP_TYPES, { key: 'name', limit: 5 });
+      return results.map(item => item.obj);
+    },
+    formattedAt(): string {
+      if (this.activeTimestamp == null) {
+        return 'No timestamp selected';
+      }
+      return Utils.formatSeconds(this.activeTimestamp.at, true);
+    },
+    shouldShowDelete(): boolean {
+      return this.editTimestampMode === 'edit';
+    },
+    title(): string {
+      if (this.editTimestampMode == null) return 'ERROR';
+      if (this.editTimestampMode === 'add') return 'Create a Timestamp';
+      return 'Edit Timestamp';
+    },
+  },
+  methods: {
+    hideDialog(): void {
+      this.$store.dispatch(actionTypes.showDialog, undefined);
+    },
+    clearActiveTimestamp(): void {
+      this.$store.commit(mutationTypes.clearActiveTimestamp, undefined);
+    },
+    clearEditTimestampMode(): void {
+      this.$store.commit(mutationTypes.clearEditTimestampMode, undefined);
+    },
+    setActiveTimestamp(timestamp: Api.AmbigousTimestamp): void {
+      this.$store.commit(mutationTypes.setActiveTimestamp, timestamp);
+    },
+    updateTimestampInDrafts(newTimestamp: Api.AmbigousTimestamp): void {
+      this.$store.commit(mutationTypes.updateTimestampInDrafts, newTimestamp);
+    },
+    deleteDraftTimestamp(deletedTimestamp: Api.AmbigousTimestamp): void {
+      this.$store.commit(mutationTypes.deleteDraftTimestamp, deletedTimestamp);
+    },
+    reset() {
+      this.selectedType = TIMESTAMP_TYPES.find(type => type.id === this.activeTimestamp?.typeId);
+      this.typeFilter = '';
+    },
+    updateTimestamp(): void {
+      (this.$refs.timeSelect as HTMLDivElement | undefined)?.focus();
+      if (this.activeTimestamp != null) {
+        this.setActiveTimestamp({
+          ...this.activeTimestamp,
+          at: this.getCurrentTime(),
+          edited: true,
+        });
+      }
+    },
+    typeRadioIcon(type: Api.TimestampType): string {
+      if (this.selectedType == null || type.id !== this.selectedType?.id) {
+        return 'ic_radio_deselected.svg';
+      }
+      return 'ic_radio_selected.svg';
+    },
+    selectType(type: Api.TimestampType) {
+      this.selectedType = type;
+      this.$forceUpdate();
+    },
+    leaveDialog(): void {
+      this.play();
+      if (this.initialTab === 'edit') {
+        this.hideDialog();
+      } else {
+        this.clearActiveTimestamp();
+      }
+    },
+    onClickDone() {
+      const base = this.activeTimestamp!;
+      const updatedTimestamp: Api.AmbigousTimestamp = {
+        at: base.at,
+        typeId: this.selectedType!.id,
+        id: base.id,
+        source: base.source,
+        edited: true,
+      };
+      this.setActiveTimestamp(updatedTimestamp);
+      this.updateTimestampInDrafts(updatedTimestamp);
+      this.leaveDialog();
+    },
+    onClickDelete() {
+      this.deleteDraftTimestamp(this.activeTimestamp!);
+      this.leaveDialog();
+    },
+    onPressUp() {
+      const types = this.matchingTypes;
+      if (types.length === 0) return;
 
-  public onPressUp() {
-    const types = this.matchingTypes;
-    if (types.length === 0) return;
+      const index = types.findIndex(type => type.id === this.selectedType?.id);
+      const newIndex = (types.length + index - 1) % types.length;
+      this.selectType(types[newIndex]);
+    },
+    onPressDown() {
+      const types = this.matchingTypes;
+      if (types.length === 0) return;
 
-    const index = types.findIndex(type => type.id === this.selectedType?.id);
-    const newIndex = (types.length + index - 1) % types.length;
-    this.selectType(types[newIndex]);
-  }
-
-  public onPressDown() {
-    const types = this.matchingTypes;
-    if (types.length === 0) return;
-
-    const index = types.findIndex(type => type.id === this.selectedType?.id);
-    const newIndex = (index + 1) % types.length;
-    this.selectType(types[newIndex]);
-  }
-}
+      const index = types.findIndex(type => type.id === this.selectedType?.id);
+      const newIndex = (index + 1) % types.length;
+      this.selectType(types[newIndex]);
+    },
+  },
+});
 </script>
 
 <style scoped lang="scss">
