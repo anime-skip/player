@@ -59,7 +59,6 @@
 import vueMixins from 'vue-typed-mixins';
 import VideoControllerMixin from '../../common/mixins/VideoController';
 import KeyboardShortcutsMixin from '../../common/mixins/KeyboardShortcuts';
-import { Mutation, Getter, Action } from '../../common/utils/VuexDecorators';
 import TextInput from '../../common/components/TextInput.vue';
 import Utils from '../../common/utils/Utils';
 import WebExtImg from '../../common/components/WebExtImg.vue';
