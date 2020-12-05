@@ -5,13 +5,12 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import Vue from 'vue';
 import ProgressOverlay from '@/common/components/ProgressOverlay.vue';
 
-@Component({
+export default Vue.extend({
   components: { ProgressOverlay },
-})
-export default class Loading extends Vue {}
+});
 </script>
 
 <style lang="scss" scoped>
