@@ -7,16 +7,16 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import Vue from 'vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 
-@Component({
+export default Vue.extend({
   components: { WebExtImg },
-})
-export default class ToolbarButton extends Vue {
-  @Prop(String) public icon?: string;
-  @Prop(String) public title?: string;
-}
+  props: {
+    icon: String,
+    title: String,
+  },
+});
 </script>
 
 <style lang="scss" scoped>
