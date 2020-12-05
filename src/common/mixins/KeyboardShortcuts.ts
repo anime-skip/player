@@ -1,38 +1,49 @@
-import { Vue, Component } from 'vue-property-decorator';
+import Vue from 'vue';
 import Utils from '../utils/Utils';
 
-@Component
-export default class KeyboardShortcutMixin extends Vue {
-  created(): void {
-    console.debug(`[${this.$options.name}] KeyboardShortcutMixin.created()`);
-    global.addKeyDownListener(this.onKeyDown);
-  }
+export type KeyboardShortcutMap = { [action in KeyboardShortcutAction]?: () => void };
+interface Data {
+  $keyboardShortcuts: KeyboardShortcutMap;
+}
 
+export default Vue.extend({
+  created() {
+    this.$keyboardShortcuts = this.setupKeyboardShortcuts();
+    global.addKeyDownListener(this.onKeyDown);
+    console.debug(`[${this.$options.name}] KeyboardShortcutMixin.created()`);
+  },
   destroyed(): void {
     global.removeKeyDownListener(this.onKeyDown);
-  }
+  },
+  data(): Data {
+    // @ts-ignore: Data is just for the typing, shortcuts are setup in created
+    return {};
+  },
+  methods: {
+    onKeyDown(event: KeyboardEvent): void {
+      // Prevent triggers from firing while typing
+      if (document.activeElement?.tagName === 'INPUT' || !Utils.isKeyComboAllowed(event)) {
+        return;
+      }
 
-  onKeyDown(event: KeyboardEvent): void {
-    // Prevent triggers from firing while typing
-    if (document.activeElement?.tagName === 'INPUT' || !Utils.isKeyComboAllowed(event)) {
-      return;
-    }
-
-    const keyCombo = Utils.keyComboFromEvent(event);
-    let keyAction = Utils.findShortcutAction(
-      keyCombo,
-      this.$store.getters.primaryKeyboardShortcuts
-    );
-    if (keyAction == null) {
-      keyAction = Utils.findShortcutAction(
+      const keyCombo = Utils.keyComboFromEvent(event);
+      let keyAction = Utils.findShortcutAction(
         keyCombo,
-        this.$store.getters.secondaryKeyboardShortcuts
+        this.$store.getters.primaryKeyboardShortcuts
       );
-    }
+      if (keyAction == null) {
+        keyAction = Utils.findShortcutAction(
+          keyCombo,
+          this.$store.getters.secondaryKeyboardShortcuts
+        );
+      }
 
-    console.debug(`[${this.$options.name}] Pressed ${keyCombo} -> ${keyAction}`);
-    if (keyAction == null || this.keyboardShortcuts[keyAction] == null) return;
-    (this.keyboardShortcuts[keyAction] as Function).apply(this);
-  }
-  keyboardShortcuts: { [action in KeyboardShortcutAction]?: () => void } = {};
-}
+      console.debug(`[${this.$options.name}] Pressed ${keyCombo} -> ${keyAction}`);
+      if (keyAction == null || this.$keyboardShortcuts[keyAction] == null) return;
+      (this.$keyboardShortcuts[keyAction] as Function).apply(this);
+    },
+    setupKeyboardShortcuts(): { [action in KeyboardShortcutAction]?: () => void } {
+      return {};
+    },
+  },
+});
