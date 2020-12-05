@@ -109,6 +109,7 @@ export default vueMixins(VideoControllerMixin).extend({
         opacity: 0;
       }
       &.medium {
+        // Empty
       }
       &.high {
         transform: translateX(-2px);
@@ -125,6 +126,7 @@ export default vueMixins(VideoControllerMixin).extend({
         opacity: 0;
       }
       &.high {
+        // Empty
       }
     }
   }
