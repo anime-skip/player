@@ -6,5 +6,6 @@ artifacts/
 example/video.mp4
 .env*
 .chrome.pem
+stats.json
 
 TODO.md

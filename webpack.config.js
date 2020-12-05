@@ -32,6 +32,12 @@ const config = {
       return map;
     }, {}),
   },
+  // TODO: Investigate code splitting options
+  // optimization: {
+  //   splitChunks: {
+  //     chunks: 'all',
+  //   },
+  // },
   output: {
     path: __dirname + '/dist',
     filename: '[name].js',
@@ -134,23 +140,11 @@ const config = {
       },
     ]),
   ],
-  devServer: {
-    stats: {
-      colors: true,
-      hash: false,
-      version: false,
-      timings: false,
-      assets: false,
-      chunks: false,
-      modules: false,
-      reasons: false,
-      children: false,
-      source: false,
-      errors: false,
-      errorDetails: false,
-      warnings: false,
-      publicPath: false,
-    },
+  stats: {
+    assetsSort: '!size',
+    entrypoints: false,
+    excludeAssets: [/.*\.(png|svg)$/],
+    modules: false,
   },
 };
 

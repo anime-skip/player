@@ -14,18 +14,19 @@
     "check-manifest": "yarn build:prod && yarn web-ext --config=.web-ext.config.js lint && yarn build:chrome:prod && yarn web-ext --config=.web-ext.config.js lint",
     "package": "node scripts/package.js",
     "package:dry": "cross-env DRY_RUN=true yarn package",
-    "build": "cross-env BUILD_ONLY=true BUILD_FOR=firefox NODE_ENV=development webpack --hide-modules --watch",
-    "build:prod": "cross-env BUILD_ONLY=true BUILD_FOR=firefox NODE_ENV=production webpack --hide-modules",
-    "build:chrome": "cross-env BUILD_ONLY=true BUILD_FOR=chrome NODE_ENV=development webpack --hide-modules --watch",
-    "build:chrome:prod": "cross-env BUILD_ONLY=true BUILD_FOR=chrome NODE_ENV=production webpack --hide-modules",
-    "start": "cross-env HMR=true BUILD_FOR=firefox NODE_ENV=development webpack --hide-modules --watch",
-    "start:prod": "cross-env BUILD_FOR=firefox NODE_ENV=production webpack --hide-modules",
-    "start:chrome": "cross-env HMR=true BUILD_FOR=chrome NODE_ENV=development webpack --hide-modules --watch",
-    "start:chrome:prod": "cross-env BUILD_FOR=chrome NODE_ENV=production webpack --hide-modules",
+    "build": "cross-env BUILD_ONLY=true BUILD_FOR=firefox NODE_ENV=development webpack --watch",
+    "build:prod": "cross-env BUILD_ONLY=true BUILD_FOR=firefox NODE_ENV=production webpack",
+    "build:chrome": "cross-env BUILD_ONLY=true BUILD_FOR=chrome NODE_ENV=development webpack --watch",
+    "build:chrome:prod": "cross-env BUILD_ONLY=true BUILD_FOR=chrome NODE_ENV=production webpack",
+    "start": "cross-env HMR=true BUILD_FOR=firefox NODE_ENV=development webpack --watch",
+    "start:prod": "cross-env BUILD_FOR=firefox NODE_ENV=production webpack",
+    "start:chrome": "cross-env HMR=true BUILD_FOR=chrome NODE_ENV=development webpack --watch",
+    "start:chrome:prod": "cross-env BUILD_FOR=chrome NODE_ENV=production webpack",
     "test": "jest --runInBand",
     "test:watch": "yarn test --watchAll",
     "test:integration": "echo 'TODO'",
-    "test:e2e": "echo 'TODO'"
+    "test:e2e": "echo 'TODO'",
+    "webpack-profile": "cross-env BUILD_ONLY=true BUILD_FOR=firefox NODE_ENV=production webpack --profile --json > stats.json && echo 'Upload ./stats.json to https://alexkuz.github.io/webpack-chart/'"
   },
   "husky": {
     "hooks": {
