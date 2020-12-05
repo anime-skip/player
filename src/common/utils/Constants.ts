@@ -269,3 +269,5 @@ export const SUPPORTED_THIRD_PARTY_SERVICES: Record<
   vrv: ['ANIME_SKIP', 'BETTER_VRV'],
   funimation: ['ANIME_SKIP'],
 };
+
+export const PLAYER_ACTIVITY_TIMEOUT = 2000;
