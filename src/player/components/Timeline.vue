@@ -79,7 +79,7 @@ export default vueMixins(VideoControllerMixin, KeyboardShortcutMixin).extend({
     duration: Number,
     updateTime: { type: Function, required: true } as PropValidator<
       (newTime: number, updatePlayer?: boolean) => void
-    >, // TODO: Optional?
+    >,
     timestamps: { type: Array, required: true } as PropValidator<Api.Timestamp[]>,
   },
   data() {
