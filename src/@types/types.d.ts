@@ -13,10 +13,7 @@ declare interface LoginRefreshPayload {
 declare interface PlayerState {
   isActive: boolean;
   isBuffering: boolean;
-  isLoadingEpisodeInfo: boolean;
   isPaused: boolean;
-  isFullscreen: boolean;
-  isMuted: boolean;
 }
 
 declare interface SkippablePreference {

@@ -71,11 +71,8 @@ export default vueMixins(KeyboardShortcutMixin, VideoControllerMixin).extend({
     // TODO: use Vue.set...
     const playerState: PlayerState = {
       isActive: false,
-      isBuffering: false,
-      isPaused: global.getVideo().paused,
-      isLoadingEpisodeInfo: false,
-      isFullscreen: false,
-      isMuted: global.getVideo().muted,
+      isBuffering: true,
+      isPaused: true,
     };
     return {
       playerState,
