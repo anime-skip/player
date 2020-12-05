@@ -17,7 +17,7 @@ export default Vue.extend({
   components: { WebExtImg },
   props: {
     isChecked: { type: Boolean, required: true },
-    isDisabled: { type: Boolean, required: true },
+    isDisabled: Boolean,
     text: { type: String, required: true },
     tooltip: String,
   },

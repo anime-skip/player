@@ -17,67 +17,81 @@
 </template>
 
 <script lang="ts">
-import { Component, Mixins } from 'vue-property-decorator';
-import { Getter, Action } from '@/common/utils/VuexDecorators';
+import vueMixins from 'vue-typed-mixins';
 import RequestState from '@/common/utils/RequestState';
 import EpisodeUtils from '@/common/utils/EpisodeUtils';
 import ToolbarButton from '@/player/components/ToolbarButton.vue';
 import VideoControllerMixin from '@/common/mixins/VideoController';
+import actionTypes from '@/common/store/actionTypes';
 
-@Component({
+export default vueMixins(VideoControllerMixin).extend({
   components: { ToolbarButton },
-})
-export default class EpisodeInfo extends Mixins(VideoControllerMixin) {
-  @Action() public showDialog!: (dialogName?: string) => void;
-
-  @Getter() public displayEpisodeInfo?: DisplayEpisodeInfo;
-  @Getter() public episodeRequestState!: RequestState;
-  @Getter() public episodeUrl!: boolean;
-  @Getter() public activeDialog?: string;
-  @Getter() public isLoggedIn!: boolean;
-  @Getter() public duration?: number;
-
-  public serviceDisplayName = global.serviceDisplayName ?? 'Unknown';
-
-  public get hasTriedLoadingEpisodeInfo(): boolean {
-    return (
-      this.episodeRequestState === RequestState.FAILURE ||
-      this.episodeRequestState === RequestState.SUCCESS
-    );
-  }
-
-  public get isConnectButtonVisible(): boolean {
-    const areDialogsHidden = this.activeDialog == null;
-    const episodeUrlIsMissing = !this.episodeUrl;
-    const videoIsLoaded = this.duration != null && this.duration > 0;
-    return episodeUrlIsMissing && areDialogsHidden && videoIsLoaded;
-  }
-
-  public get isLoadingEpisodeInfo(): boolean {
-    return this.episodeRequestState === RequestState.LOADING;
-  }
-
-  public get showTitle(): string {
-    return this.displayEpisodeInfo?.show ?? '';
-  }
-
-  public get episodeTitle(): string {
-    return this.displayEpisodeInfo?.name ?? '';
-  }
-
-  public get episodeDetails(): string {
-    return EpisodeUtils.seasonAndNumberFromEpisodeInfo(this.displayEpisodeInfo);
-  }
-
-  public showEditDialog() {
-    this.pause();
-    if (this.isLoggedIn) {
-      this.showDialog('EditEpisodeDialog');
-    } else {
-      this.showDialog('AccountDialog');
-    }
-  }
-}
+  data() {
+    return {
+      serviceDisplayName: global.serviceDisplayName ?? 'Unknown',
+    };
+  },
+  computed: {
+    displayEpisodeInfo(): DisplayEpisodeInfo | undefined {
+      return this.$store.getters.displayEpisodeInfo;
+    },
+    episodeRequestState(): RequestState {
+      return this.$store.getters.episodeRequestState;
+    },
+    hasEpisodeUrl(): boolean {
+      return !!this.$store.getters.episodeUrl;
+    },
+    activeDialog(): string | undefined {
+      return this.$store.getters.activeDialog;
+    },
+    isLoggedIn(): boolean {
+      return this.$store.getters.isLoggedIn;
+    },
+    duration(): number | undefined {
+      return this.$store.getters.duration;
+    },
+    hasTriedLoadingEpisodeInfo(): boolean {
+      return (
+        this.episodeRequestState === RequestState.FAILURE ||
+        this.episodeRequestState === RequestState.SUCCESS
+      );
+    },
+    isConnectButtonVisible(): boolean {
+      const areDialogsHidden = this.activeDialog == null;
+      const episodeUrlIsMissing = !this.hasEpisodeUrl;
+      const videoIsLoaded = this.duration != null && this.duration > 0;
+      return episodeUrlIsMissing && areDialogsHidden && videoIsLoaded;
+    },
+    isLoadingEpisodeInfo(): boolean {
+      return this.episodeRequestState === RequestState.LOADING;
+    },
+    showTitle(): string {
+      return this.displayEpisodeInfo?.show ?? '';
+    },
+    episodeTitle(): string {
+      return this.displayEpisodeInfo?.name ?? '';
+    },
+    episodeDetails(): string {
+      return EpisodeUtils.seasonAndNumberFromEpisodeInfo(this.displayEpisodeInfo);
+    },
+  },
+  methods: {
+    showEpisodeDialog(): void {
+      this.$store.dispatch(actionTypes.showDialog, 'EditEpisodeDialog');
+    },
+    showAccountDialog(): void {
+      this.$store.dispatch(actionTypes.showDialog, 'AccountDialog');
+    },
+    showEditDialog() {
+      this.pause();
+      if (this.isLoggedIn) {
+        this.showEpisodeDialog();
+      } else {
+        this.showAccountDialog();
+      }
+    },
+  },
+});
 </script>
 
 <style lang="scss" scoped>

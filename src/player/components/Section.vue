@@ -13,8 +13,8 @@ import { PropValidator } from 'vue/types/options';
 export default Vue.extend({
   props: {
     timestamp: { type: Object, required: true } as PropValidator<Api.Timestamp>,
-    endTime: { type: Number, required: true },
-    duration: { type: Number, required: true },
+    endTime: Number,
+    duration: Number,
     currentTime: Number,
     skipped: Boolean,
     buffered: Boolean,
