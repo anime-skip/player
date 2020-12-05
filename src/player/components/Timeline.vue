@@ -138,7 +138,7 @@ export default vueMixins(VideoControllerMixin, KeyboardShortcutMixin).extend({
   },
   computed: {
     isEditing(): boolean {
-      return this.$store.getters.isEditing;
+      return this.$store.state.isEditing;
     },
     hasEpisode(): boolean {
       return this.$store.getters.hasEpisode;
@@ -147,10 +147,10 @@ export default vueMixins(VideoControllerMixin, KeyboardShortcutMixin).extend({
       return this.$store.getters.isLoggedIn;
     },
     activeTimestamp(): Api.AmbigousTimestamp | undefined {
-      return this.$store.getters.activeTimestamp;
+      return this.$store.state.activeTimestamp;
     },
     hoveredTimestamp(): Api.AmbigousTimestamp | undefined {
-      return this.$store.getters.hoveredTimestamp;
+      return this.$store.state.hoveredTimestamp;
     },
     draftTimestamps(): Api.AmbigousTimestamp[] {
       return this.$store.getters.draftTimestamps;
@@ -159,13 +159,13 @@ export default vueMixins(VideoControllerMixin, KeyboardShortcutMixin).extend({
       return this.$store.getters.preferences;
     },
     preferencesLastUpdatedAt(): number {
-      return this.$store.getters.preferencesLastUpdatedAt;
+      return this.$store.state.preferencesLastUpdatedAt;
     },
     hasSkippedFromZero(): boolean {
-      return this.$store.getters.hasSkippedFromZero;
+      return this.$store.state.hasSkippedFromZero;
     },
     playbackRate(): number {
-      return this.$store.getters.playbackRate;
+      return this.$store.state.playbackRate;
     },
     activeTimestamps(): Api.AmbigousTimestamp[] {
       return this.$store.getters.activeTimestamps;

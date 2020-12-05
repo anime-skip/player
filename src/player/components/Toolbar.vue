@@ -135,16 +135,16 @@ export default vueMixins(VideoControllerMixin, KeyboardShortcutMixin).extend({
       return this.$store.getters.preferences;
     },
     activeDialog(): string | undefined {
-      return this.$store.getters.activeDialog;
+      return this.$store.state.activeDialog;
     },
     isEditing(): boolean {
-      return this.$store.getters.isEditing;
+      return this.$store.state.isEditing;
     },
     browserType(): BrowserType {
-      return this.$store.getters.browserType;
+      return this.$store.state.browserType;
     },
     activeTimestamp(): Api.AmbigousTimestamp | undefined {
-      return this.$store.getters.activeTimestamp;
+      return this.$store.state.activeTimestamp;
     },
     isSavingTimestamps(): boolean {
       return this.$store.getters.isSavingTimestamps;

@@ -119,10 +119,10 @@ export default vueMixins(VideoControllerMixin).extend({
       return this.$store.getters.isLoggedIn;
     },
     isEditing(): boolean {
-      return this.$store.getters.isEditing;
+      return this.$store.state.isEditing;
     },
     episodeUrl(): Api.EpisodeUrlNoEpisode | undefined {
-      return this.$store.getters.episodeUrl;
+      return this.$store.state.episodeUrl;
     },
     isSavingTimestamps(): boolean {
       return this.$store.getters.isSavingTimestamps;

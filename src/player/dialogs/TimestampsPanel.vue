@@ -29,7 +29,7 @@ export default vueMixins(VideoControllerMixin, KeyboardShortcutsMixin).extend({
   },
   computed: {
     activeTimestamp(): Api.AmbigousTimestamp | undefined {
-      return this.$store.getters.activeTimestamp;
+      return this.$store.state.activeTimestamp;
     },
   },
   methods: {

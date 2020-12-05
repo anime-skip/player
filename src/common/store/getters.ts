@@ -10,26 +10,8 @@ import Utils from '../utils/Utils';
 
 export default as<GetterTree<VuexState, VuexState>>({
   // General
-  state(state): VuexState {
-    return state;
-  },
-  activeDialog(state): string | undefined {
-    return state.activeDialog;
-  },
-  playbackRate({ playbackRate }): number {
-    return playbackRate;
-  },
-  isEditing({ isEditing }): boolean {
-    return isEditing;
-  },
   tabUrl({ tabUrl }): string {
     return Browser.transformServiceUrl(tabUrl);
-  },
-  browserType({ browserType }) {
-    return browserType;
-  },
-  hasSkippedFromZero({ hasSkippedFromZero }) {
-    return hasSkippedFromZero;
   },
   duration({ duration }) {
     return duration || undefined;
@@ -70,11 +52,8 @@ export default as<GetterTree<VuexState, VuexState>>({
   hasPreferenceError({ preferencesRequestState }): boolean {
     return preferencesRequestState === RequestState.FAILURE;
   },
-  preferencesLastUpdatedAt({ preferencesLastUpdatedAt }): number {
-    return preferencesLastUpdatedAt;
-  },
 
-  // Keyboard shortcusts
+  // Keyboard shortcuts
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   primaryKeyboardShortcuts({ primaryKeyboardShortcuts }): any {
     return primaryKeyboardShortcuts ?? DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS;
@@ -105,23 +84,8 @@ export default as<GetterTree<VuexState, VuexState>>({
     return map;
   },
 
-  // Shows
-  searchShowsResult({ searchShowsResult }): Api.ShowSearchResult[] {
-    return searchShowsResult;
-  },
-
   // Episodes
-  searchEpisodesResult({ searchEpisodesResult }): Api.EpisodeSearchResult[] {
-    return searchEpisodesResult;
-  },
-  episodeUrl({ episodeUrl }): Api.EpisodeUrlNoEpisode | undefined {
-    return episodeUrl;
-  },
-  episode({ episode }): Api.Episode | undefined {
-    return episode;
-  },
-  displayEpisodeInfo(state): DisplayEpisodeInfo {
-    const { inferredEpisodeInfo, episode } = state;
+  displayEpisodeInfo({ inferredEpisodeInfo, episode }): DisplayEpisodeInfo {
     if (episode != null) {
       return {
         absoluteNumber: episode.absoluteNumber,
@@ -138,12 +102,6 @@ export default as<GetterTree<VuexState, VuexState>>({
       season: inferredEpisodeInfo?.season,
       show: inferredEpisodeInfo?.show || 'Unknown Show',
     };
-  },
-  inferredEpisodeInfo({ inferredEpisodeInfo }): InferredEpisodeInfo | undefined {
-    return inferredEpisodeInfo;
-  },
-  episodeRequestState({ episodeRequestState }): RequestState {
-    return episodeRequestState;
   },
   hasEpisode({ episodeUrl }): boolean {
     return episodeUrl != null;
@@ -173,12 +131,6 @@ export default as<GetterTree<VuexState, VuexState>>({
     );
     return offsetBoundedTimestamps;
   },
-  activeTimestamp(state): Api.AmbigousTimestamp | undefined {
-    return state.activeTimestamp;
-  },
-  hoveredTimestamp(state): Api.AmbigousTimestamp | undefined {
-    return state.hoveredTimestamp;
-  },
   draftTimestamps(state): Api.AmbigousTimestamp[] {
     let drafts = state.draftTimestamps;
     if (state.activeTimestamp != null) {
@@ -192,17 +144,14 @@ export default as<GetterTree<VuexState, VuexState>>({
     }
     return drafts;
   },
-  activeTimestamps(_, getters): Api.AmbigousTimestamp[] {
-    return getters.isEditing ? getters.draftTimestamps : getters.timestamps;
+  activeTimestamps(state, getters): Api.AmbigousTimestamp[] {
+    return state.isEditing ? getters.draftTimestamps : getters.timestamps;
   },
-  editTimestampMode(state): 'edit' | 'add' | undefined {
-    return state.editTimestampMode;
-  },
-  canEditTimestamps(_, getters): boolean {
+  canEditTimestamps(state, getters): boolean {
     if (!getters.isLoggedIn) return false;
-    const episodeInfo: Api.EpisodeUrlNoEpisode = getters.episodeUrl;
-    if (episodeInfo == null) return false;
-    const episode: Api.Episode = getters.episode;
+    const episodeUrl = state.episodeUrl;
+    if (episodeUrl == null) return false;
+    const episode = state.episode;
     if (episode == null) return false;
     const { name, show } = episode;
     if (!name || !show?.name) return false;

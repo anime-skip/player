@@ -64,7 +64,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       commit(mutations.activeDialog, dialogName);
     }
   },
-  async [types.startEditing]({ commit, dispatch, getters }, onStartedEditing?: () => void) {
+  async [types.startEditing]({ commit, dispatch, getters, state }, onStartedEditing?: () => void) {
     if (!getters.isLoggedIn) {
       await dispatch(types.showDialog, 'AccountDialog');
       return;
@@ -74,7 +74,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       return;
     }
 
-    if (!getters.isEditing) {
+    if (!state.isEditing) {
       commit(mutations.toggleEditMode, true);
       commit(mutations.setDraftTimestamps, getters.timestamps);
     }
@@ -373,7 +373,6 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       state.inferredEpisodeInfo?.name != null &&
       state.inferredEpisodeInfo?.show != null
     ) {
-      console.log({ inferred: state.inferredEpisodeInfo });
       await dispatch(types.fetchThirdPartyEpisode, {
         name: state.inferredEpisodeInfo.name,
         showName: state.inferredEpisodeInfo.show,
