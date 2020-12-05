@@ -7,14 +7,14 @@
 </template>
 
 <script lang="ts">
-import { Component } from 'vue-property-decorator';
-import AnimatedIcon from './AnimatedIcon.vue';
+import vueMixins from 'vue-typed-mixins';
+import AnimatedIcon from '@/common/mixins/AnimatedIcon';
 
-@Component
-export default class PlayPauseButton extends AnimatedIcon {
-  public getPath(): [[number, number], [number, number]][][] {
-    // prettier-ignore
-    return [
+export default vueMixins(AnimatedIcon).extend({
+  methods: {
+    getPath(): [[number, number], [number, number]][][] {
+      // prettier-ignore
+      return [
       [
         [[6, 5], [7, 5]],
         [[10, 5], [13, 8.82]],
@@ -28,8 +28,9 @@ export default class PlayPauseButton extends AnimatedIcon {
         [[14, 19], [11, 16.45]],
       ],
     ];
-  }
-}
+    },
+  },
+});
 </script>
 
 <style lang="scss" scoped>
