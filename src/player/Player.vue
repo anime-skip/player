@@ -210,7 +210,8 @@ export default vueMixins(KeyboardShortcutMixin, VideoControllerMixin).extend({
     padding-top: 32px;
     box-sizing: border-box;
   }
-  &.paused {
+  &.paused,
+  &.buffering {
     .left-content {
       opacity: 1;
       pointer-events: unset;
