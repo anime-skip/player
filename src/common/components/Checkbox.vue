@@ -4,28 +4,29 @@
     :title="tooltip"
     :class="{ 'dark down': !isChecked, disabled: isDisabled }"
   >
-    <WebExtImg class="checkmark" :src="getIcon()" />
+    <WebExtImg class="checkmark" :src="icon" />
     <span class="text" :class="{ selected: isChecked }">{{ text }}</span>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import Vue from 'vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 
-@Component({
+export default Vue.extend({
   components: { WebExtImg },
-})
-export default class Checkbox extends Vue {
-  @Prop(Boolean) public isChecked!: boolean;
-  @Prop(Boolean) public isDisabled!: boolean;
-  @Prop(String) public text!: string;
-  @Prop(String) public tooltip!: string;
-
-  public getIcon(): string {
-    return `ic_${this.isChecked ? 'checked' : 'unchecked'}.svg`;
-  }
-}
+  props: {
+    isChecked: { type: Boolean, required: true },
+    isDisabled: { type: Boolean, required: true },
+    text: { type: String, required: true },
+    tooltip: String,
+  },
+  computed: {
+    icon(): string {
+      return `ic_${this.isChecked ? 'checked' : 'unchecked'}.svg`;
+    },
+  },
+});
 </script>
 
 <style lang="scss" scoped>
