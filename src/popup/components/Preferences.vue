@@ -69,102 +69,100 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import Vue from 'vue';
 import ProgressOverlay from '@/common/components/ProgressOverlay.vue';
 import PopupHeader from './PopupHeader.vue';
 import Checkbox from '@/common/components/Checkbox.vue';
 import TextInput from '@/common/components/TextInput.vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import PlaybackRatePicker from '@/common/components/PlaybackRatePicker.vue';
-import { Getter, Action, Mutation } from '@/common/utils/VuexDecorators';
 import { SKIPPABLE_PREFERENCES } from '../../common/utils/Constants';
 import Messenger from '@/common/utils/Messenger';
+import actionTypes from '@/common/store/actionTypes';
+import mutationTypes from '@/common/store/mutationTypes';
 
-@Component({
+export default Vue.extend({
   components: { ProgressOverlay, PopupHeader, Checkbox, TextInput, PlaybackRatePicker, WebExtImg },
-})
-export default class Preferences extends Vue {
-  @Prop(Boolean) public small?: string;
-
-  @Getter() public preferences?: Api.Preferences;
-  @Getter() public isLoggingIn!: boolean;
-  @Getter() public hasPreferenceError!: boolean;
-
-  @Action() public updatePreferences!: (pref: keyof Api.Preferences) => void;
-  @Action('showDialog') public hideDialog!: () => void;
-
-  @Mutation() public logOut!: () => void;
-
-  public activePlayerOption?: PlayerOptionGroup;
-
-  public constructor() {
-    super();
-  }
-
-  public mounted(): void {
-    this.playerOptions;
-  }
-
-  public data() {
+  props: {
+    small: Boolean,
+  },
+  mounted(): void {
+    this.playerOptions; // TODO! huh?
+  },
+  data() {
     return {
-      activePlayerOption: undefined,
+      activePlayerOption: undefined as PlayerOptionGroup | undefined,
+      messenger: new Messenger('preferences'),
     };
-  }
+  },
+  computed: {
+    preferences(): Api.Preferences | undefined {
+      return this.$store.getters.preferences;
+    },
+    isLoggingIn(): boolean {
+      return this.$store.getters.isLoggingIn;
+    },
+    hasPreferenceError(): boolean {
+      return this.$store.getters.hasPreferenceError;
+    },
+    SKIPPABLE_PREFERENCES(): SkippablePreference[] {
+      return SKIPPABLE_PREFERENCES;
+    },
+    hasPlayerOptions(): boolean {
+      return !!global.getPlayerOptions;
+    },
+    playerOptions(): PlayerOptionGroup[] {
+      const options = (global.getPlayerOptions && global.getPlayerOptions()) || [];
+      return options.filter(group => group.options.length > 1);
+    },
+  },
+  methods: {
+    updatePreferences(pref: keyof Api.Preferences): void {
+      this.$store.dispatch(actionTypes.updatePreferences, pref);
+    },
+    hideDialog(): void {
+      // TODO: Pull dialog ids into constants
+      // TODO: Create a hideDialog action
+      this.$store.dispatch(actionTypes.showDialog, undefined);
+    },
+    logOut(): void {
+      this.$store.commit(mutationTypes.logOut);
+    },
+    getPref(pref: keyof Api.Preferences): boolean {
+      const prefs = this.preferences;
+      if (!prefs) {
+        return false;
+      }
+      return prefs[pref];
+    },
+    onClickAutoSkip() {
+      this.updatePreferences('enableAutoSkip');
+    },
+    onClickPreference(preferenceKey: keyof Api.Preferences): void {
+      this.updatePreferences(preferenceKey);
+    },
+    onClickKeyboardShortcuts(): void {
+      this.messenger.send('@anime-skip/open-options', undefined).then(this.hideDialog);
+    },
+    onClickOptionGroup(optionGroup: PlayerOptionGroup): void {
+      Vue.set(this, 'activePlayerOption', optionGroup);
+      this.activePlayerOption = optionGroup;
+    },
+    getSelectedOption(optionGroup: PlayerOptionGroup): string {
+      const selected = optionGroup.options.filter(option => option.isSelected);
+      if (selected.length === 0) return '';
 
-  public get SKIPPABLE_PREFERENCES(): SkippablePreference[] {
-    return SKIPPABLE_PREFERENCES;
-  }
-
-  public getPref(pref: keyof Api.Preferences): boolean {
-    const prefs = this.preferences;
-    if (!prefs) {
-      return false;
-    }
-    return prefs[pref];
-  }
-
-  public onClickAutoSkip() {
-    this.updatePreferences('enableAutoSkip');
-  }
-
-  public onClickPreference(preferenceKey: keyof Api.Preferences): void {
-    this.updatePreferences(preferenceKey);
-  }
-
-  public onClickKeyboardShortcuts(): void {
-    new Messenger('preferences').send('@anime-skip/open-options', undefined).then(this.hideDialog);
-  }
-
-  public get hasPlayerOptions(): boolean {
-    return !!global.getPlayerOptions;
-  }
-
-  public get playerOptions(): PlayerOptionGroup[] {
-    const options = (global.getPlayerOptions && global.getPlayerOptions()) || [];
-    return options.filter(group => group.options.length > 1);
-  }
-
-  public onClickOptionGroup(optionGroup: PlayerOptionGroup): void {
-    Vue.set(this, 'activePlayerOption', optionGroup);
-    this.activePlayerOption = optionGroup;
-  }
-
-  public getSelectedOption(optionGroup: PlayerOptionGroup): string {
-    const selected = optionGroup.options.filter(option => option.isSelected);
-    if (selected.length === 0) return '';
-
-    return selected[0].title;
-  }
-
-  public onClickOptionGroupBack(): void {
-    Vue.set(this, 'activePlayerOption', undefined);
-  }
-
-  public onClickOption(option: PlayerOption): void {
-    option.node.click();
-    this.hideDialog();
-  }
-}
+      return selected[0].title;
+    },
+    onClickOptionGroupBack(): void {
+      this.activePlayerOption = undefined;
+    },
+    onClickOption(option: PlayerOption): void {
+      option.node.click();
+      this.hideDialog();
+    },
+  },
+});
 </script>
 
 <style lang="scss" scoped>
