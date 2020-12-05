@@ -5,6 +5,7 @@ declare interface VuexState {
    */
   playbackRate: number;
   isEditing: boolean;
+  isInitialBuffer: boolean;
   selectedTimestamp: Api.AmbigousTimestamp | undefined;
   tabUrl: string;
   browserType: BrowserType;

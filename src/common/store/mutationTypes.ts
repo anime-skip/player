@@ -2,6 +2,7 @@ export default {
   activeDialog: '@@general/activeDialog' as const,
   changePlaybackRate: '@@general/changePlaybackRate' as const,
   toggleEditMode: '@@general/toggleEditMode' as const,
+  setIsInitialBuffer: '@@general/setIsInitialBuffer' as const,
   setTabUrl: '@@general/setTabUrl' as const,
   setHasSkippedFromZero: '@@general/setHasSkippedFromZero' as const,
   setDuration: '@@general/setDuration' as const,

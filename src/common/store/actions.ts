@@ -363,6 +363,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     commit(mutationTypes.setEpisodeUrl, undefined);
     commit(mutationTypes.setEpisode, undefined);
     commit(mutationTypes.setInferredEpisodeInfo, undefined);
+    commit(mutationTypes.setIsInitialBuffer, true);
 
     commit(mutationTypes.initialVideoDataRequestState, RequestState.LOADING);
     try {
