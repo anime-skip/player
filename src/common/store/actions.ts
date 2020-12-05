@@ -361,6 +361,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
   async [types.loadAllEpisodeData]({ commit, dispatch, state }, tabUrl = state.tabUrl) {
     commit(mutationTypes.setTimestamps, []);
     commit(mutationTypes.setEpisodeUrl, undefined);
+    commit(mutationTypes.setEpisode, undefined);
     commit(mutationTypes.setInferredEpisodeInfo, undefined);
 
     await Promise.all([
