@@ -5,17 +5,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import Vue from 'vue';
 import Popup from '@/popup/Popup.vue';
 import BasicDialog from './BasicDialog.vue';
 
-@Component({
-  components: {
-    BasicDialog,
-    Popup,
-  },
-})
-export default class AccountDialog extends Vue {}
+export default Vue.extend({
+  components: { BasicDialog, Popup },
+});
 </script>
 
 <style lang="scss">

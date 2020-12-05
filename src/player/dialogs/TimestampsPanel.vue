@@ -35,6 +35,7 @@ export default class TimestampsPanel extends Mixins(VideoControllerMixin, Keyboa
   initialTab: 'edit' | 'details' = 'details';
 
   keyboardShortcuts: { [action in KeyboardShortcutAction]?: () => void } = {
+    // TODO? If I use a keyboardshortcut when the panel is just up, what happens?
     advanceFrame: this.updateTimestamp,
     advanceSmall: this.updateTimestamp,
     advanceMedium: this.updateTimestamp,

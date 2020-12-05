@@ -7,28 +7,31 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import Vue from 'vue';
+import { PropValidator } from 'vue/types/options';
 
-@Component
-export default class Section extends Vue {
-  @Prop(Object) public timestamp!: Api.Timestamp;
-  @Prop(Number) public endTime!: number;
-  @Prop(Number) public duration!: number;
-  @Prop(Number) public currentTime?: number;
-  @Prop(Boolean) public skipped?: boolean;
-  @Prop(Boolean) public buffered?: boolean;
-  @Prop(Boolean) public completed?: boolean;
-
-  public get left(): number {
-    return (this.timestamp.at / this.duration) * 100;
-  }
-  public get width(): number {
-    if (this.currentTime == null || this.currentTime > this.endTime) {
-      return (this.endTime / this.duration) * 100 - this.left;
-    }
-    return (this.currentTime / this.duration) * 100 - this.left;
-  }
-}
+export default Vue.extend({
+  props: {
+    timestamp: { type: Object, required: true } as PropValidator<Api.Timestamp>,
+    endTime: { type: Number, required: true },
+    duration: { type: Number, required: true },
+    currentTime: Number,
+    skipped: Boolean,
+    buffered: Boolean,
+    completed: Boolean,
+  },
+  computed: {
+    left(): number {
+      return (this.timestamp.at / this.duration) * 100;
+    },
+    width(): number {
+      if (this.currentTime == null || this.currentTime > this.endTime) {
+        return (this.endTime / this.duration) * 100 - this.left;
+      }
+      return (this.currentTime / this.duration) * 100 - this.left;
+    },
+  },
+});
 </script>
 
 <style lang="scss" scoped>
