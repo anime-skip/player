@@ -54,15 +54,16 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Watch, Mixins } from 'vue-property-decorator';
+import vueMixins from 'vue-typed-mixins';
 import Section from './Section.vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import VueSlider from 'vue-slider-component';
 import '../scss/VideoSlider.scss';
 import Utils from '@/common/utils/Utils';
-import { Getter, Mutation } from '@/common/utils/VuexDecorators';
 import VideoControllerMixin from '@/common/mixins/VideoController';
 import KeyboardShortcutMixin from '@/common/mixins/KeyboardShortcuts';
+import { PropValidator } from 'vue/types/options';
+import mutationTypes from '@/common/store/mutationTypes';
 
 interface SectionData {
   timestamp: Api.Timestamp;
@@ -70,186 +71,189 @@ interface SectionData {
   isSkipped: boolean;
 }
 
-@Component({
+export default vueMixins(VideoControllerMixin, KeyboardShortcutMixin).extend({
   components: { Section, WebExtImg, VueSlider },
-})
-export default class Timeline extends Mixins(VideoControllerMixin, KeyboardShortcutMixin) {
-  @Prop(Boolean) public isFlipped?: boolean;
-  @Prop(Number) public currentTime!: number;
-  @Prop(Number) public duration!: Readonly<number>;
-  @Prop(Function) public updateTime!: (newTime: number, updatePlayer?: boolean) => void;
-  @Prop(Array) public timestamps!: Api.Timestamp[];
+  props: {
+    isFlipped: Boolean,
+    currentTime: { type: Number, required: true },
+    duration: Number,
+    updateTime: { type: Function, required: true } as PropValidator<
+      (newTime: number, updatePlayer?: boolean) => void
+    >,
+    timestamps: { type: Array, required: true } as PropValidator<Api.Timestamp[]>,
+  },
+  data() {
+    return {
+      isSeeking: false,
+      seekingTime: 0,
+      service: global.service,
+    };
+  },
+  watch: {
+    currentTime(newTime: number, oldTime: number) {
+      // Do nothing
+      const currentTimestamp = Utils.previousTimestamp(oldTime, this.timestamps, undefined);
+      const insideSkippedSection =
+        currentTimestamp != null && Utils.isSkipped(currentTimestamp, this.preferences);
+      if (insideSkippedSection) {
+        return;
+      }
 
-  public sections: SectionData[] = [];
-  public completedSections: SectionData[] = [];
-  public isSeeking = false;
-  public seekingTime = 0;
-  public service = global.service;
+      // Get the next timestamp AFTER the oldTime, regardless of if it's skipped
+      const oldNext = Utils.nextTimestamp(oldTime, this.timestamps, undefined);
 
-  @Getter() isEditing!: boolean;
-  @Getter() hasEpisode!: boolean;
-  @Getter() isLoggedIn!: boolean;
-  @Getter() activeTimestamp?: Api.AmbigousTimestamp;
-  @Getter() hoveredTimestamp?: Api.AmbigousTimestamp;
-  @Getter() draftTimestamps!: Api.AmbigousTimestamp[];
-  @Getter('preferences') prefs?: Api.Preferences;
-  @Getter() preferencesLastUpdatedAt!: number;
-  @Getter() hasSkippedFromZero!: boolean;
-  @Getter() playbackRate!: number;
-  @Getter() activeTimestamps!: Api.AmbigousTimestamp[];
+      // Do nothing
+      const timeDiff = Math.abs(oldTime - newTime);
+      const hasNoMoreTimestamsps = oldNext == null;
+      const isSeeking = timeDiff > 1 * this.playbackRate; // Multiple the base number, 1s, by the speed so that high playback rates don't "skip" over timestamps
+      const isAtEnd = newTime >= this.duration;
+      if (hasNoMoreTimestamsps || isSeeking || isAtEnd || this.isEditing) {
+        return;
+      }
 
-  @Mutation() setHasSkippedFromZero!: (newValue: boolean) => void;
-  @Mutation() toggleEditMode!: (isEditing: boolean) => void;
+      // Skip timestamp at 0:00 if we haven't yet
+      const wasAtBeginning = oldTime === 0;
+      const haveNotSkippedFromBeginning = !this.hasSkippedFromZero;
+      const shouldSkipFirstTimestamp = Utils.isSkipped(this.timestamps[0], this.preferences);
+      if (wasAtBeginning && haveNotSkippedFromBeginning && shouldSkipFirstTimestamp) {
+        this.setHasSkippedFromZero(true);
+        this.goToNextTimestampOnTimeChange(newTime);
+        return;
+      }
 
-  public mounted(): void {
-    this.updateSections();
-  }
+      // Do nothing
+      const willNotPastATimestamp = oldNext!.at > newTime + timeDiff; // look forward a time update so we don't show the user a frame of the skipped section
+      const notSkippingThePassedTimestamp = !Utils.isSkipped(oldNext!, this.preferences);
+      if (willNotPastATimestamp || notSkippingThePassedTimestamp) {
+        return;
+      }
+      const jumpedDirectlyToTimestamp =
+        this.timestamps.find(timestamp => Math.abs(timestamp.at - oldTime) < 0.0001) != null;
+      if (jumpedDirectlyToTimestamp) {
+        return;
+      }
 
-  public get normalizedTime(): number {
-    return Math.max(0, Math.min(100, (this.currentTime / this.duration) * 100));
-  }
-
-  @Watch('currentTime')
-  public onChangeCurrentTime(newTime: number, oldTime: number): void {
-    this.completedSections = this.getCompletedSections();
-
-    // Do nothing
-    const currentTimestamp = Utils.previousTimestamp(oldTime, this.timestamps, undefined);
-    const insideSkippedSection =
-      currentTimestamp != null && Utils.isSkipped(currentTimestamp, this.prefs);
-    if (insideSkippedSection) {
-      return;
-    }
-
-    // Get the next timestamp AFTER the oldTime, regardless of if it's skipped
-    const oldNext = Utils.nextTimestamp(oldTime, this.timestamps, undefined);
-
-    // Do nothing
-    const timeDiff = Math.abs(oldTime - newTime);
-    const hasNoMoreTimestamsps = oldNext == null;
-    const isSeeking = timeDiff > 1 * this.playbackRate; // Multiple the base number, 1s, by the speed so that high playback rates don't "skip" over timestamps
-    const isAtEnd = newTime >= this.duration;
-    if (hasNoMoreTimestamsps || isSeeking || isAtEnd || this.isEditing) {
-      return;
-    }
-
-    // Skip timestamp at 0:00 if we haven't yet
-    const wasAtBeginning = oldTime === 0;
-    const haveNotSkippedFromBeginning = !this.hasSkippedFromZero;
-    const shouldSkipFirstTimestamp = Utils.isSkipped(this.timestamps[0], this.prefs);
-    if (wasAtBeginning && haveNotSkippedFromBeginning && shouldSkipFirstTimestamp) {
-      this.setHasSkippedFromZero(true);
       this.goToNextTimestampOnTimeChange(newTime);
-      return;
-    }
-
-    // Do nothing
-    const willNotPastATimestamp = oldNext!.at > newTime + timeDiff; // look forward a time update so we don't show the user a frame of the skipped section
-    const notSkippingThePassedTimestamp = !Utils.isSkipped(oldNext!, this.prefs);
-    if (willNotPastATimestamp || notSkippingThePassedTimestamp) {
-      return;
-    }
-    const jumpedDirectlyToTimestamp =
-      this.timestamps.find(timestamp => Math.abs(timestamp.at - oldTime) < 0.0001) != null;
-    if (jumpedDirectlyToTimestamp) {
-      return;
-    }
-
-    this.goToNextTimestampOnTimeChange(newTime);
-  }
-
-  public timestampClass(timestamp: Api.AmbigousTimestamp): Record<string, boolean> {
-    return {
-      active:
-        timestamp.id === this.activeTimestamp?.id || timestamp.id === this.hoveredTimestamp?.id,
-    };
-  }
-
-  public timestampIcon(timestamp: Api.AmbigousTimestamp): string {
-    if (!this.isEditing) return 'ic_timestamp.svg';
-    if (!timestamp.edited) return 'ic_timestamp_draft.svg';
-    return 'ic_timestamp_draft_edited.svg';
-  }
-
-  /**
-   * Get the timestamp to go to, then go there or the end of the video if there isn't another time
-   * stamp to go to
-   */
-  public goToNextTimestampOnTimeChange(newTime: number) {
-    const newNext = Utils.nextTimestamp(newTime, this.timestamps, this.prefs);
-    this.updateTime(newNext?.at ?? this.duration, true);
-  }
-
-  public get canAddTimestamp(): boolean {
-    return this.isEditing && this.activeTimestamp == null;
-  }
-
-  public onSeek(newTime: number) {
-    this.$emit('seek', (newTime / 100) * this.duration);
-  }
-
-  public onChangeDuration(newDuration?: number) {
-    this.duration = newDuration || 0;
-    this.updateSections();
-  }
-
-  @Watch('timestamps')
-  @Watch('duration')
-  @Watch('isEditing')
-  @Watch('preferencesLastUpdatedAt')
-  public updateSections(): void {
-    this.sections = this.getSections();
-    this.completedSections = this.getCompletedSections();
-  }
-
-  public get unknownTimestamp(): Api.Timestamp {
-    return {
-      id: 'unknown',
-      at: 0,
-      typeId: 'unknown',
-      source: 'ANIME_SKIP',
-    };
-  }
-
-  public get endTimestamp(): Api.Timestamp {
-    return {
-      id: 'end',
-      at: this.duration || 0,
-      typeId: 'end',
-      source: 'ANIME_SKIP',
-    };
-  }
-
-  public getSections(): SectionData[] {
-    if (this.timestamps.length === 0 || this.isEditing) {
-      return [
-        {
-          timestamp: this.unknownTimestamp,
-          endTime: this.duration,
-          isSkipped: false,
-        },
-      ];
-    }
-    const withEnd = [...this.timestamps, this.endTimestamp];
-    return this.timestamps.map<SectionData>(
-      (timestamp: Api.Timestamp, index: number): SectionData => ({
-        timestamp: timestamp,
-        endTime: withEnd[index + 1].at,
-        isSkipped: Utils.isSkipped(timestamp, this.prefs),
-      })
-    );
-  }
-  public getCompletedSections(): SectionData[] {
-    if (!this.sections) {
-      return [];
-    }
-    return this.sections.filter(section => {
-      return (
-        section.timestamp.at < this.currentTime && !Utils.isSkipped(section.timestamp, this.prefs)
+    },
+  },
+  computed: {
+    isEditing(): boolean {
+      return this.$store.getters.isEditing;
+    },
+    hasEpisode(): boolean {
+      return this.$store.getters.hasEpisode;
+    },
+    isLoggedIn(): boolean {
+      return this.$store.getters.isLoggedIn;
+    },
+    activeTimestamp(): Api.AmbigousTimestamp | undefined {
+      return this.$store.getters.activeTimestamp;
+    },
+    hoveredTimestamp(): Api.AmbigousTimestamp | undefined {
+      return this.$store.getters.hoveredTimestamp;
+    },
+    draftTimestamps(): Api.AmbigousTimestamp[] {
+      return this.$store.getters.draftTimestamps;
+    },
+    preferences(): Api.Preferences | undefined {
+      return this.$store.getters.preferences;
+    },
+    preferencesLastUpdatedAt(): number {
+      return this.$store.getters.preferencesLastUpdatedAt;
+    },
+    hasSkippedFromZero(): boolean {
+      return this.$store.getters.hasSkippedFromZero;
+    },
+    playbackRate(): number {
+      return this.$store.getters.playbackRate;
+    },
+    activeTimestamps(): Api.AmbigousTimestamp[] {
+      return this.$store.getters.activeTimestamps;
+    },
+    normalizedTime(): number {
+      return Math.max(0, Math.min(100, (this.currentTime / this.duration) * 100));
+    },
+    canAddTimestamp(): boolean {
+      return this.isEditing && this.activeTimestamp == null;
+    },
+    unknownTimestamp(): Api.Timestamp {
+      return {
+        id: 'unknown',
+        at: 0,
+        typeId: 'unknown',
+        source: 'ANIME_SKIP',
+      };
+    },
+    endTimestamp(): Api.Timestamp {
+      return {
+        id: 'end',
+        at: this.duration || 0,
+        typeId: 'end',
+        source: 'ANIME_SKIP',
+      };
+    },
+    sections(): SectionData[] {
+      if (this.timestamps.length === 0 || this.isEditing) {
+        return [
+          {
+            timestamp: this.unknownTimestamp,
+            endTime: this.duration,
+            isSkipped: false,
+          },
+        ];
+      }
+      const withEnd = [...this.timestamps, this.endTimestamp];
+      return this.timestamps.map<SectionData>(
+        (timestamp: Api.Timestamp, index: number): SectionData => ({
+          timestamp: timestamp,
+          endTime: withEnd[index + 1].at,
+          isSkipped: Utils.isSkipped(timestamp, this.preferences),
+        })
       );
-    });
-  }
-}
+    },
+    completedSections(): SectionData[] {
+      if (!this.sections) {
+        return [];
+      }
+      return this.sections.filter(section => {
+        return (
+          section.timestamp.at < this.currentTime &&
+          !Utils.isSkipped(section.timestamp, this.preferences)
+        );
+      });
+    },
+  },
+  methods: {
+    setHasSkippedFromZero(newValue: boolean): void {
+      this.$store.commit(mutationTypes.setHasSkippedFromZero, newValue);
+    },
+    toggleEditMode(isEditing: boolean): void {
+      this.$store.commit(mutationTypes.toggleEditMode, isEditing);
+    },
+    timestampClass(timestamp: Api.AmbigousTimestamp): Record<string, boolean> {
+      return {
+        active:
+          timestamp.id === this.activeTimestamp?.id || timestamp.id === this.hoveredTimestamp?.id,
+      };
+    },
+    timestampIcon(timestamp: Api.AmbigousTimestamp): string {
+      if (!this.isEditing) return 'ic_timestamp.svg';
+      if (!timestamp.edited) return 'ic_timestamp_draft.svg';
+      return 'ic_timestamp_draft_edited.svg';
+    },
+    /**
+     * Get the timestamp to go to, then go there or the end of the video if there isn't another time
+     * stamp to go to
+     */
+    goToNextTimestampOnTimeChange(newTime: number) {
+      const newNext = Utils.nextTimestamp(newTime, this.timestamps, this.preferences);
+      this.updateTime(newNext?.at ?? this.duration, true);
+    },
+    onSeek(newTime: number) {
+      this.$emit('seek', (newTime / 100) * this.duration);
+    },
+  },
+});
 </script>
 
 <style lang="scss" scoped>
