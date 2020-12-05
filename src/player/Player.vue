@@ -29,7 +29,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Mixins } from 'vue-property-decorator';
+import Vue from 'vue';
+import vueMixins from 'vue-typed-mixins';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import Loading from '@/common/components/Loading.vue';
 import ToolBar from './components/Toolbar.vue';
@@ -38,11 +39,13 @@ import AccountDialog from './dialogs/AccountDialog.vue';
 import TimestampsPanel from './dialogs/TimestampsPanel.vue';
 import EditEpisodeDialog from './dialogs/EditEpisodeDialog/index.vue';
 import KeyboardShortcutMixin from '@/common/mixins/KeyboardShortcuts';
-import { Action, Mutation, Getter } from '@/common/utils/VuexDecorators';
 import Browser from '@/common/utils/Browser';
 import VideoControllerMixin from '../common/mixins/VideoController';
+import mutationTypes from '@/common/store/mutationTypes';
+import actionTypes from '@/common/store/actionTypes';
+import { PLAYER_ACTIVITY_TIMEOUT } from '@/common/utils/Constants';
 
-@Component({
+export default vueMixins(KeyboardShortcutMixin, VideoControllerMixin).extend({
   components: {
     WebExtImg,
     ToolBar,
@@ -52,99 +55,106 @@ import VideoControllerMixin from '../common/mixins/VideoController';
     Loading,
     TimestampsPanel,
   },
-})
-export default class Player extends Mixins(KeyboardShortcutMixin, VideoControllerMixin) {
-  public playerState: PlayerState = {
-    isActive: false,
-    isBuffering: false,
-    isPaused: global.getVideo().paused,
-    isLoadingEpisodeInfo: false,
-    isFullscreen: false,
-    isMuted: global.getVideo().muted,
-  };
-
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  public activeTimer?: any;
-  public activeTimeout = 2000;
-
-  @Getter() playbackRate!: number;
-  @Getter() isEditing!: boolean;
-  @Getter() tabUrl!: string;
-
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  @Mutation() public restoreState!: (payload: { changes: any; callback?: () => void }) => void;
-  @Mutation() public changePlaybackRate!: (playbackRate: number) => void;
-  @Mutation() public setTabUrl!: (url: string) => void;
-  @Mutation() public setHasSkippedFromZero!: (newValue: boolean) => void;
-
-  @Action() public loadAllEpisodeData!: (url?: string) => void;
-
-  constructor() {
-    super();
-    Browser.storage.addListener((changes: Partial<VuexState>) => {
-      this.restoreState({ changes });
-    });
-  }
-
-  public mounted(): void {
+  created() {
+    Browser.storage.addListener(this.onStorageChanged);
+    browser.runtime.onMessage.addListener(this.onReceiveMessage);
+    global.onVideoChanged(this.onVideoChanged);
+  },
+  mounted(): void {
     this.loadAllEpisodeData();
-
-    global.onVideoChanged(video => {
+  },
+  destroyed() {
+    browser.runtime.onMessage.removeListener(this.onReceiveMessage);
+  },
+  data() {
+    // TODO: Put in store
+    // TODO: use Vue.set...
+    const playerState: PlayerState = {
+      isActive: false,
+      isBuffering: false,
+      isPaused: global.getVideo().paused,
+      isLoadingEpisodeInfo: false,
+      isFullscreen: false,
+      isMuted: global.getVideo().muted,
+    };
+    return {
+      playerState,
+      activeTimer: undefined as number | undefined,
+    };
+  },
+  computed: {
+    playbackRate(): number {
+      return this.$store.getters.playbackRate;
+    },
+    isEditing(): boolean {
+      return this.$store.getters.isEditing;
+    },
+    tabUrl(): string {
+      return this.$store.getters.tabUrl;
+    },
+    isActive(): boolean {
+      return this.playerState.isActive || this.isEditing;
+    },
+  },
+  methods: {
+    onStorageChanged(changes: Partial<VuexState>): void {
+      this.$store.commit(mutationTypes.restoreState, changes);
+    },
+    onVideoChanged(video: HTMLVideoElement): void {
       this.changePlaybackRate(this.playbackRate);
       video.onplay = () => this.onPlay();
       video.onpause = () => this.onPause();
-      this.playerState.isPaused = video.paused;
+      Vue.set(this.playerState, 'isPaused', video.paused);
 
       // Managing the buffer
       video.onplaying = () => {
-        this.playerState.isBuffering = false;
+        Vue.set(this.playerState, 'isBuffering', false);
       };
       video.onwaiting = () => {
-        this.playerState.isBuffering = true;
+        Vue.set(this.playerState, 'isBuffering', true);
       };
-    });
+    },
+    changePlaybackRate(playbackRate: number): void {
+      this.$store.commit(mutationTypes.changePlaybackRate, playbackRate);
+    },
+    setTabUrl(url: string): void {
+      this.$store.commit(mutationTypes.setTabUrl, url);
+    },
+    setHasSkippedFromZero(newValue: boolean): void {
+      this.$store.commit(mutationTypes.setHasSkippedFromZero, newValue);
+    },
+    loadAllEpisodeData(url?: string): void {
+      this.$store.dispatch(actionTypes.loadAllEpisodeData, url);
+    },
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    onReceiveMessage({ type, payload: url }: any) {
+      if (type != '@anime-skip/changeUrl') return;
 
-    browser.runtime.onMessage.addListener(this.onReceiveMessage);
-  }
-
-  public destroyed() {
-    browser.runtime.onMessage.removeListener(this.onReceiveMessage);
-  }
-
-  public get isActive(): boolean {
-    return this.playerState.isActive || this.isEditing;
-  }
-
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  public onReceiveMessage({ type, payload: url }: any) {
-    if (type != '@anime-skip/changeUrl') return;
-
-    console.debug('Change URL: ' + url);
-    this.setTabUrl(url);
-    this.setHasSkippedFromZero(false);
-    this.loadAllEpisodeData();
-  }
-
-  public toggleActive(isActive: boolean) {
-    Vue.set(this.playerState, 'isActive', isActive);
-    if (this.activeTimer != null) {
-      clearTimeout(this.activeTimer);
-    }
-    if (isActive) {
-      this.activeTimer = setTimeout(() => {
-        this.toggleActive(false);
-      }, this.activeTimeout);
-    }
-  }
-
-  public onPlay() {
-    Vue.set(this.playerState, 'isPaused', false);
-    this.toggleActive(true);
-  }
-  public onPause() {
-    Vue.set(this.playerState, 'isPaused', true);
-  }
-}
+      console.debug('Change URL: ' + url);
+      this.setTabUrl(url);
+      this.setHasSkippedFromZero(false);
+      this.loadAllEpisodeData();
+    },
+    toggleActive(isActive: boolean) {
+      Vue.set(this.playerState, 'isActive', isActive);
+      if (this.activeTimer != null) {
+        window.clearTimeout(this.activeTimer);
+      }
+      if (isActive) {
+        this.activeTimer = window.setTimeout(() => {
+          this.toggleActive(false);
+        }, PLAYER_ACTIVITY_TIMEOUT);
+      }
+    },
+    onPlay() {
+      Vue.set(this.playerState, 'isPaused', false);
+      this.toggleActive(true);
+    },
+    onPause() {
+      Vue.set(this.playerState, 'isPaused', true);
+    },
+  },
+});
 </script>
 
 <style lang="scss">
