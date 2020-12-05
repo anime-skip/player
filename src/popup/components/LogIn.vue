@@ -27,49 +27,59 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import Vue from 'vue';
 import TextInput from '@/common/components/TextInput.vue';
-import { Action, Getter } from '@/common/utils/VuexDecorators';
 import ProgressOverlay from '@/common/components/ProgressOverlay.vue';
 import PopupHeader from './PopupHeader.vue';
+import actionTypes from '@/common/store/actionTypes';
 
-@Component({
+export default Vue.extend({
   components: { TextInput, ProgressOverlay, PopupHeader },
-})
-export default class LogIn extends Vue {
-  public isError = false;
-  public username = '';
-  public password = '';
-
-  @Prop(Boolean) public small?: string;
-
-  @Getter() public isLoggingIn!: boolean;
-  @Getter() public isLogInError!: boolean;
-
-  @Action() public loginManual!: (payload: LoginManualPayload) => void;
-
-  public mounted() {
+  props: {
+    small: Boolean,
+  },
+  data() {
+    return {
+      isError: false,
+      username: '',
+      password: '',
+    };
+  },
+  mounted() {
     (this.$refs.form as Element).addEventListener('submit', this.onSubmit);
-  }
+  },
+  computed: {
+    // TODO: compose and reuse
+    isLoggingIn(): boolean {
+      return this.$store.getters.isLoggingIn;
+    },
+    isLogInError(): boolean {
+      return this.$store.getters.isLogInError;
+    },
+  },
+  methods: {
+    loginManual(payload: LoginManualPayload): void {
+      this.$store.dispatch(actionTypes.loginManual, payload);
+    },
+    onSubmit(event: Event) {
+      event.preventDefault();
+      event.stopPropagation();
 
-  public onSubmit(event: Event) {
-    event.preventDefault();
-    event.stopPropagation();
+      const urlParams = new URLSearchParams(window.location.search);
+      const closeAfterLogin = urlParams.get('closeAfterLogin');
+      let callback: (() => void) | undefined;
+      if (closeAfterLogin === 'true') {
+        callback = window.close;
+      }
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const closeAfterLogin = urlParams.get('closeAfterLogin');
-    let callback: (() => void) | undefined;
-    if (closeAfterLogin === 'true') {
-      callback = window.close;
-    }
-
-    this.loginManual({
-      username: this.username,
-      password: this.password,
-      callback,
-    });
-  }
-}
+      this.loginManual({
+        username: this.username,
+        password: this.password,
+        callback,
+      });
+    },
+  },
+});
 </script>
 
 <style lang="scss" scoped>
