@@ -45,7 +45,7 @@ export default Vue.extend({
   // emits: ['focus', 'blur', 'input'],
   data() {
     return {
-      internalValue: '',
+      internalValue: this.value ?? this.defaultValue ?? '',
       isFocused: false,
     };
   },
