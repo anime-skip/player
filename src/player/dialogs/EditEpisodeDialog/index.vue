@@ -220,6 +220,10 @@ $width: 450px;
   }
 }
 
+.ProgressOverlay {
+  min-height: 172px;
+}
+
 .header {
   display: flex;
   flex-direction: row;
