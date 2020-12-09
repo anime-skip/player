@@ -1,6 +1,7 @@
 declare interface ServiceHelpers {
   getRootQuery(): string;
   getVideoQuery(): string;
+  doNotReplacePlayer: (() => boolean) | undefined;
   getVideo(): HTMLVideoElement;
   inferEpisodeInfo(): Promise<InferredEpisodeInfo>;
 

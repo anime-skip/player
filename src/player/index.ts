@@ -32,7 +32,7 @@ async function sleep(ms: number): Promise<void> {
 
 // Inject DOM
 
-(async function injectPlayer() {
+async function injectPlayer() {
   const rootQuery = global.getRootQuery();
   console.debug(`Adding player to ${rootQuery}`);
 
@@ -55,4 +55,10 @@ async function sleep(ms: number): Promise<void> {
   }).$mount();
   const parent = document.querySelector(rootQuery) as HTMLElement;
   parent.appendChild(vue.$el);
-})();
+}
+
+if (global.doNotReplacePlayer?.()) {
+  console.info('Did not inject Anime Skip on purpose');
+} else {
+  injectPlayer();
+}

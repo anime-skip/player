@@ -15,6 +15,15 @@ global.getVideoQuery = (): string => {
   return '#brightcove-player > video';
 };
 
+global.doNotReplacePlayer = (): boolean => {
+  const path = Utils.stripUrl(window.parent.location.href)
+    .replace('https://www.funimation.com/', '')
+    .replace(/\/$/, '');
+  // something like "show/{show-name}/..." or "show/{show-name}" so if the last slash is at position 5, it is a show
+  const isShowPage = path.lastIndexOf('/') === 5;
+  return isShowPage;
+};
+
 global.transformServiceUrl = Utils.stripUrl;
 
 global.getPlayerOptions = (): PlayerOptionGroup[] => {
