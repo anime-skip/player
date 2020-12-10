@@ -2,6 +2,8 @@
 
 ## `[Unreleased]`
 
+## `v1.0.23`
+
 ### Enhancements
 
 - Vue Object Syntax refactor
