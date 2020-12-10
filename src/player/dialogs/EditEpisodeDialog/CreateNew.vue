@@ -29,17 +29,17 @@
 </template>
 
 <script lang="ts">
-import vueMixins from 'vue-typed-mixins';
+import { defineComponent, PropType } from 'vue';
 import ShowAutocompleteMixin from '@/common/mixins/ShowAutocomplete';
 import AutocompleteTextInput from '@/common/components/AutocompleteTextInput.vue';
 import TextInput from '@/common/components/TextInput.vue';
-import { PropOptions } from 'vue';
-import actionTypes from '@/common/store/actionTypes';
+import { ActionTypes } from '@/common/store/actionTypes';
 
-export default vueMixins(ShowAutocompleteMixin).extend({
+export default defineComponent({
   components: { AutocompleteTextInput, TextInput },
+  mixins: [ShowAutocompleteMixin],
   props: {
-    prefill: { type: Object, required: false } as PropOptions<CreateEpisodePrefill | undefined>,
+    prefill: Object as PropType<CreateEpisodePrefill>,
   },
   data() {
     return {
@@ -65,7 +65,7 @@ export default vueMixins(ShowAutocompleteMixin).extend({
   },
   methods: {
     hideDialog(): void {
-      this.$store.dispatch(actionTypes.showDialog, undefined);
+      this.$store.dispatch(ActionTypes.SHOW_DIALOG, undefined);
     },
     async onClickCreate(): Promise<void> {
       const duration = this.$store.state.duration;
@@ -102,7 +102,7 @@ export default vueMixins(ShowAutocompleteMixin).extend({
           data: episodeUrl,
         },
       };
-      await this.$store.dispatch(actionTypes.createEpisodeData, payload);
+      await this.$store.dispatch(ActionTypes.CREATE_EPISODE_DATA, payload);
 
       this.hideDialog();
     },

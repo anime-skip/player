@@ -91,22 +91,26 @@
 </template>
 
 <script lang="ts">
-import { PropOptions } from 'vue';
+import { defineComponent, PropType } from 'vue';
 import AutocompleteTextInput from '@/common/components/AutocompleteTextInput.vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
-import actionTypes from '@/common/store/actionTypes';
+import { ActionTypes } from '@/common/store/actionTypes';
 import EpisodeUtils from '@/common/utils/EpisodeUtils';
 import { TIMESTAMP_SOURCES } from '@/common/utils/Constants';
 import ShowAutocompleteMixin from '@/common/mixins/ShowAutocomplete';
 import EpisodeAutocompleteMixin from '@/common/mixins/EpisodeAutocomplete';
-import vueMixins from 'vue-typed-mixins'; // TODO: Remove lib once migrated to vue3
 
-export default vueMixins(ShowAutocompleteMixin, EpisodeAutocompleteMixin).extend({
+export default defineComponent({
   components: { AutocompleteTextInput, WebExtImg },
+  mixins: [ShowAutocompleteMixin, EpisodeAutocompleteMixin],
   props: {
-    suggestions: Array as PropOptions<Api.ThirdPartyEpisode[]>,
-    prefill: { type: Object, required: false } as PropOptions<CreateEpisodePrefill | undefined>,
+    suggestions: {
+      type: Array as PropType<Api.ThirdPartyEpisode[]>,
+      required: true,
+    },
+    prefill: Object as PropType<CreateEpisodePrefill | undefined>,
   },
+  emits: ['createNew'],
   data() {
     return {
       show: this.prefill?.show || {
@@ -171,7 +175,7 @@ export default vueMixins(ShowAutocompleteMixin, EpisodeAutocompleteMixin).extend
   },
   methods: {
     hideDialog(): void {
-      this.$store.dispatch(actionTypes.showDialog, undefined);
+      this.$store.dispatch(ActionTypes.SHOW_DIALOG, undefined);
     },
     onClickSuggestion(suggestion: Api.ThirdPartyEpisode): void {
       if (suggestion.source !== 'ANIME_SKIP') {
@@ -208,7 +212,7 @@ export default vueMixins(ShowAutocompleteMixin, EpisodeAutocompleteMixin).extend
     },
     async linkToExistingEpisode(episode: Api.EpisodeSearchResult): Promise<void> {
       try {
-        await this.$store.dispatch(actionTypes.linkEpisodeUrl, {
+        await this.$store.dispatch(ActionTypes.LINK_EPISODE_URL, {
           episode,
           onSuccess: this.hideDialog,
         });
@@ -217,7 +221,7 @@ export default vueMixins(ShowAutocompleteMixin, EpisodeAutocompleteMixin).extend
       }
     },
     async createFromThirdParty(thirdPartyEpisode: Api.ThirdPartyEpisode) {
-      await this.$store.dispatch(actionTypes.createEpisodeFromThirdParty, {
+      await this.$store.dispatch(ActionTypes.CREATE_EPISODE_FROM_THIRD_PARTY, {
         thirdPartyEpisode,
         onSuccess: this.hideDialog,
       });

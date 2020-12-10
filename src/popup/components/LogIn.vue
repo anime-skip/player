@@ -27,13 +27,14 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import TextInput from '@/common/components/TextInput.vue';
 import ProgressOverlay from '@/common/components/ProgressOverlay.vue';
 import PopupHeader from './PopupHeader.vue';
-import actionTypes from '@/common/store/actionTypes';
+import { ActionTypes } from '@/common/store/actionTypes';
+import { GetterTypes } from '@/common/store/getterTypes';
 
-export default Vue.extend({
+export default defineComponent({
   components: { TextInput, ProgressOverlay, PopupHeader },
   props: {
     small: Boolean,
@@ -51,15 +52,15 @@ export default Vue.extend({
   computed: {
     // TODO: compose and reuse
     isLoggingIn(): boolean {
-      return this.$store.getters.isLoggingIn;
+      return this.$store.getters[GetterTypes.IS_LOGGING_IN];
     },
     isLogInError(): boolean {
-      return this.$store.getters.isLogInError;
+      return this.$store.getters[GetterTypes.IS_LOGIN_ERROR];
     },
   },
   methods: {
     loginManual(payload: LoginManualPayload): void {
-      this.$store.dispatch(actionTypes.loginManual, payload);
+      this.$store.dispatch(ActionTypes.LOGIN_MANUAL, payload);
     },
     onSubmit(event: Event) {
       event.preventDefault();

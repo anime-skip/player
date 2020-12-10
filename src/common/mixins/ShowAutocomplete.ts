@@ -1,8 +1,8 @@
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import Mappers from '../utils/Mappers';
 import Utils from '../utils/Utils';
 
-const ShowAutocompleteMixin = Vue.extend({
+const ShowAutocompleteMixin = defineComponent({
   data() {
     const show: AutocompleteItem<Api.ShowSearchResult> = {
       title: '',

@@ -7,12 +7,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import Loading from '@/common/components/Loading.vue';
 import LogIn from './components/LogIn.vue';
 import Preferences from './components/Preferences.vue';
+import { GetterTypes } from '@/common/store/getterTypes';
 
-export default Vue.extend({
+export default defineComponent({
   components: {
     Loading,
     LogIn,
@@ -23,10 +24,10 @@ export default Vue.extend({
   },
   computed: {
     isLoggedIn(): boolean {
-      return this.$store.getters.isLoggedIn;
+      return this.$store.getters[GetterTypes.IS_LOGGED_IN];
     },
     isLoggingIn(): boolean {
-      return this.$store.getters.isLoggingIn;
+      return this.$store.getters[GetterTypes.IS_LOGGING_IN];
     },
   },
 });

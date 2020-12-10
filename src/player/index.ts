@@ -1,8 +1,7 @@
 import '@/common/shared.scss';
-import Vue from 'vue';
+import { createApp } from 'vue';
 import Player from './Player.vue';
-import store from '@/common/store';
-import Ripple from 'vue-ripple-directive';
+import { store } from '@/common/store';
 import MessengerApi from '@/common/api/MessengerApi';
 
 console.log('INJECTED player/index.ts');
@@ -45,16 +44,12 @@ async function injectPlayer() {
   // Set the style to hide all the old elements
   document.body.classList.add('hide-for-anime-skip');
 
-  Ripple.color = 'rgba(255, 255, 255, 0.12)';
-  Vue.directive('ripple', Ripple);
-  Vue.config.productionTip = false;
+  // Ripple.color = 'rgba(255, 255, 255, 0.12)';
+  // Vue.directive('ripple', Ripple);
 
-  const vue = new Vue({
-    store,
-    render: h => h(Player),
-  }).$mount();
-  const parent = document.querySelector(rootQuery) as HTMLElement;
-  parent.appendChild(vue.$el);
+  createApp(Player)
+    .use(store)
+    .mount(rootQuery);
 }
 
 if (global.doNotReplacePlayer?.()) {

@@ -12,15 +12,17 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent, PropType } from 'vue';
 import KeyboardShortcutChooser from '@/options/components/KeyboardShortcutChooser.vue';
+import { GetterTypes } from '@/common/store/getterTypes';
 
-export default Vue.extend({
+export default defineComponent({
   components: { KeyboardShortcutChooser },
   props: {
     name: { type: String, required: true },
-    actionName: { type: String, required: true },
+    actionName: { type: String as PropType<KeyboardShortcutAction>, required: true },
   },
+  emits: ['updatePrimary', 'updateSecondary'],
   methods: {
     updatePrimary(value: string | undefined) {
       this.$emit('updatePrimary', value);
@@ -32,8 +34,8 @@ export default Vue.extend({
   computed: {
     shortcut(): { primary: string | undefined; secondary: string | undefined } {
       return {
-        primary: this.$store.getters.primaryKeyboardShortcuts[this.actionName],
-        secondary: this.$store.getters.secondaryKeyboardShortcuts[this.actionName],
+        primary: this.$store.getters[GetterTypes.PRIMARY_KEYBOARD_SHORTCUTS][this.actionName],
+        secondary: this.$store.getters[GetterTypes.SECONDARY_KEYBOARD_SHORTCUTS][this.actionName],
       };
     },
   },

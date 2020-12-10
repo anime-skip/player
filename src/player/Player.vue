@@ -30,8 +30,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import vueMixins from 'vue-typed-mixins';
+import { defineComponent } from 'vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import Loading from '@/common/components/Loading.vue';
 import ToolBar from './components/Toolbar.vue';
@@ -42,11 +41,13 @@ import EditEpisodeDialog from './dialogs/EditEpisodeDialog/index.vue';
 import KeyboardShortcutMixin from '@/common/mixins/KeyboardShortcuts';
 import Browser from '@/common/utils/Browser';
 import VideoControllerMixin from '../common/mixins/VideoController';
-import mutationTypes from '@/common/store/mutationTypes';
-import actionTypes from '@/common/store/actionTypes';
+import { MutationTypes } from '@/common/store/mutationTypes';
+import { ActionTypes } from '@/common/store/actionTypes';
 import { PLAYER_ACTIVITY_TIMEOUT } from '@/common/utils/Constants';
+import { GetterTypes } from '@/common/store/getterTypes';
+import { State } from '@/common/store/state';
 
-export default vueMixins(KeyboardShortcutMixin, VideoControllerMixin).extend({
+export default defineComponent({
   components: {
     WebExtImg,
     ToolBar,
@@ -56,6 +57,7 @@ export default vueMixins(KeyboardShortcutMixin, VideoControllerMixin).extend({
     Loading,
     TimestampsPanel,
   },
+  mixins: [KeyboardShortcutMixin, VideoControllerMixin],
   created() {
     Browser.storage.addListener(this.onStorageChanged);
     browser.runtime.onMessage.addListener(this.onReceiveMessage);
@@ -69,7 +71,6 @@ export default vueMixins(KeyboardShortcutMixin, VideoControllerMixin).extend({
   },
   data() {
     // TODO: Put in store
-    // TODO: use Vue.set...
     const playerState: PlayerState = {
       isActive: false,
       isBuffering: true,
@@ -88,7 +89,7 @@ export default vueMixins(KeyboardShortcutMixin, VideoControllerMixin).extend({
       return this.$store.state.isEditing;
     },
     tabUrl(): string {
-      return this.$store.getters.tabUrl;
+      return this.$store.getters[GetterTypes.TAB_URL];
     },
     isActive(): boolean {
       return this.playerState.isActive || this.isEditing;
@@ -101,35 +102,35 @@ export default vueMixins(KeyboardShortcutMixin, VideoControllerMixin).extend({
     },
   },
   methods: {
-    onStorageChanged(changes: Partial<VuexState>): void {
-      this.$store.commit(mutationTypes.restoreState, changes);
+    onStorageChanged(changes: Partial<State>): void {
+      this.$store.commit(MutationTypes.RESTORE_STATE, { changes }); // TODO! test
     },
     onVideoChanged(video: HTMLVideoElement): void {
       this.changePlaybackRate(this.playbackRate);
       video.onplay = () => this.onPlay();
       video.onpause = () => this.onPause();
-      Vue.set(this.playerState, 'isPaused', video.paused);
+      this.playerState.isPaused = video.paused; // TODO: Test set
 
       // Managing the buffer
       video.onplaying = () => {
-        Vue.set(this.playerState, 'isBuffering', false);
-        this.$store.commit(mutationTypes.setIsInitialBuffer, false);
+        this.playerState.isBuffering = false; // TODO: Test set
+        this.$store.commit(MutationTypes.SET_IS_INITIAL_BUFFER, false);
       };
       video.onwaiting = () => {
-        Vue.set(this.playerState, 'isBuffering', true);
+        this.playerState.isBuffering = true; // TODO: Test set
       };
     },
     changePlaybackRate(playbackRate: number): void {
-      this.$store.commit(mutationTypes.changePlaybackRate, playbackRate);
+      this.$store.commit(MutationTypes.CHANGE_PLAYBACK_RATE, playbackRate);
     },
     setTabUrl(url: string): void {
-      this.$store.commit(mutationTypes.setTabUrl, url);
+      this.$store.commit(MutationTypes.SET_TAB_URL, url);
     },
     setHasSkippedFromZero(newValue: boolean): void {
-      this.$store.commit(mutationTypes.setHasSkippedFromZero, newValue);
+      this.$store.commit(MutationTypes.SET_HAS_SKIPPED_FROM_ZERO, newValue);
     },
     loadAllEpisodeData(url?: string): void {
-      this.$store.dispatch(actionTypes.loadAllEpisodeData, url);
+      this.$store.dispatch(ActionTypes.LOAD_ALL_EPISODE_DATA, url);
     },
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     onReceiveMessage({ type, payload: url }: any) {
@@ -141,7 +142,7 @@ export default vueMixins(KeyboardShortcutMixin, VideoControllerMixin).extend({
       this.loadAllEpisodeData();
     },
     toggleActive(isActive: boolean) {
-      Vue.set(this.playerState, 'isActive', isActive);
+      this.playerState.isActive = isActive; // TODO: Test set
       if (this.activeTimer != null) {
         window.clearTimeout(this.activeTimer);
       }
@@ -152,11 +153,11 @@ export default vueMixins(KeyboardShortcutMixin, VideoControllerMixin).extend({
       }
     },
     onPlay() {
-      Vue.set(this.playerState, 'isPaused', false);
+      this.playerState.isPaused = false; // TODO: Test set
       this.toggleActive(true);
     },
     onPause() {
-      Vue.set(this.playerState, 'isPaused', true);
+      this.playerState.isPaused = true; // TODO: Test set
     },
   },
 });

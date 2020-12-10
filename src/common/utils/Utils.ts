@@ -1,5 +1,5 @@
-import { Store } from 'vuex';
-import actionTypes from '../store/actionTypes';
+import { Store } from '@/common/store';
+import { ActionTypes } from '../store/actionTypes';
 
 export default class Utils {
   /**
@@ -14,7 +14,7 @@ export default class Utils {
    *          next timestamp. Timestamps at a time equal to the `currentTime` will not be
    *          returned (thus exclusive).
    */
-  public static nextTimestamp<T extends Api.AmbigousTimestamp>(
+  public static nextTimestamp<T extends Api.AmbiguousTimestamp>(
     currentTime: number,
     timestamps: T[],
     preferences: Api.Preferences | undefined
@@ -27,7 +27,7 @@ export default class Utils {
     );
   }
 
-  public static previousTimestamp<T extends Api.AmbigousTimestamp>(
+  public static previousTimestamp<T extends Api.AmbiguousTimestamp>(
     time: number,
     timestamps: T[],
     preferences: Api.Preferences | undefined
@@ -41,7 +41,7 @@ export default class Utils {
   }
 
   public static isSkipped(
-    { typeId: _typeId }: Api.AmbigousTimestamp,
+    { typeId: _typeId }: Api.AmbiguousTimestamp,
     preferences: Api.Preferences | undefined
   ): boolean {
     if (!preferences) return false;
@@ -225,7 +225,7 @@ export default class Utils {
 
   public static computeTimestampDiffs(
     oldTimestamps: Api.Timestamp[],
-    newTimestamps: Api.AmbigousTimestamp[]
+    newTimestamps: Api.AmbiguousTimestamp[]
   ): { toCreate: Api.InputTimestamp[]; toUpdate: Api.Timestamp[]; toDelete: Api.Timestamp[] } {
     const intersect = newTimestamps.filter(newItem =>
       Utils.arrayIncludes(oldTimestamps, 'id', newItem)
@@ -258,7 +258,7 @@ export default class Utils {
     };
   }
 
-  public static timestampSorter(l: Api.AmbigousTimestamp, r: Api.AmbigousTimestamp): number {
+  public static timestampSorter(l: Api.AmbiguousTimestamp, r: Api.AmbiguousTimestamp): number {
     return l.at - r.at;
   }
 
@@ -344,11 +344,12 @@ export default class Utils {
   }
 
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  public static async apiAction<A extends any[], R>(
-    store: Store<unknown>,
-    apiCall: (...args: A) => Promise<R>,
-    ...args: A
-  ): Promise<R> {
-    return await store.dispatch(actionTypes.apiCall, { apiCall, args });
+  public static async apiAction<C extends (...args: any[]) => Promise<any>>(
+    store: Store,
+    apiCall: C,
+    ...args: Parameters<C>
+  ): Promise<ReturnType<C>> {
+    // @ts-ignore: Type generics did not make it through to dispatch()
+    return await store.dispatch(ActionTypes.API_CALL, { apiCall, args });
   }
 }

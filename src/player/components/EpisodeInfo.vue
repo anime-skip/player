@@ -11,21 +11,23 @@
       class="link-button"
       icon="ic_link.svg"
       title="Connect to Anime Skip"
-      @click.stop.native="showEditDialog"
+      @click.stop="showEditDialog"
     />
   </div>
 </template>
 
 <script lang="ts">
-import vueMixins from 'vue-typed-mixins';
+import { defineComponent } from 'vue';
 import RequestState from '@/common/utils/RequestState';
 import EpisodeUtils from '@/common/utils/EpisodeUtils';
 import ToolbarButton from '@/player/components/ToolbarButton.vue';
 import VideoControllerMixin from '@/common/mixins/VideoController';
-import actionTypes from '@/common/store/actionTypes';
+import { ActionTypes } from '@/common/store/actionTypes';
+import { GetterTypes } from '@/common/store/getterTypes';
 
-export default vueMixins(VideoControllerMixin).extend({
+export default defineComponent({
   components: { ToolbarButton },
+  mixins: [VideoControllerMixin],
   data() {
     return {
       serviceDisplayName: global.serviceDisplayName ?? 'Unknown',
@@ -33,7 +35,7 @@ export default vueMixins(VideoControllerMixin).extend({
   },
   computed: {
     displayEpisodeInfo(): DisplayEpisodeInfo | undefined {
-      return this.$store.getters.displayEpisodeInfo;
+      return this.$store.getters[GetterTypes.DISPLAY_EPISODE_INFO];
     },
     initialVideoDataRequestState(): RequestState {
       return this.$store.state.initialVideoDataRequestState;
@@ -45,10 +47,10 @@ export default vueMixins(VideoControllerMixin).extend({
       return this.$store.state.activeDialog;
     },
     isLoggedIn(): boolean {
-      return this.$store.getters.isLoggedIn;
+      return this.$store.getters[GetterTypes.IS_LOGGED_IN];
     },
     duration(): number | undefined {
-      return this.$store.getters.duration;
+      return this.$store.getters[GetterTypes.DURATION];
     },
     hasLoadedData(): boolean {
       return (
@@ -74,10 +76,10 @@ export default vueMixins(VideoControllerMixin).extend({
   },
   methods: {
     showEpisodeDialog(): void {
-      this.$store.dispatch(actionTypes.showDialog, 'EditEpisodeDialog');
+      this.$store.dispatch(ActionTypes.SHOW_DIALOG, 'EditEpisodeDialog');
     },
     showAccountDialog(): void {
-      this.$store.dispatch(actionTypes.showDialog, 'AccountDialog');
+      this.$store.dispatch(ActionTypes.SHOW_DIALOG, 'AccountDialog');
     },
     showEditDialog() {
       this.pause();

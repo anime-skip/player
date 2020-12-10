@@ -1,10 +1,10 @@
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 
 function linear(from: number, to: number, percent: number): number {
   return (to - from) * percent + from;
 }
 
-export default Vue.extend({
+export default defineComponent({
   props: {
     state: { type: Number, required: true },
     durationMs: { type: Number, default: 200 },

@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts">
-import vueMixins from 'vue-typed-mixins';
+import { defineComponent, PropType } from 'vue';
 import Section from './Section.vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import VueSlider from 'vue-slider-component';
@@ -62,8 +62,8 @@ import '../scss/VideoSlider.scss';
 import Utils from '@/common/utils/Utils';
 import VideoControllerMixin from '@/common/mixins/VideoController';
 import KeyboardShortcutMixin from '@/common/mixins/KeyboardShortcuts';
-import { PropValidator } from 'vue/types/options';
-import mutationTypes from '@/common/store/mutationTypes';
+import { MutationTypes } from '@/common/store/mutationTypes';
+import { GetterTypes } from '@/common/store/getterTypes';
 
 interface SectionData {
   timestamp: Api.Timestamp;
@@ -71,17 +71,23 @@ interface SectionData {
   isSkipped: boolean;
 }
 
-export default vueMixins(VideoControllerMixin, KeyboardShortcutMixin).extend({
+export default defineComponent({
   components: { Section, WebExtImg, VueSlider },
+  mixins: [VideoControllerMixin, KeyboardShortcutMixin],
   props: {
     isFlipped: Boolean,
     currentTime: { type: Number, required: true },
-    duration: Number,
-    updateTime: { type: Function, required: true } as PropValidator<
-      (newTime: number, updatePlayer?: boolean) => void
-    >,
-    timestamps: { type: Array, required: true } as PropValidator<Api.Timestamp[]>,
+    duration: { type: Number, required: true },
+    updateTime: {
+      type: Function as PropType<(newTime: number, updatePlayer?: boolean) => void>,
+      required: true,
+    },
+    timestamps: {
+      type: Array as PropType<Api.Timestamp[]>,
+      required: true,
+    },
   },
+  emits: ['seek'],
   data() {
     return {
       isSeeking: false,
@@ -141,22 +147,22 @@ export default vueMixins(VideoControllerMixin, KeyboardShortcutMixin).extend({
       return this.$store.state.isEditing;
     },
     hasEpisode(): boolean {
-      return this.$store.getters.hasEpisode;
+      return this.$store.getters[GetterTypes.HAS_EPISODE];
     },
     isLoggedIn(): boolean {
-      return this.$store.getters.isLoggedIn;
+      return this.$store.getters[GetterTypes.IS_LOGGED_IN];
     },
-    activeTimestamp(): Api.AmbigousTimestamp | undefined {
+    activeTimestamp(): Api.AmbiguousTimestamp | undefined {
       return this.$store.state.activeTimestamp;
     },
-    hoveredTimestamp(): Api.AmbigousTimestamp | undefined {
+    hoveredTimestamp(): Api.AmbiguousTimestamp | undefined {
       return this.$store.state.hoveredTimestamp;
     },
-    draftTimestamps(): Api.AmbigousTimestamp[] {
-      return this.$store.getters.draftTimestamps;
+    draftTimestamps(): Api.AmbiguousTimestamp[] {
+      return this.$store.getters[GetterTypes.DRAFT_TIMESTAMPS];
     },
     preferences(): Api.Preferences | undefined {
-      return this.$store.getters.preferences;
+      return this.$store.getters[GetterTypes.PREFERENCES];
     },
     preferencesLastUpdatedAt(): number {
       return this.$store.state.preferencesLastUpdatedAt;
@@ -167,8 +173,8 @@ export default vueMixins(VideoControllerMixin, KeyboardShortcutMixin).extend({
     playbackRate(): number {
       return this.$store.state.playbackRate;
     },
-    activeTimestamps(): Api.AmbigousTimestamp[] {
-      return this.$store.getters.activeTimestamps;
+    activeTimestamps(): Api.AmbiguousTimestamp[] {
+      return this.$store.getters[GetterTypes.ACTIVE_TIMESTAMPS];
     },
     normalizedTime(): number {
       return Math.max(0, Math.min(100, (this.currentTime / this.duration) * 100));
@@ -225,18 +231,18 @@ export default vueMixins(VideoControllerMixin, KeyboardShortcutMixin).extend({
   },
   methods: {
     setHasSkippedFromZero(newValue: boolean): void {
-      this.$store.commit(mutationTypes.setHasSkippedFromZero, newValue);
+      this.$store.commit(MutationTypes.SET_HAS_SKIPPED_FROM_ZERO, newValue);
     },
     toggleEditMode(isEditing: boolean): void {
-      this.$store.commit(mutationTypes.toggleEditMode, isEditing);
+      this.$store.commit(MutationTypes.TOGGLE_EDIT_MODE, isEditing);
     },
-    timestampClass(timestamp: Api.AmbigousTimestamp): Record<string, boolean> {
+    timestampClass(timestamp: Api.AmbiguousTimestamp): Record<string, boolean> {
       return {
         active:
           timestamp.id === this.activeTimestamp?.id || timestamp.id === this.hoveredTimestamp?.id,
       };
     },
-    timestampIcon(timestamp: Api.AmbigousTimestamp): string {
+    timestampIcon(timestamp: Api.AmbiguousTimestamp): string {
       if (!this.isEditing) return 'ic_timestamp.svg';
       if (!timestamp.edited) return 'ic_timestamp_draft.svg';
       return 'ic_timestamp_draft_edited.svg';

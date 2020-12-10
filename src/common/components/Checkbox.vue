@@ -10,10 +10,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 
-export default Vue.extend({
+export default defineComponent({
   components: { WebExtImg },
   props: {
     isChecked: { type: Boolean, required: true },

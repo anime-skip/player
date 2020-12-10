@@ -12,23 +12,24 @@
 </template>
 
 <script lang="ts">
-import vueMixins from 'vue-typed-mixins';
+import { defineComponent } from 'vue';
 import VideoControllerMixin from '../../common/mixins/VideoController';
 import KeyboardShortcutsMixin, { KeyboardShortcutMap } from '../../common/mixins/KeyboardShortcuts';
 import TimestampDetails from '../components/TimestampDetails.vue';
 import EditTimestamp from '../components/EditTimestamp.vue';
 import BasicDialog from './BasicDialog.vue';
-import mutationTypes from '@/common/store/mutationTypes';
+import { MutationTypes } from '@/common/store/mutationTypes';
 
-export default vueMixins(VideoControllerMixin, KeyboardShortcutsMixin).extend({
+export default defineComponent({
   components: { BasicDialog, TimestampDetails, EditTimestamp },
+  mixins: [VideoControllerMixin, KeyboardShortcutsMixin],
   data() {
     return {
       initialTab: 'details' as 'edit' | 'details',
     };
   },
   computed: {
-    activeTimestamp(): Api.AmbigousTimestamp | undefined {
+    activeTimestamp(): Api.AmbiguousTimestamp | undefined {
       return this.$store.state.activeTimestamp;
     },
   },
@@ -36,8 +37,8 @@ export default vueMixins(VideoControllerMixin, KeyboardShortcutsMixin).extend({
     onShow(): void {
       this.initialTab = this.activeTimestamp == null ? 'details' : 'edit';
     },
-    setActiveTimestamp(timestamp: Api.AmbigousTimestamp): void {
-      this.$store.commit(mutationTypes.setActiveTimestamp, timestamp);
+    setActiveTimestamp(timestamp: Api.AmbiguousTimestamp): void {
+      this.$store.commit(MutationTypes.SET_ACTIVE_TIMESTAMP, timestamp);
     },
     updateTimestamp(): void {
       (this.$refs.timeSelect as HTMLDivElement | undefined)?.focus();

@@ -18,14 +18,16 @@
 </template>
 
 <script lang="ts">
+import { GetterTypes } from '@/common/store/getterTypes';
 import Utils from '@/common/utils/Utils';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 
-export default Vue.extend({
+export default defineComponent({
   props: {
     shortcut: { type: String, required: false },
     secondary: Boolean,
   },
+  emits: ['update'],
   data() {
     return {
       isShowingEditor: false,
@@ -75,7 +77,9 @@ export default Vue.extend({
   computed: {
     duplicate(): boolean {
       if (this.shortcut == null) return false;
-      const count: number | undefined = this.$store.getters.keyComboCountMap[this.shortcut];
+      const count: number | undefined = this.$store.getters[GetterTypes.KEY_COMBO_COUNT_MAP][
+        this.shortcut
+      ];
       return count != null && count > 1;
     },
   },

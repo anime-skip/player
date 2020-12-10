@@ -23,8 +23,8 @@
         label="Filter..."
         v-model="typeFilter"
         @submit="onClickDone()"
-        @keydown.native.up.stop.prevent="onPressUp"
-        @keydown.native.down.stop.prevent="onPressDown"
+        @keydown.up.stop.prevent="onPressUp"
+        @keydown.down.stop.prevent="onPressDown"
       />
     </header>
     <div class="middle-container scroll">
@@ -56,7 +56,7 @@
 </template>
 
 <script lang="ts">
-import vueMixins from 'vue-typed-mixins';
+import { defineComponent, PropType } from 'vue';
 import VideoControllerMixin from '../../common/mixins/VideoController';
 import KeyboardShortcutsMixin from '../../common/mixins/KeyboardShortcuts';
 import TextInput from '../../common/components/TextInput.vue';
@@ -64,14 +64,17 @@ import Utils from '../../common/utils/Utils';
 import WebExtImg from '../../common/components/WebExtImg.vue';
 import { TIMESTAMP_TYPES, TIMESTAMP_TYPE_NOT_SELECTED } from '../../common/utils/Constants';
 import fuzzysort from 'fuzzysort';
-import { PropValidator } from 'vue/types/options';
-import actionTypes from '@/common/store/actionTypes';
-import mutationTypes from '@/common/store/mutationTypes';
+import { ActionTypes } from '@/common/store/actionTypes';
+import { MutationTypes } from '@/common/store/mutationTypes';
 
-export default vueMixins(VideoControllerMixin, KeyboardShortcutsMixin).extend({
+export default defineComponent({
   components: { WebExtImg, TextInput },
+  mixins: [VideoControllerMixin, KeyboardShortcutsMixin],
   props: {
-    initialTab: { type: String, required: true } as PropValidator<'edit' | 'details'>,
+    initialTab: {
+      type: String as PropType<'edit' | 'details'>,
+      required: true,
+    },
   },
   mounted() {
     this.reset();
@@ -93,7 +96,7 @@ export default vueMixins(VideoControllerMixin, KeyboardShortcutsMixin).extend({
     this.selectedType = undefined;
   },
   watch: {
-    activeTimestamp(newTimestamp: Api.AmbigousTimestamp, oldTimestamp: Api.AmbigousTimestamp) {
+    activeTimestamp(newTimestamp: Api.AmbiguousTimestamp, oldTimestamp: Api.AmbiguousTimestamp) {
       if (newTimestamp && newTimestamp.id !== oldTimestamp?.id) {
         this.reset();
       }
@@ -111,7 +114,7 @@ export default vueMixins(VideoControllerMixin, KeyboardShortcutsMixin).extend({
     };
   },
   computed: {
-    activeTimestamp(): Api.AmbigousTimestamp | undefined {
+    activeTimestamp(): Api.AmbiguousTimestamp | undefined {
       return this.$store.state.activeTimestamp;
     },
     episodeUrl(): Api.EpisodeUrlNoEpisode | undefined {
@@ -157,22 +160,22 @@ export default vueMixins(VideoControllerMixin, KeyboardShortcutsMixin).extend({
   },
   methods: {
     hideDialog(): void {
-      this.$store.dispatch(actionTypes.showDialog, undefined);
+      this.$store.dispatch(ActionTypes.SHOW_DIALOG, undefined);
     },
     clearActiveTimestamp(): void {
-      this.$store.commit(mutationTypes.clearActiveTimestamp, undefined);
+      this.$store.commit(MutationTypes.CLEAR_ACTIVE_TIMESTAMP, undefined);
     },
     clearEditTimestampMode(): void {
-      this.$store.commit(mutationTypes.clearEditTimestampMode, undefined);
+      this.$store.commit(MutationTypes.CLEAR_EDIT_TIMESTAMP_MODE, undefined);
     },
-    setActiveTimestamp(timestamp: Api.AmbigousTimestamp): void {
-      this.$store.commit(mutationTypes.setActiveTimestamp, timestamp);
+    setActiveTimestamp(timestamp: Api.AmbiguousTimestamp): void {
+      this.$store.commit(MutationTypes.SET_ACTIVE_TIMESTAMP, timestamp);
     },
-    updateTimestampInDrafts(newTimestamp: Api.AmbigousTimestamp): void {
-      this.$store.commit(mutationTypes.updateTimestampInDrafts, newTimestamp);
+    updateTimestampInDrafts(newTimestamp: Api.AmbiguousTimestamp): void {
+      this.$store.commit(MutationTypes.UPDATE_TIMESTAMP_IN_DRAFTS, newTimestamp);
     },
-    deleteDraftTimestamp(deletedTimestamp: Api.AmbigousTimestamp): void {
-      this.$store.commit(mutationTypes.deleteDraftTimestamp, deletedTimestamp);
+    deleteDraftTimestamp(deletedTimestamp: Api.AmbiguousTimestamp): void {
+      this.$store.commit(MutationTypes.DELETE_DRAFT_TIMESTAMP, deletedTimestamp);
     },
     reset() {
       this.selectedType = TIMESTAMP_TYPES.find(type => type.id === this.activeTimestamp?.typeId);
@@ -208,7 +211,7 @@ export default vueMixins(VideoControllerMixin, KeyboardShortcutsMixin).extend({
     },
     onClickDone() {
       const base = this.activeTimestamp!;
-      const updatedTimestamp: Api.AmbigousTimestamp = {
+      const updatedTimestamp: Api.AmbiguousTimestamp = {
         at: base.at,
         typeId: this.selectedType!.id,
         id: base.id,

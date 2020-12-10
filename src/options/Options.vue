@@ -118,23 +118,23 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import PopupHeader from '@/popup/components/PopupHeader.vue';
 import KeyboardShortcutItem from './components/KeyboardShortcutItem.vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
-import mutationTypes from '@/common/store/mutationTypes';
+import { MutationTypes } from '@/common/store/mutationTypes';
 
-export default Vue.extend({
+export default defineComponent({
   components: { KeyboardShortcutItem, PopupHeader, WebExtImg },
   methods: {
     updatePrimaryShortcut(type: KeyboardShortcutAction): (value: string) => void {
       return (value: string | undefined): void => {
-        this.$store.commit(mutationTypes.setPrimaryKeyboardShortcut, { type, value });
+        this.$store.commit(MutationTypes.SET_PRIMARY_KEYBOARD_SHORTCUT, { type, value });
       };
     },
     updateSecondaryShortcut(type: KeyboardShortcutAction): (value: string) => void {
       return (value: string | undefined): void => {
-        this.$store.commit(mutationTypes.setSecondaryKeyboardShortcut, { type, value });
+        this.$store.commit(MutationTypes.SET_SECONDARY_KEYBOARD_SHORTCUT, { type, value });
       };
     },
   },

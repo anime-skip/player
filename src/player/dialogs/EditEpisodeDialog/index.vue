@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import ProgressOverlay from '@/common/components/ProgressOverlay.vue';
 import BasicDialog from '../BasicDialog.vue';
 import FindExisting from './FindExisting.vue';
@@ -30,7 +30,7 @@ import Utils from '@/common/utils/Utils';
 import RequestState from '@/common/utils/RequestState';
 import Mappers from '@/common/utils/Mappers';
 
-export default Vue.extend({
+export default defineComponent({
   components: { ProgressOverlay, BasicDialog, FindExisting, CreateNew },
   data() {
     const suggestions: Api.ThirdPartyEpisode[] = [];

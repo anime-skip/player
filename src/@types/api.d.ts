@@ -154,7 +154,7 @@ declare namespace Api {
     source: TimestampSource;
   }
 
-  interface AmbigousTimestamp extends InputTimestamp {
+  interface AmbiguousTimestamp extends InputTimestamp {
     /**
      * It is a number when it is local, randomly generated. It is remote when the id is a string (GUID)
      */

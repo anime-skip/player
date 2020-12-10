@@ -21,7 +21,7 @@
         @seek="onSeek"
       />
       <div class="buttons">
-        <ToolbarButton class="margin-right" @click.native="togglePlayPause()">
+        <ToolbarButton class="margin-right" @click="togglePlayPause()">
           <PlayPauseButton :state="playerState.isPaused ? 1 : 0" />
         </ToolbarButton>
         <ToolbarButton class="margin-right" icon="ic_next_episode.svg" v-if="false" />
@@ -31,13 +31,13 @@
           v-if="timestamps.length > 0"
           class="margin-right"
           icon="ic_prev_timestamp.svg"
-          @click.native="previousTimestamp()"
+          @click="previousTimestamp()"
         />
         <ToolbarButton
           v-if="timestamps.length > 0"
           class="margin-right"
           icon="ic_next_timestamp.svg"
-          @click.native="nextTimestamp()"
+          @click="nextTimestamp()"
         />
         <div class="divider margin-right" v-if="timestamps.length > 0" />
         <p class="current-time">
@@ -48,22 +48,22 @@
           class="margin-left"
           icon="ic_timestamps.svg"
           title="Timestamps"
-          @click.native="toggleTimestampsDialog"
+          @click="toggleTimestampsDialog"
         />
         <ToolbarButton
           v-if="isEditing && !isSavingTimestamps"
           class="margin-left"
           icon="ic_save_changes.svg"
           title="Save Changes"
-          @click.native="saveChanges()"
+          @click="saveChanges()"
         />
         <div class="divider margin-left" />
         <ToolbarButton
           class="margin-left margin-right"
           icon="ic_more.svg"
-          @click.native="toggleAccountDialog"
+          @click="toggleAccountDialog"
         />
-        <ToolbarButton v-if="isFullscreenEnabled" @click.native="toggleFullscreen()">
+        <ToolbarButton v-if="isFullscreenEnabled" @click="toggleFullscreen()">
           <FullscreenButton :state="isFullscreen ? 0 : 1" :key="isFullscreenCount" />
         </ToolbarButton>
       </div>
@@ -72,7 +72,7 @@
 </template>
 
 <script lang="ts">
-import vueMixins from 'vue-typed-mixins';
+import { defineComponent, PropType } from 'vue';
 import Timeline from './Timeline.vue';
 import ToolbarButton from './ToolbarButton.vue';
 import AccountDialog from '../dialogs/AccountDialog.vue';
@@ -84,11 +84,11 @@ import WebExtImg from '@/common/components/WebExtImg.vue';
 import VideoControllerMixin from '@/common/mixins/VideoController';
 import KeyboardShortcutMixin, { KeyboardShortcutMap } from '../../common/mixins/KeyboardShortcuts';
 import { FRAME } from '../../common/utils/Constants';
-import { PropValidator } from 'vue/types/options';
-import mutationTypes from '@/common/store/mutationTypes';
-import actionTypes from '@/common/store/actionTypes';
+import { MutationTypes } from '@/common/store/mutationTypes';
+import { ActionTypes } from '@/common/store/actionTypes';
+import { GetterTypes } from '@/common/store/getterTypes';
 
-export default vueMixins(VideoControllerMixin, KeyboardShortcutMixin).extend({
+export default defineComponent({
   components: {
     Timeline,
     PlayPauseButton,
@@ -98,8 +98,12 @@ export default vueMixins(VideoControllerMixin, KeyboardShortcutMixin).extend({
     AccountDialog,
     WebExtImg,
   },
+  mixins: [VideoControllerMixin, KeyboardShortcutMixin],
   props: {
-    playerState: { type: Object, required: true } as PropValidator<PlayerState>,
+    playerState: {
+      type: Object as PropType<PlayerState>,
+      required: true,
+    },
   },
   created() {
     global.onVideoChanged(video => {
@@ -128,11 +132,11 @@ export default vueMixins(VideoControllerMixin, KeyboardShortcutMixin).extend({
     };
   },
   computed: {
-    timestamps(): Api.AmbigousTimestamp[] {
-      return this.$store.getters.timestamps;
+    timestamps(): Api.AmbiguousTimestamp[] {
+      return this.$store.getters[GetterTypes.TIMESTAMPS];
     },
     preferences(): Api.Preferences | undefined {
-      return this.$store.getters.preferences;
+      return this.$store.getters[GetterTypes.PREFERENCES];
     },
     activeDialog(): string | undefined {
       return this.$store.state.activeDialog;
@@ -143,21 +147,21 @@ export default vueMixins(VideoControllerMixin, KeyboardShortcutMixin).extend({
     browserType(): BrowserType {
       return this.$store.state.browserType;
     },
-    activeTimestamp(): Api.AmbigousTimestamp | undefined {
+    activeTimestamp(): Api.AmbiguousTimestamp | undefined {
       return this.$store.state.activeTimestamp;
     },
     isSavingTimestamps(): boolean {
-      return this.$store.getters.isSavingTimestamps;
+      return this.$store.getters[GetterTypes.IS_SAVING_TIMESTAMPS];
     },
     duration(): number | undefined {
-      return this.$store.getters.duration;
+      return this.$store.getters[GetterTypes.DURATION];
     },
     isActive(): boolean {
       return this.playerState.isActive || this.isEditing;
     },
-    activeTimestamps(): Api.AmbigousTimestamp[] {
+    activeTimestamps(): Api.AmbiguousTimestamp[] {
       if (this.isEditing) {
-        return this.$store.getters.draftTimestamps;
+        return this.$store.getters[GetterTypes.DRAFT_TIMESTAMPS];
       }
       return this.timestamps;
     },
@@ -167,26 +171,26 @@ export default vueMixins(VideoControllerMixin, KeyboardShortcutMixin).extend({
     },
   },
   methods: {
-    setActiveTimestamp(timestamp: Api.AmbigousTimestamp): void {
-      this.$store.commit(mutationTypes.setActiveTimestamp, timestamp);
+    setActiveTimestamp(timestamp: Api.AmbiguousTimestamp): void {
+      this.$store.commit(MutationTypes.SET_ACTIVE_TIMESTAMP, timestamp);
     },
     setEditTimestampMode(mode: 'add' | 'edit' | undefined): void {
-      this.$store.commit(mutationTypes.setEditTimestampMode, mode);
+      this.$store.commit(MutationTypes.SET_EDIT_TIMESTAMP_MODE, mode);
     },
     setDuration(duration?: number): void {
-      this.$store.commit(mutationTypes.setDuration, duration);
+      this.$store.commit(MutationTypes.SET_DURATION, duration);
     },
     showDialog(dialogName?: string): void {
-      this.$store.dispatch(actionTypes.showDialog, dialogName);
+      this.$store.dispatch(ActionTypes.SHOW_DIALOG, dialogName);
     },
     async createNewTimestamp(): Promise<void> {
-      this.$store.dispatch(actionTypes.createNewTimestamp, undefined);
+      this.$store.dispatch(ActionTypes.CREATE_NEW_TIMESTAMP, undefined);
     },
     async addMissingDurations(duration: number): Promise<void> {
-      this.$store.dispatch(actionTypes.addMissingDurations, duration);
+      this.$store.dispatch(ActionTypes.ADD_MISSING_DURATIONS, duration);
     },
     async saveChanges(): Promise<void> {
-      this.$store.dispatch(actionTypes.stopEditing);
+      this.$store.dispatch(ActionTypes.STOP_EDITING);
     },
     toggleFullscreen(): void {
       this.isFullscreen = !Utils.isFullscreen();

@@ -15,5 +15,5 @@
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
   "cSpell.words": ["camelcase"],
-  "cSpell.ignoreWords": ["builtins"]
+  "cSpell.ignoreWords": ["builtins", "vuex"]
 }

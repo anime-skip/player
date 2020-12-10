@@ -20,7 +20,7 @@
         <Checkbox
           :isChecked="getPref('enableAutoSkip')"
           text="Auto-skip Sections"
-          @click.native="updatePreferences('enableAutoSkip')"
+          @click="updatePreferences('enableAutoSkip')"
         />
       </div>
 
@@ -32,7 +32,7 @@
           :isChecked="getPref(preference.key)"
           :isDisabled="!getPref('enableAutoSkip')"
           :text="preference.title"
-          @click.native="onClickPreference(preference.key)"
+          @click="onClickPreference(preference.key)"
         />
       </div>
       <span v-if="hasPreferenceError" class="error-message">
@@ -69,7 +69,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import ProgressOverlay from '@/common/components/ProgressOverlay.vue';
 import PopupHeader from './PopupHeader.vue';
 import Checkbox from '@/common/components/Checkbox.vue';
@@ -78,10 +78,11 @@ import WebExtImg from '@/common/components/WebExtImg.vue';
 import PlaybackRatePicker from '@/common/components/PlaybackRatePicker.vue';
 import { SKIPPABLE_PREFERENCES } from '../../common/utils/Constants';
 import Messenger from '@/common/utils/Messenger';
-import actionTypes from '@/common/store/actionTypes';
-import mutationTypes from '@/common/store/mutationTypes';
+import { ActionTypes } from '@/common/store/actionTypes';
+import { MutationTypes } from '@/common/store/mutationTypes';
+import { GetterTypes } from '@/common/store/getterTypes';
 
-export default Vue.extend({
+export default defineComponent({
   components: { ProgressOverlay, PopupHeader, Checkbox, TextInput, PlaybackRatePicker, WebExtImg },
   props: {
     small: Boolean,
@@ -97,13 +98,13 @@ export default Vue.extend({
   },
   computed: {
     preferences(): Api.Preferences | undefined {
-      return this.$store.getters.preferences;
+      return this.$store.getters[GetterTypes.PREFERENCES];
     },
     isLoggingIn(): boolean {
-      return this.$store.getters.isLoggingIn;
+      return this.$store.getters[GetterTypes.IS_LOGGING_IN];
     },
     hasPreferenceError(): boolean {
-      return this.$store.getters.hasPreferenceError;
+      return this.$store.getters[GetterTypes.HAS_PREFERENCE_ERROR];
     },
     SKIPPABLE_PREFERENCES(): SkippablePreference[] {
       return SKIPPABLE_PREFERENCES;
@@ -118,15 +119,15 @@ export default Vue.extend({
   },
   methods: {
     updatePreferences(pref: keyof Api.Preferences): void {
-      this.$store.dispatch(actionTypes.updatePreferences, pref);
+      this.$store.dispatch(ActionTypes.UPDATE_PREFERENCES, pref);
     },
     hideDialog(): void {
       // TODO: Pull dialog ids into constants
       // TODO: Create a hideDialog action
-      this.$store.dispatch(actionTypes.showDialog, undefined);
+      this.$store.dispatch(ActionTypes.SHOW_DIALOG, undefined);
     },
     logOut(): void {
-      this.$store.commit(mutationTypes.logOut);
+      this.$store.commit(MutationTypes.LOG_OUT);
     },
     getPref(pref: keyof Api.Preferences): boolean {
       const prefs = this.preferences;
@@ -145,8 +146,7 @@ export default Vue.extend({
       this.messenger.send('@anime-skip/open-options', undefined).then(this.hideDialog);
     },
     onClickOptionGroup(optionGroup: PlayerOptionGroup): void {
-      Vue.set(this, 'activePlayerOption', optionGroup);
-      this.activePlayerOption = optionGroup;
+      this.activePlayerOption = optionGroup; // TODO: Test set
     },
     getSelectedOption(optionGroup: PlayerOptionGroup): string {
       const selected = optionGroup.options.filter(option => option.isSelected);

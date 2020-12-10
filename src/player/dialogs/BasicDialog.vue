@@ -15,20 +15,22 @@
 </template>
 
 <script lang="ts">
-import actionTypes from '@/common/store/actionTypes';
-import Vue from 'vue';
-import { PropValidator } from 'vue/types/options';
+import { ActionTypes } from '@/common/store/actionTypes';
+import { defineComponent, PropType } from 'vue';
 
-export default Vue.extend({
+export default defineComponent({
   props: {
     name: { type: String, required: true },
-    gravityX: { type: String, default: 'center' } as PropValidator<
-      'center' | 'flex-start' | 'flex-end'
-    >,
-    gravityY: { type: String, default: 'center' } as PropValidator<
-      'center' | 'flex-start' | 'flex-end'
-    >,
+    gravityX: {
+      type: String as PropType<'center' | 'flex-start' | 'flex-end'>,
+      default: 'center',
+    },
+    gravityY: {
+      type: String as PropType<'center' | 'flex-start' | 'flex-end'>,
+      default: 'center',
+    },
   },
+  emits: ['show', 'hide'],
   watch: {
     activeDialog(currentDialog?: string, prevDialog?: string) {
       if (currentDialog === prevDialog) return;
@@ -47,7 +49,7 @@ export default Vue.extend({
   },
   methods: {
     dismiss(): void {
-      this.$store.dispatch(actionTypes.showDialog, undefined);
+      this.$store.dispatch(ActionTypes.SHOW_DIALOG, undefined);
     },
   },
 });

@@ -45,23 +45,22 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import type { PropValidator } from 'vue/types/options';
+import { defineComponent, PropType } from 'vue';
 import TextInput from './TextInput.vue';
 
-export default Vue.extend({
+export default defineComponent({
   components: { TextInput },
   props: {
-    value: { type: Object, required: true } as PropValidator<AutocompleteItem>,
+    value: { type: Object as PropType<AutocompleteItem>, required: true },
     label: String,
     errorMessage: String,
     noOptionsMessage: { type: String, default: 'No results' },
-    options: { type: Array, required: true } as PropValidator<AutocompleteItem[]>,
+    options: { type: Array as PropType<AutocompleteItem[]>, required: true },
     leftIcon: String,
     searchDelay: { type: Number, default: 300 },
     disabled: Boolean,
   },
-  // emits: ["search"],
+  emits: ['search', 'focus', 'blur', 'select', 'input'],
   mounted() {
     if (this.value) {
       this.searchValue = this.value.title;
@@ -98,7 +97,7 @@ export default Vue.extend({
       // Update parent
       if (this.searchValue !== this.inputValue.title) {
         this.setInputValue({
-            key: '',
+          key: '',
           title: this.searchValue,
         });
       }
@@ -184,7 +183,7 @@ export default Vue.extend({
       } else {
         this.highlightedIndex = (this.highlightedIndex + 1) % this.options.length;
       }
-    }
+    },
   },
 });
 </script>

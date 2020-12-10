@@ -1,4 +1,5 @@
-import Vue from 'vue';
+import { defineComponent } from 'vue';
+import { GetterTypes } from '../store/getterTypes';
 import Utils from '../utils/Utils';
 
 export type KeyboardShortcutMap = { [action in KeyboardShortcutAction]?: () => void };
@@ -6,7 +7,7 @@ interface Data {
   $keyboardShortcuts: KeyboardShortcutMap;
 }
 
-export default Vue.extend({
+export default defineComponent({
   created() {
     this.$keyboardShortcuts = this.setupKeyboardShortcuts();
     global.addKeyDownListener(this.onKeyDown);
@@ -29,12 +30,12 @@ export default Vue.extend({
       const keyCombo = Utils.keyComboFromEvent(event);
       let keyAction = Utils.findShortcutAction(
         keyCombo,
-        this.$store.getters.primaryKeyboardShortcuts
+        this.$store.getters[GetterTypes.PRIMARY_KEYBOARD_SHORTCUTS]
       );
       if (keyAction == null) {
         keyAction = Utils.findShortcutAction(
           keyCombo,
-          this.$store.getters.secondaryKeyboardShortcuts
+          this.$store.getters[GetterTypes.SECONDARY_KEYBOARD_SHORTCUTS]
         );
       }
 

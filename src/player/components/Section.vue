@@ -7,14 +7,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { PropValidator } from 'vue/types/options';
+import { defineComponent, PropType } from 'vue';
 
-export default Vue.extend({
+export default defineComponent({
   props: {
-    timestamp: { type: Object, required: true } as PropValidator<Api.Timestamp>,
-    endTime: Number,
-    duration: Number,
+    timestamp: { type: Object as PropType<Api.Timestamp>, required: true },
+    endTime: { type: Number, required: true },
+    duration: { type: Number, required: true },
     currentTime: Number,
     skipped: Boolean,
     buffered: Boolean,

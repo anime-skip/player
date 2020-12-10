@@ -23,15 +23,16 @@
 </template>
 
 <script lang="ts">
-import vueMixins from 'vue-typed-mixins';
+import { defineComponent } from 'vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import VueSlider from 'vue-slider-component';
 import ToolbarButton from '../ToolbarButton.vue';
 import '../../scss/VolumeSlider.scss';
 import VideoControllerMixin from '../../../common/mixins/VideoController';
 
-export default vueMixins(VideoControllerMixin).extend({
+export default defineComponent({
   components: { WebExtImg, VueSlider, ToolbarButton },
+  mixins: [VideoControllerMixin],
   data() {
     return {
       isDragging: false,

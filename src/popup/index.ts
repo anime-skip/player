@@ -1,21 +1,17 @@
 import './index.scss';
 import '@/common/shared.scss';
-import Vue from 'vue';
+
+import { createApp } from 'vue';
 import Popup from './Popup.vue';
-import store from '../common/store';
+import { store } from '../common/store';
 import AxiosApi from '@/common/api/AxiosApi';
 
 // Setup Globals
 
 global.Api = AxiosApi;
-// @ts-ignore
-global.getVideo = () => undefined;
 
 // Inject DOM
 
-Vue.config.productionTip = false;
-
-new Vue({
-  render: h => h(Popup),
-  store,
-}).$mount('#app');
+createApp(Popup)
+  .use(store)
+  .mount('#app');

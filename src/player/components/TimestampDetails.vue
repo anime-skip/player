@@ -58,7 +58,7 @@
         class="add-new"
         title="New Timestamp"
         icon="ic_add_timestamp.svg"
-        @click.native="onClickAddNew"
+        @click="onClickAddNew"
       />
       <div v-if="false" class="warning">
         <WebExtImg src="ic_warning.svg" />
@@ -80,18 +80,20 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue';
 import Utils from '@/common/utils/Utils';
-import vueMixins from 'vue-typed-mixins';
 import { TIMESTAMP_TYPES, TIMESTAMP_SOURCES, SECONDS } from '../../common/utils/Constants';
 import WebExtImg from '../../common/components/WebExtImg.vue';
 import ProgressOverlay from '../../common/components/ProgressOverlay.vue';
 import ToolbarButton from './ToolbarButton.vue';
 import VideoControllerMixin from '@/common/mixins/VideoController';
-import mutationTypes from '@/common/store/mutationTypes';
-import actionTypes from '@/common/store/actionTypes';
+import { MutationTypes } from '@/common/store/mutationTypes';
+import { ActionTypes } from '@/common/store/actionTypes';
+import { GetterTypes } from '@/common/store/getterTypes';
 
-export default vueMixins(VideoControllerMixin).extend({
+export default defineComponent({
   components: { WebExtImg, ToolbarButton, ProgressOverlay },
+  mixins: [VideoControllerMixin],
   destroyed(): void {
     this.onStopHoverTimestamp();
   },
@@ -109,14 +111,14 @@ export default vueMixins(VideoControllerMixin).extend({
     };
   },
   computed: {
-    activeTimestamps(): Api.AmbigousTimestamp[] {
-      return this.$store.getters.activeTimestamps;
+    activeTimestamps(): Api.AmbiguousTimestamp[] {
+      return this.$store.getters[GetterTypes.ACTIVE_TIMESTAMPS];
     },
     canEditTimestamps(): boolean {
-      return this.$store.getters.canEditTimestamps;
+      return this.$store.getters[GetterTypes.CAN_EDIT_TIMESTAMPS];
     },
     isLoggedIn(): boolean {
-      return this.$store.getters.isLoggedIn;
+      return this.$store.getters[GetterTypes.IS_LOGGED_IN];
     },
     isEditing(): boolean {
       return this.$store.state.isEditing;
@@ -125,47 +127,47 @@ export default vueMixins(VideoControllerMixin).extend({
       return this.$store.state.episodeUrl;
     },
     isSavingTimestamps(): boolean {
-      return this.$store.getters.isSavingTimestamps;
+      return this.$store.getters[GetterTypes.IS_SAVING_TIMESTAMPS];
     },
   },
   methods: {
-    deleteDraftTimestamp(deletedTimestamp: Api.AmbigousTimestamp): void {
-      this.$store.commit(mutationTypes.deleteDraftTimestamp, deletedTimestamp);
+    deleteDraftTimestamp(deletedTimestamp: Api.AmbiguousTimestamp): void {
+      this.$store.commit(MutationTypes.DELETE_DRAFT_TIMESTAMP, deletedTimestamp);
     },
-    setActiveTimestamp(timestamp: Api.AmbigousTimestamp): void {
-      this.$store.commit(mutationTypes.setActiveTimestamp, timestamp);
+    setActiveTimestamp(timestamp: Api.AmbiguousTimestamp): void {
+      this.$store.commit(MutationTypes.SET_ACTIVE_TIMESTAMP, timestamp);
     },
-    setHoveredTimestamp(timestamp: Api.AmbigousTimestamp): void {
-      this.$store.commit(mutationTypes.setHoveredTimestamp, timestamp);
+    setHoveredTimestamp(timestamp: Api.AmbiguousTimestamp): void {
+      this.$store.commit(MutationTypes.SET_HOVERED_TIMESTAMP, timestamp);
     },
     clearHoveredTimestamp(): void {
-      this.$store.commit(mutationTypes.clearHoveredTimestamp);
+      this.$store.commit(MutationTypes.CLEAR_HOVERED_TIMESTAMP);
     },
     setEditTimestampMode(mode: 'add' | 'edit' | undefined): void {
-      this.$store.commit(mutationTypes.setEditTimestampMode, mode);
+      this.$store.commit(MutationTypes.SET_EDIT_TIMESTAMP_MODE, mode);
     },
     startEditing(onStartedEditing?: () => void): void {
-      this.$store.dispatch(actionTypes.startEditing, onStartedEditing);
+      this.$store.dispatch(ActionTypes.START_EDITING, onStartedEditing);
     },
     stopEditing(discard?: boolean): void {
-      this.$store.dispatch(actionTypes.stopEditing, discard);
+      this.$store.dispatch(ActionTypes.STOP_EDITING, discard);
     },
     hideDialog(): void {
-      this.$store.dispatch(actionTypes.showDialog, undefined);
+      this.$store.dispatch(ActionTypes.SHOW_DIALOG, undefined);
     },
     showAccountDialog(): void {
-      this.$store.dispatch(actionTypes.showDialog, 'AccountDialog');
+      this.$store.dispatch(ActionTypes.SHOW_DIALOG, 'AccountDialog');
     },
     showEpisodeDialog(): void {
-      this.$store.dispatch(actionTypes.showDialog, 'EditEpisodeDialog');
+      this.$store.dispatch(ActionTypes.SHOW_DIALOG, 'EditEpisodeDialog');
     },
     async createNewTimestamp(): Promise<void> {
-      this.$store.dispatch(actionTypes.createNewTimestamp, undefined);
+      this.$store.dispatch(ActionTypes.CREATE_NEW_TIMESTAMP, undefined);
     },
-    itemTitle(timestamp: Api.AmbigousTimestamp): string {
+    itemTitle(timestamp: Api.AmbiguousTimestamp): string {
       return this.timestampTypeMap[timestamp.typeId ?? '']?.name ?? 'Unknown';
     },
-    itemSubtitle(timestamp: Api.AmbigousTimestamp): string {
+    itemSubtitle(timestamp: Api.AmbiguousTimestamp): string {
       const source = this.timestampSourceMap[timestamp.source];
       const at = Utils.formatSeconds(timestamp.at, true);
       if (source == null) {
@@ -176,7 +178,7 @@ export default vueMixins(VideoControllerMixin).extend({
       /* eslint-disable-next-line no-irregular-whitespace */
       return `${at} • ${source ?? 'Unknown Source'}`;
     },
-    async editTimestamp(timestamp: Api.AmbigousTimestamp): Promise<void> {
+    async editTimestamp(timestamp: Api.AmbiguousTimestamp): Promise<void> {
       this.pause();
       await this.startEditing(() => {
         this.setEditTimestampMode('edit');
@@ -184,12 +186,12 @@ export default vueMixins(VideoControllerMixin).extend({
         this.setCurrentTime(timestamp.at);
       });
     },
-    async deleteTimestamp(timestamp: Api.AmbigousTimestamp): Promise<void> {
+    async deleteTimestamp(timestamp: Api.AmbiguousTimestamp): Promise<void> {
       await this.startEditing(() => {
         this.deleteDraftTimestamp(timestamp);
       });
     },
-    onClickTimestamp(timestamp: Api.AmbigousTimestamp): void {
+    onClickTimestamp(timestamp: Api.AmbiguousTimestamp): void {
       this.setCurrentTime(timestamp.at);
     },
     async onClickAddNew(): Promise<void> {
@@ -203,7 +205,7 @@ export default vueMixins(VideoControllerMixin).extend({
       await this.stopEditing(true);
       this.hideDialog();
     },
-    onHoverTimestamp(timestamp: Api.AmbigousTimestamp): void {
+    onHoverTimestamp(timestamp: Api.AmbiguousTimestamp): void {
       if (this.hoverTimeout != null) window.clearTimeout(this.hoverTimeout);
       this.setHoveredTimestamp(timestamp);
       this.hoverTimeout = window.setTimeout(this.clearHoveredTimestamp, 3 * SECONDS);

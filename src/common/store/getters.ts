@@ -1,4 +1,3 @@
-import { as } from '../utils/GlobalUtils';
 import { GetterTree } from 'vuex';
 import RequestState from '../utils/RequestState';
 import {
@@ -7,35 +6,63 @@ import {
 } from '../utils/Constants';
 import Browser from '../utils/Browser';
 import Utils from '../utils/Utils';
+import { State } from './state';
+import { GetterTypes } from './getterTypes';
 
-export default as<GetterTree<VuexState, VuexState>>({
+// Typings /////////////////////////////////////////////////////////////////////
+
+export interface Getters {
+  [GetterTypes.TAB_URL](state: State): string;
+  [GetterTypes.DURATION](state: State): number | undefined;
+  [GetterTypes.IS_LOGGING_IN](state: State): boolean;
+  [GetterTypes.IS_LOGGED_IN](state: State): boolean;
+  [GetterTypes.IS_LOGIN_ERROR](state: State): boolean;
+  [GetterTypes.TOKEN](state: State): string | undefined;
+  [GetterTypes.REFRESH_TOKEN](state: State): string | undefined;
+  [GetterTypes.PREFERENCES](state: State): Api.Preferences | undefined;
+  [GetterTypes.HAS_PREFERENCE_ERROR](state: State): boolean;
+  [GetterTypes.PRIMARY_KEYBOARD_SHORTCUTS](state: State): KeyboardShortcutsMap;
+  [GetterTypes.SECONDARY_KEYBOARD_SHORTCUTS](state: State): KeyboardShortcutsMap;
+  [GetterTypes.KEY_COMBO_COUNT_MAP](state: State): { [keyCombo: string]: number | undefined };
+  [GetterTypes.DISPLAY_EPISODE_INFO](state: State): DisplayEpisodeInfo;
+  [GetterTypes.HAS_EPISODE](state: State): boolean;
+  [GetterTypes.TIMESTAMPS](state: State): Api.AmbiguousTimestamp[];
+  [GetterTypes.DRAFT_TIMESTAMPS](state: State): Api.AmbiguousTimestamp[];
+  [GetterTypes.ACTIVE_TIMESTAMPS](state: State, getters: any): Api.AmbiguousTimestamp[];
+  [GetterTypes.CAN_EDIT_TIMESTAMPS](state: State, getters: any): boolean;
+  [GetterTypes.IS_SAVING_TIMESTAMPS](state: State): boolean;
+}
+
+// Getters /////////////////////////////////////////////////////////////////////
+
+export const getters: GetterTree<State, State> & Getters = {
   // General
-  tabUrl({ tabUrl }): string {
+  [GetterTypes.TAB_URL]({ tabUrl }) {
     return Browser.transformServiceUrl(tabUrl);
   },
-  duration({ duration }) {
+  [GetterTypes.DURATION]({ duration }) {
     return duration || undefined;
   },
 
   // Login
-  isLoggingIn({ loginRequestState }): boolean {
+  [GetterTypes.IS_LOGGING_IN]({ loginRequestState }) {
     return loginRequestState === RequestState.LOADING;
   },
-  isLoggedIn({ loginRequestState }): boolean {
+  [GetterTypes.IS_LOGGED_IN]({ loginRequestState }) {
     return loginRequestState === RequestState.SUCCESS;
   },
-  isLogInError({ loginRequestState }): boolean {
+  [GetterTypes.IS_LOGIN_ERROR]({ loginRequestState }) {
     return loginRequestState === RequestState.FAILURE;
   },
 
   // Authentication
-  token(state): string | undefined {
+  [GetterTypes.TOKEN](state) {
     if (state.tokenExpiresAt && state.tokenExpiresAt <= Date.now()) {
       return undefined;
     }
     return state.token;
   },
-  refreshToken(state): string | undefined {
+  [GetterTypes.REFRESH_TOKEN](state) {
     if (state.refreshTokenExpiresAt && state.refreshTokenExpiresAt <= Date.now()) {
       return undefined;
     }
@@ -43,39 +70,36 @@ export default as<GetterTree<VuexState, VuexState>>({
   },
 
   // Preferences
-  preferences(state): Api.Preferences | undefined {
+  [GetterTypes.PREFERENCES](state) {
     if (!state.account) {
       return undefined;
     }
     return state.account.preferences;
   },
-  hasPreferenceError({ preferencesRequestState }): boolean {
+  [GetterTypes.HAS_PREFERENCE_ERROR]({ preferencesRequestState }) {
     return preferencesRequestState === RequestState.FAILURE;
   },
 
   // Keyboard shortcuts
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  primaryKeyboardShortcuts({ primaryKeyboardShortcuts }): any {
+  [GetterTypes.PRIMARY_KEYBOARD_SHORTCUTS]({ primaryKeyboardShortcuts }) {
     return primaryKeyboardShortcuts ?? DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS;
   },
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  secondaryKeyboardShortcuts({ secondaryKeyboardShortcuts }): any {
+  [GetterTypes.SECONDARY_KEYBOARD_SHORTCUTS]({ secondaryKeyboardShortcuts }) {
     return secondaryKeyboardShortcuts ?? DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS;
   },
-  keyComboCountMap({
-    primaryKeyboardShortcuts,
-    secondaryKeyboardShortcuts,
-  }): { [keyCombo: string]: number | undefined } {
+  [GetterTypes.KEY_COMBO_COUNT_MAP]({ primaryKeyboardShortcuts, secondaryKeyboardShortcuts }) {
     const map: { [keyCombo: string]: number | undefined } = {};
     Object.values(primaryKeyboardShortcuts ?? DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS).forEach(
-      keyCombo => {
+      (keyCombo?: string) => {
         if (keyCombo) {
           map[keyCombo] = (map[keyCombo] ?? 0) + 1;
         }
       }
     );
     Object.values(secondaryKeyboardShortcuts ?? DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS).forEach(
-      keyCombo => {
+      (keyCombo?: string) => {
         if (keyCombo) {
           map[keyCombo] = (map[keyCombo] ?? 0) + 1;
         }
@@ -85,7 +109,7 @@ export default as<GetterTree<VuexState, VuexState>>({
   },
 
   // Episodes
-  displayEpisodeInfo({ inferredEpisodeInfo, episode }): DisplayEpisodeInfo {
+  [GetterTypes.DISPLAY_EPISODE_INFO]({ inferredEpisodeInfo, episode }) {
     if (episode != null) {
       return {
         absoluteNumber: episode.absoluteNumber,
@@ -103,12 +127,12 @@ export default as<GetterTree<VuexState, VuexState>>({
       show: inferredEpisodeInfo?.show || 'Unknown Show',
     };
   },
-  hasEpisode({ episodeUrl }): boolean {
+  [GetterTypes.HAS_EPISODE]({ episodeUrl }) {
     return episodeUrl != null;
   },
 
   // Timestamps
-  timestamps({ timestamps, episodeUrl, episode, duration }): Api.AmbigousTimestamp[] {
+  [GetterTypes.TIMESTAMPS]({ timestamps, episodeUrl, episode, duration }) {
     // Find the offset
     let timestampsOffset = episodeUrl?.timestampsOffset;
     if (timestampsOffset == null && episode?.baseDuration != null && duration != null) {
@@ -131,7 +155,7 @@ export default as<GetterTree<VuexState, VuexState>>({
     );
     return offsetBoundedTimestamps;
   },
-  draftTimestamps(state): Api.AmbigousTimestamp[] {
+  [GetterTypes.DRAFT_TIMESTAMPS](state) {
     let drafts = state.draftTimestamps;
     if (state.activeTimestamp != null) {
       const activeIndex = drafts.findIndex(timestamp => timestamp.id === state.activeTimestamp?.id);
@@ -144,11 +168,13 @@ export default as<GetterTree<VuexState, VuexState>>({
     }
     return drafts;
   },
-  activeTimestamps(state, getters): Api.AmbigousTimestamp[] {
-    return state.isEditing ? getters.draftTimestamps : getters.timestamps;
+  [GetterTypes.ACTIVE_TIMESTAMPS](state, getters) {
+    return state.isEditing
+      ? getters[GetterTypes.DRAFT_TIMESTAMPS]
+      : getters[GetterTypes.TIMESTAMPS];
   },
-  canEditTimestamps(state, getters): boolean {
-    if (!getters.isLoggedIn) return false;
+  [GetterTypes.CAN_EDIT_TIMESTAMPS](state, getters) {
+    if (!getters[GetterTypes.IS_LOGGED_IN]) return false;
     const episodeUrl = state.episodeUrl;
     if (episodeUrl == null) return false;
     const episode = state.episode;
@@ -158,7 +184,7 @@ export default as<GetterTree<VuexState, VuexState>>({
     if (name === 'Unknown Episode' || show?.name === 'Unknown Show') return false;
     return true;
   },
-  isSavingTimestamps(state): boolean {
+  [GetterTypes.IS_SAVING_TIMESTAMPS](state) {
     return state.saveTimestampsRequestState === RequestState.LOADING;
   },
-});
+};
