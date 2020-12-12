@@ -10,32 +10,34 @@
     }"
     @click.stop
   >
-    <Section
-      v-for="section of sections"
-      :key="section.timestamp.id"
-      :timestamp="section.timestamp"
-      :endTime="section.endTime"
-      :duration="duration"
-      :skipped="section.isSkipped"
-    />
-    <Section
-      v-for="section of completedSections"
-      :key="'completed' + section.timestamp.id"
-      :timestamp="section.timestamp"
-      :endTime="section.endTime"
-      :duration="duration"
-      :currentTime="currentTime"
-      completed
-    />
-    <WebExtImg
-      v-for="timestamp of activeTimestamps"
-      :key="`t${timestamp.id}`"
-      class="Timestamp"
-      :class="timestampClass(timestamp)"
-      :src="timestampIcon(timestamp)"
-      :style="{ left: `${(timestamp.at / duration) * 100}%` }"
-    />
-    <VueSlider
+    <template v-if="duration">
+      <Section
+        v-for="section of sections"
+        :key="section.timestamp.id"
+        :timestamp="section.timestamp"
+        :endTime="section.endTime"
+        :duration="duration"
+        :skipped="section.isSkipped"
+      />
+      <Section
+        v-for="section of completedSections"
+        :key="'completed' + section.timestamp.id"
+        :timestamp="section.timestamp"
+        :endTime="section.endTime"
+        :duration="duration"
+        :currentTime="currentTime"
+        completed
+      />
+      <WebExtImg
+        v-for="timestamp of activeTimestamps"
+        :key="`t${timestamp.id}`"
+        class="Timestamp"
+        :class="timestampClass(timestamp)"
+        :src="timestampIcon(timestamp)"
+        :style="timestampStyle(timestamp)"
+      />
+    </template>
+    <!-- <VueSlider
       v-if="duration > 0"
       class="slider"
       :value="normalizedTime"
@@ -49,7 +51,7 @@
       dragOnClick
       :useKeyboard="false"
       @change="onSeek"
-    />
+    /> -->
   </div>
 </template>
 
@@ -57,7 +59,6 @@
 import { defineComponent, PropType } from 'vue';
 import Section from './Section.vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
-import VueSlider from 'vue-slider-component';
 import '../scss/VideoSlider.scss';
 import Utils from '@/common/utils/Utils';
 import VideoControllerMixin from '@/common/mixins/VideoController';
@@ -72,12 +73,12 @@ interface SectionData {
 }
 
 export default defineComponent({
-  components: { Section, WebExtImg, VueSlider },
+  components: { Section, WebExtImg },
   mixins: [VideoControllerMixin, KeyboardShortcutMixin],
   props: {
     isFlipped: Boolean,
     currentTime: { type: Number, required: true },
-    duration: { type: Number, required: true },
+    duration: Number,
     updateTime: {
       type: Function as PropType<(newTime: number, updatePlayer?: boolean) => void>,
       required: true,
@@ -97,6 +98,7 @@ export default defineComponent({
   },
   watch: {
     currentTime(newTime: number, oldTime: number) {
+      if (!this.duration) return;
       // Do nothing
       const currentTimestamp = Utils.previousTimestamp(oldTime, this.timestamps, undefined);
       const insideSkippedSection =
@@ -177,6 +179,7 @@ export default defineComponent({
       return this.$store.getters[GetterTypes.ACTIVE_TIMESTAMPS];
     },
     normalizedTime(): number {
+      if (!this.duration) return 0;
       return Math.max(0, Math.min(100, (this.currentTime / this.duration) * 100));
     },
     canAddTimestamp(): boolean {
@@ -199,6 +202,8 @@ export default defineComponent({
       };
     },
     sections(): SectionData[] {
+      if (!this.duration) return [];
+
       if (this.timestamps.length === 0 || this.isEditing) {
         return [
           {
@@ -253,10 +258,24 @@ export default defineComponent({
      */
     goToNextTimestampOnTimeChange(newTime: number) {
       const newNext = Utils.nextTimestamp(newTime, this.timestamps, this.preferences);
-      this.updateTime(newNext?.at ?? this.duration, true);
+      const goToTime = newNext?.at ?? this.duration;
+      if (goToTime != null) {
+        this.updateTime(goToTime, true);
+      }
     },
     onSeek(newTime: number) {
+      if (!this.duration) return;
       this.$emit('seek', (newTime / 100) * this.duration);
+    },
+    timestampStyle(timestamp: Api.AmbiguousTimestamp): object {
+      if (!this.duration) {
+        return {
+          left: '0',
+        };
+      }
+      return {
+        left: `${(timestamp.at / this.duration) * 100}%`,
+      };
     },
   },
 });

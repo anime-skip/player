@@ -13,7 +13,7 @@ export default defineComponent({
     global.addKeyDownListener(this.onKeyDown);
     console.debug(`[${this.$options.name}] KeyboardShortcutMixin.created()`);
   },
-  destroyed(): void {
+  unmounted(): void {
     global.removeKeyDownListener(this.onKeyDown);
   },
   data(): Data {

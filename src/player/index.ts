@@ -39,17 +39,22 @@ async function injectPlayer() {
     console.debug("Player's root node not found, trying again");
     await sleep(100);
   }
-  console.debug(`Added player to ${rootQuery}`);
 
   // Set the style to hide all the old elements
   document.body.classList.add('hide-for-anime-skip');
 
-  // Ripple.color = 'rgba(255, 255, 255, 0.12)';
-  // Vue.directive('ripple', Ripple);
+  try {
+    const container = document.createElement('div');
 
-  createApp(Player)
-    .use(store)
-    .mount(rootQuery);
+    const app = createApp(Player).use(store);
+    const mountedApp = app.mount(container);
+
+    document.querySelector(rootQuery)?.appendChild(mountedApp.$el);
+
+    console.info(`Added player to ${rootQuery}`);
+  } catch (err) {
+    console.warn('Failed to inject player UI', err);
+  }
 }
 
 if (global.doNotReplacePlayer?.()) {

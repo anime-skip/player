@@ -7,7 +7,7 @@
         leftIcon="ic_account.svg"
         label="Username"
         autocomplete="username"
-        v-model="username"
+        v-model:value="username"
       />
       <TextInput
         class="flex row"
@@ -16,7 +16,7 @@
         :errorMessage="isLogInError ? 'Username or password is incorrect' : undefined"
         autocomplete="current-password"
         type="password"
-        v-model="password"
+        v-model:value="password"
       />
       <div class="bottom-row">
         <input type="submit" value="Log In" class="clickable focus button" />

@@ -1,12 +1,12 @@
 <template>
   <div class="VolumeButton" :class="{ dragging: isDragging }">
-    <ToolbarButton class="inner-button" @click.native="toggleMuted">
+    <ToolbarButton class="inner-button" @click="toggleMuted">
       <WebExtImg src="ic_volume_muted.svg" class="ic_muted" :class="volumeClass" />
       <WebExtImg src="ic_volume_speaker.svg" class="ic_speaker" :class="volumeClass" />
       <WebExtImg src="ic_volume_low.svg" class="ic_low" :class="volumeClass" />
       <WebExtImg src="ic_volume_high.svg" class="ic_high" :class="volumeClass" />
     </ToolbarButton>
-    <VueSlider
+    <!-- <VueSlider
       class="slider"
       v-model="level"
       height="3"
@@ -18,20 +18,19 @@
       @change="setVolume"
       @drag-start="isDragging = true"
       @drag-end="isDragging = false"
-    />
+    /> -->
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
-import VueSlider from 'vue-slider-component';
 import ToolbarButton from '../ToolbarButton.vue';
 import '../../scss/VolumeSlider.scss';
 import VideoControllerMixin from '../../../common/mixins/VideoController';
 
 export default defineComponent({
-  components: { WebExtImg, VueSlider, ToolbarButton },
+  components: { WebExtImg, ToolbarButton },
   mixins: [VideoControllerMixin],
   data() {
     return {

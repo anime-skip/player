@@ -2,7 +2,8 @@
   <div class="EditTimestamp">
     <header>
       <h1 class="section-header">
-        <div v-ripple class="img-button" title="Discard changes" @click="clearActiveTimestamp">
+        <!-- TODO: Ripple -->
+        <div class="img-button" title="Discard changes" @click="clearActiveTimestamp">
           <WebExtImg src="ic_chevron_left.svg" />
         </div>
         {{ title }}
@@ -21,7 +22,7 @@
         class="flex row"
         leftIcon="ic_filter.svg"
         label="Filter..."
-        v-model="typeFilter"
+        v-model:value="typeFilter"
         @submit="onClickDone()"
         @keydown.up.stop.prevent="onPressUp"
         @keydown.down.stop.prevent="onPressDown"
@@ -29,7 +30,8 @@
     </header>
     <div class="middle-container scroll">
       <ul class="type-list">
-        <li v-for="t of matchingTypes" :key="t.id" v-ripple @click="selectType(t)">
+        <!-- TODO: Ripple -->
+        <li v-for="t of matchingTypes" :key="t.id" @click="selectType(t)">
           <WebExtImg class="icon" :src="typeRadioIcon(t)" />
           <p class="name">{{ t.name }}</p>
         </li>
@@ -90,7 +92,7 @@ export default defineComponent({
       }
     }, 200);
   },
-  destroyed() {
+  unmounted() {
     this.clearActiveTimestamp();
     this.clearEditTimestampMode();
     this.selectedType = undefined;

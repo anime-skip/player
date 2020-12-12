@@ -3,16 +3,16 @@
     <AutocompleteTextInput
       class="horizontal-margin"
       label="Show Name"
-      v-model="show"
+      v-model:value="show"
       :options="showOptions"
       @select="onSelectShow"
       @search="searchShows"
     />
-    <TextInput class="row" label="Episode Name" v-model="name" @submit="onClickCreate" />
+    <TextInput class="row" label="Episode Name" v-model:value="name" @submit="onClickCreate" />
     <div class="row input-row">
-      <TextInput label="Season" v-model="season" @submit="onClickCreate" />
-      <TextInput label="Number in Season" v-model="number" @submit="onClickCreate" />
-      <TextInput label="Overall Number" v-model="absoluteNumber" @submit="onClickCreate" />
+      <TextInput label="Season" v-model:value="season" @submit="onClickCreate" />
+      <TextInput label="Number in Season" v-model:value="number" @submit="onClickCreate" />
+      <TextInput label="Overall Number" v-model:value="absoluteNumber" @submit="onClickCreate" />
     </div>
     <div class="row buttons">
       <button

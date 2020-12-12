@@ -48,7 +48,7 @@ export interface Mutations {
   // Preferences
   [MutationTypes.TOGGLE_PREFERENCE](
     state: State,
-    change: { pref: keyof Api.Preferences; value: boolean }
+    change: { preference: keyof Api.Preferences; value: boolean }
   ): void;
   [MutationTypes.SET_PREFERENCES_REQUEST_STATE](state: State, requestState: RequestState): void;
 
@@ -197,7 +197,7 @@ export const mutations: MutationTree<State> & Mutations = {
       console.warn('togglePref() called without account in the store');
       return;
     }
-    state.account.preferences[change.pref] = change.value; // TODO: Test set removal
+    state.account.preferences[change.preference] = change.value; // TODO: Test set removal
     state.preferencesLastUpdatedAt = Date.now();
   },
   [MutationTypes.SET_PREFERENCES_REQUEST_STATE](state, requestState) {

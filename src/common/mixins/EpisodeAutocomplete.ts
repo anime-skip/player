@@ -22,9 +22,6 @@ const EpisodeAutocompleteMixin = defineComponent({
     },
   },
   methods: {
-    onSelectEpisode(item: AutocompleteItem<Api.EpisodeSearchResult>): void {
-      this.episode = item;
-    },
     async searchEpisodes(episode: string): Promise<void> {
       this.episodeSearchResults = await Utils.apiAction(
         this.$store,

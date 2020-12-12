@@ -114,6 +114,8 @@ const config = {
   plugins: [
     new webpack.DefinePlugin({
       global: 'window',
+      __VUE_OPTIONS_API__: true,
+      __VUE_PROD_DEVTOOLS__: false,
     }),
     new VueLoaderPlugin(),
     new MiniCssExtractPlugin({

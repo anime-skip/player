@@ -185,14 +185,14 @@ export const actions: ActionTree<State, State> & Actions = {
           [preference]: newValue,
         };
         commit(MutationTypes.SET_PREFERENCES_REQUEST_STATE, RequestState.LOADING);
-        commit(MutationTypes.TOGGLE_PREFERENCE, { pref: preference, value: newValue });
+        commit(MutationTypes.TOGGLE_PREFERENCE, { preference, value: newValue });
         await callApi(commit, global.Api.updatePreferences, newPreferences);
         commit(MutationTypes.SET_PREFERENCES_REQUEST_STATE, RequestState.SUCCESS);
         commit(MutationTypes.PERSIST_PREFERENCES, newPreferences);
       } catch (err) {
         commit(MutationTypes.SET_PREFERENCES_REQUEST_STATE, RequestState.FAILURE);
         setTimeout(() => {
-          commit(MutationTypes.TOGGLE_PREFERENCE, { pref: preference, value: !newValue });
+          commit(MutationTypes.TOGGLE_PREFERENCE, { preference, value: !newValue });
         }, 200);
         throw err;
       }

@@ -33,7 +33,7 @@
       <AutocompleteTextInput
         class="horizontal-margin"
         label="Enter the show name..."
-        v-model="show"
+        v-model:value="show"
         :options="showOptions"
         @select="onSelectShow"
         @search="searchShows"
@@ -43,9 +43,8 @@
         ref="episode"
         class="row horizontal-margin"
         label="Enter the episode name..."
-        v-model="episode"
+        v-model:value="episode"
         :options="episodeOptions"
-        @select="onSelectEpisode"
         @search="searchEpisodes"
       />
     </div>

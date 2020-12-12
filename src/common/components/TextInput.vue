@@ -41,7 +41,7 @@ export default defineComponent({
     value: String,
     disabled: Boolean,
   },
-  emits: ['focus', 'blur', 'input', 'keypress-esc', 'submit'],
+  emits: ['focus', 'blur', 'update:value', 'keypress-esc', 'submit'],
   data() {
     return {
       internalValue: this.value ?? this.defaultValue ?? '',
@@ -54,7 +54,7 @@ export default defineComponent({
     },
     internalValue(newInternalValue: string | undefined) {
       if (newInternalValue !== this.value) {
-        this.$emit('input', newInternalValue);
+        this.$emit('update:value', newInternalValue);
       }
     },
   },
@@ -83,7 +83,7 @@ export default defineComponent({
       this.$emit('keypress-esc');
     },
     setInputValue(value: string) {
-      this.$emit('input', value);
+      this.$emit('update:value', value);
     },
   },
 });

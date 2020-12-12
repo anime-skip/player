@@ -352,4 +352,18 @@ export default class Utils {
     // @ts-ignore: Type generics did not make it through to dispatch()
     return await store.dispatch(ActionTypes.API_CALL, { apiCall, args });
   }
+
+  public static setIntervalUntil(callback: () => boolean, interval: number, timeout: number): void {
+    function clearBothTimers(): void {
+      window.clearTimeout(timeoutTimer);
+      window.clearInterval(intervalTimer);
+    }
+    const timeoutTimer = window.setTimeout(clearBothTimers, timeout);
+    const intervalTimer = window.setInterval(() => {
+      const stopEarly = callback();
+      if (stopEarly) {
+        clearBothTimers();
+      }
+    }, interval);
+  }
 }

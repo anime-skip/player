@@ -1,5 +1,5 @@
 <template>
-  <div class="ToolbarButton" v-ripple>
+  <div class="ToolbarButton">
     <slot v-if="icon == null" />
     <WebExtImg v-else :src="icon" :draggable="false" />
     <p v-if="title" class="title">{{ title }}</p>

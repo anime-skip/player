@@ -66,7 +66,7 @@ export default defineComponent({
   mounted(): void {
     this.loadAllEpisodeData();
   },
-  destroyed() {
+  unmounted() {
     browser.runtime.onMessage.removeListener(this.onReceiveMessage);
   },
   data() {

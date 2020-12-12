@@ -3,12 +3,14 @@
     <header>
       <h1 class="section-header">
         Timestamps
-        <div v-ripple class="img-button" title="Close dialog" @click="hideDialog()">
+        <!-- TODO: Ripple -->
+        <div class="img-button" title="Close dialog" @click="hideDialog()">
           <WebExtImg src="ic_close.svg" />
         </div>
       </h1>
     </header>
     <ul>
+      <!-- TODO: Ripple -->
       <li
         class="noselect"
         v-for="timestamp of activeTimestamps"
@@ -17,21 +19,18 @@
         @mouseover.stop.prevent="onHoverTimestamp(timestamp)"
         @mousemove.stop.prevent="onHoverTimestamp(timestamp)"
         @mouseleave.stop.prevent="onStopHoverTimestamp()"
-        v-ripple
       >
         <div class="left">
           <span class="title">{{ itemTitle(timestamp) }}</span>
           <span class="subtitle">{{ itemSubtitle(timestamp) }}</span>
         </div>
         <div v-if="canEditTimestamps" class="right" @click.stop.prevent @mousedown.stop.prevent>
-          <div
-            v-ripple
-            class="right-button delete"
-            @click.stop.prevent="deleteTimestamp(timestamp)"
-          >
+          <!-- TODO: Ripple -->
+          <div class="right-button delete" @click.stop.prevent="deleteTimestamp(timestamp)">
             <WebExtImg src="ic_delete.svg" />
           </div>
-          <div v-ripple class="right-button edit" @click="editTimestamp(timestamp)">
+          <!-- TODO: Ripple -->
+          <div class="right-button edit" @click="editTimestamp(timestamp)">
             <WebExtImg src="ic_edit.svg" />
           </div>
         </div>
@@ -94,7 +93,7 @@ import { GetterTypes } from '@/common/store/getterTypes';
 export default defineComponent({
   components: { WebExtImg, ToolbarButton, ProgressOverlay },
   mixins: [VideoControllerMixin],
-  destroyed(): void {
+  unmounted(): void {
     this.onStopHoverTimestamp();
   },
   data() {

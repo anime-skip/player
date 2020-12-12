@@ -41,7 +41,6 @@
     "fuzzysort": "^1.1.4",
     "md5": "^2.2.1",
     "vue": "^3.0.4",
-    "vue-slider-component": "^3.2.2",
     "vuex": "^4.0.0-rc.2",
     "webextension-polyfill": "^0.6.0"
   },
