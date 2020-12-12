@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "apollographql.vscode-apollo",
+    "streetsidesoftware.code-spell-checker",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "mrmlnc.vscode-scss",
+    "octref.vetur",
+    "dariofuzinato.vue-peek"
+  ]
+}
