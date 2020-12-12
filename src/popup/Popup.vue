@@ -1,6 +1,5 @@
 <template>
   <div class="Popup">
-    <Loading v-if="isLoggingIn" />
     <LogIn v-if="!isLoggedIn" :small="small" />
     <Preferences v-else :small="small" />
   </div>
@@ -8,14 +7,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import Loading from '@/common/components/Loading.vue';
 import LogIn from './components/LogIn.vue';
 import Preferences from './components/Preferences.vue';
 import { GetterTypes } from '@/common/store/getterTypes';
 
 export default defineComponent({
   components: {
-    Loading,
     LogIn,
     Preferences,
   },
