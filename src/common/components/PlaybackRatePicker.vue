@@ -30,7 +30,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
-import { PLAYBACK_SPEEDS } from '../../common/utils/Constants';
+import { PLAYBACK_SPEEDS } from '@/common/utils/Constants';
 import { MutationTypes } from '../store/mutationTypes';
 
 export default defineComponent({
@@ -46,7 +46,7 @@ export default defineComponent({
   data() {
     return {
       customRate: '',
-      PLAYBACK_SPEEDS: PLAYBACK_SPEEDS.filter(speed => !speed.hideWhenSmall || !this.showLess),
+      PLAYBACK_SPEEDS: PLAYBACK_SPEEDS.filter((speed) => !speed.hideWhenSmall || !this.showLess),
     };
   },
   watch: {

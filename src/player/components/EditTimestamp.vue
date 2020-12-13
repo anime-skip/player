@@ -59,17 +59,18 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import VideoControllerMixin from '../../common/mixins/VideoController';
-import KeyboardShortcutsMixin from '../../common/mixins/KeyboardShortcuts';
-import TextInput from '../../common/components/TextInput.vue';
-import Utils from '../../common/utils/Utils';
-import WebExtImg from '../../common/components/WebExtImg.vue';
-import { TIMESTAMP_TYPES, TIMESTAMP_TYPE_NOT_SELECTED } from '../../common/utils/Constants';
+import VideoControllerMixin from '@/common/mixins/VideoController';
+import KeyboardShortcutsMixin from '@/common/mixins/KeyboardShortcuts';
+import TextInput from '@/common/components/TextInput.vue';
+import Utils from '@/common/utils/Utils';
+import WebExtImg from '@/common/components/WebExtImg.vue';
+import { TIMESTAMP_TYPES, TIMESTAMP_TYPE_NOT_SELECTED } from '@/common/utils/Constants';
 import fuzzysort from 'fuzzysort';
 import { ActionTypes } from '@/common/store/actionTypes';
 import { MutationTypes } from '@/common/store/mutationTypes';
 
 export default defineComponent({
+  name: 'EditTimestamp',
   components: { WebExtImg, TextInput },
   mixins: [VideoControllerMixin, KeyboardShortcutsMixin],
   props: {
@@ -143,7 +144,7 @@ export default defineComponent({
       if (filter == '') return TIMESTAMP_TYPES;
 
       const results = fuzzysort.go(this.typeFilter, TIMESTAMP_TYPES, { key: 'name', limit: 5 });
-      return results.map(item => item.obj);
+      return results.map((item) => item.obj);
     },
     formattedAt(): string {
       if (this.activeTimestamp == null) {
@@ -180,7 +181,7 @@ export default defineComponent({
       this.$store.commit(MutationTypes.DELETE_DRAFT_TIMESTAMP, deletedTimestamp);
     },
     reset() {
-      this.selectedType = TIMESTAMP_TYPES.find(type => type.id === this.activeTimestamp?.typeId);
+      this.selectedType = TIMESTAMP_TYPES.find((type) => type.id === this.activeTimestamp?.typeId);
       this.typeFilter = '';
     },
     updateTimestamp(): void {
@@ -232,7 +233,7 @@ export default defineComponent({
       const types = this.matchingTypes;
       if (types.length === 0) return;
 
-      const index = types.findIndex(type => type.id === this.selectedType?.id);
+      const index = types.findIndex((type) => type.id === this.selectedType?.id);
       const newIndex = (types.length + index - 1) % types.length;
       this.selectType(types[newIndex]);
     },
@@ -240,7 +241,7 @@ export default defineComponent({
       const types = this.matchingTypes;
       if (types.length === 0) return;
 
-      const index = types.findIndex(type => type.id === this.selectedType?.id);
+      const index = types.findIndex((type) => type.id === this.selectedType?.id);
       const newIndex = (index + 1) % types.length;
       this.selectType(types[newIndex]);
     },

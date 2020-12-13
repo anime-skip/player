@@ -81,13 +81,14 @@ import VolumeButton from './animations/VolumeButton.vue';
 import Utils from '@/common/utils/Utils';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import VideoControllerMixin from '@/common/mixins/VideoController';
-import KeyboardShortcutMixin, { KeyboardShortcutMap } from '../../common/mixins/KeyboardShortcuts';
-import { FRAME } from '../../common/utils/Constants';
+import KeyboardShortcutMixin, { KeyboardShortcutMap } from '@/common/mixins/KeyboardShortcuts';
+import { FRAME } from '@/common/utils/Constants';
 import { MutationTypes } from '@/common/store/mutationTypes';
 import { ActionTypes } from '@/common/store/actionTypes';
 import { GetterTypes } from '@/common/store/getterTypes';
 
 export default defineComponent({
+  name: 'Toolbar',
   components: {
     Timeline,
     PlayPauseButton,
@@ -105,7 +106,7 @@ export default defineComponent({
     },
   },
   created() {
-    global.onVideoChanged(video => {
+    global.onVideoChanged((video) => {
       video.addEventListener('durationchange', (event: Event) => {
         this.updateDuration((event.target as HTMLVideoElement).duration);
       });

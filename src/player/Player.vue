@@ -40,7 +40,7 @@ import TimestampsPanel from './dialogs/TimestampsPanel.vue';
 import EditEpisodeDialog from './dialogs/EditEpisodeDialog/index.vue';
 import KeyboardShortcutMixin from '@/common/mixins/KeyboardShortcuts';
 import Browser from '@/common/utils/Browser';
-import VideoControllerMixin from '../common/mixins/VideoController';
+import VideoControllerMixin from '@/common/mixins/VideoController';
 import { MutationTypes } from '@/common/store/mutationTypes';
 import { ActionTypes } from '@/common/store/actionTypes';
 import { PLAYER_ACTIVITY_TIMEOUT } from '@/common/utils/Constants';
@@ -48,6 +48,7 @@ import { GetterTypes } from '@/common/store/getterTypes';
 import { State } from '@/common/store/state';
 
 export default defineComponent({
+  name: 'Player',
   components: {
     WebExtImg,
     ToolBar,

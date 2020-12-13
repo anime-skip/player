@@ -13,14 +13,15 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import VideoControllerMixin from '../../common/mixins/VideoController';
-import KeyboardShortcutsMixin, { KeyboardShortcutMap } from '../../common/mixins/KeyboardShortcuts';
+import VideoControllerMixin from '@/common/mixins/VideoController';
+import KeyboardShortcutsMixin, { KeyboardShortcutMap } from '@/common/mixins/KeyboardShortcuts';
 import TimestampDetails from '../components/TimestampDetails.vue';
 import EditTimestamp from '../components/EditTimestamp.vue';
 import BasicDialog from './BasicDialog.vue';
 import { MutationTypes } from '@/common/store/mutationTypes';
 
 export default defineComponent({
+  name: 'TimestampsPanel',
   components: { BasicDialog, TimestampDetails, EditTimestamp },
   mixins: [VideoControllerMixin, KeyboardShortcutsMixin],
   data() {

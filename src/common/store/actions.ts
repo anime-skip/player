@@ -7,17 +7,17 @@ import RequestState from '../utils/RequestState';
 import Utils from '../utils/Utils';
 import Mappers from '../utils/Mappers';
 import { State } from './state';
-import { Mutations } from './mutations';
 import { MutationTypes } from './mutationTypes';
 import { assertLoggedIn, callApi } from './actionUtils';
+import type { Store } from '.';
+import { GetterTypes } from './getterTypes';
 
 // Typings /////////////////////////////////////////////////////////////////////
 
-export interface AugmentedActionContext<S = State> extends Omit<ActionContext<S, S>, 'commit'> {
-  commit<K extends keyof Mutations>(
-    key: K,
-    payload?: Parameters<Mutations[K]>[1]
-  ): ReturnType<Mutations[K]>;
+export interface AugmentedActionContext<S = State>
+  extends Omit<ActionContext<S, S>, 'commit' | 'getters'> {
+  commit: Store['commit'];
+  getters: Store['getters'];
 }
 
 export interface Actions {
@@ -106,18 +106,18 @@ export const actions: ActionTree<State, State> & Actions = {
     }
   },
   async [ActionTypes.START_EDITING]({ commit, dispatch, getters, state }, onStartedEditing) {
-    if (!getters.isLoggedIn) {
+    if (!getters[GetterTypes.IS_LOGGED_IN]) {
       await dispatch(ActionTypes.SHOW_DIALOG, 'AccountDialog');
       return;
     }
-    if (!getters.hasEpisode) {
+    if (!getters[GetterTypes.HAS_EPISODE]) {
       await dispatch(ActionTypes.SHOW_DIALOG, 'EditEpisodeDialog');
       return;
     }
 
     if (!state.isEditing) {
       commit(MutationTypes.TOGGLE_EDIT_MODE, true);
-      commit(MutationTypes.SET_DRAFT_TIMESTAMPS, getters.timestamps);
+      commit(MutationTypes.SET_DRAFT_TIMESTAMPS, getters[GetterTypes.TIMESTAMPS]);
     }
     if (onStartedEditing != null) {
       onStartedEditing();
@@ -312,7 +312,7 @@ export const actions: ActionTree<State, State> & Actions = {
       const showName = thirdPartyEpisode.show.name;
       const showSearchResults = await callApi(commit, global.Api.searchShows, showName);
       const existingShow: Api.ShowSearchResult | undefined = showSearchResults.filter(
-        searchResult => searchResult.name.toUpperCase() === showName.toUpperCase()
+        (searchResult) => searchResult.name.toUpperCase() === showName.toUpperCase()
       )[0];
       commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.LOADING);
 
@@ -364,7 +364,7 @@ export const actions: ActionTree<State, State> & Actions = {
           )
         );
         const timestamps = Mappers.thirdPartyEpisodeToAmbiguousTimestamps(thirdPartyEpisode);
-        const offsetTimestamps = timestamps.map(timestamp => ({
+        const offsetTimestamps = timestamps.map((timestamp) => ({
           ...timestamp,
           at: Utils.applyTimestampsOffset(episodeUrl.timestampsOffset, timestamp.at),
         }));
@@ -457,7 +457,7 @@ export const actions: ActionTree<State, State> & Actions = {
         name,
         showName
       );
-      const episodesWithTimestamps = episodes.filter(episode => episode.timestamps.length > 0);
+      const episodesWithTimestamps = episodes.filter((episode) => episode.timestamps.length > 0);
       if (episodesWithTimestamps.length > 0) {
         const episode = episodesWithTimestamps[0];
         const timestamps = Mappers.thirdPartyEpisodeToAmbiguousTimestamps(episode);
@@ -477,7 +477,7 @@ export const actions: ActionTree<State, State> & Actions = {
     }
   },
   async [ActionTypes.ADD_MISSING_DURATIONS]({ commit, state, getters }, duration) {
-    if (!getters.isLoggedIn || !duration) return;
+    if (!getters[GetterTypes.IS_LOGGED_IN] || !duration) return;
 
     const episodeUrl = state.episodeUrl;
     const episode = state.episode;

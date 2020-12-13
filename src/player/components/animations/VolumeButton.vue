@@ -23,7 +23,7 @@
 import { defineComponent } from 'vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import ToolbarButton from '../ToolbarButton.vue';
-import VideoControllerMixin from '../../../common/mixins/VideoController';
+import VideoControllerMixin from '@/common/mixins/VideoController';
 import Slider from '../Slider.vue';
 
 export default defineComponent({

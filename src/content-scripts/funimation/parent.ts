@@ -1,6 +1,6 @@
 console.log('INJECTED content-scripts/funimation/parent.ts');
 
-import Messenger from '../../common/utils/Messenger';
+import Messenger from '@/common/utils/Messenger';
 
 new Messenger<
   ParentMessageTypes,

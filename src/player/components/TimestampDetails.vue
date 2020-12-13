@@ -81,9 +81,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import Utils from '@/common/utils/Utils';
-import { TIMESTAMP_TYPES, TIMESTAMP_SOURCES, SECONDS } from '../../common/utils/Constants';
-import WebExtImg from '../../common/components/WebExtImg.vue';
-import ProgressOverlay from '../../common/components/ProgressOverlay.vue';
+import { TIMESTAMP_TYPES, TIMESTAMP_SOURCES, SECONDS } from '@/common/utils/Constants';
+import WebExtImg from '@/common/components/WebExtImg.vue';
+import ProgressOverlay from '@/common/components/ProgressOverlay.vue';
 import ToolbarButton from './ToolbarButton.vue';
 import VideoControllerMixin from '@/common/mixins/VideoController';
 import { MutationTypes } from '@/common/store/mutationTypes';

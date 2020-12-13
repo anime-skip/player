@@ -76,7 +76,7 @@ import Checkbox from '@/common/components/Checkbox.vue';
 import TextInput from '@/common/components/TextInput.vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import PlaybackRatePicker from '@/common/components/PlaybackRatePicker.vue';
-import { SKIPPABLE_PREFERENCES } from '../../common/utils/Constants';
+import { SKIPPABLE_PREFERENCES } from '@/common/utils/Constants';
 import Messenger from '@/common/utils/Messenger';
 import { ActionTypes } from '@/common/store/actionTypes';
 import { MutationTypes } from '@/common/store/mutationTypes';
@@ -114,7 +114,7 @@ export default defineComponent({
     },
     playerOptions(): PlayerOptionGroup[] {
       const options = (global.getPlayerOptions && global.getPlayerOptions()) || [];
-      return options.filter(group => group.options.length > 1);
+      return options.filter((group) => group.options.length > 1);
     },
   },
   methods: {
@@ -149,7 +149,7 @@ export default defineComponent({
       this.activePlayerOption = optionGroup; // TODO: Test set
     },
     getSelectedOption(optionGroup: PlayerOptionGroup): string {
-      const selected = optionGroup.options.filter(option => option.isSelected);
+      const selected = optionGroup.options.filter((option) => option.isSelected);
       if (selected.length === 0) return '';
 
       return selected[0].title;
