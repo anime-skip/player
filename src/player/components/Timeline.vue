@@ -133,7 +133,7 @@ export default defineComponent({
         return;
       }
       const jumpedDirectlyToTimestamp =
-        this.timestamps.find((timestamp) => Math.abs(timestamp.at - oldTime) < 0.0001) != null;
+        this.timestamps.find(timestamp => Math.abs(timestamp.at - oldTime) < 0.0001) != null;
       if (jumpedDirectlyToTimestamp) {
         return;
       }
@@ -223,7 +223,7 @@ export default defineComponent({
       if (!this.sections) {
         return [];
       }
-      return this.sections.filter((section) => {
+      return this.sections.filter(section => {
         return (
           section.timestamp.at < this.currentTime &&
           !Utils.isSkipped(section.timestamp, this.preferences)

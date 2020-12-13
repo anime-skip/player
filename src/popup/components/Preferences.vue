@@ -114,7 +114,7 @@ export default defineComponent({
     },
     playerOptions(): PlayerOptionGroup[] {
       const options = (global.getPlayerOptions && global.getPlayerOptions()) || [];
-      return options.filter((group) => group.options.length > 1);
+      return options.filter(group => group.options.length > 1);
     },
   },
   methods: {
@@ -149,7 +149,7 @@ export default defineComponent({
       this.activePlayerOption = optionGroup; // TODO: Test set
     },
     getSelectedOption(optionGroup: PlayerOptionGroup): string {
-      const selected = optionGroup.options.filter((option) => option.isSelected);
+      const selected = optionGroup.options.filter(option => option.isSelected);
       if (selected.length === 0) return '';
 
       return selected[0].title;

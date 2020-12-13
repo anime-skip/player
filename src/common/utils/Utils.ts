@@ -136,7 +136,7 @@ export default class Utils {
   public static async waitForVideoLoad(): Promise<number> {
     if (!this._videoLoadPromise) {
       this._videoLoadPromise = new Promise(res => {
-        const timeout = window.setInterval(function() {
+        const timeout = window.setInterval(function () {
           const video = global.getVideo();
           const duration = Math.round(video.duration);
           if (video.readyState > 0) {

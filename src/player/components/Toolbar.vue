@@ -106,7 +106,7 @@ export default defineComponent({
     },
   },
   created() {
-    global.onVideoChanged((video) => {
+    global.onVideoChanged(video => {
       video.addEventListener('durationchange', (event: Event) => {
         this.updateDuration((event.target as HTMLVideoElement).duration);
       });

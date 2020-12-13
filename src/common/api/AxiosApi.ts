@@ -12,10 +12,7 @@ const axios = Axios.create({
 if (process.env.NODE_ENV !== 'production') {
   axios.interceptors.request.use((config): any => {
     const formattedGraphql = Utils.formatGraphql(config.data.query);
-    const type = formattedGraphql
-      .split('\n')[0]
-      ?.replace('{', '')
-      .trim();
+    const type = formattedGraphql.split('\n')[0]?.replace('{', '').trim();
     /* eslint-disable no-console */
     console.groupCollapsed(
       `%cAPI  %c/${config.url} ${type}`,

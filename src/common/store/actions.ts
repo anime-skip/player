@@ -312,7 +312,7 @@ export const actions: ActionTree<State, State> & Actions = {
       const showName = thirdPartyEpisode.show.name;
       const showSearchResults = await callApi(commit, global.Api.searchShows, showName);
       const existingShow: Api.ShowSearchResult | undefined = showSearchResults.filter(
-        (searchResult) => searchResult.name.toUpperCase() === showName.toUpperCase()
+        searchResult => searchResult.name.toUpperCase() === showName.toUpperCase()
       )[0];
       commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.LOADING);
 
@@ -364,7 +364,7 @@ export const actions: ActionTree<State, State> & Actions = {
           )
         );
         const timestamps = Mappers.thirdPartyEpisodeToAmbiguousTimestamps(thirdPartyEpisode);
-        const offsetTimestamps = timestamps.map((timestamp) => ({
+        const offsetTimestamps = timestamps.map(timestamp => ({
           ...timestamp,
           at: Utils.applyTimestampsOffset(episodeUrl.timestampsOffset, timestamp.at),
         }));
@@ -457,7 +457,7 @@ export const actions: ActionTree<State, State> & Actions = {
         name,
         showName
       );
-      const episodesWithTimestamps = episodes.filter((episode) => episode.timestamps.length > 0);
+      const episodesWithTimestamps = episodes.filter(episode => episode.timestamps.length > 0);
       if (episodesWithTimestamps.length > 0) {
         const episode = episodesWithTimestamps[0];
         const timestamps = Mappers.thirdPartyEpisodeToAmbiguousTimestamps(episode);

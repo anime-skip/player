@@ -3,7 +3,7 @@ console.log('INJECTED content-scripts/vrv/parent.ts');
 import Messenger from '@/common/utils/Messenger';
 
 async function sleep(ms: number): Promise<void> {
-  return new Promise((res) => setTimeout(res, ms));
+  return new Promise(res => setTimeout(res, ms));
 }
 
 function getEpisodeInfo(): InferredEpisodeInfo {

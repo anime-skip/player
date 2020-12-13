@@ -11,6 +11,4 @@ global.Api = AxiosApi;
 
 // Inject DOM
 
-createApp(Options)
-  .use(store)
-  .mount('#app');
+createApp(Options).use(store).mount('#app');

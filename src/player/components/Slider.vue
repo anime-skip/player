@@ -86,7 +86,7 @@ export default defineComponent({
       onMouseMove: any,
       onMouseUpContainer: { callback?: any }
     ) =>
-      function(event: MouseEvent): void {
+      function (event: MouseEvent): void {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
@@ -99,7 +99,7 @@ export default defineComponent({
         window.removeEventListener('mouseup', onMouseUpContainer.callback);
       };
     const onSeekDrag = (target: HTMLDivElement) =>
-      function(event: MouseEvent): void {
+      function (event: MouseEvent): void {
         const newProgress = progressFromMouseEvent(event, target);
         updateProgressDuringSeek(newProgress);
       };
