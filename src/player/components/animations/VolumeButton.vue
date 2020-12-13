@@ -6,19 +6,16 @@
       <WebExtImg src="ic_volume_low.svg" class="ic_low" :class="volumeClass" />
       <WebExtImg src="ic_volume_high.svg" class="ic_high" :class="volumeClass" />
     </ToolbarButton>
-    <!-- <VueSlider
+    <Slider
       class="slider"
-      v-model="level"
-      height="3"
-      silent
+      :progress="level"
       :max="1"
-      :interval="0.05"
-      :duration="0.1"
-      :dotSize="11"
-      @change="setVolume"
-      @drag-start="isDragging = true"
-      @drag-end="isDragging = false"
-    /> -->
+      backgroundColor="#ffffff48"
+      foregroundColor="white"
+      @seek="setVolume"
+      @seek:start="isDragging = true"
+      @seek:end="isDragging = false"
+    />
   </div>
 </template>
 
@@ -26,11 +23,11 @@
 import { defineComponent } from 'vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import ToolbarButton from '../ToolbarButton.vue';
-import '../../scss/VolumeSlider.scss';
 import VideoControllerMixin from '../../../common/mixins/VideoController';
+import Slider from '../Slider.vue';
 
 export default defineComponent({
-  components: { WebExtImg, ToolbarButton },
+  components: { WebExtImg, ToolbarButton, Slider },
   mixins: [VideoControllerMixin],
   data() {
     return {

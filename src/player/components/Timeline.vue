@@ -1,6 +1,5 @@
 <template>
   <div
-    ref="timeline"
     class="Timeline"
     :class="{
       vrv: service === 'vrv',
@@ -10,48 +9,45 @@
     }"
     @click.stop
   >
-    <template v-if="duration">
-      <Section
-        v-for="section of sections"
-        :key="section.timestamp.id"
-        :timestamp="section.timestamp"
-        :endTime="section.endTime"
-        :duration="duration"
-        :skipped="section.isSkipped"
-      />
-      <Section
-        v-for="section of completedSections"
-        :key="'completed' + section.timestamp.id"
-        :timestamp="section.timestamp"
-        :endTime="section.endTime"
-        :duration="duration"
-        :currentTime="currentTime"
-        completed
-      />
-      <WebExtImg
-        v-for="timestamp of activeTimestamps"
-        :key="`t${timestamp.id}`"
-        class="Timestamp"
-        :class="timestampClass(timestamp)"
-        :src="timestampIcon(timestamp)"
-        :style="timestampStyle(timestamp)"
-      />
-    </template>
-    <!-- <VueSlider
-      v-if="duration > 0"
+    <Slider
+      v-if="duration != null && duration > 0"
       class="slider"
-      :value="normalizedTime"
-      height="3"
-      :min="0"
+      :progress="normalizedTime"
       :max="100"
-      :interval="0.01"
-      :duration="0"
-      tooltip="none"
-      :dotSize="isFlipped ? 3 : 11"
-      dragOnClick
-      :useKeyboard="false"
-      @change="onSeek"
-    /> -->
+      :inactiveThumbSize="isFlipped ? 3 : undefined"
+      disableUpdateDuringSeek
+      @seek="onSeek"
+    >
+      <template v-slot:background>
+        <Section
+          v-for="section of sections"
+          :key="section.timestamp.id"
+          :timestamp="section.timestamp"
+          :endTime="section.endTime"
+          :duration="duration"
+          :skipped="section.isSkipped"
+        />
+      </template>
+      <template v-slot:foreground>
+        <Section
+          v-for="section of completedSections"
+          :key="'completed' + section.timestamp.id"
+          :timestamp="section.timestamp"
+          :endTime="section.endTime"
+          :duration="duration"
+          :currentTime="currentTime"
+          completed
+        />
+        <WebExtImg
+          v-for="timestamp of activeTimestamps"
+          :key="`t${timestamp.id}`"
+          class="Timestamp"
+          :class="timestampClass(timestamp)"
+          :src="timestampIcon(timestamp)"
+          :style="timestampStyle(timestamp)"
+        />
+      </template>
+    </Slider>
   </div>
 </template>
 
@@ -59,12 +55,12 @@
 import { defineComponent, PropType } from 'vue';
 import Section from './Section.vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
-import '../scss/VideoSlider.scss';
 import Utils from '@/common/utils/Utils';
 import VideoControllerMixin from '@/common/mixins/VideoController';
 import KeyboardShortcutMixin from '@/common/mixins/KeyboardShortcuts';
 import { MutationTypes } from '@/common/store/mutationTypes';
 import { GetterTypes } from '@/common/store/getterTypes';
+import Slider from './Slider.vue';
 
 interface SectionData {
   timestamp: Api.Timestamp;
@@ -73,7 +69,7 @@ interface SectionData {
 }
 
 export default defineComponent({
-  components: { Section, WebExtImg },
+  components: { Section, WebExtImg, Slider },
   mixins: [VideoControllerMixin, KeyboardShortcutMixin],
   props: {
     isFlipped: Boolean,
@@ -263,9 +259,10 @@ export default defineComponent({
         this.updateTime(goToTime, true);
       }
     },
-    onSeek(newTime: number) {
+    onSeek(normalizedTime: number) {
       if (!this.duration) return;
-      this.$emit('seek', (newTime / 100) * this.duration);
+      const newTime = (normalizedTime / 100) * this.duration;
+      this.updateTime(newTime, true);
     },
     timestampStyle(timestamp: Api.AmbiguousTimestamp): object {
       if (!this.duration) {
@@ -289,9 +286,8 @@ $translationVrv: 0px;
 $translationInactiveSliderVrv: 3px;
 
 .Timeline {
-  height: 11px;
+  height: 3px;
   position: relative;
-  cursor: pointer;
   transform: scaleY(1) translateY($translationDefault);
   transition: 200ms;
 
@@ -310,7 +306,7 @@ $translationInactiveSliderVrv: 3px;
   }
 
   .slider {
-    top: -1px;
+    top: 0;
     left: 0;
     right: 0;
     transition: top;
@@ -320,9 +316,9 @@ $translationInactiveSliderVrv: 3px;
   }
 
   .Timestamp {
+    position: absolute;
     height: 6px;
     width: 12px;
-    top: 4px;
     transform: translateX(-50%);
     transition: 250ms ease transform;
 

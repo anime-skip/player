@@ -65,6 +65,7 @@ export default defineComponent({
      */
     setVolume(newVolume: number): void {
       global.getVideo().volume = newVolume;
+      this.level = newVolume;
     },
     toggleMuted() {
       this.setMuted(!this.isMuted);

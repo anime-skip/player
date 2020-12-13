@@ -38,7 +38,7 @@ export default defineComponent({
   position: absolute;
   background-color: rgba($color: $background300, $alpha: 0.75);
   height: 3px;
-  top: 4px;
+  border-radius: 1.5px;
 }
 .skipped {
   background-color: transparent;

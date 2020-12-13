@@ -18,7 +18,6 @@
         :duration="duration"
         :updateTime="updateTime"
         :timestamps="timestamps"
-        @seek="onSeek"
       />
       <div class="buttons">
         <ToolbarButton class="margin-right" @click="togglePlayPause()">
@@ -213,10 +212,6 @@ export default defineComponent({
         this.setCurrentTime(newTime);
       }
       this.currentTime = Utils.boundedNumber(newTime, [0, this.duration]);
-    },
-    onSeek(newTime: number) {
-      this.currentTime = Utils.boundedNumber(newTime, [0, this.duration]);
-      this.updateTime(newTime, true);
     },
     addTime(seconds: number): void {
       this.currentTime = Utils.boundedNumber(this.currentTime + seconds, [0, this.duration]);
