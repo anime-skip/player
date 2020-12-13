@@ -16,7 +16,6 @@ export function assertLoggedIn(
   }
 }
 
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 export async function callApi<A extends any[], R>(
   commit: AugmentedActionContext['commit'],
   apiMethod: (...args: A) => Promise<R>,

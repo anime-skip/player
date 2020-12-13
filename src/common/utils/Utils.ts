@@ -113,7 +113,6 @@ export default class Utils {
       console.warn('Not in full screen mode, tried to exit');
       return;
     }
-    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     const d = document as any;
     if (document.exitFullscreen) {
       document.exitFullscreen();
@@ -214,11 +213,9 @@ export default class Utils {
   }
 
   public static arrayIncludes<K extends string>(
-    /* eslint-disable @typescript-eslint/no-explicit-any */
     array: { [key in K]: any }[],
     idKey: K,
     value: { [key in K]: any } & Record<string, any>
-    /* eslint-enable @typescript-eslint/no-explicit-any */
   ): boolean {
     return array.some(item => item[idKey] === value[idKey]);
   }
@@ -343,7 +340,6 @@ export default class Utils {
     return value;
   }
 
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   public static async apiAction<C extends (...args: any[]) => Promise<any>>(
     store: Store,
     apiCall: C,
@@ -355,8 +351,10 @@ export default class Utils {
 
   public static setIntervalUntil(callback: () => boolean, interval: number, timeout: number): void {
     function clearBothTimers(): void {
+      /* eslint-disable @typescript-eslint/no-use-before-define */
       window.clearTimeout(timeoutTimer);
       window.clearInterval(intervalTimer);
+      /* eslint-enable @typescript-eslint/no-use-before-define */
     }
     const timeoutTimer = window.setTimeout(clearBothTimers, timeout);
     const intervalTimer = window.setInterval(() => {

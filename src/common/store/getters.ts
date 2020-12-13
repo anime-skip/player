@@ -8,6 +8,7 @@ import Browser from '../utils/Browser';
 import Utils from '../utils/Utils';
 import { State } from './state';
 import { GetterTypes } from './getterTypes';
+import { Store } from '.';
 
 // Typings /////////////////////////////////////////////////////////////////////
 
@@ -28,8 +29,11 @@ export interface Getters {
   [GetterTypes.HAS_EPISODE](state: State): boolean;
   [GetterTypes.TIMESTAMPS](state: State): Api.AmbiguousTimestamp[];
   [GetterTypes.DRAFT_TIMESTAMPS](state: State): Api.AmbiguousTimestamp[];
-  [GetterTypes.ACTIVE_TIMESTAMPS](state: State, getters: any): Api.AmbiguousTimestamp[];
-  [GetterTypes.CAN_EDIT_TIMESTAMPS](state: State, getters: any): boolean;
+  [GetterTypes.ACTIVE_TIMESTAMPS](
+    state: State,
+    getters: Store['getters']
+  ): Api.AmbiguousTimestamp[];
+  [GetterTypes.CAN_EDIT_TIMESTAMPS](state: State, getters: Store['getters']): boolean;
   [GetterTypes.IS_SAVING_TIMESTAMPS](state: State): boolean;
 }
 
@@ -81,11 +85,9 @@ export const getters: GetterTree<State, State> & Getters = {
   },
 
   // Keyboard shortcuts
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   [GetterTypes.PRIMARY_KEYBOARD_SHORTCUTS]({ primaryKeyboardShortcuts }) {
     return primaryKeyboardShortcuts ?? DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS;
   },
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   [GetterTypes.SECONDARY_KEYBOARD_SHORTCUTS]({ secondaryKeyboardShortcuts }) {
     return secondaryKeyboardShortcuts ?? DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS;
   },

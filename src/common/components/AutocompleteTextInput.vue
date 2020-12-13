@@ -93,10 +93,6 @@ export default defineComponent({
       (document.activeElement as HTMLElement | undefined)?.blur();
     };
 
-    const shouldShowSuggestions = computed<boolean>(() => {
-      console.log('AK - shouldShowSuggestions', !wasEscPressed.value, isFocused.value);
-      return !wasEscPressed.value && isFocused.value;
-    });
     const highlightedIndex = ref<number | null>(null);
     const moveHighlightedIndex = (increment: 1 | -1) => () => {
       if (highlightedIndex.value === null) {
@@ -149,6 +145,10 @@ export default defineComponent({
       isFocused.value = false;
       emit('blur');
     };
+
+    const shouldShowSuggestions = computed<boolean>(() => {
+      return !wasEscPressed.value && isFocused.value;
+    });
 
     return {
       searchValue,

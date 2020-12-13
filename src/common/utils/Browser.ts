@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { State } from '../store/state';
 import {
   persistedKeys,

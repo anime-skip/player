@@ -82,11 +82,9 @@ export default defineComponent({
       return progress;
     };
     const onSeekEnd = (
-      /* eslint-disable @typescript-eslint/no-explicit-any */
       target: HTMLDivElement,
       onMouseMove: any,
       onMouseUpContainer: { callback?: any }
-      /* eslint-enable @typescript-eslint/no-explicit-any */
     ) =>
       function(event: MouseEvent): void {
         event.preventDefault();
