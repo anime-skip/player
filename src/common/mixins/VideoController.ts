@@ -5,16 +5,20 @@ export default defineComponent({
   created(): void {
     global.onVideoChanged(video => {
       video.onvolumechange = () => {
-        this.level = this.isMuted ? 0 : video.volume;
+        this.volume = this.isMuted ? 0 : video.volume;
       };
       this.isMuted = video.muted;
-      this.level = this.isMuted ? 0 : video.volume;
+      this.volume = this.isMuted ? 0 : video.volume;
     });
+  },
+  beforeUnmount(): void {
+    global.getVideo().removeEventListener('volumechange', this.onIgnoredVolumeChange);
   },
   data() {
     return {
       isMuted: !!global.getVideo().muted,
-      level: global.getVideo().volume,
+      volume: global.getVideo().volume,
+      beforeMuteVolume: 0,
     };
   },
   methods: {
@@ -51,24 +55,47 @@ export default defineComponent({
     },
     setMuted(isMuted: boolean) {
       this.isMuted = isMuted;
-      this.level = this.isMuted ? 0 : global.getVideo().volume;
       global.getVideo().muted = isMuted;
+
+      if (isMuted) {
+        this.beforeMuteVolume = this.volume;
+        this.setVolume(0, true);
+      } else {
+        this.setVolume(this.beforeMuteVolume, true);
+        this.beforeMuteVolume = 0;
+      }
     },
     /**
-     * @returns {number} A decimal value between [0-1]
+     * @param volume          A decimal value between [0-1]
+     * @param bypassMuteLogic Skip un-muting of the video if necessary when true. This param is only
+     *                        for use in the `setMuted` method
      */
-    videoVolumeLevel(): number {
-      return global.getVideo().volume;
-    },
-    /**
-     * @param volume A decimal value between [0-1]
-     */
-    setVolume(newVolume: number): void {
+    setVolume(newVolume: number, bypassMuteLogic = false): void {
+      this.volume = newVolume;
       global.getVideo().volume = newVolume;
-      this.level = newVolume;
+
+      if (!bypassMuteLogic && this.isMuted) {
+        this.isMuted = false;
+        global.getVideo().muted = false;
+        this.beforeMuteVolume = 0;
+      }
     },
     toggleMuted() {
       this.setMuted(!this.isMuted);
+    },
+    /**
+     * If the volume changes unexpectedly, ignore the change and set it back to what it was before
+     */
+    setupVolumeOverrideManager(): void {
+      global.onVideoChanged(video => {
+        video.addEventListener('volumechange', this.onIgnoredVolumeChange);
+      });
+    },
+    onIgnoredVolumeChange(event: Event): void {
+      const video = event.target as HTMLVideoElement | undefined;
+      if (!video?.muted && video?.volume === this.volume) return;
+      console.log('Ignoring volume change event, reseting to ' + this.volume);
+      global.getVideo().volume = this.volume;
     },
   },
 });

@@ -8,7 +8,7 @@
     </ToolbarButton>
     <Slider
       class="slider"
-      :progress="level"
+      :progress="volume"
       :max="1"
       backgroundColor="#ffffff48"
       foregroundColor="white"
@@ -29,6 +29,9 @@ import Slider from '../Slider.vue';
 export default defineComponent({
   components: { WebExtImg, ToolbarButton, Slider },
   mixins: [VideoControllerMixin],
+  mounted(): void {
+    this.setupVolumeOverrideManager();
+  },
   data() {
     return {
       isDragging: false,
@@ -37,8 +40,8 @@ export default defineComponent({
   computed: {
     volumeClass(): string {
       if (this.isMuted) return 'muted';
-      if (this.level <= 0.05) return 'low';
-      if (this.level < 0.6) return 'medium';
+      if (this.volume <= 0.05) return 'low';
+      if (this.volume < 0.6) return 'medium';
       return 'high';
     },
   },
