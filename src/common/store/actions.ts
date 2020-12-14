@@ -476,7 +476,7 @@ export const actions: ActionTree<State, State> & Actions = {
       commit(MutationTypes.SET_EPISODE, undefined);
     }
   },
-  async [ActionTypes.ADD_MISSING_DURATIONS]({ commit, state, getters }, duration) {
+  async [ActionTypes.ADD_MISSING_DURATIONS]({ commit, state }, duration) {
     if (!state.isLoggedIn || !duration) return;
 
     const episodeUrl = state.episodeUrl;
