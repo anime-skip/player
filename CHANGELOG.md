@@ -2,6 +2,18 @@
 
 ## `[Unreleased]`
 
+### Enhancements
+
+- Vue 3 migration, better performance under the hood
+- Improved volume controls (restore volume on un-mute, selecting a volume un-mutes)
+- Minor UI tweaks to the timeline
+
+### Fixes
+
+- Funimation randomly started muting videos
+- Sometimes the login loading indicator would never go away
+- Timestamps don't show as edited (red) if they are saved but not changed
+
 ## `v1.0.23`
 
 ### Enhancements
