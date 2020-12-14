@@ -16,7 +16,6 @@ export interface Getters {
   [GetterTypes.TAB_URL](state: State): string;
   [GetterTypes.DURATION](state: State): number | undefined;
   [GetterTypes.IS_LOGGING_IN](state: State): boolean;
-  [GetterTypes.IS_LOGGED_IN](state: State): boolean;
   [GetterTypes.IS_LOGIN_ERROR](state: State): boolean;
   [GetterTypes.TOKEN](state: State): string | undefined;
   [GetterTypes.REFRESH_TOKEN](state: State): string | undefined;
@@ -51,9 +50,6 @@ export const getters: GetterTree<State, State> & Getters = {
   // Login
   [GetterTypes.IS_LOGGING_IN]({ loginRequestState }) {
     return loginRequestState === RequestState.LOADING;
-  },
-  [GetterTypes.IS_LOGGED_IN]({ loginRequestState }) {
-    return loginRequestState === RequestState.SUCCESS;
   },
   [GetterTypes.IS_LOGIN_ERROR]({ loginRequestState }) {
     return loginRequestState === RequestState.FAILURE;

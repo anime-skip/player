@@ -106,7 +106,7 @@ export const actions: ActionTree<State, State> & Actions = {
     }
   },
   async [ActionTypes.START_EDITING]({ commit, dispatch, getters, state }, onStartedEditing) {
-    if (!getters[GetterTypes.IS_LOGGED_IN]) {
+    if (!state.isLoggedIn) {
       await dispatch(ActionTypes.SHOW_DIALOG, 'AccountDialog');
       return;
     }
@@ -477,7 +477,7 @@ export const actions: ActionTree<State, State> & Actions = {
     }
   },
   async [ActionTypes.ADD_MISSING_DURATIONS]({ commit, state, getters }, duration) {
-    if (!getters[GetterTypes.IS_LOGGED_IN] || !duration) return;
+    if (!state.isLoggedIn || !duration) return;
 
     const episodeUrl = state.episodeUrl;
     const episode = state.episode;

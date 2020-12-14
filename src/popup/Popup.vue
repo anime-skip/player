@@ -21,7 +21,7 @@ export default defineComponent({
   },
   computed: {
     isLoggedIn(): boolean {
-      return this.$store.getters[GetterTypes.IS_LOGGED_IN];
+      return this.$store.state.isLoggedIn;
     },
     isLoggingIn(): boolean {
       return this.$store.getters[GetterTypes.IS_LOGGING_IN];

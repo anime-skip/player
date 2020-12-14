@@ -149,7 +149,7 @@ export default defineComponent({
       return this.$store.getters[GetterTypes.HAS_EPISODE];
     },
     isLoggedIn(): boolean {
-      return this.$store.getters[GetterTypes.IS_LOGGED_IN];
+      return this.$store.state.isLoggedIn;
     },
     activeTimestamp(): Api.AmbiguousTimestamp | undefined {
       return this.$store.state.activeTimestamp;

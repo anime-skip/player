@@ -174,6 +174,7 @@ export const mutations: MutationTree<State> & Mutations = {
     state.refreshToken = loginPayload.refreshToken;
     state.refreshTokenExpiresAt = now + REFRESH_TOKEN_DURATION;
     state.account = loginPayload.account;
+    state.isLoggedIn = true;
 
     loginRequestState(state, RequestState.SUCCESS);
     persistAccount(state);
@@ -184,6 +185,7 @@ export const mutations: MutationTree<State> & Mutations = {
     state.refreshToken = undefined;
     state.refreshTokenExpiresAt = undefined;
     state.account = undefined;
+    state.isLoggedIn = false;
     loginRequestState(state, RequestState.NOT_REQUESTED);
     persistAccount(state);
   },

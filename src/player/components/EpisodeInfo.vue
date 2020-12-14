@@ -47,7 +47,7 @@ export default defineComponent({
       return this.$store.state.activeDialog;
     },
     isLoggedIn(): boolean {
-      return this.$store.getters[GetterTypes.IS_LOGGED_IN];
+      return this.$store.state.isLoggedIn;
     },
     duration(): number | undefined {
       return this.$store.getters[GetterTypes.DURATION];

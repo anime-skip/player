@@ -3,7 +3,7 @@ export const persistedKeys = [
   'tokenExpiresAt' as const,
   'refreshToken' as const,
   'refreshTokenExpiresAt' as const,
-  'loginRequestState' as const,
+  'isLoggedIn' as const,
   'account' as const,
   'playbackRate' as const,
   'primaryKeyboardShortcuts' as const,

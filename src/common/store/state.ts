@@ -16,6 +16,7 @@ export const state = {
   refreshToken: undefined as string | undefined,
   refreshTokenExpiresAt: undefined as number | undefined,
   loginRequestState: RequestState.NOT_REQUESTED,
+  isLoggedIn: false,
 
   account: undefined as Api.Account | undefined,
   preferencesRequestState: RequestState.NOT_REQUESTED,
