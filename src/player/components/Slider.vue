@@ -3,7 +3,7 @@
     <slot name="background">
       <div class="default-background" :style="defaultBackgroundColorStyle" />
     </slot>
-    <slot name="foreground">
+    <slot name="foreground" v-bind:progress="displayedProgress">
       <div class="default-foreground" :style="defaultForegroundStyle" />
     </slot>
     <div class="thumb-container" :style="thumbOffsetStyle">
@@ -42,19 +42,19 @@ export default defineComponent({
 
     const isSeeking = ref(false);
     const seekProgress = ref(0);
-    const progress = computed<number>(() => {
+    const displayedProgress = computed<number>(() => {
       if (props.disableUpdateDuringSeek && isSeeking.value) {
         return seekProgress.value;
       }
       return props.progress;
     });
     const offsetLeftPercent = computed(
-      () => ((progress.value - props.min) / (props.max - props.min)) * 100
+      () => ((displayedProgress.value - props.min) / (props.max - props.min)) * 100
     );
     const updateProgressDuringSeek = (newProgress: number): void => {
       if (isSeeking.value && props.disableUpdateDuringSeek) {
         seekProgress.value = newProgress;
-      } else if (newProgress !== progress.value) {
+      } else if (newProgress !== displayedProgress.value) {
         emit('seek', newProgress);
       }
     };
@@ -144,6 +144,7 @@ export default defineComponent({
       defaultForegroundColorStyle,
       onSeekStart,
       isSeeking,
+      displayedProgress,
     };
   },
 });
