@@ -20,7 +20,7 @@ export function changePlaybackRate(state: State, playbackRate: RequestState): vo
     }
   });
 
-  const video = global.getVideo();
+  const video = global.getVideo?.();
   if (video) {
     video.playbackRate = playbackRate || 1;
   }
