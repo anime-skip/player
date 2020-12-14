@@ -16,8 +16,7 @@
         v-for="timestamp of activeTimestamps"
         :key="timestamp.id"
         @click="onClickTimestamp(timestamp)"
-        @mouseover.stop.prevent="onHoverTimestamp(timestamp)"
-        @mousemove.stop.prevent="onHoverTimestamp(timestamp)"
+        @mouseenter="onHoverTimestamp(timestamp)"
         @mouseleave.stop.prevent="onStopHoverTimestamp()"
       >
         <div class="left">
@@ -117,7 +116,7 @@ export default defineComponent({
       return this.$store.getters[GetterTypes.CAN_EDIT_TIMESTAMPS];
     },
     isLoggedIn(): boolean {
-      return this.$store.getters[GetterTypes.IS_LOGGED_IN];
+      return this.$store.state.isLoggedIn;
     },
     isEditing(): boolean {
       return this.$store.state.isEditing;
