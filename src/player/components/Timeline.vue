@@ -320,7 +320,7 @@ $translationInactiveSliderVrv: 3px;
     transition: 250ms ease transform;
 
     &.active {
-      transform: translateX(-50%);
+      transform: translateX(-50%) translateY(-12px);
     }
   }
 }
