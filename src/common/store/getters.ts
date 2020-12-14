@@ -32,6 +32,9 @@ export interface Getters {
     state: State,
     getters: Store['getters']
   ): Api.AmbiguousTimestamp[];
+  [GetterTypes.APPLY_TIMESTAMP_DIFF](
+    state: State
+  ): (timestamp: Api.Timestamp | Api.AmbiguousTimestamp) => Api.AmbiguousTimestamp;
   [GetterTypes.CAN_EDIT_TIMESTAMPS](state: State, getters: Store['getters']): boolean;
   [GetterTypes.IS_SAVING_TIMESTAMPS](state: State): boolean;
 }
@@ -171,8 +174,19 @@ export const getters: GetterTree<State, State> & Getters = {
       ? getters[GetterTypes.DRAFT_TIMESTAMPS]
       : getters[GetterTypes.TIMESTAMPS];
   },
-  [GetterTypes.CAN_EDIT_TIMESTAMPS](state, getters) {
-    if (!getters[GetterTypes.IS_LOGGED_IN]) return false;
+  // @ts-ignore: types don't like generics
+  [GetterTypes.APPLY_TIMESTAMP_DIFF](state) {
+    return function (timestamp) {
+      const original = state.timestamps.find(t => t.id === timestamp.id);
+      const edited = original?.at !== timestamp.at || original.typeId !== timestamp.typeId;
+      return {
+        ...timestamp,
+        edited,
+      };
+    };
+  },
+  [GetterTypes.CAN_EDIT_TIMESTAMPS](state) {
+    if (!state.isLoggedIn) return false;
     const episodeUrl = state.episodeUrl;
     if (episodeUrl == null) return false;
     const episode = state.episode;

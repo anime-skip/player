@@ -19,6 +19,7 @@ import TimestampDetails from '../components/TimestampDetails.vue';
 import EditTimestamp from '../components/EditTimestamp.vue';
 import BasicDialog from './BasicDialog.vue';
 import { MutationTypes } from '@/common/store/mutationTypes';
+import { GetterTypes } from '@/common/store/getterTypes';
 
 export default defineComponent({
   name: 'TimestampsPanel',
@@ -44,11 +45,13 @@ export default defineComponent({
     updateTimestamp(): void {
       (this.$refs.timeSelect as HTMLDivElement | undefined)?.focus();
       if (this.activeTimestamp != null) {
-        this.setActiveTimestamp({
+        const newTimestamp = {
           ...this.activeTimestamp,
           at: this.getCurrentTime(),
-          edited: true,
-        });
+        };
+        this.setActiveTimestamp(
+          this.$store.getters[GetterTypes.APPLY_TIMESTAMP_DIFF](newTimestamp)
+        );
       }
     },
     setupKeyboardShortcuts(): KeyboardShortcutMap {

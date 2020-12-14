@@ -68,6 +68,7 @@ import { TIMESTAMP_TYPES, TIMESTAMP_TYPE_NOT_SELECTED } from '@/common/utils/Con
 import fuzzysort from 'fuzzysort';
 import { ActionTypes } from '@/common/store/actionTypes';
 import { MutationTypes } from '@/common/store/mutationTypes';
+import { GetterTypes } from '@/common/store/getterTypes';
 
 export default defineComponent({
   name: 'EditTimestamp',
@@ -187,11 +188,13 @@ export default defineComponent({
     updateTimestamp(): void {
       (this.$refs.timeSelect as HTMLDivElement | undefined)?.focus();
       if (this.activeTimestamp != null) {
-        this.setActiveTimestamp({
+        const newTimestamp = {
           ...this.activeTimestamp,
           at: this.getCurrentTime(),
-          edited: true,
-        });
+        };
+        this.setActiveTimestamp(
+          this.$store.getters[GetterTypes.APPLY_TIMESTAMP_DIFF](newTimestamp)
+        );
       }
     },
     typeRadioIcon(type: Api.TimestampType): string {
@@ -219,9 +222,10 @@ export default defineComponent({
         typeId: this.selectedType!.id,
         id: base.id,
         source: base.source,
-        edited: true,
       };
-      this.setActiveTimestamp(updatedTimestamp);
+      this.setActiveTimestamp(
+        this.$store.getters[GetterTypes.APPLY_TIMESTAMP_DIFF](updatedTimestamp)
+      );
       this.updateTimestampInDrafts(updatedTimestamp);
       this.leaveDialog();
     },
