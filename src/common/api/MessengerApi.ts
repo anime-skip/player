@@ -17,8 +17,8 @@ export default as<Api.Implementation>({
     return messenger.send('loginRefresh', refreshToken);
   },
 
-  updatePreferences(prefs) {
-    return messenger.send('updatePreferences', prefs);
+  updatePreferences(preferences) {
+    return messenger.send('updatePreferences', preferences);
   },
 
   createShow(data) {

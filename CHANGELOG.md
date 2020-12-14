@@ -195,7 +195,7 @@ This release is the first candidate for a public beta.
 - Improved UX of filtering timestamp types (#73)
 - Show service name instead of "Anime Skip" above episode info (#75)
 - "K" will enter edit mode (#76)
-- Label and button visibilty changes when the edit timestamp panel is shown (#74)
+- Label and button visibility changes when the edit timestamp panel is shown (#74)
 
 ### Fixes
 

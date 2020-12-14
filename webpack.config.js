@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const webpack = require('webpack');
 const ejs = require('ejs');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -11,6 +12,12 @@ const { services } = require('./src/manifest');
 const example = path.resolve(__dirname, 'example', 'index.html');
 
 require('dotenv').config({ path: '.env.firefox' });
+
+function transformHtml(content) {
+  return ejs.render(content.toString().replace('.ts', '.js'), {
+    ...process.env,
+  });
+}
 
 const config = {
   mode: process.env.NODE_ENV,
@@ -201,12 +208,6 @@ if (process.env.HMR === 'true') {
       manifest: __dirname + '/src/manifest.json',
     }),
   ]);
-}
-
-function transformHtml(content) {
-  return ejs.render(content.toString().replace('.ts', '.js'), {
-    ...process.env,
-  });
 }
 
 module.exports = config;

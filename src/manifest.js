@@ -87,8 +87,8 @@ const browser = (process.env.BUILD_FOR || '').toLowerCase();
 if (!browser) throw "Include a 'BUILD_FOR=firefox|chrome' environment variable";
 
 /**
- * Address all `{{browser}}.` prefixes, removing fields for other browesers and removing that tag
- * for fields for the specified browser
+ * Address all `{{browser}}.` prefixes, removing fields for other browsers and removing that tag for
+ * fields for the specified browser
  */
 function resolveBrowserTagsInObject(object) {
   if (Array.isArray(object)) {

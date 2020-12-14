@@ -94,7 +94,7 @@ export default defineComponent({
     onIgnoredVolumeChange(event: Event): void {
       const video = event.target as HTMLVideoElement | undefined;
       if (!video?.muted && video?.volume === this.volume) return;
-      console.log('Ignoring volume change event, reseting to ' + this.volume);
+      console.log('Ignoring volume change event, reset to ' + this.volume);
       global.getVideo().volume = this.volume;
     },
   },

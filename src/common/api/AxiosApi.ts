@@ -200,15 +200,15 @@ export default as<Api.Implementation>({
     return response.data.loginRefresh;
   },
 
-  async updatePreferences(prefs): Promise<void> {
+  async updatePreferences(preferences): Promise<void> {
     const m = mutation(
-      `mutation SavePreferences($prefs: InputPreferences!) {
-        savePreferences(preferences: $prefs) {
+      `mutation SavePreferences($preferences: InputPreferences!) {
+        savePreferences(preferences: $preferences) {
           ${preferencesData}
         }
       }`,
       {
-        prefs,
+        preferences,
       }
     );
     await sendGraphql(m);

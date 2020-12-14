@@ -236,7 +236,7 @@ export const SKIPPABLE_PREFERENCES: SkippablePreference[] = [
     key: 'skipTransitions',
     title: 'Transitions',
     help:
-      'Short animation that plays before and after a commertial break. Most of the time, this is an info card about the world or characters',
+      'Short animation that plays before and after a commercial break. Most of the time, this is an info card about the world or characters',
   },
   {
     key: 'skipCredits',
