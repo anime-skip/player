@@ -259,11 +259,17 @@ export default class Utils {
     return l.at - r.at;
   }
 
+  public static isModiferKeyPressed(event: KeyboardEvent): boolean {
+    return event.ctrlKey || event.altKey || event.shiftKey || event.metaKey;
+  }
+
   public static isKeyComboAllowed(event: KeyboardEvent): boolean {
+    const isModifierPressed = this.isModiferKeyPressed(event);
     switch (event.key) {
-      case 'Escape':
       case 'Enter':
       case 'Backspace':
+      case 'Escape':
+        return isModifierPressed;
       case 'Control':
       case 'Alt':
       case 'Shift':

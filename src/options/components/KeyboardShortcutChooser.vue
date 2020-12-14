@@ -43,16 +43,18 @@ export default defineComponent({
       this.isShowingEditor = false;
     },
     onKeyDown(event: KeyboardEvent) {
-      switch (event.key) {
-        case 'Escape':
-          return this.hideEditor();
-        case 'Enter':
-          console.debug('emitting', this.editKey);
-          if (this.editKey) this.$emit('update', this.editKey);
-          return this.hideEditor();
-        case 'Backspace':
-          this.$emit('update', undefined);
-          return this.hideEditor();
+      if (!Utils.isModiferKeyPressed(event)) {
+        switch (event.key) {
+          case 'Escape':
+            return this.hideEditor();
+          case 'Enter':
+            console.debug('emitting', this.editKey);
+            if (this.editKey) this.$emit('update', this.editKey);
+            return this.hideEditor();
+          case 'Backspace':
+            this.$emit('update', undefined);
+            return this.hideEditor();
+        }
       }
       if (!Utils.isKeyComboAllowed(event)) {
         return;
