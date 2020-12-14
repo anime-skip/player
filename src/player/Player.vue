@@ -71,11 +71,12 @@ export default defineComponent({
     browser.runtime.onMessage.removeListener(this.onReceiveMessage);
   },
   data() {
+    const video = global.getVideo();
     // TODO: Put in store
     const playerState: PlayerState = {
       isActive: false,
-      isBuffering: true,
-      isPaused: true,
+      isBuffering: video?.seeking ?? false,
+      isPaused: video?.paused ?? false,
     };
     return {
       playerState,
@@ -115,7 +116,9 @@ export default defineComponent({
       // Managing the buffer
       video.onplaying = () => {
         this.playerState.isBuffering = false; // TODO: Test set
-        this.$store.commit(MutationTypes.SET_IS_INITIAL_BUFFER, false);
+        if (this.$store.state.isInitialBuffer) {
+          this.$store.commit(MutationTypes.SET_IS_INITIAL_BUFFER, false);
+        }
       };
       video.onwaiting = () => {
         this.playerState.isBuffering = true; // TODO: Test set
