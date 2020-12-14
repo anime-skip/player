@@ -1,13 +1,9 @@
 <template>
-  <div
-    class="Section"
-    :class="{ buffered, completed, skipped }"
-    :style="{ left: `${left}%`, width: `${width}%` }"
-  />
+  <div class="Section" :class="{ buffered, completed, skipped, current }" :style="positioning" />
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { computed, defineComponent, PropType } from 'vue';
 
 export default defineComponent({
   props: {
@@ -19,16 +15,31 @@ export default defineComponent({
     buffered: Boolean,
     completed: Boolean,
   },
-  computed: {
-    left(): number {
-      return (this.timestamp.at / this.duration) * 100;
-    },
-    width(): number {
-      if (this.currentTime == null || this.currentTime > this.endTime) {
-        return (this.endTime / this.duration) * 100 - this.left;
+  setup(props) {
+    const left = computed<number>(() => {
+      return (props.timestamp.at / props.duration) * 100;
+    });
+    const width = computed<number>(() => {
+      if (props.currentTime == null || props.currentTime > props.endTime) {
+        return (props.endTime / props.duration) * 100 - left.value;
       }
-      return (this.currentTime / this.duration) * 100 - this.left;
-    },
+      if (props.currentTime < props.timestamp.at) {
+        return 0;
+      }
+      return (props.currentTime / props.duration) * 100 - left.value;
+    });
+    const positioning = computed(() => ({ left: `${left.value}%`, width: `${width.value}%` }));
+
+    const current = computed<boolean>(() => {
+      if (props.currentTime == null) return false;
+
+      return props.currentTime >= props.timestamp.at && props.currentTime <= props.endTime;
+    });
+
+    return {
+      positioning,
+      current,
+    };
   },
 });
 </script>
@@ -48,5 +59,9 @@ export default defineComponent({
 }
 .completed {
   background-color: $primary300;
+}
+.current {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 </style>
