@@ -25,11 +25,11 @@
     console.debug('added key listener');
     const keyPress = document.getElementById('key-press');
     document.addEventListener('keydown', function (event) {
-      console.debug('pressed key: ' + event.key);
+      console.debug('[example] pressed key: ' + event.key);
       keyPress.innerText = event.key;
     });
     document.onkeydown = function (event) {
-      console.debug('onkeydown');
+      console.debug('[example] onkeydown');
       keyPress.innerText = event.key;
     };
   </script>
