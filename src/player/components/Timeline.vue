@@ -28,14 +28,14 @@
           :skipped="section.isSkipped"
         />
       </template>
-      <template v-slot:foreground>
+      <template v-slot:foreground="slotProps" v-if="activeTimestamps.length > 0">
         <Section
           v-for="section of completedSections"
           :key="'completed' + section.timestamp.id"
           :timestamp="section.timestamp"
           :endTime="section.endTime"
           :duration="duration"
-          :currentTime="currentTime"
+          :currentTime="(slotProps.progress / 100) * (duration || 0)"
           completed
         />
         <WebExtImg
@@ -96,6 +96,7 @@ export default defineComponent({
   watch: {
     currentTime(newTime: number, oldTime: number) {
       if (!this.duration) return;
+
       // Do nothing
       const currentTimestamp = Utils.previousTimestamp(oldTime, this.timestamps, undefined);
       const insideSkippedSection =
@@ -220,14 +221,8 @@ export default defineComponent({
       );
     },
     completedSections(): SectionData[] {
-      if (!this.sections) {
-        return [];
-      }
       return this.sections.filter(section => {
-        return (
-          section.timestamp.at < this.currentTime &&
-          !Utils.isSkipped(section.timestamp, this.preferences)
-        );
+        return !Utils.isSkipped(section.timestamp, this.preferences);
       });
     },
   },
@@ -287,19 +282,12 @@ $translationVrv: 0px;
 $translationInactiveSliderVrv: 3px;
 
 .Timeline {
-  height: 3px;
   position: relative;
-  transform: scaleY(1) translateY($translationDefault);
+  transform: scaleY(1);
   transition: 200ms;
 
   &.flipped {
     transform: scaleY(-1);
-    .slider {
-      transform: translateY($translationInactiveSliderDefault);
-    }
-  }
-  & > * {
-    position: absolute;
   }
   &.add-margin {
     margin-left: 24px;
@@ -311,6 +299,14 @@ $translationInactiveSliderVrv: 3px;
     left: 0;
     right: 0;
     transition: top;
+
+    .slider-foreground {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+    }
   }
   &.flipped .slider {
     top: 0px;
@@ -324,18 +320,7 @@ $translationInactiveSliderVrv: 3px;
     transition: 250ms ease transform;
 
     &.active {
-      transform: translateX(-50%) translateY(-12px);
-    }
-  }
-}
-
-// VRV specific styles
-.Timeline.vrv {
-  transform: scaleY(1) translateY($translationVrv);
-  &.flipped {
-    transform: scaleY(-1) translateY(-7px);
-    .slider {
-      transform: translateY($translationInactiveSliderVrv);
+      transform: translateX(-50%);
     }
   }
 }
