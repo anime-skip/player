@@ -25,10 +25,11 @@ import WebExtImg from '@/common/components/WebExtImg.vue';
 import ToolbarButton from '../ToolbarButton.vue';
 import VideoControllerMixin from '@/common/mixins/VideoController';
 import Slider from '../Slider.vue';
+import KeyboardShortcutsMixin from '@/common/mixins/KeyboardShortcuts';
 
 export default defineComponent({
   components: { WebExtImg, ToolbarButton, Slider },
-  mixins: [VideoControllerMixin],
+  mixins: [VideoControllerMixin, KeyboardShortcutsMixin],
   mounted(): void {
     this.setupVolumeOverrideManager();
   },
@@ -43,6 +44,14 @@ export default defineComponent({
       if (this.volume <= 0.05) return 'low';
       if (this.volume < 0.6) return 'medium';
       return 'high';
+    },
+  },
+  methods: {
+    setupKeyboardShortcuts(): { [action in KeyboardShortcutAction]?: () => void } {
+      return {
+        volumeUp: () => this.addVolume(0.2),
+        volumeDown: () => this.addVolume(-0.2),
+      };
     },
   },
 });

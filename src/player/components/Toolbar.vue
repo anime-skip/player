@@ -47,7 +47,7 @@
         @click="toggleTimestampsDialog"
       />
       <ToolbarButton
-        v-if="isEditing && !isSavingTimestamps"
+        v-if="isSaveTimestampsAvailable"
         class="margin-left"
         icon="ic_save_changes.svg"
         title="Save Changes"
@@ -161,6 +161,9 @@ export default defineComponent({
       // TODO: compose this
       return Utils.formatSeconds(this.currentTime, this.playerState.isPaused);
     },
+    isSaveTimestampsAvailable(): boolean {
+      return this.isEditing && !this.isSavingTimestamps;
+    },
   },
   methods: {
     setActiveTimestamp(timestamp: Api.AmbiguousTimestamp): void {
@@ -181,8 +184,8 @@ export default defineComponent({
     async addMissingDurations(duration: number): Promise<void> {
       this.$store.dispatch(ActionTypes.ADD_MISSING_DURATIONS, duration);
     },
-    async saveChanges(): Promise<void> {
-      this.$store.dispatch(ActionTypes.STOP_EDITING);
+    async saveChanges(discard?: boolean): Promise<void> {
+      this.$store.dispatch(ActionTypes.STOP_EDITING, discard);
     },
     toggleFullscreen(): void {
       this.isFullscreen = !Utils.isFullscreen();
@@ -261,14 +264,10 @@ export default defineComponent({
       return {
         // General Controls
         playPause: () => this.togglePlayPause(),
+        toggleFullscreen: () => this.toggleFullscreen(),
         hideDialog: this.showDialog,
         nextTimestamp: () => this.nextTimestamp(),
         previousTimestamp: () => this.previousTimestamp(),
-        createTimestamp: () => {
-          if (this.activeTimestamp == null) {
-            this.createNewTimestamp();
-          }
-        },
         // Advance Time
         advanceFrame: () => this.addTime(FRAME),
         advanceSmall: () => this.addTime(2),
@@ -279,6 +278,20 @@ export default defineComponent({
         rewindSmall: () => this.addTime(-2),
         rewindMedium: () => this.addTime(-5),
         rewindLarge: () => this.addTime(-85),
+        // Editing
+        createTimestamp: () => {
+          if (this.activeTimestamp == null) {
+            this.createNewTimestamp();
+          }
+        },
+        saveTimestamps: () => {
+          if (!this.isSaveTimestampsAvailable) return;
+          this.saveChanges();
+        },
+        discardChanges: () => {
+          if (!this.isSaveTimestampsAvailable) return;
+          this.saveChanges(true);
+        },
       };
     },
   },

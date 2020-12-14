@@ -7,6 +7,8 @@
 - Vue 3 migration, better performance under the hood
 - Improved volume controls (restore volume on un-mute, selecting a volume un-mutes)
 - Minor UI tweaks to the timeline
+- Added keyboard shortcuts (Toggle fullscreen: `G`, Volume up: `↑`, Volume down: `↓`, Save timestamps: `ctrl+ENTER`, Discard timestamps: `` ctrl+` ``)
+- Changed keyboard shortcut defaults (next timestamp: `E` -> `ctrl+E`, prev timestamp: `C` -> `ctrl+C`)
 
 ### Fixes
 

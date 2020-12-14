@@ -68,7 +68,7 @@ export default defineComponent({
       const decimalPercent = (boundedMouseX - min) / (max - min);
       const progress = (props.max - props.min) * decimalPercent + props.min;
 
-      // console.log(`Positions:\n
+      // console.debug(`Positions:\n
       //   slider.clientX: ${sliderClientX}
       //   slider.clientWidth: ${slider.clientWidth}
       //   slider.clientEnd: ${sliderClientX + slider.clientWidth}\n

@@ -448,7 +448,6 @@ export const actions: ActionTree<State, State> & Actions = {
     }
   },
   async [ActionTypes.FETCH_THIRD_PARTY_EPISODE]({ commit }, { name, showName }) {
-    console.log({ name, showName });
     try {
       commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.LOADING);
       const episodes: Api.ThirdPartyEpisode[] = await callApi(
@@ -483,7 +482,7 @@ export const actions: ActionTree<State, State> & Actions = {
     const episode = state.episode;
 
     if (episodeUrl == null || episode == null) {
-      console.log('Did not update durations, episode or url was undefined', {
+      console.debug('Did not update durations, episode or url was undefined', {
         episode,
         episodeUrl,
       });

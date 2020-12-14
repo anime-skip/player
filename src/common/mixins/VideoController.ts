@@ -4,9 +4,6 @@ import Utils from '../utils/Utils';
 export default defineComponent({
   created(): void {
     global.onVideoChanged(video => {
-      video.onvolumechange = () => {
-        this.volume = this.isMuted ? 0 : video.volume;
-      };
       this.isMuted = video.muted;
       this.volume = this.isMuted ? 0 : video.volume;
     });
@@ -83,6 +80,9 @@ export default defineComponent({
     toggleMuted() {
       this.setMuted(!this.isMuted);
     },
+    addVolume(decimalPercent: number): void {
+      this.setVolume(Utils.boundedNumber(this.volume + decimalPercent, [0, 1]));
+    },
     /**
      * If the volume changes unexpectedly, ignore the change and set it back to what it was before
      */
@@ -91,10 +91,10 @@ export default defineComponent({
         video.addEventListener('volumechange', this.onIgnoredVolumeChange);
       });
     },
-    onIgnoredVolumeChange(event: Event): void {
-      const video = event.target as HTMLVideoElement | undefined;
+    onIgnoredVolumeChange(): void {
+      const video: HTMLVideoElement | undefined = global.getVideo();
       if (!video?.muted && video?.volume === this.volume) return;
-      console.log('Ignoring volume change event, reset to ' + this.volume);
+      console.debug(`Ignoring volume change event, reset to ${this.volume}`);
       global.getVideo().volume = this.volume;
     },
   },

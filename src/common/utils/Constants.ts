@@ -76,9 +76,12 @@ export const PLAYBACK_SPEEDS: PlaybackRate[] = [
 
 export const DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS: KeyboardShortcutsMap = {
   playPause: 'D',
+  toggleFullscreen: 'G',
+  volumeUp: '↑',
+  volumeDown: '↓',
   hideDialog: '`',
-  nextTimestamp: 'E',
-  previousTimestamp: 'C',
+  nextTimestamp: 'shift+L',
+  previousTimestamp: 'shift+J',
   advanceFrame: 'L',
   advanceSmall: 'V',
   advanceMedium: 'F',
@@ -88,12 +91,16 @@ export const DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS: KeyboardShortcutsMap = {
   rewindMedium: 'S',
   rewindLarge: 'W',
   createTimestamp: 'K',
+  saveTimestamps: 'ctrl+ENTER',
+  discardChanges: 'ctrl+`',
 };
 
 export const DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS: KeyboardShortcutsMap = {
   playPause: 'Space',
   advanceMedium: '→',
   rewindMedium: '←',
+  nextTimestamp: 'shift+→',
+  previousTimestamp: 'shift+←',
 };
 
 export const TIMESTAMP_TYPES: Api.TimestampType[] = [
