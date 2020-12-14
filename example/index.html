@@ -24,11 +24,11 @@
   <script>
     console.debug('added key listener');
     const keyPress = document.getElementById('key-press');
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function (event) {
       console.debug('pressed key: ' + event.key);
       keyPress.innerText = event.key;
     });
-    document.onkeydown = function(event) {
+    document.onkeydown = function (event) {
       console.debug('onkeydown');
       keyPress.innerText = event.key;
     };
