@@ -157,7 +157,7 @@ export const getters: GetterTree<State, State> & Getters = {
     return offsetBoundedTimestamps;
   },
   [GetterTypes.DRAFT_TIMESTAMPS](state) {
-    let drafts = state.draftTimestamps;
+    let drafts = [...state.draftTimestamps];
     if (state.activeTimestamp != null) {
       const activeIndex = drafts.findIndex(timestamp => timestamp.id === state.activeTimestamp?.id);
       const activeIsExisting = activeIndex !== -1;

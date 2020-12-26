@@ -14,28 +14,27 @@
       :currentTime="currentTime"
       :duration="duration"
       :updateTime="updateTime"
-      :timestamps="timestamps"
     />
     <div class="buttons">
       <ToolbarButton class="margin-right" @click="togglePlayPause()">
-        <PlayPauseButton :state="playerState.isPaused ? 1 : 0" />
+        <PlayPauseButton :state="playPauseState" />
       </ToolbarButton>
-      <ToolbarButton class="margin-right" icon="ic_next_episode.svg" v-if="false" />
+      <!-- <ToolbarButton class="margin-right" icon="ic_next_episode.svg" /> -->
       <VolumeButton />
       <div class="divider margin-right" />
       <ToolbarButton
-        v-if="timestamps.length > 0"
+        v-if="hasTimestamps"
         class="margin-right"
         icon="ic_prev_timestamp.svg"
-        @click="previousTimestamp()"
+        @click="gotoPreviousTimestamp()"
       />
       <ToolbarButton
-        v-if="timestamps.length > 0"
+        v-if="hasTimestamps"
         class="margin-right"
         icon="ic_next_timestamp.svg"
-        @click="nextTimestamp()"
+        @click="gotoNextTimestamp()"
       />
-      <div class="divider margin-right" v-if="timestamps.length > 0" />
+      <div class="divider margin-right" v-if="hasTimestamps" />
       <p class="current-time">
         {{ formattedTime }}&ensp;/&ensp;<span>{{ displayDuration }}</span>
       </p>
@@ -60,14 +59,14 @@
         @click="toggleAccountDialog"
       />
       <ToolbarButton v-if="isFullscreenEnabled" @click="toggleFullscreen()">
-        <FullscreenButton :state="isFullscreen ? 0 : 1" :key="isFullscreenCount" />
+        <FullscreenButton :state="fullscreenState" :key="isFullscreenCount" />
       </ToolbarButton>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { computed, defineComponent, PropType, ref } from 'vue';
 import Timeline from './Timeline.vue';
 import ToolbarButton from './ToolbarButton.vue';
 import AccountDialog from '../dialogs/AccountDialog.vue';
@@ -76,12 +75,15 @@ import FullscreenButton from './animations/FullscreenButton.vue';
 import VolumeButton from './animations/VolumeButton.vue';
 import Utils from '@/common/utils/Utils';
 import WebExtImg from '@/common/components/WebExtImg.vue';
-import VideoControllerMixin from '@/common/mixins/VideoController';
-import KeyboardShortcutMixin, { KeyboardShortcutMap } from '@/common/mixins/KeyboardShortcuts';
+import { useVideoController } from '@/common/mixins/VideoController';
+import { useKeyboardShortcuts } from '@/common/mixins/KeyboardShortcuts';
 import { FRAME } from '@/common/utils/Constants';
 import { MutationTypes } from '@/common/store/mutationTypes';
 import { ActionTypes } from '@/common/store/actionTypes';
 import { GetterTypes } from '@/common/store/getterTypes';
+import { useStore } from 'vuex';
+import { Store } from '@/common/store';
+import useFormattedTime from '@/common/composition/formattedTime';
 
 export default defineComponent({
   name: 'Toolbar',
@@ -94,206 +96,208 @@ export default defineComponent({
     AccountDialog,
     WebExtImg,
   },
-  mixins: [VideoControllerMixin, KeyboardShortcutMixin],
   props: {
     playerState: {
       type: Object as PropType<PlayerState>,
       required: true,
     },
   },
-  created() {
-    global.onVideoChanged(video => {
-      video.addEventListener('durationchange', (event: Event) => {
-        this.updateDuration((event.target as HTMLVideoElement).duration);
-      });
-      this.updateTime(video.currentTime);
-      video.ontimeupdate = () => {
-        this.updateTime(video.currentTime);
-      };
-    });
-    document.addEventListener('fullscreenchange', () => {
-      this.isFullscreen = Utils.isFullscreen();
-      this.isFullscreenCount++;
-    });
-    Utils.waitForVideoLoad().then(this.updateDuration);
-  },
-  data() {
-    return {
-      currentTime: 0,
-      isFullscreen: Utils.isFullscreen(),
-      isFullscreenCount: 0,
-      displayDuration: 'Loading...',
-      isFullscreenEnabled: document.fullscreenEnabled,
+  setup(props) {
+    const store: Store = useStore();
+    const { setCurrentTime, pause, togglePlayPause, addTime } = useVideoController();
+
+    // Editing
+    const isEditing = computed(() => store.state.isEditing);
+    const isSavingTimestamps = computed(() => store.getters[GetterTypes.IS_SAVING_TIMESTAMPS]);
+    const isSaveTimestampsAvailable = computed(() => isEditing.value && !isSavingTimestamps.value);
+    const isPaused = computed<boolean>(() => props.playerState.isPaused);
+
+    const currentTime = ref(0);
+    const isActive = computed(() => props.playerState.isActive || isEditing.value);
+    const formattedTime = useFormattedTime(currentTime, isPaused);
+
+    // Play button
+    const playPauseState = computed<1 | 0>(() => (isPaused.value ? 1 : 0));
+
+    // Duration
+    const displayDuration = ref('Loading...');
+    const duration = computed(() => store.getters[GetterTypes.DURATION]);
+
+    // Full screen button
+    const isFullscreen = ref(Utils.isFullscreen());
+    const isFullscreenCount = ref(0);
+    const isFullscreenEnabled = ref(document.fullscreenEnabled);
+    const fullscreenState = computed<1 | 0>(() => (isFullscreen.value ? 0 : 1));
+
+    // Timestamps
+    const activeTimestamp = computed(() => store.state.activeTimestamp);
+    const timestamps = computed(() => store.getters[GetterTypes.ACTIVE_TIMESTAMPS]);
+    const hasTimestamps = computed(() => timestamps.value.length > 0);
+
+    // Dialogs
+    const showDialog = (dialog?: string): void => {
+      store.dispatch(ActionTypes.SHOW_DIALOG, dialog);
     };
-  },
-  computed: {
-    timestamps(): Api.AmbiguousTimestamp[] {
-      return this.$store.getters[GetterTypes.TIMESTAMPS];
-    },
-    preferences(): Api.Preferences | undefined {
-      return this.$store.getters[GetterTypes.PREFERENCES];
-    },
-    activeDialog(): string | undefined {
-      return this.$store.state.activeDialog;
-    },
-    isEditing(): boolean {
-      return this.$store.state.isEditing;
-    },
-    activeTimestamp(): Api.AmbiguousTimestamp | undefined {
-      return this.$store.state.activeTimestamp;
-    },
-    isSavingTimestamps(): boolean {
-      return this.$store.getters[GetterTypes.IS_SAVING_TIMESTAMPS];
-    },
-    duration(): number | undefined {
-      return this.$store.getters[GetterTypes.DURATION];
-    },
-    isActive(): boolean {
-      return this.playerState.isActive || this.isEditing;
-    },
-    activeTimestamps(): Api.AmbiguousTimestamp[] {
-      if (this.isEditing) {
-        return this.$store.getters[GetterTypes.DRAFT_TIMESTAMPS];
-      }
-      return this.timestamps;
-    },
-    formattedTime(): string {
-      // TODO: compose this
-      return Utils.formatSeconds(this.currentTime, this.playerState.isPaused);
-    },
-    isSaveTimestampsAvailable(): boolean {
-      return this.isEditing && !this.isSavingTimestamps;
-    },
-  },
-  methods: {
-    setActiveTimestamp(timestamp: Api.AmbiguousTimestamp): void {
-      this.$store.commit(MutationTypes.SET_ACTIVE_TIMESTAMP, timestamp);
-    },
-    setEditTimestampMode(mode: 'add' | 'edit' | undefined): void {
-      this.$store.commit(MutationTypes.SET_EDIT_TIMESTAMP_MODE, mode);
-    },
-    setDuration(duration?: number): void {
-      this.$store.commit(MutationTypes.SET_DURATION, duration);
-    },
-    showDialog(dialogName?: string): void {
-      this.$store.dispatch(ActionTypes.SHOW_DIALOG, dialogName);
-    },
-    async createNewTimestamp(): Promise<void> {
-      this.$store.dispatch(ActionTypes.CREATE_NEW_TIMESTAMP, undefined);
-    },
-    async addMissingDurations(duration: number): Promise<void> {
-      this.$store.dispatch(ActionTypes.ADD_MISSING_DURATIONS, duration);
-    },
-    async saveChanges(discard?: boolean): Promise<void> {
-      this.$store.dispatch(ActionTypes.STOP_EDITING, discard);
-    },
-    toggleFullscreen(): void {
-      this.isFullscreen = !Utils.isFullscreen();
-      if (this.isFullscreen) {
+    const toggleAccountDialog = (): void => {
+      showDialog(store.state.activeDialog === 'AccountDialog' ? undefined : 'AccountDialog');
+    };
+    const toggleTimestampsDialog = (): void => {
+      showDialog(store.state.activeDialog === 'TimestampsPanel' ? undefined : 'TimestampsPanel');
+    };
+
+    const setActiveTimestamp = (timestamp: Api.AmbiguousTimestamp): void => {
+      store.commit(MutationTypes.SET_ACTIVE_TIMESTAMP, timestamp);
+    };
+    const setEditTimestampMode = (mode: 'add' | 'edit' | undefined): void => {
+      store.commit(MutationTypes.SET_EDIT_TIMESTAMP_MODE, mode);
+    };
+    const setDuration = (newDuration?: number): void => {
+      store.commit(MutationTypes.SET_DURATION, newDuration);
+    };
+    const createNewTimestamp = async (): Promise<void> => {
+      store.dispatch(ActionTypes.CREATE_NEW_TIMESTAMP, undefined);
+    };
+    const addMissingDurations = (missingDuration: number) => {
+      store.dispatch(ActionTypes.ADD_MISSING_DURATIONS, missingDuration);
+    };
+    const saveChanges = (discard?: boolean) => {
+      store.dispatch(ActionTypes.STOP_EDITING, discard);
+    };
+    const toggleFullscreen = (): void => {
+      isFullscreen.value = !Utils.isFullscreen();
+      if (isFullscreen.value) {
         Utils.enterFullscreen();
       } else {
         Utils.exitFullscreen();
       }
-    },
-    updateDuration(duration: number) {
-      this.setDuration(duration);
-      if (duration === 0) {
-        this.displayDuration = 'Loading...';
+    };
+    const updateDuration = (newDuration: number) => {
+      setDuration(newDuration);
+      if (newDuration === 0) {
+        displayDuration.value = 'Loading...';
+      } else {
+        displayDuration.value = Utils.formatSeconds(newDuration, false);
       }
-      this.displayDuration = Utils.formatSeconds(duration, false);
-      this.addMissingDurations(duration);
-    },
-    updateTime(newTime: number, updateVideo?: boolean) {
+      addMissingDurations(newDuration);
+    };
+    const updateTime = (newTime: number, updateVideo?: boolean) => {
       if (updateVideo) {
-        this.setCurrentTime(newTime);
+        setCurrentTime(newTime);
       }
-      this.currentTime = Utils.boundedNumber(newTime, [0, this.duration]);
-    },
-    addTime(seconds: number): void {
-      this.currentTime = Utils.boundedNumber(this.currentTime + seconds, [0, this.duration]);
-      this.updateTime(this.currentTime, true);
-    },
-    nextTimestamp(): void {
+      currentTime.value = Utils.boundedNumber(newTime, [0, duration.value]);
+    };
+    const gotoNextTimestamp = (): void => {
       const nextTimestamp = Utils.nextTimestamp(
-        this.currentTime + 0.1,
-        this.activeTimestamps,
+        currentTime.value + 0.1,
+        timestamps.value,
         undefined
       );
       const video = global.getVideo();
       if (nextTimestamp) {
-        this.updateTime(nextTimestamp.at, true);
-        if (this.isEditing) {
-          this.pause();
-          this.setActiveTimestamp(nextTimestamp);
-          this.setEditTimestampMode('edit');
-          this.showDialog('TimestampsPanel');
+        updateTime(nextTimestamp.at, true);
+        if (isEditing.value) {
+          pause();
+          setActiveTimestamp(nextTimestamp);
+          setEditTimestampMode('edit');
+          showDialog('TimestampsPanel');
         }
       } else if (video.duration) {
-        this.updateTime(video.duration, true);
+        updateTime(video.duration, true);
       } else {
         console.warn(
           'Tried to go to next timestamp, but there was not one and the duration had not been initalized'
         );
       }
-    },
-    previousTimestamp(): void {
+    };
+    const gotoPreviousTimestamp = (): void => {
       const previousTimestamp = Utils.previousTimestamp(
-        this.currentTime,
-        this.activeTimestamps,
+        currentTime.value,
+        timestamps.value,
         undefined
       );
       if (previousTimestamp) {
-        this.updateTime(previousTimestamp.at, true);
-        if (this.isEditing) {
-          this.pause();
-          this.setActiveTimestamp(previousTimestamp);
-          this.setEditTimestampMode('edit');
-          this.showDialog('TimestampsPanel');
+        updateTime(previousTimestamp.at, true);
+        if (isEditing.value) {
+          pause();
+          setActiveTimestamp(previousTimestamp);
+          setEditTimestampMode('edit');
+          showDialog('TimestampsPanel');
         }
       } else {
-        this.updateTime(0, true);
+        updateTime(0, true);
       }
-    },
-    toggleAccountDialog(): void {
-      this.showDialog(this.activeDialog === 'AccountDialog' ? undefined : 'AccountDialog');
-    },
-    toggleTimestampsDialog(): void {
-      this.showDialog(this.activeDialog === 'TimestampsPanel' ? undefined : 'TimestampsPanel');
-    },
-    setupKeyboardShortcuts(): KeyboardShortcutMap {
-      return {
-        // General Controls
-        playPause: () => this.togglePlayPause(),
-        toggleFullscreen: () => this.toggleFullscreen(),
-        hideDialog: this.showDialog,
-        nextTimestamp: () => this.nextTimestamp(),
-        previousTimestamp: () => this.previousTimestamp(),
-        // Advance Time
-        advanceFrame: () => this.addTime(FRAME),
-        advanceSmall: () => this.addTime(2),
-        advanceMedium: () => this.addTime(5),
-        advanceLarge: () => this.addTime(90),
-        // Rewind Time
-        rewindFrame: () => this.addTime(-FRAME),
-        rewindSmall: () => this.addTime(-2),
-        rewindMedium: () => this.addTime(-5),
-        rewindLarge: () => this.addTime(-85),
-        // Editing
-        createTimestamp: () => {
-          if (this.activeTimestamp == null) {
-            this.createNewTimestamp();
-          }
-        },
-        saveTimestamps: () => {
-          if (!this.isSaveTimestampsAvailable) return;
-          this.saveChanges();
-        },
-        discardChanges: () => {
-          if (!this.isSaveTimestampsAvailable) return;
-          this.saveChanges(true);
-        },
+    };
+    useKeyboardShortcuts('Toolbar', store, {
+      // General Controls
+      playPause: () => togglePlayPause(),
+      toggleFullscreen: () => toggleFullscreen(),
+      hideDialog: showDialog,
+      nextTimestamp: () => gotoNextTimestamp(),
+      previousTimestamp: () => gotoPreviousTimestamp(),
+      // Advance Time
+      advanceFrame: () => addTime(FRAME),
+      advanceSmall: () => addTime(2),
+      advanceMedium: () => addTime(5),
+      advanceLarge: () => addTime(90),
+      // Rewind Time
+      rewindFrame: () => addTime(-FRAME),
+      rewindSmall: () => addTime(-2),
+      rewindMedium: () => addTime(-5),
+      rewindLarge: () => addTime(-85),
+      // Editing
+      createTimestamp: () => {
+        if (activeTimestamp.value == null) {
+          createNewTimestamp();
+        }
+      },
+      saveTimestamps: () => {
+        if (!isSaveTimestampsAvailable.value) return;
+        saveChanges();
+      },
+      discardChanges: () => {
+        if (!isSaveTimestampsAvailable.value) return;
+        saveChanges(true);
+      },
+    });
+
+    // Lifecycle
+    global.onVideoChanged(video => {
+      video.addEventListener('durationchange', (event: Event) => {
+        updateDuration((event.target as HTMLVideoElement).duration);
+      });
+      updateTime(video.currentTime);
+      video.ontimeupdate = () => {
+        updateTime(video.currentTime);
       };
-    },
+    });
+    document.addEventListener('fullscreenchange', () => {
+      isFullscreen.value = Utils.isFullscreen();
+      isFullscreenCount.value++;
+    });
+    Utils.waitForVideoLoad().then(updateDuration);
+
+    return {
+      currentTime,
+      isFullscreen,
+      isFullscreenCount,
+      displayDuration,
+      isFullscreenEnabled,
+      toggleAccountDialog,
+      toggleTimestampsDialog,
+      playPauseState,
+      fullscreenState,
+      isSaveTimestampsAvailable,
+      isActive,
+      duration,
+      hasTimestamps,
+      saveChanges,
+      toggleFullscreen,
+      togglePlayPause,
+      formattedTime,
+      updateTime,
+      gotoPreviousTimestamp,
+      gotoNextTimestamp,
+    };
   },
 });
 </script>

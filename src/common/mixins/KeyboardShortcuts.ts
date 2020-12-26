@@ -1,4 +1,6 @@
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted, onUnmounted } from 'vue';
+import { useStore } from 'vuex';
+import { Store } from '../store';
 import { GetterTypes } from '../store/getterTypes';
 import Utils from '../utils/Utils';
 
@@ -7,8 +9,38 @@ interface Data {
   $keyboardShortcuts: KeyboardShortcutMap;
 }
 
+function onKeyDown(
+  this: any,
+  componentName: string | undefined,
+  $keyboardShortcuts: KeyboardShortcutMap,
+  store: Store
+) {
+  return (event: KeyboardEvent) => {
+    // Prevent triggers from firing while typing
+    if (document.activeElement?.tagName === 'INPUT' || !Utils.isKeyComboAllowed(event)) {
+      return;
+    }
+
+    const keyCombo = Utils.keyComboFromEvent(event);
+    let keyAction = Utils.findShortcutAction(
+      keyCombo,
+      store.getters[GetterTypes.PRIMARY_KEYBOARD_SHORTCUTS]
+    );
+    if (keyAction == null) {
+      keyAction = Utils.findShortcutAction(
+        keyCombo,
+        store.getters[GetterTypes.SECONDARY_KEYBOARD_SHORTCUTS]
+      );
+    }
+
+    console.debug(`[${componentName}] Pressed ${keyCombo} -> ${keyAction}`);
+    if (keyAction == null || $keyboardShortcuts[keyAction] == null) return;
+    ($keyboardShortcuts[keyAction] as Function)();
+  };
+}
+
 export default defineComponent({
-  created() {
+  mounted() {
     this.$keyboardShortcuts = this.setupKeyboardShortcuts();
     global.addKeyDownListener(this.onKeyDown);
     console.debug(`[${this.$options.name}] KeyboardShortcutMixin.created()`);
@@ -21,30 +53,30 @@ export default defineComponent({
     return {};
   },
   methods: {
-    onKeyDown(event: KeyboardEvent): void {
-      // Prevent triggers from firing while typing
-      if (document.activeElement?.tagName === 'INPUT' || !Utils.isKeyComboAllowed(event)) {
-        return;
-      }
-
-      const keyCombo = Utils.keyComboFromEvent(event);
-      let keyAction = Utils.findShortcutAction(
-        keyCombo,
-        this.$store.getters[GetterTypes.PRIMARY_KEYBOARD_SHORTCUTS]
-      );
-      if (keyAction == null) {
-        keyAction = Utils.findShortcutAction(
-          keyCombo,
-          this.$store.getters[GetterTypes.SECONDARY_KEYBOARD_SHORTCUTS]
-        );
-      }
-
-      console.debug(`[${this.$options.name}] Pressed ${keyCombo} -> ${keyAction}`);
-      if (keyAction == null || this.$keyboardShortcuts[keyAction] == null) return;
-      (this.$keyboardShortcuts[keyAction] as Function).apply(this);
+    onKeyDown(event: KeyboardEvent) {
+      onKeyDown(this.$options.name, this.$keyboardShortcuts, this.$store)(event);
     },
     setupKeyboardShortcuts(): { [action in KeyboardShortcutAction]?: () => void } {
       return {};
     },
   },
 });
+
+export const useKeyboardShortcuts = (
+  componentName: string,
+  store: Store = useStore(),
+  $keyboardShortcuts: KeyboardShortcutMap = {}
+) => {
+  const onKeyDownInstance = onKeyDown(componentName, $keyboardShortcuts, store);
+  onMounted(() => {
+    global.addKeyDownListener(onKeyDownInstance);
+    console.debug(`[${componentName}] KeyboardShortcutComposition.created()`);
+  });
+  onUnmounted(() => {
+    global.removeKeyDownListener(onKeyDownInstance);
+  });
+
+  return {
+    $keyboardShortcuts,
+  };
+};

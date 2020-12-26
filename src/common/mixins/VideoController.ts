@@ -99,3 +99,29 @@ export default defineComponent({
     },
   },
 });
+
+export function useVideoController() {
+  const setCurrentTime = (seconds: number) => {
+    const video = global.getVideo();
+    video.currentTime = Utils.boundedNumber(seconds, [0, video.duration]);
+  };
+  const pause = () => {
+    const video = global.getVideo();
+    video.paused ? video.play() : video.pause();
+  };
+  const togglePlayPause = () => {
+    const video = global.getVideo();
+    video.paused ? video.play() : video.pause();
+  };
+  const addTime = (seconds: number) => {
+    const video = global.getVideo();
+    video.currentTime = Utils.boundedNumber(video.currentTime + seconds, [0, video.duration]);
+  };
+
+  return {
+    setCurrentTime,
+    pause,
+    togglePlayPause,
+    addTime,
+  };
+}

@@ -1,11 +1,13 @@
 <template>
   <div class="Slider">
-    <slot name="background">
-      <div class="default-background" :style="defaultBackgroundColorStyle" />
-    </slot>
-    <slot name="foreground" v-bind:progress="displayedProgress">
-      <div class="default-foreground" :style="defaultForegroundStyle" />
-    </slot>
+    <div class="bar-container">
+      <slot name="background">
+        <div class="default-background" :style="defaultBackgroundColorStyle" />
+      </slot>
+      <slot name="foreground" v-bind:progress="displayedProgress">
+        <div class="default-foreground" :style="defaultForegroundStyle" />
+      </slot>
+    </div>
     <div class="thumb-container" :style="thumbOffsetStyle">
       <slot name="thumb">
         <div class="default-thumb" :class="{ seeking: isSeeking }" :style="defaultThumbStyle">
@@ -163,8 +165,20 @@ $thumbSizeUnitless: strip-unit($thumbSize);
   display: flex;
   flex-direction: row;
 
+  .bar-container {
+    position: absolute;
+    left: 0;
+    top: 2px;
+    right: 0;
+    height: $height;
+  }
+
   .default-background {
-    width: 100%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
     height: $height;
     border-radius: $height / 2;
   }
@@ -172,9 +186,9 @@ $thumbSizeUnitless: strip-unit($thumbSize);
   .default-foreground {
     position: absolute;
     left: 0;
-    top: 2px;
     right: 0;
-    height: $height;
+    top: 0;
+    bottom: 0;
     background-color: $primary300;
     border-top-left-radius: $height / 2;
     border-bottom-left-radius: $height / 2;
