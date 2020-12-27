@@ -21,6 +21,10 @@ export interface Mutations {
   [MutationTypes.SET_TAB_URL](state: State, tabUrl: string): void;
   [MutationTypes.SET_HAS_SKIPPED_FROM_ZERO](state: State, hasSkippedFromZero: boolean): void;
   [MutationTypes.SET_DURATION](state: State, duration: number): void;
+  [MutationTypes.SET_IS_PAUSED](state: State, isPaused: boolean): void;
+  [MutationTypes.SET_IS_ACTIVE](state: State, isActive: boolean): void;
+  [MutationTypes.SET_IS_BUFFERING](state: State, isBuffering: boolean): void;
+  [MutationTypes.SET_CURRENT_TIME](state: State, currentTime: number): void;
   [MutationTypes.SET_IS_INITIAL_BUFFER](state: State, newIsInitialBuffer: boolean): void;
 
   // Storage
@@ -109,7 +113,19 @@ export const mutations: MutationTree<State> & Mutations = {
     state.hasSkippedFromZero = hasSkippedFromZero;
   },
   [MutationTypes.SET_DURATION](state, duration) {
-    state.duration = duration;
+    state.playerState.duration = duration;
+  },
+  [MutationTypes.SET_IS_PAUSED](state, isPaused) {
+    state.playerState.isPaused = isPaused;
+  },
+  [MutationTypes.SET_IS_ACTIVE](state, isActive) {
+    state.playerState.isActive = isActive;
+  },
+  [MutationTypes.SET_IS_BUFFERING](state, isBuffering) {
+    state.playerState.isBuffering = isBuffering;
+  },
+  [MutationTypes.SET_CURRENT_TIME](state, currentTime) {
+    state.playerState.currentTime = currentTime;
   },
   [MutationTypes.SET_IS_INITIAL_BUFFER](state, newIsInitialBuffer: boolean) {
     state.isInitialBuffer = newIsInitialBuffer;

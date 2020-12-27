@@ -50,9 +50,9 @@ export default defineComponent({
       }
       return props.progress;
     });
-    const offsetLeftPercent = computed(
-      () => ((displayedProgress.value - props.min) / (props.max - props.min)) * 100
-    );
+    const offsetLeftPercent = computed(() => {
+      return ((displayedProgress.value - props.min) / (props.max - props.min)) * 100;
+    });
     const updateProgressDuringSeek = (newProgress: number): void => {
       if (isSeeking.value && props.disableUpdateDuringSeek) {
         seekProgress.value = newProgress;

@@ -1,4 +1,7 @@
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
+import { useStore } from 'vuex';
+import { Store, store } from '../store';
+import { MutationTypes } from '../store/mutationTypes';
 import Utils from '../utils/Utils';
 
 export default defineComponent({
@@ -9,50 +12,63 @@ export default defineComponent({
     });
   },
   beforeUnmount(): void {
-    global.getVideo().removeEventListener('volumechange', this.onIgnoredVolumeChange);
+    this.getVideo().removeEventListener('volumechange', this.onIgnoredVolumeChange);
   },
   data() {
     return {
-      isMuted: !!global.getVideo().muted,
-      volume: global.getVideo().volume,
+      isMuted: !!global.getVideo!().muted,
+      volume: global.getVideo!().volume,
       beforeMuteVolume: 0,
     };
   },
+  computed: {
+    currentTime(): number {
+      return this.$store.state.playerState.currentTime;
+    },
+  },
   methods: {
+    getVideo(): HTMLVideoElement {
+      return global.getVideo!();
+    },
     togglePlayPause(): void {
-      const video = global.getVideo();
-      video.paused ? video.play() : video.pause();
+      const video = this.getVideo();
+      video?.paused ? video.play() : video?.pause();
     },
     play(): void {
-      global.getVideo().play();
+      this.getVideo().play();
     },
     pause(): void {
-      global.getVideo().pause();
+      this.getVideo().pause();
       // TODO - #85
       // if (global.service === 'funimation') {
       //   setTimeout(() => {
       //     console.debug('[Funimation] secondary pause');
-      //     global.getVideo().pause();
+      //     this.getVideo().pause();
       //   }, 10);
       // }
     },
     addTime(seconds: number): void {
-      const video = global.getVideo();
-      video.currentTime = Utils.boundedNumber(video.currentTime + seconds, [0, video.duration]);
+      this.setCurrentTime(this.currentTime + seconds);
     },
-    setCurrentTime(seconds: number): void {
-      const video = global.getVideo();
-      video.currentTime = Utils.boundedNumber(seconds, [0, video.duration]);
+    setCurrentTime(seconds: number, updateVideo = true): void {
+      const video = this.getVideo();
+      if (video == null) return;
+
+      const bounded = Utils.boundedNumber(seconds, [0, video.duration]);
+      store.commit(MutationTypes.SET_CURRENT_TIME, bounded);
+      if (updateVideo) {
+        video.currentTime = bounded;
+      }
     },
     getCurrentTime(): number {
-      return global.getVideo().currentTime;
+      return this.getVideo().currentTime ?? 0;
     },
     videoMuted(): boolean {
-      return global.getVideo().muted;
+      return this.getVideo().muted ?? false;
     },
     setMuted(isMuted: boolean) {
       this.isMuted = isMuted;
-      global.getVideo().muted = isMuted;
+      this.getVideo().muted = isMuted;
 
       if (isMuted) {
         this.beforeMuteVolume = this.volume;
@@ -69,11 +85,11 @@ export default defineComponent({
      */
     setVolume(newVolume: number, bypassMuteLogic = false): void {
       this.volume = newVolume;
-      global.getVideo().volume = newVolume;
+      this.getVideo().volume = newVolume;
 
       if (!bypassMuteLogic && this.isMuted) {
         this.isMuted = false;
-        global.getVideo().muted = false;
+        this.getVideo().muted = false;
         this.beforeMuteVolume = 0;
       }
     },
@@ -92,30 +108,35 @@ export default defineComponent({
       });
     },
     onIgnoredVolumeChange(): void {
-      const video: HTMLVideoElement | undefined = global.getVideo();
+      const video: HTMLVideoElement | undefined = this.getVideo();
       if (!video?.muted && video?.volume === this.volume) return;
       console.debug(`Ignoring volume change event, reset to ${this.volume}`);
-      global.getVideo().volume = this.volume;
+      this.getVideo().volume = this.volume;
     },
   },
 });
 
-export function useVideoController() {
-  const setCurrentTime = (seconds: number) => {
-    const video = global.getVideo();
-    video.currentTime = Utils.boundedNumber(seconds, [0, video.duration]);
+export function useVideoController(store: Store = useStore()) {
+  const currentTime = computed(() => store.state.playerState.currentTime);
+  const getVideo = (): HTMLVideoElement => global.getVideo!();
+  const setCurrentTime = (seconds: number, updateVideo = true) => {
+    const video = getVideo();
+    const bounded = Utils.boundedNumber(seconds, [0, video.duration]);
+    store.commit(MutationTypes.SET_CURRENT_TIME, bounded);
+    if (updateVideo) {
+      video.currentTime = bounded;
+    }
   };
   const pause = () => {
-    const video = global.getVideo();
+    const video = getVideo();
     video.paused ? video.play() : video.pause();
   };
   const togglePlayPause = () => {
-    const video = global.getVideo();
+    const video = getVideo();
     video.paused ? video.play() : video.pause();
   };
   const addTime = (seconds: number) => {
-    const video = global.getVideo();
-    video.currentTime = Utils.boundedNumber(video.currentTime + seconds, [0, video.duration]);
+    setCurrentTime(currentTime.value + seconds);
   };
 
   return {
@@ -123,5 +144,6 @@ export function useVideoController() {
     pause,
     togglePlayPause,
     addTime,
+    getVideo,
   };
 }

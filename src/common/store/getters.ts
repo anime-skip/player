@@ -46,8 +46,8 @@ export const getters: GetterTree<State, State> & Getters = {
   [GetterTypes.TAB_URL]({ tabUrl }) {
     return Browser.transformServiceUrl(tabUrl);
   },
-  [GetterTypes.DURATION]({ duration }) {
-    return duration || undefined;
+  [GetterTypes.DURATION]({ playerState }) {
+    return playerState.duration || undefined;
   },
 
   // Login
@@ -133,11 +133,11 @@ export const getters: GetterTree<State, State> & Getters = {
   },
 
   // Timestamps
-  [GetterTypes.TIMESTAMPS]({ timestamps, episodeUrl, episode, duration }) {
+  [GetterTypes.TIMESTAMPS]({ timestamps, episodeUrl, episode, playerState }) {
     // Find the offset
     let timestampsOffset = episodeUrl?.timestampsOffset;
-    if (timestampsOffset == null && episode?.baseDuration != null && duration != null) {
-      timestampsOffset = Utils.computeTimestampsOffset(episode.baseDuration, duration);
+    if (timestampsOffset == null && episode?.baseDuration != null && playerState.duration != null) {
+      timestampsOffset = Utils.computeTimestampsOffset(episode.baseDuration, playerState.duration);
     }
 
     // Apply the offset
@@ -148,11 +148,11 @@ export const getters: GetterTree<State, State> & Getters = {
         at,
       };
     });
-    if (duration == null) return offsetTimestamps;
+    if (playerState.duration! == null) return offsetTimestamps;
 
     // Remove out of bounds timestamps
     const offsetBoundedTimestamps = offsetTimestamps.filter(
-      timestamp => timestamp.at <= duration && timestamp.at >= 0
+      timestamp => timestamp.at <= playerState.duration! && timestamp.at >= 0
     );
     return offsetBoundedTimestamps;
   },

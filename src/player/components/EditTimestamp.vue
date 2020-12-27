@@ -217,15 +217,14 @@ export default defineComponent({
     },
     onClickDone() {
       const base = this.activeTimestamp!;
-      const updatedTimestamp: Api.AmbiguousTimestamp = {
+      const updatedTimestamp: Api.AmbiguousTimestamp = this.$store.getters[
+        GetterTypes.APPLY_TIMESTAMP_DIFF
+      ]({
         at: base.at,
         typeId: this.selectedType!.id,
         id: base.id,
         source: base.source,
-      };
-      this.setActiveTimestamp(
-        this.$store.getters[GetterTypes.APPLY_TIMESTAMP_DIFF](updatedTimestamp)
-      );
+      });
       this.updateTimestampInDrafts(updatedTimestamp);
       this.leaveDialog();
     },

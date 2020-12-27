@@ -8,7 +8,7 @@ global.addKeyDownListener = function (callback) {
 };
 
 global.removeKeyDownListener = function (callback) {
-  keyboardListeners.filter(item => item !== callback);
+  keyboardListeners = keyboardListeners.filter(item => item !== callback);
 };
 
 /**

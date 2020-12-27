@@ -1,6 +1,8 @@
 import RequestState from '../utils/RequestState';
 import Browser from '../utils/Browser';
 
+const initialVideo = global.getVideo?.();
+
 export const state = {
   activeDialog: undefined as string | undefined,
   playbackRate: 1,
@@ -9,7 +11,13 @@ export const state = {
   tabUrl: Browser.transformServiceUrl(Browser.getIframeReferrer()),
   browserType: Browser.detect(),
   hasSkippedFromZero: false,
-  duration: undefined as number | undefined,
+  playerState: {
+    isActive: false,
+    isBuffering: initialVideo?.seeking ?? false,
+    isPaused: initialVideo?.paused ?? false,
+    currentTime: 0,
+    duration: undefined as number | undefined,
+  },
 
   token: undefined as string | undefined,
   tokenExpiresAt: undefined as number | undefined,

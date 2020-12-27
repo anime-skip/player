@@ -46,6 +46,7 @@ import { ActionTypes } from '@/common/store/actionTypes';
 import { PLAYER_ACTIVITY_TIMEOUT } from '@/common/utils/Constants';
 import { GetterTypes } from '@/common/store/getterTypes';
 import { State } from '@/common/store/state';
+import { Store } from '@/common/store';
 
 export default defineComponent({
   name: 'Player',
@@ -71,19 +72,14 @@ export default defineComponent({
     browser.runtime.onMessage.removeListener(this.onReceiveMessage);
   },
   data() {
-    const video = global.getVideo();
-    // TODO: Put in store
-    const playerState: PlayerState = {
-      isActive: false,
-      isBuffering: video?.seeking ?? false,
-      isPaused: video?.paused ?? false,
-    };
     return {
-      playerState,
       activeTimer: undefined as number | undefined,
     };
   },
   computed: {
+    playerState(): Store['state']['playerState'] {
+      return this.$store.state.playerState;
+    },
     playbackRate(): number {
       return this.$store.state.playbackRate;
     },
@@ -111,17 +107,17 @@ export default defineComponent({
       this.changePlaybackRate(this.playbackRate);
       video.onplay = () => this.onPlay();
       video.onpause = () => this.onPause();
-      this.playerState.isPaused = video.paused; // TODO: Test set
+      this.$store.commit(MutationTypes.SET_IS_PAUSED, video.paused);
 
       // Managing the buffer
       video.onplaying = () => {
-        this.playerState.isBuffering = false; // TODO: Test set
+        this.$store.commit(MutationTypes.SET_IS_BUFFERING, false);
         if (this.$store.state.isInitialBuffer) {
           this.$store.commit(MutationTypes.SET_IS_INITIAL_BUFFER, false);
         }
       };
       video.onwaiting = () => {
-        this.playerState.isBuffering = true; // TODO: Test set
+        this.$store.commit(MutationTypes.SET_IS_BUFFERING, true);
       };
     },
     changePlaybackRate(playbackRate: number): void {
@@ -145,7 +141,7 @@ export default defineComponent({
       this.loadAllEpisodeData();
     },
     toggleActive(isActive: boolean) {
-      this.playerState.isActive = isActive; // TODO: Test set
+      this.$store.commit(MutationTypes.SET_IS_ACTIVE, isActive);
       if (this.activeTimer != null) {
         window.clearTimeout(this.activeTimer);
       }
@@ -156,11 +152,11 @@ export default defineComponent({
       }
     },
     onPlay() {
-      this.playerState.isPaused = false; // TODO: Test set
+      this.$store.commit(MutationTypes.SET_IS_PAUSED, false);
       this.toggleActive(true);
     },
     onPause() {
-      this.playerState.isPaused = true; // TODO: Test set
+      this.$store.commit(MutationTypes.SET_IS_PAUSED, true);
     },
   },
 });

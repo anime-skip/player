@@ -11,9 +11,7 @@
       class="timeline"
       :class="{ 'timeline-hidden': !duration }"
       :isFlipped="!playerState.isPaused && !isActive"
-      :currentTime="currentTime"
       :duration="duration"
-      :updateTime="updateTime"
     />
     <div class="buttons">
       <ToolbarButton class="margin-right" @click="togglePlayPause()">
@@ -66,7 +64,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import Timeline from './Timeline.vue';
 import ToolbarButton from './ToolbarButton.vue';
 import AccountDialog from '../dialogs/AccountDialog.vue';
@@ -96,24 +94,19 @@ export default defineComponent({
     AccountDialog,
     WebExtImg,
   },
-  props: {
-    playerState: {
-      type: Object as PropType<PlayerState>,
-      required: true,
-    },
-  },
-  setup(props) {
+  setup() {
     const store: Store = useStore();
-    const { setCurrentTime, pause, togglePlayPause, addTime } = useVideoController();
+    const { setCurrentTime, pause, togglePlayPause, addTime, getVideo } = useVideoController();
 
     // Editing
+    const playerState = computed(() => store.state.playerState);
     const isEditing = computed(() => store.state.isEditing);
     const isSavingTimestamps = computed(() => store.getters[GetterTypes.IS_SAVING_TIMESTAMPS]);
     const isSaveTimestampsAvailable = computed(() => isEditing.value && !isSavingTimestamps.value);
-    const isPaused = computed<boolean>(() => props.playerState.isPaused);
+    const isPaused = computed<boolean>(() => playerState.value.isPaused);
 
-    const currentTime = ref(0);
-    const isActive = computed(() => props.playerState.isActive || isEditing.value);
+    const currentTime = computed(() => store.state.playerState.currentTime);
+    const isActive = computed(() => playerState.value.isActive || isEditing.value);
     const formattedTime = useFormattedTime(currentTime, isPaused);
 
     // Play button
@@ -180,21 +173,15 @@ export default defineComponent({
       }
       addMissingDurations(newDuration);
     };
-    const updateTime = (newTime: number, updateVideo?: boolean) => {
-      if (updateVideo) {
-        setCurrentTime(newTime);
-      }
-      currentTime.value = Utils.boundedNumber(newTime, [0, duration.value]);
-    };
     const gotoNextTimestamp = (): void => {
       const nextTimestamp = Utils.nextTimestamp(
         currentTime.value + 0.1,
         timestamps.value,
         undefined
       );
-      const video = global.getVideo();
+      const video = getVideo();
       if (nextTimestamp) {
-        updateTime(nextTimestamp.at, true);
+        setCurrentTime(nextTimestamp.at);
         if (isEditing.value) {
           pause();
           setActiveTimestamp(nextTimestamp);
@@ -202,7 +189,7 @@ export default defineComponent({
           showDialog('TimestampsPanel');
         }
       } else if (video.duration) {
-        updateTime(video.duration, true);
+        setCurrentTime(video.duration);
       } else {
         console.warn(
           'Tried to go to next timestamp, but there was not one and the duration had not been initalized'
@@ -216,7 +203,7 @@ export default defineComponent({
         undefined
       );
       if (previousTimestamp) {
-        updateTime(previousTimestamp.at, true);
+        setCurrentTime(previousTimestamp.at);
         if (isEditing.value) {
           pause();
           setActiveTimestamp(previousTimestamp);
@@ -224,7 +211,7 @@ export default defineComponent({
           showDialog('TimestampsPanel');
         }
       } else {
-        updateTime(0, true);
+        setCurrentTime(0);
       }
     };
     useKeyboardShortcuts('Toolbar', store, {
@@ -265,9 +252,9 @@ export default defineComponent({
       video.addEventListener('durationchange', (event: Event) => {
         updateDuration((event.target as HTMLVideoElement).duration);
       });
-      updateTime(video.currentTime);
+      setCurrentTime(video.currentTime, false);
       video.ontimeupdate = () => {
-        updateTime(video.currentTime);
+        setCurrentTime(video.currentTime, false);
       };
     });
     document.addEventListener('fullscreenchange', () => {
@@ -294,9 +281,9 @@ export default defineComponent({
       toggleFullscreen,
       togglePlayPause,
       formattedTime,
-      updateTime,
       gotoPreviousTimestamp,
       gotoNextTimestamp,
+      playerState,
     };
   },
 });

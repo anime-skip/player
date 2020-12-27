@@ -137,13 +137,12 @@ export default class Utils {
     if (!this._videoLoadPromise) {
       this._videoLoadPromise = new Promise(res => {
         const timeout = window.setInterval(function () {
-          const video = global.getVideo();
-          const duration = Math.round(video.duration);
-          if (video.readyState > 0) {
-            res(duration);
+          const video = global.getVideo?.();
+          if (video && video.readyState > 0) {
+            res(Math.round(video.duration));
             clearInterval(timeout);
           }
-        }, 500);
+        }, 250);
       });
     }
     return this._videoLoadPromise;

@@ -115,8 +115,9 @@ export default defineComponent({
           this.onClickCreateNew();
         }
       } catch (err) {
+        console.info('Failed to load suggestions', err);
         this.isLoadingSuggestions = false;
-        console.warn('Failed to load suggestions', err);
+        this.onClickCreateNew();
       }
     },
     async loadDefaultShowOption(): Promise<void> {

@@ -1,10 +1,11 @@
-import { createStore, createLogger, CommitOptions, DispatchOptions } from 'vuex';
+import { createStore, CommitOptions, DispatchOptions } from 'vuex';
 import { mutations, Mutations } from './mutations';
 import { actions, Actions } from './actions';
 import { getters, Getters } from './getters';
 import { state, State } from './state';
 import { ActionTypes } from './actionTypes';
 import { Store as VuexStore } from 'vuex';
+import plugins from './plugins';
 
 export interface Store extends Omit<VuexStore<State>, 'commit' | 'getters' | 'dispatch'> {
   commit<K extends keyof Mutations>(
@@ -29,7 +30,7 @@ export const store: Store = createStore({
   mutations,
   actions,
   getters,
-  plugins: [createLogger()],
+  plugins,
   strict: process.env.NODE_ENV !== 'production',
 });
 store.dispatch(ActionTypes.INITIAL_LOAD);

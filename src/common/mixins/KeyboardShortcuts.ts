@@ -43,7 +43,7 @@ export default defineComponent({
   mounted() {
     this.$keyboardShortcuts = this.setupKeyboardShortcuts();
     global.addKeyDownListener(this.onKeyDown);
-    console.debug(`[${this.$options.name}] KeyboardShortcutMixin.created()`);
+    console.debug(`[${this.$options.name}] KeyboardShortcutMixin.mounted()`);
   },
   unmounted(): void {
     global.removeKeyDownListener(this.onKeyDown);
@@ -70,7 +70,7 @@ export const useKeyboardShortcuts = (
   const onKeyDownInstance = onKeyDown(componentName, $keyboardShortcuts, store);
   onMounted(() => {
     global.addKeyDownListener(onKeyDownInstance);
-    console.debug(`[${componentName}] KeyboardShortcutComposition.created()`);
+    console.debug(`[${componentName}] KeyboardShortcutComposition.mounted()`);
   });
   onUnmounted(() => {
     global.removeKeyDownListener(onKeyDownInstance);

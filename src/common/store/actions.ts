@@ -141,7 +141,11 @@ export const actions: ActionTree<State, State> & Actions = {
     return await callApi(commit, apiCall, ...args);
   },
   async [ActionTypes.CREATE_NEW_TIMESTAMP]({ commit, dispatch }) {
-    const video = global.getVideo();
+    const video = global.getVideo?.();
+    if (video == null) {
+      console.warn('Tried adding timestamp in a context without a video');
+      return;
+    }
     video.pause();
 
     await dispatch(ActionTypes.START_EDITING, () => {
@@ -221,7 +225,7 @@ export const actions: ActionTree<State, State> & Actions = {
   ): Promise<void> {
     commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.LOADING);
 
-    const duration = state.duration;
+    const duration = state.playerState.duration;
     const baseDuration = episode.baseDuration;
     let timestampsOffset: number | undefined;
     if (baseDuration != null && duration != null) {
@@ -319,16 +323,19 @@ export const actions: ActionTree<State, State> & Actions = {
       const episode: Api.InputEpisode = {
         name: thirdPartyEpisode.name,
         absoluteNumber: thirdPartyEpisode.absoluteNumber,
-        baseDuration: thirdPartyEpisode.baseDuration ?? state.duration,
+        baseDuration: thirdPartyEpisode.baseDuration ?? state.playerState.duration,
         number: thirdPartyEpisode.number,
         season: thirdPartyEpisode.season,
       };
       const episodeUrl: Api.InputEpisodeUrl = {
         url: state.tabUrl,
-        duration: state.duration,
+        duration: state.playerState.duration,
         timestampsOffset:
-          state.duration != null && thirdPartyEpisode.baseDuration != null
-            ? Utils.computeTimestampsOffset(thirdPartyEpisode.baseDuration, state.duration)
+          state.playerState.duration != null && thirdPartyEpisode.baseDuration != null
+            ? Utils.computeTimestampsOffset(
+                thirdPartyEpisode.baseDuration,
+                state.playerState.duration
+              )
             : undefined,
       };
       const payload: CreateEpisodeDataPayload = {
@@ -471,6 +478,7 @@ export const actions: ActionTree<State, State> & Actions = {
       commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.SUCCESS);
     } catch (err) {
       console.warn('actions.fetchThirdPartyEpisode', err);
+      commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.FAILURE);
       commit(MutationTypes.SET_EPISODE_URL, undefined);
       commit(MutationTypes.SET_EPISODE, undefined);
     }

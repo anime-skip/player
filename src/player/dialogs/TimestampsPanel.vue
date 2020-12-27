@@ -39,19 +39,14 @@ export default defineComponent({
     onShow(): void {
       this.initialTab = this.activeTimestamp == null ? 'details' : 'edit';
     },
-    setActiveTimestamp(timestamp: Api.AmbiguousTimestamp): void {
-      this.$store.commit(MutationTypes.SET_ACTIVE_TIMESTAMP, timestamp);
-    },
     updateTimestamp(): void {
       (this.$refs.timeSelect as HTMLDivElement | undefined)?.focus();
       if (this.activeTimestamp != null) {
-        const newTimestamp = {
+        const newTimestamp = this.$store.getters[GetterTypes.APPLY_TIMESTAMP_DIFF]({
           ...this.activeTimestamp,
           at: this.getCurrentTime(),
-        };
-        this.setActiveTimestamp(
-          this.$store.getters[GetterTypes.APPLY_TIMESTAMP_DIFF](newTimestamp)
-        );
+        });
+        this.$store.commit(MutationTypes.SET_ACTIVE_TIMESTAMP, newTimestamp);
       }
     },
     setupKeyboardShortcuts(): KeyboardShortcutMap {

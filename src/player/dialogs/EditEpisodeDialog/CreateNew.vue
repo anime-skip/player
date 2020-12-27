@@ -68,7 +68,7 @@ export default defineComponent({
       this.$store.dispatch(ActionTypes.SHOW_DIALOG, undefined);
     },
     async onClickCreate(): Promise<void> {
-      const duration = this.$store.state.duration;
+      const duration = this.$store.state.playerState.duration;
       const episode: Api.InputEpisode = {
         name: this.name.trim() || undefined,
         season: this.season.trim() || undefined,
