@@ -3,7 +3,7 @@ export const persistedKeys = [
   'tokenExpiresAt' as const,
   'refreshToken' as const,
   'refreshTokenExpiresAt' as const,
-  'loginRequestState' as const,
+  'isLoggedIn' as const,
   'account' as const,
   'playbackRate' as const,
   'primaryKeyboardShortcuts' as const,
@@ -76,9 +76,12 @@ export const PLAYBACK_SPEEDS: PlaybackRate[] = [
 
 export const DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS: KeyboardShortcutsMap = {
   playPause: 'D',
+  toggleFullscreen: 'G',
+  volumeUp: '↑',
+  volumeDown: '↓',
   hideDialog: '`',
-  nextTimestamp: 'E',
-  previousTimestamp: 'C',
+  nextTimestamp: 'shift+L',
+  previousTimestamp: 'shift+J',
   advanceFrame: 'L',
   advanceSmall: 'V',
   advanceMedium: 'F',
@@ -88,12 +91,16 @@ export const DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS: KeyboardShortcutsMap = {
   rewindMedium: 'S',
   rewindLarge: 'W',
   createTimestamp: 'K',
+  saveTimestamps: 'ctrl+ENTER',
+  discardChanges: 'ctrl+`',
 };
 
 export const DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS: KeyboardShortcutsMap = {
   playPause: 'Space',
   advanceMedium: '→',
   rewindMedium: '←',
+  nextTimestamp: 'shift+→',
+  previousTimestamp: 'shift+←',
 };
 
 export const TIMESTAMP_TYPES: Api.TimestampType[] = [
@@ -236,7 +243,7 @@ export const SKIPPABLE_PREFERENCES: SkippablePreference[] = [
     key: 'skipTransitions',
     title: 'Transitions',
     help:
-      'Short animation that plays before and after a commertial break. Most of the time, this is an info card about the world or characters',
+      'Short animation that plays before and after a commercial break. Most of the time, this is an info card about the world or characters',
   },
   {
     key: 'skipCredits',

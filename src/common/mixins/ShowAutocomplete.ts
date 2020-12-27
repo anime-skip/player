@@ -1,8 +1,8 @@
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import Mappers from '../utils/Mappers';
 import Utils from '../utils/Utils';
 
-const ShowAutocompleteMixin = Vue.extend({
+const ShowAutocompleteMixin = defineComponent({
   data() {
     const show: AutocompleteItem<Api.ShowSearchResult> = {
       title: '',
@@ -22,20 +22,16 @@ const ShowAutocompleteMixin = Vue.extend({
     },
   },
   methods: {
-    onSelectShow(item: AutocompleteItem<Api.ShowSearchResult>): void {
-      this.show = item;
-      const timeout = setTimeout(() => {
-        clearTimeout(timeout);
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        clearInterval(interval);
-      }, 100);
-      const interval = setInterval(() => {
-        if (this.$refs.episode != null) {
-          (this.$refs.episode as HTMLInputElement).focus?.();
-          clearTimeout(timeout);
-          clearInterval(interval);
-        }
-      }, 10);
+    onSelectShow(): void {
+      Utils.setIntervalUntil(
+        () => {
+          const focus = (this.$refs.episode as any | undefined)?.focus;
+          focus?.();
+          return focus != null;
+        },
+        10,
+        100
+      );
     },
     async searchShows(show: string): Promise<void> {
       this.showSearchResults = await Utils.apiAction(this.$store, global.Api.searchShows, show);

@@ -7,10 +7,11 @@
 </template>
 
 <script lang="ts">
-import vueMixins from 'vue-typed-mixins';
+import { defineComponent } from 'vue';
 import AnimatedIcon from '@/common/mixins/AnimatedIcon';
 
-export default vueMixins(AnimatedIcon).extend({
+export default defineComponent({
+  mixins: [AnimatedIcon],
   methods: {
     getPath(): [[number, number], [number, number]][][] {
       // prettier-ignore

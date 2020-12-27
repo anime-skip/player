@@ -1,8 +1,8 @@
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import Mappers from '../utils/Mappers';
 import Utils from '../utils/Utils';
 
-const EpisodeAutocompleteMixin = Vue.extend({
+const EpisodeAutocompleteMixin = defineComponent({
   data() {
     const episode: AutocompleteItem<Api.EpisodeSearchResult> = {
       title: '',
@@ -22,9 +22,6 @@ const EpisodeAutocompleteMixin = Vue.extend({
     },
   },
   methods: {
-    onSelectEpisode(item: AutocompleteItem<Api.EpisodeSearchResult>): void {
-      this.episode = item;
-    },
     async searchEpisodes(episode: string): Promise<void> {
       this.episodeSearchResults = await Utils.apiAction(
         this.$store,

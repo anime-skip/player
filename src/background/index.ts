@@ -50,7 +50,7 @@ const messenger = new Messenger<
 
 // Setup tab listener messaging
 
-browser.tabs.onUpdated.addListener(function(tabId, { url }, _tabInfo) {
+browser.tabs.onUpdated.addListener(function (tabId, { url }, _tabInfo) {
   if (url == null) return;
 
   messenger.send('@anime-skip/changeUrl', url, tabId).catch(err => {

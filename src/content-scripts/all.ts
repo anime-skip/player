@@ -12,7 +12,7 @@ global.getVideo = (): HTMLVideoElement => {
 
 let oldVideoSrc: string | undefined;
 function checkVideoChanged(): void {
-  const newVideo = global.getVideo();
+  const newVideo = global.getVideo!();
   if (newVideo?.src !== oldVideoSrc) {
     console.debug('Video changed, calling callbacks:', {
       oldVideo: oldVideoSrc,

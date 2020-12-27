@@ -1,160 +1,202 @@
 import Browser from '@/common/utils/Browser';
-import { ActionContext, Action } from 'vuex';
-import {
-  persistedKeys,
-  TIMESTAMP_TYPE_NOT_SELECTED,
-  UNAUTHORIZED_ERROR_MESSAGE,
-} from '@/common/utils/Constants';
-import mutations from './mutationTypes';
-import { as, sleep } from '../utils/GlobalUtils';
-import types from './actionTypes';
+import { ActionContext, ActionTree } from 'vuex';
+import { persistedKeys, TIMESTAMP_TYPE_NOT_SELECTED } from '@/common/utils/Constants';
+import { sleep } from '../utils/GlobalUtils';
+import { ActionTypes } from './actionTypes';
 import RequestState from '../utils/RequestState';
-import { AssertionError } from 'assert';
-import mutationTypes from './mutationTypes';
 import Utils from '../utils/Utils';
 import Mappers from '../utils/Mappers';
+import { State } from './state';
+import { MutationTypes } from './mutationTypes';
+import { assertLoggedIn, callApi } from './actionUtils';
+import type { Store } from '.';
+import { GetterTypes } from './getterTypes';
 
-// TODO make everything async
+// Typings /////////////////////////////////////////////////////////////////////
 
-type VuexStateWithAccount = VuexState & { account: Api.Account };
-
-// Helpers /////////////////////////////////////////////////////////////////////
-
-function assertLoggedIn(
-  context: ActionContext<VuexState, VuexState>
-): asserts context is ActionContext<VuexStateWithAccount, VuexStateWithAccount> {
-  if (context.state.account == null) {
-    context.commit(mutations.loginRequestState, RequestState.NOT_REQUESTED);
-    throw new AssertionError({ message: 'state.account does not exist, log in again' });
-  }
+export interface AugmentedActionContext<S = State>
+  extends Omit<ActionContext<S, S>, 'commit' | 'getters'> {
+  commit: Store['commit'];
+  getters: Store['getters'];
 }
 
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-async function callApi<A extends any[], R>(
-  commit: ActionContext<VuexState, VuexState>['commit'],
-  apiMethod: (...args: A) => Promise<R>,
-  ...args: A
-): Promise<R> {
-  try {
-    return await apiMethod(...args);
-  } catch (err) {
-    if (err.message == UNAUTHORIZED_ERROR_MESSAGE) {
-      commit(mutationTypes.logOut);
+export interface Actions {
+  [ActionTypes.INITIAL_LOAD](context: AugmentedActionContext): Promise<void>;
+  [ActionTypes.SHOW_DIALOG](context: AugmentedActionContext, dialogName?: string): Promise<void>;
+  [ActionTypes.START_EDITING](
+    context: AugmentedActionContext,
+    onStartedEditing?: () => void
+  ): Promise<void>;
+  [ActionTypes.STOP_EDITING](
+    context: AugmentedActionContext,
+    discardChanges?: boolean
+  ): Promise<void>;
+  [ActionTypes.API_CALL]<R, A extends never[]>(
+    context: AugmentedActionContext,
+    payload: { apiCall: (...args: A) => Promise<R>; args: A }
+  ): Promise<R>;
+  [ActionTypes.CREATE_NEW_TIMESTAMP](context: AugmentedActionContext): Promise<void>;
+  [ActionTypes.LOGIN_MANUAL](
+    context: AugmentedActionContext,
+    payload: LoginManualPayload
+  ): Promise<void>;
+  [ActionTypes.UPDATE_PREFERENCES](
+    context: AugmentedActionContext,
+    pref: keyof Api.Preferences
+  ): Promise<void>;
+  [ActionTypes.SEARCH_SHOWS](context: AugmentedActionContext, name: string): Promise<void>;
+  [ActionTypes.LINK_EPISODE_URL](
+    context: AugmentedActionContext,
+    payload: { episode: Api.EpisodeSearchResult; onSuccess?: () => void }
+  ): Promise<void>;
+  [ActionTypes.CREATE_EPISODE_DATA](
+    context: AugmentedActionContext,
+    payload: CreateEpisodeDataPayload
+  ): Promise<void>;
+  [ActionTypes.CREATE_EPISODE_FROM_THIRD_PARTY](
+    context: AugmentedActionContext,
+    payload: { thirdPartyEpisode: Api.ThirdPartyEpisode; onSuccess?: () => void }
+  ): Promise<void>;
+  [ActionTypes.SEARCH_EPISODES](
+    context: AugmentedActionContext,
+    payload: { name: string; showId: string }
+  ): Promise<void>;
+  [ActionTypes.LOAD_ALL_EPISODE_DATA](
+    context: AugmentedActionContext,
+    tabUrl: string
+  ): Promise<void>;
+  [ActionTypes.FETCH_EPISODE_BY_URL](context: AugmentedActionContext, url: string): Promise<void>;
+  [ActionTypes.INFER_EPISODE_INFO](context: AugmentedActionContext): Promise<void>;
+  [ActionTypes.FETCH_THIRD_PARTY_EPISODE](
+    context: AugmentedActionContext,
+    payload: { name: string; showName: string }
+  ): Promise<void>;
+  [ActionTypes.ADD_MISSING_DURATIONS](
+    context: AugmentedActionContext,
+    duration: number
+  ): Promise<void>;
+  [ActionTypes.UPDATE_TIMESTAMPS](
+    context: AugmentedActionContext,
+    payload: {
+      oldTimestamps: Api.Timestamp[];
+      newTimestamps: Api.AmbiguousTimestamp[];
+      episodeUrl: Api.EpisodeUrlNoEpisode;
+      episode: Api.Episode;
     }
-    throw err;
-  }
+  ): Promise<void>;
 }
 
 // Actions /////////////////////////////////////////////////////////////////////
 
-export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState> }>({
+export const actions: ActionTree<State, State> & Actions = {
   // General
-  async [types.initialLoad](context) {
-    const newState = await Browser.storage.getAll<Partial<VuexState>>(persistedKeys);
-    context.commit(mutations.restoreState, { changes: newState });
+  async [ActionTypes.INITIAL_LOAD](context) {
+    const newState = await Browser.storage.getAll<Partial<State>>(persistedKeys);
+    context.commit(MutationTypes.RESTORE_STATE, { changes: newState });
   },
-  async [types.showDialog]({ state, commit }, dialogName?: string) {
+  async [ActionTypes.SHOW_DIALOG]({ state, commit }, dialogName) {
     if (state.activeDialog === dialogName) return;
 
     if (state.activeDialog) {
-      commit(mutations.activeDialog, undefined);
+      commit(MutationTypes.ACTIVE_DIALOG, undefined);
       await sleep(250);
     }
     if (dialogName) {
-      commit(mutations.activeDialog, dialogName);
+      commit(MutationTypes.ACTIVE_DIALOG, dialogName);
     }
   },
-  async [types.startEditing]({ commit, dispatch, getters, state }, onStartedEditing?: () => void) {
-    if (!getters.isLoggedIn) {
-      await dispatch(types.showDialog, 'AccountDialog');
+  async [ActionTypes.START_EDITING]({ commit, dispatch, getters, state }, onStartedEditing) {
+    if (!state.isLoggedIn) {
+      await dispatch(ActionTypes.SHOW_DIALOG, 'AccountDialog');
       return;
     }
-    if (!getters.hasEpisode) {
-      await dispatch(types.showDialog, 'EditEpisodeDialog');
+    if (!getters[GetterTypes.HAS_EPISODE]) {
+      await dispatch(ActionTypes.SHOW_DIALOG, 'EditEpisodeDialog');
       return;
     }
 
     if (!state.isEditing) {
-      commit(mutations.toggleEditMode, true);
-      commit(mutations.setDraftTimestamps, getters.timestamps);
+      commit(MutationTypes.TOGGLE_EDIT_MODE, true);
+      commit(MutationTypes.SET_DRAFT_TIMESTAMPS, getters[GetterTypes.TIMESTAMPS]);
     }
     if (onStartedEditing != null) {
       onStartedEditing();
     }
   },
-  async [types.stopEditing]({ state, commit, dispatch }, discardChanges?: boolean) {
+  async [ActionTypes.STOP_EDITING]({ state, commit, dispatch }, discardChanges) {
     if (!discardChanges) {
       const oldTimestamps = state.episode?.timestamps ?? [];
       const newTimestamps = state.draftTimestamps;
-      await dispatch(types.updateTimestamps, {
+      await dispatch(ActionTypes.UPDATE_TIMESTAMPS, {
         oldTimestamps,
         newTimestamps,
         episodeUrl: state.episodeUrl!,
         episode: state.episode,
       });
     }
-    commit(mutations.toggleEditMode, false);
-    commit(mutations.setDraftTimestamps, []);
+    commit(MutationTypes.TOGGLE_EDIT_MODE, false);
+    commit(MutationTypes.SET_DRAFT_TIMESTAMPS, []);
   },
-  async [types.apiCall](
-    { commit },
-    { apiCall, args }: { apiCall: (...args: unknown[]) => Promise<never>; args: never[] }
-  ) {
+  async [ActionTypes.API_CALL]({ commit }, { apiCall, args }) {
     return await callApi(commit, apiCall, ...args);
   },
-  async [types.createNewTimestamp]({ commit, dispatch }) {
-    const video = global.getVideo();
+  async [ActionTypes.CREATE_NEW_TIMESTAMP]({ commit, dispatch }) {
+    const video = global.getVideo?.();
+    if (video == null) {
+      console.warn('Tried adding timestamp in a context without a video');
+      return;
+    }
     video.pause();
 
-    await dispatch(types.startEditing, () => {
-      commit(mutationTypes.setEditTimestampMode, 'add');
-      commit(mutationTypes.setActiveTimestamp, {
+    await dispatch(ActionTypes.START_EDITING, () => {
+      commit(MutationTypes.SET_EDIT_TIMESTAMP_MODE, 'add');
+      commit(MutationTypes.SET_ACTIVE_TIMESTAMP, {
         at: video.currentTime,
         typeId: TIMESTAMP_TYPE_NOT_SELECTED,
         id: Utils.randomId(),
         source: 'ANIME_SKIP',
         edited: true,
       });
-      dispatch(types.showDialog, 'TimestampsPanel');
+      dispatch(ActionTypes.SHOW_DIALOG, 'TimestampsPanel');
     });
   },
 
   // Auth
-  async [types.loginManual]({ commit }, { username, password, callback }: LoginManualPayload) {
+  async [ActionTypes.LOGIN_MANUAL]({ commit }, { username, password, callback }) {
     try {
-      commit(mutations.loginRequestState, RequestState.LOADING);
+      commit(MutationTypes.SET_LOGIN_REQUEST_STATE, RequestState.LOADING);
       const loginData = await callApi(commit, global.Api.loginManual, username, password);
-      commit(mutations.login, loginData);
-      commit(mutations.loginRequestState, RequestState.SUCCESS);
+      commit(MutationTypes.LOG_IN, loginData);
+      commit(MutationTypes.SET_LOGIN_REQUEST_STATE, RequestState.SUCCESS);
       callback?.();
     } catch (err) {
       console.warn('actions.loginManual', err);
-      commit(mutations.loginRequestState, RequestState.FAILURE);
+      commit(MutationTypes.SET_LOGIN_REQUEST_STATE, RequestState.FAILURE);
     }
   },
 
   // Preferences
-  async [types.updatePreferences](context, pref: keyof Api.Preferences) {
+  async [ActionTypes.UPDATE_PREFERENCES](context, preference) {
     const { commit } = context;
     try {
       assertLoggedIn(context);
       const { state } = context;
       const allPreferences = state.account.preferences;
-      const newValue = !allPreferences[pref];
+      const newValue = !allPreferences[preference];
       try {
         const newPreferences = {
           ...allPreferences,
-          [pref]: newValue,
+          [preference]: newValue,
         };
-        commit(mutations.preferencesRequestState, RequestState.LOADING);
-        commit(mutations.togglePref, { pref, value: newValue });
+        commit(MutationTypes.SET_PREFERENCES_REQUEST_STATE, RequestState.LOADING);
+        commit(MutationTypes.TOGGLE_PREFERENCE, { preference, value: newValue });
         await callApi(commit, global.Api.updatePreferences, newPreferences);
-        commit(mutations.preferencesRequestState, RequestState.SUCCESS);
-        commit(mutations.persistPreferences, newPreferences);
+        commit(MutationTypes.SET_PREFERENCES_REQUEST_STATE, RequestState.SUCCESS);
+        commit(MutationTypes.PERSIST_PREFERENCES, newPreferences);
       } catch (err) {
-        commit(mutations.preferencesRequestState, RequestState.FAILURE);
+        commit(MutationTypes.SET_PREFERENCES_REQUEST_STATE, RequestState.FAILURE);
         setTimeout(() => {
-          commit(mutations.togglePref, { pref, value: !newValue });
+          commit(MutationTypes.TOGGLE_PREFERENCE, { preference, value: !newValue });
         }, 200);
         throw err;
       }
@@ -164,26 +206,26 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
   },
 
   // Shows
-  async [types.searchShows]({ commit }, name: string) {
+  async [ActionTypes.SEARCH_SHOWS]({ commit }, name) {
     try {
-      commit(mutationTypes.searchShowsRequestState, RequestState.LOADING);
+      commit(MutationTypes.SET_SEARCH_SHOWS_REQUEST_STATE, RequestState.LOADING);
       const results = await callApi(commit, global.Api.searchShows, name);
-      commit(mutationTypes.searchShowsRequestState, RequestState.SUCCESS);
-      commit(mutationTypes.searchShowsResult, results);
+      commit(MutationTypes.SET_SEARCH_SHOWS_REQUEST_STATE, RequestState.SUCCESS);
+      commit(MutationTypes.SET_SEARCH_SHOWS_RESULT, results);
     } catch (err) {
       console.warn('actions.searchShows', err);
-      commit(mutationTypes.searchShowsRequestState, RequestState.FAILURE);
+      commit(MutationTypes.SET_SEARCH_SHOWS_REQUEST_STATE, RequestState.FAILURE);
     }
   },
 
   // Episodes
-  async [types.linkEpisodeUrl](
-    { state, commit, dispatch },
-    { episode, onSuccess }: { episode: Api.EpisodeSearchResult; onSuccess?: () => void }
+  async [ActionTypes.LINK_EPISODE_URL](
+    { commit, state, dispatch },
+    { episode, onSuccess }
   ): Promise<void> {
-    commit(mutationTypes.episodeRequestState, RequestState.LOADING);
+    commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.LOADING);
 
-    const duration = state.duration;
+    const duration = state.playerState.duration;
     const baseDuration = episode.baseDuration;
     let timestampsOffset: number | undefined;
     if (baseDuration != null && duration != null) {
@@ -202,22 +244,22 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
     }
     try {
       await callApi(commit, global.Api.createEpisodeUrl, episodeUrl, episode.id);
-      commit(mutationTypes.episodeRequestState, RequestState.SUCCESS);
+      commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.SUCCESS);
       onSuccess?.();
-      await dispatch(types.fetchEpisodeByUrl, episodeUrl.url);
+      await dispatch(ActionTypes.FETCH_EPISODE_BY_URL, episodeUrl.url);
     } catch (err) {
       console.warn('Failed to create new EpisodeUrl', err);
-      commit(mutationTypes.episodeRequestState, RequestState.FAILURE);
+      commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.FAILURE);
     }
   },
-  async [types.createEpisodeData](
-    { state, commit, dispatch },
-    { show: showData, episode: episodeData, episodeUrl: episodeUrlData }: CreateEpisodeDataPayload
+  async [ActionTypes.CREATE_EPISODE_DATA](
+    { commit, dispatch, state },
+    { show: showData, episode: episodeData, episodeUrl: episodeUrlData }
   ) {
     try {
       // Setup
-      dispatch(types.showDialog, undefined);
-      commit(mutationTypes.episodeRequestState, RequestState.LOADING);
+      dispatch(ActionTypes.SHOW_DIALOG, undefined);
+      commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.LOADING);
 
       // Show
       let showId: string;
@@ -258,42 +300,42 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       }
 
       // Update the data
-      await dispatch(types.fetchEpisodeByUrl, episodeUrl.url);
-      commit(mutationTypes.episodeRequestState, RequestState.SUCCESS);
+      await dispatch(ActionTypes.FETCH_EPISODE_BY_URL, episodeUrl.url);
+      commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.SUCCESS);
     } catch (err) {
       console.warn('actions.createEpisodeData', err);
-      commit(mutationTypes.episodeRequestState, RequestState.FAILURE);
+      commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.FAILURE);
     }
   },
-  async [types.createEpisodeFromThirdParty](
-    { state, commit, dispatch },
-    {
-      thirdPartyEpisode,
-      onSuccess,
-    }: { thirdPartyEpisode: Api.ThirdPartyEpisode; onSuccess?: () => void }
+  async [ActionTypes.CREATE_EPISODE_FROM_THIRD_PARTY](
+    { commit, state, dispatch },
+    { thirdPartyEpisode, onSuccess }
   ) {
-    commit(mutationTypes.episodeRequestState, RequestState.LOADING);
+    commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.LOADING);
     try {
       const showName = thirdPartyEpisode.show.name;
       const showSearchResults = await callApi(commit, global.Api.searchShows, showName);
       const existingShow: Api.ShowSearchResult | undefined = showSearchResults.filter(
         searchResult => searchResult.name.toUpperCase() === showName.toUpperCase()
       )[0];
-      commit(mutationTypes.episodeRequestState, RequestState.LOADING);
+      commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.LOADING);
 
       const episode: Api.InputEpisode = {
         name: thirdPartyEpisode.name,
         absoluteNumber: thirdPartyEpisode.absoluteNumber,
-        baseDuration: thirdPartyEpisode.baseDuration ?? state.duration,
+        baseDuration: thirdPartyEpisode.baseDuration ?? state.playerState.duration,
         number: thirdPartyEpisode.number,
         season: thirdPartyEpisode.season,
       };
       const episodeUrl: Api.InputEpisodeUrl = {
         url: state.tabUrl,
-        duration: state.duration,
+        duration: state.playerState.duration,
         timestampsOffset:
-          state.duration != null && thirdPartyEpisode.baseDuration != null
-            ? Utils.computeTimestampsOffset(thirdPartyEpisode.baseDuration, state.duration)
+          state.playerState.duration != null && thirdPartyEpisode.baseDuration != null
+            ? Utils.computeTimestampsOffset(
+                thirdPartyEpisode.baseDuration,
+                state.playerState.duration
+              )
             : undefined,
       };
       const payload: CreateEpisodeDataPayload = {
@@ -317,7 +359,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
         },
       };
 
-      await dispatch(types.createEpisodeData, payload);
+      await dispatch(ActionTypes.CREATE_EPISODE_DATA, payload);
       if (thirdPartyEpisode.timestamps.length > 0) {
         console.info(
           'Timestamps:',
@@ -333,7 +375,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
           ...timestamp,
           at: Utils.applyTimestampsOffset(episodeUrl.timestampsOffset, timestamp.at),
         }));
-        await dispatch(types.updateTimestamps, {
+        await dispatch(ActionTypes.UPDATE_TIMESTAMPS, {
           oldTimestamps: [],
           newTimestamps: offsetTimestamps,
           episodeUrl: state.episodeUrl,
@@ -341,39 +383,39 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
         });
       }
       onSuccess?.();
-      commit(mutationTypes.episodeRequestState, RequestState.SUCCESS);
+      commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.SUCCESS);
     } catch (err) {
       console.warn('Failed to create episode from third party data', err);
-      commit(mutationTypes.episodeRequestState, RequestState.FAILURE);
+      commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.FAILURE);
     }
   },
-  async [types.searchEpisodes]({ commit }, { name, showId }: { name: string; showId: string }) {
+  async [ActionTypes.SEARCH_EPISODES]({ commit }, { name, showId }) {
     try {
-      commit(mutationTypes.searchEpisodesRequestState, RequestState.LOADING);
+      commit(MutationTypes.SET_SEARCH_EPISODES_REQUEST_STATE, RequestState.LOADING);
       const results = await callApi(commit, global.Api.searchEpisodes, name, showId);
-      commit(mutationTypes.searchEpisodesResult, results);
-      commit(mutationTypes.searchEpisodesRequestState, RequestState.SUCCESS);
+      commit(MutationTypes.SET_SEARCH_EPISODES_RESULT, results);
+      commit(MutationTypes.SET_SEARCH_EPISODES_REQUEST_STATE, RequestState.SUCCESS);
     } catch (err) {
       console.warn('actions.searchEpisodes', err);
-      commit(mutationTypes.searchEpisodesRequestState, RequestState.FAILURE);
+      commit(MutationTypes.SET_SEARCH_EPISODES_REQUEST_STATE, RequestState.FAILURE);
     }
   },
-  async [types.loadAllEpisodeData]({ commit, dispatch, state }, tabUrl = state.tabUrl) {
-    commit(mutationTypes.setTimestamps, []);
-    commit(mutationTypes.setEpisodeUrl, undefined);
-    commit(mutationTypes.setEpisode, undefined);
-    commit(mutationTypes.setInferredEpisodeInfo, undefined);
-    commit(mutationTypes.setIsInitialBuffer, true);
+  async [ActionTypes.LOAD_ALL_EPISODE_DATA]({ commit, dispatch, state }, tabUrl = state.tabUrl) {
+    commit(MutationTypes.SET_TIMESTAMPS, []);
+    commit(MutationTypes.SET_EPISODE_URL, undefined);
+    commit(MutationTypes.SET_EPISODE, undefined);
+    commit(MutationTypes.SET_INFERRED_EPISODE_INFO, undefined);
+    commit(MutationTypes.SET_IS_INITIAL_BUFFER, true);
 
-    commit(mutationTypes.initialVideoDataRequestState, RequestState.LOADING);
+    commit(MutationTypes.SET_INITIAL_VIDEO_DATA_REQUEST_STATE, RequestState.LOADING);
     try {
       await Promise.all([
-        dispatch(types.inferEpisodeInfo),
-        dispatch(types.fetchEpisodeByUrl, tabUrl),
+        dispatch(ActionTypes.INFER_EPISODE_INFO),
+        dispatch(ActionTypes.FETCH_EPISODE_BY_URL, tabUrl),
       ]);
-      commit(mutationTypes.initialVideoDataRequestState, RequestState.SUCCESS);
+      commit(MutationTypes.SET_INITIAL_VIDEO_DATA_REQUEST_STATE, RequestState.SUCCESS);
     } catch (err) {
-      commit(mutationTypes.initialVideoDataRequestState, RequestState.FAILURE);
+      commit(MutationTypes.SET_INITIAL_VIDEO_DATA_REQUEST_STATE, RequestState.FAILURE);
     }
 
     if (
@@ -381,44 +423,40 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       state.inferredEpisodeInfo?.name != null &&
       state.inferredEpisodeInfo?.show != null
     ) {
-      dispatch(types.fetchThirdPartyEpisode, {
+      dispatch(ActionTypes.FETCH_THIRD_PARTY_EPISODE, {
         name: state.inferredEpisodeInfo.name,
         showName: state.inferredEpisodeInfo.show,
       });
     }
   },
-  async [types.fetchEpisodeByUrl]({ commit }, url) {
+  async [ActionTypes.FETCH_EPISODE_BY_URL]({ commit }: AugmentedActionContext, url) {
     try {
-      commit(mutationTypes.episodeRequestState, RequestState.LOADING);
+      commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.LOADING);
       const { episode, ...episodeUrl } = await callApi(commit, global.Api.fetchEpisodeByUrl, url);
-      commit(mutationTypes.setEpisodeUrl, episodeUrl);
-      commit(mutationTypes.setEpisode, episode);
-      commit(mutationTypes.episodeRequestState, RequestState.SUCCESS);
+      commit(MutationTypes.SET_EPISODE_URL, episodeUrl);
+      commit(MutationTypes.SET_EPISODE, episode);
+      commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.SUCCESS);
     } catch (err) {
       console.warn('actions.fetchEpisodeByUrl', err);
-      commit(mutationTypes.setEpisodeUrl, undefined);
+      commit(MutationTypes.SET_EPISODE_URL, undefined);
     }
   },
-  async [types.inferEpisodeInfo]({ commit }) {
+  async [ActionTypes.INFER_EPISODE_INFO]({ commit }) {
     try {
-      commit(mutationTypes.episodeRequestState, RequestState.LOADING);
+      commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.LOADING);
       const episodeInfo = await global.inferEpisodeInfo();
       if (episodeInfo == null) throw new Error('Could not infer episode info');
-      commit(mutationTypes.episodeRequestState, RequestState.SUCCESS);
-      commit(mutationTypes.setInferredEpisodeInfo, episodeInfo);
+      commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.SUCCESS);
+      commit(MutationTypes.SET_INFERRED_EPISODE_INFO, episodeInfo);
     } catch (err) {
       console.warn('actions.inferEpisodeInfo', err);
-      commit(mutationTypes.episodeRequestState, RequestState.FAILURE);
-      commit(mutationTypes.setEpisodeUrl, undefined);
+      commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.FAILURE);
+      commit(MutationTypes.SET_EPISODE_URL, undefined);
     }
   },
-  async [types.fetchThirdPartyEpisode](
-    { commit },
-    { name, showName }: { name: string; showName: string }
-  ) {
-    console.log({ name, showName });
+  async [ActionTypes.FETCH_THIRD_PARTY_EPISODE]({ commit }, { name, showName }) {
     try {
-      commit(mutationTypes.episodeRequestState, RequestState.LOADING);
+      commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.LOADING);
       const episodes: Api.ThirdPartyEpisode[] = await callApi(
         commit,
         global.Api.fetchEpisodeByName,
@@ -429,27 +467,30 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       if (episodesWithTimestamps.length > 0) {
         const episode = episodesWithTimestamps[0];
         const timestamps = Mappers.thirdPartyEpisodeToAmbiguousTimestamps(episode);
-        commit(mutationTypes.setEpisodeUrl, undefined);
-        commit(mutationTypes.setEpisode, {
+        commit(MutationTypes.SET_EPISODE_URL, undefined);
+        commit(MutationTypes.SET_EPISODE, {
           ...episode,
+          // TODO! Fix this typing
+          // @ts-ignore
           timestamps,
         });
       }
-      commit(mutationTypes.episodeRequestState, RequestState.SUCCESS);
+      commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.SUCCESS);
     } catch (err) {
       console.warn('actions.fetchThirdPartyEpisode', err);
-      commit(mutationTypes.setEpisodeUrl, undefined);
-      commit(mutationTypes.setEpisode, undefined);
+      commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.FAILURE);
+      commit(MutationTypes.SET_EPISODE_URL, undefined);
+      commit(MutationTypes.SET_EPISODE, undefined);
     }
   },
-  async [types.addMissingDurations]({ commit, state, getters }, duration: number) {
-    if (!getters.isLoggedIn || !duration) return;
+  async [ActionTypes.ADD_MISSING_DURATIONS]({ commit, state }, duration) {
+    if (!state.isLoggedIn || !duration) return;
 
     const episodeUrl = state.episodeUrl;
     const episode = state.episode;
 
     if (episodeUrl == null || episode == null) {
-      console.log('Did not update durations, episode or url was undefined', {
+      console.debug('Did not update durations, episode or url was undefined', {
         episode,
         episodeUrl,
       });
@@ -460,7 +501,7 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
         episodeUrl.timestampsOffset ??
         Utils.computeTimestampsOffset(newBaseDuration, newUrlDuration);
 
-      let newEpisode: Api.Episode = { ...episode };
+      let newEpisode = { ...episode };
       if (newBaseDuration != episode.baseDuration) {
         newEpisode = await callApi(commit, global.Api.updateEpisode, episode.id, {
           absoluteNumber: episode.absoluteNumber,
@@ -486,27 +527,17 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
           }
         );
       }
-      commit(mutationTypes.setEpisodeUrl, newEpisodeUrlNoEpisode);
-      commit(mutationTypes.setEpisode, newEpisode);
+      commit(MutationTypes.SET_EPISODE_URL, newEpisodeUrlNoEpisode);
+      commit(MutationTypes.SET_EPISODE, newEpisode);
     }
   },
 
   // Timestamps
-  async [types.updateTimestamps](
+  async [ActionTypes.UPDATE_TIMESTAMPS](
     { commit, dispatch },
-    {
-      oldTimestamps: offsetOldTimestamps,
-      newTimestamps: offsetNewTimestamps,
-      episodeUrl,
-      episode,
-    }: {
-      oldTimestamps: Api.Timestamp[];
-      newTimestamps: Api.AmbigousTimestamp[];
-      episodeUrl: Api.EpisodeUrlNoEpisode;
-      episode: Api.Episode;
-    }
+    { oldTimestamps: offsetOldTimestamps, newTimestamps: offsetNewTimestamps, episodeUrl, episode }
   ) {
-    const removeOffset = <T extends Api.AmbigousTimestamp>(timestamp: T): T => {
+    const removeOffset = <T extends Api.AmbiguousTimestamp>(timestamp: T): T => {
       const at = Utils.undoTimestampOffset(episodeUrl?.timestampsOffset, timestamp.at);
       return {
         ...timestamp,
@@ -514,13 +545,13 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       };
     };
     const oldTimestamps: Api.Timestamp[] = offsetOldTimestamps.map(removeOffset);
-    const newTimestamps: Api.AmbigousTimestamp[] = offsetNewTimestamps.map(removeOffset);
-    commit(mutationTypes.setSaveTimestampRequestState, RequestState.LOADING);
+    const newTimestamps: Api.AmbiguousTimestamp[] = offsetNewTimestamps.map(removeOffset);
+    commit(MutationTypes.SET_SAVE_TIMESTAMP_REQUEST_STATE, RequestState.LOADING);
     const { toCreate, toUpdate, toDelete } = Utils.computeTimestampDiffs(
       oldTimestamps,
       newTimestamps
     );
-    commit(mutationTypes.setTimestamps, newTimestamps);
+    commit(MutationTypes.SET_TIMESTAMPS, newTimestamps);
 
     try {
       for (const toCreateItem of toCreate) {
@@ -532,11 +563,11 @@ export default as<{ [type in ValueOf<typeof types>]: Action<VuexState, VuexState
       for (const toDeleteItem of toDelete) {
         await callApi(commit, global.Api.deleteTimestamp, toDeleteItem.id);
       }
-      commit(mutationTypes.setSaveTimestampRequestState, RequestState.SUCCESS);
+      commit(MutationTypes.SET_SAVE_TIMESTAMP_REQUEST_STATE, RequestState.SUCCESS);
     } catch (err) {
-      commit(mutationTypes.setSaveTimestampRequestState, RequestState.FAILURE);
-      commit(mutationTypes.setTimestamps, oldTimestamps);
+      commit(MutationTypes.SET_SAVE_TIMESTAMP_REQUEST_STATE, RequestState.FAILURE);
+      commit(MutationTypes.SET_TIMESTAMPS, oldTimestamps);
     }
-    dispatch(types.fetchEpisodeByUrl, episodeUrl.url);
+    dispatch(ActionTypes.FETCH_EPISODE_BY_URL, episodeUrl.url);
   },
-});
+};

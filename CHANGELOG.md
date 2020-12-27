@@ -2,6 +2,20 @@
 
 ## `[Unreleased]`
 
+### Enhancements
+
+- Vue 3 migration, better performance under the hood
+- Improved volume controls (restore volume on un-mute, selecting a volume un-mutes)
+- Minor UI tweaks to the timeline
+- Added keyboard shortcuts (Toggle fullscreen: `G`, Volume up: `↑`, Volume down: `↓`, Save timestamps: `ctrl+ENTER`, Discard timestamps: `` ctrl+` ``)
+- Changed keyboard shortcut defaults (next timestamp: `E` -> `ctrl+E`, prev timestamp: `C` -> `ctrl+C`)
+
+### Fixes
+
+- Funimation randomly started muting videos
+- Sometimes the login loading indicator would never go away
+- Timestamps don't show as edited (red) if they are saved but not changed
+
 ## `v1.0.23`
 
 ### Enhancements
@@ -183,7 +197,7 @@ This release is the first candidate for a public beta.
 - Improved UX of filtering timestamp types (#73)
 - Show service name instead of "Anime Skip" above episode info (#75)
 - "K" will enter edit mode (#76)
-- Label and button visibilty changes when the edit timestamp panel is shown (#74)
+- Label and button visibility changes when the edit timestamp panel is shown (#74)
 
 ### Fixes
 

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Axios, { AxiosError } from 'axios';
 import Utils from '@/common/utils/Utils';
 import Browser from '@/common/utils/Browser';
@@ -13,10 +12,7 @@ const axios = Axios.create({
 if (process.env.NODE_ENV !== 'production') {
   axios.interceptors.request.use((config): any => {
     const formattedGraphql = Utils.formatGraphql(config.data.query);
-    const type = formattedGraphql
-      .split('\n')[0]
-      ?.replace('{', '')
-      .trim();
+    const type = formattedGraphql.split('\n')[0]?.replace('{', '').trim();
     /* eslint-disable no-console */
     console.groupCollapsed(
       `%cAPI  %c/${config.url} ${type}`,
@@ -204,15 +200,15 @@ export default as<Api.Implementation>({
     return response.data.loginRefresh;
   },
 
-  async updatePreferences(prefs): Promise<void> {
+  async updatePreferences(preferences): Promise<void> {
     const m = mutation(
-      `mutation SavePreferences($prefs: InputPreferences!) {
-        savePreferences(preferences: $prefs) {
+      `mutation SavePreferences($preferences: InputPreferences!) {
+        savePreferences(preferences: $preferences) {
           ${preferencesData}
         }
       }`,
       {
-        prefs,
+        preferences,
       }
     );
     await sendGraphql(m);

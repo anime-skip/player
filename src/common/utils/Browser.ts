@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { State } from '../store/state';
 import {
   persistedKeys,
   REFRESH_TOKEN_DURATION,
@@ -6,7 +6,7 @@ import {
   UNAUTHORIZED_ERROR_MESSAGE,
 } from './Constants';
 
-function prepareChangedStorage(object: any): Partial<VuexState> {
+function prepareChangedStorage(object: any): Partial<State> {
   for (const key in object) {
     object[key] = JSON.parse(object[key].newValue);
   }
@@ -20,7 +20,7 @@ export default class Browser {
       tokenExpiresAt,
       refreshToken,
       refreshTokenExpiresAt,
-    } = await Browser.storage.getAll<Partial<VuexState>>(persistedKeys);
+    } = await Browser.storage.getAll<Partial<State>>(persistedKeys);
     const now = Date.now();
 
     if (tokenExpiresAt != null && token != null && now <= tokenExpiresAt) {
@@ -70,7 +70,7 @@ export default class Browser {
     setItem: async (key: string, value: any): Promise<void> => {
       await browser.storage.local.set({ [key]: JSON.stringify(value) });
     },
-    addListener: (callback: (changes: Partial<VuexState>) => void): void => {
+    addListener: (callback: (changes: Partial<State>) => void): void => {
       // @ts-ignore
       browser.storage.onChanged.addListener((changes, area) => {
         if (area === 'local') {
@@ -98,7 +98,7 @@ export default class Browser {
    * Return the the url of the webpage this is ran in. Most of the time it is in a Iframe, but
    * sometimes not.
    *
-   * - If we are in an iframe, we will return the referrer (the url that instancated the iframe).
+   * - If we are in an iframe, we will return the referrer (the url that instantiated the iframe).
    *   Note that if the page uses HTML5 history mode, url changes are not reflected in this field.
    * - If we are not in an iframe, then just return the URL of the document
    */

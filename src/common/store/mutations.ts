@@ -1,78 +1,138 @@
 import {
-  persistedKeys,
   REFRESH_TOKEN_DURATION,
   ACCESS_TOKEN_DURATION,
   DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS,
   DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS,
 } from '@/common/utils/Constants';
 import Browser from '@/common/utils/Browser';
-import Vue from 'vue';
-import { Mutation } from 'vuex';
-import types from './mutationTypes';
-import { as } from '../utils/GlobalUtils';
+import { MutationTree } from 'vuex';
+import { MutationTypes } from './mutationTypes';
 import RequestState from '../utils/RequestState';
 import Utils from '../utils/Utils';
+import { State } from './state';
+import { changePlaybackRate, loginRequestState, persistAccount } from './mutationUtils';
 
-// Helpers /////////////////////////////////////////////////////////////////////
+// Typings /////////////////////////////////////////////////////////////////////
 
-async function persistAccount(state: VuexState): Promise<void> {
-  for (const key of persistedKeys) {
-    await Browser.storage.setItem(key, state[key]);
-  }
-}
+export interface Mutations {
+  [MutationTypes.ACTIVE_DIALOG](state: State, dialogName: string | undefined): void;
+  [MutationTypes.CHANGE_PLAYBACK_RATE](state: State, playbackRate: RequestState): void;
+  [MutationTypes.TOGGLE_EDIT_MODE](state: State, isEditing: boolean): void;
+  [MutationTypes.SET_TAB_URL](state: State, tabUrl: string): void;
+  [MutationTypes.SET_HAS_SKIPPED_FROM_ZERO](state: State, hasSkippedFromZero: boolean): void;
+  [MutationTypes.SET_DURATION](state: State, duration: number): void;
+  [MutationTypes.SET_IS_PAUSED](state: State, isPaused: boolean): void;
+  [MutationTypes.SET_IS_ACTIVE](state: State, isActive: boolean): void;
+  [MutationTypes.SET_IS_BUFFERING](state: State, isBuffering: boolean): void;
+  [MutationTypes.SET_CURRENT_TIME](state: State, currentTime: number): void;
+  [MutationTypes.SET_IS_INITIAL_BUFFER](state: State, newIsInitialBuffer: boolean): void;
 
-function loginRequestState(state: VuexState, loginRequestState: RequestState): void {
-  state.loginRequestState = loginRequestState;
-  Browser.storage.setItem('loginRequestState', loginRequestState);
-}
+  // Storage
+  [MutationTypes.RESTORE_STATE](
+    state: State,
+    { changes, callback }: { changes: Partial<State>; callback?: () => void }
+  ): void;
+  [MutationTypes.PERSIST_PREFERENCES](state: State, payload: Api.Preferences): void;
 
-function changePlaybackRate(state: VuexState, playbackRate: RequestState): void {
-  state.playbackRate = playbackRate;
-  Browser.storage.getItem('playbackRate').then(storedRate => {
-    if (storedRate !== playbackRate) {
-      Browser.storage.setItem('playbackRate', playbackRate);
-    }
-  });
+  // Keyboard
+  [MutationTypes.SET_PRIMARY_KEYBOARD_SHORTCUT](
+    state: State,
+    { type, value }: { type: KeyboardShortcutAction; value: string | undefined }
+  ): void;
+  [MutationTypes.SET_SECONDARY_KEYBOARD_SHORTCUT](
+    state: State,
+    { type, value }: { type: KeyboardShortcutAction; value: string | undefined }
+  ): void;
 
-  const video = global.getVideo();
-  if (video) {
-    video.playbackRate = playbackRate || 1;
-  }
+  // Login
+  [MutationTypes.LOG_IN](state: State, loginPayload: Api.LoginResponse): void;
+  [MutationTypes.LOG_OUT](state: State): void;
+  [MutationTypes.SET_LOGIN_REQUEST_STATE](state: State, requestState: RequestState): void;
+
+  // Preferences
+  [MutationTypes.TOGGLE_PREFERENCE](
+    state: State,
+    change: { preference: keyof Api.Preferences; value: boolean }
+  ): void;
+  [MutationTypes.SET_PREFERENCES_REQUEST_STATE](state: State, requestState: RequestState): void;
+
+  // Shows
+  [MutationTypes.SET_SEARCH_SHOWS_RESULT](state: State, shows: Api.ShowSearchResult[]): void;
+  [MutationTypes.SET_SEARCH_SHOWS_REQUEST_STATE](state: State, requestState: RequestState): void;
+
+  // Episodes
+  [MutationTypes.SET_SEARCH_EPISODES_RESULT](
+    state: State,
+    episodes: Api.EpisodeSearchResult[]
+  ): void;
+  [MutationTypes.SET_SEARCH_EPISODES_REQUEST_STATE](state: State, requestState: RequestState): void;
+  [MutationTypes.SET_EPISODE_URL](state: State, episodeUrl?: Api.EpisodeUrlNoEpisode): void;
+  [MutationTypes.SET_EPISODE](state: State, episode?: Api.Episode): void;
+  [MutationTypes.SET_INFERRED_EPISODE_INFO](state: State, episode?: InferredEpisodeInfo): void;
+  [MutationTypes.SET_EPISODE_REQUEST_STATE](state: State, requestState: RequestState): void;
+  [MutationTypes.SET_INITIAL_VIDEO_DATA_REQUEST_STATE](
+    state: State,
+    requestState: RequestState
+  ): void;
+
+  // Timestamps
+  [MutationTypes.SET_ACTIVE_TIMESTAMP](state: State, timestamp: Api.AmbiguousTimestamp): void;
+  [MutationTypes.CLEAR_ACTIVE_TIMESTAMP](state: State): void;
+  [MutationTypes.SET_HOVERED_TIMESTAMP](state: State, timestamp: Api.AmbiguousTimestamp): void;
+  [MutationTypes.CLEAR_HOVERED_TIMESTAMP](state: State): void;
+  [MutationTypes.UPDATE_TIMESTAMP_IN_DRAFTS](
+    state: State,
+    newTimestamp: Api.AmbiguousTimestamp
+  ): void;
+  [MutationTypes.DELETE_DRAFT_TIMESTAMP](
+    state: State,
+    deletedTimestamp: Api.AmbiguousTimestamp
+  ): void;
+  [MutationTypes.SET_DRAFT_TIMESTAMPS](state: State, timestamps: Api.AmbiguousTimestamp[]): void;
+  [MutationTypes.SET_TIMESTAMPS](state: State, timestamps: Api.AmbiguousTimestamp[]): void;
+  [MutationTypes.CLEAR_EDIT_TIMESTAMP_MODE](state: State): void;
+  [MutationTypes.SET_EDIT_TIMESTAMP_MODE](state: State, editMode: 'add' | 'edit' | undefined): void;
+  [MutationTypes.SET_SAVE_TIMESTAMP_REQUEST_STATE](state: State, requestState: RequestState): void;
 }
 
 // Mutations ///////////////////////////////////////////////////////////////////
 
-export default as<
-  {
-    [type in ValueOf<typeof types>]: Mutation<VuexState>;
-  }
->({
+export const mutations: MutationTree<State> & Mutations = {
   // General
-  [types.activeDialog](state, dialogName: string | undefined) {
+  [MutationTypes.ACTIVE_DIALOG](state, dialogName) {
     state.activeDialog = dialogName;
   },
-  [types.changePlaybackRate]: changePlaybackRate,
-  [types.toggleEditMode](state, isEditing: boolean) {
+  [MutationTypes.CHANGE_PLAYBACK_RATE]: changePlaybackRate,
+  [MutationTypes.TOGGLE_EDIT_MODE](state, isEditing) {
     state.isEditing = isEditing;
   },
-  [types.setTabUrl](state, tabUrl) {
+  [MutationTypes.SET_TAB_URL](state, tabUrl) {
     state.tabUrl = Browser.transformServiceUrl(tabUrl);
   },
-  [types.setHasSkippedFromZero](state, hasSkippedFromZero) {
+  [MutationTypes.SET_HAS_SKIPPED_FROM_ZERO](state, hasSkippedFromZero) {
     state.hasSkippedFromZero = hasSkippedFromZero;
   },
-  [types.setDuration](state, duration) {
-    state.duration = duration;
+  [MutationTypes.SET_DURATION](state, duration) {
+    state.playerState.duration = duration;
   },
-  [types.setIsInitialBuffer](state, newIsInitialBuffer: boolean) {
+  [MutationTypes.SET_IS_PAUSED](state, isPaused) {
+    state.playerState.isPaused = isPaused;
+  },
+  [MutationTypes.SET_IS_ACTIVE](state, isActive) {
+    state.playerState.isActive = isActive;
+  },
+  [MutationTypes.SET_IS_BUFFERING](state, isBuffering) {
+    state.playerState.isBuffering = isBuffering;
+  },
+  [MutationTypes.SET_CURRENT_TIME](state, currentTime) {
+    state.playerState.currentTime = currentTime;
+  },
+  [MutationTypes.SET_IS_INITIAL_BUFFER](state, newIsInitialBuffer: boolean) {
     state.isInitialBuffer = newIsInitialBuffer;
   },
 
   // Storage
-  [types.restoreState](
-    state,
-    { changes, callback }: { changes: Partial<VuexState>; callback?: () => void }
-  ) {
+  [MutationTypes.RESTORE_STATE](state, { changes, callback }) {
     for (const field in changes) {
       /* eslint-disable-next-line no-prototype-builtins */
       if (state.hasOwnProperty(field)) {
@@ -81,54 +141,48 @@ export default as<
           changePlaybackRate(state, playbackRate);
         } else {
           // @ts-ignore
-          Vue.set(state, field, changes[field]);
+          state[field] = changes[field]; // TODO: Test set
         }
       }
     }
     state.preferencesLastUpdatedAt = Date.now();
     if (callback) callback();
   },
-  [types.persistPreferences](state, payload: Api.Preferences) {
+  [MutationTypes.PERSIST_PREFERENCES](state, payload) {
     if (!state.account) {
       console.warn('updatePreference() called without account in the store');
       return;
     }
-    Vue.set(state.account, 'preferences', payload);
+    state.account.preferences = payload; // TODO: Test set removal
     persistAccount(state);
   },
 
   // Keyboard
-  [types.setPrimaryKeyboardShortcut](
-    state,
-    { type, value }: { type: KeyboardShortcutAction; value: string | undefined }
-  ) {
+  [MutationTypes.SET_PRIMARY_KEYBOARD_SHORTCUT](state, { type, value }) {
     if (state.primaryKeyboardShortcuts == null) {
       state.primaryKeyboardShortcuts = {
         ...DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS,
         [type]: value,
       };
     } else {
-      Vue.set(state.primaryKeyboardShortcuts, type, value);
+      state.primaryKeyboardShortcuts[type] = value; // TODO: Test set removal
     }
     persistAccount(state);
   },
-  [types.setSecondaryKeyboardShortcut](
-    state,
-    { type, value }: { type: KeyboardShortcutAction; value: string | undefined }
-  ) {
+  [MutationTypes.SET_SECONDARY_KEYBOARD_SHORTCUT](state, { type, value }) {
     if (state.secondaryKeyboardShortcuts == null) {
       state.secondaryKeyboardShortcuts = {
         ...DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS,
         [type]: value,
       };
     } else {
-      Vue.set(state.secondaryKeyboardShortcuts, type, value);
+      state.secondaryKeyboardShortcuts[type] = value; // TODO: Test set removal
     }
     persistAccount(state);
   },
 
   // Login
-  [types.login](state, loginPayload: Api.LoginResponse) {
+  [MutationTypes.LOG_IN](state, loginPayload) {
     const now = Date.now();
 
     state.token = loginPayload.authToken;
@@ -136,86 +190,88 @@ export default as<
     state.refreshToken = loginPayload.refreshToken;
     state.refreshTokenExpiresAt = now + REFRESH_TOKEN_DURATION;
     state.account = loginPayload.account;
+    state.isLoggedIn = true;
 
     loginRequestState(state, RequestState.SUCCESS);
     persistAccount(state);
   },
-  [types.logOut](state) {
+  [MutationTypes.LOG_OUT](state) {
     state.token = undefined;
     state.tokenExpiresAt = undefined;
     state.refreshToken = undefined;
     state.refreshTokenExpiresAt = undefined;
     state.account = undefined;
+    state.isLoggedIn = false;
     loginRequestState(state, RequestState.NOT_REQUESTED);
     persistAccount(state);
   },
-  [types.loginRequestState](state, requestState: RequestState) {
+  [MutationTypes.SET_LOGIN_REQUEST_STATE](state, requestState) {
     loginRequestState(state, requestState);
   },
 
   // Preferences
-  [types.togglePref](state, change: { pref: keyof Api.Preferences; value: boolean }) {
+  [MutationTypes.TOGGLE_PREFERENCE](state, change) {
     if (!state.account) {
       console.warn('togglePref() called without account in the store');
       return;
     }
-    Vue.set(state.account.preferences, change.pref, change.value);
+    state.account.preferences[change.preference] = change.value; // TODO: Test set removal
     state.preferencesLastUpdatedAt = Date.now();
   },
-  [types.preferencesRequestState](state, requestState: RequestState) {
+  [MutationTypes.SET_PREFERENCES_REQUEST_STATE](state, requestState) {
     state.preferencesRequestState = requestState;
   },
 
   // Shows
-  [types.searchShowsResult](state, shows: Api.ShowSearchResult[] = []) {
+  [MutationTypes.SET_SEARCH_SHOWS_RESULT](state, shows = []) {
     state.searchShowsResult = shows;
   },
-  [types.searchShowsRequestState](state, requestState: RequestState) {
+  [MutationTypes.SET_SEARCH_SHOWS_REQUEST_STATE](state, requestState) {
     state.searchShowsRequestState = requestState;
   },
 
   // Episodes
-  [types.searchEpisodesResult](state, episodes: Api.EpisodeSearchResult[] = []) {
+  [MutationTypes.SET_SEARCH_EPISODES_RESULT](state, episodes = []) {
     state.searchEpisodesResult = episodes;
   },
-  [types.searchEpisodesRequestState](state, requestState: RequestState) {
+  [MutationTypes.SET_SEARCH_EPISODES_REQUEST_STATE](state, requestState) {
     state.searchEpisodesRequestState = requestState;
   },
-  [types.setEpisodeUrl](state, episodeUrl?: Api.EpisodeUrlNoEpisode) {
+  [MutationTypes.SET_EPISODE_URL](state, episodeUrl) {
     state.episodeUrl = episodeUrl;
   },
-  [types.setEpisode](state, episode?: Api.Episode) {
+  [MutationTypes.SET_EPISODE](state, episode) {
     state.episode = episode;
     state.timestamps = (episode?.timestamps || []).sort(Utils.timestampSorter);
   },
-  [types.setInferredEpisodeInfo](state, episode?: InferredEpisodeInfo) {
+  [MutationTypes.SET_INFERRED_EPISODE_INFO](state, episode) {
     state.inferredEpisodeInfo = episode;
   },
-  [types.episodeRequestState](state, requestState: RequestState) {
+  [MutationTypes.SET_EPISODE_REQUEST_STATE](state, requestState) {
     state.episodeRequestState = requestState;
   },
-  [types.initialVideoDataRequestState](state, requestState: RequestState) {
+  [MutationTypes.SET_INITIAL_VIDEO_DATA_REQUEST_STATE](state, requestState) {
     state.initialVideoDataRequestState = requestState;
   },
 
   // Timestamps
-  [types.setActiveTimestamp](state, timestamp: Api.AmbigousTimestamp) {
+  [MutationTypes.SET_ACTIVE_TIMESTAMP](state, timestamp) {
     state.activeTimestamp = timestamp;
   },
-  [types.clearActiveTimestamp](state) {
+  [MutationTypes.CLEAR_ACTIVE_TIMESTAMP](state) {
     state.activeTimestamp = undefined;
   },
-  [types.setHoveredTimestamp](state, timestamp: Api.AmbigousTimestamp) {
+  [MutationTypes.SET_HOVERED_TIMESTAMP](state, timestamp) {
     state.hoveredTimestamp = timestamp;
   },
-  [types.clearHoveredTimestamp](state) {
+  [MutationTypes.CLEAR_HOVERED_TIMESTAMP](state) {
     state.hoveredTimestamp = undefined;
   },
-  [types.updateTimestampInDrafts](state, newTimestamp: Api.AmbigousTimestamp) {
+  [MutationTypes.UPDATE_TIMESTAMP_IN_DRAFTS](state, newTimestamp) {
     const index = state.draftTimestamps.findIndex(
       draftTimestamp => draftTimestamp.id === newTimestamp.id
     );
-    let unsortedTimestamps: Api.AmbigousTimestamp[];
+    let unsortedTimestamps: Api.AmbiguousTimestamp[];
     if (index == -1) {
       unsortedTimestamps = [...state.draftTimestamps, newTimestamp];
     } else {
@@ -224,24 +280,24 @@ export default as<
     }
     state.draftTimestamps = unsortedTimestamps.sort(Utils.timestampSorter);
   },
-  [types.deleteDraftTimestamp](state, deletedTimestamp: Api.AmbigousTimestamp) {
+  [MutationTypes.DELETE_DRAFT_TIMESTAMP](state, deletedTimestamp) {
     state.draftTimestamps = state.draftTimestamps.filter(item => {
       return item.id !== deletedTimestamp.id;
     });
   },
-  [types.setDraftTimestamps](state, timestamps: Api.AmbigousTimestamp[]) {
+  [MutationTypes.SET_DRAFT_TIMESTAMPS](state, timestamps) {
     state.draftTimestamps = [...timestamps].sort(Utils.timestampSorter);
   },
-  [types.setTimestamps](state, timestamps: Api.AmbigousTimestamp[]) {
+  [MutationTypes.SET_TIMESTAMPS](state, timestamps) {
     state.timestamps = [...timestamps].sort(Utils.timestampSorter);
   },
-  [types.clearEditTimestampMode](state) {
+  [MutationTypes.CLEAR_EDIT_TIMESTAMP_MODE](state) {
     state.editTimestampMode = undefined;
   },
-  [types.setEditTimestampMode](state, editMode: 'add' | 'edit' | undefined) {
+  [MutationTypes.SET_EDIT_TIMESTAMP_MODE](state, editMode) {
     state.editTimestampMode = editMode;
   },
-  [types.setSaveTimestampRequestState](state, requestState: RequestState) {
+  [MutationTypes.SET_SAVE_TIMESTAMP_REQUEST_STATE](state, requestState) {
     state.saveTimestampsRequestState = requestState;
   },
-});
+};

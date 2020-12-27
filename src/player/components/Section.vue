@@ -1,35 +1,45 @@
 <template>
-  <div
-    class="Section"
-    :class="{ buffered, completed, skipped }"
-    :style="{ left: `${left}%`, width: `${width}%` }"
-  />
+  <div class="Section" :class="{ buffered, completed, skipped, current }" :style="positioning" />
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { PropValidator } from 'vue/types/options';
+import { computed, defineComponent, PropType } from 'vue';
 
-export default Vue.extend({
+export default defineComponent({
   props: {
-    timestamp: { type: Object, required: true } as PropValidator<Api.Timestamp>,
-    endTime: Number,
-    duration: Number,
+    timestamp: { type: Object as PropType<Api.Timestamp>, required: true },
+    endTime: { type: Number, required: true },
+    duration: { type: Number, required: true },
     currentTime: Number,
     skipped: Boolean,
     buffered: Boolean,
     completed: Boolean,
   },
-  computed: {
-    left(): number {
-      return (this.timestamp.at / this.duration) * 100;
-    },
-    width(): number {
-      if (this.currentTime == null || this.currentTime > this.endTime) {
-        return (this.endTime / this.duration) * 100 - this.left;
+  setup(props) {
+    const left = computed<number>(() => {
+      return (props.timestamp.at / props.duration) * 100;
+    });
+    const width = computed<number>(() => {
+      if (props.currentTime == null || props.currentTime > props.endTime) {
+        return (props.endTime / props.duration) * 100 - left.value;
       }
-      return (this.currentTime / this.duration) * 100 - this.left;
-    },
+      if (props.currentTime < props.timestamp.at) {
+        return 0;
+      }
+      return (props.currentTime / props.duration) * 100 - left.value;
+    });
+    const positioning = computed(() => ({ left: `${left.value}%`, width: `${width.value}%` }));
+
+    const current = computed<boolean>(() => {
+      if (props.currentTime == null) return false;
+
+      return props.currentTime >= props.timestamp.at && props.currentTime <= props.endTime;
+    });
+
+    return {
+      positioning,
+      current,
+    };
   },
 });
 </script>
@@ -39,7 +49,7 @@ export default Vue.extend({
   position: absolute;
   background-color: rgba($color: $background300, $alpha: 0.75);
   height: 3px;
-  top: 4px;
+  border-radius: 1.5px;
 }
 .skipped {
   background-color: transparent;
@@ -49,5 +59,9 @@ export default Vue.extend({
 }
 .completed {
   background-color: $primary300;
+}
+.current {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 </style>

@@ -24,25 +24,24 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { PropValidator } from 'vue/types/options';
+import { defineComponent, PropType } from 'vue';
 import WebExtImg from './WebExtImg.vue';
 
-export default Vue.extend({
+export default defineComponent({
   components: { WebExtImg },
   props: {
     id: String,
     label: { type: String, required: true },
     errorMessage: String,
-    autocomplete: String as PropValidator<'username' | 'current-password'>,
+    autocomplete: String as PropType<'username' | 'current-password'>,
     defaultValue: String,
-    type: { type: String, default: 'text' } as PropValidator<'text' | 'password'>,
+    type: { type: String as PropType<'text' | 'password'>, default: 'text' },
     leftIcon: String,
-    isValid: { type: Boolean, required: false, default: true },
+    isValid: { type: Boolean, default: true },
     value: String,
     disabled: Boolean,
   },
-  // emits: ['focus', 'blur', 'input'],
+  emits: ['focus', 'blur', 'update:value', 'keypress-esc', 'submit'],
   data() {
     return {
       internalValue: this.value ?? this.defaultValue ?? '',
@@ -55,7 +54,7 @@ export default Vue.extend({
     },
     internalValue(newInternalValue: string | undefined) {
       if (newInternalValue !== this.value) {
-        this.$emit('input', newInternalValue);
+        this.$emit('update:value', newInternalValue);
       }
     },
   },
@@ -84,7 +83,7 @@ export default Vue.extend({
       this.$emit('keypress-esc');
     },
     setInputValue(value: string) {
-      this.$emit('input', value);
+      this.$emit('update:value', value);
     },
   },
 });

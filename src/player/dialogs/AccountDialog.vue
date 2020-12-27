@@ -5,11 +5,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import Popup from '@/popup/Popup.vue';
 import BasicDialog from './BasicDialog.vue';
 
-export default Vue.extend({
+export default defineComponent({
   components: { BasicDialog, Popup },
 });
 </script>

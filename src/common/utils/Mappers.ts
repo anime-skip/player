@@ -22,7 +22,7 @@ export default {
       data: episode,
     };
   },
-  thirdPartyEpisodeToAmbiguousTimestamps(episode: Api.ThirdPartyEpisode): Api.AmbigousTimestamp[] {
+  thirdPartyEpisodeToAmbiguousTimestamps(episode: Api.ThirdPartyEpisode): Api.AmbiguousTimestamp[] {
     return episode.timestamps.map(timestamp => ({
       id: timestamp.id ?? Utils.randomId(),
       source: episode.source ?? 'ANIME_SKIP',

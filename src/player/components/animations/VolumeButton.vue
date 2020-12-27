@@ -1,37 +1,38 @@
 <template>
   <div class="VolumeButton" :class="{ dragging: isDragging }">
-    <ToolbarButton class="inner-button" @click.native="toggleMuted">
+    <ToolbarButton class="inner-button" @click="toggleMuted">
       <WebExtImg src="ic_volume_muted.svg" class="ic_muted" :class="volumeClass" />
       <WebExtImg src="ic_volume_speaker.svg" class="ic_speaker" :class="volumeClass" />
       <WebExtImg src="ic_volume_low.svg" class="ic_low" :class="volumeClass" />
       <WebExtImg src="ic_volume_high.svg" class="ic_high" :class="volumeClass" />
     </ToolbarButton>
-    <VueSlider
+    <Slider
       class="slider"
-      v-model="level"
-      height="3"
-      silent
+      :progress="volume"
       :max="1"
-      :interval="0.05"
-      :duration="0.1"
-      :dotSize="11"
-      @change="setVolume"
-      @drag-start="isDragging = true"
-      @drag-end="isDragging = false"
+      backgroundColor="#ffffff48"
+      foregroundColor="white"
+      @seek="setVolume"
+      @seek:start="isDragging = true"
+      @seek:end="isDragging = false"
     />
   </div>
 </template>
 
 <script lang="ts">
-import vueMixins from 'vue-typed-mixins';
+import { defineComponent } from 'vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
-import VueSlider from 'vue-slider-component';
 import ToolbarButton from '../ToolbarButton.vue';
-import '../../scss/VolumeSlider.scss';
-import VideoControllerMixin from '../../../common/mixins/VideoController';
+import VideoControllerMixin from '@/common/mixins/VideoController';
+import Slider from '../Slider.vue';
+import KeyboardShortcutsMixin from '@/common/mixins/KeyboardShortcuts';
 
-export default vueMixins(VideoControllerMixin).extend({
-  components: { WebExtImg, VueSlider, ToolbarButton },
+export default defineComponent({
+  components: { WebExtImg, ToolbarButton, Slider },
+  mixins: [VideoControllerMixin, KeyboardShortcutsMixin],
+  mounted(): void {
+    this.setupVolumeOverrideManager();
+  },
   data() {
     return {
       isDragging: false,
@@ -40,9 +41,17 @@ export default vueMixins(VideoControllerMixin).extend({
   computed: {
     volumeClass(): string {
       if (this.isMuted) return 'muted';
-      if (this.level <= 0.05) return 'low';
-      if (this.level < 0.6) return 'medium';
+      if (this.volume <= 0.05) return 'low';
+      if (this.volume < 0.6) return 'medium';
       return 'high';
+    },
+  },
+  methods: {
+    setupKeyboardShortcuts(): { [action in KeyboardShortcutAction]?: () => void } {
+      return {
+        volumeUp: () => this.addVolume(0.2),
+        volumeDown: () => this.addVolume(-0.2),
+      };
     },
   },
 });

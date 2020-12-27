@@ -105,11 +105,11 @@ describe('Utils', () => {
   describe('computeTimestampDiffs()', () => {
     it('should return the correct toCreate', () => {
       const oldTimestamps: Api.Timestamp[] = [];
-      const newTimestamps: Api.AmbigousTimestamp[] = [
+      const newTimestamps: Api.AmbiguousTimestamp[] = [
         { id: '0', at: 0, typeId: 'intro', source: 'ANIME_SKIP' },
       ];
 
-      const expectedToCreate: Api.AmbigousTimestamp[] = newTimestamps;
+      const expectedToCreate: Api.AmbiguousTimestamp[] = newTimestamps;
       const expectedToUpdate: Api.Timestamp[] = [];
       const expectedToDelete: Api.Timestamp[] = [];
 
@@ -129,13 +129,13 @@ describe('Utils', () => {
         { id: '1', at: 1, typeId: 'intro', source: 'ANIME_SKIP' },
         { id: '2', at: 2, typeId: 'intro', source: 'ANIME_SKIP' },
       ];
-      const newTimestamps: Api.AmbigousTimestamp[] = [
+      const newTimestamps: Api.AmbiguousTimestamp[] = [
         { id: '0', at: 0, typeId: 'branding', source: 'ANIME_SKIP' },
         { id: '1', at: 1, typeId: 'intro', source: 'ANIME_SKIP' },
         { id: '2', at: 3, typeId: 'intro', source: 'ANIME_SKIP' },
       ];
 
-      const expectedToCreate: Api.AmbigousTimestamp[] = [];
+      const expectedToCreate: Api.AmbiguousTimestamp[] = [];
       const expectedToUpdate: Api.Timestamp[] = [
         { id: '0', at: 0, typeId: 'branding', source: 'ANIME_SKIP' },
         { id: '2', at: 3, typeId: 'intro', source: 'ANIME_SKIP' },
@@ -156,9 +156,9 @@ describe('Utils', () => {
       const oldTimestamps: Api.Timestamp[] = [
         { id: '0', at: 0, typeId: 'branding', source: 'ANIME_SKIP' },
       ];
-      const newTimestamps: Api.AmbigousTimestamp[] = [];
+      const newTimestamps: Api.AmbiguousTimestamp[] = [];
 
-      const expectedToCreate: Api.AmbigousTimestamp[] = [];
+      const expectedToCreate: Api.AmbiguousTimestamp[] = [];
       const expectedToUpdate: Api.Timestamp[] = [];
       const expectedToDelete: Api.Timestamp[] = oldTimestamps;
 
@@ -181,7 +181,7 @@ describe('Utils', () => {
         { id: '4', at: 8, typeId: 'credits', source: 'ANIME_SKIP' },
         { id: '5', at: 8, typeId: 'filler', source: 'ANIME_SKIP' },
       ];
-      const newTimestamps: Api.AmbigousTimestamp[] = [
+      const newTimestamps: Api.AmbiguousTimestamp[] = [
         { id: '0', at: 1, typeId: 'filler', source: 'ANIME_SKIP' },
         { id: '1', at: 2, typeId: 'recap', source: 'ANIME_SKIP' },
         { id: '2', at: 3, typeId: 'intro', source: 'BETTER_VRV' },
@@ -191,7 +191,7 @@ describe('Utils', () => {
         { id: '8', at: 8, typeId: 'preview', source: 'ANIME_SKIP' },
       ];
 
-      const expectedToCreate: Api.AmbigousTimestamp[] = [
+      const expectedToCreate: Api.AmbiguousTimestamp[] = [
         { id: '6', at: 4, typeId: 'filler', source: 'ANIME_SKIP' },
         { id: '7', at: 7, typeId: 'credits', source: 'ANIME_SKIP' },
         { id: '8', at: 8, typeId: 'preview', source: 'ANIME_SKIP' },

@@ -3,16 +3,16 @@
     <AutocompleteTextInput
       class="horizontal-margin"
       label="Show Name"
-      v-model="show"
+      v-model:value="show"
       :options="showOptions"
       @select="onSelectShow"
       @search="searchShows"
     />
-    <TextInput class="row" label="Episode Name" v-model="name" @submit="onClickCreate" />
+    <TextInput class="row" label="Episode Name" v-model:value="name" @submit="onClickCreate" />
     <div class="row input-row">
-      <TextInput label="Season" v-model="season" @submit="onClickCreate" />
-      <TextInput label="Number in Season" v-model="number" @submit="onClickCreate" />
-      <TextInput label="Overall Number" v-model="absoluteNumber" @submit="onClickCreate" />
+      <TextInput label="Season" v-model:value="season" @submit="onClickCreate" />
+      <TextInput label="Number in Season" v-model:value="number" @submit="onClickCreate" />
+      <TextInput label="Overall Number" v-model:value="absoluteNumber" @submit="onClickCreate" />
     </div>
     <div class="row buttons">
       <button
@@ -29,17 +29,17 @@
 </template>
 
 <script lang="ts">
-import vueMixins from 'vue-typed-mixins';
+import { defineComponent, PropType } from 'vue';
 import ShowAutocompleteMixin from '@/common/mixins/ShowAutocomplete';
 import AutocompleteTextInput from '@/common/components/AutocompleteTextInput.vue';
 import TextInput from '@/common/components/TextInput.vue';
-import { PropOptions } from 'vue';
-import actionTypes from '@/common/store/actionTypes';
+import { ActionTypes } from '@/common/store/actionTypes';
 
-export default vueMixins(ShowAutocompleteMixin).extend({
+export default defineComponent({
   components: { AutocompleteTextInput, TextInput },
+  mixins: [ShowAutocompleteMixin],
   props: {
-    prefill: { type: Object, required: false } as PropOptions<CreateEpisodePrefill | undefined>,
+    prefill: Object as PropType<CreateEpisodePrefill>,
   },
   data() {
     return {
@@ -65,10 +65,10 @@ export default vueMixins(ShowAutocompleteMixin).extend({
   },
   methods: {
     hideDialog(): void {
-      this.$store.dispatch(actionTypes.showDialog, undefined);
+      this.$store.dispatch(ActionTypes.SHOW_DIALOG, undefined);
     },
     async onClickCreate(): Promise<void> {
-      const duration = this.$store.state.duration;
+      const duration = this.$store.state.playerState.duration;
       const episode: Api.InputEpisode = {
         name: this.name.trim() || undefined,
         season: this.season.trim() || undefined,
@@ -102,7 +102,7 @@ export default vueMixins(ShowAutocompleteMixin).extend({
           data: episodeUrl,
         },
       };
-      await this.$store.dispatch(actionTypes.createEpisodeData, payload);
+      await this.$store.dispatch(ActionTypes.CREATE_EPISODE_DATA, payload);
 
       this.hideDialog();
     },

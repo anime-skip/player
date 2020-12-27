@@ -1,6 +1,5 @@
 <template>
   <div
-    ref="timeline"
     class="Timeline"
     :class="{
       vrv: service === 'vrv',
@@ -10,248 +9,239 @@
     }"
     @click.stop
   >
-    <Section
-      v-for="section of sections"
-      :key="section.timestamp.id"
-      :timestamp="section.timestamp"
-      :endTime="section.endTime"
-      :duration="duration"
-      :skipped="section.isSkipped"
-    />
-    <Section
-      v-for="section of completedSections"
-      :key="'completed' + section.timestamp.id"
-      :timestamp="section.timestamp"
-      :endTime="section.endTime"
-      :duration="duration"
-      :currentTime="currentTime"
-      completed
-    />
-    <WebExtImg
-      v-for="timestamp of activeTimestamps"
-      :key="`t${timestamp.id}`"
-      class="Timestamp"
-      :class="timestampClass(timestamp)"
-      :src="timestampIcon(timestamp)"
-      :style="{ left: `${(timestamp.at / duration) * 100}%` }"
-    />
-    <VueSlider
-      v-if="duration > 0"
+    <Slider
+      v-if="duration != null && duration > 0"
       class="slider"
-      :value="normalizedTime"
-      height="3"
-      :min="0"
+      :progress="normalizedTime"
       :max="100"
-      :interval="0.01"
-      :duration="0"
-      tooltip="none"
-      :dotSize="isFlipped ? 3 : 11"
-      dragOnClick
-      :useKeyboard="false"
-      @change="onSeek"
-    />
+      :inactiveThumbSize="isFlipped ? 3 : undefined"
+      disableUpdateDuringSeek
+      @seek="onSeek"
+    >
+      <template v-slot:background>
+        <Section
+          v-for="section of sections"
+          :key="section.timestamp.id"
+          :timestamp="section.timestamp"
+          :endTime="section.endTime"
+          :duration="duration"
+          :skipped="section.isSkipped"
+        />
+      </template>
+      <template v-slot:foreground="slotProps" v-if="activeTimestamps.length > 0">
+        <Section
+          v-for="section of completedSections"
+          :key="'completed' + section.timestamp.id"
+          :timestamp="section.timestamp"
+          :endTime="section.endTime"
+          :duration="duration"
+          :currentTime="(slotProps.progress / 100) * (duration || 0)"
+          completed
+        />
+        <WebExtImg
+          v-for="timestamp of activeTimestamps"
+          :key="`t${timestamp.id}`"
+          class="Timestamp"
+          :class="timestampClass(timestamp)"
+          :src="timestampIcon(timestamp)"
+          :style="timestampStyle(timestamp)"
+        />
+      </template>
+    </Slider>
   </div>
 </template>
 
 <script lang="ts">
-import vueMixins from 'vue-typed-mixins';
+import { computed, defineComponent, ref, watch } from 'vue';
 import Section from './Section.vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
-import VueSlider from 'vue-slider-component';
-import '../scss/VideoSlider.scss';
 import Utils from '@/common/utils/Utils';
-import VideoControllerMixin from '@/common/mixins/VideoController';
-import KeyboardShortcutMixin from '@/common/mixins/KeyboardShortcuts';
-import { PropValidator } from 'vue/types/options';
-import mutationTypes from '@/common/store/mutationTypes';
+import { MutationTypes } from '@/common/store/mutationTypes';
+import { GetterTypes } from '@/common/store/getterTypes';
+import Slider from './Slider.vue';
+import { useStore } from 'vuex';
+import { Store } from '@/common/store';
+import { useVideoController } from '@/common/mixins/VideoController';
 
 interface SectionData {
-  timestamp: Api.Timestamp;
+  timestamp: Api.AmbiguousTimestamp;
   endTime: number;
   isSkipped: boolean;
 }
 
-export default vueMixins(VideoControllerMixin, KeyboardShortcutMixin).extend({
-  components: { Section, WebExtImg, VueSlider },
+export default defineComponent({
+  name: 'Timeline',
+  components: { Section, WebExtImg, Slider },
   props: {
     isFlipped: Boolean,
-    currentTime: { type: Number, required: true },
     duration: Number,
-    updateTime: { type: Function, required: true } as PropValidator<
-      (newTime: number, updatePlayer?: boolean) => void
-    >,
-    timestamps: { type: Array, required: true } as PropValidator<Api.Timestamp[]>,
   },
-  data() {
-    return {
-      isSeeking: false,
-      seekingTime: 0,
-      service: global.service,
+  emits: ['seek'],
+  setup(props) {
+    const store: Store = useStore();
+    const service = global.service;
+    const preferences = computed(() => store.getters[GetterTypes.PREFERENCES]);
+    const { setCurrentTime } = useVideoController();
+    const currentTime = computed(() => store.state.playerState.currentTime);
+
+    // Editing
+    const isEditing = computed(() => store.state.isEditing);
+    const canAddTimestamp = computed(() => isEditing.value && store.state.activeTimestamp == null);
+
+    // Timestamps
+    const activeTimestamps = computed(() => store.getters[GetterTypes.ACTIVE_TIMESTAMPS]);
+    const timestampStyle = (timestamp: Api.AmbiguousTimestamp) => {
+      if (!props.duration) {
+        return {
+          left: '0',
+        };
+      }
+      return {
+        left: `${(timestamp.at / props.duration) * 100}%`,
+      };
     };
-  },
-  watch: {
-    currentTime(newTime: number, oldTime: number) {
+    const timestampClass = (timestamp: Api.AmbiguousTimestamp): Record<string, boolean> => {
+      return {
+        active:
+          timestamp.id === store.state.activeTimestamp?.id ||
+          timestamp.id === store.state.hoveredTimestamp?.id,
+      };
+    };
+    const timestampIcon = (timestamp: Api.AmbiguousTimestamp): string => {
+      if (!isEditing.value) return 'ic_timestamp.svg';
+      if (!timestamp.edited) return 'ic_timestamp_draft.svg';
+      return 'ic_timestamp_draft_edited.svg';
+    };
+    const goToNextTimestampOnTimeChange = (newTime: number): void => {
+      const newNext = Utils.nextTimestamp(newTime, activeTimestamps.value, preferences.value);
+      const goToTime = newNext?.at ?? props.duration;
+      if (goToTime != null) {
+        setCurrentTime(goToTime);
+      }
+    };
+
+    // Sections
+    const unknownTimestamp = (): Api.AmbiguousTimestamp => ({
+      id: 'unknown',
+      at: 0,
+      typeId: 'unknown',
+      source: 'ANIME_SKIP',
+    });
+    const endTimestamp = (): Api.Timestamp => ({
+      id: 'end',
+      at: props.duration || 0,
+      typeId: 'end',
+      source: 'ANIME_SKIP',
+    });
+    const sections = computed<SectionData[]>(() => {
+      if (!props.duration) return [];
+
+      if (activeTimestamps.value.length === 0 || isEditing.value) {
+        return [
+          {
+            timestamp: unknownTimestamp(),
+            endTime: props.duration,
+            isSkipped: false,
+          },
+        ];
+      }
+      const withEnd = [...activeTimestamps.value, endTimestamp()];
+      return activeTimestamps.value.map<SectionData>(
+        (timestamp: Api.AmbiguousTimestamp, index: number): SectionData => ({
+          timestamp: timestamp,
+          endTime: withEnd[index + 1].at,
+          isSkipped: Utils.isSkipped(timestamp, preferences.value),
+        })
+      );
+    });
+    const completedSections = computed<SectionData[]>(() => {
+      return sections.value.filter(
+        section => !Utils.isSkipped(section.timestamp, preferences.value)
+      );
+    });
+
+    // On time change
+    const isSeeking = ref(false);
+    const seekingTime = ref(0);
+    const onSeek = (newNormalizedTime: number): void => {
+      if (!props.duration) return;
+      const newTime = (newNormalizedTime / 100) * props.duration;
+      setCurrentTime(newTime);
+    };
+    const normalizedTime = computed(() => {
+      if (!props.duration) return 0;
+      return Utils.boundedNumber((currentTime.value / props.duration) * 100, [0, 100]);
+    });
+    const hasSkippedFromZero = computed({
+      get: () => store.state.hasSkippedFromZero,
+      set: value => store.commit(MutationTypes.SET_HAS_SKIPPED_FROM_ZERO, value),
+    });
+    watch(currentTime, (newTime, oldTime) => {
+      if (!props.duration) return;
+
       // Do nothing
-      const currentTimestamp = Utils.previousTimestamp(oldTime, this.timestamps, undefined);
+      const currentTimestamp = Utils.previousTimestamp(oldTime, activeTimestamps.value, undefined);
       const insideSkippedSection =
-        currentTimestamp != null && Utils.isSkipped(currentTimestamp, this.preferences);
+        currentTimestamp != null && Utils.isSkipped(currentTimestamp, preferences.value);
       if (insideSkippedSection) {
         return;
       }
 
       // Get the next timestamp AFTER the oldTime, regardless of if it's skipped
-      const oldNext = Utils.nextTimestamp(oldTime, this.timestamps, undefined);
+      const oldNext = Utils.nextTimestamp(oldTime, activeTimestamps.value, undefined);
 
       // Do nothing
       const timeDiff = Math.abs(oldTime - newTime);
       const hasNoMoreTimestamsps = oldNext == null;
-      const isSeeking = timeDiff > 1 * this.playbackRate; // Multiple the base number, 1s, by the speed so that high playback rates don't "skip" over timestamps
-      const isAtEnd = newTime >= this.duration;
-      if (hasNoMoreTimestamsps || isSeeking || isAtEnd || this.isEditing) {
+      const isSeeking = timeDiff > 1 * store.state.playbackRate; // Multiple the base number, 1s, by the speed so that high playback rates don't "skip" over timestamps
+      const isAtEnd = newTime >= props.duration;
+      if (hasNoMoreTimestamsps || isSeeking || isAtEnd || isEditing.value) {
         return;
       }
 
       // Skip timestamp at 0:00 if we haven't yet
       const wasAtBeginning = oldTime === 0;
-      const haveNotSkippedFromBeginning = !this.hasSkippedFromZero;
-      const shouldSkipFirstTimestamp = Utils.isSkipped(this.timestamps[0], this.preferences);
+      const haveNotSkippedFromBeginning = !hasSkippedFromZero.value;
+      const shouldSkipFirstTimestamp = Utils.isSkipped(
+        activeTimestamps.value[0],
+        preferences.value
+      );
       if (wasAtBeginning && haveNotSkippedFromBeginning && shouldSkipFirstTimestamp) {
-        this.setHasSkippedFromZero(true);
-        this.goToNextTimestampOnTimeChange(newTime);
+        hasSkippedFromZero.value = true;
+        goToNextTimestampOnTimeChange(newTime);
         return;
       }
 
       // Do nothing
       const willNotPastATimestamp = oldNext!.at > newTime + timeDiff; // look forward a time update so we don't show the user a frame of the skipped section
-      const notSkippingThePassedTimestamp = !Utils.isSkipped(oldNext!, this.preferences);
+      const notSkippingThePassedTimestamp = !Utils.isSkipped(oldNext!, preferences.value);
       if (willNotPastATimestamp || notSkippingThePassedTimestamp) {
         return;
       }
       const jumpedDirectlyToTimestamp =
-        this.timestamps.find(timestamp => Math.abs(timestamp.at - oldTime) < 0.0001) != null;
+        activeTimestamps.value.find(timestamp => Math.abs(timestamp.at - oldTime) < 0.0001) != null;
       if (jumpedDirectlyToTimestamp) {
         return;
       }
 
-      this.goToNextTimestampOnTimeChange(newTime);
-    },
-  },
-  computed: {
-    isEditing(): boolean {
-      return this.$store.state.isEditing;
-    },
-    hasEpisode(): boolean {
-      return this.$store.getters.hasEpisode;
-    },
-    isLoggedIn(): boolean {
-      return this.$store.getters.isLoggedIn;
-    },
-    activeTimestamp(): Api.AmbigousTimestamp | undefined {
-      return this.$store.state.activeTimestamp;
-    },
-    hoveredTimestamp(): Api.AmbigousTimestamp | undefined {
-      return this.$store.state.hoveredTimestamp;
-    },
-    draftTimestamps(): Api.AmbigousTimestamp[] {
-      return this.$store.getters.draftTimestamps;
-    },
-    preferences(): Api.Preferences | undefined {
-      return this.$store.getters.preferences;
-    },
-    preferencesLastUpdatedAt(): number {
-      return this.$store.state.preferencesLastUpdatedAt;
-    },
-    hasSkippedFromZero(): boolean {
-      return this.$store.state.hasSkippedFromZero;
-    },
-    playbackRate(): number {
-      return this.$store.state.playbackRate;
-    },
-    activeTimestamps(): Api.AmbigousTimestamp[] {
-      return this.$store.getters.activeTimestamps;
-    },
-    normalizedTime(): number {
-      return Math.max(0, Math.min(100, (this.currentTime / this.duration) * 100));
-    },
-    canAddTimestamp(): boolean {
-      return this.isEditing && this.activeTimestamp == null;
-    },
-    unknownTimestamp(): Api.Timestamp {
-      return {
-        id: 'unknown',
-        at: 0,
-        typeId: 'unknown',
-        source: 'ANIME_SKIP',
-      };
-    },
-    endTimestamp(): Api.Timestamp {
-      return {
-        id: 'end',
-        at: this.duration || 0,
-        typeId: 'end',
-        source: 'ANIME_SKIP',
-      };
-    },
-    sections(): SectionData[] {
-      if (this.timestamps.length === 0 || this.isEditing) {
-        return [
-          {
-            timestamp: this.unknownTimestamp,
-            endTime: this.duration,
-            isSkipped: false,
-          },
-        ];
-      }
-      const withEnd = [...this.timestamps, this.endTimestamp];
-      return this.timestamps.map<SectionData>(
-        (timestamp: Api.Timestamp, index: number): SectionData => ({
-          timestamp: timestamp,
-          endTime: withEnd[index + 1].at,
-          isSkipped: Utils.isSkipped(timestamp, this.preferences),
-        })
-      );
-    },
-    completedSections(): SectionData[] {
-      if (!this.sections) {
-        return [];
-      }
-      return this.sections.filter(section => {
-        return (
-          section.timestamp.at < this.currentTime &&
-          !Utils.isSkipped(section.timestamp, this.preferences)
-        );
-      });
-    },
-  },
-  methods: {
-    setHasSkippedFromZero(newValue: boolean): void {
-      this.$store.commit(mutationTypes.setHasSkippedFromZero, newValue);
-    },
-    toggleEditMode(isEditing: boolean): void {
-      this.$store.commit(mutationTypes.toggleEditMode, isEditing);
-    },
-    timestampClass(timestamp: Api.AmbigousTimestamp): Record<string, boolean> {
-      return {
-        active:
-          timestamp.id === this.activeTimestamp?.id || timestamp.id === this.hoveredTimestamp?.id,
-      };
-    },
-    timestampIcon(timestamp: Api.AmbigousTimestamp): string {
-      if (!this.isEditing) return 'ic_timestamp.svg';
-      if (!timestamp.edited) return 'ic_timestamp_draft.svg';
-      return 'ic_timestamp_draft_edited.svg';
-    },
-    /**
-     * Get the timestamp to go to, then go there or the end of the video if there isn't another time
-     * stamp to go to
-     */
-    goToNextTimestampOnTimeChange(newTime: number) {
-      const newNext = Utils.nextTimestamp(newTime, this.timestamps, this.preferences);
-      this.updateTime(newNext?.at ?? this.duration, true);
-    },
-    onSeek(newTime: number) {
-      this.$emit('seek', (newTime / 100) * this.duration);
-    },
+      goToNextTimestampOnTimeChange(newTime);
+    });
+
+    return {
+      isSeeking,
+      isEditing,
+      service,
+      seekingTime,
+      canAddTimestamp,
+      normalizedTime,
+      timestampStyle,
+      timestampClass,
+      timestampIcon,
+      onSeek,
+      sections,
+      completedSections,
+      activeTimestamps,
+    };
   },
 });
 </script>
@@ -264,20 +254,12 @@ $translationVrv: 0px;
 $translationInactiveSliderVrv: 3px;
 
 .Timeline {
-  height: 11px;
   position: relative;
-  cursor: pointer;
-  transform: scaleY(1) translateY($translationDefault);
+  transform: scaleY(1);
   transition: 200ms;
 
   &.flipped {
     transform: scaleY(-1);
-    .slider {
-      transform: translateY($translationInactiveSliderDefault);
-    }
-  }
-  & > * {
-    position: absolute;
   }
   &.add-margin {
     margin-left: 24px;
@@ -285,35 +267,32 @@ $translationInactiveSliderVrv: 3px;
   }
 
   .slider {
-    top: -1px;
+    top: 0;
     left: 0;
     right: 0;
     transition: top;
+
+    .slider-foreground {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+    }
   }
   &.flipped .slider {
     top: 0px;
   }
 
   .Timestamp {
+    position: absolute;
     height: 6px;
     width: 12px;
-    top: 4px;
     transform: translateX(-50%);
     transition: 250ms ease transform;
 
     &.active {
       transform: translateX(-50%) translateY(-12px);
-    }
-  }
-}
-
-// VRV specific styles
-.Timeline.vrv {
-  transform: scaleY(1) translateY($translationVrv);
-  &.flipped {
-    transform: scaleY(-1) translateY(-7px);
-    .slider {
-      transform: translateY($translationInactiveSliderVrv);
     }
   }
 }

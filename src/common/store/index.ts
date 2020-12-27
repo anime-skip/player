@@ -1,21 +1,36 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import mutations from './mutations';
-import actions from './actions';
-import getters from './getters';
-import { initialState } from './state';
-import actionTypes from './actionTypes';
-import createLogger from 'vuex/dist/logger';
+import { createStore, CommitOptions, DispatchOptions } from 'vuex';
+import { mutations, Mutations } from './mutations';
+import { actions, Actions } from './actions';
+import { getters, Getters } from './getters';
+import { state, State } from './state';
+import { ActionTypes } from './actionTypes';
+import { Store as VuexStore } from 'vuex';
+import plugins from './plugins';
 
-Vue.use(Vuex);
+export interface Store extends Omit<VuexStore<State>, 'commit' | 'getters' | 'dispatch'> {
+  commit<K extends keyof Mutations>(
+    key: K,
+    payload?: Parameters<Mutations[K]>[1],
+    options?: CommitOptions
+  ): ReturnType<Mutations[K]>;
 
-const store = new Vuex.Store({
-  state: initialState,
+  getters: {
+    [K in keyof Getters]: ReturnType<Getters[K]>;
+  };
+
+  dispatch<K extends keyof Actions>(
+    key: K,
+    payload?: Parameters<Actions[K]>[1],
+    options?: DispatchOptions
+  ): ReturnType<Actions[K]>;
+}
+
+export const store: Store = createStore({
+  state,
   mutations,
   actions,
   getters,
-  plugins: [createLogger()],
+  plugins,
+  strict: process.env.NODE_ENV !== 'production',
 });
-store.dispatch(actionTypes.initialLoad);
-
-export default store;
+store.dispatch(ActionTypes.INITIAL_LOAD);

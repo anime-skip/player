@@ -28,12 +28,12 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
-import { PLAYBACK_SPEEDS } from '../../common/utils/Constants';
-import mutationTypes from '../store/mutationTypes';
+import { PLAYBACK_SPEEDS } from '@/common/utils/Constants';
+import { MutationTypes } from '../store/mutationTypes';
 
-export default Vue.extend({
+export default defineComponent({
   components: { WebExtImg },
   props: {
     showLess: Boolean,
@@ -74,7 +74,7 @@ export default Vue.extend({
   },
   methods: {
     changePlaybackRate(speed: number): void {
-      this.$store.commit(mutationTypes.changePlaybackRate, speed);
+      this.$store.commit(MutationTypes.CHANGE_PLAYBACK_RATE, speed);
     },
     onChangePlaybackRate() {
       if (!this.isConstantSelected) {

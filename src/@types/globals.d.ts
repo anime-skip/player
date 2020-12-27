@@ -9,10 +9,10 @@ declare interface ServiceHelpers {
    */
   getVideoQuery(): string;
   /**
-   * Returns the video element. If necessary, this method can be overriden, but a single instance
+   * Returns the video element. If necessary, this method can be overridden, but a single instance
    * that all services use is defined in `all.ts`
    */
-  getVideo(): HTMLVideoElement;
+  getVideo: undefined | (() => HTMLVideoElement);
   /**
    * Sometimes, the player should not be injected when the url is matched (funimation show preview)
    */

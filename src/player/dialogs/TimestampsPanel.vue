@@ -12,23 +12,26 @@
 </template>
 
 <script lang="ts">
-import vueMixins from 'vue-typed-mixins';
-import VideoControllerMixin from '../../common/mixins/VideoController';
-import KeyboardShortcutsMixin, { KeyboardShortcutMap } from '../../common/mixins/KeyboardShortcuts';
+import { defineComponent } from 'vue';
+import VideoControllerMixin from '@/common/mixins/VideoController';
+import KeyboardShortcutsMixin, { KeyboardShortcutMap } from '@/common/mixins/KeyboardShortcuts';
 import TimestampDetails from '../components/TimestampDetails.vue';
 import EditTimestamp from '../components/EditTimestamp.vue';
 import BasicDialog from './BasicDialog.vue';
-import mutationTypes from '@/common/store/mutationTypes';
+import { MutationTypes } from '@/common/store/mutationTypes';
+import { GetterTypes } from '@/common/store/getterTypes';
 
-export default vueMixins(VideoControllerMixin, KeyboardShortcutsMixin).extend({
+export default defineComponent({
+  name: 'TimestampsPanel',
   components: { BasicDialog, TimestampDetails, EditTimestamp },
+  mixins: [VideoControllerMixin, KeyboardShortcutsMixin],
   data() {
     return {
       initialTab: 'details' as 'edit' | 'details',
     };
   },
   computed: {
-    activeTimestamp(): Api.AmbigousTimestamp | undefined {
+    activeTimestamp(): Api.AmbiguousTimestamp | undefined {
       return this.$store.state.activeTimestamp;
     },
   },
@@ -36,17 +39,14 @@ export default vueMixins(VideoControllerMixin, KeyboardShortcutsMixin).extend({
     onShow(): void {
       this.initialTab = this.activeTimestamp == null ? 'details' : 'edit';
     },
-    setActiveTimestamp(timestamp: Api.AmbigousTimestamp): void {
-      this.$store.commit(mutationTypes.setActiveTimestamp, timestamp);
-    },
     updateTimestamp(): void {
       (this.$refs.timeSelect as HTMLDivElement | undefined)?.focus();
       if (this.activeTimestamp != null) {
-        this.setActiveTimestamp({
+        const newTimestamp = this.$store.getters[GetterTypes.APPLY_TIMESTAMP_DIFF]({
           ...this.activeTimestamp,
           at: this.getCurrentTime(),
-          edited: true,
         });
+        this.$store.commit(MutationTypes.SET_ACTIVE_TIMESTAMP, newTimestamp);
       }
     },
     setupKeyboardShortcuts(): KeyboardShortcutMap {

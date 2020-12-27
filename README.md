@@ -20,7 +20,7 @@ yarn prettier:write
 
 This will install and open Firefox. To open another browser, more changes will have to be made.
 
-> When running `yarn start` or `yarn start:prod`, you will be taken to the local `/example/index.html` page. For this page's video to load, you need to add a file call `/exmaple/video.mp4`. Note that this file is ignored by git. You can choose whatever video you want
+> When running `yarn start` or `yarn start:prod`, you will be taken to the local `/example/index.html` page. For this page's video to load, you need to add a file call `/example/video.mp4`. Note that this file is ignored by git. You can choose whatever video you want
 
 ### Developing with a Firefox Profile
 

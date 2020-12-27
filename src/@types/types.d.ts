@@ -122,6 +122,9 @@ interface CreateEpisodePrefill {
 
 type KeyboardShortcutAction =
   | 'playPause'
+  | 'toggleFullscreen'
+  | 'volumeUp'
+  | 'volumeDown'
   | 'hideDialog'
   | 'nextTimestamp'
   | 'previousTimestamp'
@@ -133,6 +136,8 @@ type KeyboardShortcutAction =
   | 'rewindSmall'
   | 'rewindMedium'
   | 'rewindLarge'
-  | 'createTimestamp';
+  | 'createTimestamp'
+  | 'saveTimestamps'
+  | 'discardChanges';
 
 type KeyboardShortcutsMap = { [keyCombo in KeyboardShortcutAction]?: string };

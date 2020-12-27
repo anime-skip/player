@@ -3,10 +3,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import Browser from '@/common/utils/Browser';
 
-export default Vue.extend({
+export default defineComponent({
   props: {
     src: String,
     draggable: Boolean,

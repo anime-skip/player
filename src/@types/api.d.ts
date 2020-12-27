@@ -11,7 +11,7 @@ declare namespace Api {
   interface Implementation {
     loginManual(username: string, password: string): Promise<Api.LoginResponse>;
     loginRefresh(refreshToken: string): Promise<Api.LoginRefreshResponse>;
-    updatePreferences(prefs: Api.Preferences): Promise<void>;
+    updatePreferences(preferences: Api.Preferences): Promise<void>;
 
     createShow(data: Api.InputShow): Promise<Api.Show>;
     searchShows(name: string): Promise<Api.ShowSearchResult[]>;
@@ -154,7 +154,7 @@ declare namespace Api {
     source: TimestampSource;
   }
 
-  interface AmbigousTimestamp extends InputTimestamp {
+  interface AmbiguousTimestamp extends InputTimestamp {
     /**
      * It is a number when it is local, randomly generated. It is remote when the id is a string (GUID)
      */

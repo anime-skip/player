@@ -9,7 +9,7 @@
       </h4>
       <div>
         <KeyboardShortcutItem
-          name="Play/Pause"
+          name="Play/pause"
           actionName="playPause"
           v-on="{
             updatePrimary: updatePrimaryShortcut('playPause'),
@@ -17,7 +17,31 @@
           }"
         />
         <KeyboardShortcutItem
-          name="Close Dialog"
+          name="Volume up"
+          actionName="volumeUp"
+          v-on="{
+            updatePrimary: updatePrimaryShortcut('volumeUp'),
+            updateSecondary: updateSecondaryShortcut('volumeUp'),
+          }"
+        />
+        <KeyboardShortcutItem
+          name="Volume down"
+          actionName="volumeDown"
+          v-on="{
+            updatePrimary: updatePrimaryShortcut('volumeDown'),
+            updateSecondary: updateSecondaryShortcut('volumeDown'),
+          }"
+        />
+        <KeyboardShortcutItem
+          name="Toggle fullscreen"
+          actionName="toggleFullscreen"
+          v-on="{
+            updatePrimary: updatePrimaryShortcut('toggleFullscreen'),
+            updateSecondary: updateSecondaryShortcut('toggleFullscreen'),
+          }"
+        />
+        <KeyboardShortcutItem
+          name="Close dialog"
           actionName="hideDialog"
           v-on="{
             updatePrimary: updatePrimaryShortcut('hideDialog'),
@@ -82,7 +106,7 @@
       <h4 class="header">Editing</h4>
       <div>
         <KeyboardShortcutItem
-          name="Frame Rewind"
+          name="Frame rewind"
           actionName="rewindFrame"
           v-on="{
             updatePrimary: updatePrimaryShortcut('rewindFrame'),
@@ -90,7 +114,31 @@
           }"
         />
         <KeyboardShortcutItem
-          name="Create Timestamp"
+          name="Frame advance"
+          actionName="advanceFrame"
+          v-on="{
+            updatePrimary: updatePrimaryShortcut('advanceFrame'),
+            updateSecondary: updateSecondaryShortcut('advanceFrame'),
+          }"
+        />
+        <KeyboardShortcutItem
+          name="Rewind to/edit the previous timestamp"
+          actionName="nextTimestamp"
+          v-on="{
+            updatePrimary: updatePrimaryShortcut('nextTimestamp'),
+            updateSecondary: updateSecondaryShortcut('nextTimestamp'),
+          }"
+        />
+        <KeyboardShortcutItem
+          name="Advance to/edit the next timestamp"
+          actionName="previousTimestamp"
+          v-on="{
+            updatePrimary: updatePrimaryShortcut('previousTimestamp'),
+            updateSecondary: updateSecondaryShortcut('previousTimestamp'),
+          }"
+        />
+        <KeyboardShortcutItem
+          name="Create timestamp"
           actionName="createTimestamp"
           v-on="{
             updatePrimary: updatePrimaryShortcut('createTimestamp'),
@@ -98,11 +146,19 @@
           }"
         />
         <KeyboardShortcutItem
-          name="Frame Advance"
-          actionName="advanceFrame"
+          name="Save timestamps"
+          actionName="saveTimestamps"
           v-on="{
-            updatePrimary: updatePrimaryShortcut('advanceFrame'),
-            updateSecondary: updateSecondaryShortcut('advanceFrame'),
+            updatePrimary: updatePrimaryShortcut('saveTimestamps'),
+            updateSecondary: updateSecondaryShortcut('saveTimestamps'),
+          }"
+        />
+        <KeyboardShortcutItem
+          name="Discard changes"
+          actionName="discardChanges"
+          v-on="{
+            updatePrimary: updatePrimaryShortcut('discardChanges'),
+            updateSecondary: updateSecondaryShortcut('discardChanges'),
           }"
         />
       </div>
@@ -118,23 +174,23 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import PopupHeader from '@/popup/components/PopupHeader.vue';
 import KeyboardShortcutItem from './components/KeyboardShortcutItem.vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
-import mutationTypes from '@/common/store/mutationTypes';
+import { MutationTypes } from '@/common/store/mutationTypes';
 
-export default Vue.extend({
+export default defineComponent({
   components: { KeyboardShortcutItem, PopupHeader, WebExtImg },
   methods: {
     updatePrimaryShortcut(type: KeyboardShortcutAction): (value: string) => void {
       return (value: string | undefined): void => {
-        this.$store.commit(mutationTypes.setPrimaryKeyboardShortcut, { type, value });
+        this.$store.commit(MutationTypes.SET_PRIMARY_KEYBOARD_SHORTCUT, { type, value });
       };
     },
     updateSecondaryShortcut(type: KeyboardShortcutAction): (value: string) => void {
       return (value: string | undefined): void => {
-        this.$store.commit(mutationTypes.setSecondaryKeyboardShortcut, { type, value });
+        this.$store.commit(MutationTypes.SET_SECONDARY_KEYBOARD_SHORTCUT, { type, value });
       };
     },
   },
