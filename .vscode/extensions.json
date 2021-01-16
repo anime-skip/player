@@ -6,6 +6,7 @@
     "esbenp.prettier-vscode",
     "mrmlnc.vscode-scss",
     "octref.vetur",
-    "dariofuzinato.vue-peek"
+    "dariofuzinato.vue-peek",
+    "bradlc.vscode-tailwindcss"
   ]
 }

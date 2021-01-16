@@ -3,6 +3,7 @@ import { createApp } from 'vue';
 import Player from './Player.vue';
 import { store } from '@/common/store';
 import MessengerApi from '@/common/api/MessengerApi';
+import UI from '@anime-skip/ui';
 
 console.log('INJECTED player/index.ts');
 
@@ -46,7 +47,7 @@ async function injectPlayer() {
   try {
     const container = document.createElement('div');
 
-    const app = createApp(Player).use(store);
+    const app = createApp(Player).use(store).use(UI);
     const mountedApp = app.mount(container);
 
     document.querySelector(rootQuery)?.appendChild(mountedApp.$el);

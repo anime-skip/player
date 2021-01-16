@@ -1,6 +1,7 @@
+/artifacts
+/build/.intermediate
 node_modules/
 dist/
-artifacts/
 
 *.log
 example/video.mp4

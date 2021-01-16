@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import TextInput from '@/common/components/TextInput.vue';
+import { TextInput } from '@anime-skip/ui';
 import ProgressOverlay from '@/common/components/ProgressOverlay.vue';
 import PopupHeader from './PopupHeader.vue';
 import { ActionTypes } from '@/common/store/actionTypes';

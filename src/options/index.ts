@@ -4,6 +4,7 @@ import { createApp } from 'vue';
 import Options from './Options.vue';
 import AxiosApi from '@/common/api/AxiosApi';
 import { store } from '@/common/store';
+import UI from '@anime-skip/ui';
 
 // Setup Globals
 
@@ -11,4 +12,4 @@ global.Api = AxiosApi;
 
 // Inject DOM
 
-createApp(Options).use(store).mount('#app');
+createApp(Options).use(store).use(UI).mount('#app');
