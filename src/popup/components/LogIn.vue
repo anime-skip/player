@@ -5,20 +5,20 @@
       <TextInput
         class="flex row"
         leftIcon="ic_account.svg"
-        label="Username"
+        placeholder="Username"
         autocomplete="username"
         v-model:value="username"
       />
       <TextInput
         class="flex row"
         leftIcon="ic_password.svg"
-        label="Password"
+        placeholder="Password"
         :errorMessage="isLogInError ? 'Username or password is incorrect' : undefined"
         autocomplete="current-password"
         type="password"
         v-model:value="password"
       />
-      <div class="bottom-row">
+      <div class="bottom-row flex flex-row-reverse">
         <input type="submit" value="Log In" class="clickable focus button" />
         <a href="https://www.anime-skip.com/sign-up">Sign Up</a>
       </div>
@@ -28,14 +28,14 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import TextInput from '@/common/components/TextInput.vue';
+// import TextInput from '@/common/components/TextInput.vue';
 import ProgressOverlay from '@/common/components/ProgressOverlay.vue';
 import PopupHeader from './PopupHeader.vue';
 import { ActionTypes } from '@/common/store/actionTypes';
 import { GetterTypes } from '@/common/store/getterTypes';
 
 export default defineComponent({
-  components: { TextInput, ProgressOverlay, PopupHeader },
+  components: { ProgressOverlay, PopupHeader },
   props: {
     small: Boolean,
   },

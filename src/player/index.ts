@@ -1,8 +1,12 @@
 import '@/common/shared.scss';
+import '../common/tailwind.css';
+
 import { createApp } from 'vue';
 import Player from './Player.vue';
 import { store } from '@/common/store';
 import MessengerApi from '@/common/api/MessengerApi';
+import ui from '@anime-skip/ui';
+import '@anime-skip/ui/style.css';
 
 console.log('INJECTED player/index.ts');
 
@@ -46,7 +50,7 @@ async function injectPlayer() {
   try {
     const container = document.createElement('div');
 
-    const app = createApp(Player).use(store);
+    const app = createApp(Player).use(store).use(ui);
     const mountedApp = app.mount(container);
 
     document.querySelector(rootQuery)?.appendChild(mountedApp.$el);
