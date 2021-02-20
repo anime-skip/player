@@ -1,60 +1,46 @@
 <template>
   <div
-    class="ToolBar"
+    class="ToolBar relative cursor-default"
     :class="{
       active: isActive,
       paused: playerState.isPaused,
     }"
     @click.stop
   >
-    <Timeline
-      class="timeline"
-      :class="{ 'timeline-hidden': !duration }"
+    <TimelineWrapper
+      class="timeline-alignment"
+      :class="{ 'opacity-0 pointer-events-none': !duration }"
       :isFlipped="!playerState.isPaused && !isActive"
       :duration="duration"
     />
-    <div class="buttons">
-      <ToolbarButton class="margin-right" @click="togglePlayPause()">
+    <div class="h-toolbar flex flex-row items-center space-x-1 px-2 pt-0.5">
+      <ToolbarButton @click="togglePlayPause()">
         <PlayPauseButton :state="playPauseState" />
       </ToolbarButton>
-      <!-- <ToolbarButton class="margin-right" icon="ic_next_episode.svg" /> -->
-      <VolumeButton />
-      <div class="divider margin-right" />
       <ToolbarButton
         v-if="hasTimestamps"
-        class="margin-right"
-        icon="ic_prev_timestamp.svg"
+        icon="M11 18V6L2.5 12L11 18ZM11.5 12L20 18V6L11.5 12Z"
         @click="gotoPreviousTimestamp()"
       />
       <ToolbarButton
         v-if="hasTimestamps"
-        class="margin-right"
-        icon="ic_next_timestamp.svg"
+        icon="M4 18L12.5 12L4 6V18ZM13 6V18L21.5 12L13 6Z"
         @click="gotoNextTimestamp()"
       />
-      <div class="divider margin-right" v-if="hasTimestamps" />
-      <p class="current-time">
-        {{ formattedTime }}&ensp;/&ensp;<span>{{ displayDuration }}</span>
-      </p>
-      <div class="space" />
-      <ToolbarButton
-        class="margin-left"
-        icon="ic_timestamps.svg"
-        title="Timestamps"
-        @click="toggleTimestampsDialog"
-      />
+      <VolumeButton />
+      <p class="body-2">{{ formattedTime }} / {{ displayDuration }}</p>
+      <div class="flex-1" />
+      <ToolbarButton icon="ic_timestamps.svg" title="Timestamps" @click="toggleTimestampsDialog" />
       <ToolbarButton
         v-if="isSaveTimestampsAvailable"
-        class="margin-left"
-        icon="ic_save_changes.svg"
+        icon="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
         title="Save Changes"
         @click="saveChanges()"
       />
-      <div class="divider margin-left" />
       <ToolbarButton
-        class="margin-left margin-right"
-        icon="ic_more.svg"
-        @click="toggleAccountDialog"
+        class=""
+        icon="M12 8C13.1 8 14 7.1 14 6C14 4.9 13.1 4 12 4C10.9 4 10 4.9 10 6C10 7.1 10.9 8 12 8ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10ZM12 16C10.9 16 10 16.9 10 18C10 19.1 10.9 20 12 20C13.1 20 14 19.1 14 18C14 16.9 13.1 16 12 16Z"
+        @click="togglePreferencesDialog"
       />
       <ToolbarButton v-if="isFullscreenEnabled" @click="toggleFullscreen()">
         <FullscreenButton :state="fullscreenState" :key="isFullscreenCount" />
@@ -65,9 +51,9 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue';
-import Timeline from './Timeline.vue';
+import TimelineWrapper from './TimelineWrapper.vue';
 import ToolbarButton from './ToolbarButton.vue';
-import AccountDialog from '../dialogs/AccountDialog.vue';
+import PreferencesDialog from '../dialogs/PreferencesDialog.vue';
 import PlayPauseButton from './animations/PlayPauseButton.vue';
 import FullscreenButton from './animations/FullscreenButton.vue';
 import VolumeButton from './animations/VolumeButton.vue';
@@ -86,12 +72,12 @@ import useFormattedTime from '@/common/composition/formattedTime';
 export default defineComponent({
   name: 'Toolbar',
   components: {
-    Timeline,
+    TimelineWrapper,
     PlayPauseButton,
     ToolbarButton,
     FullscreenButton,
     VolumeButton,
-    AccountDialog,
+    PreferencesDialog,
     WebExtImg,
   },
   setup() {
@@ -131,8 +117,10 @@ export default defineComponent({
     const showDialog = (dialog?: string): void => {
       store.dispatch(ActionTypes.SHOW_DIALOG, dialog);
     };
-    const toggleAccountDialog = (): void => {
-      showDialog(store.state.activeDialog === 'AccountDialog' ? undefined : 'AccountDialog');
+    const togglePreferencesDialog = (): void => {
+      showDialog(
+        store.state.activeDialog === 'PreferencesDialog' ? undefined : 'PreferencesDialog'
+      );
     };
     const toggleTimestampsDialog = (): void => {
       showDialog(store.state.activeDialog === 'TimestampsPanel' ? undefined : 'TimestampsPanel');
@@ -269,7 +257,7 @@ export default defineComponent({
       isFullscreenCount,
       displayDuration,
       isFullscreenEnabled,
-      toggleAccountDialog,
+      togglePreferencesDialog,
       toggleTimestampsDialog,
       playPauseState,
       fullscreenState,
@@ -290,14 +278,18 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+@import '../../common/css/constants.scss';
+@import '@anime-skip/ui/theme.scss';
+
+.h-toolbar {
+  height: $toolbarHeight;
+}
+
 .ToolBar {
-  position: relative;
-  // hide 1px of the timeline under the video's bounding box
   transform: translateY($toolbarHeight + 1px);
   transition: 200ms;
   transition-property: transform;
   user-select: none;
-  cursor: default;
 
   &.active,
   &.paused {
@@ -315,7 +307,10 @@ export default defineComponent({
     transition: 200ms;
     transition-property: opacity;
     opacity: 0;
-    background: linear-gradient(transparent, rgba($color: $background500, $alpha: 0.6));
+    background: linear-gradient(
+      transparent,
+      rgba($color: $backgroundColor-background, $alpha: $opacity-medium)
+    );
   }
   &.active {
     &::before {
@@ -328,45 +323,9 @@ export default defineComponent({
     }
   }
 
-  .timeline {
+  .timeline-alignment {
     // Line bottom of background with top of buttons
     margin-bottom: -2px;
-  }
-
-  .timeline-hidden {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .buttons {
-    height: $toolbarHeight;
-    padding: 0 8px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    .margin-left {
-      margin-left: 8px;
-    }
-    .margin-right {
-      margin-right: 8px;
-    }
-    .divider {
-      width: 2px;
-      height: 32px;
-      border-radius: 1px;
-      background-color: $divider;
-    }
-    .space {
-      flex: 1;
-    }
-  }
-  .current-time {
-    margin-left: 16px;
-    color: $textPrimary;
-    span {
-      font-weight: 600;
-      color: $textSecondary;
-    }
   }
 }
 </style>

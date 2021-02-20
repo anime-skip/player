@@ -16,6 +16,7 @@ import { changePlaybackRate, loginRequestState, persistAccount } from './mutatio
 
 export interface Mutations {
   [MutationTypes.ACTIVE_DIALOG](state: State, dialogName: string | undefined): void;
+  [MutationTypes.TOGGLE_LOGIN_DIALOG](state: State, isShowing: boolean): void;
   [MutationTypes.CHANGE_PLAYBACK_RATE](state: State, playbackRate: RequestState): void;
   [MutationTypes.TOGGLE_EDIT_MODE](state: State, isEditing: boolean): void;
   [MutationTypes.SET_TAB_URL](state: State, tabUrl: string): void;
@@ -101,6 +102,9 @@ export const mutations: MutationTree<State> & Mutations = {
   // General
   [MutationTypes.ACTIVE_DIALOG](state, dialogName) {
     state.activeDialog = dialogName;
+  },
+  [MutationTypes.TOGGLE_LOGIN_DIALOG](state, isShowing) {
+    state.isShowingLoginDialog = isShowing;
   },
   [MutationTypes.CHANGE_PLAYBACK_RATE]: changePlaybackRate,
   [MutationTypes.TOGGLE_EDIT_MODE](state, isEditing) {

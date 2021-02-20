@@ -1,58 +1,89 @@
 <template>
-  <div class="EditTimestamp">
-    <header>
-      <h1 class="section-header">
-        <!-- TODO: Ripple -->
-        <div class="img-button" title="Discard changes" @click="clearActiveTimestamp">
-          <WebExtImg src="ic_chevron_left.svg" />
+  <div class="text-left h-full flex flex-col">
+    <header
+      class="flex flex-col flex-shrink-0 -mx-4 -mt-2 pl-2 pb-2 border-b border-opacity-divider border-on-surface"
+    >
+      <div class="mt-0 flex flex-row items-center">
+        <div
+          class="p-2 rounded-full select-none bg-on-surface bg-opacity-0 hover:bg-opacity-hover"
+          title="Discard changes"
+          @click="clearActiveTimestamp"
+        >
+          <WebExtImg class="w-6 h-6" src="ic_chevron_left.svg" :draggable="false" />
         </div>
-        {{ title }}
-      </h1>
-      <h2 class="section-header">Starts At</h2>
-      <div ref="timeSelect" class="focusable button dark time-selector" tabindex="0">
-        <WebExtImg class="icon" src="ic_clock.svg" :draggable="false" />
-        <p class="time">
-          {{ formattedAt }}
+        <h6 class="ml-2 pt-0.5">{{ title }}</h6>
+      </div>
+    </header>
+    <div class="flex flex-col flex-1 space-y-2 pt-4 -mx-4 px-4 pb-2 overflow-y-hidden">
+      <p class="subtitle-1">Starts At</p>
+      <div class="flex flex-row space-x-4 py-2 items-center">
+        <RaisedContainer dark ref="timeSelect" class="self-start flex-shrink-0" tabindex="0">
+          <div class="w-full h-10 pl-3 pr-4 flex items-center space-x-3">
+            <WebExtImg class="icon" src="ic_clock.svg" :draggable="false" />
+            <p class="time">
+              {{ formattedAt }}
+            </p>
+          </div>
+        </RaisedContainer>
+        <p class="body-2 text-opacity-medium text-on-surface">
+          Use J and L keys to move left and right
         </p>
       </div>
-      <p class="label">Use J and L keys to adjust where the timestamp starts at</p>
-      <h2 class="section-header section-header-spacing">Timestamp Type</h2>
+      <p class="subtitle-1 py-2">Timestamp type</p>
       <TextInput
         ref="filterInput"
-        class="flex row"
-        leftIcon="ic_filter.svg"
-        label="Filter..."
+        class="flex row -mb-2"
+        placeholder="Filter..."
         v-model:value="typeFilter"
         @submit="onClickDone()"
         @keydown.up.stop.prevent="onPressUp"
         @keydown.down.stop.prevent="onPressDown"
-      />
-    </header>
-    <div class="middle-container scroll">
-      <ul class="type-list">
-        <!-- TODO: Ripple -->
-        <li v-for="t of matchingTypes" :key="t.id" @click="selectType(t)">
-          <WebExtImg class="icon" :src="typeRadioIcon(t)" />
-          <p class="name">{{ t.name }}</p>
-        </li>
-      </ul>
+      >
+        <template v-slot:left-icon="slotProps">
+          <Icon
+            :disabled="slotProps.disabled"
+            :active="slotProps.focused"
+            path="M6,13H18V11H6M3,6V8H21V6M10,18H14V16H10V18Z"
+          />
+        </template>
+      </TextInput>
+      <div class="flex flex-col flex-1 rounded overflow-y-hidden">
+        <p v-if="matchingTypes.length === 0" class="px-4 py-6 text-error body-2 text-center">
+          No results
+        </p>
+        <ul v-else class="scroll overflow-y-auto">
+          <li
+            v-for="t of matchingTypes"
+            :key="t.id"
+            class="flex flex-row space-x-4 px-3 py-2 bg-on-surface bg-opacity-0 hover:bg-opacity-hover cursor-pointer"
+            @click="selectType(t)"
+          >
+            <Icon
+              v-if="isTypeSelected(t)"
+              class="fill-secondary opacity-100"
+              path="M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7Z"
+            />
+            <Icon
+              v-else
+              path="M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"
+            />
+            <p
+              :class="{
+                'text-opacity-100': isTypeSelected(t),
+                'text-opacity-medium': !isTypeSelected(t),
+              }"
+            >
+              {{ t.name }}
+            </p>
+          </li>
+        </ul>
+      </div>
     </div>
-    <footer class="bottom-container">
-      <input
-        type="submit"
-        value="Done"
-        class="clickable focus button save"
-        @click="onClickDone()"
-        :class="{ disabled: isSaveDisabled }"
-      />
-      <input
-        v-if="shouldShowDelete"
-        type="submit"
-        value="Delete"
-        class="clickable focus invalid button delete"
-        @click="onClickDelete()"
-        :class="{ disabled: isSaveDisabled }"
-      />
+    <footer class="pt-2 flex flex-row-reverse justify-between flex-shrink-0">
+      <RaisedButton @click="onClickDone" :disabled="isSaveDisabled">Save</RaisedButton>
+      <RaisedButton v-if="shouldShowDelete" error @click="onClickDelete" :disabled="isSaveDisabled"
+        >Delete</RaisedButton
+      >
     </footer>
   </div>
 </template>
@@ -61,7 +92,6 @@
 import { defineComponent, PropType } from 'vue';
 import VideoControllerMixin from '@/common/mixins/VideoController';
 import KeyboardShortcutsMixin from '@/common/mixins/KeyboardShortcuts';
-import TextInput from '@/common/components/TextInput.vue';
 import Utils from '@/common/utils/Utils';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import { TIMESTAMP_TYPES, TIMESTAMP_TYPE_NOT_SELECTED } from '@/common/utils/Constants';
@@ -72,7 +102,7 @@ import { GetterTypes } from '@/common/store/getterTypes';
 
 export default defineComponent({
   name: 'EditTimestamp',
-  components: { WebExtImg, TextInput },
+  components: { WebExtImg },
   mixins: [VideoControllerMixin, KeyboardShortcutsMixin],
   props: {
     initialTab: {
@@ -197,11 +227,8 @@ export default defineComponent({
         );
       }
     },
-    typeRadioIcon(type: Api.TimestampType): string {
-      if (this.selectedType == null || type.id !== this.selectedType?.id) {
-        return 'ic_radio_deselected.svg';
-      }
-      return 'ic_radio_selected.svg';
+    isTypeSelected(type: Api.TimestampType): boolean {
+      return this.selectedType != null && type.id === this.selectedType.id;
     },
     selectType(type: Api.TimestampType) {
       this.selectedType = type;
@@ -253,165 +280,26 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-.EditTimestamp {
-  text-align: start;
-  overflow-x: hidden;
+@import '@anime-skip/ui/theme.scss';
+
+.opacity-100 {
+  opacity: 1 !important;
+}
+
+.scroll {
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-
-  .section-header {
-    margin-top: 0px;
-    margin-bottom: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba($color: $backgroundColor-primary, $alpha: $opacity-low) transparent;
+  &::-webkit-scrollbar {
+    width: 8px;
+    padding: 1px;
   }
-
-  .section-header-spacing {
-    margin-top: 16px;
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
   }
-
-  header {
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-    padding-bottom: 0;
-
-    h1 {
-      font-weight: 500;
-      font-size: 20px;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      margin-left: -8px;
-
-      .img-button {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 6px;
-        margin-right: 6px;
-      }
-
-      img {
-        opacity: 0.9;
-        transition: 200ms opacity;
-
-        &:hover:active {
-          opacity: 1;
-        }
-      }
-    }
-
-    .time-selector {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      min-height: 40px;
-      padding: 0px;
-      align-self: flex-start;
-
-      .icon {
-        width: 40px;
-        height: 24px;
-        opacity: 0.36;
-      }
-
-      .divider {
-        width: 1px;
-        align-self: stretch;
-        background-color: $background300;
-      }
-
-      .time {
-        margin-top: 4px;
-        padding-left: 8px;
-        padding-right: 16px;
-        font-size: 18px;
-        font-weight: 500;
-        letter-spacing: 1px;
-      }
-    }
-
-    .label {
-      font-size: 14px;
-      margin-top: 8px;
-      color: $textSecondary;
-      flex-wrap: wrap;
-    }
-  }
-
-  .middle-container {
-    flex: 1;
-
-    .type-list {
-      display: flex;
-      flex-direction: column;
-      padding: 0;
-      margin: 0;
-      padding-top: 8px;
-
-      li {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        padding-top: 6px;
-        padding-bottom: 6px;
-        cursor: pointer;
-        border-radius: 3px;
-        margin-right: 4px;
-
-        .icon {
-          width: 36px;
-          height: 24px;
-          opacity: 0.36;
-        }
-
-        .name {
-          margin: 0;
-          margin-left: 8px;
-          font-size: 15px;
-        }
-      }
-    }
-  }
-
-  .scroll {
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: $divider #00000000;
-
-    &::-webkit-scrollbar {
-      width: 8px;
-      padding: 1px;
-    }
-    &::-webkit-scrollbar-track {
-      background-color: transparent;
-    }
-    &::-webkit-scrollbar-thumb {
-      background-color: #484848;
-      border-radius: 5px;
-    }
-  }
-
-  footer {
-    display: flex;
-    flex-direction: row-reverse;
-    flex-shrink: 0;
-    padding-top: 16px;
-
-    .save {
-      margin-left: 24px;
-    }
-
-    .row {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      margin-top: 16px;
-    }
+  &::-webkit-scrollbar-thumb {
+    background-color: $backgroundColor-control-disabled;
+    border-radius: 5px;
   }
 }
 </style>

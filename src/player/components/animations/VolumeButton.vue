@@ -1,13 +1,13 @@
 <template>
   <div class="VolumeButton" :class="{ dragging: isDragging }">
-    <ToolbarButton class="inner-button" @click="toggleMuted">
+    <ToolbarButton class="inner-button w-12" @click="toggleMuted">
       <WebExtImg src="ic_volume_muted.svg" class="ic_muted" :class="volumeClass" />
       <WebExtImg src="ic_volume_speaker.svg" class="ic_speaker" :class="volumeClass" />
       <WebExtImg src="ic_volume_low.svg" class="ic_low" :class="volumeClass" />
       <WebExtImg src="ic_volume_high.svg" class="ic_high" :class="volumeClass" />
     </ToolbarButton>
     <Slider
-      class="slider"
+      class="slider white"
       :progress="volume"
       :max="1"
       backgroundColor="#ffffff48"
@@ -24,11 +24,10 @@ import { defineComponent } from 'vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import ToolbarButton from '../ToolbarButton.vue';
 import VideoControllerMixin from '@/common/mixins/VideoController';
-import Slider from '../Slider.vue';
 import KeyboardShortcutsMixin from '@/common/mixins/KeyboardShortcuts';
 
 export default defineComponent({
-  components: { WebExtImg, ToolbarButton, Slider },
+  components: { WebExtImg, ToolbarButton },
   mixins: [VideoControllerMixin, KeyboardShortcutsMixin],
   mounted(): void {
     this.setupVolumeOverrideManager();
@@ -41,7 +40,7 @@ export default defineComponent({
   computed: {
     volumeClass(): string {
       if (this.isMuted) return 'muted';
-      if (this.volume <= 0.05) return 'low';
+      if (this.volume <= 0.1) return 'low';
       if (this.volume < 0.6) return 'medium';
       return 'high';
     },
@@ -58,33 +57,33 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+@import '@anime-skip/ui/theme.scss';
+
 .VolumeButton {
   display: flex;
   flex-direction: row;
-  width: 128px;
-  max-width: 40px;
+  width: 136px;
+  max-width: 56px;
   align-items: center;
   overflow-x: hidden;
-  padding-right: 12px;
+  padding-right: 16px;
   margin-right: 8px;
   transition: 200ms;
   transition-property: max-width;
   &:hover,
   &.dragging {
-    max-width: 128px;
+    max-width: 136px;
   }
 
   .inner-button {
-    width: 24px;
-    height: 24px;
-    margin-right: 12px;
+    margin-right: 8px;
     position: relative;
     img {
       position: absolute;
-      left: 8px;
-      right: 8px;
-      top: 5px;
-      bottom: 5px;
+      left: 12px;
+      right: 12px;
+      top: 8px;
+      bottom: 8px;
       transition: 200ms;
     }
 
@@ -149,5 +148,10 @@ export default defineComponent({
   &.dragging .slider {
     display: block;
   }
+}
+
+.slider.white {
+  --default-background-color: #{rgba($color: $backgroundColor-on-surface, $alpha: $opacity-low)} !important;
+  --default-foreground-color: #{$backgroundColor-on-surface} !important;
 }
 </style>

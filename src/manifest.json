@@ -4,7 +4,7 @@
   "manifest_version": 2,
   "permissions": ["storage", "tabs"],
   "{{chrome}}.browser_action": {
-    "browser_style": true,
+    "browser_style": false,
     "default_icon": {
       "16": "assets/extension-logo/16.png",
       "32": "assets/extension-logo/32.png",
@@ -16,7 +16,7 @@
   },
   "{{firefox}}.page_action": {
     "show_matches": ["https://www.anime-skip.com/*", "https://anime-skip.com/*"],
-    "browser_style": true,
+    "browser_style": false,
     "default_icon": {
       "16": "assets/extension-logo/16.png",
       "32": "assets/extension-logo/32.png",

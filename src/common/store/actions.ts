@@ -107,7 +107,7 @@ export const actions: ActionTree<State, State> & Actions = {
   },
   async [ActionTypes.START_EDITING]({ commit, dispatch, getters, state }, onStartedEditing) {
     if (!state.isLoggedIn) {
-      await dispatch(ActionTypes.SHOW_DIALOG, 'AccountDialog');
+      await dispatch(ActionTypes.SHOW_DIALOG, 'PreferencesDialog');
       return;
     }
     if (!getters[GetterTypes.HAS_EPISODE]) {

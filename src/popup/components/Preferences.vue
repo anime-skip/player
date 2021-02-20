@@ -1,54 +1,46 @@
 <template>
-  <ProgressOverlay v-if="activePlayerOption == null" :isLoading="isLoggingIn" class="Preferences">
-    <div class="column">
-      <PopupHeader title="Preferences" class="header" :small="small" />
-
-      <h2 class="section-header">General</h2>
-      <div class="input-grid input-grid--2" :class="{ small }">
-        <PlaybackRatePicker :showLess="!small" />
-        <div
-          v-for="optionGroup of playerOptions"
-          :key="optionGroup.title"
-          class="option-group-button clickable dark focus button"
-          @click="onClickOptionGroup(optionGroup)"
-        >
-          <WebExtImg v-if="optionGroup.icon != null" :src="optionGroup.icon" class="left" />
-          <span class="label">{{ optionGroup.title }}</span>
-          <span class="value">{{ getSelectedOption(optionGroup) }}</span>
-          <WebExtImg src="ic_chevron_right.svg" class="right" />
-        </div>
-        <Checkbox
-          :isChecked="getPref('enableAutoSkip')"
-          text="Auto-skip Sections"
-          @click="updatePreferences('enableAutoSkip')"
-        />
+  <div v-if="activePlayerOption == null" class="column">
+    <h2 class="section-header">General</h2>
+    <div class="input-grid input-grid--2" :class="{ small }">
+      <PlaybackRatePicker :showLess="!small" />
+      <div
+        v-for="optionGroup of playerOptions"
+        :key="optionGroup.title"
+        class="option-group-button clickable dark focus button"
+        @click="onClickOptionGroup(optionGroup)"
+      >
+        <WebExtImg v-if="optionGroup.icon != null" :src="optionGroup.icon" class="left" />
+        <span class="label">{{ optionGroup.title }}</span>
+        <span class="value">{{ getSelectedOption(optionGroup) }}</span>
+        <WebExtImg src="ic_chevron_right.svg" class="right" />
       </div>
-
-      <h2 class="section-header">What do you want to skip?</h2>
-      <div class="input-grid" :class="{ small }">
-        <Checkbox
-          v-for="preference in SKIPPABLE_PREFERENCES"
-          :key="preference.key"
-          :isChecked="getPref(preference.key)"
-          :isDisabled="!getPref('enableAutoSkip')"
-          :text="preference.title"
-          @click="onClickPreference(preference.key)"
-        />
-      </div>
-      <span v-if="hasPreferenceError" class="error-message">
-        Could not save preferences, please try again later
-      </span>
-      <h2 class="section-header">Other Settings</h2>
-      <div class="clickable dark focus button other-setting" @click="onClickKeyboardShortcuts">
-        <span>Edit Keyboard Shortcuts</span>
-        <WebExtImg src="ic_chevron_right.svg" />
-      </div>
-      <div class="bottom-row">
-        <a class="link" href="https://www.anime-skip.com/support" target="_blank">Need help?</a>
-        <a class="link" href="#" @click.prevent="logOut()">Log out</a>
-      </div>
+      <Checkbox
+        :isChecked="getPref('enableAutoSkip')"
+        text="Auto-skip Sections"
+        @click="updatePreferences('enableAutoSkip')"
+      />
     </div>
-  </ProgressOverlay>
+
+    <h2 class="section-header">What do you want to skip?</h2>
+    <div class="input-grid" :class="{ small }">
+      <Checkbox
+        v-for="preference in SKIPPABLE_PREFERENCES"
+        :key="preference.key"
+        :isChecked="getPref(preference.key)"
+        :isDisabled="!getPref('enableAutoSkip')"
+        :text="preference.title"
+        @click="onClickPreference(preference.key)"
+      />
+    </div>
+    <span v-if="hasPreferenceError" class="error-message">
+      Could not save preferences, please try again later
+    </span>
+    <h2 class="section-header">Other Settings</h2>
+    <div class="clickable dark focus button other-setting" @click="onClickKeyboardShortcuts">
+      <span>Edit Keyboard Shortcuts</span>
+      <WebExtImg src="ic_chevron_right.svg" />
+    </div>
+  </div>
   <div v-else class="Preferences player-options column">
     <h3 class="player-option-title" @click="onClickOptionGroupBack">
       <WebExtImg src="ic_chevron_left.svg" />
@@ -72,8 +64,6 @@
 import { defineComponent } from 'vue';
 import ProgressOverlay from '@/common/components/ProgressOverlay.vue';
 import PopupHeader from './PopupHeader.vue';
-import Checkbox from '@/common/components/Checkbox.vue';
-import TextInput from '@/common/components/TextInput.vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import PlaybackRatePicker from '@/common/components/PlaybackRatePicker.vue';
 import { SKIPPABLE_PREFERENCES } from '@/common/utils/Constants';
@@ -83,7 +73,7 @@ import { MutationTypes } from '@/common/store/mutationTypes';
 import { GetterTypes } from '@/common/store/getterTypes';
 
 export default defineComponent({
-  components: { ProgressOverlay, PopupHeader, Checkbox, TextInput, PlaybackRatePicker, WebExtImg },
+  components: { ProgressOverlay, PopupHeader, PlaybackRatePicker, WebExtImg },
   props: {
     small: Boolean,
   },
@@ -99,9 +89,6 @@ export default defineComponent({
   computed: {
     preferences(): Api.Preferences | undefined {
       return this.$store.getters[GetterTypes.PREFERENCES];
-    },
-    isLoggingIn(): boolean {
-      return this.$store.getters[GetterTypes.IS_LOGGING_IN];
     },
     hasPreferenceError(): boolean {
       return this.$store.getters[GetterTypes.HAS_PREFERENCE_ERROR];
@@ -137,7 +124,7 @@ export default defineComponent({
       return prefs[pref];
     },
     onClickAutoSkip() {
-      this.updatePreferences('enableAutoSkip');
+      this.$store.dispatch(ActionTypes.UPDATE_PREFERENCES, 'enableAutoSkip');
     },
     onClickPreference(preferenceKey: keyof Api.Preferences): void {
       this.updatePreferences(preferenceKey);
@@ -166,126 +153,126 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.Preferences {
-  min-width: 250px;
-  max-width: 700px;
+// .Preferences {
+//   min-width: 250px;
+//   max-width: 700px;
 
-  .column {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .input-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(150px, 1fr));
-    grid-gap: 16px;
-    margin: 16px 0;
-    align-items: stretch;
-    &.small {
-      grid-template-columns: repeat(2, minmax(150px, 1fr));
-    }
-  }
-  .input-grid--2 {
-    align-items: stretch;
-    grid-template-columns: repeat(2, minmax(225px, 1fr));
-    &.small {
-      grid-template-columns: repeat(1, minmax(225px, 1fr));
-    }
-  }
-  a {
-    color: $textPrimary;
-    font-size: 15px;
-  }
-  .error-message {
-    color: $red400;
-  }
-  .bottom-row {
-    padding-top: 16px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
+//   .column {
+//     display: flex;
+//     flex-direction: column;
+//     align-items: stretch;
+//   }
+//   .input-grid {
+//     display: grid;
+//     grid-template-columns: repeat(3, minmax(150px, 1fr));
+//     grid-gap: 16px;
+//     margin: 16px 0;
+//     align-items: stretch;
+//     &.small {
+//       grid-template-columns: repeat(2, minmax(150px, 1fr));
+//     }
+//   }
+//   .input-grid--2 {
+//     align-items: stretch;
+//     grid-template-columns: repeat(2, minmax(225px, 1fr));
+//     &.small {
+//       grid-template-columns: repeat(1, minmax(225px, 1fr));
+//     }
+//   }
+//   a {
+//     // color: $textPrimary;
+//     font-size: 15px;
+//   }
+//   .error-message {
+//     // color: $red400;
+//   }
+//   .bottom-row {
+//     padding-top: 16px;
+//     display: flex;
+//     flex-direction: row;
+//     justify-content: space-between;
+//   }
 
-  .option-group-button {
-    height: 38px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+//   .option-group-button {
+//     height: 38px;
+//     display: flex;
+//     flex-direction: row;
+//     align-items: center;
 
-    img.left {
-      margin-right: 16px;
-    }
+//     img.left {
+//       margin-right: 16px;
+//     }
 
-    span {
-      text-transform: none;
+//     span {
+//       text-transform: none;
 
-      &.label {
-        margin-right: 8px;
-      }
-      &.value {
-        flex: 1;
-        text-align: right;
-        font-weight: 400;
-        opacity: 0.64;
-      }
-    }
+//       &.label {
+//         margin-right: 8px;
+//       }
+//       &.value {
+//         flex: 1;
+//         text-align: right;
+//         font-weight: 400;
+//         opacity: 0.64;
+//       }
+//     }
 
-    img.right {
-      margin-left: 8px;
-      opacity: 0.48;
-    }
-  }
+//     img.right {
+//       margin-left: 8px;
+//       opacity: 0.48;
+//     }
+//   }
 
-  .other-setting {
-    display: flex;
-    flex-direction: row;
-    margin-top: 16px;
-    align-self: flex-start;
-    text-transform: none;
-    align-items: center;
+//   .other-setting {
+//     display: flex;
+//     flex-direction: row;
+//     margin-top: 16px;
+//     align-self: flex-start;
+//     text-transform: none;
+//     align-items: center;
 
-    img {
-      margin-left: 8px;
-    }
-  }
-}
+//     img {
+//       margin-left: 8px;
+//     }
+//   }
+// }
 
-.Preferences.player-options {
-  overflow-x: hidden;
+// .Preferences.player-options {
+//   overflow-x: hidden;
 
-  .list {
-    flex-grow: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
+//   .list {
+//     flex-grow: 1;
+//     overflow-y: auto;
+//     overflow-x: hidden;
+//   }
 
-  .player-option-title {
-    cursor: pointer;
-    margin-top: 4px;
-    margin-bottom: 16px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+//   .player-option-title {
+//     cursor: pointer;
+//     margin-top: 4px;
+//     margin-bottom: 16px;
+//     display: flex;
+//     flex-direction: row;
+//     align-items: center;
 
-    span {
-      color: $textPrimary;
-    }
+//     span {
+//       // color: $textPrimary;
+//     }
 
-    img {
-      margin-right: 8px;
-      opacity: 0.64;
-    }
-  }
+//     img {
+//       margin-right: 8px;
+//       opacity: 0.64;
+//     }
+//   }
 
-  .player-option {
-    margin-top: 8px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+//   .player-option {
+//     margin-top: 8px;
+//     display: flex;
+//     flex-direction: row;
+//     align-items: center;
 
-    img {
-      margin-right: 16px;
-    }
-  }
-}
+//     img {
+//       margin-right: 16px;
+//     }
+//   }
+// }
 </style>

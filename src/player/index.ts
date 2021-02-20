@@ -1,12 +1,10 @@
-import '@/common/shared.scss';
-import '../common/tailwind.css';
-
 import { createApp } from 'vue';
 import Player from './Player.vue';
 import { store } from '@/common/store';
 import MessengerApi from '@/common/api/MessengerApi';
+
 import ui from '@anime-skip/ui';
-import '@anime-skip/ui/style.css';
+import '@/common/css';
 
 console.log('INJECTED player/index.ts');
 

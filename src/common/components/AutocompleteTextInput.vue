@@ -1,8 +1,10 @@
 <template>
-  <div class="AutocompleteTextInput">
+  <div class="relative flex flex-col">
     <TextInput
       ref="input"
+      class="relative"
       :label="label"
+      :placeholder="placeholder"
       :errorMessage="errorMessage"
       :leftIcon="leftIcon"
       v-model:value="searchValue"
@@ -13,46 +15,56 @@
       @keydown.enter.prevent.stop="onSubmit"
       @keydown.up.prevent.stop="selectUp"
       @keydown.down.prevent.stop="selectDown"
+      @click.prevent.stop
     />
-    <!-- @mousedown.prevent: prevent input from losing focus when clicking on an item -->
-    <div
-      v-if="shouldShowSuggestions"
-      class="suggestions"
-      @mousedown.prevent
-      @mouseover="onHoverOptions"
-    >
-      <div
-        v-for="(option, index) of options"
-        :key="option.key"
-        class="default-option"
-        :class="{ selected: option.key === value.key, highlight: index === highlightedIndex }"
-        @click="onClickOption(option)"
+    <div v-if="shouldShowSuggestions" class="h-0 overflow-y-visible z-10">
+      <!-- @mousedown.prevent: prevent input from losing focus when clicking on an item -->
+      <Card
+        class="max-h-72 mt-1 rounded divide-y divide-on-surface divide-opacity-divider overflow-auto"
+        :elevation="4"
+        @mousedown.prevent
+        @mouseover="onHoverOptions"
       >
-        <slot name="option" :option="option" :click="onClickOption">
-          <p class="title">{{ option.title }}</p>
-          <p v-if="option.subtitle" class="subtitle">{{ option.subtitle }}</p>
-        </slot>
-      </div>
-    </div>
-    <div
-      v-if="shouldShowSuggestions && options.length === 0 && !!searchValue"
-      class="suggestions"
-      @mousedown.prevent
-    >
-      <p class="no-results">{{ noOptionsMessage }}</p>
+        <div v-for="(option, index) of options" :key="option.key">
+          <div
+            class="option clickable"
+            :class="{ highlighted: index === highlightedIndex }"
+            @click="onClickOption(option)"
+          >
+            <slot
+              name="option"
+              :option="option"
+              :index="index"
+              :highlightedIndex="highlightedIndex"
+              :value="value"
+              :click="onClickOption"
+            >
+              <p class="subtitle-1 text-on-surface text-opacity-high">{{ option.title }}</p>
+              <p v-if="option.subtitle" class="subtitle-2 text-on-surface text-opacity-medium mt-1">
+                {{ option.subtitle }}
+              </p>
+            </slot>
+          </div>
+        </div>
+        <p
+          v-if="options.length === 0 && !!searchValue"
+          class="option text-opacity-medium text-center"
+        >
+          {{ noOptionsMessage }}
+        </p>
+      </Card>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, PropType, ref, watch } from 'vue';
-import TextInput from './TextInput.vue';
 
 export default defineComponent({
-  components: { TextInput },
   props: {
     value: { type: Object as PropType<AutocompleteItem>, required: true },
     label: String,
+    placeholder: String,
     errorMessage: String,
     noOptionsMessage: { type: String, default: 'No results' },
     options: { type: Array as PropType<AutocompleteItem[]>, required: true },
@@ -179,81 +191,23 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-$borderRadius: 3px;
-$optionHeight: 48px;
+<style lang="css">
+.surface-control {
+  --surface-color: theme('colors.control') !important;
+}
 
-.AutocompleteTextInput {
-  position: relative;
+.min-h-12 {
+  min-height: 3rem;
+}
 
-  .suggestions {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 48px - 1px;
-    background-color: $input500;
-    border-bottom-left-radius: $borderRadius;
-    border-bottom-right-radius: $borderRadius;
-    // padding-top: $borderRadius;
-    overflow-y: auto;
-    z-index: 100;
-    max-height: 6 * $optionHeight;
-    filter: drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.48));
-
-    &.invalid {
-      background-color: $red500;
-    }
-
-    .suggestions-wrapper {
-      background-color: $input500;
-    }
-  }
-
-  .default-option {
-    height: $optionHeight;
-    border-top: 1px solid $divider;
-    background-color: $input700;
-    padding: 0 16px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    cursor: pointer;
-    transition: 200ms;
-
-    &.selected {
-      border-top: 1px solid transparent;
-      background-color: $divider;
-    }
-
-    &:hover,
-    &.highlight {
-      background-color: $primary700;
-    }
-
-    &:hover:active {
-      background-color: $primary500;
-    }
-
-    .title {
-      padding-top: 2px;
-      font-size: 15px;
-      color: $textPrimary;
-    }
-
-    .subtitle {
-      color: $textSecondary;
-      margin-top: -1px;
-      font-size: 13px;
-    }
-  }
-
-  .no-results {
-    color: $textPrimary;
-    padding: 8px 16px;
-    background-color: $input700;
-    text-align: center;
-  }
+.option {
+  @apply flex flex-col justify-center px-4 py-2;
+  min-height: 48px;
+}
+.option.clickable {
+  @apply bg-on-surface bg-opacity-0 transition-colors hover:bg-opacity-divider cursor-pointer;
+}
+.option.highlighted {
+  @apply bg-opacity-divider !important;
 }
 </style>

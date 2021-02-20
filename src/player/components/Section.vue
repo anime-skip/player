@@ -47,7 +47,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .Section {
   position: absolute;
-  background-color: rgba($color: $background300, $alpha: 0.75);
+  // background-color: rgba($color: $background300, $alpha: 0.75);
   height: 3px;
   border-radius: 1.5px;
 }
@@ -58,7 +58,7 @@ export default defineComponent({
   background-color: rgba($color: white, $alpha: 0.75);
 }
 .completed {
-  background-color: $primary300;
+  // background-color: $primary300;
 }
 .current {
   border-top-right-radius: 0;

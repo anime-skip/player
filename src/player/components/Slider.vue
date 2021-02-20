@@ -189,7 +189,7 @@ $thumbSizeUnitless: strip-unit($thumbSize);
     right: 0;
     top: 0;
     bottom: 0;
-    background-color: $primary300;
+    // background-color: $primary300;
     border-top-left-radius: $height / 2;
     border-bottom-left-radius: $height / 2;
   }
@@ -210,7 +210,7 @@ $thumbSizeUnitless: strip-unit($thumbSize);
       min-width: $thumbSize;
       min-height: $thumbSize;
       border-radius: 50%;
-      background-color: $primary300;
+      // background-color: $primary300;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -237,7 +237,7 @@ $thumbSizeUnitless: strip-unit($thumbSize);
           top: -3px;
           bottom: -3px;
           opacity: 0.38;
-          background-color: $primary300;
+          // background-color: $primary300;
         }
       }
     }

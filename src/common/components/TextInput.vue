@@ -89,7 +89,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 $colorNotActive: rgba(
   $color: black,
   $alpha: 0.24,
@@ -136,11 +136,11 @@ $inputHeight: 48px;
       font-size: 15px;
       font-weight: 500;
       line-height: $inputHeight;
-      caret-color: $primary500;
-      color: $textPrimary;
+      // caret-color: $primary500;
+      // color: $textPrimary;
       min-width: 0;
       &::placeholder {
-        color: $textSecondary;
+        // color: $textSecondary;
       }
     }
   }

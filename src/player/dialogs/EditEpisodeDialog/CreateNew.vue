@@ -1,29 +1,29 @@
 <template>
-  <div class="CreateNew">
+  <div class="p-4 space-y-4">
     <AutocompleteTextInput
       class="horizontal-margin"
-      label="Show Name"
+      placeholder="Show name"
       v-model:value="show"
       :options="showOptions"
       @select="onSelectShow"
       @search="searchShows"
     />
-    <TextInput class="row" label="Episode Name" v-model:value="name" @submit="onClickCreate" />
-    <div class="row input-row">
+    <TextInput
+      class="row"
+      placeholder="Episode name"
+      v-model:value="name"
+      @submit="onClickCreate"
+    />
+    <div class="flex flex-row space-x-4">
       <TextInput label="Season" v-model:value="season" @submit="onClickCreate" />
       <TextInput label="Number in Season" v-model:value="number" @submit="onClickCreate" />
-      <TextInput label="Overall Number" v-model:value="absoluteNumber" @submit="onClickCreate" />
+      <TextInput label="Watch Order" v-model:value="absoluteNumber" @submit="onClickCreate" />
     </div>
-    <div class="row buttons">
-      <button
-        class="button clickable"
-        :class="{ disabled: isCreateDisabled }"
-        :disabled="isCreateDisabled"
-        @click.stop.prevent="onClickCreate"
-      >
+    <div class="flex flex-row-reverse justify-between pt-2">
+      <RaisedButton :disabled="isCreateDisabled" @click.stop.prevent="onClickCreate">
         {{ createButtonText }}
-      </button>
-      <button class="button clickable dark" @click.stop.prevent="hideDialog">Cancel</button>
+      </RaisedButton>
+      <FlatButton transparent @click.stop.prevent="hideDialog">Cancel</FlatButton>
     </div>
   </div>
 </template>
@@ -32,11 +32,10 @@
 import { defineComponent, PropType } from 'vue';
 import ShowAutocompleteMixin from '@/common/mixins/ShowAutocomplete';
 import AutocompleteTextInput from '@/common/components/AutocompleteTextInput.vue';
-import TextInput from '@/common/components/TextInput.vue';
 import { ActionTypes } from '@/common/store/actionTypes';
 
 export default defineComponent({
-  components: { AutocompleteTextInput, TextInput },
+  components: { AutocompleteTextInput },
   mixins: [ShowAutocompleteMixin],
   props: {
     prefill: Object as PropType<CreateEpisodePrefill>,

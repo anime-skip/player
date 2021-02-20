@@ -46,7 +46,7 @@ $duration: 1.4s;
     right: 0;
     top: 0;
     bottom: 0;
-    background-color: rgba($color: $background500, $alpha: 0.8);
+    // background-color: rgba($color: $background500, $alpha: 0.8);
 
     display: flex;
     flex-direction: column;

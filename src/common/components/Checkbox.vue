@@ -48,9 +48,9 @@ export default defineComponent({
     font-weight: 700;
     padding-top: 2px;
     font-size: 14px;
-    color: $textPrimary;
+    // color: $textPrimary;
     &.selected {
-      color: $textPrimary;
+      // color: $textPrimary;
     }
   }
 }

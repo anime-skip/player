@@ -1,7 +1,7 @@
 <template>
   <BasicDialog name="EditEpisodeDialog" gravityX="center" gravityY="center" @show="onShow">
-    <ProgressOverlay :isLoading="isLoading">
-      <div class="header">
+    <LoadingOverlay class="min-h-12" :isLoading="isLoading">
+      <div class="flex flex-row mx-2">
         <p class="tab" :class="{ active: tab == 0 }" @click="onClickFindExisting">
           Find an existing episode
         </p>
@@ -16,13 +16,13 @@
         :suggestions="suggestions"
       />
       <CreateNew v-else-if="shouldShowCreateNew" :prefill="prefill" />
-    </ProgressOverlay>
+    </LoadingOverlay>
   </BasicDialog>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import ProgressOverlay from '@/common/components/ProgressOverlay.vue';
+import { LoadingOverlay } from '@anime-skip/ui';
 import BasicDialog from '../BasicDialog.vue';
 import FindExisting from './FindExisting.vue';
 import CreateNew from './CreateNew.vue';
@@ -31,7 +31,7 @@ import RequestState from '@/common/utils/RequestState';
 import Mappers from '@/common/utils/Mappers';
 
 export default defineComponent({
-  components: { ProgressOverlay, BasicDialog, FindExisting, CreateNew },
+  components: { LoadingOverlay, BasicDialog, FindExisting, CreateNew },
   data() {
     const suggestions: Api.ThirdPartyEpisode[] = [];
     const prefill: CreateEpisodePrefill = {
@@ -204,43 +204,27 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-$width: 450px;
-
+<style lang="css">
 * {
   padding: 0;
   margin: 0;
 }
 
-#EditEpisodeDialog {
-  .dialog-root-container {
-    overflow-y: auto;
-    max-height: 70%;
-    width: $width;
-    overflow-y: visible;
-  }
+#EditEpisodeDialog .dialog-root-container {
+  max-height: 70%;
+  width: 480px;
+  overflow: visible;
 }
 
-.ProgressOverlay {
-  min-height: 172px;
+.tab {
+  @apply mx-2 pt-4 cursor-pointer border-b-2 text-on-surface border-primary border-opacity-0 text-opacity-medium font-bold transition-all;
 }
 
-.header {
-  display: flex;
-  flex-direction: row;
-  margin: 0 8px;
+.tab.active {
+  @apply text-primary border-opacity-100;
+}
 
-  .tab {
-    margin: 0 8px;
-    height: 24px;
-    padding-top: 16px;
-    cursor: pointer;
-    color: $textSecondary;
-
-    &.active {
-      color: $textPrimary;
-      border-bottom: 2px solid $primary300;
-    }
-  }
+.min-h-12 {
+  min-height: 12rem; /* 192px */
 }
 </style>
