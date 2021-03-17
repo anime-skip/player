@@ -5,7 +5,7 @@
       <div class="relative">
         <div class="flex flex-row overflow-x-auto box-border space-x-4 px-4">
           <div v-for="suggestion of suggestionListItems" :key="suggestion.index">
-            <RaisedContainer dark @click="onClickSuggestion(suggestion.value)">
+            <RaisedContainer dark @click.stop.prevent="onClickSuggestion(suggestion.value)">
               <div class="box-border w-44 px-4 pt-4 pb-3 text-left space-y-1">
                 <p class="subtitle-1 text-primary font-semibold">
                   {{ suggestion.timestamps }}

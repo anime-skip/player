@@ -39,7 +39,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
-    const isLoggedIn = computed(() => store.state.account != null);
+    const isLoggedIn = computed(() => store.state.isLoggedIn);
     const { togglePreference, getBooleanPreference } = usePreferenceEditor();
     const enableAutoSkip = computed(() => getBooleanPreference('enableAutoSkip'));
 

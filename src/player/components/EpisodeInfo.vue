@@ -86,9 +86,8 @@ export default defineComponent({
       this.pause();
       if (!this.isLoggedIn) {
         this.showLoginDialog();
-      } else {
-        this.showEpisodeDialog();
       }
+      this.showEpisodeDialog();
     },
   },
 });

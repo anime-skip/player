@@ -1,21 +1,32 @@
 <template>
-  <BasicDialog name="EditEpisodeDialog" gravityX="center" gravityY="center" @show="onShow">
-    <LoadingOverlay class="min-h-12" :isLoading="isLoading">
-      <div class="flex flex-row mx-2">
-        <p class="tab" :class="{ active: tab == 0 }" @click="onClickFindExisting">
-          Find an existing episode
-        </p>
-        <p class="tab" :class="{ active: tab == 1 }" @click="onClickCreateNew">
-          Create a new episode
-        </p>
+  <BasicDialog
+    name="EditEpisodeDialog"
+    gravityX="center"
+    gravityY="center"
+    @show="onShow"
+    @hide="onHide"
+  >
+    <LoadingOverlay class="min-h-6" :isLoading="isLoading">
+      <div v-if="!isLoggedIn" class="px-16 py-8 text-center self-center justify-self-center">
+        <LoginWarning before="connecting this episode to Anime Skip" />
       </div>
-      <FindExisting
-        v-if="shouldShowFindExisting"
-        @createNew="enableCreateNew"
-        :prefill="prefill"
-        :suggestions="suggestions"
-      />
-      <CreateNew v-else-if="shouldShowCreateNew" :prefill="prefill" />
+      <template v-else>
+        <div class="flex flex-row mx-2">
+          <p class="tab" :class="{ active: tab == 0 }" @click="onClickFindExisting">
+            Find an existing episode
+          </p>
+          <p class="tab" :class="{ active: tab == 1 }" @click="onClickCreateNew">
+            Create a new episode
+          </p>
+        </div>
+        <FindExisting
+          v-if="shouldShowFindExisting"
+          @createNew="enableCreateNew"
+          :prefill="prefill"
+          :suggestions="suggestions"
+        />
+        <CreateNew v-else-if="shouldShowCreateNew" :prefill="prefill" />
+      </template>
     </LoadingOverlay>
   </BasicDialog>
 </template>
@@ -29,9 +40,10 @@ import CreateNew from './CreateNew.vue';
 import Utils from '@/common/utils/Utils';
 import RequestState from '@/common/utils/RequestState';
 import Mappers from '@/common/utils/Mappers';
+import LoginWarning from '@/player/components/LoginWarning';
 
 export default defineComponent({
-  components: { LoadingOverlay, BasicDialog, FindExisting, CreateNew },
+  components: { LoadingOverlay, BasicDialog, FindExisting, CreateNew, LoginWarning },
   data() {
     const suggestions: Api.ThirdPartyEpisode[] = [];
     const prefill: CreateEpisodePrefill = {
@@ -49,6 +61,7 @@ export default defineComponent({
       isLoadingSuggestions: false,
       isLoadingDefaultShow: false,
       isLoadingDefaultEpisode: false,
+      showing: false,
     };
   },
   computed: {
@@ -57,11 +70,15 @@ export default defineComponent({
     },
     isLoading(): boolean {
       return (
+        this.$store.getters.IS_LOGGING_IN ||
         this.$store.state.episodeRequestState === RequestState.LOADING ||
         this.isLoadingSuggestions ||
         this.isLoadingDefaultShow ||
         this.isLoadingDefaultEpisode
       );
+    },
+    isLoggedIn(): boolean {
+      return this.$store.getters.IS_LOGGED_IN && !this.$store.getters.IS_LOGGING_IN;
     },
     shouldShowTabs(): boolean {
       // don't show it while it's still loading so it properly fills the default show and episode values
@@ -72,6 +89,17 @@ export default defineComponent({
     },
     shouldShowCreateNew(): boolean {
       return this.shouldShowTabs && this.tab === 1;
+    },
+  },
+  watch: {
+    isLoggedIn(newValue, oldValue): void {
+      if (this.showing && newValue && !oldValue) {
+        // TODO: Fix race condition that leads to immeditate log out
+        setTimeout(() => {
+          this.loadSuggestions();
+          this.loadDefaultShowOption();
+        }, 200);
+      }
     },
   },
   methods: {
@@ -90,8 +118,14 @@ export default defineComponent({
       };
       this.suggestions = [];
 
-      this.loadSuggestions();
-      this.loadDefaultShowOption();
+      if (this.isLoggedIn) {
+        this.loadSuggestions();
+        this.loadDefaultShowOption();
+      }
+      this.showing = true;
+    },
+    onHide(): void {
+      this.showing = false;
     },
     async loadSuggestions(): Promise<void> {
       if (this.inferredInfo?.name == null || this.inferredInfo.show == null) {
@@ -224,7 +258,7 @@ export default defineComponent({
   @apply text-primary border-opacity-100;
 }
 
-.min-h-12 {
-  min-height: 12rem; /* 192px */
+.min-h-6 {
+  min-height: 6rem; /* 96px */
 }
 </style>
