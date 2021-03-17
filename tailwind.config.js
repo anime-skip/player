@@ -1,7 +1,12 @@
 module.exports = {
   presets: [require('@anime-skip/ui/tailwind.preset')],
-  // purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
-  purge: [],
+  purge: [
+    './src/**/*.html',
+    './src/**/*.vue',
+    './src/**/*.jsx',
+    './src/**/*.tsx',
+    './node_modules/@anime-skip/ui/ui.*.js',
+  ],
   theme: {
     extend: {
       width: {
