@@ -10,7 +10,7 @@ type LoggedInState = State & { account: Api.Account };
 export function assertLoggedIn(
   context: AugmentedActionContext
 ): asserts context is AugmentedActionContext<LoggedInState> {
-  if (!context.getters.IS_LOGGED_IN) {
+  if (!context.state.isLoggedIn) {
     context.commit(MutationTypes.SET_LOGIN_REQUEST_STATE, RequestState.NOT_REQUESTED);
     throw new AssertionError({ message: 'state.account does not exist, log in again' });
   }

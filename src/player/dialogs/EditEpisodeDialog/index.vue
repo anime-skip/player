@@ -40,7 +40,7 @@ import CreateNew from './CreateNew.vue';
 import Utils from '@/common/utils/Utils';
 import RequestState from '@/common/utils/RequestState';
 import Mappers from '@/common/utils/Mappers';
-import LoginWarning from '@/player/components/LoginWarning';
+import LoginWarning from '@/player/components/LoginWarning.vue';
 
 export default defineComponent({
   components: { LoadingOverlay, BasicDialog, FindExisting, CreateNew, LoginWarning },
@@ -78,7 +78,7 @@ export default defineComponent({
       );
     },
     isLoggedIn(): boolean {
-      return this.$store.getters.IS_LOGGED_IN && !this.$store.getters.IS_LOGGING_IN;
+      return this.$store.state.isLoggedIn && !this.$store.getters.IS_LOGGING_IN;
     },
     shouldShowTabs(): boolean {
       // don't show it while it's still loading so it properly fills the default show and episode values
