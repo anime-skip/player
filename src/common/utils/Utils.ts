@@ -86,20 +86,20 @@ export default class Utils {
     }
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
-      // @ts-ignore
+      // @ts-expect-error: difficult typing
     } else if (elem.mozRequestFullScreen) {
       /* Firefox */
-      // @ts-ignore
+      // @ts-expect-error: difficult typing
       elem.mozRequestFullScreen();
-      // @ts-ignore
+      // @ts-expect-error: difficult typing
     } else if (elem.webkitRequestFullscreen) {
       /* Chrome, Safari and Opera */
-      // @ts-ignore
+      // @ts-expect-error: difficult typing
       elem.webkitRequestFullscreen();
-      // @ts-ignore
+      // @ts-expect-error: difficult typing
     } else if (elem.msRequestFullscreen) {
       /* IE/Edge */
-      // @ts-ignore
+      // @ts-expect-error: difficult typing
       elem.msRequestFullscreen();
     }
   }
@@ -113,6 +113,7 @@ export default class Utils {
       console.warn('Not in full screen mode, tried to exit');
       return;
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const d = document as any;
     if (document.exitFullscreen) {
       document.exitFullscreen();
@@ -210,7 +211,7 @@ export default class Utils {
   public static randomId(): number {
     return Math.random() * Number.MAX_SAFE_INTEGER;
   }
-
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   public static arrayIncludes<K extends string>(
     array: { [key in K]: any }[],
     idKey: K,
@@ -218,6 +219,7 @@ export default class Utils {
   ): boolean {
     return array.some(item => item[idKey] === value[idKey]);
   }
+  /* eslint-enable @typescript-eslint/no-explicit-any */
 
   public static computeTimestampDiffs(
     oldTimestamps: Api.Timestamp[],
@@ -345,12 +347,12 @@ export default class Utils {
     return value;
   }
 
-  public static async apiAction<C extends (...args: any[]) => Promise<any>>(
+  public static async apiAction<R, A extends unknown[]>(
     store: Store,
-    apiCall: C,
-    ...args: Parameters<C>
-  ): Promise<ReturnType<C>> {
-    // @ts-ignore: Type generics did not make it through to dispatch()
+    apiCall: (...args: A) => Promise<R>,
+    ...args: A
+  ): Promise<R> {
+    // @ts-expect-error: Type generics did not make it through to dispatch()
     return await store.dispatch(ActionTypes.API_CALL, { apiCall, args });
   }
 

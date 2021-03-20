@@ -141,3 +141,7 @@ type KeyboardShortcutAction =
   | 'discardChanges';
 
 type KeyboardShortcutsMap = { [keyCombo in KeyboardShortcutAction]?: string };
+
+declare interface TextInputRef {
+  focus(selectAll?: boolean): void;
+}

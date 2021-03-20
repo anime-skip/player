@@ -5,8 +5,8 @@
       class="relative"
       :label="label"
       :placeholder="placeholder"
-      :errorMessage="errorMessage"
-      :leftIcon="leftIcon"
+      :error-message="errorMessage"
+      :left-icon="leftIcon"
       v-model:value="searchValue"
       :disabled="disabled"
       @focus="onFocusInput"
@@ -63,12 +63,12 @@ import { computed, defineComponent, PropType, ref, watch } from 'vue';
 export default defineComponent({
   props: {
     value: { type: Object as PropType<AutocompleteItem>, required: true },
-    label: String,
-    placeholder: String,
-    errorMessage: String,
+    label: { type: String, required: true },
+    placeholder: { type: String, default: undefined },
+    errorMessage: { type: String, default: undefined },
     noOptionsMessage: { type: String, default: 'No results' },
     options: { type: Array as PropType<AutocompleteItem[]>, required: true },
-    leftIcon: String,
+    leftIcon: { type: String, default: undefined },
     searchDelay: { type: Number, default: 300 },
     disabled: Boolean,
   },
@@ -185,7 +185,7 @@ export default defineComponent({
   },
   methods: {
     focus() {
-      (this.$refs.input as any | undefined)?.focus(true);
+      (this.$refs.input as TextInputRef | undefined)?.focus(true);
     },
   },
 });

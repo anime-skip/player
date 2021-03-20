@@ -14,7 +14,7 @@ export default class Messenger<
     this.forwardTypes = forwardTypes;
 
     if (listeners != null || forwardTypes != null) {
-      // @ts-ignore
+      // @ts-expect-error: difficult typing
       browser.runtime.onMessage.addListener(this.onReceiveMessage);
       console.debug(`Started ${source} messenger`);
     }

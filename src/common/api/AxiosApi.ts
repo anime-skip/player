@@ -1,4 +1,4 @@
-import Axios, { AxiosError } from 'axios';
+import Axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import Utils from '@/common/utils/Utils';
 import Browser from '@/common/utils/Browser';
 import md5 from 'md5';
@@ -10,47 +10,49 @@ const axios = Axios.create({
 });
 
 if (process.env.NODE_ENV !== 'production') {
-  axios.interceptors.request.use((config): any => {
-    const formattedGraphql = Utils.formatGraphql(config.data.query);
-    const type = formattedGraphql.split('\n')[0]?.replace('{', '').trim();
-    /* eslint-disable no-console */
-    console.groupCollapsed(
-      `%cAPI  %c/${config.url} ${type}`,
-      'font-weight: 600; color: default;',
-      'font-weight: 400; color: default;'
-    );
-    console.debug(`URL: %c${config.baseURL}${config.url}`, 'color: #137AF8');
-    const headers = {
-      ...config.headers,
-      ...config.headers.common,
-      ...config.headers[config.method || 'get'],
-    };
-    delete headers.get;
-    delete headers.post;
-    delete headers.put;
-    delete headers.delete;
-    delete headers.patch;
-    delete headers.head;
-    console.debug('Headers: ', headers);
-    if (config.params) {
-      console.debug('Parameters: ', config.params);
-    }
-    if (config.data) {
-      console.debug(`GraphQL:\n%c${formattedGraphql}`, 'color: #137AF8');
-      if (config.data.variables) {
-        console.debug('Variables: ', config.data.variables);
+  axios.interceptors.request.use(
+    (config): AxiosRequestConfig => {
+      const formattedGraphql = Utils.formatGraphql(config.data.query);
+      const type = formattedGraphql.split('\n')[0]?.replace('{', '').trim();
+      /* eslint-disable no-console */
+      console.groupCollapsed(
+        `%cAPI  %c/${config.url} ${type}`,
+        'font-weight: 600; color: default;',
+        'font-weight: 400; color: default;'
+      );
+      console.debug(`URL: %c${config.baseURL}${config.url}`, 'color: #137AF8');
+      const headers = {
+        ...config.headers,
+        ...config.headers.common,
+        ...config.headers[config.method || 'get'],
+      };
+      delete headers.get;
+      delete headers.post;
+      delete headers.put;
+      delete headers.delete;
+      delete headers.patch;
+      delete headers.head;
+      console.debug('Headers: ', headers);
+      if (config.params) {
+        console.debug('Parameters: ', config.params);
       }
+      if (config.data) {
+        console.debug(`GraphQL:\n%c${formattedGraphql}`, 'color: #137AF8');
+        if (config.data.variables) {
+          console.debug('Variables: ', config.data.variables);
+        }
+      }
+      /* eslint-enable no-console */
+      return config;
     }
-    /* eslint-enable no-console */
-    return config;
-  });
+  );
 }
 
-function query(q: string, vars?: { [variableName: string]: any }): GraphQlBody {
+function query(q: string, vars?: GraphQlVariables): GraphQlBody {
   return { query: q, variables: vars };
 }
 
-function mutation(mutationString: string, vars: { [variableName: string]: any }): GraphQlBody {
+function mutation(mutationString: string, vars: GraphQlVariables): GraphQlBody {
   return { query: mutationString, variables: vars };
 }
 
@@ -132,7 +134,7 @@ const episodeUrlData = `
 
 /* eslint-disable no-console */
 async function sendGraphql<Q extends string, D>(
-  data: any,
+  data: unknown,
   skipAuth = false
 ): Promise<{ data: { [field in Q]: D } }> {
   try {
@@ -167,7 +169,7 @@ async function sendGraphql<Q extends string, D>(
 }
 
 async function sendUnauthorizedGraphql<Q extends string, D>(
-  data: any
+  data: unknown
 ): Promise<{ data: { [field in Q]: D } }> {
   return await sendGraphql(data, true);
 }

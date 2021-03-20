@@ -59,7 +59,7 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   props: {
-    shortcut: { type: String, required: false },
+    shortcut: { type: String, default: undefined },
     secondary: Boolean,
   },
   emits: ['update'],

@@ -1,5 +1,5 @@
 <template>
-  <LoadingOverlay :isLoading="isLoggingOut">
+  <LoadingOverlay :is-loading="isLoggingOut">
     <div class="p-4 space-y-8">
       <PopupHeader title="Preferences" class="header" />
       <GeneralSettings>

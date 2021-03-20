@@ -1,5 +1,5 @@
 <template>
-  <LoadingOverlay :isLoading="isLoggingIn">
+  <LoadingOverlay :is-loading="isLoggingIn">
     <div class="w-popup-sm p-6 flex flex-col space-y-4">
       <PopupHeader title="Log In" />
       <TextInput
@@ -19,7 +19,7 @@
       </TextInput>
       <TextInput
         placeholder="Password"
-        :errorMessage="isLogInError ? 'Username or password is incorrect' : undefined"
+        :error-message="isLogInError ? 'Username or password is incorrect' : undefined"
         autocomplete="current-password"
         type="password"
         v-model:value="password"
@@ -59,7 +59,7 @@ export default defineComponent({
   components: { PopupHeader },
   props: {
     closeAfterLogin: Boolean,
-    close: Function as PropType<() => void>,
+    close: { type: Function as PropType<() => void>, default: undefined },
   },
   data() {
     return {

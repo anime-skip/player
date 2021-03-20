@@ -1,8 +1,10 @@
 type AxiosResponse<T> = import('axios').AxiosResponse<T>;
 
+type GraphQlVariables = { [variableName: string]: unknown };
+
 declare interface GraphQlBody {
   query?: string;
-  variables?: { [variableName: string]: any };
+  variables?: GraphQlVariables;
 }
 
 declare namespace Api {

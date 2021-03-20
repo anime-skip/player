@@ -23,7 +23,7 @@
       <EpisodeInfo />
     </div>
     <div class="right-content" />
-    <ToolBar class="bottom-content" :playerState="playerState" />
+    <ToolBar class="bottom-content" :player-state="playerState" />
 
     <!-- Dialogs -->
     <TimestampsPanel />
@@ -134,11 +134,12 @@ export default defineComponent({
     loadAllEpisodeData(url?: string): void {
       this.$store.dispatch(ActionTypes.LOAD_ALL_EPISODE_DATA, url);
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onReceiveMessage({ type, payload: url }: any) {
       if (type != '@anime-skip/changeUrl') return;
 
       console.debug('Change URL: ' + url);
-      this.setTabUrl(url);
+      this.setTabUrl(url as string);
       this.setHasSkippedFromZero(false);
       this.loadAllEpisodeData();
     },

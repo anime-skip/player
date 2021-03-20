@@ -126,10 +126,16 @@ export const actions: ActionTree<State, State> & Actions = {
     if (!discardChanges) {
       const oldTimestamps = state.episode?.timestamps ?? [];
       const newTimestamps = state.draftTimestamps;
+      const episodeUrl = state.episodeUrl;
+      if (episodeUrl == null) {
+        throw new Error(
+          'Cannot stop editing if the episode url does not exist because there is nothing to save to'
+        );
+      }
       await dispatch(ActionTypes.UPDATE_TIMESTAMPS, {
         oldTimestamps,
         newTimestamps,
-        episodeUrl: state.episodeUrl!,
+        episodeUrl,
         episode: state.episode,
       });
     }
@@ -300,7 +306,10 @@ export const actions: ActionTree<State, State> & Actions = {
           episodeId
         );
       } else {
-        episodeUrl = state.episodeUrl!;
+        if (state.episodeUrl == null) {
+          throw new Error("Can't update an episode URL that doesn't exist");
+        }
+        episodeUrl = state.episodeUrl;
       }
 
       // Update the data
@@ -474,8 +483,7 @@ export const actions: ActionTree<State, State> & Actions = {
         commit(MutationTypes.SET_EPISODE_URL, undefined);
         commit(MutationTypes.SET_EPISODE, {
           ...episode,
-          // TODO! Fix this typing
-          // @ts-ignore
+          // @ts-expect-error: TODO fix this typing
           timestamps,
         });
       }

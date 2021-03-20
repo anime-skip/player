@@ -1,5 +1,5 @@
 <template>
-  <LogIn v-if="!isLoggedIn" :small="small" :closeAfterLogin="closeAfterLogin" :close="close" />
+  <LogIn v-if="!isLoggedIn" :small="small" :close-after-login="closeAfterLogin" :close="close" />
   <PopupPreferences v-else :small="small" />
 </template>
 

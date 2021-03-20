@@ -10,7 +10,7 @@
     <TimelineWrapper
       class="timeline-alignment"
       :class="{ 'opacity-0 pointer-events-none': !duration }"
-      :isFlipped="!playerState.isPaused && !isActive"
+      :is-flipped="!playerState.isPaused && !isActive"
       :duration="duration"
     />
     <div class="h-toolbar flex flex-row items-center space-x-1 px-2 pt-0.5">
@@ -78,7 +78,13 @@ export default defineComponent({
   },
   setup() {
     const store: Store = useStore();
-    const { setCurrentTime, pause, togglePlayPause, addTime, getVideo } = useVideoController();
+    const {
+      setCurrentTime,
+      pause,
+      togglePlayPause,
+      addTime,
+      getVideoOrThrow,
+    } = useVideoController();
 
     // Editing
     const playerState = computed(() => store.state.playerState);
@@ -163,7 +169,7 @@ export default defineComponent({
         timestamps.value,
         undefined
       );
-      const video = getVideo();
+      const video = getVideoOrThrow();
       if (nextTimestamp) {
         setCurrentTime(nextTimestamp.at);
         if (isEditing.value) {

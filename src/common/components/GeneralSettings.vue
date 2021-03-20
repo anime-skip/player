@@ -12,7 +12,7 @@
         'grid-cols-2': !small,
       }"
     >
-      <PlaybackRatePicker :showLess="!small" />
+      <PlaybackRatePicker :show-less="!small" />
       <RaisedCheckbox
         label="Auto-skip sections"
         :checked="enableAutoSkip"

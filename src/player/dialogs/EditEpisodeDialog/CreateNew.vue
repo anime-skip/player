@@ -38,7 +38,7 @@ export default defineComponent({
   components: { AutocompleteTextInput },
   mixins: [ShowAutocompleteMixin],
   props: {
-    prefill: Object as PropType<CreateEpisodePrefill>,
+    prefill: { type: Object as PropType<CreateEpisodePrefill>, default: undefined },
   },
   data() {
     return {

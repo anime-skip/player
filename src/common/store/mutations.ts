@@ -144,7 +144,7 @@ export const mutations: MutationTree<State> & Mutations = {
           const playbackRate = (changes[field] as number) || 1;
           changePlaybackRate(state, playbackRate);
         } else {
-          // @ts-ignore
+          // @ts-expect-error: difficult typing
           state[field] = changes[field]; // TODO: Test set
         }
       }

@@ -21,13 +21,13 @@ export default defineComponent({
   components: { WebExtImg },
   emits: ['click'],
   props: {
-    icon: String,
-    title: String,
+    icon: { type: String, default: undefined },
+    title: { type: String, default: undefined },
   },
   methods: {
     onClick() {
       this.$emit('click');
-      (document.activeElement as any | undefined)?.blur?.();
+      (document.activeElement as HTMLInputElement | HTMLElement | undefined)?.blur();
     },
   },
 });

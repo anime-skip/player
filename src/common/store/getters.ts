@@ -148,11 +148,13 @@ export const getters: GetterTree<State, State> & Getters = {
         at,
       };
     });
-    if (playerState.duration! == null) return offsetTimestamps;
+
+    const duration = playerState.duration;
+    if (duration == null) return offsetTimestamps;
 
     // Remove out of bounds timestamps
     const offsetBoundedTimestamps = offsetTimestamps.filter(
-      timestamp => timestamp.at <= playerState.duration! && timestamp.at >= 0
+      timestamp => timestamp.at <= duration && timestamp.at >= 0
     );
     return offsetBoundedTimestamps;
   },
@@ -174,7 +176,6 @@ export const getters: GetterTree<State, State> & Getters = {
       ? getters[GetterTypes.DRAFT_TIMESTAMPS]
       : getters[GetterTypes.TIMESTAMPS];
   },
-  // @ts-ignore: types don't like generics
   [GetterTypes.APPLY_TIMESTAMP_DIFF](state) {
     return function (timestamp) {
       const original = state.timestamps.find(t => t.id === timestamp.id);

@@ -4,7 +4,7 @@ export async function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export function clone(data: any): any {
+export function clone<T>(data: T): T | { message: string; data: T } {
   try {
     return JSON.parse(JSON.stringify(data));
   } catch (err) {

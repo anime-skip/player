@@ -16,7 +16,7 @@ export function assertLoggedIn(
   }
 }
 
-export async function callApi<A extends any[], R>(
+export async function callApi<A extends unknown[], R>(
   commit: AugmentedActionContext['commit'],
   apiMethod: (...args: A) => Promise<R>,
   ...args: A

@@ -10,8 +10,8 @@
       class="slider w-full"
       :progress="normalizedTime"
       :max="100"
-      disableUpdateDuringSeek
-      :defaultThumbSize="thumbSize"
+      disable-update-during-seek
+      :default-thumb-size="thumbSize"
       @seek="onSeek"
     >
       <template #background>
@@ -23,7 +23,7 @@
             seeking: isSeeking,
           }"
           :timestamps="timelineData"
-          :normalizedProgress="slotProps.progress"
+          :normalized-progress="slotProps.progress"
           :editing="isEditing"
           @click.stop
         />
@@ -45,7 +45,7 @@ import TimestampColors from '@/player/utils/TimelineColors';
 export default defineComponent({
   props: {
     isFlipped: Boolean,
-    duration: Number,
+    duration: { type: Number, default: undefined },
   },
   emits: ['seek'],
   setup(props) {
@@ -66,11 +66,12 @@ export default defineComponent({
     // Timestamps
     const activeTimestamps = computed(() => store.getters[GetterTypes.ACTIVE_TIMESTAMPS]);
     const timelineData = computed(() => {
-      if (props.duration == null) return [];
+      const duration = props.duration;
+      if (duration == null) return [];
 
       return activeTimestamps.value.map(timestamp => ({
         key: timestamp.id,
-        normalizedAt: (timestamp.at / props.duration!) * 100,
+        normalizedAt: (timestamp.at / duration) * 100,
         skipped: !isEditing.value && Utils.isSkipped(timestamp, preferences.value),
         color:
           typeof timestamp.id === 'number'
@@ -119,7 +120,7 @@ export default defineComponent({
       }
 
       // Get the next timestamp AFTER the oldTime, regardless of if it's skipped
-      const oldNext = Utils.nextTimestamp(oldTime, activeTimestamps.value, undefined);
+      let oldNext = Utils.nextTimestamp(oldTime, activeTimestamps.value, undefined);
 
       // Do nothing
       const timeDiff = Math.abs(oldTime - newTime);
@@ -129,6 +130,7 @@ export default defineComponent({
       if (hasNoMoreTimestamsps || isSeeking || isAtEnd || isEditing.value) {
         return;
       }
+      oldNext = oldNext as Api.AmbiguousTimestamp;
 
       // Skip timestamp at 0:00 if we haven't yet
       const wasAtBeginning = oldTime === 0;
@@ -144,8 +146,9 @@ export default defineComponent({
       }
 
       // Do nothing
-      const willNotPastATimestamp = oldNext!.at > newTime + timeDiff; // look forward a time update so we don't show the user a frame of the skipped section
-      const notSkippingThePassedTimestamp = !Utils.isSkipped(oldNext!, preferences.value);
+      // const oldNext as Api.AmbiguousTimestamp;
+      const willNotPastATimestamp = oldNext.at > newTime + timeDiff; // look forward a time update so we don't show the user a frame of the skipped section
+      const notSkippingThePassedTimestamp = !Utils.isSkipped(oldNext, preferences.value);
       if (willNotPastATimestamp || notSkippingThePassedTimestamp) {
         return;
       }
