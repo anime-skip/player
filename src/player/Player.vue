@@ -134,7 +134,8 @@ export default defineComponent({
     loadAllEpisodeData(url?: string): void {
       this.$store.dispatch(ActionTypes.LOAD_ALL_EPISODE_DATA, url);
     },
-    onReceiveMessage({ type, payload: url }: { type: string; payload: unknown }) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onReceiveMessage({ type, payload: url }: any) {
       if (type != '@anime-skip/changeUrl') return;
 
       console.debug('Change URL: ' + url);

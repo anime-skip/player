@@ -78,7 +78,13 @@ export default defineComponent({
   },
   setup() {
     const store: Store = useStore();
-    const { setCurrentTime, pause, togglePlayPause, addTime, getVideo } = useVideoController();
+    const {
+      setCurrentTime,
+      pause,
+      togglePlayPause,
+      addTime,
+      getVideoOrThrow,
+    } = useVideoController();
 
     // Editing
     const playerState = computed(() => store.state.playerState);
@@ -163,7 +169,7 @@ export default defineComponent({
         timestamps.value,
         undefined
       );
-      const video = getVideo();
+      const video = getVideoOrThrow();
       if (nextTimestamp) {
         setCurrentTime(nextTimestamp.at);
         if (isEditing.value) {
