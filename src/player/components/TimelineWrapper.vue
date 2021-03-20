@@ -47,7 +47,6 @@ export default defineComponent({
     isFlipped: Boolean,
     duration: { type: Number, default: undefined },
   },
-  emits: ['seek'],
   setup(props) {
     const store: Store = useStore();
     const service = global.service;

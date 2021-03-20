@@ -40,7 +40,10 @@ export default defineComponent({
     },
     hideDialog: { type: Function as PropType<(store: Store) => void>, default: undefined },
   },
-  emits: ['show', 'hide'],
+  emits: {
+    show: () => true,
+    hide: () => true,
+  },
   watch: {
     activeDialog(currentDialog?: string, prevDialog?: string) {
       if (currentDialog === prevDialog) return;

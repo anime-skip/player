@@ -23,12 +23,12 @@
           :class="{
             'ring ring-opacity-low': isTimeSelectFocused,
           }"
-          tabindex="0"
+          :tabindex="0"
           @focus="isTimeSelectFocused = true"
           @blur="isTimeSelectFocused = false"
           @click.stop.prevent="focusOnTimeSelect"
         >
-          <RaisedContainer :down="isTimeSelectFocused" dark tabindex="-1" class="no-firefox-dots">
+          <RaisedContainer :down="isTimeSelectFocused" dark :tabindex="-1" class="no-firefox-dots">
             <div class="w-full h-10 pl-3 pr-4 flex items-center space-x-3 no-firefox-dots">
               <WebExtImg class="icon" src="ic_clock.svg" :draggable="false" />
               <p class="time">

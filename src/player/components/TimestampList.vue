@@ -12,7 +12,7 @@
       <div class="scroll -mx-4 select-none pt-2 flex-1">
         <table class="w-full">
           <tr>
-            <td colspan="4" class="px-4 text-center">
+            <td :colspan="4" class="px-4 text-center">
               <ToolbarButton
                 v-if="isEditing"
                 class="w-full"
