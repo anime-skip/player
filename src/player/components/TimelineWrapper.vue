@@ -60,7 +60,8 @@ export default defineComponent({
 
     // Editing
     const isEditing = computed(() => store.state.isEditing);
-    const canAddTimestamp = computed(() => isEditing.value && store.state.activeTimestamp == null);
+    const timestampBeingEdited = computed(() => store.state.activeTimestamp);
+    const canAddTimestamp = computed(() => isEditing.value && timestampBeingEdited.value == null);
 
     // Timestamps
     const activeTimestamps = computed(() => store.getters[GetterTypes.ACTIVE_TIMESTAMPS]);
@@ -77,7 +78,9 @@ export default defineComponent({
             : timestamp.edited
             ? TimestampColors.edited
             : TimestampColors.default,
-        active: store.state.hoveredTimestamp?.id === timestamp.id,
+        active:
+          store.state.hoveredTimestamp?.id === timestamp.id ||
+          timestamp.id === timestampBeingEdited.value?.id,
       }));
     });
     const goToNextTimestampOnTimeChange = (newTime: number): void => {
