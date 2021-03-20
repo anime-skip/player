@@ -70,7 +70,7 @@ export default defineComponent({
       return activeTimestamps.value.map(timestamp => ({
         key: timestamp.id,
         normalizedAt: (timestamp.at / props.duration!) * 100,
-        skipped: Utils.isSkipped(timestamp, preferences.value),
+        skipped: !isEditing.value && Utils.isSkipped(timestamp, preferences.value),
         color:
           typeof timestamp.id === 'number'
             ? TimestampColors.new
