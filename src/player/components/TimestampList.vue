@@ -71,14 +71,14 @@
               <template v-if="canEditTimestamps">
                 <td class="w-10 py-1">
                   <div
-                    class="w-6 p-2 rounded-full box-content opacity-0 group-hover:opacity-medium hover:bg-on-surface hover:bg-opacity-hover transition-all"
+                    class="w-6 p-2 rounded-full box-content opacity-0 group-hover:opacity-medium hover:bg-on-surface hover:bg-opacity-active transition-all"
                   >
                     <WebExtImg src="ic_delete.svg" @click.stop="deleteTimestamp(timestamp)" />
                   </div>
                 </td>
                 <td class="w-10 py-1">
                   <div
-                    class="w-6 p-2 mr-2 rounded-full box-content opacity-low group-hover:opacity-medium hover:bg-on-surface hover:bg-opacity-hover"
+                    class="w-6 p-2 mr-2 rounded-full box-content opacity-low group-hover:opacity-medium hover:bg-on-surface hover:bg-opacity-active"
                   >
                     <WebExtImg src="ic_edit.svg" @click.stop="editTimestamp(timestamp)" />
                   </div>
