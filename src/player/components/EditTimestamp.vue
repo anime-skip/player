@@ -19,7 +19,7 @@
       <div class="flex flex-row space-x-4 py-2 items-center">
         <div
           ref="timeSelect"
-          class="self-start flex-shrink-0 rounded-sm ring-primary"
+          class="self-start flex-shrink-0 rounded-sm ring-primary no-firefox-dots"
           :class="{
             'ring ring-opacity-low': isTimeSelectFocused,
           }"
@@ -28,8 +28,8 @@
           @blur="isTimeSelectFocused = false"
           @click.stop.prevent="focusOnTimeSelect"
         >
-          <RaisedContainer :down="isTimeSelectFocused" dark tabindex="-1">
-            <div class="w-full h-10 pl-3 pr-4 flex items-center space-x-3">
+          <RaisedContainer :down="isTimeSelectFocused" dark tabindex="-1" class="no-firefox-dots">
+            <div class="w-full h-10 pl-3 pr-4 flex items-center space-x-3 no-firefox-dots">
               <WebExtImg class="icon" src="ic_clock.svg" :draggable="false" />
               <p class="time">
                 {{ formattedAt }}
@@ -321,5 +321,9 @@ export default defineComponent({
     background-color: $backgroundColor-control-disabled;
     border-radius: 5px;
   }
+}
+
+.no-firefox-dots::-moz-focus-inner {
+  border: 0;
 }
 </style>
