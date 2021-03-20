@@ -27,7 +27,7 @@ export default defineComponent({
   methods: {
     onClick() {
       this.$emit('click');
-      (document.activeElement as any | undefined)?.blur?.();
+      (document.activeElement as HTMLInputElement | HTMLElement | undefined)?.blur();
     },
   },
 });

@@ -185,7 +185,7 @@ export default defineComponent({
   },
   methods: {
     focus() {
-      (this.$refs.input as any | undefined)?.focus(true);
+      (this.$refs.input as TextInputRef | undefined)?.focus(true);
     },
   },
 });

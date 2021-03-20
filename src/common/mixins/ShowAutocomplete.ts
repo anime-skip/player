@@ -25,7 +25,7 @@ const ShowAutocompleteMixin = defineComponent({
     onSelectShow(): void {
       Utils.setIntervalUntil(
         () => {
-          const focus = (this.$refs.episode as any | undefined)?.focus;
+          const focus = (this.$refs.episode as TextInputRef | undefined)?.focus;
           focus?.();
           return focus != null;
         },

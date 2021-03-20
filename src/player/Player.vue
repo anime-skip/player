@@ -134,11 +134,11 @@ export default defineComponent({
     loadAllEpisodeData(url?: string): void {
       this.$store.dispatch(ActionTypes.LOAD_ALL_EPISODE_DATA, url);
     },
-    onReceiveMessage({ type, payload: url }: any) {
+    onReceiveMessage({ type, payload: url }: { type: string; payload: unknown }) {
       if (type != '@anime-skip/changeUrl') return;
 
       console.debug('Change URL: ' + url);
-      this.setTabUrl(url);
+      this.setTabUrl(url as string);
       this.setHasSkippedFromZero(false);
       this.loadAllEpisodeData();
     },

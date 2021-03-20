@@ -6,7 +6,7 @@ import {
   UNAUTHORIZED_ERROR_MESSAGE,
 } from './Constants';
 
-function prepareChangedStorage(object: any): Partial<State> {
+function prepareChangedStorage(object: Record<string, { newValue: string }>): Partial<State> {
   for (const key in object) {
     object[key] = JSON.parse(object[key].newValue);
   }
@@ -48,32 +48,37 @@ export default class Browser {
     getItem: async <T>(key: string): Promise<T | undefined> => {
       // @ts-ignore
       const keyMap = await browser.storage.local.get(key);
-      const value = keyMap[key] as any;
+      const value = keyMap[key] as string | T;
       try {
-        return JSON.parse(value) as T;
+        return JSON.parse(value as string) as T;
       } catch (err) {
         return value as T;
       }
     },
-    getAll: async <T extends { [key: string]: any }>(keys: (keyof T)[]): Promise<T> => {
-      const storage = await browser.storage.local.get(keys as any);
-      const data: any = {};
+    getAll: async <T extends { [key: string]: string | unknown }>(
+      keys: (keyof T)[]
+    ): Promise<T> => {
+      // @ts-expect-error
+      const storage = await browser.storage.local.get(keys);
+      const data = {} as { [key in keyof T]: T[key] };
       keys.forEach(key => {
         try {
+          // @ts-expect-error
           data[key] = JSON.parse(storage[key]);
         } catch (err) {
+          // @ts-expect-error
           data[key] = storage[key];
         }
       });
       return data;
     },
-    setItem: async (key: string, value: any): Promise<void> => {
+    setItem: async (key: string, value: unknown): Promise<void> => {
       await browser.storage.local.set({ [key]: JSON.stringify(value) });
     },
     addListener: (callback: (changes: Partial<State>) => void): void => {
-      // @ts-ignore
       browser.storage.onChanged.addListener((changes, area) => {
         if (area === 'local') {
+          // @ts-expect-error
           callback(prepareChangedStorage(changes));
         }
       });

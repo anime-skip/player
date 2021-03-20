@@ -10,7 +10,6 @@ interface Data {
 }
 
 function onKeyDown(
-  this: any,
   componentName: string | undefined,
   $keyboardShortcuts: KeyboardShortcutMap,
   store: Store

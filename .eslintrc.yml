@@ -33,7 +33,6 @@ overrides:
         - 'warn'
         - argsIgnorePattern: _.*
           varsIgnorePattern: _.*
-      '@typescript-eslint/no-explicit-any': 'off'
       '@typescript-eslint/ban-ts-comment': 'off'
       '@typescript-eslint/explicit-module-boundary-types': 'off'
   - files: ['*.d.ts']
@@ -50,7 +49,6 @@ overrides:
       vue/singleline-html-element-content-newline: 'off'
       vue/max-attributes-per-line: 'off'
       vue/require-default-prop: 'off'
-      '@typescript-eslint/no-explicit-any': 'off'
       '@typescript-eslint/no-unused-vars':
         - 'warn'
         - argsIgnorePattern: _.*
