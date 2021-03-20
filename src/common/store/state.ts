@@ -5,6 +5,7 @@ const initialVideo = global.getVideo?.();
 
 export const state = {
   activeDialog: undefined as string | undefined,
+  isShowingLoginDialog: false,
   playbackRate: 1,
   isEditing: false,
   isInitialBuffer: true,

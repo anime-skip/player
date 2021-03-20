@@ -1,15 +1,19 @@
 <template>
   <transition name="dialog">
     <div
-      v-if="name === activeDialog"
-      class="BasicDialog"
+      v-if="visible"
+      class="BasicDialog absolute inset-0 flex flex-col cursor-pointer overflow-visible"
       :id="name"
       :style="`align-items: ${gravityX}; justify-content: ${gravityY}`"
       @click.stop="dismiss()"
     >
-      <div class="dialog-root-container" @click.stop>
+      <Card
+        class="dialog-root-container overflow-x-hidden overflow-y-auto cursor-auto rounded-md"
+        :elevation="8"
+        @click.stop
+      >
         <slot />
-      </div>
+      </Card>
     </div>
   </transition>
 </template>
@@ -17,6 +21,7 @@
 <script lang="ts">
 import { ActionTypes } from '@/common/store/actionTypes';
 import { defineComponent, PropType } from 'vue';
+import { Store } from '@/common/store';
 
 export default defineComponent({
   props: {
@@ -29,6 +34,10 @@ export default defineComponent({
       type: String as PropType<'center' | 'flex-start' | 'flex-end'>,
       default: 'center',
     },
+    isShowing: {
+      type: Function as PropType<(dialogName: string, activeDialog?: string) => boolean>,
+    },
+    hideDialog: { type: Function as PropType<(store: Store) => void>, required: false },
   },
   emits: ['show', 'hide'],
   watch: {
@@ -46,16 +55,28 @@ export default defineComponent({
     activeDialog(): string | undefined {
       return this.$store.state.activeDialog;
     },
+    visible(): boolean {
+      if (this.isShowing) {
+        return this.isShowing(this.name, this.activeDialog);
+      }
+      return this.name === this.activeDialog;
+    },
   },
   methods: {
     dismiss(): void {
-      this.$store.dispatch(ActionTypes.SHOW_DIALOG, undefined);
+      if (this.hideDialog) {
+        this.hideDialog(this.$store);
+      } else {
+        this.$store.dispatch(ActionTypes.SHOW_DIALOG, undefined);
+      }
     },
   },
 });
 </script>
 
 <style lang="scss" scoped>
+@import '@anime-skip/ui/theme.scss';
+
 .dialog-enter-active,
 .dialog-leave-active {
   transition-property: opacity;
@@ -71,42 +92,22 @@ export default defineComponent({
 }
 
 .BasicDialog {
-  position: absolute;
   z-index: 2;
-  display: flex;
-  flex-direction: column;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  cursor: pointer;
-  overflow: visible;
-  & * {
+  * {
     padding: 0;
     margin: 0;
     text-align: left;
   }
 
-  .row {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-  }
-
   .dialog-root-container {
-    border-radius: 4px;
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 6px 10px rgba(0, 0, 0, 0.22),
-      0 2px 5px rgba(0, 0, 0, 0.4);
-    background-color: $background500;
+    background-color: $backgroundColor-background !important;
     transform: translate(0px, 0px);
     transition: 250ms;
     transition-property: transform, opacity;
-    cursor: auto;
-    overflow-x: hidden;
 
-    overflow-y: auto;
     scrollbar-width: thin;
-    scrollbar-color: $divider #00000000;
+    scrollbar-color: rgba($color: $backgroundColor-primary, $alpha: $opacity-low)
+      $backgroundColor-background;
 
     &::-webkit-scrollbar {
       width: 8px;

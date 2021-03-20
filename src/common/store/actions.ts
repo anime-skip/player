@@ -107,8 +107,7 @@ export const actions: ActionTree<State, State> & Actions = {
   },
   async [ActionTypes.START_EDITING]({ commit, dispatch, getters, state }, onStartedEditing) {
     if (!state.isLoggedIn) {
-      await dispatch(ActionTypes.SHOW_DIALOG, 'AccountDialog');
-      return;
+      await commit(MutationTypes.TOGGLE_LOGIN_DIALOG, true);
     }
     if (!getters[GetterTypes.HAS_EPISODE]) {
       await dispatch(ActionTypes.SHOW_DIALOG, 'EditEpisodeDialog');
@@ -140,7 +139,7 @@ export const actions: ActionTree<State, State> & Actions = {
   async [ActionTypes.API_CALL]({ commit }, { apiCall, args }) {
     return await callApi(commit, apiCall, ...args);
   },
-  async [ActionTypes.CREATE_NEW_TIMESTAMP]({ commit, dispatch }) {
+  async [ActionTypes.CREATE_NEW_TIMESTAMP]({ commit, dispatch, state }) {
     const video = global.getVideo?.();
     if (video == null) {
       console.warn('Tried adding timestamp in a context without a video');
@@ -148,17 +147,22 @@ export const actions: ActionTree<State, State> & Actions = {
     }
     video.pause();
 
-    await dispatch(ActionTypes.START_EDITING, () => {
-      commit(MutationTypes.SET_EDIT_TIMESTAMP_MODE, 'add');
-      commit(MutationTypes.SET_ACTIVE_TIMESTAMP, {
-        at: video.currentTime,
-        typeId: TIMESTAMP_TYPE_NOT_SELECTED,
-        id: Utils.randomId(),
-        source: 'ANIME_SKIP',
-        edited: true,
+    if (state.isLoggedIn) {
+      await dispatch(ActionTypes.START_EDITING, () => {
+        commit(MutationTypes.SET_EDIT_TIMESTAMP_MODE, 'add');
+        commit(MutationTypes.SET_ACTIVE_TIMESTAMP, {
+          at: video.currentTime,
+          typeId: TIMESTAMP_TYPE_NOT_SELECTED,
+          id: Utils.randomId(),
+          source: 'ANIME_SKIP',
+          edited: true,
+        });
+        dispatch(ActionTypes.SHOW_DIALOG, 'TimestampsPanel');
       });
+    } else {
+      commit(MutationTypes.TOGGLE_LOGIN_DIALOG, true);
       dispatch(ActionTypes.SHOW_DIALOG, 'TimestampsPanel');
-    });
+    }
   },
 
   // Auth

@@ -1,20 +1,18 @@
 <template>
-  <div class="Popup">
-    <LogIn v-if="!isLoggedIn" :small="small" />
-    <Preferences v-else :small="small" />
-  </div>
+  <LogIn v-if="!isLoggedIn" :small="small" :closeAfterLogin="closeAfterLogin" :close="close" />
+  <PopupPreferences v-else :small="small" />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import LogIn from './components/LogIn.vue';
-import Preferences from './components/Preferences.vue';
+import PopupPreferences from './components/PopupPreferences.vue';
 import { GetterTypes } from '@/common/store/getterTypes';
 
 export default defineComponent({
   components: {
     LogIn,
-    Preferences,
+    PopupPreferences,
   },
   props: {
     small: Boolean,
@@ -26,15 +24,16 @@ export default defineComponent({
     isLoggingIn(): boolean {
       return this.$store.getters[GetterTypes.IS_LOGGING_IN];
     },
+    closeAfterLogin(): boolean {
+      const urlParams = new URLSearchParams(window?.location.search);
+      const closePopupAfterLogin = urlParams.get('closeAfterLogin');
+      return closePopupAfterLogin === 'true';
+    },
+  },
+  methods: {
+    close() {
+      window.close();
+    },
   },
 });
 </script>
-
-<style lang="scss" scoped>
-.Popup {
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-}
-</style>

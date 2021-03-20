@@ -1,50 +1,31 @@
 <template>
   <div
-    class="Timeline"
+    class="TimelineWrapper"
     :class="{
-      vrv: service === 'vrv',
-      flipped: isFlipped,
-      seeking: isSeeking,
       'add-margin': isEditing,
+      flipped: isFlipped,
     }"
-    @click.stop
   >
     <Slider
-      v-if="duration != null && duration > 0"
-      class="slider"
+      class="slider w-full"
       :progress="normalizedTime"
       :max="100"
-      :inactiveThumbSize="isFlipped ? 3 : undefined"
       disableUpdateDuringSeek
+      :defaultThumbSize="thumbSize"
       @seek="onSeek"
     >
-      <template v-slot:background>
-        <Section
-          v-for="section of sections"
-          :key="section.timestamp.id"
-          :timestamp="section.timestamp"
-          :endTime="section.endTime"
-          :duration="duration"
-          :skipped="section.isSkipped"
-        />
+      <template #background>
+        <div />
       </template>
-      <template v-slot:foreground="slotProps" v-if="activeTimestamps.length > 0">
-        <Section
-          v-for="section of completedSections"
-          :key="'completed' + section.timestamp.id"
-          :timestamp="section.timestamp"
-          :endTime="section.endTime"
-          :duration="duration"
-          :currentTime="(slotProps.progress / 100) * (duration || 0)"
-          completed
-        />
-        <WebExtImg
-          v-for="timestamp of activeTimestamps"
-          :key="`t${timestamp.id}`"
-          class="Timestamp"
-          :class="timestampClass(timestamp)"
-          :src="timestampIcon(timestamp)"
-          :style="timestampStyle(timestamp)"
+      <template #foreground="slotProps">
+        <Timeline
+          :class="{
+            seeking: isSeeking,
+          }"
+          :timestamps="timelineData"
+          :normalizedProgress="slotProps.progress"
+          :editing="isEditing"
+          @click.stop
         />
       </template>
     </Slider>
@@ -53,25 +34,15 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref, watch } from 'vue';
-import Section from './Section.vue';
-import WebExtImg from '@/common/components/WebExtImg.vue';
 import Utils from '@/common/utils/Utils';
 import { MutationTypes } from '@/common/store/mutationTypes';
 import { GetterTypes } from '@/common/store/getterTypes';
-import Slider from './Slider.vue';
 import { useStore } from 'vuex';
 import { Store } from '@/common/store';
 import { useVideoController } from '@/common/mixins/VideoController';
-
-interface SectionData {
-  timestamp: Api.AmbiguousTimestamp;
-  endTime: number;
-  isSkipped: boolean;
-}
+import TimestampColors from '@/player/utils/TimelineColors';
 
 export default defineComponent({
-  name: 'Timeline',
-  components: { Section, WebExtImg, Slider },
   props: {
     isFlipped: Boolean,
     duration: Number,
@@ -84,34 +55,34 @@ export default defineComponent({
     const { setCurrentTime } = useVideoController();
     const currentTime = computed(() => store.state.playerState.currentTime);
 
+    // Styles
+    const thumbSize = computed(() => (props.isFlipped ? 3 : 11));
+
     // Editing
     const isEditing = computed(() => store.state.isEditing);
-    const canAddTimestamp = computed(() => isEditing.value && store.state.activeTimestamp == null);
+    const timestampBeingEdited = computed(() => store.state.activeTimestamp);
+    const canAddTimestamp = computed(() => isEditing.value && timestampBeingEdited.value == null);
 
     // Timestamps
     const activeTimestamps = computed(() => store.getters[GetterTypes.ACTIVE_TIMESTAMPS]);
-    const timestampStyle = (timestamp: Api.AmbiguousTimestamp) => {
-      if (!props.duration) {
-        return {
-          left: '0',
-        };
-      }
-      return {
-        left: `${(timestamp.at / props.duration) * 100}%`,
-      };
-    };
-    const timestampClass = (timestamp: Api.AmbiguousTimestamp): Record<string, boolean> => {
-      return {
+    const timelineData = computed(() => {
+      if (props.duration == null) return [];
+
+      return activeTimestamps.value.map(timestamp => ({
+        key: timestamp.id,
+        normalizedAt: (timestamp.at / props.duration!) * 100,
+        skipped: !isEditing.value && Utils.isSkipped(timestamp, preferences.value),
+        color:
+          typeof timestamp.id === 'number'
+            ? TimestampColors.new
+            : timestamp.edited
+            ? TimestampColors.edited
+            : TimestampColors.default,
         active:
-          timestamp.id === store.state.activeTimestamp?.id ||
-          timestamp.id === store.state.hoveredTimestamp?.id,
-      };
-    };
-    const timestampIcon = (timestamp: Api.AmbiguousTimestamp): string => {
-      if (!isEditing.value) return 'ic_timestamp.svg';
-      if (!timestamp.edited) return 'ic_timestamp_draft.svg';
-      return 'ic_timestamp_draft_edited.svg';
-    };
+          store.state.hoveredTimestamp?.id === timestamp.id ||
+          timestamp.id === timestampBeingEdited.value?.id,
+      }));
+    });
     const goToNextTimestampOnTimeChange = (newTime: number): void => {
       const newNext = Utils.nextTimestamp(newTime, activeTimestamps.value, preferences.value);
       const goToTime = newNext?.at ?? props.duration;
@@ -119,46 +90,6 @@ export default defineComponent({
         setCurrentTime(goToTime);
       }
     };
-
-    // Sections
-    const unknownTimestamp = (): Api.AmbiguousTimestamp => ({
-      id: 'unknown',
-      at: 0,
-      typeId: 'unknown',
-      source: 'ANIME_SKIP',
-    });
-    const endTimestamp = (): Api.Timestamp => ({
-      id: 'end',
-      at: props.duration || 0,
-      typeId: 'end',
-      source: 'ANIME_SKIP',
-    });
-    const sections = computed<SectionData[]>(() => {
-      if (!props.duration) return [];
-
-      if (activeTimestamps.value.length === 0 || isEditing.value) {
-        return [
-          {
-            timestamp: unknownTimestamp(),
-            endTime: props.duration,
-            isSkipped: false,
-          },
-        ];
-      }
-      const withEnd = [...activeTimestamps.value, endTimestamp()];
-      return activeTimestamps.value.map<SectionData>(
-        (timestamp: Api.AmbiguousTimestamp, index: number): SectionData => ({
-          timestamp: timestamp,
-          endTime: withEnd[index + 1].at,
-          isSkipped: Utils.isSkipped(timestamp, preferences.value),
-        })
-      );
-    });
-    const completedSections = computed<SectionData[]>(() => {
-      return sections.value.filter(
-        section => !Utils.isSkipped(section.timestamp, preferences.value)
-      );
-    });
 
     // On time change
     const isSeeking = ref(false);
@@ -234,26 +165,22 @@ export default defineComponent({
       seekingTime,
       canAddTimestamp,
       normalizedTime,
-      timestampStyle,
-      timestampClass,
-      timestampIcon,
       onSeek,
-      sections,
-      completedSections,
       activeTimestamps,
+      timelineData,
+      thumbSize,
     };
   },
 });
 </script>
 
 <style lang="scss" scoped>
+@import '@anime-skip/ui/theme.scss';
+
 $translationDefault: 4px;
 $translationInactiveSliderDefault: 4px;
 
-$translationVrv: 0px;
-$translationInactiveSliderVrv: 3px;
-
-.Timeline {
+.TimelineWrapper {
   position: relative;
   transform: scaleY(1);
   transition: 200ms;
@@ -266,34 +193,12 @@ $translationInactiveSliderVrv: 3px;
     margin-right: 24px;
   }
 
-  .slider {
-    top: 0;
-    left: 0;
-    right: 0;
-    transition: top;
-
-    .slider-foreground {
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-    }
-  }
   &.flipped .slider {
     top: 0px;
   }
+}
 
-  .Timestamp {
-    position: absolute;
-    height: 6px;
-    width: 12px;
-    transform: translateX(-50%);
-    transition: 250ms ease transform;
-
-    &.active {
-      transform: translateX(-50%) translateY(-12px);
-    }
-  }
+.slider {
+  --default-foreground-color: #{$backgroundColor-primaryPalette-500} !important;
 }
 </style>

@@ -1,38 +1,31 @@
 <template>
-  <form class="FindExisting">
-    <div v-if="isShowingSuggestions" class="suggestions">
-      <p class="header horizontal-margin">{{ suggestionsHeader }}</p>
-      <div class="list-row">
-        <div class="suggestion-list">
-          <div
-            v-for="suggestion of suggestionListItems"
-            :key="suggestion.index"
-            class="suggestion-spacing"
-          >
-            <div
-              class="suggestion button clickable dark noselect"
-              @click="onClickSuggestion(suggestion.value)"
-            >
-              <p class="show">{{ suggestion.show }}</p>
-              <p class="episode">{{ suggestion.episode }}</p>
-              <p class="subtitle">{{ suggestion.subtitle }}</p>
-              <p class="subtitle">
-                {{ suggestion.timestamps }}
-                <span v-if="suggestion.source != null" class="source"
-                  >({{ suggestion.source }})</span
-                >
-              </p>
-            </div>
+  <form class="FindExisting py-4 space-y-4 flex flex-col">
+    <div v-if="isShowingSuggestions" class="space-y-4 mt-2">
+      <p class="caption mb-2 mx-4 text-on-surface text-opacity-medium">{{ suggestionsHeader }}</p>
+      <div class="relative">
+        <div class="flex flex-row overflow-x-auto box-border space-x-4 px-4">
+          <div v-for="suggestion of suggestionListItems" :key="suggestion.index">
+            <RaisedContainer dark @click.stop.prevent="onClickSuggestion(suggestion.value)">
+              <div class="box-border w-44 px-4 pt-4 pb-3 text-left space-y-1">
+                <p class="subtitle-1 text-primary font-semibold">
+                  {{ suggestion.timestamps }}
+                </p>
+                <p class="text-on-surface text-opacity-medium caption pb-2">
+                  from <strong>{{ suggestion.source || 'Anime Skip' }}</strong>
+                </p>
+                <p class="body-2 text-on-surface text-opacity-high">{{ suggestion.subtitle }}</p>
+              </div>
+            </RaisedContainer>
           </div>
         </div>
         <div class="gradient-borders" />
       </div>
     </div>
-    <div v-else>
-      <p class="header horizontal-margin">Manual Search</p>
+    <div v-else class="space-y-4 mt-2">
+      <p class="caption mb-2 mx-4 text-on-surface text-opacity-medium">Manual Search</p>
       <AutocompleteTextInput
-        class="horizontal-margin"
-        label="Enter the show name..."
+        class="mx-4"
+        placeholder="Enter the show name..."
         v-model:value="show"
         :options="showOptions"
         @select="onSelectShow"
@@ -41,50 +34,34 @@
       <AutocompleteTextInput
         v-if="isExistingShow"
         ref="episode"
-        class="row horizontal-margin"
-        label="Enter the episode name..."
+        class="mx-4"
+        placeholder="Enter the episode name..."
         v-model:value="episode"
         :options="episodeOptions"
         @search="searchEpisodes"
       />
     </div>
-    <div class="buttons row horizontal-margin">
-      <div v-if="!isShowingSuggestions">
-        <button
-          v-if="shouldCreateNew"
-          class="button clickable margin-left"
-          @click.stop.prevent="onClickCreateNew"
-        >
+    <div class="flex flex-row-reverse mx-4 space-x-reverse space-x-4">
+      <template v-if="!isShowingSuggestions">
+        <RaisedButton v-if="shouldCreateNew" @click.stop.prevent="onClickCreateNew">
           Create New
-        </button>
-        <button
-          v-else
-          class="button clickable margin-left"
-          :class="{ disabled: isSaveDisabled }"
-          :disabled="isSaveDisabled"
-          @click.stop.prevent="onClickSave"
-        >
+        </RaisedButton>
+        <RaisedButton v-else :disabled="isSaveDisabled" @click.stop.prevent="onClickSave">
           Save Episode
-        </button>
-      </div>
-      <button
-        v-if="isShowingSuggestions"
-        class="button clickable dark margin-left"
-        @click.stop.prevent="toggleSuggestions(false)"
-      >
+        </RaisedButton>
+      </template>
+      <RaisedButton v-if="isShowingSuggestions" @click.stop.prevent="toggleSuggestions(false)">
         Manual Search
-      </button>
-      <button
-        v-else
-        class="button clickable dark margin-left"
-        :class="{ disabled: !hasSuggestions }"
-        :disabled="!hasSuggestions"
+      </RaisedButton>
+      <FlatButton
+        v-else-if="hasSuggestions"
+        transparent
         @click.stop.prevent="toggleSuggestions(true)"
       >
         {{ suggestionsHeader }}
-      </button>
-      <div class="space" />
-      <button class="button clickable dark" @click.stop.prevent="hideDialog">Cancel</button>
+      </FlatButton>
+      <div class="flex-1" />
+      <FlatButton transparent @click.stop.prevent="hideDialog">Cancel</FlatButton>
     </div>
   </form>
 </template>
@@ -92,7 +69,6 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import AutocompleteTextInput from '@/common/components/AutocompleteTextInput.vue';
-import WebExtImg from '@/common/components/WebExtImg.vue';
 import { ActionTypes } from '@/common/store/actionTypes';
 import EpisodeUtils from '@/common/utils/EpisodeUtils';
 import { TIMESTAMP_SOURCES } from '@/common/utils/Constants';
@@ -100,7 +76,7 @@ import ShowAutocompleteMixin from '@/common/mixins/ShowAutocomplete';
 import EpisodeAutocompleteMixin from '@/common/mixins/EpisodeAutocomplete';
 
 export default defineComponent({
-  components: { AutocompleteTextInput, WebExtImg },
+  components: { AutocompleteTextInput },
   mixins: [ShowAutocompleteMixin, EpisodeAutocompleteMixin],
   props: {
     suggestions: {
@@ -229,134 +205,18 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
-.FindExisting {
-  padding: 16px 0;
-  display: flex;
-  flex-direction: column;
-
-  .header {
-    margin-bottom: 8px;
-    color: $textPrimary;
-  }
-
-  .horizontal-margin {
-    margin-left: 16px;
-    margin-right: 16px;
-  }
-
-  .row {
-    margin-top: 12px;
-  }
-
-  .suggestions {
-    .list-row {
-      position: relative;
-      .gradient-borders {
-        pointer-events: none;
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        &:before {
-          content: '';
-          position: absolute;
-          left: 0;
-          width: 16px;
-          top: 0;
-          bottom: 0;
-          background: rgb(0, 0, 0);
-          background: linear-gradient(
-            90deg,
-            rgba($color: $background500, $alpha: 1) 25%,
-            rgba($color: $background500, $alpha: 0) 100%
-          );
-        }
-        &:after {
-          content: '';
-          position: absolute;
-          right: 0;
-          width: 16px;
-          top: 0;
-          bottom: 0;
-          background: rgb(0, 0, 0);
-          background: linear-gradient(
-            270deg,
-            rgba($color: $background500, $alpha: 1) 25%,
-            rgba($color: $background500, $alpha: 0) 100%
-          );
-        }
-      }
-    }
-
-    .suggestion-list {
-      display: flex;
-      flex-direction: row;
-      box-sizing: border-box;
-      overflow-x: auto;
-
-      .suggestion-spacing {
-        padding-left: 16px;
-        padding-bottom: 12px;
-
-        &:first-child {
-          padding-left: 16px;
-        }
-        &:last-child {
-          padding-right: 16px;
-        }
-      }
-
-      .suggestion {
-        display: inline-block;
-        height: unset;
-        max-width: 256px;
-        text-transform: none;
-        text-align: start;
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        justify-content: center;
-        padding: 8px 16px;
-        & > * {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-        .show {
-          font-family: sans-serif;
-          color: $primary300;
-          margin-bottom: 2px;
-        }
-        .episode {
-          font-family: sans-serif;
-          font-size: 18px;
-          color: white;
-          font-weight: 400;
-        }
-        .subtitle {
-          color: $textPrimary;
-          font-weight: 400;
-        }
-        .source {
-          color: $textSecondary;
-        }
-      }
-    }
-  }
-
-  .buttons {
-    display: flex;
-    flex-direction: row-reverse;
-
-    .margin-left {
-      margin-left: 16px;
-    }
-
-    .space {
-      flex-grow: 1;
-    }
-  }
+<style lang="css" scoped>
+.gradient-borders {
+  @apply pointer-events-none absolute inset-0;
+}
+.gradient-borders:before {
+  @apply absolute inset-y-0 left-0 w-4;
+  content: '';
+  background: linear-gradient(90deg, #142026ff 25%, #14202600 100%);
+}
+.gradient-borders:after {
+  @apply absolute inset-y-0 right-0 w-4;
+  content: '';
+  background: linear-gradient(270deg, #142026ff 25%, #14202600 100%);
 }
 </style>

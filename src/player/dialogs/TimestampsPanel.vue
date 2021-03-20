@@ -7,7 +7,7 @@
     @show="onShow"
   >
     <EditTimestamp v-if="activeTimestamp != null" :initialTab="initialTab" />
-    <TimestampDetails v-else />
+    <TimestampList v-else />
   </BasicDialog>
 </template>
 
@@ -15,7 +15,7 @@
 import { defineComponent } from 'vue';
 import VideoControllerMixin from '@/common/mixins/VideoController';
 import KeyboardShortcutsMixin, { KeyboardShortcutMap } from '@/common/mixins/KeyboardShortcuts';
-import TimestampDetails from '../components/TimestampDetails.vue';
+import TimestampList from '../components/TimestampList.vue';
 import EditTimestamp from '../components/EditTimestamp.vue';
 import BasicDialog from './BasicDialog.vue';
 import { MutationTypes } from '@/common/store/mutationTypes';
@@ -23,7 +23,7 @@ import { GetterTypes } from '@/common/store/getterTypes';
 
 export default defineComponent({
   name: 'TimestampsPanel',
-  components: { BasicDialog, TimestampDetails, EditTimestamp },
+  components: { BasicDialog, TimestampList, EditTimestamp },
   mixins: [VideoControllerMixin, KeyboardShortcutsMixin],
   data() {
     return {
@@ -68,7 +68,6 @@ export default defineComponent({
 
 <style lang="scss">
 #TimestampsPanel {
-  color: $textPrimarySolid;
   pointer-events: none;
 
   .dialog-root-container {
@@ -77,8 +76,6 @@ export default defineComponent({
     height: 70%;
     max-height: 800px;
     margin-bottom: 36px;
-    background-color: rgba($color: $background500, $alpha: 0.9);
-    box-shadow: none;
     pointer-events: auto;
     display: flex;
     flex-direction: column;

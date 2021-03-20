@@ -1,37 +1,49 @@
 <template>
-  <BasicDialog name="EditEpisodeDialog" gravityX="center" gravityY="center" @show="onShow">
-    <ProgressOverlay :isLoading="isLoading">
-      <div class="header">
-        <p class="tab" :class="{ active: tab == 0 }" @click="onClickFindExisting">
-          Find an existing episode
-        </p>
-        <p class="tab" :class="{ active: tab == 1 }" @click="onClickCreateNew">
-          Create a new episode
-        </p>
+  <BasicDialog
+    name="EditEpisodeDialog"
+    gravityX="center"
+    gravityY="center"
+    @show="onShow"
+    @hide="onHide"
+  >
+    <LoadingOverlay class="min-h-6" :isLoading="isLoading">
+      <div v-if="!isLoggedIn" class="px-16 py-8 text-center self-center justify-self-center">
+        <LoginWarning before="connecting this episode to Anime Skip" />
       </div>
-      <FindExisting
-        v-if="shouldShowFindExisting"
-        @createNew="enableCreateNew"
-        :prefill="prefill"
-        :suggestions="suggestions"
-      />
-      <CreateNew v-else-if="shouldShowCreateNew" :prefill="prefill" />
-    </ProgressOverlay>
+      <template v-else>
+        <div class="flex flex-row mx-2">
+          <p class="tab" :class="{ active: tab == 0 }" @click="onClickFindExisting">
+            Find an existing episode
+          </p>
+          <p class="tab" :class="{ active: tab == 1 }" @click="onClickCreateNew">
+            Create a new episode
+          </p>
+        </div>
+        <FindExisting
+          v-if="shouldShowFindExisting"
+          @createNew="enableCreateNew"
+          :prefill="prefill"
+          :suggestions="suggestions"
+        />
+        <CreateNew v-else-if="shouldShowCreateNew" :prefill="prefill" />
+      </template>
+    </LoadingOverlay>
   </BasicDialog>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import ProgressOverlay from '@/common/components/ProgressOverlay.vue';
+import { LoadingOverlay } from '@anime-skip/ui';
 import BasicDialog from '../BasicDialog.vue';
 import FindExisting from './FindExisting.vue';
 import CreateNew from './CreateNew.vue';
 import Utils from '@/common/utils/Utils';
 import RequestState from '@/common/utils/RequestState';
 import Mappers from '@/common/utils/Mappers';
+import LoginWarning from '@/player/components/LoginWarning.vue';
 
 export default defineComponent({
-  components: { ProgressOverlay, BasicDialog, FindExisting, CreateNew },
+  components: { LoadingOverlay, BasicDialog, FindExisting, CreateNew, LoginWarning },
   data() {
     const suggestions: Api.ThirdPartyEpisode[] = [];
     const prefill: CreateEpisodePrefill = {
@@ -49,6 +61,7 @@ export default defineComponent({
       isLoadingSuggestions: false,
       isLoadingDefaultShow: false,
       isLoadingDefaultEpisode: false,
+      showing: false,
     };
   },
   computed: {
@@ -57,11 +70,15 @@ export default defineComponent({
     },
     isLoading(): boolean {
       return (
+        this.$store.getters.IS_LOGGING_IN ||
         this.$store.state.episodeRequestState === RequestState.LOADING ||
         this.isLoadingSuggestions ||
         this.isLoadingDefaultShow ||
         this.isLoadingDefaultEpisode
       );
+    },
+    isLoggedIn(): boolean {
+      return this.$store.state.isLoggedIn && !this.$store.getters.IS_LOGGING_IN;
     },
     shouldShowTabs(): boolean {
       // don't show it while it's still loading so it properly fills the default show and episode values
@@ -72,6 +89,17 @@ export default defineComponent({
     },
     shouldShowCreateNew(): boolean {
       return this.shouldShowTabs && this.tab === 1;
+    },
+  },
+  watch: {
+    isLoggedIn(newValue, oldValue): void {
+      if (this.showing && newValue && !oldValue) {
+        // TODO: Fix race condition that leads to immeditate log out
+        setTimeout(() => {
+          this.loadSuggestions();
+          this.loadDefaultShowOption();
+        }, 200);
+      }
     },
   },
   methods: {
@@ -90,8 +118,14 @@ export default defineComponent({
       };
       this.suggestions = [];
 
-      this.loadSuggestions();
-      this.loadDefaultShowOption();
+      if (this.isLoggedIn) {
+        this.loadSuggestions();
+        this.loadDefaultShowOption();
+      }
+      this.showing = true;
+    },
+    onHide(): void {
+      this.showing = false;
     },
     async loadSuggestions(): Promise<void> {
       if (this.inferredInfo?.name == null || this.inferredInfo.show == null) {
@@ -204,43 +238,27 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-$width: 450px;
-
+<style lang="css">
 * {
   padding: 0;
   margin: 0;
 }
 
-#EditEpisodeDialog {
-  .dialog-root-container {
-    overflow-y: auto;
-    max-height: 70%;
-    width: $width;
-    overflow-y: visible;
-  }
+#EditEpisodeDialog .dialog-root-container {
+  max-height: 70%;
+  width: 480px;
+  overflow: visible;
 }
 
-.ProgressOverlay {
-  min-height: 172px;
+.tab {
+  @apply mx-2 pt-4 cursor-pointer border-b-2 text-on-surface border-primary border-opacity-0 text-opacity-medium font-bold transition-all;
 }
 
-.header {
-  display: flex;
-  flex-direction: row;
-  margin: 0 8px;
+.tab.active {
+  @apply text-primary border-opacity-100;
+}
 
-  .tab {
-    margin: 0 8px;
-    height: 24px;
-    padding-top: 16px;
-    cursor: pointer;
-    color: $textSecondary;
-
-    &.active {
-      color: $textPrimary;
-      border-bottom: 2px solid $primary300;
-    }
-  }
+.min-h-6 {
+  min-height: 6rem; /* 96px */
 }
 </style>

@@ -1,40 +1,58 @@
 <template>
   <div class="PlaybackRatePicker">
-    <div class="container clickable dark down">
-      <WebExtImg src="ic_playback_speed.svg" class="image" />
-      <div
-        v-for="speed in PLAYBACK_SPEEDS"
-        :key="speed.value"
-        class="option"
-        :class="{ clickable: playbackRate === speed.value && !customRate }"
-        @click="onClickOption(speed.value)"
-      >
-        {{ speed.display }}
+    <div
+      class="flex items-stretch justify-items-stretch h-10 w-full divide-x-2 divide-background rounded-sm bg-control"
+    >
+      <Icon :size="10" path="M4 18L12.5 12L4 6V18ZM13 6V18L21.5 12L13 6Z" class="p-2 w-10" />
+      <div v-for="speed in PLAYBACK_SPEEDS" :key="speed.value" class="flex-1 min-w-10">
+        <RaisedContainer
+          class="cursor-pointer text-on-surface box-border w-full h-full"
+          :down="!isRateSelected(speed.value)"
+          :dark="!isRateSelected(speed.value)"
+          @click="onClickOption(speed.value)"
+        >
+          <span
+            class="transition-colors"
+            :class="{ 'text-on-primary': isRateSelected(speed.value) }"
+            >{{ speed.display }}</span
+          >
+        </RaisedContainer>
       </div>
-      <input
-        type="text"
-        step="0.01"
-        maxlength="4"
-        :class="{ clickable: !!customRate, error: isCustomError }"
-        class="option"
-        placeholder="?.?"
-        :value="customRate"
-        @input="onChangeCustom"
-        @blur="onBlurCustom()"
-      />
+      <div class="flex-1 min-w-10 box-border">
+        <RaisedContainer
+          :down="!customRate"
+          :dark="!customRate"
+          :error="isCustomError"
+          class="w-full p-0"
+          tabindex="-1"
+        >
+          <input
+            type="text"
+            step="0.01"
+            maxlength="4"
+            class="bg-transparent w-full h-10 text-center"
+            :class="{
+              'caret-white': !isCustomError,
+              'bg-error text-on-error': isCustomError,
+            }"
+            placeholder="?.?"
+            :value="customRate"
+            @input="onChangeCustom"
+            @blur="onBlurCustom()"
+          />
+        </RaisedContainer>
+      </div>
     </div>
-    <div v-if="isCustomError" class="error-message">Custom speed must be between 0.5 and 4</div>
+    <div v-if="isCustomError" class="body-2 text-error mt-2">Custom speeds: 0.5 - 4</div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import WebExtImg from '@/common/components/WebExtImg.vue';
 import { PLAYBACK_SPEEDS } from '@/common/utils/Constants';
 import { MutationTypes } from '../store/mutationTypes';
 
 export default defineComponent({
-  components: { WebExtImg },
   props: {
     showLess: Boolean,
   },
@@ -73,6 +91,9 @@ export default defineComponent({
     },
   },
   methods: {
+    isRateSelected(speed: number): boolean {
+      return this.playbackRate === speed && !this.customRate;
+    },
     changePlaybackRate(speed: number): void {
       this.$store.commit(MutationTypes.CHANGE_PLAYBACK_RATE, speed);
     },
@@ -104,76 +125,19 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-$height: 40px;
+.bg-transparent {
+  background: transparent;
+}
 
-.PlaybackRatePicker {
-  display: flex;
-  flex-direction: column;
+.caret-white {
+  caret-color: white;
+}
 
-  .container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    height: $height;
+input {
+  min-width: 0 !important;
+}
 
-    .image {
-      padding-left: 8px;
-      padding-right: 8px;
-      width: $height + 1;
-      height: $height;
-      box-sizing: border-box;
-      border-right: 1px solid $divider;
-    }
-
-    & > .option {
-      cursor: pointer;
-      flex: 1;
-      flex-basis: 0;
-      font-weight: 600;
-      font-size: 14.5px;
-      height: $height;
-      line-height: $height;
-      box-sizing: border-box;
-      padding: 0;
-      padding-top: 2px;
-      text-align: center;
-      &.clickable {
-        border-left: none;
-      }
-
-      &[type='text'] {
-        flex: unset;
-        flex-basis: unset;
-        width: 48px;
-        color: white;
-        background-color: transparent;
-        border: none;
-        border-left: 1px solid $divider;
-        outline: none;
-        text-align: center !important;
-        -webkit-appearance: none;
-        -moz-appearance: textfield;
-        margin: 0;
-        cursor: text;
-
-        &.clickable {
-          background-color: $primary500;
-        }
-        &.error {
-          box-shadow: none;
-          background-color: $red500;
-          box-shadow: 0 3px 0 0 $red700;
-          border-top-right-radius: 3px;
-          border-bottom-right-radius: 3px;
-        }
-      }
-    }
-  }
-
-  .error-message {
-    align-self: center;
-    text-align: right;
-    margin-top: 4px;
-  }
+.min-w-10 {
+  flex-basis: 2.5rem;
 }
 </style>

@@ -1,18 +1,18 @@
 <template>
-  <div class="EpisodeInfo" :class="{ visible: hasLoadedData }">
-    <h2>
+  <div class="EpisodeInfo space-y-4" :class="{ visible: hasLoadedData }">
+    <h5 class="text-primary">
       {{ showTitle }}
-      <span>&ensp;&bull;&ensp;{{ serviceDisplayName }}</span>
-    </h2>
-    <h1>{{ episodeTitle }}</h1>
-    <h3>{{ episodeDetails }}</h3>
-    <ToolbarButton
-      v-if="isConnectButtonVisible"
-      class="link-button"
-      icon="ic_link.svg"
-      title="Connect to Anime Skip"
-      @click.stop="showEditDialog"
-    />
+      <span class="font-normal text-opacity-low">&ensp;&bull;&ensp;{{ serviceDisplayName }}</span>
+    </h5>
+    <h3>{{ episodeTitle }}</h3>
+    <h6 class="text-on-surface text-opacity-high">{{ episodeDetails }}</h6>
+    <FlatButton v-if="isConnectButtonVisible" transparent @click.stop="showEditDialog">
+      <Icon
+        class="inline fill-on-surface opacity-100"
+        path="M10.59,13.41C11,13.8 11,14.44 10.59,14.83C10.2,15.22 9.56,15.22 9.17,14.83C7.22,12.88 7.22,9.71 9.17,7.76V7.76L12.71,4.22C14.66,2.27 17.83,2.27 19.78,4.22C21.73,6.17 21.73,9.34 19.78,11.29L18.29,12.78C18.3,11.96 18.17,11.14 17.89,10.36L18.36,9.88C19.54,8.71 19.54,6.81 18.36,5.64C17.19,4.46 15.29,4.46 14.12,5.64L10.59,9.17C9.41,10.34 9.41,12.24 10.59,13.41M13.41,9.17C13.8,8.78 14.44,8.78 14.83,9.17C16.78,11.12 16.78,14.29 14.83,16.24V16.24L11.29,19.78C9.34,21.73 6.17,21.73 4.22,19.78C2.27,17.83 2.27,14.66 4.22,12.71L5.71,11.22C5.7,12.04 5.83,12.86 6.11,13.65L5.64,14.12C4.46,15.29 4.46,17.19 5.64,18.36C6.81,19.54 8.71,19.54 9.88,18.36L13.41,14.83C14.59,13.66 14.59,11.76 13.41,10.59C13,10.2 13,9.56 13.41,9.17Z"
+      />
+      <span class="pl-2">Connect to Anime Skip</span>
+    </FlatButton>
   </div>
 </template>
 
@@ -20,13 +20,12 @@
 import { defineComponent } from 'vue';
 import RequestState from '@/common/utils/RequestState';
 import EpisodeUtils from '@/common/utils/EpisodeUtils';
-import ToolbarButton from '@/player/components/ToolbarButton.vue';
 import VideoControllerMixin from '@/common/mixins/VideoController';
 import { ActionTypes } from '@/common/store/actionTypes';
 import { GetterTypes } from '@/common/store/getterTypes';
+import { MutationTypes } from '@/common/store/mutationTypes';
 
 export default defineComponent({
-  components: { ToolbarButton },
   mixins: [VideoControllerMixin],
   data() {
     return {
@@ -78,16 +77,15 @@ export default defineComponent({
     showEpisodeDialog(): void {
       this.$store.dispatch(ActionTypes.SHOW_DIALOG, 'EditEpisodeDialog');
     },
-    showAccountDialog(): void {
-      this.$store.dispatch(ActionTypes.SHOW_DIALOG, 'AccountDialog');
+    showLoginDialog(): void {
+      this.$store.commit(MutationTypes.TOGGLE_LOGIN_DIALOG, true);
     },
     showEditDialog() {
       this.pause();
-      if (this.isLoggedIn) {
-        this.showEpisodeDialog();
-      } else {
-        this.showAccountDialog();
+      if (!this.isLoggedIn) {
+        this.showLoginDialog();
       }
+      this.showEpisodeDialog();
     },
   },
 });
@@ -113,36 +111,9 @@ export default defineComponent({
     text-align: start;
     margin: 0;
   }
+}
 
-  h1 {
-    font-size: 64px;
-    font-weight: 400;
-    line-height: 64px;
-    margin-bottom: 4px;
-    color: $textPrimarySolid;
-  }
-
-  h2 {
-    font-size: 26px;
-    font-weight: 600;
-    color: $primary300;
-    margin-bottom: 16px;
-    span {
-      color: $textSecondary;
-      font-weight: 400;
-    }
-  }
-
-  h3 {
-    font-size: 20px;
-    font-weight: 400;
-    color: $textSecondary;
-  }
-
-  .link-button {
-    margin-top: 8px;
-    background-color: rgba($color: white, $alpha: 0.12);
-    padding-right: 12px;
-  }
+.opacity-100 {
+  opacity: 1 !important;
 }
 </style>

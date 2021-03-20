@@ -16,12 +16,13 @@ global.removeKeyDownListener = function (callback) {
  * something, so it gets called first. If it doesn't get called first, it can't stop the propagation
  */
 document.addEventListener('keydown', function (event) {
+  setTimeout(() => {
+    console.log('calling keyboard listeners');
+    keyboardListeners.forEach(listener => listener(event));
+  }, 0);
   event.stopImmediatePropagation();
   event.stopPropagation();
   event.cancelBubble = true;
-  setImmediate(() => {
-    keyboardListeners.forEach(listener => listener(event));
-  });
 });
 
 // document.addEventListener('keyup', function(event) {

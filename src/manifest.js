@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 const manifest = {
   ...require('./manifest.json'),
   version: require('../package.json').version,
@@ -17,9 +16,9 @@ const manifest = {
 const services = [
   {
     folder: 'example',
-    player_matches: ['file:///*/example/index.html'],
-    parent_matches: ['file:///*/example/index.html'],
-    page_matches: ['file:///*/example/index.html'],
+    player_matches: ['file:///*/example/index.html*'],
+    parent_matches: ['file:///*/example/index.html*'],
+    page_matches: ['file:///*/example/index.html*'],
   },
   {
     folder: 'vrv',

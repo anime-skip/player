@@ -1,10 +1,11 @@
 <template>
   <div
     id="AnimeSkipPlayer"
+    class="absolute inset-0 grid overflow-hidden bg-background bg-opacity-0"
     :class="{
       active: isActive,
-      paused: playerState.isPaused,
-      buffering: playerState.isBuffering,
+      'paused bg-opacity-medium': playerState.isPaused,
+      'buffering bg-opacity-medium': playerState.isBuffering,
       showing: isEpisodeInfoShowing,
     }"
     @mouseenter.prevent="toggleActive(true)"
@@ -12,30 +13,32 @@
     @mousemove.prevent="toggleActive(true)"
     @click="togglePlayPause()"
   >
-    <Loading
+    <div
       v-if="playerState.isBuffering && !playerState.isPaused"
-      class="buffer-loading-container"
-    />
-    <div class="left-content">
+      class="absolute inset-0 flex items-center justify-center"
+    >
+      <Loading />
+    </div>
+    <div class="left-content opacity-0 pointer-events-none pl-8 pt-8 box-border">
       <EpisodeInfo />
     </div>
-    <div class="right-content"></div>
+    <div class="right-content" />
     <ToolBar class="bottom-content" :playerState="playerState" />
 
     <!-- Dialogs -->
     <TimestampsPanel />
-    <AccountDialog />
+    <PreferencesDialog />
     <EditEpisodeDialog />
+    <LoginDialog />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import WebExtImg from '@/common/components/WebExtImg.vue';
-import Loading from '@/common/components/Loading.vue';
 import ToolBar from './components/Toolbar.vue';
 import EpisodeInfo from './components/EpisodeInfo.vue';
-import AccountDialog from './dialogs/AccountDialog.vue';
+import LoginDialog from './dialogs/LoginDialog.vue';
+import PreferencesDialog from './dialogs/PreferencesDialog.vue';
 import TimestampsPanel from './dialogs/TimestampsPanel.vue';
 import EditEpisodeDialog from './dialogs/EditEpisodeDialog/index.vue';
 import KeyboardShortcutMixin from '@/common/mixins/KeyboardShortcuts';
@@ -51,12 +54,11 @@ import { Store } from '@/common/store';
 export default defineComponent({
   name: 'Player',
   components: {
-    WebExtImg,
     ToolBar,
     EpisodeInfo,
-    AccountDialog,
+    LoginDialog,
+    PreferencesDialog,
     EditEpisodeDialog,
-    Loading,
     TimestampsPanel,
   },
   mixins: [KeyboardShortcutMixin, VideoControllerMixin],
@@ -164,59 +166,22 @@ export default defineComponent({
 
 <style lang="scss">
 #AnimeSkipPlayer {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  display: grid;
   transition: 200ms;
   transition-property: background-color;
   grid-template-columns: 1fr auto;
   grid-template-rows: 1fr auto;
   grid-template-areas: 'left-content right-content' 'toolbar toolbar';
-  overflow: hidden;
   cursor: none;
   &.active,
   &.paused {
     cursor: unset;
   }
-  &.paused,
-  &.buffering {
-    background-color: rgba($color: $input700, $alpha: 0.48);
-  }
-  * {
-    font-family: 'Overpass', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  .buffer-loading-container {
-    position: absolute;
-    z-index: 0;
-    display: flex;
-    flex-direction: column;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    background-color: rgba($color: $background500, $alpha: 0.5);
-
-    * {
-      background-color: transparent;
-    }
-  }
 
   .left-content {
     z-index: 1;
-    opacity: 0;
-    pointer-events: none;
     grid-area: left-content;
     transition: 200ms;
     transition-property: opacity;
-    padding-left: 32px;
-    padding-top: 32px;
-    box-sizing: border-box;
   }
   &.showing {
     .left-content {

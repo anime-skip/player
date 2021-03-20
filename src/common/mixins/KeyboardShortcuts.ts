@@ -35,7 +35,7 @@ function onKeyDown(
 
     console.debug(`[${componentName}] Pressed ${keyCombo} -> ${keyAction}`);
     if (keyAction == null || $keyboardShortcuts[keyAction] == null) return;
-    ($keyboardShortcuts[keyAction] as Function)();
+    ($keyboardShortcuts[keyAction] as () => void)();
   };
 }
 

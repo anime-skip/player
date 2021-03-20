@@ -54,17 +54,15 @@ const config = {
     alias: {
       '@': path.resolve(__dirname, 'src'),
     },
+    fallback: {
+      assert: false,
+    },
   },
   module: {
     rules: [
       {
         test: /\.vue$/,
-        loaders: 'vue-loader',
-      },
-      {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/,
+        loader: 'vue-loader',
       },
       {
         test: /\.ts$/,
@@ -76,27 +74,11 @@ const config = {
       },
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
       },
       {
         test: /\.scss$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          {
-            loader: 'sass-loader',
-            options: {
-              data: `
-                @import "@/common/_variables.scss";
-                @import "@/common/_mixins.scss";
-              `,
-            },
-          },
-        ],
-      },
-      {
-        test: /\.sass$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader?indentedSyntax'],
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
       },
       {
         test: /\.(png|jpg|jpeg|gif|svg|ico)$/,

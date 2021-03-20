@@ -1,9 +1,16 @@
 <template>
-  <div class="ToolbarButton">
+  <FlatButton transparent class="h-10 px-3 outline-none border-none" @click="onClick">
     <slot v-if="icon == null" />
-    <WebExtImg v-else :src="icon" :draggable="false" />
-    <p v-if="title" class="title">{{ title }}</p>
-  </div>
+    <template v-else>
+      <WebExtImg
+        v-if="icon.endsWith('svg')"
+        class="inline fill-on-surface opacity-100"
+        :src="icon"
+      />
+      <Icon v-else class="inline fill-on-surface opacity-100" :path="icon" :draggable="false" />
+    </template>
+    <span v-if="title" class="pl-2 normal-case">{{ title }}</span>
+  </FlatButton>
 </template>
 
 <script lang="ts">
@@ -12,38 +19,32 @@ import WebExtImg from '@/common/components/WebExtImg.vue';
 
 export default defineComponent({
   components: { WebExtImg },
+  emits: ['click'],
   props: {
     icon: String,
     title: String,
   },
+  methods: {
+    onClick() {
+      this.$emit('click');
+      (document.activeElement as any | undefined)?.blur?.();
+    },
+  },
 });
 </script>
 
-<style lang="scss" scoped>
-.ToolbarButton {
-  height: 24px;
-  padding: 5px 8px;
-  background-color: transparent;
-  border-radius: 4px;
-  transition: 200ms;
-  transition-property: background-color;
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+<style lang="css" scoped>
+.border-none::-moz-focus-inner,
+.outline-none::-moz-focus-inner {
+  border: 0;
+}
 
-  &:hover {
-    background-color: rgba($color: #ffffff, $alpha: 0.06);
-  }
-  &:hover:active {
-    background-color: rgba($color: #ffffff, $alpha: 0.12);
-  }
+.px-3 {
+  padding-left: 0.75rem !important;
+  padding-right: 0.75rem !important;
+}
 
-  .title {
-    color: $textPrimary;
-    font-size: 15px;
-    margin-left: 8px;
-    padding-top: 4px;
-  }
+.opacity-100 {
+  opacity: 1 !important;
 }
 </style>

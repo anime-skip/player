@@ -1,19 +1,54 @@
 <template>
-  <div class="KeyboardShortcutChooser noselect" :class="{ secondary }">
-    <pre v-if="shortcut" tabindex="0" @click="showEditor" :class="{ duplicate }">{{
-      shortcut
-    }}</pre>
-    <pre v-else class="unset" tabindex="0" @click="showEditor">unset</pre>
+  <div
+    class="select-none px-2.5 py-1 surface rounded cursor-pointer"
+    :class="{
+      'surface-4': !!shortcut,
+      'surface-primary': !secondary,
+      'surface-error': duplicate,
+    }"
+    @click="showEditor"
+  >
+    <pre
+      v-if="shortcut"
+      class="font-mono-2 font-size-body"
+      :class="{
+        'text-on-primary': !secondary,
+        'text-on-surface': secondary,
+      }"
+      tabindex="0"
+      >{{ shortcut }}</pre
+    >
+    <pre v-else class="opacity-medium font-mono-2 font-size-body" tabindex="0" @click="showEditor">
+unset</pre
+    >
 
-    <div v-if="isShowingEditor" class="fullscreen-overlay noselect">
-      <h1 class="preview">
-        <pre v-if="!editKey" class="no-selection">[Press a key]</pre>
-        <pre v-else>{{ editKey }}</pre>
-      </h1>
-      <p class="hint"><code>Enter</code> to save</p>
-      <p class="hint"><code>Esc</code> to cancel</p>
-      <p class="hint"><code>Backspace</code> to remove</p>
-    </div>
+    <teleport to="body">
+      <div
+        v-if="isShowingEditor"
+        class="fixed inset-0 bg-control-variant bg-opacity-high select-none flex flex-col justify-center items-center"
+      >
+        <h5
+          class="w-full max-w-xs p-4 rounded-md ring-2 ring-on-surface ring-opacity-low text-center font-bold"
+        >
+          <span v-if="!editKey" class="no-selection">[Press a key]</span>
+          <pre v-else class="font-mono-2">{{ editKey }}</pre>
+        </h5>
+        <table class="w-full max-w-xs mt-8">
+          <tr>
+            <td class="text-right"><code>Enter</code></td>
+            <td class="text-left">to save</td>
+          </tr>
+          <tr>
+            <td class="text-right"><code>Backspace</code></td>
+            <td class="text-left">to remove</td>
+          </tr>
+          <tr>
+            <td class="text-right"><code>Esc</code></td>
+            <td class="text-left">to cancel</td>
+          </tr>
+        </table>
+      </div>
+    </teleport>
   </div>
 </template>
 
@@ -88,88 +123,20 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss">
-.KeyboardShortcutChooser {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 4px;
+<style scoped>
+td {
+  @apply px-1 pb-2;
+  width: 50%;
+}
 
-  & > pre {
-    font-family: monospace;
-    font-size: 16px;
-    background-color: $primary300;
-    padding: 4px 8px;
-    border-radius: 3px;
-    font-weight: bold;
-    color: black;
-    cursor: pointer;
-    transition: 100ms;
+code {
+  @apply rounded bg-control-highlight px-2.5 pb-1 pt-2;
+}
 
-    &:hover {
-      filter: brightness(1.1);
-    }
-    &:hover:active {
-      filter: brightness(1.2);
-    }
-  }
-
-  &.secondary > pre {
-    color: rgba($color: white, $alpha: 0.75);
-    background-color: $divider;
-  }
-
-  & > pre.duplicate {
-    color: $textPrimary;
-    background-color: $red700;
-  }
-
-  & > pre.unset {
-    color: $textSecondary;
-    background-color: transparent;
-    font-weight: normal;
-    font-style: italic;
-  }
-
-  .fullscreen-overlay {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    background-color: rgba($color: $background300, $alpha: 0.9);
-    z-index: 1;
-
-    .preview {
-      width: 100%;
-      max-width: 300px;
-      padding: 16px;
-      padding-bottom: 12px;
-      border: 2px solid $divider;
-      border-radius: 8px;
-      text-align: center;
-    }
-
-    .no-selection {
-      opacity: 0.64;
-    }
-
-    .hint {
-      color: $textSecondary;
-      margin-top: 16px;
-    }
-
-    code {
-      background-color: $divider;
-      padding: 2px 4px;
-      border-radius: 2px;
-      font-family: monospace;
-      font-size: 15px;
-    }
-  }
+.font-mono-2 {
+  font-family: monospace;
+}
+.font-size-body {
+  font-size: 16px;
 }
 </style>
