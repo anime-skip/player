@@ -2,6 +2,8 @@
 const { execSync } = require('child_process');
 const path = require('path');
 
+const isCi = process.env.CI === 'true';
+
 const ESC = '\x1b';
 const RESET = `${ESC}[0m`;
 const BOLD = `${ESC}[1m`;
@@ -74,9 +76,9 @@ async function script(runner) {
 async function run(message, runner) {
   try {
     if (runner) {
-      step(`${BLUE}●`, message);
+      if (!isCi) step(`${BLUE}●`, message);
       await runner();
-      clearLine();
+      if (!isCi) clearLine();
       step(`${GREEN}●`, message + '\n');
     } else {
       step(`${BLUE}●`, message + ' - no runner\n');
