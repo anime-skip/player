@@ -1,12 +1,12 @@
 <template>
   <BasicDialog
     name="EditEpisodeDialog"
-    gravityX="center"
-    gravityY="center"
+    gravity-x="center"
+    gravity-y="center"
     @show="onShow"
     @hide="onHide"
   >
-    <LoadingOverlay class="min-h-6" :isLoading="isLoading">
+    <LoadingOverlay class="min-h-6" :is-loading="isLoading">
       <div v-if="!isLoggedIn" class="px-16 py-8 text-center self-center justify-self-center">
         <LoginWarning before="connecting this episode to Anime Skip" />
       </div>

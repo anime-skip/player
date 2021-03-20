@@ -2,7 +2,7 @@
   <div v-if="activePlayerOption == null" class="column">
     <h2 class="section-header">General</h2>
     <div class="input-grid input-grid--2" :class="{ small }">
-      <PlaybackRatePicker :showLess="!small" />
+      <PlaybackRatePicker :show-less="!small" />
       <div
         v-for="optionGroup of playerOptions"
         :key="optionGroup.title"
@@ -15,7 +15,7 @@
         <WebExtImg src="ic_chevron_right.svg" class="right" />
       </div>
       <Checkbox
-        :isChecked="getPref('enableAutoSkip')"
+        :is-checked="getPref('enableAutoSkip')"
         text="Auto-skip Sections"
         @click="updatePreferences('enableAutoSkip')"
       />
@@ -26,8 +26,8 @@
       <Checkbox
         v-for="preference in SKIPPABLE_PREFERENCES"
         :key="preference.key"
-        :isChecked="getPref(preference.key)"
-        :isDisabled="!getPref('enableAutoSkip')"
+        :is-checked="getPref(preference.key)"
+        :is-disabled="!getPref('enableAutoSkip')"
         :text="preference.title"
         @click="onClickPreference(preference.key)"
       />

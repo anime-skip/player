@@ -1,5 +1,5 @@
 <template>
-  <BasicDialog name="PreferencesDialog" gravityX="flex-end" gravityY="flex-end">
+  <BasicDialog name="PreferencesDialog" gravity-x="flex-end" gravity-y="flex-end">
     <GeneralSettings small>
       <RaisedButton dark @click="openExtensionOptions">
         <div class="flex justify-between w-full">
@@ -7,7 +7,7 @@
         </div>
       </RaisedButton>
     </GeneralSettings>
-    <SkippedSections twoColumns />
+    <SkippedSections two-columns />
   </BasicDialog>
 </template>
 

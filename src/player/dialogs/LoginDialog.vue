@@ -2,11 +2,11 @@
   <BasicDialog
     name="LoginDialog"
     class="bg-control-variant bg-opacity-medium z-50"
-    gravityX="center"
-    gravityY="center"
+    gravity-x="center"
+    gravity-y="center"
     v-bind="{ isShowing, hideDialog }"
   >
-    <LogIn closeAfterLogin :close="hideDialog" />
+    <LogIn close-after-login :close="hideDialog" />
   </BasicDialog>
 </template>
 

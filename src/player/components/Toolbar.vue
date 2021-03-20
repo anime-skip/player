@@ -10,7 +10,7 @@
     <TimelineWrapper
       class="timeline-alignment"
       :class="{ 'opacity-0 pointer-events-none': !duration }"
-      :isFlipped="!playerState.isPaused && !isActive"
+      :is-flipped="!playerState.isPaused && !isActive"
       :duration="duration"
     />
     <div class="h-toolbar flex flex-row items-center space-x-1 px-2 pt-0.5">

@@ -10,8 +10,8 @@
       class="slider w-full"
       :progress="normalizedTime"
       :max="100"
-      disableUpdateDuringSeek
-      :defaultThumbSize="thumbSize"
+      disable-update-during-seek
+      :default-thumb-size="thumbSize"
       @seek="onSeek"
     >
       <template #background>
@@ -23,7 +23,7 @@
             seeking: isSeeking,
           }"
           :timestamps="timelineData"
-          :normalizedProgress="slotProps.progress"
+          :normalized-progress="slotProps.progress"
           :editing="isEditing"
           @click.stop
         />

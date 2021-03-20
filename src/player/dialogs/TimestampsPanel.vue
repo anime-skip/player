@@ -2,11 +2,11 @@
   <BasicDialog
     id="TimestampsPanel"
     name="TimestampsPanel"
-    gravityX="flex-end"
-    gravityY="center"
+    gravity-x="flex-end"
+    gravity-y="center"
     @show="onShow"
   >
-    <EditTimestamp v-if="activeTimestamp != null" :initialTab="initialTab" />
+    <EditTimestamp v-if="activeTimestamp != null" :initial-tab="initialTab" />
     <TimestampList v-else />
   </BasicDialog>
 </template>

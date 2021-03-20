@@ -49,7 +49,6 @@ overrides:
     rules:
       no-undef: 'off'
       vue/singleline-html-element-content-newline: 'off'
-      vue/attribute-hyphenation: ['warn', 'never']
       vue/max-attributes-per-line: 'off'
       vue/require-default-prop: 'off'
       '@typescript-eslint/no-explicit-any': 'off'

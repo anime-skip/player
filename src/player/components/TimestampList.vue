@@ -1,5 +1,5 @@
 <template>
-  <LoadingOverlay class="h-full" :isLoading="isSavingTimestamps">
+  <LoadingOverlay class="h-full" :is-loading="isSavingTimestamps">
     <div class="flex flex-col h-full">
       <header
         class="pl-4 pr-2 pb-2 -mt-1.5 -mx-4 border-b border-on-surface border-opacity-divider flex-shrink-0"

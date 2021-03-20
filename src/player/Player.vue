@@ -23,7 +23,7 @@
       <EpisodeInfo />
     </div>
     <div class="right-content" />
-    <ToolBar class="bottom-content" :playerState="playerState" />
+    <ToolBar class="bottom-content" :player-state="playerState" />
 
     <!-- Dialogs -->
     <TimestampsPanel />

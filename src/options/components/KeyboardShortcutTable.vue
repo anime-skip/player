@@ -19,7 +19,7 @@
       <KeyboardShortcutRow
         top
         name="Play/pause"
-        actionName="playPause"
+        action-name="playPause"
         v-on="{
           updatePrimary: updatePrimaryShortcut('playPause'),
           updateSecondary: updateSecondaryShortcut('playPause'),
@@ -27,7 +27,7 @@
       />
       <KeyboardShortcutRow
         name="Volume up"
-        actionName="volumeUp"
+        action-name="volumeUp"
         v-on="{
           updatePrimary: updatePrimaryShortcut('volumeUp'),
           updateSecondary: updateSecondaryShortcut('volumeUp'),
@@ -35,7 +35,7 @@
       />
       <KeyboardShortcutRow
         name="Volume down"
-        actionName="volumeDown"
+        action-name="volumeDown"
         v-on="{
           updatePrimary: updatePrimaryShortcut('volumeDown'),
           updateSecondary: updateSecondaryShortcut('volumeDown'),
@@ -43,7 +43,7 @@
       />
       <KeyboardShortcutRow
         name="Toggle fullscreen"
-        actionName="toggleFullscreen"
+        action-name="toggleFullscreen"
         v-on="{
           updatePrimary: updatePrimaryShortcut('toggleFullscreen'),
           updateSecondary: updateSecondaryShortcut('toggleFullscreen'),
@@ -52,7 +52,7 @@
       <KeyboardShortcutRow
         bottom
         name="Close dialog"
-        actionName="hideDialog"
+        action-name="hideDialog"
         v-on="{
           updatePrimary: updatePrimaryShortcut('hideDialog'),
           updateSecondary: updateSecondaryShortcut('hideDialog'),
@@ -64,7 +64,7 @@
       <KeyboardShortcutRow
         top
         name="Advance 2 second"
-        actionName="advanceSmall"
+        action-name="advanceSmall"
         v-on="{
           updatePrimary: updatePrimaryShortcut('advanceSmall'),
           updateSecondary: updateSecondaryShortcut('advanceSmall'),
@@ -72,7 +72,7 @@
       />
       <KeyboardShortcutRow
         name="Advance 5 seconds"
-        actionName="advanceMedium"
+        action-name="advanceMedium"
         v-on="{
           updatePrimary: updatePrimaryShortcut('advanceMedium'),
           updateSecondary: updateSecondaryShortcut('advanceMedium'),
@@ -81,7 +81,7 @@
       <KeyboardShortcutRow
         bottom
         name="Advance 90 seconds"
-        actionName="advanceLarge"
+        action-name="advanceLarge"
         v-on="{
           updatePrimary: updatePrimaryShortcut('advanceLarge'),
           updateSecondary: updateSecondaryShortcut('advanceLarge'),
@@ -93,7 +93,7 @@
       <KeyboardShortcutRow
         top
         name="Rewind 2 second"
-        actionName="rewindSmall"
+        action-name="rewindSmall"
         v-on="{
           updatePrimary: updatePrimaryShortcut('rewindSmall'),
           updateSecondary: updateSecondaryShortcut('rewindSmall'),
@@ -101,7 +101,7 @@
       />
       <KeyboardShortcutRow
         name="Rewind 5 seconds"
-        actionName="rewindMedium"
+        action-name="rewindMedium"
         v-on="{
           updatePrimary: updatePrimaryShortcut('rewindMedium'),
           updateSecondary: updateSecondaryShortcut('rewindMedium'),
@@ -110,7 +110,7 @@
       <KeyboardShortcutRow
         bottom
         name="Rewind 90 seconds"
-        actionName="rewindLarge"
+        action-name="rewindLarge"
         v-on="{
           updatePrimary: updatePrimaryShortcut('rewindLarge'),
           updateSecondary: updateSecondaryShortcut('rewindLarge'),
@@ -122,7 +122,7 @@
       <KeyboardShortcutRow
         top
         name="Frame rewind"
-        actionName="rewindFrame"
+        action-name="rewindFrame"
         v-on="{
           updatePrimary: updatePrimaryShortcut('rewindFrame'),
           updateSecondary: updateSecondaryShortcut('rewindFrame'),
@@ -130,7 +130,7 @@
       />
       <KeyboardShortcutRow
         name="Frame advance"
-        actionName="advanceFrame"
+        action-name="advanceFrame"
         v-on="{
           updatePrimary: updatePrimaryShortcut('advanceFrame'),
           updateSecondary: updateSecondaryShortcut('advanceFrame'),
@@ -138,7 +138,7 @@
       />
       <KeyboardShortcutRow
         name="Rewind to/edit the previous timestamp"
-        actionName="nextTimestamp"
+        action-name="nextTimestamp"
         v-on="{
           updatePrimary: updatePrimaryShortcut('nextTimestamp'),
           updateSecondary: updateSecondaryShortcut('nextTimestamp'),
@@ -146,7 +146,7 @@
       />
       <KeyboardShortcutRow
         name="Advance to/edit the next timestamp"
-        actionName="previousTimestamp"
+        action-name="previousTimestamp"
         v-on="{
           updatePrimary: updatePrimaryShortcut('previousTimestamp'),
           updateSecondary: updateSecondaryShortcut('previousTimestamp'),
@@ -154,7 +154,7 @@
       />
       <KeyboardShortcutRow
         name="Create timestamp"
-        actionName="createTimestamp"
+        action-name="createTimestamp"
         v-on="{
           updatePrimary: updatePrimaryShortcut('createTimestamp'),
           updateSecondary: updateSecondaryShortcut('createTimestamp'),
@@ -162,7 +162,7 @@
       />
       <KeyboardShortcutRow
         name="Save timestamps"
-        actionName="saveTimestamps"
+        action-name="saveTimestamps"
         v-on="{
           updatePrimary: updatePrimaryShortcut('saveTimestamps'),
           updateSecondary: updateSecondaryShortcut('saveTimestamps'),
@@ -171,7 +171,7 @@
       <KeyboardShortcutRow
         bottom
         name="Discard changes"
-        actionName="discardChanges"
+        action-name="discardChanges"
         v-on="{
           updatePrimary: updatePrimaryShortcut('discardChanges'),
           updateSecondary: updateSecondaryShortcut('discardChanges'),
