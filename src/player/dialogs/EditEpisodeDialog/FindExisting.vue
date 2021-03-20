@@ -69,7 +69,6 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import AutocompleteTextInput from '@/common/components/AutocompleteTextInput.vue';
-import WebExtImg from '@/common/components/WebExtImg.vue';
 import { ActionTypes } from '@/common/store/actionTypes';
 import EpisodeUtils from '@/common/utils/EpisodeUtils';
 import { TIMESTAMP_SOURCES } from '@/common/utils/Constants';
@@ -77,7 +76,7 @@ import ShowAutocompleteMixin from '@/common/mixins/ShowAutocomplete';
 import EpisodeAutocompleteMixin from '@/common/mixins/EpisodeAutocomplete';
 
 export default defineComponent({
-  components: { AutocompleteTextInput, WebExtImg },
+  components: { AutocompleteTextInput },
   mixins: [ShowAutocompleteMixin, EpisodeAutocompleteMixin],
   props: {
     suggestions: {
@@ -220,59 +219,4 @@ export default defineComponent({
   content: '';
   background: linear-gradient(270deg, #142026ff 25%, #14202600 100%);
 }
-/*
-// .FindExisting {
-
-//     .suggestion-list {
-//       display: flex;
-//       flex-direction: row;
-//       box-sizing: border-box;
-//       overflow-x: auto;
-
-//       .suggestion {
-//         display: inline-block;
-//         height: unset;
-//         max-width: 256px;
-//         text-transform: none;
-//         text-align: start;
-//         display: flex;
-//         flex-direction: column;
-//         align-items: stretch;
-//         justify-content: center;
-//         padding: 8px 16px;
-//         & > * {
-//           white-space: nowrap;
-//           overflow: hidden;
-//           text-overflow: ellipsis;
-//         }
-//         .episode {
-//           font-family: sans-serif;
-//           font-size: 18px;
-//           color: white;
-//           font-weight: 400;
-//         }
-//         .subtitle {
-//           // color: $textPrimary;
-//           font-weight: 400;
-//         }
-//         .source {
-//           // color: $textSecondary;
-//         }
-//       }
-//   }
-
-//   .buttons {
-//     display: flex;
-//     flex-direction: row-reverse;
-
-//     .margin-left {
-//       margin-left: 16px;
-//     }
-
-//     .space {
-//       flex-grow: 1;
-//     }
-//   }
-// }
-*/
 </style>

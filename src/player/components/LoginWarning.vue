@@ -14,11 +14,10 @@ export default defineComponent({
   props: {
     before: String,
   },
-  setup(props) {
+  setup() {
     const { openLoginDialog } = useLoginDialog();
     return {
       openLoginDialog,
-      before: props.before,
     };
   },
 });

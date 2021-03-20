@@ -9,7 +9,7 @@
         v-model:value="username"
         @submit="login"
       >
-        <template v-slot:left-icon="slotProps">
+        <template #left-icon="slotProps">
           <Icon
             :disabled="slotProps.disabled"
             :active="slotProps.focused"
@@ -25,7 +25,7 @@
         v-model:value="password"
         @submit="login"
       >
-        <template v-slot:left-icon="slotProps">
+        <template #left-icon="slotProps">
           <Icon
             :disabled="slotProps.disabled"
             :active="slotProps.focused"

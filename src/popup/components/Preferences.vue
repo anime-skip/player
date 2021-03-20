@@ -62,8 +62,6 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import ProgressOverlay from '@/common/components/ProgressOverlay.vue';
-import PopupHeader from './PopupHeader.vue';
 import WebExtImg from '@/common/components/WebExtImg.vue';
 import PlaybackRatePicker from '@/common/components/PlaybackRatePicker.vue';
 import { SKIPPABLE_PREFERENCES } from '@/common/utils/Constants';
@@ -73,7 +71,7 @@ import { MutationTypes } from '@/common/store/mutationTypes';
 import { GetterTypes } from '@/common/store/getterTypes';
 
 export default defineComponent({
-  components: { ProgressOverlay, PopupHeader, PlaybackRatePicker, WebExtImg },
+  components: { PlaybackRatePicker, WebExtImg },
   props: {
     small: Boolean,
   },
@@ -151,128 +149,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss" scoped>
-// .Preferences {
-//   min-width: 250px;
-//   max-width: 700px;
-
-//   .column {
-//     display: flex;
-//     flex-direction: column;
-//     align-items: stretch;
-//   }
-//   .input-grid {
-//     display: grid;
-//     grid-template-columns: repeat(3, minmax(150px, 1fr));
-//     grid-gap: 16px;
-//     margin: 16px 0;
-//     align-items: stretch;
-//     &.small {
-//       grid-template-columns: repeat(2, minmax(150px, 1fr));
-//     }
-//   }
-//   .input-grid--2 {
-//     align-items: stretch;
-//     grid-template-columns: repeat(2, minmax(225px, 1fr));
-//     &.small {
-//       grid-template-columns: repeat(1, minmax(225px, 1fr));
-//     }
-//   }
-//   a {
-//     // color: $textPrimary;
-//     font-size: 15px;
-//   }
-//   .error-message {
-//     // color: $red400;
-//   }
-//   .bottom-row {
-//     padding-top: 16px;
-//     display: flex;
-//     flex-direction: row;
-//     justify-content: space-between;
-//   }
-
-//   .option-group-button {
-//     height: 38px;
-//     display: flex;
-//     flex-direction: row;
-//     align-items: center;
-
-//     img.left {
-//       margin-right: 16px;
-//     }
-
-//     span {
-//       text-transform: none;
-
-//       &.label {
-//         margin-right: 8px;
-//       }
-//       &.value {
-//         flex: 1;
-//         text-align: right;
-//         font-weight: 400;
-//         opacity: 0.64;
-//       }
-//     }
-
-//     img.right {
-//       margin-left: 8px;
-//       opacity: 0.48;
-//     }
-//   }
-
-//   .other-setting {
-//     display: flex;
-//     flex-direction: row;
-//     margin-top: 16px;
-//     align-self: flex-start;
-//     text-transform: none;
-//     align-items: center;
-
-//     img {
-//       margin-left: 8px;
-//     }
-//   }
-// }
-
-// .Preferences.player-options {
-//   overflow-x: hidden;
-
-//   .list {
-//     flex-grow: 1;
-//     overflow-y: auto;
-//     overflow-x: hidden;
-//   }
-
-//   .player-option-title {
-//     cursor: pointer;
-//     margin-top: 4px;
-//     margin-bottom: 16px;
-//     display: flex;
-//     flex-direction: row;
-//     align-items: center;
-
-//     span {
-//       // color: $textPrimary;
-//     }
-
-//     img {
-//       margin-right: 8px;
-//       opacity: 0.64;
-//     }
-//   }
-
-//   .player-option {
-//     margin-top: 8px;
-//     display: flex;
-//     flex-direction: row;
-//     align-items: center;
-
-//     img {
-//       margin-right: 16px;
-//     }
-//   }
-// }
-</style>

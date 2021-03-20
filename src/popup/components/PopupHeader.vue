@@ -15,28 +15,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss" scoped>
-// .PopupHeader {
-//   .title {
-//     // color: $textPrimary;
-//     font-size: 22px;
-//     font-weight: 700;
-//     padding: 0;
-//     margin: 0;
-
-//     &.small {
-//       font-size: 18px;
-//     }
-//   }
-//   .subtitle {
-//     // color: $textSecondary;
-//     font-size: 22px;
-//     font-weight: 400;
-
-//     &.small {
-//       font-size: 18px;
-//     }
-//   }
-// }
-</style>

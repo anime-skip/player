@@ -53,12 +53,10 @@
 import { computed, defineComponent, ref } from 'vue';
 import TimelineWrapper from './TimelineWrapper.vue';
 import ToolbarButton from './ToolbarButton.vue';
-import PreferencesDialog from '../dialogs/PreferencesDialog.vue';
 import PlayPauseButton from './animations/PlayPauseButton.vue';
 import FullscreenButton from './animations/FullscreenButton.vue';
 import VolumeButton from './animations/VolumeButton.vue';
 import Utils from '@/common/utils/Utils';
-import WebExtImg from '@/common/components/WebExtImg.vue';
 import { useVideoController } from '@/common/mixins/VideoController';
 import { useKeyboardShortcuts } from '@/common/mixins/KeyboardShortcuts';
 import { FRAME } from '@/common/utils/Constants';
@@ -77,8 +75,6 @@ export default defineComponent({
     ToolbarButton,
     FullscreenButton,
     VolumeButton,
-    PreferencesDialog,
-    WebExtImg,
   },
   setup() {
     const store: Store = useStore();

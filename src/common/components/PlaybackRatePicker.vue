@@ -49,12 +49,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import WebExtImg from '@/common/components/WebExtImg.vue';
 import { PLAYBACK_SPEEDS } from '@/common/utils/Constants';
 import { MutationTypes } from '../store/mutationTypes';
 
 export default defineComponent({
-  components: { WebExtImg },
   props: {
     showLess: Boolean,
   },

@@ -14,10 +14,10 @@
       :defaultThumbSize="thumbSize"
       @seek="onSeek"
     >
-      <template v-slot:background>
+      <template #background>
         <div />
       </template>
-      <template v-slot:foreground="slotProps">
+      <template #foreground="slotProps">
         <Timeline
           :class="{
             seeking: isSeeking,

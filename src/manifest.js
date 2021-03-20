@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 const manifest = {
   ...require('./manifest.json'),
   version: require('../package.json').version,

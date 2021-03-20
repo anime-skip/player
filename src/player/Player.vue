@@ -35,7 +35,6 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import WebExtImg from '@/common/components/WebExtImg.vue';
 import ToolBar from './components/Toolbar.vue';
 import EpisodeInfo from './components/EpisodeInfo.vue';
 import LoginDialog from './dialogs/LoginDialog.vue';
@@ -55,7 +54,6 @@ import { Store } from '@/common/store';
 export default defineComponent({
   name: 'Player',
   components: {
-    WebExtImg,
     ToolBar,
     EpisodeInfo,
     LoginDialog,

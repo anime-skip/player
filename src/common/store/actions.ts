@@ -6,12 +6,11 @@ import { ActionTypes } from './actionTypes';
 import RequestState from '../utils/RequestState';
 import Utils from '../utils/Utils';
 import Mappers from '../utils/Mappers';
-import { state, State } from './state';
+import { State } from './state';
 import { MutationTypes } from './mutationTypes';
 import { assertLoggedIn, callApi } from './actionUtils';
 import type { Store } from '.';
 import { GetterTypes } from './getterTypes';
-import { getters } from './getters';
 
 // Typings /////////////////////////////////////////////////////////////////////
 

@@ -183,13 +183,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import PopupHeader from '@/popup/components/PopupHeader.vue';
 import KeyboardShortcutRow from './KeyboardShortcutRow.vue';
-import WebExtImg from '@/common/components/WebExtImg.vue';
 import { MutationTypes } from '@/common/store/mutationTypes';
 
 export default defineComponent({
-  components: { KeyboardShortcutRow, PopupHeader, WebExtImg },
+  components: { KeyboardShortcutRow },
   methods: {
     updatePrimaryShortcut(type: KeyboardShortcutAction): (value: string) => void {
       return (value: string | undefined): void => {

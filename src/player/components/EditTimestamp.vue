@@ -51,7 +51,7 @@
         @keydown.up.stop.prevent="onPressUp"
         @keydown.down.stop.prevent="onPressDown"
       >
-        <template v-slot:left-icon="slotProps">
+        <template #left-icon="slotProps">
           <Icon
             :disabled="slotProps.disabled"
             :active="slotProps.focused"
