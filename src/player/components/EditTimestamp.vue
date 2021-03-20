@@ -17,14 +17,26 @@
     <div class="flex flex-col flex-1 space-y-2 pt-4 -mx-4 px-4 pb-2 overflow-y-hidden">
       <p class="subtitle-1">Starts At</p>
       <div class="flex flex-row space-x-4 py-2 items-center">
-        <RaisedContainer dark ref="timeSelect" class="self-start flex-shrink-0" tabindex="0">
-          <div class="w-full h-10 pl-3 pr-4 flex items-center space-x-3">
-            <WebExtImg class="icon" src="ic_clock.svg" :draggable="false" />
-            <p class="time">
-              {{ formattedAt }}
-            </p>
-          </div>
-        </RaisedContainer>
+        <div
+          ref="timeSelect"
+          class="self-start flex-shrink-0 rounded-sm ring-primary"
+          :class="{
+            'ring ring-opacity-low': isTimeSelectFocused,
+          }"
+          tabindex="0"
+          @focus="isTimeSelectFocused = true"
+          @blur="isTimeSelectFocused = false"
+          @click.stop.prevent="focusOnTimeSelect"
+        >
+          <RaisedContainer :down="isTimeSelectFocused" dark tabindex="-1">
+            <div class="w-full h-10 pl-3 pr-4 flex items-center space-x-3">
+              <WebExtImg class="icon" src="ic_clock.svg" :draggable="false" />
+              <p class="time">
+                {{ formattedAt }}
+              </p>
+            </div>
+          </RaisedContainer>
+        </div>
         <p class="body-2 text-opacity-medium text-on-surface">
           Use J and L keys to move left and right
         </p>
@@ -117,12 +129,7 @@ export default defineComponent({
     // solved by vue3/composition
     this.$forceUpdate();
 
-    const interval = setInterval(() => {
-      if (this.$refs.timeSelect != null) {
-        (this.$refs.timeSelect as HTMLElement | undefined)?.focus();
-        clearInterval(interval);
-      }
-    }, 200);
+    this.focusOnTimeSelect();
   },
   unmounted() {
     this.clearActiveTimestamp();
@@ -145,6 +152,7 @@ export default defineComponent({
     return {
       typeFilter: '',
       selectedType: undefined as Api.TimestampType | undefined,
+      isTimeSelectFocused: false,
     };
   },
   computed: {
@@ -274,6 +282,18 @@ export default defineComponent({
       const index = types.findIndex(type => type.id === this.selectedType?.id);
       const newIndex = (index + 1) % types.length;
       this.selectType(types[newIndex]);
+    },
+    focusOnTimeSelect(): void {
+      if (this.$refs.timeSelect != null) {
+        (this.$refs.timeSelect as HTMLElement).focus();
+      } else {
+        const interval = setInterval(() => {
+          if (this.$refs.timeSelect != null) {
+            (this.$refs.timeSelect as HTMLElement).focus();
+            clearInterval(interval);
+          }
+        }, 200);
+      }
     },
   },
 });
