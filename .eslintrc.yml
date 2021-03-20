@@ -35,7 +35,6 @@ overrides:
           varsIgnorePattern: _.*
       '@typescript-eslint/no-explicit-any': 'off'
       '@typescript-eslint/ban-ts-comment': 'off'
-      '@typescript-eslint/no-non-null-assertion': 'off'
       '@typescript-eslint/explicit-module-boundary-types': 'off'
   - files: ['*.d.ts']
     rules:
@@ -52,7 +51,6 @@ overrides:
       vue/max-attributes-per-line: 'off'
       vue/require-default-prop: 'off'
       '@typescript-eslint/no-explicit-any': 'off'
-      '@typescript-eslint/no-non-null-assertion': 'off'
       '@typescript-eslint/no-unused-vars':
         - 'warn'
         - argsIgnorePattern: _.*

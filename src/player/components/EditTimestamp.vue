@@ -251,12 +251,18 @@ export default defineComponent({
       }
     },
     onClickDone() {
-      const base = this.activeTimestamp!;
+      if (this.activeTimestamp == null) {
+        throw new Error("Cannot click done when there isn't an active timestamp to be done with");
+      }
+      if (this.selectedType == null) {
+        throw new Error("Cannot click done when the timestamp type hasn't been selected");
+      }
+      const base = this.activeTimestamp;
       const updatedTimestamp: Api.AmbiguousTimestamp = this.$store.getters[
         GetterTypes.APPLY_TIMESTAMP_DIFF
       ]({
         at: base.at,
-        typeId: this.selectedType!.id,
+        typeId: this.selectedType.id,
         id: base.id,
         source: base.source,
       });
@@ -264,7 +270,10 @@ export default defineComponent({
       this.leaveDialog();
     },
     onClickDelete() {
-      this.deleteDraftTimestamp(this.activeTimestamp!);
+      if (this.activeTimestamp == null) {
+        throw new Error("Cannot delete the active timestamp when there isn't an active timestamp");
+      }
+      this.deleteDraftTimestamp(this.activeTimestamp);
       this.leaveDialog();
     },
     onPressUp() {
