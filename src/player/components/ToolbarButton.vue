@@ -19,7 +19,9 @@ import WebExtImg from '@/common/components/WebExtImg.vue';
 
 export default defineComponent({
   components: { WebExtImg },
-  emits: ['click'],
+  emits: {
+    click: () => true,
+  },
   props: {
     icon: { type: String, default: undefined },
     title: { type: String, default: undefined },

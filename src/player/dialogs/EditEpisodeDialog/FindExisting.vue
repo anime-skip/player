@@ -85,7 +85,9 @@ export default defineComponent({
     },
     prefill: { type: Object as PropType<CreateEpisodePrefill | undefined>, default: undefined },
   },
-  emits: ['createNew'],
+  emits: {
+    createNew: (_arg: CreateEpisodePrefill) => true,
+  },
   data() {
     return {
       show: this.prefill?.show || {

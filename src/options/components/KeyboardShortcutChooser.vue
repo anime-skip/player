@@ -15,10 +15,10 @@
         'text-on-primary': !secondary,
         'text-on-surface': secondary,
       }"
-      tabindex="0"
+      :tabindex="0"
       >{{ shortcut }}</pre
     >
-    <pre v-else class="opacity-medium font-mono-2 font-size-body" tabindex="0" @click="showEditor">
+    <pre v-else class="opacity-medium font-mono-2 font-size-body" :tabindex="0" @click="showEditor">
 unset</pre
     >
 
@@ -62,7 +62,9 @@ export default defineComponent({
     shortcut: { type: String, default: undefined },
     secondary: Boolean,
   },
-  emits: ['update'],
+  emits: {
+    update: (_pressedKey: string | undefined) => true,
+  },
   data() {
     return {
       isShowingEditor: false,

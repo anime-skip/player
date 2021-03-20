@@ -45,7 +45,10 @@ export default defineComponent({
     top: Boolean,
     bottom: Boolean,
   },
-  emits: ['updatePrimary', 'updateSecondary'],
+  emits: {
+    updatePrimary: (_newShortcut: string | undefined) => true,
+    updateSecondary: (_newShortcut: string | undefined) => true,
+  },
   methods: {
     updatePrimary(value: string | undefined) {
       this.$emit('updatePrimary', value);

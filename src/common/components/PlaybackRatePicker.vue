@@ -24,12 +24,12 @@
           :dark="!customRate"
           :error="isCustomError"
           class="w-full p-0"
-          tabindex="-1"
+          :tabindex="-1"
         >
           <input
             type="text"
             step="0.01"
-            maxlength="4"
+            :maxlength="4"
             class="bg-transparent w-full h-10 text-center"
             :class="{
               'caret-white': !isCustomError,
@@ -106,7 +106,7 @@ export default defineComponent({
       this.customRate = '';
       this.changePlaybackRate(Number(value));
     },
-    onChangeCustom(event: InputEvent) {
+    onChangeCustom(event: Event) {
       const { value } = event.target as HTMLInputElement;
       this.customRate = value;
     },

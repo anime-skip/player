@@ -7,7 +7,7 @@
     "node": ">=10"
   },
   "scripts": {
-    "compile": "tsc -p . --noEmit",
+    "compile": "vue-tsc --noEmit",
     "lint": "eslint . --ext .js,.ts,.vue --max-warnings 0 --fix",
     "lint:no-fix": "eslint . --ext .js,.ts,.vue --max-warnings 0",
     "prettier": "prettier --check \"src/**/*.{js,ts,vue}\"",
@@ -98,6 +98,7 @@
     "ts-loader": "^8.0.17",
     "typescript": "^4.2.3",
     "vue-loader": "^16.1.2",
+    "vue-tsc": "^0.0.14",
     "web-ext": "^5.5.0",
     "web-ext-types": "^3.2.1",
     "webpack": "^5.23.0",
