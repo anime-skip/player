@@ -49,19 +49,18 @@
               @mouseleave.stop.prevent="onStopHoverTimestamp()"
             >
               <td>
-                <h6
-                  class="font-bold text-right text-lg pt-0.5 pl-4 pr-2"
-                  :style="itemTimestampStyle(timestamp)"
-                >
-                  {{ itemTime(timestamp) }}
-                </h6>
-                <p
-                  v-if="timestamp.edited"
-                  class="overflow-y-visible text-right -mt-2 text-2xs uppercase"
-                  :style="itemTimestampStyle(timestamp)"
-                >
-                  {{ itemNote(timestamp) }}
-                </p>
+                <div class="pl-4 text-right">
+                  <h6 class="font-bold text-lg pt-0.5" :style="itemTimestampStyle(timestamp)">
+                    {{ itemTime(timestamp) }}
+                  </h6>
+                  <p
+                    v-if="timestamp.edited"
+                    class="overflow-y-visible -mt-2 text-2xs uppercase"
+                    :style="itemTimestampStyle(timestamp)"
+                  >
+                    {{ itemNote(timestamp) }}
+                  </p>
+                </div>
               </td>
               <td class="px-4 py-2 spacy-y-1 w-90%">
                 <p class="">{{ itemType(timestamp) }}</p>
