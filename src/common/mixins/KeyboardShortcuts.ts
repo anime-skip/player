@@ -48,7 +48,7 @@ export default defineComponent({
     global.removeKeyDownListener(this.onKeyDown);
   },
   data(): Data {
-    // @ts-ignore: Data is just for the typing, shortcuts are setup in created
+    // @ts-expect-error: Data is just for the typing, shortcuts are setup in created
     return {};
   },
   methods: {

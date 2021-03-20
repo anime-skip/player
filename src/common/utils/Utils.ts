@@ -86,20 +86,20 @@ export default class Utils {
     }
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
-      // @ts-ignore
+      // @ts-expect-error: difficult typing
     } else if (elem.mozRequestFullScreen) {
       /* Firefox */
-      // @ts-ignore
+      // @ts-expect-error: difficult typing
       elem.mozRequestFullScreen();
-      // @ts-ignore
+      // @ts-expect-error: difficult typing
     } else if (elem.webkitRequestFullscreen) {
       /* Chrome, Safari and Opera */
-      // @ts-ignore
+      // @ts-expect-error: difficult typing
       elem.webkitRequestFullscreen();
-      // @ts-ignore
+      // @ts-expect-error: difficult typing
     } else if (elem.msRequestFullscreen) {
       /* IE/Edge */
-      // @ts-ignore
+      // @ts-expect-error: difficult typing
       elem.msRequestFullscreen();
     }
   }
@@ -352,7 +352,7 @@ export default class Utils {
     apiCall: (...args: A) => Promise<R>,
     ...args: A
   ): Promise<R> {
-    // @ts-ignore: Type generics did not make it through to dispatch()
+    // @ts-expect-error: Type generics did not make it through to dispatch()
     return await store.dispatch(ActionTypes.API_CALL, { apiCall, args });
   }
 

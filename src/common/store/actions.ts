@@ -483,8 +483,7 @@ export const actions: ActionTree<State, State> & Actions = {
         commit(MutationTypes.SET_EPISODE_URL, undefined);
         commit(MutationTypes.SET_EPISODE, {
           ...episode,
-          // TODO! Fix this typing
-          // @ts-ignore
+          // @ts-expect-error: TODO fix this typing
           timestamps,
         });
       }

@@ -27,7 +27,7 @@ const EpisodeAutocompleteMixin = defineComponent({
         this.$store,
         global.Api.searchEpisodes,
         episode,
-        // @ts-ignore: Show is not defined in the mixin, but if it's available, use it
+        // @ts-expect-error: Show is not defined in the mixin, but if it's available, use it
         this.show?.data?.id
       );
     },

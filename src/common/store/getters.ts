@@ -176,7 +176,6 @@ export const getters: GetterTree<State, State> & Getters = {
       ? getters[GetterTypes.DRAFT_TIMESTAMPS]
       : getters[GetterTypes.TIMESTAMPS];
   },
-  // @ts-ignore: types don't like generics
   [GetterTypes.APPLY_TIMESTAMP_DIFF](state) {
     return function (timestamp) {
       const original = state.timestamps.find(t => t.id === timestamp.id);

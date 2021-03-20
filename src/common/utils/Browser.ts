@@ -46,7 +46,6 @@ export default class Browser {
 
   public static storage = {
     getItem: async <T>(key: string): Promise<T | undefined> => {
-      // @ts-ignore
       const keyMap = await browser.storage.local.get(key);
       const value = keyMap[key] as string | T;
       try {
@@ -58,15 +57,15 @@ export default class Browser {
     getAll: async <T extends { [key: string]: string | unknown }>(
       keys: (keyof T)[]
     ): Promise<T> => {
-      // @ts-expect-error
+      // @ts-expect-error: difficult typing
       const storage = await browser.storage.local.get(keys);
       const data = {} as { [key in keyof T]: T[key] };
       keys.forEach(key => {
         try {
-          // @ts-expect-error
+          // @ts-expect-error: difficult typing
           data[key] = JSON.parse(storage[key]);
         } catch (err) {
-          // @ts-expect-error
+          // @ts-expect-error: difficult typing
           data[key] = storage[key];
         }
       });
@@ -78,7 +77,7 @@ export default class Browser {
     addListener: (callback: (changes: Partial<State>) => void): void => {
       browser.storage.onChanged.addListener((changes, area) => {
         if (area === 'local') {
-          // @ts-expect-error
+          // @ts-expect-error: difficult typing
           callback(prepareChangedStorage(changes));
         }
       });
@@ -87,15 +86,14 @@ export default class Browser {
 
   public static resolveUrl(extUrl: string): string {
     let getURL = (_?: string): string => extUrl;
-    // @ts-ignore
+    // @ts-expect-error: difficult typing
     if (browser) getURL = browser.runtime.getURL;
-    // @ts-ignore
+    // @ts-expect-error: difficult typing
     else if (chrome) getURL = chrome.runtime.getURL;
     return getURL(extUrl);
   }
 
   public static openPopup(): void {
-    // @ts-ignore
     if (browser) browser.browserAction.openPopup();
   }
 
@@ -123,22 +121,22 @@ export default class Browser {
    */
   public static detect(): BrowserType {
     // Opera 8.0+
-    // @ts-ignore
+    // @ts-expect-error: difficult typing
     if ((!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0)
       return "opera";
 
     // Firefox 1.0+
-    // @ts-ignore
+    // @ts-expect-error: difficult typing
     if (typeof InstallTrigger !== 'undefined')
       return "firefox";
 
     // Safari 3.0+ "[object HTMLElementConstructor]" 
-    // @ts-ignore
+    // @ts-expect-error: difficult typing
     if (/constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification)))
       return "safari";
 
     // Internet Explorer 6-11
-    // @ts-ignore
+    // @ts-expect-error: difficult typing
     const isIe = /*@cc_on!@*/false || !!document.documentMode;
     // Edge 20+
     if (!isIe && !!window.StyleMedia)
@@ -147,7 +145,7 @@ export default class Browser {
       return "ie";
 
     // Chrome 1 - 79
-    // @ts-ignore
+    // @ts-expect-error: difficult typing
     const isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
     // Edge (based on chromium) detection
     if (isChrome && (navigator.userAgent.indexOf("Edg") != -1))
