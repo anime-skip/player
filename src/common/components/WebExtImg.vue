@@ -8,7 +8,7 @@ import Browser from '@/common/utils/Browser';
 
 export default defineComponent({
   props: {
-    src: String,
+    src: { type: String, default: undefined },
     draggable: Boolean,
   },
   computed: {

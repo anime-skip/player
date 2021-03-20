@@ -36,8 +36,9 @@ export default defineComponent({
     },
     isShowing: {
       type: Function as PropType<(dialogName: string, activeDialog?: string) => boolean>,
+      default: undefined,
     },
-    hideDialog: { type: Function as PropType<(store: Store) => void>, required: false },
+    hideDialog: { type: Function as PropType<(store: Store) => void>, default: undefined },
   },
   emits: ['show', 'hide'],
   watch: {

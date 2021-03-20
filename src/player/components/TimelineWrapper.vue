@@ -45,7 +45,7 @@ import TimestampColors from '@/player/utils/TimelineColors';
 export default defineComponent({
   props: {
     isFlipped: Boolean,
-    duration: Number,
+    duration: { type: Number, default: undefined },
   },
   emits: ['seek'],
   setup(props) {

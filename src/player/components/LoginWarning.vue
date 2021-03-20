@@ -12,7 +12,7 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   props: {
-    before: String,
+    before: { type: String, default: undefined },
   },
   setup() {
     const { openLoginDialog } = useLoginDialog();

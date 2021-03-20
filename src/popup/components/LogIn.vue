@@ -59,7 +59,7 @@ export default defineComponent({
   components: { PopupHeader },
   props: {
     closeAfterLogin: Boolean,
-    close: Function as PropType<() => void>,
+    close: { type: Function as PropType<() => void>, default: undefined },
   },
   data() {
     return {

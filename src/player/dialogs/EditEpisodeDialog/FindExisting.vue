@@ -83,7 +83,7 @@ export default defineComponent({
       type: Array as PropType<Api.ThirdPartyEpisode[]>,
       required: true,
     },
-    prefill: Object as PropType<CreateEpisodePrefill | undefined>,
+    prefill: { type: Object as PropType<CreateEpisodePrefill | undefined>, default: undefined },
   },
   emits: ['createNew'],
   data() {
