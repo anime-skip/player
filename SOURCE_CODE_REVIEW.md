@@ -4,21 +4,15 @@ This is the document that contains all the necessary steps to building the submi
 
 ## Environment
 
-- Linux
+- Linux: `ubuntu-20`
 - Yarn: `v1.22.4`
-- Node: `v13.8.0`
+- Node: `v14.15.3`
 
 ## Build Process
 
-One major hiccup in this is that I will soon use private NPM modules. Since I'm not going to be giving out the API key to access them, they will be included as gzips inside the `local_modules` folder of the `sources.zip` file that is submitted for review.
+```bash
+yarn install
+yarn build:prod
+```
 
-1. Replace `package.json` versions with local versions of the private modules
-   > This will happen soon in the future, but this can be skipped this time
-2. Install modules
-   ```bash
-   yarn install
-   ```
-3. Create `dist/` folder - this is what gets zipped and submitted
-   ```bash
-   yarn build:prod
-   ```
+> The `dist/` folder created during `build:prod` is what gets zipped and submitted
