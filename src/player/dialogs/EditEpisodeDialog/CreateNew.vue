@@ -1,6 +1,7 @@
 <template>
   <div class="p-4 space-y-4">
     <AutocompleteTextInput
+      ref="showName"
       class="horizontal-margin"
       placeholder="Show name"
       v-model:value="show"
@@ -50,6 +51,9 @@ export default defineComponent({
       absoluteNumber: this.prefill?.absoluteNumber ?? '',
       season: this.prefill?.season ?? '',
     };
+  },
+  mounted(): void {
+    (this.$refs.showName as TextInputRef | null)?.focus();
   },
   computed: {
     createButtonText(): string {
