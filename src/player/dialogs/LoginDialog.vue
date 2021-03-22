@@ -26,7 +26,6 @@ export default defineComponent({
     const store = useStore();
     const isShowing = computed(() => store.state.isShowingLoginDialog);
     const { closeLoginDialog } = useLoginDialog();
-    console.info({ closeLoginDialog });
     return {
       isShowing: () => isShowing.value,
       hideDialog: closeLoginDialog,

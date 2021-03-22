@@ -16,7 +16,6 @@ global.getVideoQuery = (): string => {
 };
 
 global.transformServiceUrl = (inputUrl: string) => {
-  console.error('transformed: ', inputUrl, Utils.stripUrl(inputUrl).replace(/-[0-9]+$/, ''));
   // Strip and remove -XXXXXX from end of url
   return Utils.stripUrl(inputUrl).replace(/-[0-9]+$/, '');
 };
