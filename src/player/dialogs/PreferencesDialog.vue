@@ -103,11 +103,10 @@ export default defineComponent({
       return selected[0].title;
     };
     const playerOptions = ref<PlayerOptionGroup[]>([]);
-    const loadPlayerOptions = () => {
+    const loadPlayerOptions = async () => {
       playerOptions.value =
-        global.getPlayerOptions?.()?.filter(group => group.options.length > 1) ?? [];
+        (await global.getPlayerOptions?.())?.filter(group => group.options.length > 1) ?? [];
     };
-    onMounted(loadPlayerOptions);
 
     const activeOptions = computed(() => activePlayerGroup.value?.options ?? []);
     const { getRadioIcon, getRadioIconClass, getLabelClass } = useRadioIcon();

@@ -34,14 +34,14 @@ declare interface ServiceHelpers {
    * display the items (icon, name), as well as the actual HTML node so that it can be clicked on to
    * trigger the change
    */
-  getPlayerOptions: () => PlayerOptionGroup[] | undefined;
+  getPlayerOptions: () => Promise<PlayerOptionGroup[]> | PlayerOptionGroup[] | undefined;
   /**
    * Add a callback that gets called when a video changes (duration is different than before)
    */
   onVideoChanged(callback: (video: HTMLVideoElement) => void): void;
   Api: Api.Implementation;
   service: Service;
-  serviceDisplayName: 'Anime Skip Example' | 'VRV' | 'Funimation' | undefined;
+  serviceDisplayName: ServiceDisplayName;
 
   // keyboard-blocker.ts
   addKeyDownListener: (callback: (event: KeyboardEvent) => void) => void;

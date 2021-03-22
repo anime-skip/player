@@ -32,6 +32,12 @@ const services = [
     parent_matches: ['https://www.funimation.com/shows/*'],
     page_matches: ['https://www.funimation.com/*'],
   },
+  {
+    folder: 'crunchyroll',
+    player_matches: ['https://static.crunchyroll.com/vilos-v2/web/vilos/player.html*'],
+    parent_matches: ['https://www.crunchyroll.com/*'],
+    page_matches: ['https://www.crunchyroll.com/*'],
+  },
 ];
 
 services.forEach(service => {

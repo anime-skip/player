@@ -1,4 +1,10 @@
-declare type Service = 'vrv' | 'funimation' | 'example';
+declare type Service = 'example' | 'vrv' | 'funimation' | 'crunchyroll';
+declare type ServiceDisplayName =
+  | 'Anime Skip Example'
+  | 'VRV'
+  | 'Funimation'
+  | 'Crunchyroll'
+  | undefined;
 
 declare interface LoginManualPayload {
   username: string;
