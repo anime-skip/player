@@ -1,5 +1,4 @@
 export enum GetterTypes {
-  TAB_URL = 'TAB_URL',
   DURATION = 'DURATION',
   IS_LOGGING_IN = 'IS_LOGGING_IN',
   IS_LOGIN_ERROR = 'IS_LOGIN_ERROR',

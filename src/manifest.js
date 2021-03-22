@@ -32,6 +32,12 @@ const services = [
     parent_matches: ['https://www.funimation.com/shows/*'],
     page_matches: ['https://www.funimation.com/*'],
   },
+  {
+    folder: 'crunchyroll',
+    player_matches: ['https://static.crunchyroll.com/vilos-v2/web/vilos/player.html*'],
+    parent_matches: ['https://www.crunchyroll.com/*'],
+    page_matches: ['https://www.crunchyroll.com/*'],
+  },
 ];
 
 services.forEach(service => {
@@ -56,10 +62,10 @@ services.forEach(service => {
     js: [
       'browser-polyfill.js',
       'content-scripts/all.js',
-      `content-scripts/${service.folder}/index.js`,
+      `content-scripts/${service.folder}/globals.js`,
       'player/index.js',
     ],
-    css: ['player/index.css', `content-scripts/${service.folder}/index.css`],
+    css: ['player/index.css', `content-scripts/${service.folder}/globals.css`],
     all_frames: true,
   });
 

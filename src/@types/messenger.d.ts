@@ -21,7 +21,8 @@ type MessagePayloadMap<K extends MessageTypes> = { [type in K]: any };
 type MessageResponseMap<K extends MessageTypes> = { [type in K]: any };
 
 type MessageListener<K extends MessageTypes> = (
-  payload: MessagePayloadMap<MessageTypes>[K]
+  payload: MessagePayloadMap<MessageTypes>[K],
+  sender: browser.runtime.MessageSender
 ) => Promise<MessageResponseMap<MessageTypes>[K]>;
 
 type MessageListenerMap<K extends MessageTypes> = { [type in K]: MessageListener<any> };
@@ -83,7 +84,8 @@ interface ApiMessageResponseMap extends MessageResponseMap<ApiMessageTypes> {
 }
 
 type ApiMessageListener<T extends ApiMessageTypes> = (
-  payload: ApiMessagePayloadMap[T]
+  payload: ApiMessagePayloadMap[T],
+  sender: browser.runtime.MessageSender
 ) => Promise<ApiMessageResponseMap[T]>;
 
 type ApiMessageListenerMap = { [type in ApiMessageTypes]: ApiMessageListener<type> };
@@ -103,7 +105,8 @@ interface ParentMessageResponseMap extends MessageResponseMap<ParentMessageTypes
 }
 
 type ParentMessageListener<T extends ParentMessageTypes> = (
-  payload: ParentMessagePayloadMap[T]
+  payload: ParentMessagePayloadMap[T],
+  sender: browser.runtime.MessageSender
 ) => Promise<ParentMessageResponseMap[T]>;
 
 type ParentMessageListenerMap = { [type in ParentMessageTypes]: ParentMessageListener<type> };
@@ -112,20 +115,26 @@ type ParentMessageListenerMap = { [type in ParentMessageTypes]: ParentMessageLis
 
 //#region Runtime Messenger
 
-type RuntimeMessageTypes = '@anime-skip/open-options' | '@anime-skip/open-popup';
+type RuntimeMessageTypes =
+  | '@anime-skip/open-options'
+  | '@anime-skip/open-popup'
+  | '@anime-skip/get-url';
 
 interface RuntimeMessagePayloadMap extends MessagePayloadMap<RuntimeMessageTypes> {
   '@anime-skip/open-options': undefined;
   '@anime-skip/open-popup': undefined;
+  '@anime-skip/get-url': undefined;
 }
 
 interface RuntimeMessageResponseMap extends MessageResponseMap<RuntimeMessageTypes> {
   '@anime-skip/open-options': void;
   '@anime-skip/open-popup': void;
+  '@anime-skip/get-url': string | undefined;
 }
 
 type RuntimeMessageListener<T extends RuntimeMessageTypes> = (
-  payload: RuntimeMessagePayloadMap[T]
+  payload: RuntimeMessagePayloadMap[T],
+  sender: browser.runtime.MessageSender
 ) => Promise<RuntimeMessageResponseMap[T]>;
 
 type RuntimeMessageListenerMap = { [type in RuntimeMessageTypes]: RuntimeMessageListener<type> };

@@ -97,24 +97,6 @@ export default class Browser {
     if (browser) browser.browserAction.openPopup();
   }
 
-  /**
-   * Return the the url of the webpage this is ran in. Most of the time it is in a Iframe, but
-   * sometimes not.
-   *
-   * - If we are in an iframe, we will return the referrer (the url that instantiated the iframe).
-   *   Note that if the page uses HTML5 history mode, url changes are not reflected in this field.
-   * - If we are not in an iframe, then just return the URL of the document
-   */
-  public static getIframeReferrer(): string {
-    // Try and get the parent's url if the iframe is the same domain as the website
-    try {
-      return window.parent.location.href;
-    } catch (err) {
-      console.warn('getIframeReferrer', err);
-      return window.location != window.parent.location ? document.referrer : document.location.href;
-    }
-  }
-
   // prettier-ignore
   /**
    * https://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser
@@ -157,6 +139,6 @@ export default class Browser {
   }
 
   public static transformServiceUrl(tabUrl: string): string {
-    return (global.transformServiceUrl && global.transformServiceUrl(tabUrl)) ?? tabUrl;
+    return global.transformServiceUrl?.(tabUrl) ?? tabUrl;
   }
 }

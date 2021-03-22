@@ -63,7 +63,7 @@ export interface Actions {
   ): Promise<void>;
   [ActionTypes.LOAD_ALL_EPISODE_DATA](
     context: AugmentedActionContext,
-    tabUrl: string
+    tabUrl: string | undefined
   ): Promise<void>;
   [ActionTypes.FETCH_EPISODE_BY_URL](context: AugmentedActionContext, url: string): Promise<void>;
   [ActionTypes.INFER_EPISODE_INFO](context: AugmentedActionContext): Promise<void>;
@@ -93,6 +93,8 @@ export const actions: ActionTree<State, State> & Actions = {
   async [ActionTypes.INITIAL_LOAD](context) {
     const newState = await Browser.storage.getAll<Partial<State>>(persistedKeys);
     context.commit(MutationTypes.RESTORE_STATE, { changes: newState });
+    const url = await browser.runtime.sendMessage({ type: '@anime-skip/get-url' });
+    context.commit(MutationTypes.SET_TAB_URL, url);
   },
   async [ActionTypes.SHOW_DIALOG]({ state, commit }, dialogName) {
     if (state.activeDialog === dialogName) return;
@@ -235,6 +237,10 @@ export const actions: ActionTree<State, State> & Actions = {
   ): Promise<void> {
     commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.LOADING);
 
+    const url = state.tabUrl;
+    if (url == null) {
+      throw new Error('Cannot link a URL without a URL');
+    }
     const duration = state.playerState.duration;
     const baseDuration = episode.baseDuration;
     let timestampsOffset: number | undefined;
@@ -242,7 +248,7 @@ export const actions: ActionTree<State, State> & Actions = {
       timestampsOffset = Utils.computeTimestampsOffset(baseDuration, duration);
     }
     const episodeUrl: Api.InputEpisodeUrl = {
-      url: state.tabUrl,
+      url,
       duration,
       timestampsOffset,
     };
@@ -333,6 +339,10 @@ export const actions: ActionTree<State, State> & Actions = {
       )[0];
       commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.LOADING);
 
+      const url = state.tabUrl;
+      if (url == null) {
+        throw new Error('Cannot create episode without a URL');
+      }
       const episode: Api.InputEpisode = {
         name: thirdPartyEpisode.name,
         absoluteNumber: thirdPartyEpisode.absoluteNumber,
@@ -341,7 +351,7 @@ export const actions: ActionTree<State, State> & Actions = {
         season: thirdPartyEpisode.season,
       };
       const episodeUrl: Api.InputEpisodeUrl = {
-        url: state.tabUrl,
+        url,
         duration: state.playerState.duration,
         timestampsOffset:
           state.playerState.duration != null && thirdPartyEpisode.baseDuration != null
@@ -414,6 +424,10 @@ export const actions: ActionTree<State, State> & Actions = {
     }
   },
   async [ActionTypes.LOAD_ALL_EPISODE_DATA]({ commit, dispatch, state }, tabUrl = state.tabUrl) {
+    if (tabUrl == null) {
+      console.warn('Cannot fetch undefined url');
+      return;
+    }
     commit(MutationTypes.SET_TIMESTAMPS, []);
     commit(MutationTypes.SET_EPISODE_URL, undefined);
     commit(MutationTypes.SET_EPISODE, undefined);
@@ -456,14 +470,10 @@ export const actions: ActionTree<State, State> & Actions = {
   },
   async [ActionTypes.INFER_EPISODE_INFO]({ commit }) {
     try {
-      commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.LOADING);
       const episodeInfo = await global.inferEpisodeInfo();
-      if (episodeInfo == null) throw new Error('Could not infer episode info');
-      commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.SUCCESS);
       commit(MutationTypes.SET_INFERRED_EPISODE_INFO, episodeInfo);
     } catch (err) {
       console.warn('actions.inferEpisodeInfo', err);
-      commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.FAILURE);
       commit(MutationTypes.SET_EPISODE_URL, undefined);
     }
   },

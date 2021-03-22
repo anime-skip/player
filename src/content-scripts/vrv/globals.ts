@@ -1,30 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import Utils from '@/common/utils/Utils';
+import setupGlobals from '../setupGlobals';
 import './style.scss';
 
-console.log('INJECTED content-scripts/vrv/index.ts');
-
-global.service = 'vrv';
-global.serviceDisplayName = 'VRV';
-
-global.getRootQuery = (): string => {
-  return 'body>div';
-};
-
-global.getVideoQuery = (): string => {
-  return 'video';
-};
-
-global.transformServiceUrl = Utils.stripUrl;
-
-global.inferEpisodeInfo = async (): Promise<InferredEpisodeInfo> => {
-  console.debug('vrv.inferEpisodeInfo');
-  return await browser.runtime.sendMessage({
-    type: '@anime-skip/inferEpisodeInfo',
-  });
-};
-
-global.getPlayerOptions = (): PlayerOptionGroup[] => {
+function getPlayerOptions(): PlayerOptionGroup[] {
   const optionGroups: PlayerOptionGroup[] = [];
 
   const qualityTitleNode = document.querySelector('.qualityMenuButton.baseSettingsMenuItem');
@@ -63,9 +40,16 @@ global.getPlayerOptions = (): PlayerOptionGroup[] => {
     }
   }
 
-  console.log('vrv.getPlayerOptions', optionGroups);
-
   return optionGroups;
-};
+}
 
-document.body.classList.add('hide-for-anime-skip');
+setupGlobals('vrv', {
+  serviceDisplayName: 'VRV',
+  getPlayerOptions,
+  getRootQuery() {
+    return 'body>div';
+  },
+  getVideoQuery() {
+    return 'video';
+  },
+});

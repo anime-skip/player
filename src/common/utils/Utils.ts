@@ -211,6 +211,7 @@ export default class Utils {
   public static randomId(): number {
     return Math.random() * Number.MAX_SAFE_INTEGER;
   }
+
   /* eslint-disable @typescript-eslint/no-explicit-any */
   public static arrayIncludes<K extends string>(
     array: { [key in K]: any }[],
@@ -370,5 +371,9 @@ export default class Utils {
         clearBothTimers();
       }
     }, interval);
+  }
+
+  public static sleep(ms: number): Promise<void> {
+    return new Promise(res => setTimeout(res, ms));
   }
 }

@@ -71,6 +71,10 @@ export default defineComponent({
       this.$store.dispatch(ActionTypes.SHOW_DIALOG, undefined);
     },
     async onClickCreate(): Promise<void> {
+      const url = this.$store.state.tabUrl;
+      if (url == null) {
+        throw new Error("Cannot create an episode without it's URL");
+      }
       const duration = this.$store.state.playerState.duration;
       const episode: Api.InputEpisode = {
         name: this.name.trim() || undefined,
@@ -80,7 +84,7 @@ export default defineComponent({
         baseDuration: duration,
       };
       const episodeUrl: Api.InputEpisodeUrl = {
-        url: this.$store.state.tabUrl,
+        url,
         duration,
         timestampsOffset: 0,
       };

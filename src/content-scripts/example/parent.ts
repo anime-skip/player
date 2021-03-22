@@ -1,14 +1,7 @@
-console.log('INJECTED content-scripts/example/parent.ts');
+import setupParent from '../setupParent';
 
-import Messenger from '@/common/utils/Messenger';
-
-new Messenger<
-  ParentMessageTypes,
-  ParentMessageListenerMap,
-  ParentMessagePayloadMap,
-  ParentMessageResponseMap
->('example parent', {
-  '@anime-skip/inferEpisodeInfo': async () => {
+setupParent('example', {
+  getEpisodeInfo() {
     return {
       name: (document.getElementById('episode') as HTMLSpanElement | undefined)?.innerText,
       number: (document.getElementById('number') as HTMLSpanElement | undefined)?.innerText,

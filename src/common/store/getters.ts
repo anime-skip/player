@@ -4,7 +4,6 @@ import {
   DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS,
   DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS,
 } from '../utils/Constants';
-import Browser from '../utils/Browser';
 import Utils from '../utils/Utils';
 import { State } from './state';
 import { GetterTypes } from './getterTypes';
@@ -13,7 +12,6 @@ import { Store } from '.';
 // Typings /////////////////////////////////////////////////////////////////////
 
 export interface Getters {
-  [GetterTypes.TAB_URL](state: State): string;
   [GetterTypes.DURATION](state: State): number | undefined;
   [GetterTypes.IS_LOGGING_IN](state: State): boolean;
   [GetterTypes.IS_LOGIN_ERROR](state: State): boolean;
@@ -43,9 +41,6 @@ export interface Getters {
 
 export const getters: GetterTree<State, State> & Getters = {
   // General
-  [GetterTypes.TAB_URL]({ tabUrl }) {
-    return Browser.transformServiceUrl(tabUrl);
-  },
   [GetterTypes.DURATION]({ playerState }) {
     return playerState.duration || undefined;
   },

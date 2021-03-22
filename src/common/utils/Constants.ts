@@ -268,13 +268,23 @@ export const SKIPPABLE_PREFERENCES: SkippablePreference[] = [
   },
 ];
 
+const allTimestampSources: Array<Api.TimestampSource> = ['ANIME_SKIP', 'BETTER_VRV'];
+
+/**
+ * Some services don't mess well with each other, so the integrations have been disabled
+ */
 export const SUPPORTED_THIRD_PARTY_SERVICES: Record<
   Service,
   Array<Api.TimestampSource | undefined>
 > = {
-  example: ['ANIME_SKIP', 'BETTER_VRV'],
-  vrv: ['ANIME_SKIP', 'BETTER_VRV'],
-  funimation: ['ANIME_SKIP'],
+  example: allTimestampSources,
+  vrv: allTimestampSources,
+  funimation: allTimestampSources.filter(
+    source =>
+      // TODO: Don't support BETTER_VRV because...
+      source !== 'BETTER_VRV'
+  ),
+  crunchyroll: allTimestampSources,
 };
 
 export const PLAYER_ACTIVITY_TIMEOUT = 2000;
