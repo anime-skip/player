@@ -3,7 +3,7 @@
     <div
       class="flex items-stretch justify-items-stretch h-10 w-full divide-x-2 divide-background rounded-sm bg-control"
     >
-      <Icon :size="10" path="M4 18L12.5 12L4 6V18ZM13 6V18L21.5 12L13 6Z" class="p-2 w-10" />
+      <Icon path="M4 18L12.5 12L4 6V18ZM13 6V18L21.5 12L13 6Z" class="my-2 w-10" />
       <div v-for="speed in PLAYBACK_SPEEDS" :key="speed.value" class="flex-1 min-w-10">
         <RaisedContainer
           class="cursor-pointer text-on-surface box-border w-full h-full"
