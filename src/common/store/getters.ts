@@ -4,7 +4,6 @@ import {
   DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS,
   DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS,
 } from '../utils/Constants';
-import Browser from '../utils/Browser';
 import Utils from '../utils/Utils';
 import { State } from './state';
 import { GetterTypes } from './getterTypes';
