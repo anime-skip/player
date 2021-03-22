@@ -7,18 +7,15 @@ async function sleep(ms: number): Promise<void> {
 }
 
 function getEpisodeInfo(): InferredEpisodeInfo {
-  const show = document.querySelector('.episode-info span.series')?.textContent || undefined;
-  const fullSeason = document.querySelector('.episode-info span.season');
-  const season = fullSeason?.textContent?.replace('SEASON', '')?.trim();
-
-  const episodeSplit = document.querySelector('h2.title')?.textContent?.split(' - ') || [];
-  const name = episodeSplit.length === 2 ? episodeSplit[1] : episodeSplit[0];
-  const fullNumber = episodeSplit.length === 2 ? episodeSplit[0] : undefined;
-  const number = fullNumber?.replace('E', '')?.trim();
+  const show = document.querySelector('#showmedia_about_media a')?.textContent?.trim();
+  const number = /([0-9]+)/.exec(
+    document.querySelectorAll('#showmedia_about_media h4')?.[1]?.textContent ?? ''
+  )?.[1];
+  const dirtyName = document.querySelector('#showmedia_about_name')?.textContent?.trim();
+  const name = !dirtyName ? undefined : dirtyName.substring(1, dirtyName.length - 1);
 
   return {
     show,
-    season,
     name,
     number,
   };
