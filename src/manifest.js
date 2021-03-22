@@ -65,7 +65,7 @@ services.forEach(service => {
       `content-scripts/${service.folder}/globals.js`,
       'player/index.js',
     ],
-    css: ['player/index.css', `content-scripts/${service.folder}/index.css`],
+    css: ['player/index.css', `content-scripts/${service.folder}/globals.css`],
     all_frames: true,
   });
 
