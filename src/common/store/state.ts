@@ -9,7 +9,7 @@ export const state = {
   playbackRate: 1,
   isEditing: false,
   isInitialBuffer: true,
-  tabUrl: Browser.transformServiceUrl(Browser.getIframeReferrer()),
+  tabUrl: undefined as string | undefined,
   browserType: Browser.detect(),
   hasSkippedFromZero: false,
   playerState: {

@@ -60,7 +60,7 @@ export default class Messenger<
     if (callback) {
       let response;
       try {
-        response = await callback(payload);
+        response = await callback(payload, sender);
       } catch (error) {
         response = { errorMessage: error.message };
       }

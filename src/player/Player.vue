@@ -47,7 +47,6 @@ import VideoControllerMixin from '@/common/mixins/VideoController';
 import { MutationTypes } from '@/common/store/mutationTypes';
 import { ActionTypes } from '@/common/store/actionTypes';
 import { PLAYER_ACTIVITY_TIMEOUT } from '@/common/utils/Constants';
-import { GetterTypes } from '@/common/store/getterTypes';
 import { State } from '@/common/store/state';
 import { Store } from '@/common/store';
 
@@ -64,11 +63,11 @@ export default defineComponent({
   mixins: [KeyboardShortcutMixin, VideoControllerMixin],
   created() {
     Browser.storage.addListener(this.onStorageChanged);
-    browser.runtime.onMessage.addListener(this.onReceiveMessage);
     global.onVideoChanged(this.onVideoChanged);
   },
   mounted(): void {
-    this.loadAllEpisodeData();
+    browser.runtime.onMessage.addListener(this.onReceiveMessage);
+    this.$store.dispatch(ActionTypes.INITIAL_LOAD);
   },
   unmounted() {
     browser.runtime.onMessage.removeListener(this.onReceiveMessage);
@@ -88,8 +87,8 @@ export default defineComponent({
     isEditing(): boolean {
       return this.$store.state.isEditing;
     },
-    tabUrl(): string {
-      return this.$store.getters[GetterTypes.TAB_URL];
+    tabUrl(): string | undefined {
+      return this.$store.state.tabUrl;
     },
     isActive(): boolean {
       return this.playerState.isActive || this.isEditing;
@@ -99,6 +98,11 @@ export default defineComponent({
         this.playerState.isPaused ||
         (this.playerState.isBuffering && this.$store.state.isInitialBuffer)
       );
+    },
+  },
+  watch: {
+    tabUrl() {
+      this.loadAllEpisodeData();
     },
   },
   methods: {
