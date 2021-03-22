@@ -34,7 +34,7 @@ const config = {
 
     ...services.reduce((map, service) => {
       const path = `content-scripts/${service.folder}`;
-      map[`${path}/index`] = `./${path}/index.ts`;
+      map[`${path}/globals`] = `./${path}/globals.ts`;
       map[`${path}/parent`] = `./${path}/parent.ts`;
       return map;
     }, {}),

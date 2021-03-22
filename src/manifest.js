@@ -62,7 +62,7 @@ services.forEach(service => {
     js: [
       'browser-polyfill.js',
       'content-scripts/all.js',
-      `content-scripts/${service.folder}/index.js`,
+      `content-scripts/${service.folder}/globals.js`,
       'player/index.js',
     ],
     css: ['player/index.css', `content-scripts/${service.folder}/index.css`],

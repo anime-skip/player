@@ -35,6 +35,7 @@ declare interface ServiceHelpers {
    * trigger the change
    */
   getPlayerOptions: () => Promise<PlayerOptionGroup[]> | PlayerOptionGroup[] | undefined;
+
   /**
    * Add a callback that gets called when a video changes (duration is different than before)
    */

@@ -105,7 +105,7 @@ export default defineComponent({
     const playerOptions = ref<PlayerOptionGroup[]>([]);
     const loadPlayerOptions = async () => {
       playerOptions.value =
-        (await global.getPlayerOptions?.())?.filter(group => group.options.length > 1) ?? [];
+        (await global.getPlayerOptions())?.filter(group => group.options.length > 1) ?? [];
     };
 
     const activeOptions = computed(() => activePlayerGroup.value?.options ?? []);
