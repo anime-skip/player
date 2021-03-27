@@ -23,6 +23,7 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
           scope: '@anime-skip'
       - uses: actions/checkout@v2
+      - run: chmod +x webpack.js
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
