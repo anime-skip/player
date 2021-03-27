@@ -1,5 +1,9 @@
 <template>
-  <FlatButton transparent class="h-10 px-3 outline-none border-none" @click="onClick">
+  <FlatButton
+    transparent
+    class="h-10 px-3 outline-none border-none overflow-y-hidden"
+    @click="onClick"
+  >
     <slot v-if="icon == null" />
     <template v-else>
       <WebExtImg

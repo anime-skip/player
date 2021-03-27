@@ -245,7 +245,6 @@ export default defineComponent({
 }
 
 #EditEpisodeDialog .dialog-root-container {
-  max-height: 70%;
   width: 480px;
   overflow: visible;
 }

@@ -1,5 +1,7 @@
 import AxiosApi from '@/common/api/AxiosApi';
+import Browser from '@/common/utils/Browser';
 import Messenger from '@/common/utils/Messenger';
+import { services } from '@/common/utils/CompileTimeConstants';
 
 // Setup Globals
 
@@ -60,3 +62,45 @@ browser.tabs.onUpdated.addListener(function (tabId, { url }, _tabInfo) {
     console.warn('Tab url change update failed', err);
   });
 });
+
+// Setup page action behavior for chrome
+
+if (Browser.detect() === 'chrome') {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const chrome = browser as any;
+  browser.runtime.onInstalled.addListener(function (_details) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const hosts: Array<{ scheme: string; host: string }> = services.map(service => {
+      const url = new URL(service.page_matches[0]);
+      console.log(url);
+      return {
+        scheme: url.protocol.replace(':', ''),
+        host: url.hostname,
+      };
+    });
+    hosts.push({
+      host: 'www.anime-skip.com',
+      scheme: 'https',
+    });
+    hosts.push({
+      host: 'anime-skip.com',
+      scheme: 'https',
+    });
+
+    const rules = hosts.map(({ host, scheme }) => {
+      const matcher = scheme === 'file://' ? {} : { hostEquals: host };
+      return {
+        conditions: [
+          new chrome.declarativeContent.PageStateMatcher({
+            pageUrl: { ...matcher, schemes: [scheme] },
+          }),
+        ],
+        actions: [new chrome.declarativeContent.ShowPageAction()],
+      };
+    });
+
+    chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
+      chrome.declarativeContent.onPageChanged.addRules(rules);
+    });
+  });
+}

@@ -42,7 +42,6 @@ export default defineComponent({
   padding-bottom: $toolbarHeight + 4px + 8px;
 
   .dialog-root-container {
-    max-height: 300px;
     max-width: 400px;
     padding: 16px;
   }

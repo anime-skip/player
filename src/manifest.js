@@ -36,6 +36,7 @@ services.forEach(service => {
 
   // Add urls to the page_action for firefox
   manifest['page_action']['{{firefox}}.show_matches'].push(...service.page_matches);
+  manifest['{{chrome}}.host_permissions'].push(...service.page_matches);
 });
 
 /**
