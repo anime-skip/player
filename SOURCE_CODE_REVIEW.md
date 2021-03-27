@@ -12,7 +12,7 @@ This is the document that contains all the necessary steps to building the submi
 
 ```bash
 yarn install
-yarn build:prod
+yarn build --mode prod
 ```
 
-> The `dist/` folder created during `build:prod` is what gets zipped and submitted
+> The `dist/` folder created during `build` is what gets zipped and submitted

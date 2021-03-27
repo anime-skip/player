@@ -14,7 +14,7 @@ function readEnv() {
   }
 
   const env = {
-    BETA: process.env.BETA === 'true',
+    MODE: process.env.BETA === 'true' ? 'beta' : 'prod',
 
     // Firefox Signing
     FIREFOX_SIGNING_ISSUER: process.env.FIREFOX_SIGNING_ISSUER,
@@ -29,7 +29,7 @@ function readEnv() {
   };
 
   const package = require('../package.json');
-  const buildName = `${package.name}-${package.version}${env.BETA ? '-beta' : ''}`;
+  const buildName = `${package.name}-${package.version}-${env.MODE}`;
   const artifactsDir = ['artifacts'];
   const buildVars = {
     PACKAGE_VERSION: package.version,
@@ -84,15 +84,14 @@ script(async () => {
       await run('Ensure formatting',       () => bash('yarn prettier'));
       await run('Lint source code',        () => bash('yarn lint'));
       await run('Run tests',               () => bash('yarn test'));
-      await run('Run integration tests',   () => bash('yarn test:integration'));
       await run('Run E2E tests',           () => bash('yarn test:e2e'));
       await run('Scan extension manifest', () => bash('yarn check-manifest'));
     })()
   }
 
   await require('./zip-sources')(buildVars.OUTPUT_DIR);
-  if (buildVars.DO_FIREFOX) await require('./build-firefox')(buildVars.OUTPUT_DIR);
-  if (buildVars.DO_CHROME) await require('./build-chrome')(buildVars.OUTPUT_DIR);
+  if (buildVars.DO_FIREFOX) await require('./build-firefox')(buildVars.OUTPUT_DIR, env.MODE);
+  if (buildVars.DO_CHROME) await require('./build-chrome')(buildVars.OUTPUT_DIR, env.MODE);
 
   await require('./deploy')(buildVars, env);
 });

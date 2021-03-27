@@ -19,7 +19,6 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*.ts", "src/**/*.vue", "types/*.d.ts"],
-  "files_": ["types/vue-shims.d.ts", "types/types.d.ts"],
+  "include": ["src/**/*.ts", "src/**/*.vue", "types/*.d.ts", "scripts/webpack.ts"],
   "exclude": ["node_modules"]
 }

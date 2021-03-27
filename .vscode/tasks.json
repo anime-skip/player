@@ -4,17 +4,17 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Build",
+      "label": "Start Dev",
       "type": "shell",
       "group": "build",
-      "command": "yarn build",
+      "command": "yarn start",
       "problemMatcher": []
     },
     {
-      "label": "Build (Production)",
+      "label": "Build Staged",
       "type": "shell",
       "group": "build",
-      "command": "yarn build:prod",
+      "command": "yarn build:firefox-staged",
       "problemMatcher": []
     }
   ]

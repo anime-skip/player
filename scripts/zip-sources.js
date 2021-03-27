@@ -24,7 +24,7 @@ module.exports = async function zipSources(OUTPUT_DIR) {
     'package.json',
     'yarn.lock',
     'SOURCE_CODE_REVIEW.md',
-    'webpack.config.js',
+    'webpack.js',
     '.babelrc',
     'tsconfig.json',
     'tailwind.config.js',

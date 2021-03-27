@@ -3,42 +3,7 @@ const manifest = {
   version: require('../package.json').version,
 };
 
-/**
- * `player_matches` - The URLs that the player interface should be injected onto. This also dictates
- *                    where the keyboard shortcut blocker is injected at since the player is where
- *                    those get added by the service
- * `parent_matches` - The URLs that the parent.ts file should be injected onto. For sites like VRV
- *                    that use HTML5 History Mode, this has to be a page that is loaded before the
- *                    page with the player (ie: `https://vrv.co/*` not `https://vrv.co/watch/*`)
- * `page_matches`   - The URLs that the anime skip page_action button should appear when you are
- *                    visiting
- */
-const services = [
-  {
-    folder: 'example',
-    player_matches: ['file:///*/example/index.html*'],
-    parent_matches: ['file:///*/example/index.html*'],
-    page_matches: ['file:///*/example/index.html*'],
-  },
-  {
-    folder: 'vrv',
-    player_matches: ['https://static.vrv.co/*'],
-    parent_matches: ['https://vrv.co/*'],
-    page_matches: ['https://vrv.co/*'],
-  },
-  {
-    folder: 'funimation',
-    player_matches: ['https://www.funimation.com/player/*'],
-    parent_matches: ['https://www.funimation.com/shows/*'],
-    page_matches: ['https://www.funimation.com/*'],
-  },
-  {
-    folder: 'crunchyroll',
-    player_matches: ['https://static.crunchyroll.com/vilos-v2/web/vilos/player.html*'],
-    parent_matches: ['https://www.crunchyroll.com/*'],
-    page_matches: ['https://www.crunchyroll.com/*'],
-  },
-];
+const { services } = require('./common/utils/CompileTimeConstants');
 
 services.forEach(service => {
   // Keyboard blocker for each service
@@ -69,50 +34,49 @@ services.forEach(service => {
     all_frames: true,
   });
 
-  // Add urls to the page_action
-  manifest['{{firefox}}.page_action'].show_matches.push(...service.page_matches);
+  // Add urls to the page_action for firefox
+  manifest['page_action']['{{firefox}}.show_matches'].push(...service.page_matches);
 });
-
-// Update dev stuff
-if (process.env.NODE_ENV === 'development') {
-  manifest['{{chrome}}.browser_action'].default_title += ' Nightly';
-  manifest['{{firefox}}.page_action'].default_title += ' Nightly';
-  manifest.name += ' Nightly';
-  manifest.description = 'Development Build - ' + manifest.description;
-}
-
-// Add "(Beta)" if build is for beta. For now, always add it
-// eslint-disable-next-line no-constant-condition
-if (process.env.BETA === 'true' || true) {
-  manifest.name += ' (Beta)';
-}
-
-// Filter fields for the given browser
-const browser = (process.env.BUILD_FOR || '').toLowerCase();
-if (!browser) throw "Include a 'BUILD_FOR=firefox|chrome' environment variable";
 
 /**
  * Address all `{{browser}}.` prefixes, removing fields for other browsers and removing that tag for
  * fields for the specified browser
  */
-function resolveBrowserTagsInObject(object) {
+function resolveBrowserTagsInObject(browser, object) {
   if (Array.isArray(object)) {
-    return object.map(item => resolveBrowserTagsInObject(item));
+    return object.map(item => resolveBrowserTagsInObject(browser, item)).filter(item => !!item);
   } else if (typeof object === 'object') {
     return Object.keys(object).reduce((newObject, key) => {
       if (!key.startsWith('{{') || key.startsWith(`{{${browser}}}.`)) {
-        newObject[key.replace(`{{${browser}}}.`, '')] = resolveBrowserTagsInObject(object[key]);
+        newObject[key.replace(`{{${browser}}}.`, '')] = resolveBrowserTagsInObject(
+          browser,
+          object[key]
+        );
       }
       return newObject;
     }, {});
+  } else if (typeof object === 'string') {
+    if (!object.startsWith('{{') || object.startsWith(`{{${browser}}}.`)) {
+      return object.replace(`{{${browser}}}.`, '');
+    }
+    return undefined;
   } else {
     return object;
   }
 }
 
-const filteredManifest = resolveBrowserTagsInObject(manifest);
-
 module.exports = {
-  manifest: filteredManifest,
+  getManifest(nameVariants, browser, mode) {
+    const newManifest = resolveBrowserTagsInObject(browser, manifest);
+
+    if (nameVariants.length > 0) {
+      newManifest.name += ` (${nameVariants.join(', ')})`;
+    }
+    if (mode === 'dev') {
+      newManifest['content_security_policy'] = "script-src 'self' 'unsafe-eval'; object-src 'self'";
+    }
+
+    return newManifest;
+  },
   services,
 };
