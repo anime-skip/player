@@ -19,6 +19,7 @@
     "build": "./webpack.js --build",
     "build:firefox-staged": "yarn build --mode staged && yarn staged-zip",
     "build:chrome-staged": "yarn build --mode staged --for chrome && yarn staged-zip",
+    "zip:sources": "node -e 'require(\"./scripts/zip-sources\")(\"artifacts\")'",
     "start": "./webpack.js",
     "test": "jest --runInBand",
     "test:watch": "yarn test --watchAll",
