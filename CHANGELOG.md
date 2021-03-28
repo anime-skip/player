@@ -1,5 +1,18 @@
 # Changelog
 
+## `v1.1.1`
+
+### Fixes
+
+- Popup and options page were not restoring your logged in state when re-opened (816938b196697147ee6eafc71b24e0042a08d12c)
+- Volume icon clipping (8a3097678937b6ea355a1fb1aaaf65eaf9f5fa14)
+- Chrome popup is small
+- Login button in extension options works
+- "Player Settings" integration on the website's account page fixed
+- Clear account data when logging out
+- Fix text sizes for chrome
+- Fix login full screen size and fit for chrome
+
 ## `v1.1.0`
 
 ### Enhancements
