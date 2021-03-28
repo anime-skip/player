@@ -239,7 +239,7 @@ switch (args.mode) {
   case 'staged': {
     config.mode = 'production';
     nameVariants.push('Staged');
-    addEnvironmentVariable('NODE_ENV', 'development');
+    addEnvironmentVariable('NODE_ENV', 'production');
     addEnvironmentVariable('ENABLE_LOGGING', true);
     addEnvironmentVariable('IS_STAGED', true);
     defineVueBuildOptions({ devTools: true });
@@ -268,6 +268,8 @@ services.forEach(service => {
 const compiler = webpack(config);
 const close = () => {
   compiler.close(err => {
+    if (!err) return;
+
     console.error('Failed to close compiler:', err);
   });
 };
