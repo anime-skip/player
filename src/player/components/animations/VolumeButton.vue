@@ -63,7 +63,7 @@ export default defineComponent({
   display: flex;
   flex-direction: row;
   width: 136px;
-  max-width: 56px;
+  max-width: 57px;
   align-items: center;
   overflow-x: hidden;
   padding-right: 16px;
