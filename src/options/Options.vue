@@ -16,9 +16,13 @@ import KeyboardShortcutTable from './components/KeyboardShortcutTable.vue';
 import GeneralSettings from '../common/components/GeneralSettings.vue';
 import { MutationTypes } from '@/common/store/mutationTypes';
 import SkippedSections from '@/common/components/SkippedSections.vue';
+import { ActionTypes } from '@/common/store/actionTypes';
 
 export default defineComponent({
   components: { KeyboardShortcutTable, PopupHeader, GeneralSettings, SkippedSections },
+  mounted(): void {
+    this.$store.dispatch(ActionTypes.INITIAL_LOAD, undefined);
+  },
   methods: {
     updatePrimaryShortcut(type: KeyboardShortcutAction): (value: string) => void {
       return (value: string | undefined): void => {

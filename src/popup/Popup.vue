@@ -8,6 +8,7 @@ import { defineComponent } from 'vue';
 import LogIn from './components/LogIn.vue';
 import PopupPreferences from './components/PopupPreferences.vue';
 import { GetterTypes } from '@/common/store/getterTypes';
+import { ActionTypes } from '@/common/store/actionTypes';
 
 export default defineComponent({
   components: {
@@ -16,6 +17,9 @@ export default defineComponent({
   },
   props: {
     small: Boolean,
+  },
+  mounted(): void {
+    this.$store.dispatch(ActionTypes.INITIAL_LOAD, undefined);
   },
   computed: {
     isLoggedIn(): boolean {
