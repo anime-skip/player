@@ -7,7 +7,7 @@
         'rounded-bl-md': bottom,
       }"
     >
-      <p class="px-4">{{ name }}</p>
+      <p class="px-4 body-1">{{ name }}</p>
     </td>
     <td class="bg-control">
       <div class="flex items-center justify-center">

@@ -12,7 +12,7 @@
           @click="onClickOption(speed.value)"
         >
           <span
-            class="transition-colors"
+            class="transition-colors body-1"
             :class="{ 'text-on-primary': isRateSelected(speed.value) }"
             >{{ speed.display }}</span
           >
@@ -30,7 +30,7 @@
             type="text"
             step="0.01"
             :maxlength="4"
-            class="bg-transparent w-full h-10 text-center"
+            class="bg-transparent w-full h-10 text-center body-1"
             :class="{
               'caret-white': !isCustomError,
               'bg-error text-on-error': isCustomError,

@@ -35,7 +35,7 @@
       </TextInput>
       <div class="flex flex-row-reverse justify-between items-center">
         <RaisedButton @click="login">Log In</RaisedButton>
-        <a href="https://www.anime-skip.com/sign-up" target="_blank" class="space-x-2">
+        <a href="https://www.anime-skip.com/sign-up" target="_blank" class="space-x-2 body-1">
           <span>Sign Up</span>
           <Icon
             class="inline"
