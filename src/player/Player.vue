@@ -1,5 +1,5 @@
 <template>
-  <div
+  <ExtensionRoot
     id="AnimeSkipPlayer"
     class="absolute inset-0 grid overflow-hidden bg-background bg-opacity-0"
     :class="{
@@ -30,7 +30,7 @@
     <PreferencesDialog />
     <EditEpisodeDialog />
     <LoginDialog />
-  </div>
+  </ExtensionRoot>
 </template>
 
 <script lang="ts">
@@ -42,12 +42,11 @@ import PreferencesDialog from './dialogs/PreferencesDialog.vue';
 import TimestampsPanel from './dialogs/TimestampsPanel.vue';
 import EditEpisodeDialog from './dialogs/EditEpisodeDialog/index.vue';
 import KeyboardShortcutMixin from '@/common/mixins/KeyboardShortcuts';
-import Browser from '@/common/utils/Browser';
+import ExtensionRoot from '@/common/components/ExtensionRoot.vue';
 import VideoControllerMixin from '@/common/mixins/VideoController';
 import { MutationTypes } from '@/common/store/mutationTypes';
 import { ActionTypes } from '@/common/store/actionTypes';
 import { PLAYER_ACTIVITY_TIMEOUT } from '@/common/utils/Constants';
-import { State } from '@/common/store/state';
 import { Store } from '@/common/store';
 
 export default defineComponent({
@@ -59,15 +58,14 @@ export default defineComponent({
     PreferencesDialog,
     EditEpisodeDialog,
     TimestampsPanel,
+    ExtensionRoot,
   },
   mixins: [KeyboardShortcutMixin, VideoControllerMixin],
   created() {
-    Browser.storage.addListener(this.onStorageChanged);
     global.onVideoChanged(this.onVideoChanged);
   },
   mounted(): void {
     browser.runtime.onMessage.addListener(this.onReceiveMessage);
-    this.$store.dispatch(ActionTypes.INITIAL_LOAD);
   },
   unmounted() {
     browser.runtime.onMessage.removeListener(this.onReceiveMessage);
@@ -106,9 +104,6 @@ export default defineComponent({
     },
   },
   methods: {
-    onStorageChanged(changes: Partial<State>): void {
-      this.$store.commit(MutationTypes.RESTORE_STATE, { changes }); // TODO! test
-    },
     onVideoChanged(video: HTMLVideoElement): void {
       this.changePlaybackRate(this.playbackRate);
       video.onplay = () => this.onPlay();

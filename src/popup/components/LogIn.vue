@@ -35,7 +35,7 @@
       </TextInput>
       <div class="flex flex-row-reverse justify-between items-center">
         <RaisedButton @click="login">Log In</RaisedButton>
-        <a href="https://www.anime-skip.com/sign-up" target="_blank" class="space-x-2">
+        <a href="https://www.anime-skip.com/sign-up" target="_blank" class="space-x-2 body-1">
           <span>Sign Up</span>
           <Icon
             class="inline"
@@ -82,8 +82,8 @@ export default defineComponent({
   },
   methods: {
     login() {
-      const callback = this.closeAfterLogin ? this.close : undefined;
-      console.info({ callback });
+      const callback = this.closeAfterLogin ? () => setTimeout(this.close, 500) : undefined;
+      console.info('Login callback', { callback });
 
       this.$store.dispatch(ActionTypes.LOGIN_MANUAL, {
         username: this.username,

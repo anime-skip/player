@@ -149,6 +149,9 @@ export const mutations: MutationTree<State> & Mutations = {
         }
       }
     }
+    if (!state.isLoggedIn) {
+      state.account = undefined;
+    }
     state.preferencesLastUpdatedAt = Date.now();
     if (callback) callback();
   },

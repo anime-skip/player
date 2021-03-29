@@ -87,7 +87,7 @@ export default defineComponent({
 
     const openExtensionOptions = () => {
       new Messenger<RuntimeMessageTypes>('General Settings').send(
-        '@anime-skip/open-options',
+        '@anime-skip/open-all-settings',
         undefined
       );
     };

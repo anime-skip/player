@@ -15,9 +15,9 @@ setInterval(() => {
   });
 }, 1000);
 
-document.addEventListener('@anime-skip/open-popup', function () {
-  messenger.send('@anime-skip/open-popup', undefined);
+document.addEventListener('@anime-skip/open-login', function () {
+  messenger.send('@anime-skip/open-login', undefined);
 });
-document.addEventListener('@anime-skip/open-options', function () {
-  messenger.send('@anime-skip/open-options', undefined);
+document.addEventListener('@anime-skip/open-all-settings', function () {
+  messenger.send('@anime-skip/open-all-settings', undefined);
 });

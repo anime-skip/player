@@ -1,12 +1,12 @@
 <template>
-  <div class="max-w-screen-md mx-auto space-y-8 py-16 px-16 md:px-0">
+  <ExtensionRoot class="max-w-screen-md mx-auto space-y-8 py-16 px-16 md:px-0">
     <PopupHeader title="All Settings" />
     <div class="space-y-16">
       <GeneralSettings />
       <SkippedSections />
       <KeyboardShortcutTable />
     </div>
-  </div>
+  </ExtensionRoot>
 </template>
 
 <script lang="ts">
@@ -16,10 +16,17 @@ import KeyboardShortcutTable from './components/KeyboardShortcutTable.vue';
 import GeneralSettings from '../common/components/GeneralSettings.vue';
 import { MutationTypes } from '@/common/store/mutationTypes';
 import SkippedSections from '@/common/components/SkippedSections.vue';
+import ExtensionRoot from '@/common/components/ExtensionRoot.vue';
 import { ActionTypes } from '@/common/store/actionTypes';
 
 export default defineComponent({
-  components: { KeyboardShortcutTable, PopupHeader, GeneralSettings, SkippedSections },
+  components: {
+    KeyboardShortcutTable,
+    PopupHeader,
+    GeneralSettings,
+    SkippedSections,
+    ExtensionRoot,
+  },
   mounted(): void {
     this.$store.dispatch(ActionTypes.INITIAL_LOAD, undefined);
   },

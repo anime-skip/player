@@ -12,7 +12,7 @@
       <SkippedSections />
       <div class="flex flex-row justify-between items-baseline">
         <a
-          class="text-on-surface text-opacity-medium"
+          class="text-on-surface text-opacity-medium body-1"
           href="https://www.anime-skip.com/support"
           target="_blank"
         >
@@ -48,7 +48,7 @@ export default defineComponent({
     };
     const openExtensionOptions = () => {
       new Messenger<RuntimeMessageTypes>('General Settings').send(
-        '@anime-skip/open-options',
+        '@anime-skip/open-all-settings',
         undefined
       );
     };
