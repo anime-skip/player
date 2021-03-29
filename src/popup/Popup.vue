@@ -57,7 +57,9 @@ export default defineComponent({
 
 <style scoped>
 .chrome {
-  width: 600px;
+  min-width: 600px;
+  width: 100%;
   height: 500px;
+  margin: auto 0;
 }
 </style>
