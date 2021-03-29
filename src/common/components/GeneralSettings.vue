@@ -1,10 +1,7 @@
 <template>
   <div class="space-y-4">
     <h6>General Settings</h6>
-    <p v-if="!isLoggedIn && !hideLoginButton" class="text-error body-2">
-      Some settings are disabled until you've
-      <a href="#" @click.prevent.stop="openLoginDialog" class="underline">logged in</a>
-    </p>
+    <LoginWarning v-if="!isLoggedIn && !hideLoginButton" before="all settings are available" />
     <div
       class="grid gap-3 items-start"
       :class="{
@@ -30,9 +27,10 @@ import { useStore } from 'vuex';
 import usePreferenceEditor from '../composition/preferenceEditor';
 import useLoginDialog from '../composition/useLoginDialog';
 import PlaybackRatePicker from './PlaybackRatePicker.vue';
+import LoginWarning from '../../player/components/LoginWarning.vue';
 
 export default defineComponent({
-  components: { PlaybackRatePicker },
+  components: { PlaybackRatePicker, LoginWarning },
   props: {
     small: Boolean,
     hideLoginButton: Boolean,
