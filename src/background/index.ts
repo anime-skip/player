@@ -40,10 +40,10 @@ const messenger = new Messenger<
     updateTimestamp: global.Api.updateTimestamp,
     deleteTimestamp: global.Api.deleteTimestamp,
 
-    '@anime-skip/open-options': async () => {
+    '@anime-skip/open-all-settings': async () => {
       await browser.runtime.openOptionsPage();
     },
-    '@anime-skip/open-popup': async () => {
+    '@anime-skip/open-login': async () => {
       await browser.tabs.create({ url: 'popup/index.html?closeAfterLogin=true' });
     },
     '@anime-skip/get-url': async (_, sender) => {
