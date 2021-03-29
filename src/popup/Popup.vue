@@ -1,11 +1,11 @@
 <template>
-  <div :class="browser" class="flex items-center justify-center">
+  <ExtensionRoot :class="browser" class="flex items-center justify-center">
     <LogIn v-if="!isLoggedIn" :small="small" :close-after-login="closeAfterLogin" :close="close" />
     <div v-else-if="closeAfterLogin" class="mt-20">
       <Loading />
     </div>
     <PopupPreferences v-else :small="small" />
-  </div>
+  </ExtensionRoot>
 </template>
 
 <script lang="ts">
@@ -15,11 +15,13 @@ import PopupPreferences from './components/PopupPreferences.vue';
 import { GetterTypes } from '@/common/store/getterTypes';
 import { ActionTypes } from '@/common/store/actionTypes';
 import Browser from '@/common/utils/Browser';
+import ExtensionRoot from '@/common/components/ExtensionRoot.vue';
 
 export default defineComponent({
   components: {
     LogIn,
     PopupPreferences,
+    ExtensionRoot,
   },
   props: {
     small: Boolean,
