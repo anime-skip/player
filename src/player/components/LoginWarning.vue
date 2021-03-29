@@ -18,7 +18,7 @@ export default defineComponent({
   setup() {
     const { openLoginDialog: openPlayerLoginDialog } = useLoginDialog();
     const onClickLogin = () => {
-      const isInInjectedPlayer = window.location.protocol.includes('http');
+      const isInInjectedPlayer = !window.location.protocol.includes('extension');
       if (isInInjectedPlayer) {
         openPlayerLoginDialog();
       } else {
