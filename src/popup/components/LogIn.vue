@@ -82,8 +82,8 @@ export default defineComponent({
   },
   methods: {
     login() {
-      const callback = this.closeAfterLogin ? this.close : undefined;
-      console.info({ callback });
+      const callback = this.closeAfterLogin ? () => setTimeout(this.close, 500) : undefined;
+      console.info('Login callback', { callback });
 
       this.$store.dispatch(ActionTypes.LOGIN_MANUAL, {
         username: this.username,

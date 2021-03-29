@@ -1,6 +1,9 @@
 <template>
   <div :class="browser" class="flex items-center justify-center">
     <LogIn v-if="!isLoggedIn" :small="small" :close-after-login="closeAfterLogin" :close="close" />
+    <div v-else-if="closeAfterLogin" class="mt-20">
+      <Loading />
+    </div>
     <PopupPreferences v-else :small="small" />
   </div>
 </template>
