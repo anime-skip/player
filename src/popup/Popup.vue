@@ -1,6 +1,8 @@
 <template>
-  <LogIn v-if="!isLoggedIn" :small="small" :close-after-login="closeAfterLogin" :close="close" />
-  <PopupPreferences v-else :small="small" />
+  <div :class="browser" class="flex items-center justify-center">
+    <LogIn v-if="!isLoggedIn" :small="small" :close-after-login="closeAfterLogin" :close="close" />
+    <PopupPreferences v-else :small="small" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -9,6 +11,7 @@ import LogIn from './components/LogIn.vue';
 import PopupPreferences from './components/PopupPreferences.vue';
 import { GetterTypes } from '@/common/store/getterTypes';
 import { ActionTypes } from '@/common/store/actionTypes';
+import Browser from '@/common/utils/Browser';
 
 export default defineComponent({
   components: {
@@ -17,6 +20,11 @@ export default defineComponent({
   },
   props: {
     small: Boolean,
+  },
+  data() {
+    return {
+      browser: Browser.detect(),
+    };
   },
   mounted(): void {
     this.$store.dispatch(ActionTypes.INITIAL_LOAD, undefined);
@@ -41,3 +49,10 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.chrome {
+  width: 600px;
+  height: 500px;
+}
+</style>
