@@ -53,7 +53,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/firefox.zip
+          asset_path: ./artifacts/firefox-*.zip
           asset_name: firefox.zip
           asset_content_type: application/zip
       - name: Upload sources.zip
@@ -71,6 +71,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/chrome.zip
+          asset_path: ./artifacts/chrome-*.zip
           asset_name: chrome.zip
           asset_content_type: application/zip
