@@ -58,7 +58,7 @@ export default defineComponent({
       );
     },
     isConnectButtonVisible(): boolean {
-      const areDialogsHidden = this.activeDialog == null;
+      const areDialogsHidden = this.activeDialog == null || this.activeDialog === 'TimestampsPanel';
       const episodeUrlIsMissing = !this.hasEpisodeUrl;
       const videoIsLoaded = this.duration != null && this.duration > 0;
       return episodeUrlIsMissing && areDialogsHidden && videoIsLoaded;
