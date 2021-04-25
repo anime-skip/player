@@ -72,7 +72,17 @@ export const getters: GetterTree<State, State> & Getters = {
     if (!state.account) {
       return undefined;
     }
-    return state.account.preferences;
+    return {
+      // New fields that need a value after a migration
+      minimizeToolbarWhenEditing: false,
+      hideTimelineWhenMinimized: false,
+
+      // existing value
+      ...(state.account.preferences as Omit<
+        Api.Preferences,
+        'minimizeToolbarWhenEditing' | 'hideTimelineWhenMinimized'
+      >),
+    };
   },
   [GetterTypes.HAS_PREFERENCE_ERROR]({ preferencesRequestState }) {
     return preferencesRequestState === RequestState.FAILURE;

@@ -4,6 +4,8 @@
     :class="{
       active: isActive,
       paused: playerState.isPaused,
+      'hide-timeline-when-minimized':
+        !isActive && !playerState.isPaused && hideTimelineWhenMinimized,
     }"
     @click.stop
   >
@@ -92,9 +94,17 @@ export default defineComponent({
     const isSavingTimestamps = computed(() => store.getters[GetterTypes.IS_SAVING_TIMESTAMPS]);
     const isSaveTimestampsAvailable = computed(() => isEditing.value && !isSavingTimestamps.value);
     const isPaused = computed<boolean>(() => playerState.value.isPaused);
+    const hideTimelineWhenMinimized = computed<boolean>(
+      () => !!store.getters[GetterTypes.PREFERENCES]?.hideTimelineWhenMinimized
+    );
 
     const currentTime = computed(() => store.state.playerState.currentTime);
-    const isActive = computed(() => playerState.value.isActive || isEditing.value);
+    const minimizeToolbarWhenEditing = computed<boolean>(
+      () => !!store.getters[GetterTypes.PREFERENCES]?.minimizeToolbarWhenEditing
+    );
+    const isActive = computed(
+      () => playerState.value.isActive || (isEditing.value && !minimizeToolbarWhenEditing.value)
+    );
     const formattedTime = useFormattedTime(currentTime, isPaused);
 
     // Play button
@@ -257,6 +267,7 @@ export default defineComponent({
       currentTime,
       isFullscreen,
       isFullscreenCount,
+      hideTimelineWhenMinimized,
       displayDuration,
       isFullscreenEnabled,
       togglePreferencesDialog,
@@ -292,6 +303,10 @@ export default defineComponent({
   transition: 200ms;
   transition-property: transform;
   user-select: none;
+
+  &.hide-timeline-when-minimized {
+    transform: translateY($toolbarHeight + 6px);
+  }
 
   &.active,
   &.paused {
