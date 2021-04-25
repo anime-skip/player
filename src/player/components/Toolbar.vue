@@ -99,7 +99,12 @@ export default defineComponent({
     );
 
     const currentTime = computed(() => store.state.playerState.currentTime);
-    const isActive = computed(() => playerState.value.isActive || isEditing.value);
+    const minimizeToolbarWhenEditing = computed<boolean>(
+      () => !!store.getters.PREFERENCES?.minimizeToolbarWhenEditing
+    );
+    const isActive = computed(
+      () => playerState.value.isActive || (isEditing.value && !minimizeToolbarWhenEditing.value)
+    );
     const formattedTime = useFormattedTime(currentTime, isPaused);
 
     // Play button
