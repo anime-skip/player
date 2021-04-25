@@ -39,6 +39,9 @@ declare namespace Api {
   interface Preferences {
     enableAutoSkip: boolean;
     enableAutoPlay: boolean;
+    minimizeToolbarWhenEditing: boolean;
+    hideTimelineWhenMinimized: boolean;
+
     skipBranding: boolean;
     skipIntros: boolean;
     skipNewIntros: boolean;
