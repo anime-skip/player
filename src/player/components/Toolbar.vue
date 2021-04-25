@@ -95,12 +95,12 @@ export default defineComponent({
     const isSaveTimestampsAvailable = computed(() => isEditing.value && !isSavingTimestamps.value);
     const isPaused = computed<boolean>(() => playerState.value.isPaused);
     const hideTimelineWhenMinimized = computed<boolean>(
-      () => !!store.getters.PREFERENCES?.hideTimelineWhenMinimized
+      () => !!store.getters[GetterTypes.PREFERENCES]?.hideTimelineWhenMinimized
     );
 
     const currentTime = computed(() => store.state.playerState.currentTime);
     const minimizeToolbarWhenEditing = computed<boolean>(
-      () => !!store.getters.PREFERENCES?.minimizeToolbarWhenEditing
+      () => !!store.getters[GetterTypes.PREFERENCES]?.minimizeToolbarWhenEditing
     );
     const isActive = computed(
       () => playerState.value.isActive || (isEditing.value && !minimizeToolbarWhenEditing.value)

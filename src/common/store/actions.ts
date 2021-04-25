@@ -192,11 +192,14 @@ export const actions: ActionTree<State, State> & Actions = {
     const { commit } = context;
     try {
       assertLoggedIn(context);
-      const { state } = context;
-      const allPreferences = state.account.preferences;
+      const { getters } = context;
+      const allPreferences = getters[GetterTypes.PREFERENCES];
+      if (allPreferences == null) {
+        return console.warn('Tried to update preferences when not logged in');
+      }
       const newValue = !allPreferences[preference];
       try {
-        const newPreferences = {
+        const newPreferences: Api.Preferences = {
           ...allPreferences,
           [preference]: newValue,
         };
