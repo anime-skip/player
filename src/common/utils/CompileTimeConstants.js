@@ -24,7 +24,7 @@ module.exports.services = [
   {
     folder: 'funimation',
     player_matches: ['https://www.funimation.com/player/*'],
-    parent_matches: ['https://www.funimation.com/shows/*'],
+    parent_matches: ['https://www.funimation.com/*'],
     page_matches: ['https://www.funimation.com/*'],
   },
   {
