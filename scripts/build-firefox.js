@@ -12,5 +12,5 @@ module.exports = async function buildFirefox(OUTPUT_DIR, mode) {
 
   await run(`Caching ${CODE}dist/${RESET} for signing`, () => bash(`mv dist "${firefoxDistTemp}"`));
 
-  await run(`Creating ${CODE}firefox.zip`, () => zip(firefoxDistTemp, firefoxZip));
+  await run(`Creating ${CODE}${firefoxZip}`, () => zip(firefoxDistTemp, firefoxZip));
 };
