@@ -24,19 +24,24 @@ export default function setupParent(
       const currentUrl: string = window.location.href;
       let episode: InferredEpisodeInfo;
 
-      if (previousUrl != null && currentUrl !== previousUrl) {
-        // Wait for a little bit, then loop until the episode name is different
-        await Utils.sleep(400);
-        do {
-          await Utils.sleep(100);
+      try {
+        if (previousUrl != null && currentUrl !== previousUrl) {
+          // Wait for a little bit, then loop until the episode name is different
+          await Utils.sleep(400);
+          do {
+            await Utils.sleep(100);
+            episode = await options.getEpisodeInfo();
+          } while (episode.name === previousEpisodeName);
+        } else {
           episode = await options.getEpisodeInfo();
-        } while (episode.name === previousEpisodeName);
-      } else {
-        episode = await options.getEpisodeInfo();
-      }
+        }
 
-      previousUrl = currentUrl;
-      previousEpisodeName = episode.name;
+        previousUrl = currentUrl;
+        previousEpisodeName = episode.name;
+      } catch (err) {
+        episode = {};
+        console.error('Failed to infer episode info', err, { previousUrl, currentUrl, episode });
+      }
       return episode;
     },
   });
