@@ -1,5 +1,12 @@
 # Changelog
 
+## `v1.1.2`
+
+### Fixes
+
+- Hotfix after Funimation's website update (3c20b40b27a41aaa813c558316e2926c637c2f91)
+- Better logic for showing and hiding the "Connect to Anime Skip" button (003ad9627fc20be72a79562a981c6e2b16f8bdf8)
+
 ## `v1.1.1`
 
 ### Fixes
