@@ -1,5 +1,11 @@
 # Changelog
 
+## `v1.1.3`
+
+### Fixes
+
+- Lookup funimation details on both their new and old pages (da3033c5f9887c0008625710aa790cdf7aff22d6)
+
 ## `v1.1.2`
 
 ### Fixes
