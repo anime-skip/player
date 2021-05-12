@@ -39,7 +39,7 @@ interface ApiMessagePayloadMap extends MessagePayloadMap<ApiMessageTypes> {
   loginManual: { username: string; password: string };
   loginRefresh: string;
 
-  updatePreferences: Api.Preferences;
+  updatePreferences: Partial<Api.Preferences>;
 
   createShow: Api.InputShow;
   searchShows: string;

@@ -33,7 +33,7 @@ export interface Mutations {
     state: State,
     { changes, callback }: { changes: Partial<State>; callback?: () => void }
   ): void;
-  [MutationTypes.PERSIST_PREFERENCES](state: State, payload: Api.Preferences): void;
+  [MutationTypes.PERSIST_PREFERENCES](state: State, payload: Partial<Api.Preferences>): void;
 
   // Keyboard
   [MutationTypes.SET_PRIMARY_KEYBOARD_SHORTCUT](
@@ -160,7 +160,10 @@ export const mutations: MutationTree<State> & Mutations = {
       console.warn('updatePreference() called without account in the store');
       return;
     }
-    state.account.preferences = payload; // TODO: Test set removal
+    state.account.preferences = {
+      ...state.account.preferences,
+      ...payload,
+    }; // TODO: Test set removal
     persistAccount(state);
   },
 

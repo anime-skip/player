@@ -199,8 +199,7 @@ export const actions: ActionTree<State, State> & Actions = {
       }
       const newValue = !allPreferences[preference];
       try {
-        const newPreferences: Api.Preferences = {
-          ...allPreferences,
+        const newPreferences: Partial<Api.Preferences> = {
           [preference]: newValue,
         };
         commit(MutationTypes.SET_PREFERENCES_REQUEST_STATE, RequestState.LOADING);
