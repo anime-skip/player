@@ -1,6 +1,9 @@
 <template>
   <div class="EpisodeInfo space-y-4" :class="{ visible: hasLoadedData }">
     <h5 class="text-primary">
+      <a class="pr-1" href="https://anime-skip.com">
+        <web-ext-img class="h-6 inline-block pb-1" src="logo-sm.svg" />
+      </a>
       {{ showTitle }}
       <span class="font-normal text-opacity-low">&ensp;&bull;&ensp;{{ serviceDisplayName }}</span>
     </h5>
@@ -24,8 +27,10 @@ import VideoControllerMixin from '@/common/mixins/VideoController';
 import { ActionTypes } from '@/common/store/actionTypes';
 import { GetterTypes } from '@/common/store/getterTypes';
 import { MutationTypes } from '@/common/store/mutationTypes';
+import WebExtImg from '@/common/components/WebExtImg.vue';
 
 export default defineComponent({
+  components: { WebExtImg },
   mixins: [VideoControllerMixin],
   data() {
     return {
