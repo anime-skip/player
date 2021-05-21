@@ -1,6 +1,6 @@
 <template>
   <div class="EpisodeInfo space-y-4" :class="{ visible: hasLoadedData }">
-    <h5 class="text-primary">
+    <h5 class="text-primary line-height-2.5">
       <a class="pr-1" href="https://anime-skip.com">
         <web-ext-img class="h-6 inline-block pb-1" src="logo-sm.svg" />
       </a>
@@ -120,5 +120,9 @@ export default defineComponent({
 
 .opacity-100 {
   opacity: 1 !important;
+}
+
+.line-height-2\.5 {
+  line-height: 2.5rem;
 }
 </style>
