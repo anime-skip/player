@@ -116,7 +116,7 @@ module.exports = async function chromePublish(buildVars, env) {
       const formData = new FormData();
       formData.append(
         'image',
-        fs.createReadStream(path.join(buildVars.OUTPUT_DIR, 'chrome.zip')),
+        fs.createReadStream(path.join(buildVars.OUTPUT_DIR, `chrome-${env.MODE}.zip`)),
         'chrome.zip'
       );
       await skipForDryRuns(async () => {
