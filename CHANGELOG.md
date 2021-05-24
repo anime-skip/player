@@ -1,5 +1,16 @@
 # Changelog
 
+## `v1.1.4`
+
+### Fixes
+
+- Support Crunchyroll's new beta website (57cf10177142bed03be4b7285857907ff9d5f248)
+- Better line wrapping for the show and service header (17a121ecce0c10ff3331864aed26dfd8ce1416c1)
+
+### Changes
+
+- Added logo to top left of player (700c91ba1b5056a95329f2fb73ef96adc388f6a0)
+
 ## `v1.1.3`
 
 ### Fixes
