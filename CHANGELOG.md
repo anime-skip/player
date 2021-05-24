@@ -1,5 +1,11 @@
 # Changelog
 
+## `v1.1.5`
+
+### Fixes
+
+- Allow showing popup on Crunchyroll Beta in Chrome (4206c65e7f7e05e8ea3b6d64928ec085f736dd5c)
+
 ## `v1.1.4`
 
 ### Fixes
