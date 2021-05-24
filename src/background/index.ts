@@ -70,14 +70,16 @@ if (Browser.detect() === 'chrome') {
   const chrome = browser as any;
   browser.runtime.onInstalled.addListener(function (_details) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const hosts: Array<{ scheme: string; host: string }> = services.map(service => {
-      const url = new URL(service.page_matches[0]);
-      console.log(url);
-      return {
-        scheme: url.protocol.replace(':', ''),
-        host: url.hostname,
-      };
-    });
+    const hosts: Array<{ scheme: string; host: string }> = services
+      .flatMap(service => service.page_matches)
+      .map(pageMatch => {
+        const url = new URL(pageMatch);
+        console.log(url);
+        return {
+          scheme: url.protocol.replace(':', ''),
+          host: url.hostname,
+        };
+      });
     hosts.push({
       host: 'www.anime-skip.com',
       scheme: 'https',
@@ -86,6 +88,7 @@ if (Browser.detect() === 'chrome') {
       host: 'anime-skip.com',
       scheme: 'https',
     });
+    console.log('hosts:', hosts);
 
     const rules = hosts.map(({ host, scheme }) => {
       const matcher = scheme === 'file://' ? {} : { hostEquals: host };
