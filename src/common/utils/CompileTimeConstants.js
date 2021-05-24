@@ -30,7 +30,7 @@ module.exports.services = [
   {
     folder: 'crunchyroll',
     player_matches: ['https://static.crunchyroll.com/vilos-v2/web/vilos/player.html*'],
-    parent_matches: ['https://www.crunchyroll.com/*'],
-    page_matches: ['https://www.crunchyroll.com/*'],
+    parent_matches: ['https://www.crunchyroll.com/*', 'https://beta.crunchyroll.com/*'],
+    page_matches: ['https://www.crunchyroll.com/*', 'https://beta.crunchyroll.com/*'],
   },
 ];
