@@ -103,14 +103,14 @@ import { defineComponent } from 'vue';
 import Utils from '@/common/utils/Utils';
 import { TIMESTAMP_TYPES, TIMESTAMP_SOURCES, SECONDS } from '@/common/utils/Constants';
 import WebExtImg from '@/common/components/WebExtImg.vue';
-import ToolbarButton from './ToolbarButton.vue';
+import ToolbarButton from '../../components/ToolbarButton.vue';
 import VideoControllerMixin from '@/common/mixins/VideoController';
 import { MutationTypes } from '@/common/store/mutationTypes';
 import { ActionTypes } from '@/common/store/actionTypes';
 import { GetterTypes } from '@/common/store/getterTypes';
 import useLoginDialog from '@/common/composition/useLoginDialog';
 import TimestampColors from '@/player/utils/TimelineColors';
-import TimestampPanelLayout from './TimestampPanelLayout.vue';
+import TimestampPanelLayout from '../../components/TimestampPanelLayout.vue';
 
 export default defineComponent({
   components: { WebExtImg, ToolbarButton, TimestampPanelLayout },

@@ -111,7 +111,7 @@ import fuzzysort from 'fuzzysort';
 import { ActionTypes } from '@/common/store/actionTypes';
 import { MutationTypes } from '@/common/store/mutationTypes';
 import { GetterTypes } from '@/common/store/getterTypes';
-import TimestampPanelLayout from './TimestampPanelLayout.vue';
+import TimestampPanelLayout from '../../components/TimestampPanelLayout.vue';
 
 export default defineComponent({
   name: 'EditTimestamp',

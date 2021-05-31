@@ -15,9 +15,9 @@
 import { defineComponent } from 'vue';
 import VideoControllerMixin from '@/common/mixins/VideoController';
 import KeyboardShortcutsMixin, { KeyboardShortcutMap } from '@/common/mixins/KeyboardShortcuts';
-import TimestampList from '../components/TimestampList.vue';
-import EditTimestamp from '../components/EditTimestamp.vue';
-import BasicDialog from './BasicDialog.vue';
+import TimestampList from './TimestampList.vue';
+import EditTimestamp from './EditTimestamp.vue';
+import BasicDialog from '../BasicDialog.vue';
 import { MutationTypes } from '@/common/store/mutationTypes';
 import { GetterTypes } from '@/common/store/getterTypes';
 
