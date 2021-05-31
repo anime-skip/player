@@ -1,15 +1,7 @@
 <template>
   <LoadingOverlay class="h-full" :is-loading="isSavingTimestamps">
-    <div class="flex flex-col h-full">
-      <header
-        class="pl-4 pr-2 pb-2 -mt-1.5 -mx-4 border-b border-on-surface border-opacity-divider flex-shrink-0"
-      >
-        <h6 class="section-header flex flex-row items-center justify-between">
-          <span>Timestamps</span>
-          <ToolbarButton icon="ic_close.svg" @click="hideDialog()" />
-        </h6>
-      </header>
-      <div class="scroll -mx-4 select-none pt-2 flex-1">
+    <TimestampPanelLayout mode="close" title="Timestamps" @close="hideDialog">
+      <template #content>
         <table class="w-full">
           <tr>
             <td :colspan="4" class="px-4 text-center">
@@ -87,22 +79,22 @@
             </tr>
           </template>
         </table>
-      </div>
-      <footer v-if="canEditTimestamps" class="flex flex-row-reverse justify-center flex-shrink-0">
+        <div class="h-3" />
+      </template>
+      <template v-if="canEditTimestamps" #footer>
         <template v-if="isEditing">
-          <RaisedButton class="text-on-primary" @click="onClickSave">Save Changes</RaisedButton>
-          <div class="flex-1" />
-          <RaisedButton dark class="text-on-secondary" @click="onClickDiscard"
-            >Discard</RaisedButton
-          >
-        </template>
-        <template v-else>
-          <RaisedButton class="text-on-primary justify-self-center" @click="startEditing">
-            Start Editing
+          <RaisedButton class="text-on-primary flex-grow" @click="onClickSave">
+            Save Changes
+          </RaisedButton>
+          <RaisedButton dark class="text-on-secondary flex-grow" @click="onClickDiscard">
+            Discard
           </RaisedButton>
         </template>
-      </footer>
-    </div>
+        <template v-else>
+          <RaisedButton class="text-on-primary flex-grow" @click="startEditing">Edit</RaisedButton>
+        </template>
+      </template>
+    </TimestampPanelLayout>
   </LoadingOverlay>
 </template>
 
@@ -118,9 +110,10 @@ import { ActionTypes } from '@/common/store/actionTypes';
 import { GetterTypes } from '@/common/store/getterTypes';
 import useLoginDialog from '@/common/composition/useLoginDialog';
 import TimestampColors from '@/player/utils/TimelineColors';
+import TimestampPanelLayout from './TimestampPanelLayout.vue';
 
 export default defineComponent({
-  components: { WebExtImg, ToolbarButton },
+  components: { WebExtImg, ToolbarButton, TimestampPanelLayout },
   mixins: [VideoControllerMixin],
   setup() {
     const { openLoginDialog } = useLoginDialog();
