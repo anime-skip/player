@@ -1,103 +1,103 @@
 <template>
-  <div class="text-left h-full flex flex-col">
-    <header
-      class="flex flex-col flex-shrink-0 -mx-4 -mt-2 pl-2 pb-2 border-b border-opacity-divider border-on-surface"
-    >
-      <div class="mt-0 flex flex-row items-center">
-        <div
-          class="p-2 rounded-full select-none bg-on-surface bg-opacity-0 hover:bg-opacity-hover"
-          title="Discard changes"
-          @click="clearActiveTimestamp"
-        >
-          <WebExtImg class="w-6 h-6" src="ic_chevron_left.svg" :draggable="false" />
-        </div>
-        <h6 class="ml-2 pt-0.5">{{ title }}</h6>
-      </div>
-    </header>
-    <div class="flex flex-col flex-1 space-y-2 pt-4 -mx-4 px-4 pb-2 overflow-y-hidden">
-      <p class="subtitle-1">Starts At</p>
-      <div class="flex flex-row space-x-4 py-2 items-center">
-        <div
-          ref="timeSelect"
-          class="self-start flex-shrink-0 rounded-sm ring-primary no-firefox-dots"
-          :class="{
-            'ring ring-opacity-low': isTimeSelectFocused,
-          }"
-          :tabindex="0"
-          @focus="isTimeSelectFocused = true"
-          @blur="isTimeSelectFocused = false"
-          @click.stop.prevent="focusOnTimeSelect"
-        >
-          <RaisedContainer :down="isTimeSelectFocused" dark :tabindex="-1" class="no-firefox-dots">
-            <div class="w-full h-10 pl-3 pr-4 flex items-center space-x-3 no-firefox-dots">
-              <WebExtImg class="icon" src="ic_clock.svg" :draggable="false" />
-              <p class="time">
-                {{ formattedAt }}
-              </p>
-            </div>
-          </RaisedContainer>
-        </div>
-        <p class="body-2 text-opacity-medium text-on-surface">
-          Use J and L keys to move left and right
-        </p>
-      </div>
-      <p class="subtitle-1 py-2">Timestamp type</p>
-      <TextInput
-        ref="filterInput"
-        class="flex row -mb-2"
-        placeholder="Filter..."
-        v-model:value="typeFilter"
-        @submit="onClickDone()"
-        @keydown.up.stop.prevent="onPressUp"
-        @keydown.down.stop.prevent="onPressDown"
-      >
-        <template #left-icon="slotProps">
-          <Icon
-            :disabled="slotProps.disabled"
-            :active="slotProps.focused"
-            path="M6,13H18V11H6M3,6V8H21V6M10,18H14V16H10V18Z"
-          />
-        </template>
-      </TextInput>
-      <div class="flex flex-col flex-1 rounded overflow-y-hidden">
-        <p v-if="matchingTypes.length === 0" class="px-4 py-6 text-error body-2 text-center">
-          No results
-        </p>
-        <ul v-else class="scroll overflow-y-auto">
-          <li
-            v-for="t of matchingTypes"
-            :key="t.id"
-            class="flex flex-row space-x-4 px-3 py-2 bg-on-surface bg-opacity-0 hover:bg-opacity-hover cursor-pointer"
-            @click="selectType(t)"
+  <TimestampPanelLayout mode="back" :title="title" @back="clearActiveTimestamp">
+    <template #content>
+      <div class="flex flex-col flex-1 space-y-2 pt-3 px-4 pb-2 overflow-y-hidden">
+        <div class="flex flex-row space-x-4 pb-2 items-center">
+          <div
+            ref="timeSelect"
+            class="self-start flex-shrink-0 rounded-sm ring-primary no-firefox-dots"
+            :class="{
+              'ring ring-opacity-low': isTimeSelectFocused,
+            }"
+            :tabindex="0"
+            @focus="isTimeSelectFocused = true"
+            @blur="isTimeSelectFocused = false"
+            @click.stop.prevent="focusOnTimeSelect"
           >
-            <Icon
-              v-if="isTypeSelected(t)"
-              class="fill-secondary opacity-100"
-              path="M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7Z"
-            />
-            <Icon
-              v-else
-              path="M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"
-            />
-            <p
-              :class="{
-                'text-opacity-100': isTypeSelected(t),
-                'text-opacity-medium': !isTypeSelected(t),
-              }"
+            <RaisedContainer
+              :down="isTimeSelectFocused"
+              dark
+              :tabindex="-1"
+              class="no-firefox-dots"
             >
-              {{ t.name }}
-            </p>
-          </li>
-        </ul>
+              <div class="w-full h-10 pl-3 pr-4 flex items-center space-x-3 no-firefox-dots">
+                <WebExtImg class="icon" src="ic_clock.svg" :draggable="false" />
+                <p class="time">
+                  {{ formattedAt }}
+                </p>
+              </div>
+            </RaisedContainer>
+          </div>
+          <p class="body-2 text-opacity-medium text-on-surface">
+            Use J and L keys to move left and right
+          </p>
+        </div>
+        <p class="subtitle-1 pt-2 pb-2">Timestamp type</p>
+        <TextInput
+          ref="filterInput"
+          class="flex row -mb-2"
+          placeholder="Filter..."
+          v-model:value="typeFilter"
+          @submit="onClickDone()"
+          @keydown.up.stop.prevent="onPressUp"
+          @keydown.down.stop.prevent="onPressDown"
+        >
+          <template #left-icon="slotProps">
+            <Icon
+              :disabled="slotProps.disabled"
+              :active="slotProps.focused"
+              path="M6,13H18V11H6M3,6V8H21V6M10,18H14V16H10V18Z"
+            />
+          </template>
+        </TextInput>
+        <div>
+          <p v-if="matchingTypes.length === 0" class="px-4 py-6 text-error body-2 text-center">
+            No results
+          </p>
+          <ul v-else>
+            <li
+              v-for="t of matchingTypes"
+              :key="t.id"
+              class="flex flex-row space-x-4 px-3 py-2 bg-on-surface bg-opacity-0 hover:bg-opacity-hover cursor-pointer rounded"
+              @click="selectType(t)"
+            >
+              <Icon
+                v-if="isTypeSelected(t)"
+                class="fill-secondary opacity-100"
+                path="M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7Z"
+              />
+              <Icon
+                v-else
+                path="M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"
+              />
+              <p
+                :class="{
+                  'text-opacity-100': isTypeSelected(t),
+                  'text-opacity-medium': !isTypeSelected(t),
+                }"
+              >
+                {{ t.name }}
+              </p>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-    <footer class="pt-2 flex flex-row-reverse justify-between flex-shrink-0">
-      <RaisedButton @click="onClickDone" :disabled="isSaveDisabled">Save</RaisedButton>
-      <RaisedButton v-if="shouldShowDelete" error @click="onClickDelete" :disabled="isSaveDisabled"
-        >Delete</RaisedButton
+    </template>
+    <template #footer class="flex-row-reverse space-x-reverse">
+      <RaisedButton @click="onClickDone" :disabled="isSaveDisabled" class="flex-grow">
+        Save
+      </RaisedButton>
+      <RaisedButton
+        v-if="shouldShowDelete"
+        error
+        @click="onClickDelete"
+        :disabled="isSaveDisabled"
+        class="flex-grow"
       >
-    </footer>
-  </div>
+        Delete
+      </RaisedButton>
+    </template>
+  </TimestampPanelLayout>
 </template>
 
 <script lang="ts">
@@ -111,10 +111,11 @@ import fuzzysort from 'fuzzysort';
 import { ActionTypes } from '@/common/store/actionTypes';
 import { MutationTypes } from '@/common/store/mutationTypes';
 import { GetterTypes } from '@/common/store/getterTypes';
+import TimestampPanelLayout from './TimestampPanelLayout.vue';
 
 export default defineComponent({
   name: 'EditTimestamp',
-  components: { WebExtImg },
+  components: { WebExtImg, TimestampPanelLayout },
   mixins: [VideoControllerMixin, KeyboardShortcutsMixin],
   props: {
     initialTab: {
@@ -196,7 +197,7 @@ export default defineComponent({
     },
     title(): string {
       if (this.editTimestampMode == null) return 'ERROR';
-      if (this.editTimestampMode === 'add') return 'Create a Timestamp';
+      if (this.editTimestampMode === 'add') return 'New Timestamp';
       return 'Edit Timestamp';
     },
   },
