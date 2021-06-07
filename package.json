@@ -32,7 +32,7 @@
     }
   },
   "dependencies": {
-    "@anime-skip/ui": "^0.0.35",
+    "@anime-skip/ui": "^0.2.2",
     "axios": "^0.19.0",
     "fuzzysort": "^1.1.4",
     "md5": "^2.2.1",

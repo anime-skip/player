@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@anime-skip/ui@^0.0.35":
-  version "0.0.35"
-  resolved "https://npm.pkg.github.com/download/@anime-skip/ui/0.0.35/b19766eb4cb319310201ec703af460bda2ffe3254b994a55bb221de785e87f30#39bcd4947298799be2b84a390e7841ec3c276d8a"
-  integrity sha512-luNeNzeJ9LJoS/8GVeTgntlUm3Op+rVAqApcXyqaaAVetdOqEAjaWLxfWGF6boLacQl3LsMqaCL7yLqL4GCjeA==
+"@anime-skip/ui@^0.2.2":
+  version "0.2.2"
+  resolved "https://npm.pkg.github.com/download/@anime-skip/ui/0.2.2/a86e8fe06e3d083daa9a315d1be911c8ff885112e783440cd89d29c2ba0cfc83#f3ee353e8bdfd953895e528b0f741e12ffad5c35"
+  integrity sha512-B5ivLvh3rMV5Aa5sxsmKBxRLPyVtHF/G6VYoz0wmXvZS83PaKTjQHyPTphhPWwJ7ynT3CeC4sqEtHoRqkW3ZFA==
   dependencies:
     vue "^3.0.5"
 
