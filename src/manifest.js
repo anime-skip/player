@@ -75,6 +75,8 @@ module.exports = {
     }
     if (mode === 'dev') {
       newManifest['content_security_policy'] = "script-src 'self' 'unsafe-eval'; object-src 'self'";
+      newManifest['permissions']?.push('http://localhost/*');
+      newManifest['host_permissions']?.push('http://localhost:8081/*');
     }
 
     return newManifest;

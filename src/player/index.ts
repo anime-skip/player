@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 import Player from './Player.vue';
 import { store } from '@/common/store';
-import MessengerApi from '@/common/api/MessengerApi';
+import AxiosApi from '@/common/api/AxiosApi';
 
 import ui from '@anime-skip/ui';
 import '@/common/css';
@@ -10,7 +10,7 @@ console.log('INJECTED player/index.ts');
 
 // Setup Globals
 
-global.Api = MessengerApi;
+global.Api = AxiosApi;
 
 global.onVideoChanged(video => {
   video.controls = false;
