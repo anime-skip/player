@@ -1,14 +1,12 @@
-type AllMessageTypes = MessageTypes | ApiMessageTypes | ParentMessageTypes | RuntimeMessageTypes;
+type AllMessageTypes = MessageTypes | ParentMessageTypes | RuntimeMessageTypes;
 
 interface AllMessagePayloads
   extends MessagePayloadMap<AllMessageTypes>,
-    ApiMessagePayloadMap,
     ParentMessagePayloadMap,
     RuntimeMessagePayloadMap {}
 
 interface AllMessageResponses
   extends MessageResponseMap<AllMessageTypes>,
-    ApiMessageResponseMap,
     ParentMessageResponseMap,
     RuntimeMessageResponseMap {}
 
@@ -26,69 +24,6 @@ type MessageListener<K extends MessageTypes> = (
 ) => Promise<MessageResponseMap<MessageTypes>[K]>;
 
 type MessageListenerMap<K extends MessageTypes> = { [type in K]: MessageListener<any> };
-
-//#endregion
-
-//#region API Messenger
-
-type ApiMessageTypes = keyof Api.Implementation;
-
-type ApiMessageTypeListenerMap = MessageListenerMap<ApiMessageTypes>;
-
-interface ApiMessagePayloadMap extends MessagePayloadMap<ApiMessageTypes> {
-  loginManual: { username: string; password: string };
-  loginRefresh: string;
-
-  updatePreferences: Api.Preferences;
-
-  createShow: Api.InputShow;
-  searchShows: string;
-
-  createEpisode: { data: Api.InputEpisode; showId: string };
-  searchEpisodes: { name: string; showId?: string };
-  updateEpisode: { episodeId: string; newEpisode: Api.InputEpisode };
-
-  createEpisodeUrl: { episodeId: string; data: Api.InputEpisodeUrl };
-  deleteEpisodeUrl: string;
-  fetchEpisodeByUrl: string;
-  fetchEpisodeByName: { name: string; showName: string };
-  updateEpisodeUrl: { episodeUrl: string; newEpisodeUrl: Api.InputEpisodeUrl };
-
-  createTimestamp: { episodeId: string; data: Api.InputTimestamp };
-  updateTimestamp: Api.Timestamp;
-  deleteTimestamp: string;
-}
-
-interface ApiMessageResponseMap extends MessageResponseMap<ApiMessageTypes> {
-  loginManual: Api.LoginResponse;
-  loginRefresh: Api.LoginRefreshResponse;
-
-  updatePreferences: void;
-
-  createShow: Api.Show;
-  searchShows: Api.ShowSearchResult[];
-
-  createEpisode: Api.EpisodeSearchResult;
-  searchEpisodes: Api.EpisodeSearchResult[];
-  updateEpisode: Api.Episode;
-
-  createEpisodeUrl: Api.EpisodeUrlNoEpisode;
-  deleteEpisodeUrl: Api.EpisodeUrlNoEpisode;
-  fetchEpisodeByUrl: Api.EpisodeUrl;
-  fetchEpisodeByName: Api.ThirdPartyEpisode[];
-  updateEpisodeUrl: Api.EpisodeUrlNoEpisode;
-
-  createTimestamp: Api.Timestamp;
-  updateTimestamp: Api.Timestamp;
-  deleteTimestamp: Api.Timestamp;
-}
-
-type ApiMessageListener<T extends ApiMessageTypes> = (
-  payload: ApiMessagePayloadMap[T],
-  sender: browser.runtime.MessageSender
-) => Promise<ApiMessageResponseMap[T]>;
-
-type ApiMessageListenerMap = { [type in ApiMessageTypes]: ApiMessageListener<type> };
 
 //#endregion
 
