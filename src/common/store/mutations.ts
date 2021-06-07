@@ -33,7 +33,7 @@ export interface Mutations {
     state: State,
     { changes, callback }: { changes: Partial<State>; callback?: () => void }
   ): void;
-  [MutationTypes.PERSIST_PREFERENCES](state: State, payload: Api.Preferences): void;
+  [MutationTypes.PERSIST_PREFERENCES](state: State, payload: Partial<Api.Preferences>): void;
 
   // Keyboard
   [MutationTypes.SET_PRIMARY_KEYBOARD_SHORTCUT](
@@ -94,6 +94,7 @@ export interface Mutations {
   [MutationTypes.CLEAR_EDIT_TIMESTAMP_MODE](state: State): void;
   [MutationTypes.SET_EDIT_TIMESTAMP_MODE](state: State, editMode: 'add' | 'edit' | undefined): void;
   [MutationTypes.SET_SAVE_TIMESTAMP_REQUEST_STATE](state: State, requestState: RequestState): void;
+  [MutationTypes.TOGGLE_EDIT_TEMPLATE](state: State, showEditTemplate: boolean): void;
 }
 
 // Mutations ///////////////////////////////////////////////////////////////////
@@ -160,7 +161,10 @@ export const mutations: MutationTree<State> & Mutations = {
       console.warn('updatePreference() called without account in the store');
       return;
     }
-    state.account.preferences = payload; // TODO: Test set removal
+    state.account.preferences = {
+      ...state.account.preferences,
+      ...payload,
+    };
     persistAccount(state);
   },
 
@@ -306,5 +310,8 @@ export const mutations: MutationTree<State> & Mutations = {
   },
   [MutationTypes.SET_SAVE_TIMESTAMP_REQUEST_STATE](state, requestState) {
     state.saveTimestampsRequestState = requestState;
+  },
+  [MutationTypes.TOGGLE_EDIT_TEMPLATE](state, showEditTemplate) {
+    state.showEditTemplate = showEditTemplate;
   },
 };
