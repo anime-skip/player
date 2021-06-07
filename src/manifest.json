@@ -2,8 +2,17 @@
   "name": "Anime Skip Player",
   "description": "Skip intros, credits, filler and more on supported services",
   "manifest_version": 2,
-  "permissions": ["storage", "tabs", "{{chrome}}.declarativeContent"],
-  "{{chrome}}.host_permissions": ["https://www.anime-skip.com/*", "https://anime-skip.com/*"],
+  "permissions": [
+    "storage",
+    "tabs",
+    "{{chrome}}.declarativeContent",
+    "{{firefox}}.*://api.anime-skip.com/*"
+  ],
+  "{{chrome}}.host_permissions": [
+    "https://www.anime-skip.com/*",
+    "https://anime-skip.com/*",
+    "https://api.anime-skip.com/*"
+  ],
   "page_action": {
     "{{firefox}}.show_matches": ["https://www.anime-skip.com/*", "https://anime-skip.com/*"],
     "browser_style": false,
