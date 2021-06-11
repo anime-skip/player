@@ -95,6 +95,12 @@ export interface Mutations {
   [MutationTypes.SET_EDIT_TIMESTAMP_MODE](state: State, editMode: 'add' | 'edit' | undefined): void;
   [MutationTypes.SET_SAVE_TIMESTAMP_REQUEST_STATE](state: State, requestState: RequestState): void;
   [MutationTypes.TOGGLE_EDIT_TEMPLATE](state: State, showEditTemplate: boolean): void;
+  [MutationTypes.SET_TEMPLATE](state: State, template: Api.TemplateWithAmbiguousTimestamps): void;
+  [MutationTypes.SET_TEMPLATE_REQUEST_STATE](state: State, requestState: RequestState): void;
+  [MutationTypes.SET_INFERRED_TEMPLATE_TIMESTAMPS](
+    state: State,
+    timestamps: Api.AmbiguousTimestamp[] | undefined
+  ): void;
 }
 
 // Mutations ///////////////////////////////////////////////////////////////////
@@ -313,5 +319,14 @@ export const mutations: MutationTree<State> & Mutations = {
   },
   [MutationTypes.TOGGLE_EDIT_TEMPLATE](state, showEditTemplate) {
     state.showEditTemplate = showEditTemplate;
+  },
+  [MutationTypes.SET_TEMPLATE](state, template) {
+    state.template = template;
+  },
+  [MutationTypes.SET_TEMPLATE_REQUEST_STATE](state, requestState) {
+    state.templateRequestState = requestState;
+  },
+  [MutationTypes.SET_INFERRED_TEMPLATE_TIMESTAMPS](state, timestamps) {
+    state.inferredTemplateTimestamps = timestamps;
   },
 };

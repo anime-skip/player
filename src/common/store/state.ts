@@ -40,7 +40,7 @@ export const state = {
   searchEpisodesResult: [] as Api.EpisodeSearchResult[],
   searchEpisodesRequestState: RequestState.NOT_REQUESTED,
   episodeUrl: undefined as Api.EpisodeUrlNoEpisode | undefined,
-  episode: undefined as Api.Episode | undefined,
+  episode: undefined as Omit<Api.Episode, 'template'> | undefined,
   inferredEpisodeInfo: undefined as InferredEpisodeInfo | undefined,
   episodeRequestState: RequestState.NOT_REQUESTED,
   initialVideoDataRequestState: RequestState.NOT_REQUESTED,
@@ -52,6 +52,11 @@ export const state = {
   draftTimestamps: [] as Api.AmbiguousTimestamp[],
   selectedTimestamp: undefined as Api.AmbiguousTimestamp | undefined,
   saveTimestampsRequestState: RequestState.NOT_REQUESTED,
+
+  showEditTemplate: false,
+  templateRequestState: RequestState.NOT_REQUESTED,
+  template: undefined as Api.TemplateWithAmbiguousTimestamps | undefined,
+  inferredTemplateTimestamps: undefined as Api.AmbiguousTimestamp[] | undefined,
 };
 
 export type State = typeof state;

@@ -115,6 +115,15 @@ const thirdPartyEpisodeData = `
   show { name }
 `;
 
+const templateData = `
+  id
+  showId
+  sourceEpisodeId
+  timestampIds
+  type
+  seasons
+`;
+
 const episodeData = `
   id absoluteNumber number season name baseDuration
   timestamps {
@@ -122,6 +131,9 @@ const episodeData = `
   }
   show { 
     ${showData} 
+  }
+  template {
+    ${templateData}
   }
 `;
 
@@ -390,8 +402,8 @@ export default as<Api.Implementation>({
         data: { at, typeId, source },
       }
     );
-    const response = await sendGraphql<'createTimestamp', Api.Timestamp>(m);
-    return response.data.createTimestamp;
+    const response = await sendGraphql<'updateTimestamp', Api.Timestamp>(m);
+    return response.data.updateTimestamp;
   },
   async deleteTimestamp(timestampId: string): Promise<Api.Timestamp> {
     const m = mutation(
@@ -404,7 +416,114 @@ export default as<Api.Implementation>({
         timestampId,
       }
     );
-    const response = await sendGraphql<'createTimestamp', Api.Timestamp>(m);
-    return response.data.createTimestamp;
+    const response = await sendGraphql<'deleteTimestamp', Api.Timestamp>(m);
+    return response.data.deleteTimestamp;
+  },
+
+  async findTemplateByDetails(
+    episodeId,
+    showName,
+    season
+  ): Promise<Api.TemplateWithTimestamps | undefined> {
+    const q = query(
+      `query FindTemplateByDetails($episodeId: ID, $showName: String, $season: String) {
+        findTemplateByDetails(episodeId: $episodeId, showName: $showName, season: $season) {
+          ${templateData}
+          timestamps {
+            ${timestampData}
+          }
+          sourceEpisode {
+            baseDuration
+          }
+        }
+      }`,
+      { episodeId, showName, season }
+    );
+    const response = await sendUnauthorizedGraphql<
+      'findTemplateByDetails',
+      Api.TemplateWithTimestamps | undefined
+    >(q);
+    return response.data.findTemplateByDetails;
+  },
+  async createTemplate(newTemplate): Promise<Api.Template> {
+    const m = mutation(
+      `mutation CreateTemplate($newTemplate: InputTemplate!) {
+        createTemplate(newTemplate: $newTemplate) {
+          ${templateData}
+        }
+      }`,
+      {
+        newTemplate: {
+          showId: newTemplate.showId,
+          sourceEpisodeId: newTemplate.sourceEpisodeId,
+          type: newTemplate.type,
+          seasons: newTemplate.seasons,
+        },
+      }
+    );
+    const response = await sendGraphql<'createTemplate', Api.Template>(m);
+    return response.data.createTemplate;
+  },
+  async updateTemplate(templateId, newTemplate): Promise<Api.Template> {
+    const m = mutation(
+      `mutation UpdateTemplate($templateId: ID!, $newTemplate: InputTemplate!) {
+        updateTemplate(templateId: $templateId, newTemplate: $newTemplate) {
+          ${templateData}
+        }
+      }`,
+      {
+        templateId,
+        newTemplate: {
+          showId: newTemplate.showId,
+          sourceEpisodeId: newTemplate.sourceEpisodeId,
+          type: newTemplate.type,
+          seasons: newTemplate.seasons,
+        },
+      }
+    );
+    const response = await sendGraphql<'updateTemplate', Api.Template>(m);
+    return response.data.updateTemplate;
+  },
+  async deleteTemplate(templateId): Promise<Api.Template> {
+    const m = mutation(
+      `mutation DeleteTemplate($templateId: ID!) {
+        deleteTemplate(templateId: $templateId) {
+          ${templateData}
+        }
+      }`,
+      {
+        templateId,
+      }
+    );
+    const response = await sendGraphql<'deleteTemplate', Api.Template>(m);
+    return response.data.deleteTemplate;
+  },
+  async addTimestampToTemplate(templateTimestamp): Promise<void> {
+    const m = mutation(
+      `mutation AddTimestampToTemplate($templateTimestamp: InputTemplateTimestamp!) {
+        addTimestampToTemplate(templateTimestamp: $templateTimestamp) {
+          templateId
+          timestampId
+        }
+      }`,
+      {
+        templateTimestamp,
+      }
+    );
+    await sendGraphql<'addTimestampToTemplate', void>(m);
+  },
+  async removeTimestampFromTemplate(templateTimestamp): Promise<void> {
+    const m = mutation(
+      `mutation RemoveTimestampFromTemplate($templateTimestamp: InputTemplateTimestamp!) {
+        removeTimestampFromTemplate(templateTimestamp: $templateTimestamp) {
+          templateId
+          timestampId
+        }
+      }`,
+      {
+        templateTimestamp,
+      }
+    );
+    await sendGraphql<'removeTimestampFromTemplate', void>(m);
   },
 });

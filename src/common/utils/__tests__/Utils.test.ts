@@ -102,6 +102,120 @@ describe('Utils', () => {
     });
   });
 
+  describe('computeListDiffs', () => {
+    interface Item {
+      id: number;
+      value?: number;
+    }
+    const getId = (item: Item) => item.id;
+    const compareNeedsUpdated = (newItem: Item, oldItem: Item) => newItem.value !== oldItem.value;
+
+    it('should create all the new items when there are no old items', () => {
+      const oldItems: Item[] = [];
+      const newItems: Item[] = [{ id: 1 }, { id: 2 }];
+
+      const actual = Utils.computeListDiffs(newItems, oldItems, getId, compareNeedsUpdated);
+      const expected: ReturnType<typeof Utils.computeListDiffs> = {
+        toCreate: [{ id: 1 }, { id: 2 }],
+        toUpdate: [],
+        toDelete: [],
+        toLeave: [],
+      };
+
+      expect(actual).toEqual(expected);
+    });
+
+    it('should delete all the old items when there are no new items', () => {
+      const oldItems: Item[] = [{ id: 1 }, { id: 2 }];
+      const newItems: Item[] = [];
+
+      const actual = Utils.computeListDiffs(newItems, oldItems, getId, compareNeedsUpdated);
+      const expected: ReturnType<typeof Utils.computeListDiffs> = {
+        toCreate: [],
+        toUpdate: [],
+        toDelete: [{ id: 1 }, { id: 2 }],
+        toLeave: [],
+      };
+
+      expect(actual).toEqual(expected);
+    });
+
+    it('should leave items that are unchanged as is', () => {
+      const oldItems: Item[] = [
+        { id: 1, value: 10 },
+        { id: 2, value: 20 },
+      ];
+      const newItems: Item[] = [
+        { id: 1, value: 10 },
+        { id: 2, value: 20 },
+      ];
+
+      const actual = Utils.computeListDiffs(newItems, oldItems, getId, compareNeedsUpdated);
+      const expected: ReturnType<typeof Utils.computeListDiffs> = {
+        toCreate: [],
+        toUpdate: [],
+        toDelete: [],
+        toLeave: [
+          { id: 1, value: 10 },
+          { id: 2, value: 20 },
+        ],
+      };
+
+      expect(actual).toEqual(expected);
+    });
+
+    it('should update all the values to the new values if the lists have all the same values, but different values we care about', () => {
+      const oldItems: Item[] = [
+        { id: 1, value: 10 },
+        { id: 2, value: 20 },
+      ];
+      const newItems: Item[] = [
+        { id: 1, value: 30 },
+        { id: 2, value: 40 },
+      ];
+
+      const actual = Utils.computeListDiffs(newItems, oldItems, getId, compareNeedsUpdated);
+      const expected: ReturnType<typeof Utils.computeListDiffs> = {
+        toCreate: [],
+        toUpdate: [
+          { id: 1, value: 30 },
+          { id: 2, value: 40 },
+        ],
+        toDelete: [],
+        toLeave: [],
+      };
+
+      expect(actual).toEqual(expected);
+    });
+
+    it('should return a combination of create, update, and delete for a complex pair of lists', () => {
+      const oldItems: Item[] = [
+        { id: 1, value: 10 },
+        { id: 2, value: 20 },
+        { id: 3, value: 30 },
+        { id: 4, value: 40 },
+      ];
+      const newItems: Item[] = [
+        { id: 3, value: 30 },
+        { id: 4, value: -40 },
+        { id: 5, value: 50 },
+      ];
+
+      const actual = Utils.computeListDiffs(newItems, oldItems, getId, compareNeedsUpdated);
+      const expected: ReturnType<typeof Utils.computeListDiffs> = {
+        toCreate: [{ id: 5, value: 50 }],
+        toUpdate: [{ id: 4, value: -40 }],
+        toDelete: [
+          { id: 1, value: 10 },
+          { id: 2, value: 20 },
+        ],
+        toLeave: [{ id: 3, value: 30 }],
+      };
+
+      expect(actual).toEqual(expected);
+    });
+  });
+
   describe('computeTimestampDiffs()', () => {
     it('should return the correct toCreate', () => {
       const oldTimestamps: Api.Timestamp[] = [];
