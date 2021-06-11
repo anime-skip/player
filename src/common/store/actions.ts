@@ -179,8 +179,8 @@ export const actions: ActionTree<State, State> & Actions = {
       commit(MutationTypes.SET_LOGIN_REQUEST_STATE, RequestState.LOADING);
       const loginData = await callApi(commit, global.Api.loginManual, username, password);
       commit(MutationTypes.LOG_IN, loginData);
+      await callback?.();
       commit(MutationTypes.SET_LOGIN_REQUEST_STATE, RequestState.SUCCESS);
-      callback?.();
     } catch (err) {
       console.warn('actions.loginManual', err);
       commit(MutationTypes.SET_LOGIN_REQUEST_STATE, RequestState.FAILURE);
