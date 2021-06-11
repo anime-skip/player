@@ -307,7 +307,7 @@ export const actions: ActionTree<State, State> & Actions = {
       await callApi(commit, global.Api.createEpisodeUrl, episodeUrl, episode.id);
       commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.SUCCESS);
       onSuccess?.();
-      await dispatch(ActionTypes.FETCH_EPISODE_BY_URL, episodeUrl.url);
+      await dispatch(ActionTypes.LOAD_ALL_EPISODE_DATA, episodeUrl.url);
     } catch (err) {
       console.warn('Failed to create new EpisodeUrl', err);
       commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.FAILURE);
@@ -503,10 +503,12 @@ export const actions: ActionTree<State, State> & Actions = {
 
     commit(MutationTypes.SET_INITIAL_VIDEO_DATA_REQUEST_STATE, RequestState.LOADING);
     try {
-      const found = await dispatch(ActionTypes.FETCH_EPISODE_BY_URL, tabUrl);
-      if (!found) {
-        await dispatch(ActionTypes.INFER_EPISODE_INFO);
+      try {
+        await dispatch(ActionTypes.FETCH_EPISODE_BY_URL, tabUrl);
+      } catch (err) {
+        // do nothing
       }
+      await dispatch(ActionTypes.INFER_EPISODE_INFO);
       commit(MutationTypes.SET_INITIAL_VIDEO_DATA_REQUEST_STATE, RequestState.SUCCESS);
     } catch (err) {
       commit(MutationTypes.SET_INITIAL_VIDEO_DATA_REQUEST_STATE, RequestState.FAILURE);
@@ -541,14 +543,16 @@ export const actions: ActionTree<State, State> & Actions = {
       return false;
     }
   },
-  async [ActionTypes.INFER_EPISODE_INFO]({ commit, dispatch }) {
+  async [ActionTypes.INFER_EPISODE_INFO]({ commit, dispatch, state }) {
     try {
       const episodeInfo = await global.inferEpisodeInfo();
       commit(MutationTypes.SET_INFERRED_EPISODE_INFO, episodeInfo);
-      dispatch(ActionTypes.INFER_TEMPLATE, {
-        showName: episodeInfo.show,
-        season: episodeInfo.season,
-      });
+      if (state.template == null) {
+        dispatch(ActionTypes.INFER_TEMPLATE, {
+          showName: episodeInfo.show,
+          season: episodeInfo.season ?? state.episode?.season,
+        });
+      }
     } catch (err) {
       console.warn('actions.inferEpisodeInfo', err);
       commit(MutationTypes.SET_EPISODE_URL, undefined);
