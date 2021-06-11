@@ -192,9 +192,13 @@ export default defineComponent({
           })
           .then(() => store.commit(MutationTypes.TOGGLE_EDIT_TEMPLATE, false));
       } else {
+        if (existingTemplate.value == null) {
+          console.warn('Cannot update an undefined template');
+          return;
+        }
         store
           .dispatch(ActionTypes.UPDATE_TEMPLATE, {
-            templateId: existingTemplate.value!.id,
+            templateId: existingTemplate.value.id,
             type: type.value,
             selectedTimestampIds: newTimestampIds,
             seasons: seasonsToSave.value,

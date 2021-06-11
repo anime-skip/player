@@ -225,7 +225,7 @@ export default class Utils {
   public static computeListDiffs<T>(
     newItems: ReadonlyArray<T>,
     oldItems: ReadonlyArray<T>,
-    getId: (item: T) => any,
+    getId: (item: T) => any, // eslint-disable-line @typescript-eslint/no-explicit-any
     compareNeedsUpdated: (l: T, r: T) => boolean
   ): {
     toCreate: ReadonlyArray<T>;
@@ -234,6 +234,7 @@ export default class Utils {
     toLeave: ReadonlyArray<T>;
   } {
     const getItemMap = (items: ReadonlyArray<T>) =>
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       items.reduce<Record<any, T>>((map, item) => {
         map[getId(item)] = item;
         return map;

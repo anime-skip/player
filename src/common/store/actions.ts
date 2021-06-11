@@ -11,7 +11,6 @@ import { MutationTypes } from './mutationTypes';
 import { assertLoggedIn, callApi } from './actionUtils';
 import type { Store } from '.';
 import { GetterTypes } from './getterTypes';
-import { template } from '@babel/core';
 
 // Typings /////////////////////////////////////////////////////////////////////
 
