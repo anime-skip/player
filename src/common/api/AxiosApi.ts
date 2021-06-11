@@ -19,13 +19,8 @@ if (process.env.NODE_ENV !== 'production') {
     (config): AxiosRequestConfig => {
       const formattedGraphql = Utils.formatGraphql(config.data.query);
       const type = formattedGraphql.split('\n')[0]?.replace('{', '').trim();
-      /* eslint-disable no-console */
-      console.groupCollapsed(
-        `%cAPI  %c/${config.url} ${type}`,
-        'font-weight: 600; color: default;',
-        'font-weight: 400; color: default;'
-      );
-      console.debug(`URL: %c${config.baseURL}${config.url}`, 'color: #137AF8');
+      // @ts-expect-error: logs is custom
+      config.logs = [[`API  /${config.url} ${type}`]];
       const headers = {
         ...config.headers,
         ...config.headers.common,
@@ -37,14 +32,18 @@ if (process.env.NODE_ENV !== 'production') {
       delete headers.delete;
       delete headers.patch;
       delete headers.head;
-      console.debug('Headers: ', headers);
+      // @ts-expect-error: logs is custom
+      config.logs.push(['Headers: ', headers]);
       if (config.params) {
-        console.debug('Parameters: ', config.params);
+        // @ts-expect-error: logs is custom
+        config.logs.push(['Parameters: ', config.params]);
       }
       if (config.data) {
-        console.debug(`GraphQL:\n%c${formattedGraphql}`, 'color: #137AF8');
+        // @ts-expect-error: logs is custom
+        config.logs.push([`GraphQL:\n%c${formattedGraphql}`, 'color: #137AF8']);
         if (config.data.variables) {
-          console.debug('Variables: ', config.data.variables);
+          // @ts-expect-error: logs is custom
+          config.logs.push(['Variables: ', config.data.variables]);
         }
       }
       /* eslint-enable no-console */
@@ -169,8 +168,10 @@ async function sendGraphql<Q extends string, D>(
       throw error;
     }
 
-    console.debug('Response: ', response.data);
-    console.groupEnd();
+    // @ts-expect-error: logs is custom
+    response.config.logs.push(['Response: ', response.data]);
+    // @ts-expect-error: logs is custom
+    response.config.logs.forEach(logArgs => console.log(...logArgs));
 
     return response.data;
   } catch (err) {
