@@ -4,9 +4,14 @@ import Browser from '@/common/utils/Browser';
 import md5 from 'md5';
 import { as } from '../utils/GlobalUtils';
 
+const baseUrls: Record<string, string | undefined> = {
+  production: 'https://api.anime-skip.com/',
+  staged: 'https://staged.api.anime-skip.com/',
+  development: 'http://localhost:8081/',
+};
+
 const axios = Axios.create({
-  baseURL:
-    process.env.NODE_ENV === 'production' ? 'http://api.anime-skip.com/' : 'http://localhost:8081/',
+  baseURL: baseUrls[process.env.NODE_ENV ?? 'development'] ?? baseUrls.development,
 });
 
 if (process.env.NODE_ENV !== 'production') {
