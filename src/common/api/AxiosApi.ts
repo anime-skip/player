@@ -15,16 +15,15 @@ const axios = Axios.create({
 });
 
 if (process.env.NODE_ENV !== 'production') {
-  axios.interceptors.request.use(
-    (config): AxiosRequestConfig => {
-      const formattedGraphql = Utils.formatGraphql(config.data.query);
+  axios.interceptors.response.use(
+    /* eslint-disable no-console */
+    response => {
+      const formattedGraphql = Utils.formatGraphql(response.config.data.query);
       const type = formattedGraphql.split('\n')[0]?.replace('{', '').trim();
-      // @ts-expect-error: logs is custom
-      config.logs = [[`API  /${config.url} ${type}`]];
       const headers = {
-        ...config.headers,
-        ...config.headers.common,
-        ...config.headers[config.method || 'get'],
+        ...response.config.headers,
+        ...response.config.headers.common,
+        ...response.config.headers[response.config.method || 'get'],
       };
       delete headers.get;
       delete headers.post;
@@ -32,23 +31,28 @@ if (process.env.NODE_ENV !== 'production') {
       delete headers.delete;
       delete headers.patch;
       delete headers.head;
-      // @ts-expect-error: logs is custom
-      config.logs.push(['Headers: ', headers]);
-      if (config.params) {
-        // @ts-expect-error: logs is custom
-        config.logs.push(['Parameters: ', config.params]);
+      console.groupCollapsed(
+        `%cAPI  %c/${response.config.url} ${type}`,
+        'font-weight: 600; color: default;',
+        'font-weight: 400; color: default;'
+      );
+      console.debug(`URL: %c${response.config.baseURL}${response.config.url}`, 'color: #137AF8');
+      console.debug('Headers: ', headers);
+      if (response.config.params) {
+        console.debug('Parameters: ', response.config.params);
       }
-      if (config.data) {
-        // @ts-expect-error: logs is custom
-        config.logs.push([`GraphQL:\n%c${formattedGraphql}`, 'color: #137AF8']);
-        if (config.data.variables) {
-          // @ts-expect-error: logs is custom
-          config.logs.push(['Variables: ', config.data.variables]);
+      if (response.config.data) {
+        console.debug(`GraphQL:\n%c${formattedGraphql}`, 'color: #137AF8');
+        if (response.config.data.variables) {
+          console.debug('Variables: ', response.config.data.variables);
         }
       }
-      /* eslint-enable no-console */
-      return config;
+      console.debug('Response: ', response.data);
+      console.groupEnd();
+
+      return response;
     }
+    /* eslint-enable no-console */
   );
 }
 
@@ -153,37 +157,20 @@ async function sendGraphql<Q extends string, D>(
   data: unknown,
   skipAuth = false
 ): Promise<{ data: { [field in Q]: D } }> {
-  try {
-    const token = skipAuth ? undefined : await Browser.getAccessToken();
-    const response = await axios.post('graphql', data, {
-      headers: {
-        Authorization: token ? `Bearer ${token}` : undefined,
-      },
-    });
-    if (response.data?.errors) {
-      const error = new Error(
-        `GraphQL Request failed with ${response.data.errors.length} errors`
-      ) as AxiosError;
-      error.response = response;
-      throw error;
-    }
-
-    // @ts-expect-error: logs is custom
-    response.config.logs.push(['Response: ', response.data]);
-    // @ts-expect-error: logs is custom
-    response.config.logs.forEach(logArgs => console.log(...logArgs));
-
-    return response.data;
-  } catch (err) {
-    console.warn(err.message, {
-      status: err.response?.status,
-      headers: err.response?.headers,
-      errors: err.response?.data?.errors,
-      response: err.response,
-    });
-    console.groupEnd();
-    throw err;
+  const token = skipAuth ? undefined : await Browser.getAccessToken();
+  const response = await axios.post('graphql', data, {
+    headers: {
+      Authorization: token ? `Bearer ${token}` : undefined,
+    },
+  });
+  if (response.data?.errors) {
+    const error = new Error(
+      `GraphQL Request failed with ${response.data.errors.length} errors`
+    ) as AxiosError;
+    error.response = response;
+    throw error;
   }
+  return response.data;
 }
 
 async function sendUnauthorizedGraphql<Q extends string, D>(
