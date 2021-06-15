@@ -12,6 +12,7 @@
     "lint:no-fix": "eslint . --ext .js,.ts,.vue --max-warnings 0",
     "prettier": "prettier --check \"src/**/*.{js,ts,vue}\"",
     "prettier:write": "yarn prettier --write",
+    "services": "docker-compose -f docker/docker-compose.yml up",
     "check-manifest": "yarn build --mode prod && yarn web-ext --config=.web-ext.config.js lint && yarn build --mode prod --for chrome && yarn web-ext --config=.web-ext.config.js lint",
     "package": "node scripts/package.js",
     "package:dry": "DRY_RUN=true yarn package",
