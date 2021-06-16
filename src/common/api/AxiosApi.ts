@@ -1,4 +1,4 @@
-import Axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import Axios, { AxiosError } from 'axios';
 import Utils from '@/common/utils/Utils';
 import Browser from '@/common/utils/Browser';
 import md5 from 'md5';
