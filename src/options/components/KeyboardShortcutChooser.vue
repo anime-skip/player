@@ -2,8 +2,8 @@
   <div
     class="select-none px-2.5 py-1 surface rounded cursor-pointer"
     :class="{
-      'surface-4': !!shortcut,
-      'surface-primary': !secondary,
+      'surface-4': !!shortcut && secondary,
+      'surface-primary': !!shortcut && !secondary,
       'surface-error': duplicate,
     }"
     @click="showEditor"
