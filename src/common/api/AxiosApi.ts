@@ -4,6 +4,8 @@ import Browser from '@/common/utils/Browser';
 import md5 from 'md5';
 import { as } from '../utils/GlobalUtils';
 
+const clientId = 'OB3AfF3fZg9XlZhxtLvhwLhDcevslhnr';
+
 const axios = Axios.create({
   baseURL:
     process.env.NODE_ENV === 'production' ? 'http://api.anime-skip.com/' : 'http://localhost:8081/',
@@ -142,6 +144,7 @@ async function sendGraphql<Q extends string, D>(
     const response = await axios.post('graphql', data, {
       headers: {
         Authorization: token ? `Bearer ${token}` : undefined,
+        'X-Client-ID': clientId,
       },
     });
     if (response.data?.errors) {
