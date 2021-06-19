@@ -10,6 +10,8 @@ const baseUrls: Record<string, string | undefined> = {
   development: 'http://localhost:8081/',
 };
 
+const clientId = 'OB3AfF3fZg9XlZhxtLvhwLhDcevslhnr';
+
 const axios = Axios.create({
   baseURL: baseUrls[process.env.NODE_ENV ?? 'development'] ?? baseUrls.development,
 });
@@ -161,6 +163,7 @@ async function sendGraphql<Q extends string, D>(
   const response = await axios.post('graphql', data, {
     headers: {
       Authorization: token ? `Bearer ${token}` : undefined,
+      'X-Client-ID': clientId,
     },
   });
   if (response.data?.errors) {

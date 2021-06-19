@@ -50,6 +50,14 @@
         }"
       />
       <KeyboardShortcutRow
+        name="Take screenshot"
+        action-name="takeScreenshot"
+        v-on="{
+          updatePrimary: updatePrimaryShortcut('takeScreenshot'),
+          updateSecondary: updateSecondaryShortcut('takeScreenshot'),
+        }"
+      />
+      <KeyboardShortcutRow
         bottom
         name="Close dialog"
         action-name="hideDialog"

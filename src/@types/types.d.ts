@@ -144,7 +144,8 @@ type KeyboardShortcutAction =
   | 'rewindLarge'
   | 'createTimestamp'
   | 'saveTimestamps'
-  | 'discardChanges';
+  | 'discardChanges'
+  | 'takeScreenshot';
 
 type KeyboardShortcutsMap = { [keyCombo in KeyboardShortcutAction]?: string };
 

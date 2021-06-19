@@ -26,6 +26,7 @@
     <ToolBar class="bottom-content" :player-state="playerState" />
 
     <!-- Dialogs -->
+    <ScreenshotOverlay />
     <TimestampsPanel />
     <PreferencesDialog />
     <EditEpisodeDialog />
@@ -48,6 +49,7 @@ import { MutationTypes } from '@/common/store/mutationTypes';
 import { ActionTypes } from '@/common/store/actionTypes';
 import { PLAYER_ACTIVITY_TIMEOUT } from '@/common/utils/Constants';
 import { Store } from '@/common/store';
+import ScreenshotOverlay from './components/ScreenshotOverlay.vue';
 
 export default defineComponent({
   name: 'Player',
@@ -59,6 +61,7 @@ export default defineComponent({
     EditEpisodeDialog,
     TimestampsPanel,
     ExtensionRoot,
+    ScreenshotOverlay,
   },
   mixins: [KeyboardShortcutMixin, VideoControllerMixin],
   created() {

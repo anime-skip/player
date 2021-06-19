@@ -93,6 +93,7 @@ export const DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS: KeyboardShortcutsMap = {
   createTimestamp: 'K',
   saveTimestamps: 'ctrl+ENTER',
   discardChanges: 'ctrl+`',
+  takeScreenshot: 'ctrl+k',
 };
 
 export const DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS: KeyboardShortcutsMap = {
