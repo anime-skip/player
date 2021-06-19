@@ -6,12 +6,14 @@
     "storage",
     "tabs",
     "{{chrome}}.declarativeContent",
-    "{{firefox}}.*://api.anime-skip.com/*"
+    "{{firefox}}.*://api.anime-skip.com/*",
+    "{{firefox}}.*://staged.api.anime-skip.com/*"
   ],
   "{{chrome}}.host_permissions": [
     "https://www.anime-skip.com/*",
     "https://anime-skip.com/*",
-    "https://api.anime-skip.com/*"
+    "https://api.anime-skip.com/*",
+    "https://staged.api.anime-skip.com/*"
   ],
   "page_action": {
     "{{firefox}}.show_matches": ["https://www.anime-skip.com/*", "https://anime-skip.com/*"],

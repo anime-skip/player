@@ -65,7 +65,10 @@ export interface Actions {
     context: AugmentedActionContext,
     tabUrl: string | undefined
   ): Promise<void>;
-  [ActionTypes.FETCH_EPISODE_BY_URL](context: AugmentedActionContext, url: string): Promise<void>;
+  [ActionTypes.FETCH_EPISODE_BY_URL](
+    context: AugmentedActionContext,
+    url: string
+  ): Promise<boolean>;
   [ActionTypes.INFER_EPISODE_INFO](context: AugmentedActionContext): Promise<void>;
   [ActionTypes.FETCH_THIRD_PARTY_EPISODE](
     context: AugmentedActionContext,
@@ -84,6 +87,42 @@ export interface Actions {
       episode: Api.Episode;
     }
   ): Promise<void>;
+  [ActionTypes.INFER_TEMPLATE](
+    context: AugmentedActionContext,
+    payload: {
+      showName?: string;
+      season?: string;
+      episodeId?: string;
+    }
+  ): Promise<void>;
+  [ActionTypes.CREATE_TEMPLATE](
+    context: AugmentedActionContext,
+    payload: {
+      type: Api.TemplateType;
+      seasons?: string[];
+      selectedTimestampIds: string[];
+    }
+  ): Promise<void>;
+  [ActionTypes.UPDATE_TEMPLATE](
+    context: AugmentedActionContext,
+    payload: {
+      templateId: string;
+      type: Api.TemplateType;
+      seasons?: string[];
+      selectedTimestampIds: string[];
+    }
+  ): Promise<void>;
+  [ActionTypes.UPDATE_TEMPLATE_TIMESTAMPS](
+    context: AugmentedActionContext,
+    payload: {
+      templateId: string;
+      newTimestampIds: string[];
+    }
+  ): Promise<string[]>;
+  [ActionTypes.DELETE_TEMPLATE](
+    context: AugmentedActionContext,
+    payload: { templateId: string }
+  ): Promise<void>;
 }
 
 // Actions /////////////////////////////////////////////////////////////////////
@@ -91,10 +130,14 @@ export interface Actions {
 export const actions: ActionTree<State, State> & Actions = {
   // General
   async [ActionTypes.INITIAL_LOAD](context) {
-    const newState = await Browser.storage.getAll<Partial<State>>(persistedKeys);
-    context.commit(MutationTypes.RESTORE_STATE, { changes: newState });
-    const url = await browser.runtime.sendMessage({ type: '@anime-skip/get-url' });
-    context.commit(MutationTypes.SET_TAB_URL, url);
+    try {
+      const newState = await Browser.storage.getAll<Partial<State>>(persistedKeys);
+      context.commit(MutationTypes.RESTORE_STATE, { changes: newState });
+      const url = await browser.runtime.sendMessage({ type: '@anime-skip/get-url' });
+      context.commit(MutationTypes.SET_TAB_URL, url);
+    } catch (err) {
+      console.error('Failed to get URL from background script', err);
+    }
   },
   async [ActionTypes.SHOW_DIALOG]({ state, commit }, dialogName) {
     if (state.activeDialog === dialogName) return;
@@ -179,8 +222,8 @@ export const actions: ActionTree<State, State> & Actions = {
       commit(MutationTypes.SET_LOGIN_REQUEST_STATE, RequestState.LOADING);
       const loginData = await callApi(commit, global.Api.loginManual, username, password);
       commit(MutationTypes.LOG_IN, loginData);
+      await callback?.();
       commit(MutationTypes.SET_LOGIN_REQUEST_STATE, RequestState.SUCCESS);
-      callback?.();
     } catch (err) {
       console.warn('actions.loginManual', err);
       commit(MutationTypes.SET_LOGIN_REQUEST_STATE, RequestState.FAILURE);
@@ -199,8 +242,7 @@ export const actions: ActionTree<State, State> & Actions = {
       }
       const newValue = !allPreferences[preference];
       try {
-        const newPreferences: Api.Preferences = {
-          ...allPreferences,
+        const newPreferences: Partial<Api.Preferences> = {
           [preference]: newValue,
         };
         commit(MutationTypes.SET_PREFERENCES_REQUEST_STATE, RequestState.LOADING);
@@ -265,14 +307,14 @@ export const actions: ActionTree<State, State> & Actions = {
       await callApi(commit, global.Api.createEpisodeUrl, episodeUrl, episode.id);
       commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.SUCCESS);
       onSuccess?.();
-      await dispatch(ActionTypes.FETCH_EPISODE_BY_URL, episodeUrl.url);
+      await dispatch(ActionTypes.LOAD_ALL_EPISODE_DATA, episodeUrl.url);
     } catch (err) {
       console.warn('Failed to create new EpisodeUrl', err);
       commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.FAILURE);
     }
   },
   async [ActionTypes.CREATE_EPISODE_DATA](
-    { commit, dispatch, state },
+    { commit, dispatch, state, getters },
     { show: showData, episode: episodeData, episodeUrl: episodeUrlData }
   ) {
     try {
@@ -283,7 +325,7 @@ export const actions: ActionTree<State, State> & Actions = {
       // Show
       let showId: string;
       if (showData.create) {
-        const result = await await callApi(commit, global.Api.createShow, {
+        const result = await callApi(commit, global.Api.createShow, {
           name: showData.name,
         });
         showId = result.id;
@@ -323,6 +365,26 @@ export const actions: ActionTree<State, State> & Actions = {
 
       // Update the data
       await dispatch(ActionTypes.FETCH_EPISODE_BY_URL, episodeUrl.url);
+
+      // Apply template timestamps if necessary
+      const activeTimestamps = getters.ACTIVE_TIMESTAMPS;
+      if (activeTimestamps.length > 0) {
+        try {
+          const timestamps = await Promise.all(
+            activeTimestamps.map(timestamp =>
+              callApi(commit, global.Api.createTimestamp, episodeId, {
+                at: timestamp.at, // Offset is applied when getting a template
+                typeId: timestamp.typeId,
+                source: timestamp.source,
+              })
+            ) ?? []
+          );
+          commit(MutationTypes.SET_TIMESTAMPS, timestamps);
+        } catch (err) {
+          // do nothing
+        }
+      }
+
       commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.SUCCESS);
     } catch (err) {
       console.warn('actions.createEpisodeData', err);
@@ -434,15 +496,19 @@ export const actions: ActionTree<State, State> & Actions = {
     commit(MutationTypes.SET_TIMESTAMPS, []);
     commit(MutationTypes.SET_EPISODE_URL, undefined);
     commit(MutationTypes.SET_EPISODE, undefined);
+    commit(MutationTypes.SET_TEMPLATE, undefined);
+    commit(MutationTypes.SET_INFERRED_TEMPLATE_TIMESTAMPS, undefined);
     commit(MutationTypes.SET_INFERRED_EPISODE_INFO, undefined);
     commit(MutationTypes.SET_IS_INITIAL_BUFFER, true);
 
     commit(MutationTypes.SET_INITIAL_VIDEO_DATA_REQUEST_STATE, RequestState.LOADING);
     try {
-      await Promise.all([
-        dispatch(ActionTypes.INFER_EPISODE_INFO),
-        dispatch(ActionTypes.FETCH_EPISODE_BY_URL, tabUrl),
-      ]);
+      try {
+        await dispatch(ActionTypes.FETCH_EPISODE_BY_URL, tabUrl);
+      } catch (err) {
+        // do nothing
+      }
+      await dispatch(ActionTypes.INFER_EPISODE_INFO);
       commit(MutationTypes.SET_INITIAL_VIDEO_DATA_REQUEST_STATE, RequestState.SUCCESS);
     } catch (err) {
       commit(MutationTypes.SET_INITIAL_VIDEO_DATA_REQUEST_STATE, RequestState.FAILURE);
@@ -462,22 +528,88 @@ export const actions: ActionTree<State, State> & Actions = {
   async [ActionTypes.FETCH_EPISODE_BY_URL]({ commit }: AugmentedActionContext, url) {
     try {
       commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.LOADING);
-      const { episode, ...episodeUrl } = await callApi(commit, global.Api.fetchEpisodeByUrl, url);
+      const {
+        episode: { template, ...episode },
+        ...episodeUrl
+      } = await callApi(commit, global.Api.fetchEpisodeByUrl, url);
       commit(MutationTypes.SET_EPISODE_URL, episodeUrl);
       commit(MutationTypes.SET_EPISODE, episode);
+      commit(MutationTypes.SET_TEMPLATE, template);
       commit(MutationTypes.SET_EPISODE_REQUEST_STATE, RequestState.SUCCESS);
+      return true;
     } catch (err) {
       console.warn('actions.fetchEpisodeByUrl', err);
       commit(MutationTypes.SET_EPISODE_URL, undefined);
+      return false;
     }
   },
-  async [ActionTypes.INFER_EPISODE_INFO]({ commit }) {
+  async [ActionTypes.INFER_EPISODE_INFO]({ commit, dispatch, state }) {
     try {
       const episodeInfo = await global.inferEpisodeInfo();
       commit(MutationTypes.SET_INFERRED_EPISODE_INFO, episodeInfo);
+      if (state.template == null) {
+        dispatch(ActionTypes.INFER_TEMPLATE, {
+          showName: episodeInfo.show,
+          season: episodeInfo.season ?? state.episode?.season,
+        });
+      }
     } catch (err) {
       console.warn('actions.inferEpisodeInfo', err);
       commit(MutationTypes.SET_EPISODE_URL, undefined);
+    }
+  },
+  async [ActionTypes.INFER_TEMPLATE]({ commit, state }, payload) {
+    try {
+      const inferredTemplate = await callApi(
+        commit,
+        global.Api.findTemplateByDetails,
+        payload.episodeId,
+        payload.showName,
+        payload.season
+      );
+
+      if (inferredTemplate) {
+        // Player has to be loaded before we can show the template timestamps
+        const waitForPlayerDuration = async (): Promise<number> => {
+          if (state.playerState.duration) {
+            return state.playerState.duration;
+          }
+          let duration: number | undefined;
+          // eslint-disable-next-line no-constant-condition
+          while (true) {
+            duration = state.playerState.duration;
+            if (duration) {
+              return duration;
+            }
+            await Utils.sleep(50);
+            console.debug('Waiting for player duration...');
+          }
+        };
+        const currentDuration = await waitForPlayerDuration();
+        const templatesBaseDuration =
+          state.template?.sourceEpisode?.baseDuration ?? currentDuration;
+        const offset = Utils.computeTimestampsOffset(templatesBaseDuration, currentDuration);
+
+        const timestamps = inferredTemplate.timestamps?.map(
+          (timestamp): Api.AmbiguousTimestamp => ({
+            at: Utils.applyTimestampsOffset(offset, timestamp.at),
+            id: Utils.randomId(),
+            source: timestamp.source,
+            typeId: timestamp.typeId,
+            edited: true,
+          })
+        );
+        commit(MutationTypes.SET_TEMPLATE, inferredTemplate);
+        commit(MutationTypes.SET_INFERRED_TEMPLATE_TIMESTAMPS, timestamps);
+      } else {
+        commit(MutationTypes.SET_TEMPLATE, undefined);
+      }
+    } catch (err) {
+      console.info(
+        'Could not find episode template for ' + JSON.stringify({ search: payload }),
+        err
+      );
+      commit(MutationTypes.SET_TEMPLATE, undefined);
     }
   },
   async [ActionTypes.FETCH_THIRD_PARTY_EPISODE]({ commit }, { name, showName }) {
@@ -594,5 +726,91 @@ export const actions: ActionTree<State, State> & Actions = {
       commit(MutationTypes.SET_TIMESTAMPS, oldTimestamps);
     }
     dispatch(ActionTypes.FETCH_EPISODE_BY_URL, episodeUrl.url);
+  },
+
+  async [ActionTypes.CREATE_TEMPLATE]({ commit, dispatch, state }, payload) {
+    commit(MutationTypes.SET_TEMPLATE_REQUEST_STATE, RequestState.LOADING);
+    try {
+      if (state.episode?.show == null)
+        throw Error('Cannot create a template when there is no show');
+      const template = await callApi(commit, global.Api.createTemplate, {
+        showId: state.episode.show.id,
+        sourceEpisodeId: state.episode.id,
+        type: payload.type,
+        seasons: payload.seasons,
+      });
+      const newTimestampIds = await dispatch(ActionTypes.UPDATE_TEMPLATE_TIMESTAMPS, {
+        templateId: template.id,
+        newTimestampIds: payload.selectedTimestampIds,
+      });
+      template.timestampIds = newTimestampIds;
+      commit(MutationTypes.SET_TEMPLATE, template);
+      commit(MutationTypes.SET_TEMPLATE_REQUEST_STATE, RequestState.SUCCESS);
+    } catch (err) {
+      console.info('Failed to create template:', err);
+      commit(MutationTypes.SET_TEMPLATE_REQUEST_STATE, RequestState.FAILURE);
+    }
+  },
+  async [ActionTypes.UPDATE_TEMPLATE]({ commit, dispatch, state }, payload) {
+    commit(MutationTypes.SET_TEMPLATE_REQUEST_STATE, RequestState.LOADING);
+    try {
+      if (state.template == null) throw Error('Cannot update an undefined template');
+      if (state.episode?.show == null)
+        throw Error('Cannot update a template when there is no show');
+      const template = await callApi(commit, global.Api.updateTemplate, payload.templateId, {
+        showId: state.episode.show.id,
+        sourceEpisodeId: state.episode.id,
+        type: payload.type,
+        seasons: payload.seasons,
+      });
+      const newTimestampIds = await dispatch(ActionTypes.UPDATE_TEMPLATE_TIMESTAMPS, {
+        templateId: template.id,
+        newTimestampIds: payload.selectedTimestampIds,
+      });
+      template.timestampIds = newTimestampIds;
+      commit(MutationTypes.SET_TEMPLATE, template);
+      commit(MutationTypes.SET_TEMPLATE_REQUEST_STATE, RequestState.SUCCESS);
+    } catch (err) {
+      console.info('Failed to update template:', err);
+      commit(MutationTypes.SET_TEMPLATE_REQUEST_STATE, RequestState.FAILURE);
+    }
+  },
+  async [ActionTypes.UPDATE_TEMPLATE_TIMESTAMPS]({ commit, state }, payload) {
+    const oldTimestamps: string[] = state.template?.timestampIds ?? [];
+    const newTimestamps: string[] = payload.newTimestampIds;
+    const idToTemplateTimestamp = (id: string): Api.InputTemplateTimestamp => ({
+      templateId: payload.templateId,
+      timestampId: id,
+    });
+    const { toCreate, toDelete, toLeave } = Utils.computeListDiffs(
+      newTimestamps,
+      oldTimestamps,
+      item => item,
+      (l, r) => l != r
+    );
+    const createPromises = Promise.all(
+      toCreate.map(id =>
+        callApi(commit, global.Api.addTimestampToTemplate, idToTemplateTimestamp(id))
+      )
+    );
+    const deletePromises = Promise.all(
+      toDelete.map(id =>
+        callApi(commit, global.Api.removeTimestampFromTemplate, idToTemplateTimestamp(id))
+      )
+    );
+    await createPromises;
+    await deletePromises;
+    return [...toCreate, ...toLeave];
+  },
+  async [ActionTypes.DELETE_TEMPLATE]({ commit }, payload) {
+    commit(MutationTypes.SET_TEMPLATE_REQUEST_STATE, RequestState.LOADING);
+    try {
+      await callApi(commit, global.Api.deleteTemplate, payload.templateId);
+      commit(MutationTypes.SET_TEMPLATE, undefined);
+      commit(MutationTypes.SET_TEMPLATE_REQUEST_STATE, RequestState.SUCCESS);
+    } catch (err) {
+      console.info('Failed to delete template:', err);
+      commit(MutationTypes.SET_TEMPLATE_REQUEST_STATE, RequestState.FAILURE);
+    }
   },
 };

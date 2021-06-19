@@ -239,7 +239,7 @@ switch (args.mode) {
   case 'staged': {
     config.mode = 'production';
     nameVariants.push('Staged');
-    addEnvironmentVariable('NODE_ENV', 'production');
+    addEnvironmentVariable('NODE_ENV', 'staged');
     addEnvironmentVariable('ENABLE_LOGGING', true);
     addEnvironmentVariable('IS_STAGED', true);
     defineVueBuildOptions({ devTools: true });

@@ -35,6 +35,7 @@ export interface Getters {
   ): (timestamp: Api.Timestamp | Api.AmbiguousTimestamp) => Api.AmbiguousTimestamp;
   [GetterTypes.CAN_EDIT_TIMESTAMPS](state: State, getters: Store['getters']): boolean;
   [GetterTypes.IS_SAVING_TIMESTAMPS](state: State): boolean;
+  [GetterTypes.EDITABLE_TEMPLATE](state: State): Api.Template | undefined;
 }
 
 // Getters /////////////////////////////////////////////////////////////////////
@@ -138,7 +139,13 @@ export const getters: GetterTree<State, State> & Getters = {
   },
 
   // Timestamps
-  [GetterTypes.TIMESTAMPS]({ timestamps, episodeUrl, episode, playerState }) {
+  [GetterTypes.TIMESTAMPS]({
+    timestamps,
+    episodeUrl,
+    episode,
+    playerState,
+    inferredTemplateTimestamps,
+  }) {
     // Find the offset
     let timestampsOffset = episodeUrl?.timestampsOffset;
     if (timestampsOffset == null && episode?.baseDuration != null && playerState.duration != null) {
@@ -146,7 +153,8 @@ export const getters: GetterTree<State, State> & Getters = {
     }
 
     // Apply the offset
-    const offsetTimestamps = timestamps.map(timestamp => {
+    const ts = timestamps.length === 0 ? inferredTemplateTimestamps ?? [] : timestamps;
+    const offsetTimestamps = ts.map(timestamp => {
       const at = Utils.applyTimestampsOffset(timestampsOffset, timestamp.at);
       return {
         ...timestamp,
@@ -204,5 +212,12 @@ export const getters: GetterTree<State, State> & Getters = {
   },
   [GetterTypes.IS_SAVING_TIMESTAMPS](state) {
     return state.saveTimestampsRequestState === RequestState.LOADING;
+  },
+
+  [GetterTypes.EDITABLE_TEMPLATE](state) {
+    if (state.episode?.id != null && state.episode.id === state.template?.sourceEpisodeId) {
+      return state.template;
+    }
+    return undefined;
   },
 };

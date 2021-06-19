@@ -11,29 +11,39 @@ declare namespace Api {
   type TimestampSource = 'ANIME_SKIP' | 'BETTER_VRV';
 
   interface Implementation {
-    loginManual(username: string, password: string): Promise<Api.LoginResponse>;
-    loginRefresh(refreshToken: string): Promise<Api.LoginRefreshResponse>;
-    updatePreferences(preferences: Api.Preferences): Promise<void>;
+    loginManual(username: string, password: string): Promise<LoginResponse>;
+    loginRefresh(refreshToken: string): Promise<LoginRefreshResponse>;
+    updatePreferences(preferences: Partial<Preferences>): Promise<void>;
 
-    createShow(data: Api.InputShow): Promise<Api.Show>;
-    searchShows(name: string): Promise<Api.ShowSearchResult[]>;
+    createShow(data: InputShow): Promise<Show>;
+    searchShows(name: string): Promise<ShowSearchResult[]>;
 
-    createEpisode(data: Api.InputEpisode, showId: string): Promise<Api.EpisodeSearchResult>;
-    searchEpisodes(name: string, showId?: string): Promise<Api.EpisodeSearchResult[]>;
-    updateEpisode(id: string, input: Api.InputEpisode): Promise<Api.Episode>;
+    createEpisode(data: InputEpisode, showId: string): Promise<EpisodeSearchResult>;
+    searchEpisodes(name: string, showId?: string): Promise<EpisodeSearchResult[]>;
+    updateEpisode(id: string, input: InputEpisode): Promise<Episode>;
 
-    createEpisodeUrl(
-      data: Api.InputEpisodeUrl,
-      episodeId: string
-    ): Promise<Api.EpisodeUrlNoEpisode>;
-    deleteEpisodeUrl(episodeUrl: string): Promise<Api.EpisodeUrlNoEpisode>;
-    fetchEpisodeByUrl(url: string): Promise<Api.EpisodeUrl>;
-    fetchEpisodeByName(name: string, showName: string): Promise<Api.ThirdPartyEpisode[]>;
-    updateEpisodeUrl(url: string, inputUrl: Api.InputEpisodeUrl): Promise<Api.EpisodeUrlNoEpisode>;
+    createEpisodeUrl(data: InputEpisodeUrl, episodeId: string): Promise<EpisodeUrlNoEpisode>;
+    deleteEpisodeUrl(episodeUrl: string): Promise<EpisodeUrlNoEpisode>;
+    fetchEpisodeByUrl(url: string): Promise<EpisodeUrl>;
+    fetchEpisodeByName(name: string, showName: string): Promise<ThirdPartyEpisode[]>;
+    updateEpisodeUrl(url: string, inputUrl: InputEpisodeUrl): Promise<EpisodeUrlNoEpisode>;
 
-    createTimestamp(episodeId: string, timestamp: Api.InputTimestamp): Promise<Api.Timestamp>;
-    updateTimestamp(newTimestamp: Api.Timestamp): Promise<Api.Timestamp>;
-    deleteTimestamp(timestampId: string): Promise<Api.Timestamp>;
+    createTimestamp(episodeId: string, timestamp: InputTimestamp): Promise<Timestamp>;
+    updateTimestamp(newTimestamp: Timestamp): Promise<Timestamp>;
+    deleteTimestamp(timestampId: string): Promise<Timestamp>;
+
+    findTemplateByDetails(
+      episodeId?: string,
+      showName?: string,
+      season?: string
+    ): Promise<TemplateWithTimestamps | undefined>;
+    createTemplate(newTemplate: InputTemplate): Promise<Template>;
+    updateTemplate(templateId: string, newTemplate: InputTemplate): Promise<Template>;
+    deleteTemplate(templateId: string): Promise<Template>;
+    addTimestampToTemplate(templateTimestamp: InputTemplateTimestamp): Promise<TemplateTimestamp>;
+    removeTimestampFromTemplate(
+      templateTimestamp: InputTemplateTimestamp
+    ): Promise<TemplateTimestamp>;
   }
 
   interface Preferences {
@@ -122,6 +132,44 @@ declare namespace Api {
   interface Episode extends EpisodeSearchResult {
     show?: Show;
     timestamps: Timestamp[];
+    template?: Template;
+  }
+
+  type TemplateType = 'SHOW' | 'SEASONS';
+
+  interface InputTemplate {
+    showId: string;
+    sourceEpisodeId: string;
+    type: TemplateType;
+    seasons?: string[];
+  }
+
+  interface Template {
+    id: string;
+    showId: string;
+    sourceEpisodeId: string;
+    type: TemplateType;
+    seasons?: Array<string>;
+    timestampIds: Array<string>;
+  }
+
+  interface TemplateWithTimestamps extends Template {
+    sourceEpisode?: {
+      baseDuration?: number;
+    };
+    timestamps?: Api.Timestamp[];
+  }
+
+  interface TemplateWithAmbiguousTimestamps extends Template {
+    sourceEpisode?: {
+      baseDuration?: number;
+    };
+    timestamps?: Api.AmbiguousTimestamp[];
+  }
+
+  interface InputTemplateTimestamp {
+    templateId: string;
+    timestampId: string;
   }
 
   type ThirdPartyEpisode =

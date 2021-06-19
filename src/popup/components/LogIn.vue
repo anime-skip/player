@@ -54,6 +54,7 @@ import PopupHeader from './PopupHeader.vue';
 import { ActionTypes } from '@/common/store/actionTypes';
 import { GetterTypes } from '@/common/store/getterTypes';
 import { TextInput } from '@anime-skip/ui';
+import Utils from '@/common/utils/Utils';
 
 export default defineComponent({
   components: { PopupHeader },
@@ -82,13 +83,17 @@ export default defineComponent({
   },
   methods: {
     login() {
-      const callback = this.closeAfterLogin ? () => setTimeout(this.close, 500) : undefined;
+      const callback = async () => {
+        this.close();
+        // Wait for animation to finish before finishing the callback and the request state being removed
+        await Utils.sleep(500);
+      };
       console.info('Login callback', { callback });
 
       this.$store.dispatch(ActionTypes.LOGIN_MANUAL, {
         username: this.username,
         password: this.password,
-        callback,
+        callback: this.closeAfterLogin ? callback : undefined,
       });
     },
   },

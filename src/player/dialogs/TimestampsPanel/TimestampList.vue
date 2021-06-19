@@ -92,6 +92,9 @@
         </template>
         <template v-else>
           <RaisedButton class="text-on-primary flex-grow" @click="startEditing">Edit</RaisedButton>
+          <RaisedButton dark class="text-on-secondary flex-grow" @click="onClickOpenTemplate">
+            {{ editTemplateText }}
+          </RaisedButton>
         </template>
       </template>
     </TimestampPanelLayout>
@@ -140,6 +143,12 @@ export default defineComponent({
   computed: {
     activeTimestamps(): Api.AmbiguousTimestamp[] {
       return this.$store.getters[GetterTypes.ACTIVE_TIMESTAMPS];
+    },
+    existingTemplate(): Api.Template | undefined {
+      return this.$store.getters[GetterTypes.EDITABLE_TEMPLATE];
+    },
+    editTemplateText(): string {
+      return this.existingTemplate == null ? 'Create Template' : 'Edit Template';
     },
     canEditTimestamps(): boolean {
       return this.$store.getters[GetterTypes.CAN_EDIT_TIMESTAMPS];
@@ -241,6 +250,9 @@ export default defineComponent({
     async onClickDiscard(): Promise<void> {
       await this.stopEditing(true);
       this.hideDialog();
+    },
+    onClickOpenTemplate(): void {
+      this.$store.commit(MutationTypes.TOGGLE_EDIT_TEMPLATE, true);
     },
     onHoverTimestamp(timestamp: Api.AmbiguousTimestamp): void {
       if (this.hoverTimeout != null) window.clearTimeout(this.hoverTimeout);

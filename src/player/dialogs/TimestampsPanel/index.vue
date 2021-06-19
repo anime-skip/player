@@ -6,7 +6,8 @@
     gravity-y="center"
     @show="onShow"
   >
-    <EditTimestamp v-if="activeTimestamp != null" :initial-tab="initialTab" />
+    <EditTimestamp v-if="isShowingEditTimestamp" :initial-tab="initialTab" />
+    <EditTemplate v-else-if="isShowingTemplate" />
     <TimestampList v-else />
   </BasicDialog>
 </template>
@@ -17,13 +18,14 @@ import VideoControllerMixin from '@/common/mixins/VideoController';
 import KeyboardShortcutsMixin, { KeyboardShortcutMap } from '@/common/mixins/KeyboardShortcuts';
 import TimestampList from './TimestampList.vue';
 import EditTimestamp from './EditTimestamp.vue';
+import EditTemplate from './EditTemplate.vue';
 import BasicDialog from '../BasicDialog.vue';
 import { MutationTypes } from '@/common/store/mutationTypes';
 import { GetterTypes } from '@/common/store/getterTypes';
 
 export default defineComponent({
   name: 'TimestampsPanel',
-  components: { BasicDialog, TimestampList, EditTimestamp },
+  components: { BasicDialog, TimestampList, EditTimestamp, EditTemplate },
   mixins: [VideoControllerMixin, KeyboardShortcutsMixin],
   data() {
     return {
@@ -33,6 +35,12 @@ export default defineComponent({
   computed: {
     activeTimestamp(): Api.AmbiguousTimestamp | undefined {
       return this.$store.state.activeTimestamp;
+    },
+    isShowingEditTimestamp(): boolean {
+      return this.activeTimestamp != null;
+    },
+    isShowingTemplate(): boolean {
+      return this.$store.state.showEditTemplate;
     },
   },
   methods: {

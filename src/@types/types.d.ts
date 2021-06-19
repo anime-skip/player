@@ -9,7 +9,7 @@ declare type ServiceDisplayName =
 declare interface LoginManualPayload {
   username: string;
   password: string;
-  callback?: () => void;
+  callback?: () => Promise<void> | void;
 }
 
 declare interface LoginRefreshPayload {

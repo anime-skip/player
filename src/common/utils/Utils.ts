@@ -222,6 +222,46 @@ export default class Utils {
   }
   /* eslint-enable @typescript-eslint/no-explicit-any */
 
+  public static computeListDiffs<T>(
+    newItems: ReadonlyArray<T>,
+    oldItems: ReadonlyArray<T>,
+    getId: (item: T) => any, // eslint-disable-line @typescript-eslint/no-explicit-any
+    compareNeedsUpdated: (l: T, r: T) => boolean
+  ): {
+    toCreate: ReadonlyArray<T>;
+    toUpdate: ReadonlyArray<T>;
+    toDelete: ReadonlyArray<T>;
+    toLeave: ReadonlyArray<T>;
+  } {
+    const getItemMap = (items: ReadonlyArray<T>) =>
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      items.reduce<Record<any, T>>((map, item) => {
+        map[getId(item)] = item;
+        return map;
+      }, {});
+    const oldItemsMap = getItemMap(oldItems);
+    const newItemsMap = getItemMap(newItems);
+
+    const intersection = newItems.filter(newItem => !!oldItemsMap[getId(newItem)]);
+    const toUpdate: T[] = [];
+    const toLeave: T[] = [];
+    intersection.forEach(newItem => {
+      const oldItem = oldItemsMap[getId(newItem)];
+      if (compareNeedsUpdated(newItem, oldItem)) {
+        toUpdate.push(newItem);
+      } else {
+        toLeave.push(oldItem);
+      }
+    });
+
+    return {
+      toCreate: newItems.filter(newItem => !oldItemsMap[getId(newItem)]),
+      toUpdate,
+      toDelete: oldItems.filter(oldItem => !newItemsMap[getId(oldItem)]),
+      toLeave,
+    };
+  }
+
   public static computeTimestampDiffs(
     oldTimestamps: Api.Timestamp[],
     newTimestamps: Api.AmbiguousTimestamp[]

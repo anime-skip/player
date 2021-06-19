@@ -1,32 +1,31 @@
-import Axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import Axios, { AxiosError } from 'axios';
 import Utils from '@/common/utils/Utils';
 import Browser from '@/common/utils/Browser';
 import md5 from 'md5';
 import { as } from '../utils/GlobalUtils';
 
+const baseUrls: Record<string, string | undefined> = {
+  production: 'https://api.anime-skip.com/',
+  staged: 'https://staged.api.anime-skip.com/',
+  development: 'http://localhost:8081/',
+};
+
 const clientId = 'OB3AfF3fZg9XlZhxtLvhwLhDcevslhnr';
 
 const axios = Axios.create({
-  baseURL:
-    process.env.NODE_ENV === 'production' ? 'http://api.anime-skip.com/' : 'http://localhost:8081/',
+  baseURL: baseUrls[process.env.NODE_ENV ?? 'development'] ?? baseUrls.development,
 });
 
 if (process.env.NODE_ENV !== 'production') {
-  axios.interceptors.request.use(
-    (config): AxiosRequestConfig => {
-      const formattedGraphql = Utils.formatGraphql(config.data.query);
+  axios.interceptors.response.use(
+    /* eslint-disable no-console */
+    response => {
+      const formattedGraphql = Utils.formatGraphql(response.config.data.query);
       const type = formattedGraphql.split('\n')[0]?.replace('{', '').trim();
-      /* eslint-disable no-console */
-      console.groupCollapsed(
-        `%cAPI  %c/${config.url} ${type}`,
-        'font-weight: 600; color: default;',
-        'font-weight: 400; color: default;'
-      );
-      console.debug(`URL: %c${config.baseURL}${config.url}`, 'color: #137AF8');
       const headers = {
-        ...config.headers,
-        ...config.headers.common,
-        ...config.headers[config.method || 'get'],
+        ...response.config.headers,
+        ...response.config.headers.common,
+        ...response.config.headers[response.config.method || 'get'],
       };
       delete headers.get;
       delete headers.post;
@@ -34,19 +33,28 @@ if (process.env.NODE_ENV !== 'production') {
       delete headers.delete;
       delete headers.patch;
       delete headers.head;
+      console.groupCollapsed(
+        `%cAPI  %c/${response.config.url} ${type}`,
+        'font-weight: 600; color: default;',
+        'font-weight: 400; color: default;'
+      );
+      console.debug(`URL: %c${response.config.baseURL}${response.config.url}`, 'color: #137AF8');
       console.debug('Headers: ', headers);
-      if (config.params) {
-        console.debug('Parameters: ', config.params);
+      if (response.config.params) {
+        console.debug('Parameters: ', response.config.params);
       }
-      if (config.data) {
+      if (response.config.data) {
         console.debug(`GraphQL:\n%c${formattedGraphql}`, 'color: #137AF8');
-        if (config.data.variables) {
-          console.debug('Variables: ', config.data.variables);
+        if (response.config.data.variables) {
+          console.debug('Variables: ', response.config.data.variables);
         }
       }
-      /* eslint-enable no-console */
-      return config;
+      console.debug('Response: ', response.data);
+      console.groupEnd();
+
+      return response;
     }
+    /* eslint-enable no-console */
   );
 }
 
@@ -117,6 +125,15 @@ const thirdPartyEpisodeData = `
   show { name }
 `;
 
+const templateData = `
+  id
+  showId
+  sourceEpisodeId
+  timestampIds
+  type
+  seasons
+`;
+
 const episodeData = `
   id absoluteNumber number season name baseDuration
   timestamps {
@@ -124,6 +141,9 @@ const episodeData = `
   }
   show { 
     ${showData} 
+  }
+  template {
+    ${templateData}
   }
 `;
 
@@ -139,36 +159,21 @@ async function sendGraphql<Q extends string, D>(
   data: unknown,
   skipAuth = false
 ): Promise<{ data: { [field in Q]: D } }> {
-  try {
-    const token = skipAuth ? undefined : await Browser.getAccessToken();
-    const response = await axios.post('graphql', data, {
-      headers: {
-        Authorization: token ? `Bearer ${token}` : undefined,
-        'X-Client-ID': clientId,
-      },
-    });
-    if (response.data?.errors) {
-      const error = new Error(
-        `GraphQL Request failed with ${response.data.errors.length} errors`
-      ) as AxiosError;
-      error.response = response;
-      throw error;
-    }
-
-    console.debug('Response: ', response.data);
-    console.groupEnd();
-
-    return response.data;
-  } catch (err) {
-    console.warn(err.message, {
-      status: err.response?.status,
-      headers: err.response?.headers,
-      errors: err.response?.data?.errors,
-      response: err.response,
-    });
-    console.groupEnd();
-    throw err;
+  const token = skipAuth ? undefined : await Browser.getAccessToken();
+  const response = await axios.post('graphql', data, {
+    headers: {
+      Authorization: token ? `Bearer ${token}` : undefined,
+      'X-Client-ID': clientId,
+    },
+  });
+  if (response.data?.errors) {
+    const error = new Error(
+      `GraphQL Request failed with ${response.data.errors.length} errors`
+    ) as AxiosError;
+    error.response = response;
+    throw error;
   }
+  return response.data;
 }
 
 async function sendUnauthorizedGraphql<Q extends string, D>(
@@ -393,8 +398,8 @@ export default as<Api.Implementation>({
         data: { at, typeId, source },
       }
     );
-    const response = await sendGraphql<'createTimestamp', Api.Timestamp>(m);
-    return response.data.createTimestamp;
+    const response = await sendGraphql<'updateTimestamp', Api.Timestamp>(m);
+    return response.data.updateTimestamp;
   },
   async deleteTimestamp(timestampId: string): Promise<Api.Timestamp> {
     const m = mutation(
@@ -407,7 +412,114 @@ export default as<Api.Implementation>({
         timestampId,
       }
     );
-    const response = await sendGraphql<'createTimestamp', Api.Timestamp>(m);
-    return response.data.createTimestamp;
+    const response = await sendGraphql<'deleteTimestamp', Api.Timestamp>(m);
+    return response.data.deleteTimestamp;
+  },
+
+  async findTemplateByDetails(
+    episodeId,
+    showName,
+    season
+  ): Promise<Api.TemplateWithTimestamps | undefined> {
+    const q = query(
+      `query FindTemplateByDetails($episodeId: ID, $showName: String, $season: String) {
+        findTemplateByDetails(episodeId: $episodeId, showName: $showName, season: $season) {
+          ${templateData}
+          timestamps {
+            ${timestampData}
+          }
+          sourceEpisode {
+            baseDuration
+          }
+        }
+      }`,
+      { episodeId, showName, season }
+    );
+    const response = await sendUnauthorizedGraphql<
+      'findTemplateByDetails',
+      Api.TemplateWithTimestamps | undefined
+    >(q);
+    return response.data.findTemplateByDetails;
+  },
+  async createTemplate(newTemplate): Promise<Api.Template> {
+    const m = mutation(
+      `mutation CreateTemplate($newTemplate: InputTemplate!) {
+        createTemplate(newTemplate: $newTemplate) {
+          ${templateData}
+        }
+      }`,
+      {
+        newTemplate: {
+          showId: newTemplate.showId,
+          sourceEpisodeId: newTemplate.sourceEpisodeId,
+          type: newTemplate.type,
+          seasons: newTemplate.seasons,
+        },
+      }
+    );
+    const response = await sendGraphql<'createTemplate', Api.Template>(m);
+    return response.data.createTemplate;
+  },
+  async updateTemplate(templateId, newTemplate): Promise<Api.Template> {
+    const m = mutation(
+      `mutation UpdateTemplate($templateId: ID!, $newTemplate: InputTemplate!) {
+        updateTemplate(templateId: $templateId, newTemplate: $newTemplate) {
+          ${templateData}
+        }
+      }`,
+      {
+        templateId,
+        newTemplate: {
+          showId: newTemplate.showId,
+          sourceEpisodeId: newTemplate.sourceEpisodeId,
+          type: newTemplate.type,
+          seasons: newTemplate.seasons,
+        },
+      }
+    );
+    const response = await sendGraphql<'updateTemplate', Api.Template>(m);
+    return response.data.updateTemplate;
+  },
+  async deleteTemplate(templateId): Promise<Api.Template> {
+    const m = mutation(
+      `mutation DeleteTemplate($templateId: ID!) {
+        deleteTemplate(templateId: $templateId) {
+          ${templateData}
+        }
+      }`,
+      {
+        templateId,
+      }
+    );
+    const response = await sendGraphql<'deleteTemplate', Api.Template>(m);
+    return response.data.deleteTemplate;
+  },
+  async addTimestampToTemplate(templateTimestamp): Promise<void> {
+    const m = mutation(
+      `mutation AddTimestampToTemplate($templateTimestamp: InputTemplateTimestamp!) {
+        addTimestampToTemplate(templateTimestamp: $templateTimestamp) {
+          templateId
+          timestampId
+        }
+      }`,
+      {
+        templateTimestamp,
+      }
+    );
+    await sendGraphql<'addTimestampToTemplate', void>(m);
+  },
+  async removeTimestampFromTemplate(templateTimestamp): Promise<void> {
+    const m = mutation(
+      `mutation RemoveTimestampFromTemplate($templateTimestamp: InputTemplateTimestamp!) {
+        removeTimestampFromTemplate(templateTimestamp: $templateTimestamp) {
+          templateId
+          timestampId
+        }
+      }`,
+      {
+        templateTimestamp,
+      }
+    );
+    await sendGraphql<'removeTimestampFromTemplate', void>(m);
   },
 });
