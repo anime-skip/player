@@ -20,7 +20,7 @@ if (process.env.NODE_ENV !== 'production') {
   axios.interceptors.response.use(
     /* eslint-disable no-console */
     response => {
-      const formattedGraphql = Utils.formatGraphql(response.config.data.query);
+      const formattedGraphql = Utils.formatGraphql(JSON.parse(response.config.data).query);
       const type = formattedGraphql.split('\n')[0]?.replace('{', '').trim();
       const headers = {
         ...response.config.headers,
