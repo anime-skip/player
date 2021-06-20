@@ -41,6 +41,7 @@ import CaptureScreenshot from '@/common/utils/CaptureScreenshot';
 import { useKeyboardShortcuts } from '@/common/mixins/KeyboardShortcuts';
 import { defineComponent, ref } from 'vue';
 import { useStore } from 'vuex';
+import Browser from '@/common/utils/Browser';
 
 interface ImageDetails {
   url: string;
@@ -84,17 +85,19 @@ export default defineComponent({
       );
     };
 
-    useKeyboardShortcuts('Screenshot Overlay', useStore(), {
-      takeScreenshot() {
-        while (activeTimeouts.length > 0) {
-          clearTimeout(activeTimeouts.pop());
-        }
-        image.value = undefined;
-        const video = global.getVideo?.();
-        if (video == null) throw Error('Video is not loaded yet');
-        CaptureScreenshot(video).then(addImage).catch(console.error);
-      },
-    });
+    if (Browser.detect() === 'firefox') {
+      useKeyboardShortcuts('Screenshot Overlay', useStore(), {
+        takeScreenshot() {
+          while (activeTimeouts.length > 0) {
+            clearTimeout(activeTimeouts.pop());
+          }
+          image.value = undefined;
+          const video = global.getVideo?.();
+          if (video == null) throw Error('Video is not loaded yet');
+          CaptureScreenshot(video).then(addImage).catch(console.error);
+        },
+      });
+    }
 
     return {
       image,

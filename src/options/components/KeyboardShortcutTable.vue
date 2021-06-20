@@ -50,6 +50,7 @@
         }"
       />
       <KeyboardShortcutRow
+        v-if="isFirefox"
         name="Take screenshot"
         action-name="takeScreenshot"
         v-on="{
@@ -193,9 +194,15 @@
 import { defineComponent } from 'vue';
 import KeyboardShortcutRow from './KeyboardShortcutRow.vue';
 import { MutationTypes } from '@/common/store/mutationTypes';
+import Browser from '@/common/utils/Browser';
 
 export default defineComponent({
   components: { KeyboardShortcutRow },
+  data() {
+    return {
+      isFirefox: Browser.detect() === 'firefox',
+    };
+  },
   methods: {
     updatePrimaryShortcut(type: KeyboardShortcutAction): (value: string) => void {
       return (value: string | undefined): void => {
