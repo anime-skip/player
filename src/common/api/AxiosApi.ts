@@ -350,7 +350,9 @@ export default as<Api.Implementation>({
       { name }
     );
     const response = await sendUnauthorizedGraphql<'findEpisodeByName', Api.ThirdPartyEpisode[]>(q);
-    return response.data.findEpisodeByName.filter(episode => episode.show.name === showName);
+    return response.data.findEpisodeByName.filter(
+      episode => episode.show.name.toLowerCase() === showName.toLowerCase()
+    );
   },
   async updateEpisodeUrl(episodeUrl, newEpisodeUrl): Promise<Api.EpisodeUrlNoEpisode> {
     const m = mutation(
