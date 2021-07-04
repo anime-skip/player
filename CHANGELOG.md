@@ -1,5 +1,30 @@
 # Changelog
 
+## `v1.2.2`
+
+### Fixes
+
+- Not showing timestamps when there is a capitalization difference between show names (2a9a2de6027bb9ff4516cf05abbd98b5bbbe1b5b)
+
+## `v1.2.1`
+
+### Fixes
+
+- Disable screenshots in chrome because of the browser's security issues (11603ac87d2deecd994d5d1f32ea07400e1868d0)
+
+## `v1.2.0`
+
+### Enhancements
+
+- Templates! Reduce the amount of repetitive timestamps by sharing them between episodes (b6faede280f96659206ab5350343ea46ab3c7c36)
+- Screenshot keyboard shortcut (d98db5eeab9c65c3ffa7f655cba9e89896aef6e8)
+- More visual changes to the view/edit timestamps panel (ee3d08a21c6c0d178bddd74fd8b34516ef2da078, 25bc434ac745ad09bcc172827fbc05e98a632794)
+
+### Fixes
+
+- Player occasionally hung while saving timestamps, fixed! (17e0387b89676675e23cb15485c5572d1af10962)
+- Odd coloring of keyboard shortcut button (79e7ff51d50af8fdbf2e2182196cf3884f68d199)
+
 ## `v1.1.5`
 
 ### Fixes
