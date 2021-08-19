@@ -1,0 +1,55 @@
+{
+  "manifest_version": 2,
+  "permissions": [
+    "storage",
+    "tabs",
+    "{{chrome}}.declarativeContent",
+    "{{firefox}}.*://api.anime-skip.com/*",
+    "{{firefox}}.*://staged.api.anime-skip.com/*"
+  ],
+  "{{manifest-v3:remove-this-qualifier-once-v3}}.host_permissions": [
+    "https://www.anime-skip.com/*",
+    "https://anime-skip.com/*",
+    "https://api.anime-skip.com/*",
+    "https://staged.api.anime-skip.com/*"
+  ],
+  "page_action": {
+    "{{firefox}}.show_matches": ["https://www.anime-skip.com/*", "https://anime-skip.com/*"],
+    "browser_style": false,
+    "default_icon": {
+      "16": "assets/extension-logo/16.png",
+      "32": "assets/extension-logo/32.png",
+      "48": "assets/extension-logo/48.png",
+      "128": "assets/extension-logo/128.png"
+    },
+    "default_title": "Anime Skip Player",
+    "default_popup": "popup/index.html"
+  },
+  "options_ui": {
+    "page": "options/index.html",
+    "open_in_tab": true,
+    "{{firefox}}.browser_style": false,
+    "{{chrome}}.chrome_style": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.anime-skip.com/*", "https://anime-skip.com/*"],
+      "js": ["content-scripts/anime-skip/index.js"]
+    }
+  ],
+  "background": {
+    "scripts": [
+      "background/messenger.js",
+      "background/on-install.js",
+      "background/tab-change.js",
+      "{{chrome}}.background/chrome-page-action.js"
+    ]
+  },
+  "icons": {
+    "16": "assets/extension-logo/16.png",
+    "32": "assets/extension-logo/32.png",
+    "48": "assets/extension-logo/48.png",
+    "128": "assets/extension-logo/128.png"
+  },
+  "web_accessible_resources": ["assets/*", "assets/**/*"]
+}

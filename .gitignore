@@ -1,0 +1,32 @@
+# Vite
+#
+.vite-ssg-dist
+.vite-ssg-temp
+dist
+dist-ssr
+
+# PNPM
+#
+node_modules
+
+# Editors
+#
+.idea/
+
+# Build
+#
+extension/background
+extension/content-scripts
+extension/options
+extension/popup
+extension/manifest.json
+
+# Other
+#
+.DS_Store
+components.d.ts
+*.log
+*.env
+TODO.md
+.chrome.pem
+.old-webpack-extension

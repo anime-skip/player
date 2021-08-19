@@ -1,0 +1,41 @@
+services:
+  fake-streaming-service:
+    image: anime-skip/fake-streaming-service/web:latest
+    ports:
+      - 7238:80
+
+  backend:
+    image: anime-skip/backend/api:dev
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - 8081:8081
+    env_file: backend.env
+
+  db:
+    image: postgres:alpine
+    command: -p 9000
+    ports:
+      - 9000:9000
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: local_timestamps
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -p 9000']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  db_ui:
+    image: sosedoff/pgweb
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - 9001:8081
+    links:
+      - db
+    environment:
+      - DATABASE_URL=postgres://postgres:password@db:9000/local_timestamps?sslmode=disable

@@ -1,0 +1,59 @@
+<template>
+  <LoadingOverlay :is-loading="isLoggingOut">
+    <div class="p-4 space-y-8">
+      <PopupHeader title="Preferences" class="header" />
+      <GeneralSettings>
+        <RaisedButton dark @click="openExtensionOptions">
+          <div class="flex justify-between w-full">
+            <p class="remove-text body-1">All Settings</p>
+          </div>
+        </RaisedButton>
+      </GeneralSettings>
+      <SkippedSections />
+      <div class="flex flex-row justify-between items-baseline">
+        <a
+          class="text-on-surface text-opacity-medium body-1"
+          href="https://www.anime-skip.com/support"
+          target="_blank"
+        >
+          <span>Need help?</span>
+        </a>
+        <RaisedButton dark @click="logOut">Log Out</RaisedButton>
+      </div>
+    </div>
+  </LoadingOverlay>
+</template>
+
+<script lang="ts">
+import { defineComponent, ref } from 'vue';
+import { useStore } from 'vuex';
+import { MutationTypes } from '~/common/store/mutationTypes';
+import Messenger from '~/common/utils/Messenger';
+
+export default defineComponent({
+  setup() {
+    const store = useStore();
+
+    const isLoggingOut = ref(false);
+    const logOut = () => {
+      isLoggingOut.value = true;
+      setTimeout(() => {
+        store.commit(MutationTypes.LOG_OUT);
+        isLoggingOut.value = false;
+      }, 500);
+    };
+    const openExtensionOptions = () => {
+      new Messenger<RuntimeMessageTypes>('General Settings').send(
+        '@anime-skip/open-all-settings',
+        undefined
+      );
+    };
+
+    return {
+      isLoggingOut,
+      logOut,
+      openExtensionOptions,
+    };
+  },
+});
+</script>

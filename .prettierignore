@@ -1,0 +1,4 @@
+extension
+!extension/assets/**/*
+pnpm-lock.yaml
+.old-webpack-extension

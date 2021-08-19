@@ -1,0 +1,34 @@
+{
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS",
+      "noUnusedLocals": false,
+      "noImplicitOverride": false,
+      "noImplicitReturns": false,
+      "noImplicitThis": false,
+      "noFallthroughCasesInSwitch": false,
+      "noImplicitUseStrict": false,
+      "noUnusedParameters": false
+    }
+  },
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "ESNext",
+    "target": "ESNext",
+    "lib": ["DOM", "ESNext"],
+    "strict": true,
+    "esModuleInterop": true,
+    "incremental": false,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "noUnusedLocals": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["vite/client", "mocha"],
+    "paths": {
+      "~/*": ["src/*"]
+    }
+  },
+  "exclude": ["extension/dist", "node_modules"]
+}
