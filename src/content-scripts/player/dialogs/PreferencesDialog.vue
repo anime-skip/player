@@ -73,8 +73,6 @@
 import Messenger from '~/common/utils/Messenger';
 import { computed, defineComponent, onMounted, ref } from 'vue';
 import useRadioIcon from '~/common/composition/useRadioIcon';
-import { useStore } from 'vuex';
-import { ActionTypes } from '~/common/store/actionTypes';
 
 export default defineComponent({
   setup() {

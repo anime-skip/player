@@ -1,8 +1,6 @@
 import ui from '@anime-skip/ui';
 import { createApp } from 'vue';
 import 'vue-global-api';
-import AxiosApi from '~/common/api/AxiosApi';
-import { store } from '~/common/store';
 import '~/common/styles';
 import { loadedLog } from '~/common/utils/loadedLog';
 import Player from './Player.vue';
@@ -10,8 +8,6 @@ import Player from './Player.vue';
 loadedLog('content-scripts/player/index.ts');
 
 // Setup Globals
-
-window.Api = AxiosApi;
 
 window.onVideoChanged(video => {
   video.controls = false;
@@ -49,7 +45,7 @@ async function injectPlayer() {
   try {
     const container = document.createElement('div');
 
-    const app = createApp(Player).use(store).use(ui);
+    const app = createApp(Player).use(ui);
     const mountedApp = app.mount(container);
 
     document.querySelector(rootQuery)?.appendChild(mountedApp.$el);

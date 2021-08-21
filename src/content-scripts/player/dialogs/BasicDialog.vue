@@ -19,9 +19,7 @@
 </template>
 
 <script lang="ts">
-import { ActionTypes } from '~/common/store/actionTypes';
 import { defineComponent, PropType } from 'vue';
-import { Store } from '~/common/store';
 
 export default defineComponent({
   props: {

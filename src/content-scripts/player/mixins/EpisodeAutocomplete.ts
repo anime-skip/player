@@ -1,6 +1,6 @@
 import { defineComponent } from 'vue';
-import Mappers from '../utils/Mappers';
-import Utils from '../utils/Utils';
+import Mappers from '../../../common/utils/Mappers';
+import Utils from '../../../common/utils/Utils';
 
 const EpisodeAutocompleteMixin = defineComponent({
   data() {

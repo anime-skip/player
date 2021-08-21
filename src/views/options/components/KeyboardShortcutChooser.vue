@@ -4,9 +4,9 @@
     :class="{
       'surface-4': !!shortcut && secondary,
       'surface-primary': !!shortcut && !secondary,
-      'surface-error': duplicate,
+      'surface-error': isDuplicate,
     }"
-    @click="showEditor"
+    @click="showKeyBindingEditor"
   >
     <pre
       v-if="shortcut"
@@ -18,13 +18,18 @@
       :tabindex="0"
       >{{ shortcut }}</pre
     >
-    <pre v-else class="opacity-medium font-mono-2 font-size-body" :tabindex="0" @click="showEditor">
+    <pre
+      v-else
+      class="opacity-medium font-mono-2 font-size-body"
+      :tabindex="0"
+      @click="showKeyBindingEditor"
+    >
 unset</pre
     >
 
     <teleport to="body">
       <div
-        v-if="isShowingEditor"
+        v-if="isShowingKeyBindingEditor"
         class="
           fixed
           inset-0
@@ -46,8 +51,8 @@ unset</pre
             font-bold
           "
         >
-          <span v-if="!editKey" class="no-selection">[Press a key]</span>
-          <pre v-else class="font-mono-2">{{ editKey }}</pre>
+          <span v-if="!currentKeyBinding" class="no-selection">[Press a key]</span>
+          <pre v-else class="font-mono-2">{{ currentKeyBinding }}</pre>
         </h5>
         <table class="w-full max-w-xs mt-8">
           <tr>
@@ -68,75 +73,75 @@ unset</pre
   </div>
 </template>
 
-<script lang="ts">
-import { GetterTypes } from '~/common/store/getterTypes';
+<script lang="ts" setup>
+import {
+  usePrimaryKeyboardShortcutPrefs,
+  useSecondaryKeyboardShortcutPrefs,
+} from '~/common/state/useKeyboardShortcutPrefs';
 import Utils from '~/common/utils/Utils';
-import { defineComponent } from 'vue';
 
-export default defineComponent({
-  props: {
-    shortcut: { type: String, default: undefined },
-    secondary: Boolean,
-  },
-  emits: {
-    update: (_pressedKey: string | undefined) => true,
-  },
-  data() {
-    return {
-      isShowingEditor: false,
-      editKey: '',
-    };
-  },
-  methods: {
-    showEditor() {
-      this.isShowingEditor = true;
-      this.editKey = '';
-    },
-    hideEditor() {
-      this.isShowingEditor = false;
-    },
-    onKeyDown(event: KeyboardEvent) {
-      if (!Utils.isModiferKeyPressed(event)) {
-        switch (event.key) {
-          case 'Escape':
-            return this.hideEditor();
-          case 'Enter':
-            console.debug('emitting', this.editKey);
-            if (this.editKey) this.$emit('update', this.editKey);
-            return this.hideEditor();
-          case 'Backspace':
-            this.$emit('update', undefined);
-            return this.hideEditor();
-        }
-      }
-      if (!Utils.isKeyComboAllowed(event)) {
-        return;
-      }
+// TODO: Test full behavior
 
-      this.editKey = Utils.keyComboFromEvent(event);
+const props = defineProps<{
+  shortcut?: string;
+  secondary?: boolean;
+}>();
+const emit = defineEmits({
+  update: (_pressedKey: string | undefined) => true,
+});
 
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      event.stopPropagation();
-    },
-  },
-  watch: {
-    isShowingEditor() {
-      if (this.isShowingEditor) {
-        document.addEventListener('keydown', this.onKeyDown);
-      } else {
-        document.removeEventListener('keydown', this.onKeyDown);
-      }
-    },
-  },
-  computed: {
-    duplicate(): boolean {
-      if (this.shortcut == null) return false;
-      const count: number | undefined =
-        this.$store.getters[GetterTypes.KEY_COMBO_COUNT_MAP][this.shortcut];
-      return count != null && count > 1;
-    },
-  },
+// Editor
+
+const isShowingKeyBindingEditor = ref(false);
+const currentKeyBinding = ref('');
+
+function showKeyBindingEditor() {
+  isShowingKeyBindingEditor.value = true;
+  currentKeyBinding.value = '';
+}
+function hideKeyBindingEditor() {
+  isShowingKeyBindingEditor.value = true;
+}
+function onKeyDown(event: KeyboardEvent) {
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  event.stopPropagation();
+
+  if (!Utils.isModiferKeyPressed(event)) {
+    switch (event.key) {
+      case 'Escape':
+        return hideKeyBindingEditor();
+      case 'Enter':
+        console.debug('emitting', currentKeyBinding.value);
+        if (currentKeyBinding.value) emit('update', currentKeyBinding.value);
+        return hideKeyBindingEditor();
+      case 'Backspace':
+        emit('update', undefined);
+        return hideKeyBindingEditor();
+    }
+  }
+  if (!Utils.isKeyComboAllowed(event)) {
+    return;
+  }
+
+  currentKeyBinding.value = Utils.keyComboFromEvent(event);
+}
+watch(isShowingKeyBindingEditor, isShowing => {
+  if (isShowing) {
+    document.addEventListener('keydown', onKeyDown);
+  } else {
+    document.removeEventListener('keydown', onKeyDown);
+  }
+});
+
+const { primaryShortcutsKeyToActionsMap } = usePrimaryKeyboardShortcutPrefs();
+const { secondaryShortcutsKeyToActionsMap } = useSecondaryKeyboardShortcutPrefs();
+const isDuplicate = computed(() => {
+  const actions = [
+    ...(primaryShortcutsKeyToActionsMap.value[currentKeyBinding.value] ?? []),
+    ...(secondaryShortcutsKeyToActionsMap.value[currentKeyBinding.value] ?? []),
+  ];
+  return actions.length > 1;
 });
 </script>
 

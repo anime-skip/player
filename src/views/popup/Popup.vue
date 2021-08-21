@@ -1,50 +1,41 @@
 <template>
-  <ExtensionRoot :class="browser" class="flex items-center justify-center">
-    <LogIn v-if="!isLoggedIn" :small="small" :close-after-login="closeAfterLogin" :close="close" />
-    <div v-else-if="closeAfterLogin" class="mt-20">
+  <div :class="browser" class="flex items-center justify-center">
+    <LogIn
+      v-if="!isLoggedIn"
+      :small="small"
+      :close-after-login="shouldCloseAfterLogin"
+      :close="close"
+    />
+    <div v-else-if="shouldCloseAfterLogin" class="mt-20">
       <Loading />
     </div>
     <PopupPreferences v-else :small="small" />
-  </ExtensionRoot>
+  </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import { GetterTypes } from '~/common/store/getterTypes';
-import { ActionTypes } from '~/common/store/actionTypes';
+<script lang="ts" setup>
+import { useIsLoggedIn } from '~/common/state/useAuth';
 import Browser from '~/common/utils/Browser';
 
-export default defineComponent({
-  props: {
-    small: Boolean,
-  },
-  data() {
-    return {
-      browser: Browser.detect(),
-    };
-  },
-  mounted(): void {
-    this.$store.dispatch(ActionTypes.INITIAL_LOAD, undefined);
-  },
-  computed: {
-    isLoggedIn(): boolean {
-      return this.$store.state.isLoggedIn;
-    },
-    isLoggingIn(): boolean {
-      return this.$store.getters[GetterTypes.IS_LOGGING_IN];
-    },
-    closeAfterLogin(): boolean {
-      const urlParams = new URLSearchParams(window?.location.search);
-      const closePopupAfterLogin = urlParams.get('closeAfterLogin');
-      return closePopupAfterLogin === 'true';
-    },
-  },
-  methods: {
-    close() {
-      window.close();
-    },
-  },
+defineProps<{
+  small?: boolean;
+}>();
+
+const browser = Browser.detect();
+
+// TODO: verify no INTIAL_LOAD call works
+
+const isLoggedIn = useIsLoggedIn();
+
+const shouldCloseAfterLogin = computed(() => {
+  const urlParams = new URLSearchParams(window?.location.search);
+  const closePopupAfterLogin = urlParams.get('closeAfterLogin');
+  return closePopupAfterLogin === 'true';
 });
+
+function close() {
+  window.close();
+}
 </script>
 
 <style scoped>

@@ -130,29 +130,6 @@ interface CreateEpisodePrefill {
   absoluteNumber?: string;
 }
 
-type KeyboardShortcutAction =
-  | 'playPause'
-  | 'toggleFullscreen'
-  | 'volumeUp'
-  | 'volumeDown'
-  | 'hideDialog'
-  | 'nextTimestamp'
-  | 'previousTimestamp'
-  | 'advanceFrame'
-  | 'advanceSmall'
-  | 'advanceMedium'
-  | 'advanceLarge'
-  | 'rewindFrame'
-  | 'rewindSmall'
-  | 'rewindMedium'
-  | 'rewindLarge'
-  | 'createTimestamp'
-  | 'saveTimestamps'
-  | 'discardChanges'
-  | 'takeScreenshot';
-
-type KeyboardShortcutsMap = { [keyCombo in KeyboardShortcutAction]?: string };
-
 declare interface TextInputRef {
   focus(selectAll?: boolean): void;
 }

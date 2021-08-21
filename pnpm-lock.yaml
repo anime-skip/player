@@ -1,6 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@anime-skip/axios-api': ^2.3.2
   '@anime-skip/ui': ^1.2.1
   '@antfu/eslint-config': ^0.7.0
   '@iconify/json': ^1.1.386
@@ -61,12 +62,14 @@ specifiers:
   vue-global-api: ^0.2.4
   vue-router: ^4.0.11
   vue-tsc: ^0.2.2
+  vue-use-request-state: ^0.1.0
   vuex: ^4.0.2
   web-ext: ^6.2.0
   webext-bridge: ^4.0.1
   webextension-polyfill-ts: 0.26.0
 
 dependencies:
+  '@anime-skip/axios-api': 2.3.2
   '@anime-skip/ui': 1.2.1_ec1b06fcfbd6e462bf1374dd899f0179
   axios: 0.21.1
   fuzzysort: 1.1.4
@@ -77,6 +80,7 @@ dependencies:
   vue: 3.2.2
   vue-demi: 0.11.2_vue@3.2.2
   vue-router: 4.0.11_vue@3.2.2
+  vue-use-request-state: 0.1.0_vue@3.2.2
   vuex: 4.0.2_vue@3.2.2
   webext-bridge: 4.0.1
   webextension-polyfill-ts: 0.26.0
@@ -135,6 +139,13 @@ devDependencies:
   web-ext: 6.2.0_24ad70180841597f75a3605f48f35c1d
 
 packages:
+
+  /@anime-skip/axios-api/2.3.2:
+    resolution: {integrity: sha512-VFed8pniQt5ourAdVaLde2yty44aXd6JqZWOmXTRNMFi/BBmP9Ui9xt1yoaapuu2RWI8s9iea5f4QTbP5J915A==, tarball: download/@anime-skip/axios-api/2.3.2/43e534f48c6acb608fd4b3ef67821ae7b0774c859a6027c27f2c14f588cbd712}
+    dependencies:
+      axios: 0.19.2
+      md5: 2.3.0
+    dev: false
 
   /@anime-skip/ui/1.2.1_ec1b06fcfbd6e462bf1374dd899f0179:
     resolution: {integrity: sha512-K8rVYqKmZYT4Ft1cXfZAKSD3jwMji1dZ/f+coTXgNfAxGWcRo1/U3MmhbKOlUAv5min1C83CtBys9jxlcC9BMA==, tarball: download/@anime-skip/ui/1.2.1/f8c41c1d8ffa5affc761b745ae9ccf73473d6c9b1b1d2e7d3bee1a126bc8e80a}
@@ -1366,6 +1377,13 @@ packages:
     resolution: {integrity: sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==}
     dev: true
 
+  /axios/0.19.2:
+    resolution: {integrity: sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==}
+    deprecated: Critical security vulnerability fixed in v0.21.1. For more information, see https://github.com/axios/axios/pull/3410
+    dependencies:
+      follow-redirects: 1.5.10
+    dev: false
+
   /axios/0.21.1:
     resolution: {integrity: sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==}
     dependencies:
@@ -2002,6 +2020,12 @@ packages:
     dependencies:
       ms: 2.0.0
     dev: true
+
+  /debug/3.1.0:
+    resolution: {integrity: sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==}
+    dependencies:
+      ms: 2.0.0
+    dev: false
 
   /debug/3.2.7:
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
@@ -3215,6 +3239,13 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
+    dev: false
+
+  /follow-redirects/1.5.10:
+    resolution: {integrity: sha512-0V5l4Cizzvqt5D44aTXbFZz+FtyXV1vrDN6qrelxtfYQKW0KO0W2T/hkE8xvGa/540LkZlkaUjO4ailYTFtHVQ==}
+    engines: {node: '>=4.0'}
+    dependencies:
+      debug: 3.1.0
     dev: false
 
   /forever-agent/0.6.1:
@@ -4703,7 +4734,6 @@ packages:
 
   /ms/2.0.0:
     resolution: {integrity: sha1-VgiurfwAvmwpAd9fmGF4jeDVl8g=}
-    dev: true
 
   /ms/2.1.1:
     resolution: {integrity: sha512-tgp+dl5cGk28utYktBsrFqA7HKgrhgPsg6Z/EfhWI4gl1Hwq8B/GmY/0oXZ6nF8hDVesS/FpnYaD/kOWhYQvyg==}
@@ -7192,6 +7222,14 @@ packages:
       typescript: 4.3.5
       vscode-vue-languageservice: 0.26.16
     dev: true
+
+  /vue-use-request-state/0.1.0_vue@3.2.2:
+    resolution: {integrity: sha512-TgdYjy3dRd2aMeyvH4kSVYqO2MuZl9Zt/BSZJh8/KbEXDKzA5aV5WsBaNtD3gZeNV0k0a1LqlxNTonRH6FV2rw==}
+    peerDependencies:
+      vue: '>=3'
+    dependencies:
+      vue: 3.2.2
+    dev: false
 
   /vue/3.2.2:
     resolution: {integrity: sha512-D/LuzAV30CgNJYGyNheE/VUs5N4toL2IgmS6c9qeOxvyh0xyn4exyRqizpXIrsvfx34zG9x5gCI2tdRHCGvF9w==}

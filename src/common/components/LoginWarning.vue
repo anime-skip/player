@@ -6,31 +6,23 @@
   </p>
 </template>
 
-<script lang="ts">
-import useLoginDialog from '~/common/composition/useLoginDialog';
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
 import Messenger from '~/common/utils/Messenger';
+import { useShowLoginOverlay } from '~/content-scripts/player/state/useDialogState';
 
-export default defineComponent({
-  props: {
-    before: { type: String, default: undefined },
-  },
-  setup() {
-    const { openLoginDialog: openPlayerLoginDialog } = useLoginDialog();
-    const onClickLogin = () => {
-      const isInInjectedPlayer = !window.location.protocol.includes('extension');
-      if (isInInjectedPlayer) {
-        openPlayerLoginDialog();
-      } else {
-        new Messenger<RuntimeMessageTypes>('General Settings').send(
-          '@anime-skip/open-login',
-          undefined
-        );
-      }
-    };
-    return {
-      onClickLogin,
-    };
-  },
-});
+defineProps<{ before?: string }>();
+
+const showLoginOverlay = useShowLoginOverlay();
+
+const onClickLogin = () => {
+  const isInInjectedPlayer = !window.location.protocol.includes('extension');
+  if (isInInjectedPlayer) {
+    showLoginOverlay();
+  } else {
+    new Messenger<RuntimeMessageTypes>('General Settings').send(
+      '@anime-skip/open-login',
+      undefined
+    );
+  }
+};
 </script>

@@ -1,68 +1,38 @@
 <template>
-  <ExtensionRoot class="max-w-screen-md mx-auto space-y-8 py-16 px-16 md:px-0">
+  <div class="max-w-screen-md mx-auto space-y-8 py-16 px-16 md:px-0">
     <PopupHeader title="All Settings" />
     <div class="space-y-16">
       <GeneralSettings>
         <RaisedCheckbox
           label="Hide timeline when minimized"
           :checked="hideTimelineWhenMinimized"
-          @click="togglePreference('hideTimelineWhenMinimized')"
+          @click="toggleBooleanPreference('hideTimelineWhenMinimized')"
           :disabled="!isLoggedIn"
         />
         <RaisedCheckbox
           label="Allow minimized toolbar when editing"
           :checked="minimizeToolbarWhenEditing"
-          @click="togglePreference('minimizeToolbarWhenEditing')"
+          @click="toggleBooleanPreference('minimizeToolbarWhenEditing')"
           :disabled="!isLoggedIn"
         />
       </GeneralSettings>
       <SkippedSections />
       <KeyboardShortcutTable />
     </div>
-  </ExtensionRoot>
+  </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue';
-import { MutationTypes } from '~/common/store/mutationTypes';
-import { ActionTypes } from '~/common/store/actionTypes';
-import usePreferenceEditor from '~/common/composition/preferenceEditor';
-import { useStore } from 'vuex';
+<script lang="ts" setup>
+import { computed } from 'vue';
+import { useIsLoggedIn } from '~/common/state/useAuth';
+import { useGeneralPreferences, useToggleBooleanPref } from '~/common/state/useGeneralPreferences';
 
-export default defineComponent({
-  setup() {
-    const store = useStore();
-    const isLoggedIn = computed(() => store.state.isLoggedIn);
-    const { togglePreference, getBooleanPreference } = usePreferenceEditor();
+// TODO: verify no INTIAL_LOAD call works
 
-    const hideTimelineWhenMinimized = computed(() =>
-      getBooleanPreference('hideTimelineWhenMinimized')
-    );
-    const minimizeToolbarWhenEditing = computed(() =>
-      getBooleanPreference('minimizeToolbarWhenEditing')
-    );
+const isLoggedIn = useIsLoggedIn();
+const { preferences } = useGeneralPreferences();
+const toggleBooleanPreference = useToggleBooleanPref();
 
-    return {
-      isLoggedIn,
-      togglePreference,
-      hideTimelineWhenMinimized,
-      minimizeToolbarWhenEditing,
-    };
-  },
-  mounted(): void {
-    this.$store.dispatch(ActionTypes.INITIAL_LOAD, undefined);
-  },
-  methods: {
-    updatePrimaryShortcut(type: KeyboardShortcutAction): (value: string) => void {
-      return (value: string | undefined): void => {
-        this.$store.commit(MutationTypes.SET_PRIMARY_KEYBOARD_SHORTCUT, { type, value });
-      };
-    },
-    updateSecondaryShortcut(type: KeyboardShortcutAction): (value: string) => void {
-      return (value: string | undefined): void => {
-        this.$store.commit(MutationTypes.SET_SECONDARY_KEYBOARD_SHORTCUT, { type, value });
-      };
-    },
-  },
-});
+const hideTimelineWhenMinimized = computed(() => preferences.value.hideTimelineWhenMinimized);
+const minimizeToolbarWhenEditing = computed(() => preferences.value.minimizeToolbarWhenEditing);
 </script>

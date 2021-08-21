@@ -17,36 +17,36 @@
         <th class="subtitle-1">Secondary</th>
       </tr>
       <KeyboardShortcutRow
-        top
+        group-top
         name="Play/pause"
         action-name="playPause"
         v-on="{
-          updatePrimary: updatePrimaryShortcut('playPause'),
-          updateSecondary: updateSecondaryShortcut('playPause'),
+          updatePrimary: updatePrimaryKeyBinding('playPause'),
+          updateSecondary: updateSecondaryKeyBinding('playPause'),
         }"
       />
       <KeyboardShortcutRow
         name="Volume up"
         action-name="volumeUp"
         v-on="{
-          updatePrimary: updatePrimaryShortcut('volumeUp'),
-          updateSecondary: updateSecondaryShortcut('volumeUp'),
+          updatePrimary: updatePrimaryKeyBinding('volumeUp'),
+          updateSecondary: updateSecondaryKeyBinding('volumeUp'),
         }"
       />
       <KeyboardShortcutRow
         name="Volume down"
         action-name="volumeDown"
         v-on="{
-          updatePrimary: updatePrimaryShortcut('volumeDown'),
-          updateSecondary: updateSecondaryShortcut('volumeDown'),
+          updatePrimary: updatePrimaryKeyBinding('volumeDown'),
+          updateSecondary: updateSecondaryKeyBinding('volumeDown'),
         }"
       />
       <KeyboardShortcutRow
         name="Toggle fullscreen"
         action-name="toggleFullscreen"
         v-on="{
-          updatePrimary: updatePrimaryShortcut('toggleFullscreen'),
-          updateSecondary: updateSecondaryShortcut('toggleFullscreen'),
+          updatePrimary: updatePrimaryKeyBinding('toggleFullscreen'),
+          updateSecondary: updateSecondaryKeyBinding('toggleFullscreen'),
         }"
       />
       <KeyboardShortcutRow
@@ -54,166 +54,157 @@
         name="Take screenshot"
         action-name="takeScreenshot"
         v-on="{
-          updatePrimary: updatePrimaryShortcut('takeScreenshot'),
-          updateSecondary: updateSecondaryShortcut('takeScreenshot'),
+          updatePrimary: updatePrimaryKeyBinding('takeScreenshot'),
+          updateSecondary: updateSecondaryKeyBinding('takeScreenshot'),
         }"
       />
       <KeyboardShortcutRow
-        bottom
+        group-bottom
         name="Close dialog"
         action-name="hideDialog"
         v-on="{
-          updatePrimary: updatePrimaryShortcut('hideDialog'),
-          updateSecondary: updateSecondaryShortcut('hideDialog'),
+          updatePrimary: updatePrimaryKeyBinding('hideDialog'),
+          updateSecondary: updateSecondaryKeyBinding('hideDialog'),
         }"
       />
       <tr>
         <th class="subtitle-1 text-left">Fast Forward</th>
       </tr>
       <KeyboardShortcutRow
-        top
+        group-top
         name="Advance 2 second"
         action-name="advanceSmall"
         v-on="{
-          updatePrimary: updatePrimaryShortcut('advanceSmall'),
-          updateSecondary: updateSecondaryShortcut('advanceSmall'),
+          updatePrimary: updatePrimaryKeyBinding('advanceSmall'),
+          updateSecondary: updateSecondaryKeyBinding('advanceSmall'),
         }"
       />
       <KeyboardShortcutRow
         name="Advance 5 seconds"
         action-name="advanceMedium"
         v-on="{
-          updatePrimary: updatePrimaryShortcut('advanceMedium'),
-          updateSecondary: updateSecondaryShortcut('advanceMedium'),
+          updatePrimary: updatePrimaryKeyBinding('advanceMedium'),
+          updateSecondary: updateSecondaryKeyBinding('advanceMedium'),
         }"
       />
       <KeyboardShortcutRow
-        bottom
+        group-bottom
         name="Advance 90 seconds"
         action-name="advanceLarge"
         v-on="{
-          updatePrimary: updatePrimaryShortcut('advanceLarge'),
-          updateSecondary: updateSecondaryShortcut('advanceLarge'),
+          updatePrimary: updatePrimaryKeyBinding('advanceLarge'),
+          updateSecondary: updateSecondaryKeyBinding('advanceLarge'),
         }"
       />
       <tr>
         <th class="subtitle-1 text-left">Rewind</th>
       </tr>
       <KeyboardShortcutRow
-        top
+        group-top
         name="Rewind 2 second"
         action-name="rewindSmall"
         v-on="{
-          updatePrimary: updatePrimaryShortcut('rewindSmall'),
-          updateSecondary: updateSecondaryShortcut('rewindSmall'),
+          updatePrimary: updatePrimaryKeyBinding('rewindSmall'),
+          updateSecondary: updateSecondaryKeyBinding('rewindSmall'),
         }"
       />
       <KeyboardShortcutRow
         name="Rewind 5 seconds"
         action-name="rewindMedium"
         v-on="{
-          updatePrimary: updatePrimaryShortcut('rewindMedium'),
-          updateSecondary: updateSecondaryShortcut('rewindMedium'),
+          updatePrimary: updatePrimaryKeyBinding('rewindMedium'),
+          updateSecondary: updateSecondaryKeyBinding('rewindMedium'),
         }"
       />
       <KeyboardShortcutRow
-        bottom
+        group-bottom
         name="Rewind 90 seconds"
         action-name="rewindLarge"
         v-on="{
-          updatePrimary: updatePrimaryShortcut('rewindLarge'),
-          updateSecondary: updateSecondaryShortcut('rewindLarge'),
+          updatePrimary: updatePrimaryKeyBinding('rewindLarge'),
+          updateSecondary: updateSecondaryKeyBinding('rewindLarge'),
         }"
       />
       <tr>
         <th class="subtitle-1 text-left">Timestamp Editing</th>
       </tr>
       <KeyboardShortcutRow
-        top
+        group-top
         name="Frame rewind"
         action-name="rewindFrame"
         v-on="{
-          updatePrimary: updatePrimaryShortcut('rewindFrame'),
-          updateSecondary: updateSecondaryShortcut('rewindFrame'),
+          updatePrimary: updatePrimaryKeyBinding('rewindFrame'),
+          updateSecondary: updateSecondaryKeyBinding('rewindFrame'),
         }"
       />
       <KeyboardShortcutRow
         name="Frame advance"
         action-name="advanceFrame"
         v-on="{
-          updatePrimary: updatePrimaryShortcut('advanceFrame'),
-          updateSecondary: updateSecondaryShortcut('advanceFrame'),
+          updatePrimary: updatePrimaryKeyBinding('advanceFrame'),
+          updateSecondary: updateSecondaryKeyBinding('advanceFrame'),
         }"
       />
       <KeyboardShortcutRow
         name="Rewind to/edit the previous timestamp"
         action-name="nextTimestamp"
         v-on="{
-          updatePrimary: updatePrimaryShortcut('nextTimestamp'),
-          updateSecondary: updateSecondaryShortcut('nextTimestamp'),
+          updatePrimary: updatePrimaryKeyBinding('nextTimestamp'),
+          updateSecondary: updateSecondaryKeyBinding('nextTimestamp'),
         }"
       />
       <KeyboardShortcutRow
         name="Advance to/edit the next timestamp"
         action-name="previousTimestamp"
         v-on="{
-          updatePrimary: updatePrimaryShortcut('previousTimestamp'),
-          updateSecondary: updateSecondaryShortcut('previousTimestamp'),
+          updatePrimary: updatePrimaryKeyBinding('previousTimestamp'),
+          updateSecondary: updateSecondaryKeyBinding('previousTimestamp'),
         }"
       />
       <KeyboardShortcutRow
         name="Create timestamp"
         action-name="createTimestamp"
         v-on="{
-          updatePrimary: updatePrimaryShortcut('createTimestamp'),
-          updateSecondary: updateSecondaryShortcut('createTimestamp'),
+          updatePrimary: updatePrimaryKeyBinding('createTimestamp'),
+          updateSecondary: updateSecondaryKeyBinding('createTimestamp'),
         }"
       />
       <KeyboardShortcutRow
         name="Save timestamps"
         action-name="saveTimestamps"
         v-on="{
-          updatePrimary: updatePrimaryShortcut('saveTimestamps'),
-          updateSecondary: updateSecondaryShortcut('saveTimestamps'),
+          updatePrimary: updatePrimaryKeyBinding('saveTimestamps'),
+          updateSecondary: updateSecondaryKeyBinding('saveTimestamps'),
         }"
       />
       <KeyboardShortcutRow
-        bottom
+        group-bottom
         name="Discard changes"
         action-name="discardChanges"
         v-on="{
-          updatePrimary: updatePrimaryShortcut('discardChanges'),
-          updateSecondary: updateSecondaryShortcut('discardChanges'),
+          updatePrimary: updatePrimaryKeyBinding('discardChanges'),
+          updateSecondary: updateSecondaryKeyBinding('discardChanges'),
         }"
       />
     </table>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import { MutationTypes } from '~/common/store/mutationTypes';
+<script lang="ts" setup>
+import {
+  useUpdatePrimaryKeyBinding,
+  useUpdateSecondaryKeyBinding,
+} from '~/common/state/useKeyboardShortcutPrefs';
 import Browser from '~/common/utils/Browser';
 
-export default defineComponent({
-  data() {
-    return {
-      isFirefox: Browser.detect() === 'firefox',
-    };
-  },
-  methods: {
-    updatePrimaryShortcut(type: KeyboardShortcutAction): (value: string) => void {
-      return (value: string | undefined): void => {
-        this.$store.commit(MutationTypes.SET_PRIMARY_KEYBOARD_SHORTCUT, { type, value });
-      };
-    },
-    updateSecondaryShortcut(type: KeyboardShortcutAction): (value: string) => void {
-      return (value: string | undefined): void => {
-        this.$store.commit(MutationTypes.SET_SECONDARY_KEYBOARD_SHORTCUT, { type, value });
-      };
-    },
-  },
-});
+// Updates
+
+const updatePrimaryKeyBinding = useUpdatePrimaryKeyBinding();
+const updateSecondaryKeyBinding = useUpdateSecondaryKeyBinding();
+
+// Browser Specific Settings
+
+const isFirefox = Browser.detect() === 'firefox';
 </script>
 
 <style scoped>

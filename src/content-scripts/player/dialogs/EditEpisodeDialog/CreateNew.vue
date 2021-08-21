@@ -32,7 +32,6 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import ShowAutocompleteMixin from '~/common/mixins/ShowAutocomplete';
-import { ActionTypes } from '~/common/store/actionTypes';
 
 export default defineComponent({
   mixins: [ShowAutocompleteMixin],

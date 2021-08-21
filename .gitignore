@@ -21,12 +21,16 @@ extension/options
 extension/popup
 extension/manifest.json
 
+# Environment
+#
+.env*
+*.env
+.chrome.pem
+
 # Other
 #
 .DS_Store
 components.d.ts
 *.log
-*.env
 TODO.md
-.chrome.pem
 .old-webpack-extension

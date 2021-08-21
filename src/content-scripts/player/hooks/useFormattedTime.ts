@@ -1,5 +1,5 @@
-import { computed, Ref } from 'vue';
-import Utils from '../utils/Utils';
+import { Ref } from 'vue';
+import Utils from '~/common/utils/Utils';
 
 export default function useFormattedTime(
   currentTimeInS: Ref<number>,

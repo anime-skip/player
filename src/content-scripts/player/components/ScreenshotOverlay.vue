@@ -37,9 +37,7 @@
 
 <script lang="ts">
 import CaptureScreenshot from '~/common/utils/CaptureScreenshot';
-import { useKeyboardShortcuts } from '~/common/mixins/KeyboardShortcuts';
 import { defineComponent, ref } from 'vue';
-import { useStore } from 'vuex';
 import Browser from '~/common/utils/Browser';
 
 interface ImageDetails {

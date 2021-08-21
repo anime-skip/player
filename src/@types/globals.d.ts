@@ -44,7 +44,6 @@ declare function getPlayerOptions(): Promise<PlayerOptionGroup[]> | PlayerOption
  */
 declare function onVideoChanged(callback: (video: HTMLVideoElement) => void): void;
 
-declare var Api: Api.Implementation;
 declare var service: Service;
 declare var serviceDisplayName: ServiceDisplayName;
 

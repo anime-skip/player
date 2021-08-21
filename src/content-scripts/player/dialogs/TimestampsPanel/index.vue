@@ -14,10 +14,6 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import VideoControllerMixin from '~/common/mixins/VideoController';
-import KeyboardShortcutsMixin, { KeyboardShortcutMap } from '~/common/mixins/KeyboardShortcuts';
-import { MutationTypes } from '~/common/store/mutationTypes';
-import { GetterTypes } from '~/common/store/getterTypes';
 
 export default defineComponent({
   name: 'TimestampsPanel',

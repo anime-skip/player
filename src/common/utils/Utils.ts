@@ -1,6 +1,3 @@
-import { Store } from '~/common/store';
-import { ActionTypes } from '../store/actionTypes';
-
 export default class Utils {
   /**
    * @param currentTime The time to begin looking for timestamps after
@@ -349,18 +346,6 @@ export default class Utils {
     return key;
   }
 
-  public static findShortcutAction(
-    keyCombo: string,
-    keyMapping: KeyboardShortcutsMap
-  ): KeyboardShortcutAction | undefined {
-    for (const action in keyMapping) {
-      if (keyMapping[action as KeyboardShortcutAction] === keyCombo) {
-        return action as KeyboardShortcutAction;
-      }
-    }
-    return undefined;
-  }
-
   public static computeTimestampsOffset(baseDuration: number, duration: number): number {
     return duration - baseDuration;
   }
@@ -386,15 +371,6 @@ export default class Utils {
     if (lowBound != null && value < lowBound) return lowBound;
     if (highBound != null && value > highBound) return highBound;
     return value;
-  }
-
-  public static async apiAction<R, A extends unknown[]>(
-    store: Store,
-    apiCall: (...args: A) => Promise<R>,
-    ...args: A
-  ): Promise<R> {
-    // @ts-expect-error: Type generics did not make it through to dispatch()
-    return await store.dispatch(ActionTypes.API_CALL, { apiCall, args });
   }
 
   public static setIntervalUntil(callback: () => boolean, interval: number, timeout: number): void {

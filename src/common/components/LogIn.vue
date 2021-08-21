@@ -3,7 +3,7 @@
     <div class="w-popup-sm p-6 flex flex-col space-y-4">
       <PopupHeader title="Log In" />
       <TextInput
-        ref="username"
+        ref="usernameInput"
         placeholder="Username"
         autocomplete="username"
         v-model:value="username"
@@ -35,8 +35,12 @@
       </TextInput>
       <div class="flex flex-row-reverse justify-between items-center">
         <RaisedButton @click="login">Log In</RaisedButton>
-        <a href="https://www.anime-skip.com/sign-up" target="_blank" class="space-x-2 body-1">
-          <span>Sign Up</span>
+        <a
+          href="https://www.anime-skip.com/sign-up"
+          target="_blank"
+          class="space-x-2 body-1 text-on-surface"
+        >
+          Sign Up
           <Icon
             class="inline"
             size="sm"
@@ -48,52 +52,50 @@
   </LoadingOverlay>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue';
-import { ActionTypes } from '~/common/store/actionTypes';
-import { GetterTypes } from '~/common/store/getterTypes';
-import { TextInput } from '@anime-skip/ui';
-import Utils from '~/common/utils/Utils';
+<script lang="ts" setup>
+import useRequestState from 'vue-use-request-state';
+import { browser, Storage } from 'webextension-polyfill-ts';
+import * as Api from '../hooks/api';
+import { useApiClient } from '../hooks/useApiClient';
+import { AUTH_STORAGE_KEY, AUTH_STORAGE_LOCATION } from '../state/useAuth';
 
-export default defineComponent({
-  props: {
-    closeAfterLogin: Boolean,
-    close: { type: Function as PropType<() => void>, default: undefined },
-  },
-  data() {
-    return {
-      isError: false,
-      username: '',
-      password: '',
+const props = defineProps<{
+  closeAfterLogin?: boolean;
+  close?: () => void;
+}>();
+const api = useApiClient();
+
+// Login
+
+const { wrapRequest, isFailure: isLogInError, isLoading: isLoggingIn } = useRequestState();
+const username = ref('');
+const password = ref('');
+const performLogin = Api.useLogin(api);
+const login = wrapRequest(async () => {
+  const res = await performLogin(username.value, password.value);
+  username.value = '';
+  password.value = '';
+
+  if (props.closeAfterLogin) {
+    // Wait for login to be saved before closing
+    // TODO: Test this flow in options login [x], popup [x], web get started
+    const onChange = (changes: { [s: string]: Storage.StorageChange }, areaName: string) => {
+      if (
+        areaName === AUTH_STORAGE_LOCATION &&
+        changes[AUTH_STORAGE_KEY]?.newValue?.token === res!.authToken
+      ) {
+        browser.storage.onChanged.removeListener(onChange);
+        window.close();
+      }
     };
-  },
-  mounted() {
-    (this.$refs.username as typeof TextInput)?.focus();
-  },
-  computed: {
-    // TODO: compose and reuse
-    isLoggingIn(): boolean {
-      return this.$store.getters[GetterTypes.IS_LOGGING_IN];
-    },
-    isLogInError(): boolean {
-      return this.$store.getters[GetterTypes.IS_LOGIN_ERROR];
-    },
-  },
-  methods: {
-    login() {
-      const callback = async () => {
-        this.close?.();
-        // Wait for animation to finish before finishing the callback and the request state being removed
-        await Utils.sleep(500);
-      };
-      console.log('Login callback', { callback });
+    browser.storage.onChanged.addListener(onChange);
+  }
+});
 
-      this.$store.dispatch(ActionTypes.LOGIN_MANUAL, {
-        username: this.username,
-        password: this.password,
-        callback: this.closeAfterLogin ? callback : undefined,
-      });
-    },
-  },
+// Input Ref Focus
+
+const usernameInput = ref<TextInputRef>();
+onMounted(() => {
+  usernameInput.value?.focus();
 });
 </script>

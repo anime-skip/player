@@ -24,9 +24,6 @@ import { defineComponent } from 'vue';
 import RequestState from '~/common/utils/RequestState';
 import EpisodeUtils from '~/common/utils/EpisodeUtils';
 import VideoControllerMixin from '~/common/mixins/VideoController';
-import { ActionTypes } from '~/common/store/actionTypes';
-import { GetterTypes } from '~/common/store/getterTypes';
-import { MutationTypes } from '~/common/store/mutationTypes';
 
 export default defineComponent({
   mixins: [VideoControllerMixin],

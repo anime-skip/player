@@ -128,10 +128,6 @@
 import { defineComponent } from 'vue';
 import Utils from '~/common/utils/Utils';
 import { TIMESTAMP_TYPES, TIMESTAMP_SOURCES, SECONDS } from '~/common/utils/Constants';
-import VideoControllerMixin from '~/common/mixins/VideoController';
-import { MutationTypes } from '~/common/store/mutationTypes';
-import { ActionTypes } from '~/common/store/actionTypes';
-import { GetterTypes } from '~/common/store/getterTypes';
 import TimestampColors from '~/content-scripts/player/utils/TimelineColors';
 
 export default defineComponent({

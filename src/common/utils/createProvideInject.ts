@@ -3,8 +3,8 @@ export function createProvideInject<T>(label: string, defaultValue: T) {
   const updateKey = label + '-update';
 
   function provideValue() {
-    const value = ref(defaultValue);
-    provide(valueKey, value);
+    const value = readonly(reactive(ref(defaultValue)));
+    provide(valueKey, readonly(value));
 
     const update = (newValue: T) => {
       // @ts-expect-error: bad ref typing, should be fine
@@ -14,13 +14,20 @@ export function createProvideInject<T>(label: string, defaultValue: T) {
   }
 
   function useValue() {
-    return inject<T>(valueKey, defaultValue);
+    return inject<T>(valueKey, defaultValue) as Readonly<T>;
   }
 
   function useUpdate() {
-    return inject<(newValue: T) => void>(updateKey, () => {
+    const value = useValue();
+    const update = inject<(newValue: T) => void>(updateKey, () => {
       throw Error('Injected update has not been provided ');
     });
+    return (newValue: Partial<T>) => {
+      update({
+        ...value,
+        ...newValue,
+      });
+    };
   }
 
   return {

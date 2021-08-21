@@ -111,14 +111,9 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import VideoControllerMixin from '~/common/mixins/VideoController';
-import KeyboardShortcutsMixin from '~/common/mixins/KeyboardShortcuts';
 import Utils from '~/common/utils/Utils';
 import { TIMESTAMP_TYPES, TIMESTAMP_TYPE_NOT_SELECTED } from '~/common/utils/Constants';
 import fuzzysort from 'fuzzysort';
-import { ActionTypes } from '~/common/store/actionTypes';
-import { MutationTypes } from '~/common/store/mutationTypes';
-import { GetterTypes } from '~/common/store/getterTypes';
 
 export default defineComponent({
   name: 'EditTimestamp',

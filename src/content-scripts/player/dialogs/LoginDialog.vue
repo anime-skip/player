@@ -13,7 +13,6 @@
 <script lang="ts">
 import useLoginDialog from '~/common/composition/useLoginDialog';
 import { computed, defineComponent } from 'vue';
-import { useStore } from 'vuex';
 
 export default defineComponent({
   setup() {

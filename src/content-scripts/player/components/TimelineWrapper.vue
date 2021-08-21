@@ -35,11 +35,6 @@
 <script lang="ts">
 import { computed, defineComponent, ref, watch } from 'vue';
 import Utils from '~/common/utils/Utils';
-import { MutationTypes } from '~/common/store/mutationTypes';
-import { GetterTypes } from '~/common/store/getterTypes';
-import { useStore } from 'vuex';
-import { Store } from '~/common/store';
-import { useVideoController } from '~/common/mixins/VideoController';
 import TimestampColors from '~/content-scripts/player/utils/TimelineColors';
 
 export default defineComponent({

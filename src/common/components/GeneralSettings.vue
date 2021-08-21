@@ -13,7 +13,7 @@
       <raised-checkbox
         label="Auto-skip sections"
         :checked="enableAutoSkip"
-        @click="togglePreference('enableAutoSkip')"
+        @click="toggleBooleanPref('enableAutoSkip')"
         :disabled="!isLoggedIn"
       />
       <slot />
@@ -21,33 +21,21 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue';
-import { useStore } from 'vuex';
-import usePreferenceEditor from '../composition/preferenceEditor';
-import useLoginDialog from '../composition/useLoginDialog';
+<script lang="ts" setup>
+import { useIsLoggedIn } from '../state/useAuth';
+import { useGeneralPreferences, useToggleBooleanPref } from '../state/useGeneralPreferences';
 
-export default defineComponent({
-  props: {
-    small: Boolean,
-    hideLoginButton: Boolean,
-  },
-  setup() {
-    const store = useStore();
-    const isLoggedIn = computed(() => store.state.isLoggedIn);
-    const { togglePreference, getBooleanPreference } = usePreferenceEditor();
-    const enableAutoSkip = computed(() => getBooleanPreference('enableAutoSkip'));
+defineProps<{
+  small?: boolean;
+  hideLoginButton?: boolean;
+}>();
 
-    const { openLoginDialog } = useLoginDialog();
+const isLoggedIn = useIsLoggedIn();
 
-    return {
-      togglePreference,
-      enableAutoSkip,
-      isLoggedIn,
-      openLoginDialog,
-    };
-  },
-});
+const toggleBooleanPref = useToggleBooleanPref();
+
+const { preferences } = useGeneralPreferences();
+const enableAutoSkip = computed(() => preferences.value.enableAutoSkip);
 </script>
 
 <style scoped>

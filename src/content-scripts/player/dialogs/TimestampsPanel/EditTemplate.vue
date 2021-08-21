@@ -69,14 +69,10 @@
 
 <script lang="ts">
 import useRadioIcon from '~/common/composition/useRadioIcon';
-import { MutationTypes } from '~/common/store/mutationTypes';
 import { computed, defineComponent, ref } from 'vue';
-import { useStore } from 'vuex';
 import Utils from '~/common/utils/Utils';
 import { SECONDS, TIMESTAMP_TYPES } from '~/common/utils/Constants';
-import { ActionTypes } from '~/common/store/actionTypes';
 import RequestState from '~/common/utils/RequestState';
-import { GetterTypes } from '~/common/store/getterTypes';
 
 export default defineComponent({
   setup() {

@@ -24,36 +24,27 @@
   </LoadingOverlay>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
-import { useStore } from 'vuex';
-import { MutationTypes } from '~/common/store/mutationTypes';
+<script lang="ts" setup>
+import useRequestState from 'vue-use-request-state';
+import { useClearTokens } from '~/common/state/useAuth';
+import { useResetPreferences } from '~/common/state/useGeneralPreferences';
+import { sleep } from '~/common/utils/GlobalUtils';
 import Messenger from '~/common/utils/Messenger';
 
-export default defineComponent({
-  setup() {
-    const store = useStore();
+const clearTokens = useClearTokens();
+const resetPreferences = useResetPreferences();
 
-    const isLoggingOut = ref(false);
-    const logOut = () => {
-      isLoggingOut.value = true;
-      setTimeout(() => {
-        store.commit(MutationTypes.LOG_OUT);
-        isLoggingOut.value = false;
-      }, 500);
-    };
-    const openExtensionOptions = () => {
-      new Messenger<RuntimeMessageTypes>('General Settings').send(
-        '@anime-skip/open-all-settings',
-        undefined
-      );
-    };
-
-    return {
-      isLoggingOut,
-      logOut,
-      openExtensionOptions,
-    };
-  },
+const { wrapRequest, isLoading: isLoggingOut } = useRequestState();
+const logOut = wrapRequest(async () => {
+  await sleep(500);
+  clearTokens();
+  resetPreferences();
 });
+
+const openExtensionOptions = () => {
+  new Messenger<RuntimeMessageTypes>('General Settings').send(
+    '@anime-skip/open-all-settings',
+    undefined
+  );
+};
 </script>

@@ -1,3 +1,5 @@
+import { KeyboardShortcutActionToKeyBindingMap } from '../state/useKeyboardShortcutPrefs';
+
 export const persistedKeys = [
   'token' as const,
   'tokenExpiresAt' as const,
@@ -74,7 +76,7 @@ export const PLAYBACK_SPEEDS: PlaybackRate[] = [
   },
 ];
 
-export const DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS: KeyboardShortcutsMap = {
+export const DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS: KeyboardShortcutActionToKeyBindingMap = {
   playPause: 'D',
   toggleFullscreen: 'G',
   volumeUp: '↑',
@@ -96,7 +98,7 @@ export const DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS: KeyboardShortcutsMap = {
   takeScreenshot: 'ctrl+K',
 };
 
-export const DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS: KeyboardShortcutsMap = {
+export const DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS: KeyboardShortcutActionToKeyBindingMap = {
   playPause: 'Space',
   advanceMedium: '→',
   rewindMedium: '←',
@@ -269,16 +271,12 @@ const allTimestampSources: Array<Api.TimestampSource> = ['ANIME_SKIP', 'BETTER_V
 /**
  * Some services don't mess well with each other, so the integrations have been disabled
  */
-export const SUPPORTED_THIRD_PARTY_SERVICES: Record<
-  Service,
-  Array<Api.TimestampSource | undefined>
-> = {
-  example: allTimestampSources,
+export const SUPPORTED_THIRD_PARTY_SERVICES: Record<Service, Array<Api.TimestampSource>> = {
+  'test-service': allTimestampSources,
   vrv: allTimestampSources,
   funimation: allTimestampSources.filter(
-    source =>
-      // TODO: Don't support BETTER_VRV because...
-      source !== 'BETTER_VRV'
+    // Don't support BETTER_VRV because show names and durations are completely different
+    source => source !== 'BETTER_VRV'
   ),
   crunchyroll: allTimestampSources,
 };

@@ -274,6 +274,7 @@ async function build(browser: SupportedBrowser, mode: ExtensionMode, watch?: boo
   });
 
   try {
+    process.env.VITE_EXT_MODE = mode;
     await writeManifest(browser, mode);
     await Promise.all(configs.map(Vite.build));
   } catch (err) {
