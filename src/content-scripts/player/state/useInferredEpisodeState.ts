@@ -1,7 +1,6 @@
+import { RequestState } from 'vue-use-request-state';
 import * as Api from '~/common/api';
 import { createProvideInject } from '~/common/utils/createProvideInject';
-// TODO: Move RequestState imports to library
-import RequestState from '~/common/utils/RequestState';
 
 interface InferredEpisodeState {
   requestState: RequestState;

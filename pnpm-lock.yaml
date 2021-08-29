@@ -63,7 +63,7 @@ specifiers:
   vue-global-api: ^0.2.4
   vue-router: ^4.0.11
   vue-tsc: ^0.2.2
-  vue-use-request-state: ^0.2.1
+  vue-use-request-state: ^0.2.2
   vuex: ^4.0.2
   web-ext: ^6.2.0
   webext-bridge: ^4.0.1
@@ -81,7 +81,7 @@ dependencies:
   vue: 3.2.2
   vue-demi: 0.11.2_vue@3.2.2
   vue-router: 4.0.11_vue@3.2.2
-  vue-use-request-state: 0.2.1_vue@3.2.2
+  vue-use-request-state: 0.2.2_vue@3.2.2
   vuex: 4.0.2_vue@3.2.2
   webext-bridge: 4.0.1
   webextension-polyfill-ts: 0.26.0
@@ -7275,8 +7275,8 @@ packages:
       vscode-vue-languageservice: 0.26.16
     dev: true
 
-  /vue-use-request-state/0.2.1_vue@3.2.2:
-    resolution: {integrity: sha512-jLDzWObLEPKFN1IIYl8CYB0nsB790e274zOtLJ6S2ix2I/+qvuif6XYmQiJA3Z1FuOpKuUWvZyXFi/dvpBBavg==}
+  /vue-use-request-state/0.2.2_vue@3.2.2:
+    resolution: {integrity: sha512-siaeWtFzS++Hf8owQpOb9cVHdPrtHRr5ZuZX+OfiEf0SMPt2ZvpvfSY1cNMhc3Q8j0+10pfZjnGawRU2Tzbp2A==}
     peerDependencies:
       vue: '>=3'
     dependencies:

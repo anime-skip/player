@@ -1,7 +1,7 @@
+import { RequestState } from 'vue-use-request-state';
 import * as Api from '~/common/api';
 import { useApiClient } from '~/common/hooks/useApiClient';
 import Mappers from '~/common/utils/Mappers';
-import RequestState from '~/common/utils/RequestState';
 import { useUpdateEpisodeRequestState, useUpdateEpisodeState } from '../state/useEpisodeState';
 import { useUpdateInferredTimestamps } from '../state/useInferredEpisodeState';
 

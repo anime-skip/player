@@ -1,6 +1,6 @@
+import { RequestState } from 'vue-use-request-state';
 import * as Api from '~/common/api';
 import { createProvideInject } from '~/common/utils/createProvideInject';
-import RequestState from '~/common/utils/RequestState';
 import Utils from '~/common/utils/Utils';
 import { useInferredEpisodeState } from './useInferredEpisodeState';
 import { useTemplateTimestamps } from './useTemplateState';

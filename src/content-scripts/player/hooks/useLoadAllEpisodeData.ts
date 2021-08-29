@@ -1,4 +1,4 @@
-import RequestState from '~/common/utils/RequestState';
+import { RequestState } from 'vue-use-request-state';
 import { useEpisodeUrl } from '../state/useEpisodeState';
 import {
   useInferredEpisode,

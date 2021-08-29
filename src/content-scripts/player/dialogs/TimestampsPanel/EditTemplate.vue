@@ -76,11 +76,11 @@
 <script lang="ts" setup>
 import { useTimeout } from '@anime-skip/ui';
 import { computed, ref } from 'vue';
+import { RequestState } from 'vue-use-request-state';
 import * as Api from '~/common/api';
 import { TemplateType } from '~/common/api';
 import useRadioIcon from '~/common/composition/useRadioIcon';
 import { SECONDS, TIMESTAMP_TYPES } from '~/common/utils/Constants';
-import RequestState from '~/common/utils/RequestState';
 import Utils from '~/common/utils/Utils';
 import { useDeleteTemplate } from '../../hooks/useDeleteTemplate';
 import { useDisplayedTimestamps } from '../../hooks/useDisplayedTimestamps';

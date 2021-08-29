@@ -32,13 +32,12 @@
 </template>
 
 <script lang="ts" setup>
-import useRequestState from 'vue-use-request-state';
+import useRequestState, { RequestState } from 'vue-use-request-state';
 import { CreateEpisodePrefill } from '~/@types';
 import * as Api from '~/common/api';
 import { useApiClient } from '~/common/hooks/useApiClient';
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import Mappers from '~/common/utils/Mappers';
-import RequestState from '~/common/utils/RequestState';
 import { useInferredEpisode } from '../../state/useInferredEpisodeState';
 
 const prefill = ref<CreateEpisodePrefill>({

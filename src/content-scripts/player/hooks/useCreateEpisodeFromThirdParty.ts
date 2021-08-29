@@ -1,7 +1,7 @@
+import { RequestState } from 'vue-use-request-state';
 import * as Api from '~/common/api';
 import { useApiClient } from '~/common/hooks/useApiClient';
 import Mappers from '~/common/utils/Mappers';
-import RequestState from '~/common/utils/RequestState';
 import Utils from '~/common/utils/Utils';
 import { useUpdateEpisodeRequestState } from '../state/useEpisodeState';
 import { useDuration } from '../state/useVideoState';
