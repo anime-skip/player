@@ -4,6 +4,7 @@ import { loadedLog } from '~/common/utils/loadedLog';
 
 loadedLog('background/chrome-page-action.ts');
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const chrome = browser as any;
 browser.runtime.onInstalled.addListener(function (_details) {
   // eslint-disable-next-line @typescript-eslint/no-var-requires

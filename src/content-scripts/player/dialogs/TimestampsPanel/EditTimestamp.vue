@@ -4,7 +4,7 @@
       <div class="flex flex-col flex-1 space-y-2 pt-3 px-4 pb-2 overflow-y-hidden">
         <div class="flex flex-row space-x-4 pb-2 items-center">
           <div
-            ref="timeSelect"
+            ref="timeSelectRef"
             class="self-start flex-shrink-0 rounded-sm ring-primary no-firefox-dots"
             :class="{
               'ring ring-opacity-low': isTimeSelectFocused,
@@ -23,7 +23,7 @@
               <div class="w-full h-10 pl-3 pr-4 flex items-center space-x-3 no-firefox-dots">
                 <WebExtImg class="icon" src="ic_clock.svg" :draggable="false" />
                 <p class="time">
-                  {{ formattedAt }}
+                  {{ timestampAtFormatted }}
                 </p>
               </div>
             </RaisedContainer>
@@ -51,12 +51,12 @@
           </template>
         </TextInput>
         <div>
-          <p v-if="matchingTypes.length === 0" class="px-4 py-6 text-error body-2 text-center">
+          <p v-if="filteredResults.length === 0" class="px-4 py-6 text-error body-2 text-center">
             No results
           </p>
           <ul v-else>
             <li
-              v-for="t of matchingTypes"
+              v-for="t of filteredResults"
               :key="t.id"
               class="
                 flex flex-row
@@ -97,7 +97,7 @@
         Save
       </RaisedButton>
       <RaisedButton
-        v-if="shouldShowDelete"
+        v-if="isShowingDelete"
         error
         @click="onClickDelete"
         :disabled="isSaveDisabled"
@@ -109,205 +109,198 @@
   </TimestampPanelLayout>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue';
-import Utils from '~/common/utils/Utils';
-import { TIMESTAMP_TYPES, TIMESTAMP_TYPE_NOT_SELECTED } from '~/common/utils/Constants';
+<script lang="ts" setup>
+import { Utils } from '@anime-skip/ui';
 import fuzzysort from 'fuzzysort';
+import * as Api from '~/common/api';
+import { TIMESTAMP_TYPES, TIMESTAMP_TYPE_NOT_SELECTED } from '~/common/utils/Constants';
+import { useApplyTimestampDiff } from '../../hooks/useApplyTimestampDiff';
+import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
+import { useHideDialog } from '../../state/useDialogState';
+import {
+  EditTimestampMode,
+  useActiveTimestamp,
+  useClearActiveTimestamp,
+  useEditTimestampMode,
+} from '../../state/useEditingState';
+import { useEpisodeUrl } from '../../state/useEpisodeState';
+import { useVideoController, useVideoState } from '../../state/useVideoState';
+import { isTimestampLocal } from '../../utils/isTimestampLocal';
 
-export default defineComponent({
-  name: 'EditTimestamp',
-  mixins: [VideoControllerMixin, KeyboardShortcutsMixin],
-  props: {
-    initialTab: {
-      type: String as PropType<'edit' | 'details'>,
-      required: true,
-    },
-  },
-  mounted() {
-    this.reset();
-    // Because this happens after the render, we have to render again, otherwise when you click edit
-    // on the list ite, it will not start with a type selected on this component. This should be
-    // solved by vue3/composition
-    this.$forceUpdate();
+const props = defineProps<{
+  initialTab: 'edit' | 'details';
+}>();
 
-    this.focusOnTimeSelect();
-  },
-  unmounted() {
-    this.clearActiveTimestamp();
-    this.clearEditTimestampMode();
-    this.selectedType = undefined;
-  },
-  watch: {
-    activeTimestamp(newTimestamp: Api.AmbiguousTimestamp, oldTimestamp: Api.AmbiguousTimestamp) {
-      if (newTimestamp && newTimestamp.id !== oldTimestamp?.id) {
-        this.reset();
-      }
-    },
-    matchingTypes(current: Api.TimestampType[], _old: Api.TimestampType[]) {
-      if (current.length > 0) {
-        this.selectType(current[0]);
-      }
-    },
-  },
-  data() {
-    return {
-      typeFilter: '',
-      selectedType: undefined as Api.TimestampType | undefined,
-      isTimeSelectFocused: false,
-    };
-  },
-  computed: {
-    activeTimestamp(): Api.AmbiguousTimestamp | undefined {
-      return this.$store.state.activeTimestamp;
-    },
-    episodeUrl(): Api.EpisodeUrlNoEpisode | undefined {
-      return this.$store.state.episodeUrl;
-    },
-    editTimestampMode(): 'add' | 'edit' | undefined {
-      return this.$store.state.editTimestampMode;
-    },
-    activeDialog(): string | undefined {
-      return this.$store.state.activeDialog;
-    },
-    isSaveDisabled(): boolean {
-      // Don't have the info to save it
-      if (this.activeTimestamp == null || this.episodeUrl == null) {
-        return true;
-      }
-      if (typeof this.activeTimestamp.id === 'number') {
-        return this.selectedType == null;
-      }
-      return this.activeTimestamp.typeId == TIMESTAMP_TYPE_NOT_SELECTED;
-    },
-    matchingTypes(): Api.TimestampType[] {
-      const filter = this.typeFilter.trim();
-      if (filter == '') return TIMESTAMP_TYPES;
+const videoState = useVideoState();
+const { play } = useVideoController();
+const episodeUrl = useEpisodeUrl();
+const editTimestampMode = useEditTimestampMode();
 
-      const results = fuzzysort.go(this.typeFilter, TIMESTAMP_TYPES, { key: 'name', limit: 5 });
-      return results.map(item => item.obj);
-    },
-    formattedAt(): string {
-      if (this.activeTimestamp == null) {
-        return 'No timestamp selected';
-      }
-      return Utils.formatSeconds(this.activeTimestamp.at, true);
-    },
-    shouldShowDelete(): boolean {
-      return this.editTimestampMode === 'edit';
-    },
-    title(): string {
-      if (this.editTimestampMode == null) return 'ERROR';
-      if (this.editTimestampMode === 'add') return 'New Timestamp';
-      return 'Edit Timestamp';
-    },
-  },
-  methods: {
-    hideDialog(): void {
-      this.$store.dispatch(ActionTypes.SHOW_DIALOG, undefined);
-    },
-    clearActiveTimestamp(): void {
-      this.$store.commit(MutationTypes.CLEAR_ACTIVE_TIMESTAMP, undefined);
-    },
-    clearEditTimestampMode(): void {
-      this.$store.commit(MutationTypes.CLEAR_EDIT_TIMESTAMP_MODE, undefined);
-    },
-    setActiveTimestamp(timestamp: Api.AmbiguousTimestamp): void {
-      this.$store.commit(MutationTypes.SET_ACTIVE_TIMESTAMP, timestamp);
-    },
-    updateTimestampInDrafts(newTimestamp: Api.AmbiguousTimestamp): void {
-      this.$store.commit(MutationTypes.UPDATE_TIMESTAMP_IN_DRAFTS, newTimestamp);
-    },
-    deleteDraftTimestamp(deletedTimestamp: Api.AmbiguousTimestamp): void {
-      this.$store.commit(MutationTypes.DELETE_DRAFT_TIMESTAMP, deletedTimestamp);
-    },
-    reset() {
-      this.selectedType = TIMESTAMP_TYPES.find(type => type.id === this.activeTimestamp?.typeId);
-      this.typeFilter = '';
-    },
-    updateTimestamp(): void {
-      (this.$refs.timeSelect as HTMLDivElement | undefined)?.focus();
-      if (this.activeTimestamp != null) {
-        const newTimestamp = {
-          ...this.activeTimestamp,
-          at: this.getCurrentTime(),
-        };
-        this.setActiveTimestamp(
-          this.$store.getters[GetterTypes.APPLY_TIMESTAMP_DIFF](newTimestamp)
-        );
-      }
-    },
-    isTypeSelected(type: Api.TimestampType): boolean {
-      return this.selectedType != null && type.id === this.selectedType.id;
-    },
-    selectType(type: Api.TimestampType) {
-      this.selectedType = type;
-      this.$forceUpdate();
-    },
-    leaveDialog(): void {
-      this.play();
-      if (this.initialTab === 'edit') {
-        this.hideDialog();
-      } else {
-        this.clearActiveTimestamp();
-      }
-    },
-    onClickDone() {
-      if (this.activeTimestamp == null) {
-        throw new Error("Cannot click done when there isn't an active timestamp to be done with");
-      }
-      if (this.selectedType == null) {
-        throw new Error("Cannot click done when the timestamp type hasn't been selected");
-      }
-      const base = this.activeTimestamp;
-      const updatedTimestamp: Api.AmbiguousTimestamp = this.$store.getters[
-        GetterTypes.APPLY_TIMESTAMP_DIFF
-      ]({
-        at: base.at,
-        typeId: this.selectedType.id,
-        id: base.id,
-        source: base.source,
-      });
-      this.updateTimestampInDrafts(updatedTimestamp);
-      this.leaveDialog();
-    },
-    onClickDelete() {
-      if (this.activeTimestamp == null) {
-        throw new Error("Cannot delete the active timestamp when there isn't an active timestamp");
-      }
-      this.deleteDraftTimestamp(this.activeTimestamp);
-      this.leaveDialog();
-    },
-    onPressUp() {
-      const types = this.matchingTypes;
-      if (types.length === 0) return;
+// Active Timestamp Tracking
 
-      const index = types.findIndex(type => type.id === this.selectedType?.id);
-      const newIndex = (types.length + index - 1) % types.length;
-      this.selectType(types[newIndex]);
-    },
-    onPressDown() {
-      const types = this.matchingTypes;
-      if (types.length === 0) return;
+const activeTimestamp = useActiveTimestamp();
 
-      const index = types.findIndex(type => type.id === this.selectedType?.id);
-      const newIndex = (index + 1) % types.length;
-      this.selectType(types[newIndex]);
-    },
-    focusOnTimeSelect(): void {
-      if (this.$refs.timeSelect != null) {
-        (this.$refs.timeSelect as HTMLElement).focus();
-      } else {
-        const interval = setInterval(() => {
-          if (this.$refs.timeSelect != null) {
-            (this.$refs.timeSelect as HTMLElement).focus();
-            clearInterval(interval);
-          }
-        }, 200);
-      }
-    },
-  },
+function reset() {
+  selectedType.value = TIMESTAMP_TYPES.find(type => type.id === activeTimestamp.value?.typeId);
+  typeFilter.value = '';
+}
+
+watch(activeTimestamp, (newTimestamp, oldTimestamp) => {
+  if (newTimestamp && newTimestamp.id !== oldTimestamp?.id) {
+    reset();
+  }
 });
+
+onMounted(() => {
+  reset();
+  // TODO
+  // Because this happens after the render, we have to render again, otherwise when you click edit
+  // on the list ite, it will not start with a type selected on this component. This should be
+  // solved by vue3/composition
+  // this.$forceUpdate();
+  focusOnTimeSelect();
+});
+
+const clearActiveTimestamp = useClearActiveTimestamp();
+onUnmounted(() => {
+  clearActiveTimestamp();
+  // TODO: Not necessary?
+  // this.clearEditTimestampMode();
+  selectedType.value = undefined;
+});
+
+// Keyboard Shortcuts
+
+useKeyboardShortcuts('Edit Timestamp', {});
+
+// Time selection
+
+const isTimeSelectFocused = ref(false);
+const timestampAtFormatted = computed(() => {
+  if (activeTimestamp.value == null) return 'NA';
+  return Utils.formatSeconds(activeTimestamp.value.at, true);
+});
+
+const timeSelectRef = ref<HTMLDivElement>();
+function focusOnTimeSelect(): void {
+  if (timeSelectRef.value != null) {
+    (timeSelectRef.value as HTMLElement).focus();
+  } else {
+    const interval = setInterval(() => {
+      if (timeSelectRef.value != null) {
+        (timeSelectRef.value as HTMLElement).focus();
+        clearInterval(interval);
+      }
+    }, 200);
+  }
+}
+
+// Timestamp Type Selection
+
+const typeFilter = ref('');
+
+function selectType(type: Api.TimestampType) {
+  selectedType.value = type;
+  // TODO: Necessary?
+  // this.$forceUpdate();
+}
+
+const selectedType = ref<Api.TimestampType>();
+const filteredResults = computed<Api.TimestampType[]>(() => {
+  const filter = typeFilter.value.trim();
+  if (filter === '') return TIMESTAMP_TYPES;
+
+  return fuzzysort.go(filter, TIMESTAMP_TYPES, { key: 'name', limit: 5 }).map(({ obj }) => obj);
+});
+watch(filteredResults, results => {
+  if (results.length > 0) selectType(results[0]); // TODO: Always select 0 so you can't continue when there are no results?
+});
+
+function isTypeSelected(type: Api.TimestampType): boolean {
+  return selectedType.value?.id === type.id;
+}
+
+function onPressUp() {
+  const types = filteredResults.value;
+  if (types.length === 0) return;
+
+  const index = types.findIndex(type => type.id === selectedType.value?.id);
+  const newIndex = (types.length + index - 1) % types.length;
+  selectType(types[newIndex]);
+}
+function onPressDown() {
+  const types = filteredResults.value;
+  if (types.length === 0) return;
+
+  const index = types.findIndex(type => type.id === selectedType.value?.id);
+  const newIndex = (index + 1) % types.length;
+  selectType(types[newIndex]);
+}
+
+// Buttons
+
+const hideDialog = useHideDialog();
+
+const isSaveDisabled = computed(() => {
+  if (activeTimestamp.value == null || episodeUrl.value == null) return true;
+  if (isTimestampLocal(activeTimestamp.value)) return selectedType.value == null;
+  return activeTimestamp.value.typeId === TIMESTAMP_TYPE_NOT_SELECTED;
+});
+
+const isShowingDelete = computed(() => editTimestampMode.value === EditTimestampMode.EDIT);
+
+const title = computed(() => {
+  if (editTimestampMode.value == null) return 'ERROR';
+  if (editTimestampMode.value === EditTimestampMode.ADD) return 'New Timestamp';
+  return 'Edit Timestamp';
+});
+
+function saveDraftTimestamp(newTimestamp: Api.AmbiguousTimestamp) {
+  // TODO: Add draftTimestamps to editingState
+  // this.$store.commit(MutationTypes.UPDATE_TIMESTAMP_IN_DRAFTS, newTimestamp);
+}
+
+function deleteDraftTimestamp(deletedTimestamp: Api.AmbiguousTimestamp): void {
+  // TODO: Add draftTimestamps to editingState
+  // this.$store.commit(MutationTypes.DELETE_DRAFT_TIMESTAMP, deletedTimestamp);
+}
+
+function leaveDialog() {
+  play();
+  if (props.initialTab === 'edit') {
+    hideDialog();
+  } else {
+    clearActiveTimestamp(); // So we go back to the timestamp list
+  }
+}
+
+const applyTimestampDiff = useApplyTimestampDiff();
+function onClickDone() {
+  if (activeTimestamp.value == null) {
+    throw new Error("Cannot click done when there isn't an active timestamp to be done with");
+  }
+  if (selectedType.value == null) {
+    throw new Error("Cannot click done when the timestamp type hasn't been selected");
+  }
+  const base = activeTimestamp.value;
+  // Update the timestamp's `editing` field before saving it
+  const updatedTimestamp = applyTimestampDiff({
+    at: base.at,
+    typeId: selectedType.value.id,
+    id: base.id,
+    source: base.source,
+  });
+  saveDraftTimestamp(updatedTimestamp);
+  leaveDialog();
+}
+
+function onClickDelete() {
+  if (activeTimestamp.value == null) {
+    throw new Error("Cannot delete the active timestamp when there isn't an active timestamp");
+  }
+  deleteDraftTimestamp(activeTimestamp.value);
+  leaveDialog();
+}
 </script>
 
 <style scoped lang="scss">

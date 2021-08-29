@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import AnimatedIcon from '~/common/mixins/AnimatedIcon';
+import AnimatedIcon from '~/content-scripts/player/mixins/AnimatedIcon';
 
 export default defineComponent({
   mixins: [AnimatedIcon],

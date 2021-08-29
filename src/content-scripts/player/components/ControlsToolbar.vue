@@ -8,7 +8,7 @@
     }"
     @click.stop
   >
-    <TimelineWrapper
+    <!-- <TimelineWrapper
       class="timeline-alignment"
       :class="{ 'opacity-0 pointer-events-none': !hasDuration }"
       :is-flipped="!showToolbar"
@@ -46,13 +46,15 @@
       <ToolbarButton v-if="isFullscreenEnabled" @click="toggleFullscreen()">
         <FullscreenButton :state="fullscreenAnimationState" />
       </ToolbarButton>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script lang="ts" setup>
 import { Utils as UiUtils } from '@anime-skip/ui';
 import { useFullscreen } from '@vueuse/core';
+import * as Api from '~/common/api';
+import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
 import { FRAME } from '~/common/utils/Constants';
 import Utils from '~/common/utils/Utils';
 import { useDisplayedTimestamps } from '../hooks/useDisplayedTimestamps';
@@ -61,11 +63,11 @@ import { useHideDialog, useShowDialog, useToggleDialog } from '../state/useDialo
 import {
   EditTimestampMode,
   useEditingState,
-  useSetActiveTimestamp,
-  useSetEditTimestampMode,
-  useUpdateEditingState,
+  useIsEditing,
+  useUpdateActiveTimestamp,
+  useUpdateEditTimestampMode,
 } from '../state/useEditingState';
-import { useVideoController, useVideoState } from '../state/useVideoState';
+import { useDuration, useVideoController, useVideoState } from '../state/useVideoState';
 
 // TODO: Inject video state, remove from props
 
@@ -85,31 +87,24 @@ const formattedTime = computed(() =>
   UiUtils.formatSeconds(currentTime.value, showDecimalsInFormattedTime.value)
 );
 
-const duration = computed(() => videoState.duration);
-const hasDuration = computed(() => !videoState.duration);
+const duration = useDuration(videoState);
+const hasDuration = computed(() => !duration.value);
 const formattedDuration = computed<string>(() =>
   !hasDuration.value ? 'Loading...' : UiUtils.formatSeconds(videoState.duration, false)
 );
 
 // Preferences
 
+const preferences = useGeneralPreferences();
 // TODO: use preferences directly
-const hideTimelineWhenMinimized = ref(false);
+const hideTimelineWhenMinimized = computed(() => preferences.value.hideTimelineWhenMinimized);
 // TODO: use preferences directly
-const minimizeToolbarWhenEditing = ref(false);
-//     const hideTimelineWhenMinimized = computed<boolean>(
-//       () => !!store.getters[GetterTypes.PREFERENCES]?.hideTimelineWhenMinimized
-//     );
-//     const minimizeToolbarWhenEditing = computed<boolean>(
-//       () => !!store.getters[GetterTypes.PREFERENCES]?.minimizeToolbarWhenEditing
-//     );
+const minimizeToolbarWhenEditing = computed(() => preferences.value.minimizeToolbarWhenEditing);
 
 // Editing
 
 const editingState = useEditingState();
-const updateEditing = useUpdateEditingState();
-const isEditing = computed(() => editingState.isEditing);
-const isSaving = computed(() => editingState.isSaving);
+const isEditing = useIsEditing(editingState);
 const canSaveEdits = computed(() => editingState.isEditing && !editingState.isSaving);
 const showToolbar = computed(
   () => videoState.isActive || (isEditing.value && !minimizeToolbarWhenEditing.value)
@@ -117,7 +112,7 @@ const showToolbar = computed(
 const fullyHideToolbar = computed(
   () => !videoState.isActive && !videoState.isPaused && hideTimelineWhenMinimized.value
 );
-const setEditTimestampMode = useSetEditTimestampMode();
+const setEditTimestampMode = useUpdateEditTimestampMode();
 
 // Button Animations
 
@@ -144,7 +139,7 @@ function toggleTimestampsDialog(): void {
 const timestamps = useDisplayedTimestamps();
 const hasTimestamps = computed(() => timestamps.value.length > 0);
 const activeTimestamp = computed(() => editingState.activeTimestamp);
-const setActiveTimestamp = useSetActiveTimestamp();
+const updateActiveTimestamp = useUpdateActiveTimestamp();
 
 // Keyboard Shortcuts
 
@@ -160,7 +155,7 @@ function saveChanges(discard = false): void {
 
 function editTimestampOnJump(timestamp: Api.AmbiguousTimestamp): void {
   pause();
-  setActiveTimestamp(timestamp);
+  updateActiveTimestamp(timestamp);
   setEditTimestampMode(EditTimestampMode.EDIT);
   showDialog('TimestampsPanel');
 }

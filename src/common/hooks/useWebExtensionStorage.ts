@@ -25,9 +25,11 @@ export function useWebExtensionStorage<T extends Record<string, any>>(
     changes: { [s: string]: Storage.StorageChange },
     areaName: string
   ) => {
-    console.log(`${areaName} storage changed:`, { changes, area, key });
     if (areaName !== area) return;
     if (isEqual(changes[key]?.oldValue, changes[key]?.newValue)) return;
+    console.log(`${key}: ${areaName} storage changed:`, { changes, area, key });
+
+    // TODO: Put this listener in a sharedComposable so it only gets added once
 
     value.value = changes[key]?.newValue ?? initialValue;
   };

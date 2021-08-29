@@ -1,5 +1,5 @@
 import { GqlPreferences } from '@anime-skip/axios-api';
-import * as Api from '../hooks/api';
+import * as Api from '../api';
 import { useApiClient } from '../hooks/useApiClient';
 import { useWebExtensionStorage } from '../hooks/useWebExtensionStorage';
 
@@ -12,7 +12,7 @@ interface LocalPreferences {
   playbackRate: number;
 }
 
-const LOCAL_PREFERENCES: Array<keyof LocalPreferences> = ['playbackRate'];
+// const LOCAL_PREFERENCES: Array<keyof LocalPreferences> = ['playbackRate'];
 
 type GeneralPreferences = RemotePreferences & LocalPreferences;
 
@@ -41,7 +41,11 @@ const DEFAULT_GENERAL_PREFERENCES: GeneralPreferences = {
   skipTransitions: false,
 };
 
-export function useGeneralPreferences() {
+export function useUpdateGeneralPreferences() {
+  return _useGeneralPreferences().updatePreferences;
+}
+
+function _useGeneralPreferences() {
   const { value: preferences, updateValue: updatePreferences } =
     useWebExtensionStorage<GeneralPreferences>(
       'general-preferences',
@@ -55,8 +59,19 @@ export function useGeneralPreferences() {
   };
 }
 
+/**
+ * Current preferences with the defaults applied first so new local preferences aren't left out
+ */
+export function useGeneralPreferences() {
+  const { preferences } = _useGeneralPreferences();
+  return computed<GeneralPreferences>(() => ({
+    ...DEFAULT_GENERAL_PREFERENCES,
+    ...preferences,
+  }));
+}
+
 export function useUpdateBooleanPref() {
-  const { preferences, updatePreferences } = useGeneralPreferences();
+  const { preferences, updatePreferences } = _useGeneralPreferences();
   const api = useApiClient();
   return (pref: StripOtherTypes<GeneralPreferences, boolean>, newValue: boolean) => {
     const oldValue = preferences.value[pref];
@@ -64,28 +79,29 @@ export function useUpdateBooleanPref() {
 
     api.savePreferences(Api.PREFERENCES_QUERY, { preferences: { [pref]: newValue } }).catch(err => {
       console.warn('Failed to update preference', { pref, newValue }, err);
-      updatePreferences({ [pref]: oldValue });
+      // Slight delay for a better animation
+      setTimeout(() => updatePreferences({ [pref]: oldValue }), 200);
     });
   };
 }
 
 export function useToggleBooleanPref() {
   const update = useUpdateBooleanPref();
-  const { preferences } = useGeneralPreferences();
+  const preferences = useGeneralPreferences();
   return (pref: StripOtherTypes<GeneralPreferences, boolean>) => {
     update(pref, !preferences.value[pref]);
   };
 }
 
 export function useUpdateNumberPref() {
-  const { updatePreferences } = useGeneralPreferences();
+  const { updatePreferences } = _useGeneralPreferences();
   return (pref: StripOtherTypes<GeneralPreferences, number>, newValue: number) => {
     updatePreferences({ [pref]: newValue });
   };
 }
 
 export function useResetPreferences() {
-  const { updatePreferences } = useGeneralPreferences();
+  const { updatePreferences } = _useGeneralPreferences();
   return () => {
     updatePreferences(DEFAULT_GENERAL_PREFERENCES);
   };

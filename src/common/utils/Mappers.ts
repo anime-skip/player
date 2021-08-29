@@ -1,3 +1,4 @@
+import type * as Api from '~/common/api';
 import EpisodeUtils from './EpisodeUtils';
 import Utils from './Utils';
 

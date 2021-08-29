@@ -33,7 +33,7 @@
       />
       <AutocompleteTextInput
         v-if="isExistingShow"
-        ref="episode"
+        ref="episodeInputRef"
         class="mx-4"
         placeholder="Enter the episode name..."
         v-model:value="episode"
@@ -70,11 +70,13 @@
 import { defineComponent, PropType } from 'vue';
 import EpisodeUtils from '~/common/utils/EpisodeUtils';
 import { TIMESTAMP_SOURCES } from '~/common/utils/Constants';
-import ShowAutocompleteMixin from '~/common/mixins/ShowAutocomplete';
-import EpisodeAutocompleteMixin from '~/common/mixins/EpisodeAutocomplete';
+import * as Api from '~/common/api';
+import { useEpisodeAutocomplete } from '../../hooks/useEpisodeAutocomplete';
+import { useShowAutocomplete } from '../../hooks/useShowAutocomplete';
+import { useApiClient } from '~/common/hooks/useApiClient';
+import { useHideDialog } from '../../state/useDialogState';
 
 export default defineComponent({
-  mixins: [ShowAutocompleteMixin, EpisodeAutocompleteMixin],
   props: {
     suggestions: {
       type: Array as PropType<Api.ThirdPartyEpisode[]>,
@@ -84,6 +86,19 @@ export default defineComponent({
   },
   emits: {
     createNew: (_arg: CreateEpisodePrefill) => true,
+  },
+  setup() {
+    const api = useApiClient();
+    const episodeInputRef = ref<TextInputRef>();
+    const { show, ...showAutocomplete } = useShowAutocomplete(episodeInputRef, api);
+    const episodeAutocomplete = useEpisodeAutocomplete(show, api);
+    const hideDialog = useHideDialog();
+    return {
+      episodeInputRef,
+      ...showAutocomplete,
+      ...episodeAutocomplete,
+      hideDialog,
+    };
   },
   data() {
     return {
@@ -148,9 +163,6 @@ export default defineComponent({
     },
   },
   methods: {
-    hideDialog(): void {
-      this.$store.dispatch(ActionTypes.SHOW_DIALOG, undefined);
-    },
     onClickSuggestion(suggestion: Api.ThirdPartyEpisode): void {
       if (suggestion.source !== 'ANIME_SKIP') {
         this.createFromThirdParty(suggestion);
@@ -185,20 +197,22 @@ export default defineComponent({
       this.linkToExistingEpisode(episode);
     },
     async linkToExistingEpisode(episode: Api.EpisodeSearchResult): Promise<void> {
-      try {
-        await this.$store.dispatch(ActionTypes.LINK_EPISODE_URL, {
-          episode,
-          onSuccess: this.hideDialog,
-        });
-      } catch (err) {
-        // do nothing
-      }
+      // TODO
+      // try {
+      //   await this.$store.dispatch(ActionTypes.LINK_EPISODE_URL, {
+      //     episode,
+      //     onSuccess: this.hideDialog,
+      //   });
+      // } catch (err) {
+      //   // do nothing
+      // }
     },
     async createFromThirdParty(thirdPartyEpisode: Api.ThirdPartyEpisode) {
-      await this.$store.dispatch(ActionTypes.CREATE_EPISODE_FROM_THIRD_PARTY, {
-        thirdPartyEpisode,
-        onSuccess: this.hideDialog,
-      });
+      // TODO
+      // await this.$store.dispatch(ActionTypes.CREATE_EPISODE_FROM_THIRD_PARTY, {
+      //   thirdPartyEpisode,
+      //   onSuccess: this.hideDialog,
+      // });
     },
   },
 });

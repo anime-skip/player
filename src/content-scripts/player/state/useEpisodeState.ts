@@ -1,7 +1,16 @@
+import * as Api from '~/common/api';
 import { createProvideInject } from '~/common/utils/createProvideInject';
+import RequestState from '~/common/utils/RequestState';
+import Utils from '~/common/utils/Utils';
+import { useInferredEpisodeState } from './useInferredEpisodeState';
+import { useTemplateTimestamps } from './useTemplateState';
+import { useDuration } from './useVideoState';
 
 export interface EpisodeState {
-  savedTimestamps: Api.AmbiguousTimestamp[];
+  savedTimestamps: Api.Timestamp[];
+  episode?: Api.ThirdPartyEpisode | Omit<Api.Episode, 'timestamps' | 'template'>;
+  episodeUrl?: Omit<Api.EpisodeUrl, 'episode'>;
+  episodeRequestState: RequestState;
 }
 
 const {
@@ -10,6 +19,77 @@ const {
   useUpdate: useUpdateEpisodeState,
 } = createProvideInject<EpisodeState>('episode-state', {
   savedTimestamps: [],
+  episode: undefined,
+  episodeUrl: undefined,
+  episodeRequestState: RequestState.NOT_REQUESTED,
 });
 
 export { provideEpisodeState, useEpisodeState, useUpdateEpisodeState };
+
+export function useEpisode(episodeState = useEpisodeState()) {
+  return computed(() => episodeState.episode);
+}
+
+export function useEpisodeUrl(episodeState = useEpisodeState()) {
+  return computed(() => episodeState.episodeUrl);
+}
+
+/**
+ * Returns the saved remote timestamps, inferred episode timestamps, or template timestamps
+ */
+export function useUneditedTimestamps(
+  episodeState = useEpisodeState(),
+  duration = useDuration(),
+  templateTimestamps = useTemplateTimestamps()
+) {
+  const inferredEpisodeState = useInferredEpisodeState();
+
+  function getBaseTimestamps(): Api.AmbiguousTimestamp[] {
+    if (episodeState.savedTimestamps.length > 0) return episodeState.savedTimestamps;
+    if (
+      inferredEpisodeState.inferredTimestamps != null &&
+      inferredEpisodeState.inferredTimestamps.length > 0
+    )
+      return inferredEpisodeState.inferredTimestamps;
+
+    return templateTimestamps.value ?? [];
+  }
+
+  return computed<Api.AmbiguousTimestamp[]>(() => {
+    // Find the offset
+    let timestampsOffset = episodeState.episodeUrl?.timestampsOffset;
+    if (
+      timestampsOffset == null &&
+      episodeState.episode?.baseDuration != null &&
+      duration.value != null
+    ) {
+      timestampsOffset = Utils.computeTimestampsOffset(
+        episodeState.episode.baseDuration,
+        duration.value
+      );
+    }
+
+    // Apply the offset
+    const baseTimestamps = getBaseTimestamps();
+    const properlyOffsetTimestamps = baseTimestamps.map(timestamp => {
+      const at = Utils.applyTimestampsOffset(timestampsOffset, timestamp.at);
+      return {
+        ...timestamp,
+        at,
+      };
+    });
+
+    // Remove out of bounds timestamps
+    if (duration.value == null) return properlyOffsetTimestamps;
+    return properlyOffsetTimestamps.filter(
+      timestamp => timestamp.at <= duration.value && timestamp.at >= 0
+    );
+  });
+}
+
+export function useUpdateEpisodeRequestState() {
+  const update = useUpdateEpisodeState();
+  return (newRequestState: RequestState) => {
+    update({ episodeRequestState: newRequestState });
+  };
+}

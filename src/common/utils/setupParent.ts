@@ -7,8 +7,6 @@ export default function setupParent(
     getEpisodeInfo(): Promise<InferredEpisodeInfo> | InferredEpisodeInfo;
   }
 ): void {
-  console.log(`INJECTED content-scripts/${service}/parent.ts`);
-
   // Sites using HTML5 History mode don't update immediately, so we track the url to know if we
   // should be expecting a different episode
   let previousUrl: string | undefined;

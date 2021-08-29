@@ -12,56 +12,47 @@
   </BasicDialog>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
+import { useEditingState } from '../../state/useEditingState';
+import { provideTimestampsPanelState } from './useTimestampPanelState';
 
-export default defineComponent({
-  name: 'TimestampsPanel',
-  mixins: [VideoControllerMixin, KeyboardShortcutsMixin],
-  data() {
-    return {
-      initialTab: 'details' as 'edit' | 'details',
-    };
-  },
-  computed: {
-    activeTimestamp(): Api.AmbiguousTimestamp | undefined {
-      return this.$store.state.activeTimestamp;
-    },
-    isShowingEditTimestamp(): boolean {
-      return this.activeTimestamp != null;
-    },
-    isShowingTemplate(): boolean {
-      return this.$store.state.showEditTemplate;
-    },
-  },
-  methods: {
-    onShow(): void {
-      this.initialTab = this.activeTimestamp == null ? 'details' : 'edit';
-    },
-    updateTimestamp(): void {
-      (this.$refs.timeSelect as HTMLDivElement | undefined)?.focus();
-      if (this.activeTimestamp != null) {
-        const newTimestamp = this.$store.getters[GetterTypes.APPLY_TIMESTAMP_DIFF]({
-          ...this.activeTimestamp,
-          at: this.getCurrentTime(),
-        });
-        this.$store.commit(MutationTypes.SET_ACTIVE_TIMESTAMP, newTimestamp);
-      }
-    },
-    setupKeyboardShortcuts(): KeyboardShortcutMap {
-      return {
-        advanceFrame: this.updateTimestamp,
-        advanceSmall: this.updateTimestamp,
-        advanceMedium: this.updateTimestamp,
-        advanceLarge: this.updateTimestamp,
+provideTimestampsPanelState();
 
-        rewindFrame: this.updateTimestamp,
-        rewindSmall: this.updateTimestamp,
-        rewindMedium: this.updateTimestamp,
-        rewindLarge: this.updateTimestamp,
-      };
-    },
-  },
+const editingState = useEditingState();
+const activeTimestamp = computed(() => editingState.activeTimestamp);
+const isShowingEditTimestamp = computed(() => activeTimestamp.value != null);
+const isShowingTemplate = computed(() => true); // TODO this.$store.state.showEditTemplate in useTimestampPanelState()
+
+const initialTab = ref<'details' | 'edit'>('details');
+function onShow(): void {
+  initialTab.value = activeTimestamp.value == null ? 'details' : 'edit';
+}
+
+// Update timestamp on manual advances
+
+function updateTimestamp(): void {
+  // TODO - should this keyboard listener be in `EditTimestamp`?
+  // timeSelectRef.value?.focus();
+  // if (this.activeTimestamp != null) {
+  //   const newTimestamp = this.$store.getters[GetterTypes.APPLY_TIMESTAMP_DIFF]({ // useApplyTimestampDiff
+  //     ...this.activeTimestamp,
+  //     at: this.getCurrentTime(),
+  //   });
+  //   this.$store.commit(MutationTypes.SET_ACTIVE_TIMESTAMP, newTimestamp);
+  // }
+}
+useKeyboardShortcuts('Timestamps Panel', {
+  // Advance
+  advanceFrame: updateTimestamp,
+  advanceSmall: updateTimestamp,
+  advanceMedium: updateTimestamp,
+  advanceLarge: updateTimestamp,
+  // Rewind
+  rewindFrame: updateTimestamp,
+  rewindSmall: updateTimestamp,
+  rewindMedium: updateTimestamp,
+  rewindLarge: updateTimestamp,
 });
 </script>
 

@@ -1,3 +1,5 @@
+import type * as Api from '~/common/api';
+import { TimestampSource } from '~/common/api';
 import { KeyboardShortcutActionToKeyBindingMap } from '../state/useKeyboardShortcutPrefs';
 
 export const persistedKeys = [
@@ -190,10 +192,16 @@ export const TIMESTAMP_TYPE_NOT_SELECTED = '';
  * `null` return type means nothing should be displayed
  * `undefined` return type means the source was unknown, and "Unknown Source" should be displayed
  */
-export const TIMESTAMP_SOURCES: { [source in Api.TimestampSource]: string | undefined | null } = {
+export const TIMESTAMP_SOURCES: { [source in TimestampSource]: string | undefined | null } = {
   ANIME_SKIP: null,
   BETTER_VRV: 'BetterVRV',
 };
+
+interface SkippablePreference {
+  key: keyof Api.Preferences;
+  title: string;
+  help: string;
+}
 
 /**
  * The content to show in the skipped preferences section
@@ -266,12 +274,12 @@ export const SKIPPABLE_PREFERENCES: SkippablePreference[] = [
   },
 ];
 
-const allTimestampSources: Array<Api.TimestampSource> = ['ANIME_SKIP', 'BETTER_VRV'];
+const allTimestampSources = Object.values(TimestampSource);
 
 /**
  * Some services don't mess well with each other, so the integrations have been disabled
  */
-export const SUPPORTED_THIRD_PARTY_SERVICES: Record<Service, Array<Api.TimestampSource>> = {
+export const SUPPORTED_THIRD_PARTY_SERVICES: Record<Service, Array<TimestampSource>> = {
   'test-service': allTimestampSources,
   vrv: allTimestampSources,
   funimation: allTimestampSources.filter(

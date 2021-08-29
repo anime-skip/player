@@ -55,7 +55,7 @@
 <script lang="ts" setup>
 import useRequestState from 'vue-use-request-state';
 import { browser, Storage } from 'webextension-polyfill-ts';
-import * as Api from '../hooks/api';
+import * as Api from '~/common/api';
 import { useApiClient } from '../hooks/useApiClient';
 import { AUTH_STORAGE_KEY, AUTH_STORAGE_LOCATION } from '../state/useAuth';
 

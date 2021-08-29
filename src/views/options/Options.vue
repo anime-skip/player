@@ -30,7 +30,7 @@ import { useGeneralPreferences, useToggleBooleanPref } from '~/common/state/useG
 // TODO: verify no INTIAL_LOAD call works
 
 const isLoggedIn = useIsLoggedIn();
-const { preferences } = useGeneralPreferences();
+const preferences = useGeneralPreferences();
 const toggleBooleanPreference = useToggleBooleanPref();
 
 const hideTimelineWhenMinimized = computed(() => preferences.value.hideTimelineWhenMinimized);

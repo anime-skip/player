@@ -3,7 +3,7 @@ import { createApp } from 'vue';
 import 'vue-global-api';
 import '~/common/styles';
 import { loadedLog } from '~/common/utils/loadedLog';
-import Player from './Player.vue';
+import Container from './Container.vue';
 
 loadedLog('content-scripts/player/index.ts');
 
@@ -11,7 +11,7 @@ loadedLog('content-scripts/player/index.ts');
 
 window.onVideoChanged(video => {
   video.controls = false;
-  video.autoplay = true;
+  // video.autoplay = true;
 });
 
 // Clean DOM
@@ -45,7 +45,7 @@ async function injectPlayer() {
   try {
     const container = document.createElement('div');
 
-    const app = createApp(Player).use(ui);
+    const app = createApp(Container).use(ui);
     const mountedApp = app.mount(container);
 
     document.querySelector(rootQuery)?.appendChild(mountedApp.$el);

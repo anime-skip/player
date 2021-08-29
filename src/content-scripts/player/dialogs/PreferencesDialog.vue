@@ -69,64 +69,43 @@
   </BasicDialog>
 </template>
 
-<script lang="ts">
-import Messenger from '~/common/utils/Messenger';
-import { computed, defineComponent, onMounted, ref } from 'vue';
+<script lang="ts" setup>
+import { computed, onMounted, ref } from 'vue';
 import useRadioIcon from '~/common/composition/useRadioIcon';
+import Messenger from '~/common/utils/Messenger';
+import { useHideDialog } from '../state/useDialogState';
 
-export default defineComponent({
-  setup() {
-    const store = useStore();
+const openExtensionOptions = () => {
+  new Messenger<RuntimeMessageTypes>('General Settings').send(
+    '@anime-skip/open-all-settings',
+    undefined
+  );
+};
+const activePlayerGroup = ref<PlayerOptionGroup | undefined>();
+const hasActivePlayerGroup = computed(() => activePlayerGroup.value != null);
+const setActiveOptionGroup = (optionGroup: PlayerOptionGroup | undefined): void => {
+  activePlayerGroup.value = optionGroup;
+};
+onMounted(() => setActiveOptionGroup(undefined));
+const getSelectedOption = (optionGroup: PlayerOptionGroup) => {
+  const selected = optionGroup.options.filter(option => option.isSelected);
+  if (selected.length === 0) return '';
+  return selected[0].title;
+};
+const playerOptions = ref<PlayerOptionGroup[]>([]);
+const loadPlayerOptions = async () => {
+  playerOptions.value =
+    (await window.getPlayerOptions())?.filter(group => group.options.length > 1) ?? [];
+};
 
-    const openExtensionOptions = () => {
-      new Messenger<RuntimeMessageTypes>('General Settings').send(
-        '@anime-skip/open-all-settings',
-        undefined
-      );
-    };
-    const activePlayerGroup = ref<PlayerOptionGroup | undefined>();
-    const hasActivePlayerGroup = computed(() => activePlayerGroup.value != null);
-    const setActiveOptionGroup = (optionGroup: PlayerOptionGroup | undefined): void => {
-      activePlayerGroup.value = optionGroup;
-    };
-    onMounted(() => setActiveOptionGroup(undefined));
-    const getSelectedOption = (optionGroup: PlayerOptionGroup) => {
-      const selected = optionGroup.options.filter(option => option.isSelected);
-      if (selected.length === 0) return '';
-      return selected[0].title;
-    };
-    const playerOptions = ref<PlayerOptionGroup[]>([]);
-    const loadPlayerOptions = async () => {
-      playerOptions.value =
-        (await window.getPlayerOptions())?.filter(group => group.options.length > 1) ?? [];
-    };
-
-    const activeOptions = computed(() => activePlayerGroup.value?.options ?? []);
-    const { getRadioIcon, getRadioIconClass, getLabelClass } = useRadioIcon();
-    const onClickOption = (option: PlayerOption) => {
-      option.node.click();
-      store.dispatch(ActionTypes.SHOW_DIALOG, undefined);
-      setActiveOptionGroup(undefined);
-    };
-
-    return {
-      openExtensionOptions,
-
-      loadPlayerOptions,
-      activePlayerGroup,
-      hasActivePlayerGroup,
-      setActiveOptionGroup,
-      getSelectedOption,
-      playerOptions,
-
-      activeOptions,
-      getRadioIcon,
-      getRadioIconClass,
-      getLabelClass,
-      onClickOption,
-    };
-  },
-});
+const activeOptions = computed(() => activePlayerGroup.value?.options ?? []);
+const { getRadioIcon, getRadioIconClass, getLabelClass } = useRadioIcon();
+const hideDialog = useHideDialog();
+const onClickOption = (option: PlayerOption) => {
+  option.node.click();
+  hideDialog();
+  setActiveOptionGroup(undefined);
+};
 </script>
 
 <style lang="scss">

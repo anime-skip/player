@@ -1,4 +1,5 @@
 import expect from 'expect';
+import * as Api from '~/common/api';
 import EpisodeUtils from '../EpisodeUtils';
 
 describe('EpisodeUtils', () => {

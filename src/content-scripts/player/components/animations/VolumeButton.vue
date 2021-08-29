@@ -1,6 +1,6 @@
 <template>
   <div class="VolumeButton" :class="{ dragging: isDragging }">
-    <ToolbarButton class="inner-button w-12" @click="toggleMuted">
+    <ToolbarButton class="inner-button w-12" @click="toggleMute">
       <WebExtImg src="ic_volume_muted.svg" class="ic_muted" :class="volumeClass" />
       <WebExtImg src="ic_volume_speaker.svg" class="ic_speaker" :class="volumeClass" />
       <WebExtImg src="ic_volume_low.svg" class="ic_low" :class="volumeClass" />
@@ -8,8 +8,8 @@
     </ToolbarButton>
     <Slider
       class="slider white"
-      :progress="volume"
-      :max="1"
+      :progress="videoState.volumePercent"
+      :max="100"
       background-color="#ffffff48"
       foreground-color="white"
       @seek="setVolume"
@@ -19,38 +19,46 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import VideoControllerMixin from '~/common/mixins/VideoController';
-import KeyboardShortcutsMixin from '~/common/mixins/KeyboardShortcuts';
+<script lang="ts" setup>
+import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
+import { useVideoController, useVideoState } from '../../state/useVideoState';
 
-export default defineComponent({
-  mixins: [VideoControllerMixin, KeyboardShortcutsMixin],
-  mounted(): void {
-    this.setupVolumeOverrideManager();
+onMounted(() => {
+  // TODO - was this working in the first place?
+  // function onIgnoredVolumeChange(): void {
+  //   const video = getVideoOrThrow();
+  //   if (!video?.muted && video?.volume === this.volume) return;
+  //   console.debug(`Ignoring volume change event, reset to ${this.volume}`);
+  //   video.volume = this.volume;
+  // }
+  // global.onVideoChanged(video => {
+  //   video.addEventListener('volumechange', onIgnoredVolumeChange);
+  // });
+});
+
+const isDragging = ref(false);
+
+const videoState = useVideoState();
+const volumeClass = computed(() => {
+  if (videoState.isMuted) return 'muted';
+  if (videoState.volumePercent <= 10) return 'low';
+  if (videoState.volumePercent < 60) return 'medium';
+  return 'high';
+});
+
+const VOLUME_STEP = 10; // percent
+const { setVolumePercent, toggleMute } = useVideoController();
+useKeyboardShortcuts('VolumeButton', {
+  volumeUp() {
+    setVolumePercent(videoState.volumePercent + VOLUME_STEP);
   },
-  data() {
-    return {
-      isDragging: false,
-    };
-  },
-  computed: {
-    volumeClass(): string {
-      if (this.isMuted) return 'muted';
-      if (this.volume <= 0.1) return 'low';
-      if (this.volume < 0.6) return 'medium';
-      return 'high';
-    },
-  },
-  methods: {
-    setupKeyboardShortcuts(): { [action in KeyboardShortcutAction]?: () => void } {
-      return {
-        volumeUp: () => this.addVolume(0.2),
-        volumeDown: () => this.addVolume(-0.2),
-      };
-    },
+  volumeDown() {
+    setVolumePercent(videoState.volumePercent - VOLUME_STEP);
   },
 });
+function setVolume(volumeDecimal: number) {
+  setVolumePercent(volumeDecimal * 100);
+}
 </script>
 
 <style lang="scss" scoped>

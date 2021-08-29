@@ -7,14 +7,20 @@
             Setup default timestamps for episodes
           </p>
           <ul>
-            <li class="flex flex-row items-center space-x-4 py-2" @click="changeType('SHOW')">
+            <li
+              class="flex flex-row items-center space-x-4 py-2"
+              @click="changeType(TemplateType.SHOW)"
+            >
               <Icon
                 :path="getShowRadioIcon(isShowSelected)"
                 :class="getShowRadioIconClass(isShowSelected)"
               />
               <p class="text-on-surface" :class="getShowLabelClass(isShowSelected)">All Episodes</p>
             </li>
-            <li class="flex flex-row items-center space-x-4 py-2" @click="changeType('SEASONS')">
+            <li
+              class="flex flex-row items-center space-x-4 py-2"
+              @click="changeType(TemplateType.SEASONS)"
+            >
               <Icon
                 :path="getShowRadioIcon(isSeasonSelected)"
                 :class="getShowRadioIconClass(isSeasonSelected)"
@@ -67,173 +73,152 @@
   </LoadingOverlay>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+import { useTimeout } from '@anime-skip/ui';
+import { computed, ref } from 'vue';
+import * as Api from '~/common/api';
+import { TemplateType } from '~/common/api';
 import useRadioIcon from '~/common/composition/useRadioIcon';
-import { computed, defineComponent, ref } from 'vue';
-import Utils from '~/common/utils/Utils';
 import { SECONDS, TIMESTAMP_TYPES } from '~/common/utils/Constants';
 import RequestState from '~/common/utils/RequestState';
+import Utils from '~/common/utils/Utils';
+import { useDeleteTemplate } from '../../hooks/useDeleteTemplate';
+import { useDisplayedTimestamps } from '../../hooks/useDisplayedTimestamps';
+import { useEpisodeDisplayInfo } from '../../hooks/useEpisodeDisplayInfo';
+import { useMatchingTemplate } from '../../hooks/useMatchingTemplate';
+import { useSaveNewTemplate } from '../../hooks/useSaveNewTemplate';
+import { useSaveTemplate } from '../../hooks/useSaveTemplate';
+import {
+  useClearHoveredTimestamp,
+  useUpdateHoveredTimestamp,
+} from '../../state/useHoveredTimestamp';
+import { useTemplateRequestState } from '../../state/useTemplateState';
+import { useUpdateIsEditingTemplate } from './useTimestampPanelState';
 
-export default defineComponent({
-  setup() {
-    const store = useStore();
-    const existingTemplate = computed(() => store.getters[GetterTypes.EDITABLE_TEMPLATE]);
-    const onClickDelete = () => {
-      const template = existingTemplate.value;
-      if (template == null) {
-        console.warn(
-          "Cannot delete a template that doesn't exist",
-          JSON.stringify(template, null, 2)
-        );
-        return;
-      }
-      store
-        .dispatch(ActionTypes.DELETE_TEMPLATE, { templateId: template.id })
-        .then(() => store.commit(MutationTypes.TOGGLE_EDIT_TEMPLATE, false));
-    };
-    const discardChanges = () => {
-      store.commit(MutationTypes.TOGGLE_EDIT_TEMPLATE, false);
-    };
-    const isSavingTemplate = computed(
-      () => store.state.templateRequestState === RequestState.LOADING
-    );
+const deleteTemplate = useDeleteTemplate();
+const updateIsEditingTemplate = useUpdateIsEditingTemplate();
+const templateRequestState = useTemplateRequestState();
 
-    const type = ref<Api.TemplateType>(existingTemplate.value?.type ?? 'SHOW');
-    const changeType = (newType: Api.TemplateType) => {
-      type.value = newType;
-    };
-    const isShowSelected = computed(() => type.value === 'SHOW');
-    const {
-      getRadioIcon: getShowRadioIcon,
-      getRadioIconClass: getShowRadioIconClass,
-      getLabelClass: getShowLabelClass,
-    } = useRadioIcon();
-    const isSeasonSelected = computed(() => type.value === 'SEASONS');
-    const {
-      getRadioIcon: getSeasonRadioIcon,
-      getRadioIconClass: getSeasonRadioIconClass,
-      getLabelClass: getSeasonLabelClass,
-    } = useRadioIcon();
-    const season = ref<string>(
-      existingTemplate.value?.seasons?.[0] ?? store.getters.DISPLAY_EPISODE_INFO.season ?? ''
-    );
-    const seasonsToSave = computed<string[] | undefined>(() =>
-      type.value === 'SEASONS' ? [season.value] : undefined
-    );
-    const isSeasonValid = computed(() => !isSeasonSelected.value || !!season.value.trim());
-    const seasonErrorMessage = computed(() =>
-      isSeasonValid.value ? undefined : 'A season is required'
-    );
+const template = useMatchingTemplate();
 
-    const timestamps = computed(() => store.getters.TIMESTAMPS as Api.Timestamp[]);
-    const selectedTimestamps = ref(
-      existingTemplate.value?.timestampIds.reduce((map, id) => {
-        map[id] = true;
-        return map;
-      }, {} as Record<string, boolean>) ?? {}
+const onClickDelete = () => {
+  if (template.value == null) {
+    console.warn(
+      "Cannot delete a template that doesn't exist",
+      JSON.stringify(template.value, null, 2)
     );
-    const toggleTimestamp = (id: string) => {
-      selectedTimestamps.value = {
-        ...selectedTimestamps.value,
-        [id]: !selectedTimestamps.value?.[id],
-      };
-    };
-    const typeMap = TIMESTAMP_TYPES.reduce<{ [typeId: string]: Api.TimestampType }>(
-      (map, timestamp) => {
-        map[timestamp.id] = timestamp;
-        return map;
-      },
-      {}
-    );
-    const time = (timestamp: Api.AmbiguousTimestamp): string => {
-      return Utils.formatSeconds(timestamp.at, false);
-    };
-    const timestampType = (timestamp: Api.AmbiguousTimestamp): string => {
-      return typeMap[timestamp.typeId].name;
-    };
+    return;
+  }
+  void deleteTemplate(template.value.id)
+    .then()
+    .then(() => updateIsEditingTemplate(false));
+};
+const discardChanges = () => {
+  updateIsEditingTemplate(false);
+};
+const isSavingTemplate = computed(() => templateRequestState.value === RequestState.LOADING);
 
-    const hoverTimeout = ref<number | undefined>(undefined);
-    const setHoveredTimestamp = (timestamp: Api.AmbiguousTimestamp) => {
-      store.commit(MutationTypes.SET_HOVERED_TIMESTAMP, timestamp);
-    };
-    const clearHoveredTimestamp = () => {
-      store.commit(MutationTypes.CLEAR_HOVERED_TIMESTAMP);
-    };
-    const onHoverTimestamp = (timestamp: Api.AmbiguousTimestamp): void => {
-      if (hoverTimeout.value != null) window.clearTimeout(hoverTimeout.value);
-      setHoveredTimestamp(timestamp);
-      hoverTimeout.value = window.setTimeout(clearHoveredTimestamp, 3 * SECONDS);
-    };
-    const onStopHoverTimestamp = (): void => {
-      if (hoverTimeout.value != null) window.clearTimeout(hoverTimeout.value);
-      clearHoveredTimestamp();
-    };
+const type = ref<Api.TemplateType>(template.value?.type ?? TemplateType.SHOW);
+const changeType = (newType: Api.TemplateType) => {
+  type.value = newType;
+};
+const isShowSelected = computed(() => type.value === TemplateType.SHOW);
+const {
+  getRadioIcon: getShowRadioIcon,
+  getRadioIconClass: getShowRadioIconClass,
+  getLabelClass: getShowLabelClass,
+} = useRadioIcon();
+const isSeasonSelected = computed(() => type.value === TemplateType.SEASONS);
+const {
+  getRadioIcon: getSeasonRadioIcon,
+  getRadioIconClass: getSeasonRadioIconClass,
+  getLabelClass: getSeasonLabelClass,
+} = useRadioIcon();
+const episodeDisplayInfo = useEpisodeDisplayInfo();
+const season = ref<string>(template.value?.seasons?.[0] ?? episodeDisplayInfo.value.season ?? '');
+const seasonsToSave = computed<string[] | undefined>(() =>
+  type.value === TemplateType.SEASONS ? [season.value] : undefined
+);
+const isSeasonValid = computed(() => !isSeasonSelected.value || !!season.value.trim());
+const seasonErrorMessage = computed(() =>
+  isSeasonValid.value ? undefined : 'A season is required'
+);
 
-    const isDeleteDisabled = computed(() => existingTemplate.value == null);
-    const isCreateNew = computed(() => isDeleteDisabled.value);
-    const saveButtonLabel = computed(() => (isCreateNew.value ? 'Create' : 'Save'));
-    const onClickSave = () => {
-      const newTimestampIds = Object.entries(selectedTimestamps.value)
-        .filter(([_, selected]) => selected)
-        .map(([id, _]) => id);
-      if (isCreateNew.value) {
-        store
-          .dispatch(ActionTypes.CREATE_TEMPLATE, {
-            type: type.value,
-            selectedTimestampIds: newTimestampIds,
-            seasons: seasonsToSave.value,
-          })
-          .then(() => store.commit(MutationTypes.TOGGLE_EDIT_TEMPLATE, false));
-      } else {
-        if (existingTemplate.value == null) {
-          console.warn('Cannot update an undefined template');
-          return;
-        }
-        store
-          .dispatch(ActionTypes.UPDATE_TEMPLATE, {
-            templateId: existingTemplate.value.id,
-            type: type.value,
-            selectedTimestampIds: newTimestampIds,
-            seasons: seasonsToSave.value,
-          })
-          .then(() => store.commit(MutationTypes.TOGGLE_EDIT_TEMPLATE, false));
-      }
-    };
-    const hasSelectedTimestamps = computed<boolean>(
-      () => Object.entries(selectedTimestamps.value).filter(([_, selected]) => selected).length > 0
-    );
-    const isSaveDisabled = computed<boolean>(
-      () => !hasSelectedTimestamps.value || !isSeasonValid.value
-    );
-
-    return {
-      isDeleteDisabled,
-      saveButtonLabel,
-      discardChanges,
-      onClickSave,
-      isSavingTemplate,
-      onClickDelete,
-      changeType,
-      isShowSelected,
-      getShowRadioIcon,
-      getShowRadioIconClass,
-      getShowLabelClass,
-      isSeasonSelected,
-      getSeasonRadioIcon,
-      getSeasonRadioIconClass,
-      getSeasonLabelClass,
-      season,
-      isSeasonValid,
-      seasonErrorMessage,
-      timestamps,
-      selectedTimestamps,
-      toggleTimestamp,
-      time,
-      timestampType,
-      onHoverTimestamp,
-      onStopHoverTimestamp,
-      isSaveDisabled,
-    };
+const timestamps = useDisplayedTimestamps();
+const selectedTimestamps = ref(
+  template.value?.timestampIds.reduce((map, id) => {
+    map[id] = true;
+    return map;
+  }, {} as Record<string, boolean>) ?? {}
+);
+const toggleTimestamp = (id: string) => {
+  selectedTimestamps.value = {
+    ...selectedTimestamps.value,
+    [id]: !selectedTimestamps.value?.[id],
+  };
+};
+const typeMap = TIMESTAMP_TYPES.reduce<{ [typeId: string]: Api.TimestampType }>(
+  (map, timestamp) => {
+    map[timestamp.id] = timestamp;
+    return map;
   },
-});
+  {}
+);
+const time = (timestamp: Api.AmbiguousTimestamp): string => {
+  return Utils.formatSeconds(timestamp.at, false);
+};
+const timestampType = (timestamp: Api.AmbiguousTimestamp): string => {
+  return typeMap[timestamp.typeId].name;
+};
+
+// Hovered Timestamps
+
+const [setHoveredTimeout, clearHoveredTimeout] = useTimeout();
+const setHoveredTimestamp = useUpdateHoveredTimestamp();
+const clearHoveredTimestamp = useClearHoveredTimestamp();
+const onHoverTimestamp = (timestamp: Api.AmbiguousTimestamp): void => {
+  clearHoveredTimeout();
+  setHoveredTimestamp(timestamp);
+  setHoveredTimeout(clearHoveredTimestamp, 3 * SECONDS); // TODO test that hover goes away after 3 seconds
+};
+const onStopHoverTimestamp = (): void => {
+  clearHoveredTimeout();
+  clearHoveredTimestamp();
+};
+
+// Saving
+
+const saveNewTemplate = useSaveNewTemplate();
+const saveTemplate = useSaveTemplate();
+
+const isDeleteDisabled = computed(() => template.value == null);
+
+const isCreateNew = computed(() => isDeleteDisabled.value);
+
+const saveButtonLabel = computed(() => (isCreateNew.value ? 'Create' : 'Save'));
+
+const onClickSave = () => {
+  const newTimestampIds = Object.entries(selectedTimestamps.value)
+    .filter(([_, selected]) => selected)
+    .map(([id, _]) => id);
+  let savePromise: Promise<void>;
+  if (isCreateNew.value) {
+    savePromise = saveNewTemplate(type.value, seasonsToSave.value, newTimestampIds);
+  } else {
+    if (template.value == null) {
+      console.warn('Cannot update an undefined template');
+      return;
+    }
+    savePromise = saveTemplate(template.value.id, type.value, seasonsToSave.value, newTimestampIds);
+  }
+  savePromise.then(() => updateIsEditingTemplate(false));
+};
+
+const hasSelectedTimestamps = computed<boolean>(
+  () => Object.entries(selectedTimestamps.value).filter(([_, selected]) => selected).length > 0
+);
+
+const isSaveDisabled = computed<boolean>(
+  () => !hasSelectedTimestamps.value || !isSeasonValid.value
+);
 </script>

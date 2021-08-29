@@ -34,7 +34,7 @@ const isLoggedIn = useIsLoggedIn();
 
 const toggleBooleanPref = useToggleBooleanPref();
 
-const { preferences } = useGeneralPreferences();
+const preferences = useGeneralPreferences();
 const enableAutoSkip = computed(() => preferences.value.enableAutoSkip);
 </script>
 

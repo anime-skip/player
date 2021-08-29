@@ -4,27 +4,18 @@
     class="bg-control-variant bg-opacity-medium z-50"
     gravity-x="center"
     gravity-y="center"
-    v-bind="{ isShowing, hideDialog }"
+    v-bind="{ isShowing, hideLoginOverlay }"
   >
-    <LogIn close-after-login :close="hideDialog" />
+    <LogIn close-after-login :close="hideLoginOverlay" />
   </BasicDialog>
 </template>
 
-<script lang="ts">
-import useLoginDialog from '~/common/composition/useLoginDialog';
-import { computed, defineComponent } from 'vue';
+<script lang="ts" setup>
+import { useDialogState, useHideLoginOverlay } from '../state/useDialogState';
 
-export default defineComponent({
-  setup() {
-    const store = useStore();
-    const isShowing = computed(() => store.state.isShowingLoginDialog);
-    const { closeLoginDialog } = useLoginDialog();
-    return {
-      isShowing: () => isShowing.value,
-      hideDialog: closeLoginDialog,
-    };
-  },
-});
+const dialogState = useDialogState();
+const isShowing = () => dialogState.isShowingLoginOverlay; // TODO: This was a computed with another arrow function layered on top of this. Does the login overlay still show up and dismiss correctly?
+const hideLoginOverlay = useHideLoginOverlay();
 </script>
 
 <style lang="scss">

@@ -36,68 +36,62 @@
 </template>
 
 <script lang="ts">
-import CaptureScreenshot from '~/common/utils/CaptureScreenshot';
-import { defineComponent, ref } from 'vue';
-import Browser from '~/common/utils/Browser';
-
 interface ImageDetails {
   url: string;
   mode: 'full' | 'small';
   filename: string;
 }
+const smallAfter = 100;
+const dismissAfter = 10000;
+</script>
 
-const smallAfter = 100; // ms
-const dismissAfter = 10000; // ms
+<script lang="ts" setup>
+import { ref } from 'vue';
+import Browser from '~/common/utils/Browser';
+import CaptureScreenshot from '~/common/utils/CaptureScreenshot';
+import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 
-export default defineComponent({
-  setup() {
-    const image = ref<ImageDetails | undefined>();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const activeTimeouts: any[] = [];
-    const addImage = (imageData: string) => {
-      // Set it
+const image = ref<ImageDetails | undefined>();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const activeTimeouts: any[] = [];
+const addImage = (imageData: string) => {
+  // Set it
+  image.value = {
+    url: imageData,
+    mode: 'full',
+    filename: 'anime-skip-screenshot-' + Date.now(),
+  };
+
+  // Make it small
+  activeTimeouts.push(
+    setTimeout(() => {
+      if (image.value == null) return;
       image.value = {
-        url: imageData,
-        mode: 'full',
-        filename: 'anime-skip-screenshot-' + Date.now(),
+        ...image.value,
+        mode: 'small',
       };
+    }, smallAfter)
+  );
 
-      // Make it small
-      activeTimeouts.push(
-        setTimeout(() => {
-          if (image.value == null) return;
-          image.value = {
-            ...image.value,
-            mode: 'small',
-          };
-        }, smallAfter)
-      );
+  // Remove it
+  activeTimeouts.push(
+    setTimeout(() => {
+      image.value = undefined;
+    }, dismissAfter)
+  );
+};
 
-      // Remove it
-      activeTimeouts.push(
-        setTimeout(() => {
-          image.value = undefined;
-        }, dismissAfter)
-      );
-    };
-
-    if (Browser.detect() === 'firefox') {
-      useKeyboardShortcuts('Screenshot Overlay', useStore(), {
-        takeScreenshot() {
-          while (activeTimeouts.length > 0) {
-            clearTimeout(activeTimeouts.pop());
-          }
-          image.value = undefined;
-          const video = window.getVideo?.();
-          if (video == null) throw Error('Video is not loaded yet');
-          CaptureScreenshot(video).then(addImage).catch(console.error);
-        },
-      });
+const isFirefox = Browser.detect() === 'firefox';
+useKeyboardShortcuts('Screenshot Overlay', {
+  takeScreenshot() {
+    if (!isFirefox) return;
+    while (activeTimeouts.length > 0) {
+      clearTimeout(activeTimeouts.pop());
     }
-
-    return {
-      image,
-    };
+    image.value = undefined;
+    const video = window.getVideo?.();
+    if (video == null) throw Error('Video is not loaded yet');
+    CaptureScreenshot(video).then(addImage).catch(console.error);
   },
 });
 </script>

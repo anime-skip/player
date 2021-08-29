@@ -1,7 +1,7 @@
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import createAnimeSkipClient from '@anime-skip/axios-api';
+import { createCustomAnimeSkipClient } from '~/common/utils/CustomApiClient';
 import { useAuth } from '../state/useAuth';
 import Utils from '../utils/Utils';
 
@@ -15,7 +15,7 @@ const clientId = 'OB3AfF3fZg9XlZhxtLvhwLhDcevslhnr';
 const mode = import.meta.env.VITE_EXT_MODE;
 const modesToLog: ExtensionMode[] = ['dev', 'staged'];
 
-const client = createAnimeSkipClient(baseUrls[mode], clientId);
+const client = createCustomAnimeSkipClient(baseUrls[mode], clientId);
 if (modesToLog.includes(mode)) {
   client.axios.interceptors.response.use(
     /* eslint-disable no-console */
@@ -71,13 +71,13 @@ export function useApiClient() {
   const apiProxy = new Proxy(client, {
     get(target, field, _receiver) {
       return async function (...args: any[]) {
-        console.log('Inside proxy', { target, field, _receiver, args });
         if (field === 'axios') return (target as any)[field];
         try {
           return await (target as any)[field](...args);
         } catch (err) {
           if (err.status === 401) {
             console.warn('Token expired, logging out');
+            // TODO: Try refresh token
           } else {
             throw err;
           }

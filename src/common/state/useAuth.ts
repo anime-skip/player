@@ -2,10 +2,7 @@ import { useWebExtensionStorage } from '../hooks/useWebExtensionStorage';
 
 interface Auth {
   token?: string;
-  tokenExpiresAt?: number;
-
   refreshToken?: string;
-  refreshTokenExpiresAt?: number;
 }
 
 export const AUTH_STORAGE_KEY = 'auth';
@@ -36,8 +33,6 @@ export function useClearTokens() {
     updateAuth({
       token: undefined,
       refreshToken: undefined,
-      refreshTokenExpiresAt: undefined,
-      tokenExpiresAt: undefined,
     });
   };
 }

@@ -124,155 +124,138 @@
   </LoadingOverlay>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import Utils from '~/common/utils/Utils';
-import { TIMESTAMP_TYPES, TIMESTAMP_SOURCES, SECONDS } from '~/common/utils/Constants';
-import TimestampColors from '~/content-scripts/player/utils/TimelineColors';
+<script lang="ts" setup>
+import { useTimeout, Utils } from '@anime-skip/ui';
+import * as Api from '~/common/api';
+import { useIsLoggedIn } from '~/common/state/useAuth';
+import { SECONDS, TIMESTAMP_SOURCES, TIMESTAMP_TYPES } from '~/common/utils/Constants';
+import { useCanEditTimestamps } from '../../hooks/useCanEditTimestamps';
+import { useDisplayedTimestamps } from '../../hooks/useDisplayedTimestamps';
+import { useMatchingTemplate } from '../../hooks/useMatchingTemplate';
+import { useGetTimestampColor } from '../../hooks/useTimelineColors';
+import { useHideDialog } from '../../state/useDialogState';
+import {
+  EditTimestampMode,
+  useIsEditing,
+  useIsSavingChanges,
+  useUpdateActiveTimestamp,
+  useUpdateEditTimestampMode,
+} from '../../state/useEditingState';
+import { useEpisodeUrl } from '../../state/useEpisodeState';
+import {
+  useClearHoveredTimestamp,
+  useUpdateHoveredTimestamp,
+} from '../../state/useHoveredTimestamp';
+import { useVideoController } from '../../state/useVideoState';
 
-export default defineComponent({
-  mixins: [VideoControllerMixin],
-  unmounted(): void {
-    this.onStopHoverTimestamp();
+const timestampTypeMap = TIMESTAMP_TYPES.reduce<{ [typeId: string]: Api.TimestampType }>(
+  (map, timestamp) => {
+    map[timestamp.id] = timestamp;
+    return map;
   },
-  data() {
-    return {
-      timestampTypeMap: TIMESTAMP_TYPES.reduce<{ [typeId: string]: Api.TimestampType }>(
-        (map, timestamp) => {
-          map[timestamp.id] = timestamp;
-          return map;
-        },
-        {}
-      ),
-      timestampSourceMap: TIMESTAMP_SOURCES,
-      hoverTimeout: undefined as number | undefined,
-    };
-  },
-  computed: {
-    activeTimestamps(): Api.AmbiguousTimestamp[] {
-      return this.$store.getters[GetterTypes.ACTIVE_TIMESTAMPS];
-    },
-    existingTemplate(): Api.Template | undefined {
-      return this.$store.getters[GetterTypes.EDITABLE_TEMPLATE];
-    },
-    editTemplateText(): string {
-      return this.existingTemplate == null ? 'Create Template' : 'Edit Template';
-    },
-    canEditTimestamps(): boolean {
-      return this.$store.getters[GetterTypes.CAN_EDIT_TIMESTAMPS];
-    },
-    isLoggedIn(): boolean {
-      return this.$store.state.isLoggedIn;
-    },
-    isEditing(): boolean {
-      return this.$store.state.isEditing;
-    },
-    episodeUrl(): Api.EpisodeUrlNoEpisode | undefined {
-      return this.$store.state.episodeUrl;
-    },
-    isSavingTimestamps(): boolean {
-      return this.$store.getters[GetterTypes.IS_SAVING_TIMESTAMPS];
-    },
-  },
-  methods: {
-    deleteDraftTimestamp(deletedTimestamp: Api.AmbiguousTimestamp): void {
-      this.$store.commit(MutationTypes.DELETE_DRAFT_TIMESTAMP, deletedTimestamp);
-    },
-    setActiveTimestamp(timestamp: Api.AmbiguousTimestamp): void {
-      this.$store.commit(MutationTypes.SET_ACTIVE_TIMESTAMP, timestamp);
-    },
-    setHoveredTimestamp(timestamp: Api.AmbiguousTimestamp): void {
-      this.$store.commit(MutationTypes.SET_HOVERED_TIMESTAMP, timestamp);
-    },
-    clearHoveredTimestamp(): void {
-      this.$store.commit(MutationTypes.CLEAR_HOVERED_TIMESTAMP);
-    },
-    setEditTimestampMode(mode: 'add' | 'edit' | undefined): void {
-      this.$store.commit(MutationTypes.SET_EDIT_TIMESTAMP_MODE, mode);
-    },
-    startEditing(onStartedEditing?: () => void): void {
-      this.$store.dispatch(ActionTypes.START_EDITING, onStartedEditing);
-    },
-    stopEditing(discard?: boolean): void {
-      this.$store.dispatch(ActionTypes.STOP_EDITING, discard);
-    },
-    hideDialog(): void {
-      this.$store.dispatch(ActionTypes.SHOW_DIALOG, undefined);
-    },
-    showPreferencesDialog(): void {
-      this.$store.dispatch(ActionTypes.SHOW_DIALOG, 'PreferencesDialog');
-    },
-    showEpisodeDialog(): void {
-      this.$store.dispatch(ActionTypes.SHOW_DIALOG, 'EditEpisodeDialog');
-    },
-    async createNewTimestamp(): Promise<void> {
-      this.$store.dispatch(ActionTypes.CREATE_NEW_TIMESTAMP, undefined);
-    },
-    itemType(timestamp: Api.AmbiguousTimestamp): string {
-      return this.timestampTypeMap[timestamp.typeId ?? '']?.name ?? 'Unknown';
-    },
-    itemTime(timestamp: Api.AmbiguousTimestamp): string {
-      return Utils.formatSeconds(timestamp.at, false);
-    },
-    itemNote(timestamp: Api.AmbiguousTimestamp): string {
-      return typeof timestamp.id === 'number' ? 'New' : 'Modified';
-    },
-    itemSouce(timestamp: Api.AmbiguousTimestamp): string {
-      return this.timestampSourceMap[timestamp.source] ?? 'Unknown';
-    },
-    itemHasSource(timestamp: Api.AmbiguousTimestamp): boolean {
-      return timestamp.source !== 'ANIME_SKIP';
-    },
-    itemTimestampStyle(timestamp: Api.AmbiguousTimestamp): string {
-      const color =
-        typeof timestamp.id === 'number'
-          ? TimestampColors.new
-          : timestamp.edited
-          ? TimestampColors.edited
-          : TimestampColors.defaultLight;
-      return `color: ${color}`;
-    },
-    async editTimestamp(timestamp: Api.AmbiguousTimestamp): Promise<void> {
-      this.pause();
-      await this.startEditing(() => {
-        this.setEditTimestampMode('edit');
-        this.setActiveTimestamp(timestamp);
-        this.setCurrentTime(timestamp.at);
-      });
-    },
-    async deleteTimestamp(timestamp: Api.AmbiguousTimestamp): Promise<void> {
-      await this.startEditing(() => {
-        this.deleteDraftTimestamp(timestamp);
-      });
-    },
-    onClickTimestamp(timestamp: Api.AmbiguousTimestamp): void {
-      this.setCurrentTime(timestamp.at);
-    },
-    async onClickAddNew(): Promise<void> {
-      await this.createNewTimestamp();
-    },
-    async onClickSave(): Promise<void> {
-      await this.stopEditing();
-      this.hideDialog();
-    },
-    async onClickDiscard(): Promise<void> {
-      await this.stopEditing(true);
-      this.hideDialog();
-    },
-    onClickOpenTemplate(): void {
-      this.$store.commit(MutationTypes.TOGGLE_EDIT_TEMPLATE, true);
-    },
-    onHoverTimestamp(timestamp: Api.AmbiguousTimestamp): void {
-      if (this.hoverTimeout != null) window.clearTimeout(this.hoverTimeout);
-      this.setHoveredTimestamp(timestamp);
-      this.hoverTimeout = window.setTimeout(this.clearHoveredTimestamp, 3 * SECONDS);
-    },
-    onStopHoverTimestamp(): void {
-      if (this.hoverTimeout != null) window.clearTimeout(this.hoverTimeout);
-      this.clearHoveredTimestamp();
-    },
-  },
-});
+  {}
+);
+const isLoggedIn = useIsLoggedIn();
+const isEditing = useIsEditing();
+const episodeUrl = useEpisodeUrl();
+const { pause, setCurrentTime } = useVideoController();
+
+// Timestamp Hover
+
+const [setTimestampHoverTimeout, clearTimestampHoverTimeout] = useTimeout();
+const updateHoveredTimestamp = useUpdateHoveredTimestamp();
+function onHoverTimestamp(timestamp: Api.AmbiguousTimestamp): void {
+  clearTimestampHoverTimeout();
+  updateHoveredTimestamp(timestamp);
+  setTimestampHoverTimeout(clearHoveredTimestamp, 3 * SECONDS);
+}
+
+const clearHoveredTimestamp = useClearHoveredTimestamp(updateHoveredTimestamp);
+function onStopHoverTimestamp(): void {
+  clearTimestampHoverTimeout();
+  clearHoveredTimestamp();
+}
+onUnmounted(onStopHoverTimestamp);
+
+// Templates
+
+const existingTemplate = useMatchingTemplate();
+const editTemplateText = computed(() =>
+  existingTemplate.value ? 'Create Template' : 'Edit Template'
+);
+
+// List Items
+
+function itemType(timestamp: Api.AmbiguousTimestamp): string {
+  return timestampTypeMap[timestamp.typeId ?? '']?.name ?? 'Unknown';
+}
+function itemTime(timestamp: Api.AmbiguousTimestamp): string {
+  return Utils.formatSeconds(timestamp.at, false);
+}
+function itemNote(timestamp: Api.AmbiguousTimestamp): string {
+  return typeof timestamp.id === 'number' ? 'New' : 'Modified';
+}
+function itemSouce(timestamp: Api.AmbiguousTimestamp): string {
+  return TIMESTAMP_SOURCES[timestamp.source] ?? 'Unknown';
+}
+function itemHasSource(timestamp: Api.AmbiguousTimestamp): boolean {
+  return timestamp.source !== 'ANIME_SKIP';
+}
+const getTimestampColor = useGetTimestampColor(true); // Use lighter blue on the list so its easier to read
+function itemTimestampStyle(timestamp: Api.AmbiguousTimestamp): string {
+  return `color: ${getTimestampColor(timestamp)}`;
+}
+
+function onClickTimestamp(timestamp: Api.AmbiguousTimestamp) {
+  setCurrentTime(timestamp.at);
+}
+
+// Editing
+
+const activeTimestamps = useDisplayedTimestamps();
+const updateActiveTimestamp = useUpdateActiveTimestamp();
+const canEditTimestamps = useCanEditTimestamps();
+const isSavingTimestamps = useIsSavingChanges();
+const updateEditTimestampMode = useUpdateEditTimestampMode();
+
+function startEditing(onStartedEditing?: () => void): void {
+  // TODO this.$store.dispatch(ActionTypes.START_EDITING, onStartedEditing);
+}
+async function stopEditing(discard?: boolean): Promise<void> {
+  // TODO await this.$store.dispatch(ActionTypes.STOP_EDITING, discard);
+}
+
+function editTimestamp(timestamp: Api.AmbiguousTimestamp): void {
+  pause();
+  startEditing(() => {
+    updateEditTimestampMode(EditTimestampMode.EDIT);
+    updateActiveTimestamp(timestamp);
+    setCurrentTime(timestamp.at);
+  });
+}
+
+function deleteTimestamp(deletedTimestamp: Api.AmbiguousTimestamp) {
+  startEditing(() => {
+    // TODO: this.$store.commit(MutationTypes.DELETE_DRAFT_TIMESTAMP, deletedTimestamp)
+  });
+}
+
+function onClickAddNew(): void {
+  // TODO this.$store.dispatch(ActionTypes.CREATE_NEW_TIMESTAMP, undefined);
+}
+
+const hideDialog = useHideDialog();
+async function onClickSave(): Promise<void> {
+  await stopEditing();
+  await hideDialog();
+}
+async function onClickDiscard(): Promise<void> {
+  await stopEditing(true);
+  await hideDialog();
+}
+function onClickOpenTemplate(): void {
+  // TODO: this.$store.commit(MutationTypes.TOGGLE_EDIT_TEMPLATE, true);
+}
 </script>
 
 <style scoped lang="scss">

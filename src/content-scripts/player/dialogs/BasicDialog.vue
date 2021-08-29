@@ -1,7 +1,7 @@
 <template>
   <transition name="dialog">
     <div
-      v-if="visible"
+      v-if="isVisible"
       class="BasicDialog absolute inset-0 flex flex-col cursor-pointer overflow-visible"
       :id="name"
       :style="`align-items: ${gravityX}; justify-content: ${gravityY}`"
@@ -18,62 +18,55 @@
   </transition>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue';
+<script lang="ts" setup>
+import { PropType } from 'vue';
+import { useDialogState, useHideDialog } from '../state/useDialogState';
 
-export default defineComponent({
-  props: {
-    name: { type: String, required: true },
-    gravityX: {
-      type: String as PropType<'center' | 'flex-start' | 'flex-end'>,
-      default: 'center',
-    },
-    gravityY: {
-      type: String as PropType<'center' | 'flex-start' | 'flex-end'>,
-      default: 'center',
-    },
-    isShowing: {
-      type: Function as PropType<(dialogName: string, activeDialog?: string) => boolean>,
-      default: undefined,
-    },
-    hideDialog: { type: Function as PropType<(store: Store) => void>, default: undefined },
+const props = defineProps({
+  name: { type: String, required: true },
+  gravityX: {
+    type: String as PropType<'center' | 'flex-start' | 'flex-end'>,
+    default: 'center',
   },
-  emits: {
-    show: () => true,
-    hide: () => true,
+  gravityY: {
+    type: String as PropType<'center' | 'flex-start' | 'flex-end'>,
+    default: 'center',
   },
-  watch: {
-    activeDialog(currentDialog?: string, prevDialog?: string) {
-      if (currentDialog === prevDialog) return;
-
-      if (this.name === currentDialog && this.name !== prevDialog) {
-        this.$emit('show');
-      } else if (this.name === prevDialog && this.name !== currentDialog) {
-        this.$emit('hide');
-      }
-    },
+  isShowing: {
+    type: Function as PropType<(dialogName: string, activeDialog?: string) => boolean>,
+    default: undefined,
   },
-  computed: {
-    activeDialog(): string | undefined {
-      return this.$store.state.activeDialog;
-    },
-    visible(): boolean {
-      if (this.isShowing) {
-        return this.isShowing(this.name, this.activeDialog);
-      }
-      return this.name === this.activeDialog;
-    },
-  },
-  methods: {
-    dismiss(): void {
-      if (this.hideDialog) {
-        this.hideDialog(this.$store);
-      } else {
-        this.$store.dispatch(ActionTypes.SHOW_DIALOG, undefined);
-      }
-    },
-  },
+  hideDialog: { type: Function as PropType<() => void>, default: undefined },
 });
+const emits = defineEmits({
+  show: () => true,
+  hide: () => true,
+});
+
+const dialogState = useDialogState();
+const isVisible = computed(() => {
+  return (
+    props.isShowing?.(props.name, dialogState.activeDialog) ??
+    props.name === dialogState.activeDialog
+  );
+});
+watch(
+  () => dialogState.activeDialog,
+  (newDialog, oldDialog) => {
+    if (newDialog === oldDialog) return;
+
+    if (props.name === newDialog && props.name !== oldDialog) {
+      emits('show');
+    } else if (props.name === oldDialog && props.name !== newDialog) {
+      emits('hide');
+    }
+  }
+);
+
+const hideDialog = useHideDialog();
+function dismiss() {
+  props.hideDialog?.() ?? hideDialog();
+}
 </script>
 
 <style lang="scss" scoped>

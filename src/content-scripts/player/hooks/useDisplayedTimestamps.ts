@@ -1,10 +1,16 @@
+import * as Api from '~/common/api';
+import { useDraftTimestamps, useIsEditing } from '../state/useEditingState';
+import { useUneditedTimestamps } from '../state/useEpisodeState';
+
 /**
  * Used to return the current timestamps being displayed based on remote/template/edited timestamps
  */
 export function useDisplayedTimestamps() {
-  const displayTimestamps = ref<Api.AmbiguousTimestamp[]>([]);
+  const isEditing = useIsEditing();
+  const draftTimestamps = useDraftTimestamps();
+  const uneditedTimestamps = useUneditedTimestamps();
 
-  // TODO: Map computed value over
-
-  return displayTimestamps;
+  return computed<Api.AmbiguousTimestamp[]>(() =>
+    isEditing.value ? draftTimestamps.value : uneditedTimestamps.value
+  );
 }

@@ -1,72 +1,67 @@
 <template>
-  <PlayerState>
-    <div
-      id="AnimeSkipPlayer"
-      class="absolute inset-0 grid overflow-hidden bg-background bg-opacity-0"
-      :class="{
-        active: isActive,
-        'paused bg-opacity-medium': videoState.isPaused,
-        'buffering bg-opacity-medium': videoState.isBuffering,
-        showing: isEpisodeInfoShowing,
-      }"
-      @mouseenter.prevent="onMouseMove"
-      @mousemove.prevent="onMouseMove"
-      @mouseleave.prevent="onMouseLeave"
-      @click="togglePlayPause"
-    >
-      <div v-if="showBufferLoading" class="absolute inset-0 flex items-center justify-center">
-        <Loading />
-      </div>
-      <div class="left-content opacity-0 pointer-events-none pl-8 pt-8 box-border">
-        <EpisodeInfo />
-      </div>
-      <div class="right-content" />
-      <ToolBar class="bottom-content" />
-
-      <!-- Dialogs -->
-      <ScreenshotOverlay />
-      <TimestampsPanel />
-      <PreferencesDialog />
-      <EditEpisodeDialog />
-      <LoginDialog />
+  <div
+    id="AnimeSkipPlayer"
+    class="absolute inset-0 grid overflow-hidden bg-background bg-opacity-0"
+    :class="{
+      active: isActive,
+      'paused bg-opacity-medium': videoState.isPaused,
+      'buffering bg-opacity-medium': videoState.isBuffering,
+      showing: isEpisodeInfoShowing,
+    }"
+    @mouseenter.prevent="onMouseMove"
+    @mousemove.prevent="onMouseMove"
+    @mouseleave.prevent="onMouseLeave"
+    @click="togglePlayPause"
+  >
+    <div v-if="showBufferLoading" class="absolute inset-0 flex items-center justify-center">
+      <Loading />
     </div>
-  </PlayerState>
+    <div class="left-content opacity-0 pointer-events-none pl-8 pt-8 box-border">
+      <EpisodeInfo />
+    </div>
+    <div class="right-content" />
+    <controls-toolbar class="bottom-content" />
+
+    <!-- Dialogs -->
+    <ScreenshotOverlay />
+    <TimestampsPanel />
+    <PreferencesDialog />
+    <EditEpisodeDialog />
+    <LoginDialog />
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { useTimeout } from '@anime-skip/ui';
 import { PLAYER_ACTIVITY_TIMEOUT } from '~/common/utils/Constants';
 import Utils from '~/common/utils/Utils';
-import { useTabUrl } from './hooks/useTabUrl';
-import { useVideoElement } from './hooks/useVideoElement';
-import PlayerState from './state/PlayerState.vue';
+import { useLoadAllEpisodeData } from '../hooks/useLoadAllEpisodeData';
+import { useTabUrl } from '../hooks/useTabUrl';
+import { useVideoElement } from '../hooks/useVideoElement';
 import {
   usePlayHistory,
   useResetInitialBuffer,
   useResetSkippedFromZero,
-} from './state/usePlayHistory';
-import { useVideoState } from './state/useVideoState';
+} from '../state/usePlayHistory';
+import { useVideoState } from '../state/useVideoState';
 
 const resetHasSkippedFromZero = useResetSkippedFromZero();
 const resetInitialBuffer = useResetInitialBuffer();
 
 // Url/Video Change
 
-async function loadAllEpisodeData() {
-  // TODO
-  console.error('this.loadAllEpisodeData() action not re-implemented');
-}
-
+const loadAllEpisodeData = useLoadAllEpisodeData();
 const tabUrl = useTabUrl();
-watch(tabUrl, () => {
+watch(tabUrl, newUrl => {
   resetHasSkippedFromZero();
   resetInitialBuffer();
 
-  loadAllEpisodeData();
+  if (newUrl) {
+    loadAllEpisodeData(newUrl);
+  }
 });
 
-const { video, togglePlayPause, setActive, setInactive, setCurrentTime, setDuration } =
-  useVideoElement();
+const { video, togglePlayPause, setActive, setInactive, setDuration } = useVideoElement();
 watch(video, newVideo => {
   if (!newVideo) return;
   newVideo.playbackRate = videoState.playbackRate;

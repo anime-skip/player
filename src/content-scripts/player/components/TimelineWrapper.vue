@@ -32,142 +32,129 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, ref, watch } from 'vue';
+<script lang="ts" setup>
+import { computed, ref, watch } from 'vue';
+import * as Api from '~/common/api';
+import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
 import Utils from '~/common/utils/Utils';
-import TimestampColors from '~/content-scripts/player/utils/TimelineColors';
+import { useDisplayedTimestamps } from '../hooks/useDisplayedTimestamps';
+import { useGetTimestampColor } from '../hooks/useTimelineColors';
+import { useEditingState, useIsEditing } from '../state/useEditingState';
+import { useHoveredTimestampId } from '../state/useHoveredTimestamp';
+import { usePlayHistory, useUpdatePlayHistory } from '../state/usePlayHistory';
+import { useDuration, useVideoController, useVideoState } from '../state/useVideoState';
 
-export default defineComponent({
-  props: {
-    isFlipped: Boolean,
-    duration: { type: Number, default: undefined },
-  },
-  setup(props) {
-    const store: Store = useStore();
-    const { service } = window;
-    const preferences = computed(() => store.getters[GetterTypes.PREFERENCES]);
-    const { setCurrentTime } = useVideoController();
-    const currentTime = computed(() => store.state.playerState.currentTime);
+const props = defineProps<{
+  isFlipped?: boolean;
+}>();
 
-    // Styles
-    const thumbSize = computed(() => (props.isFlipped ? 3 : 11));
+const preferences = useGeneralPreferences();
+const { setCurrentTime } = useVideoController();
+const videoState = useVideoState();
+const currentTime = computed(() => videoState.currentTime);
+const hoveredTimestampId = useHoveredTimestampId();
+const playHistory = usePlayHistory();
+const updatePlayHistory = useUpdatePlayHistory();
 
-    // Editing
-    const isEditing = computed(() => store.state.isEditing);
-    const timestampBeingEdited = computed(() => store.state.activeTimestamp);
-    const canAddTimestamp = computed(() => isEditing.value && timestampBeingEdited.value == null);
+// Styles
 
-    // Timestamps
-    const activeTimestamps = computed(() => store.getters[GetterTypes.ACTIVE_TIMESTAMPS]);
-    const timelineData = computed(() => {
-      const duration = props.duration;
-      if (duration == null) return [];
+const thumbSize = computed(() => (props.isFlipped ? 3 : 11));
 
-      return activeTimestamps.value.map(timestamp => ({
-        key: timestamp.id,
-        normalizedAt: (timestamp.at / duration) * 100,
-        skipped: !isEditing.value && Utils.isSkipped(timestamp, preferences.value),
-        color:
-          typeof timestamp.id === 'number'
-            ? TimestampColors.new
-            : timestamp.edited
-            ? TimestampColors.edited
-            : TimestampColors.default,
-        active:
-          store.state.hoveredTimestamp?.id === timestamp.id ||
-          timestamp.id === timestampBeingEdited.value?.id,
-      }));
-    });
-    const goToNextTimestampOnTimeChange = (newTime: number): void => {
-      const newNext = Utils.nextTimestamp(newTime, activeTimestamps.value, preferences.value);
-      const goToTime = newNext?.at ?? props.duration;
-      if (goToTime != null) {
-        setCurrentTime(goToTime);
-      }
-    };
+// Editing
 
-    // On time change
-    const isSeeking = ref(false);
-    const seekingTime = ref(0);
-    const onSeek = (newNormalizedTime: number): void => {
-      if (!props.duration) return;
-      const newTime = (newNormalizedTime / 100) * props.duration;
-      setCurrentTime(newTime);
-    };
-    const normalizedTime = computed(() => {
-      if (!props.duration) return 0;
-      return Utils.boundedNumber((currentTime.value / props.duration) * 100, [0, 100]);
-    });
-    const hasSkippedFromZero = computed({
-      get: () => store.state.hasSkippedFromZero,
-      set: value => store.commit(MutationTypes.SET_HAS_SKIPPED_FROM_ZERO, value),
-    });
-    watch(currentTime, (newTime, oldTime) => {
-      if (!props.duration) return;
+const editingState = useEditingState();
+const isEditing = useIsEditing(editingState);
+const timestampBeingEdited = computed(() => editingState.activeTimestamp);
 
-      // Do nothing
-      const currentTimestamp = Utils.previousTimestamp(oldTime, activeTimestamps.value, undefined);
-      const insideSkippedSection =
-        currentTimestamp != null && Utils.isSkipped(currentTimestamp, preferences.value);
-      if (insideSkippedSection) {
-        return;
-      }
+// Timestamps
 
-      // Get the next timestamp AFTER the oldTime, regardless of if it's skipped
-      let oldNext = Utils.nextTimestamp(oldTime, activeTimestamps.value, undefined);
+const getTimestampColor = useGetTimestampColor(false); // Use darker blue on the actual timeline
+const activeTimestamps = useDisplayedTimestamps();
+const duration = useDuration(videoState);
+const timelineData = computed(() => {
+  if (duration.value == null) return [];
 
-      // Do nothing
-      const timeDiff = Math.abs(oldTime - newTime);
-      const hasNoMoreTimestamsps = oldNext == null;
-      const isSeeking = timeDiff > 1 * store.state.playbackRate; // Multiple the base number, 1s, by the speed so that high playback rates don't "skip" over timestamps
-      const isAtEnd = newTime >= props.duration;
-      if (hasNoMoreTimestamsps || isSeeking || isAtEnd || isEditing.value) {
-        return;
-      }
-      oldNext = oldNext as Api.AmbiguousTimestamp;
+  return activeTimestamps.value.map(timestamp => ({
+    key: timestamp.id,
+    normalizedAt: (timestamp.at / duration.value) * 100,
+    skipped: !isEditing.value && Utils.isSkipped(timestamp, preferences.value),
+    color: getTimestampColor(timestamp),
+    active:
+      hoveredTimestampId.value === timestamp.id || timestamp.id === timestampBeingEdited.value?.id,
+  }));
+});
+const goToNextTimestampOnTimeChange = (newTime: number): void => {
+  const newNext = Utils.nextTimestamp(newTime, activeTimestamps.value, preferences.value);
+  const goToTime = newNext?.at ?? duration.value;
+  if (goToTime != null) {
+    setCurrentTime(goToTime);
+  }
+};
 
-      // Skip timestamp at 0:00 if we haven't yet
-      const wasAtBeginning = oldTime === 0;
-      const haveNotSkippedFromBeginning = !hasSkippedFromZero.value;
-      const shouldSkipFirstTimestamp = Utils.isSkipped(
-        activeTimestamps.value[0],
-        preferences.value
-      );
-      if (wasAtBeginning && haveNotSkippedFromBeginning && shouldSkipFirstTimestamp) {
-        hasSkippedFromZero.value = true;
-        goToNextTimestampOnTimeChange(newTime);
-        return;
-      }
+// On time change
 
-      // Do nothing
-      // const oldNext as Api.AmbiguousTimestamp;
-      const willNotPastATimestamp = oldNext.at > newTime + timeDiff; // look forward a time update so we don't show the user a frame of the skipped section
-      const notSkippingThePassedTimestamp = !Utils.isSkipped(oldNext, preferences.value);
-      if (willNotPastATimestamp || notSkippingThePassedTimestamp) {
-        return;
-      }
-      const jumpedDirectlyToTimestamp =
-        activeTimestamps.value.find(timestamp => Math.abs(timestamp.at - oldTime) < 0.0001) != null;
-      if (jumpedDirectlyToTimestamp) {
-        return;
-      }
+const isSeeking = ref(false);
+const onSeek = (newNormalizedTime: number): void => {
+  if (!duration.value) return;
+  const newTime = (newNormalizedTime / 100) * duration.value;
+  setCurrentTime(newTime);
+};
+const normalizedTime = computed(() => {
+  if (!duration.value) return 0;
+  return Utils.boundedNumber((currentTime.value / duration.value) * 100, [0, 100]);
+});
+const hasSkippedFromZero = computed({
+  get: () => playHistory.hasSkippedFromZero,
+  set: value => updatePlayHistory({ hasSkippedFromZero: value }),
+});
+watch(currentTime, (newTime, oldTime) => {
+  if (!duration.value) return;
 
-      goToNextTimestampOnTimeChange(newTime);
-    });
+  // Do nothing
+  const currentTimestamp = Utils.previousTimestamp(oldTime, activeTimestamps.value, undefined);
+  const insideSkippedSection =
+    currentTimestamp != null && Utils.isSkipped(currentTimestamp, preferences.value);
+  if (insideSkippedSection) {
+    return;
+  }
 
-    return {
-      isSeeking,
-      isEditing,
-      service,
-      seekingTime,
-      canAddTimestamp,
-      normalizedTime,
-      onSeek,
-      activeTimestamps,
-      timelineData,
-      thumbSize,
-    };
-  },
+  // Get the next timestamp AFTER the oldTime, regardless of if it's skipped
+  let oldNext = Utils.nextTimestamp(oldTime, activeTimestamps.value, undefined);
+
+  // Do nothing
+  const timeDiff = Math.abs(oldTime - newTime);
+  const hasNoMoreTimestamsps = oldNext == null;
+  const isSeeking = timeDiff > 1 * videoState.playbackRate; // Multiple the base number, 1s, by the speed so that high playback rates don't "skip" over timestamps
+  const isAtEnd = newTime >= duration.value;
+  if (hasNoMoreTimestamsps || isSeeking || isAtEnd || isEditing.value) {
+    return;
+  }
+  oldNext = oldNext as Api.AmbiguousTimestamp;
+
+  // Skip timestamp at 0:00 if we haven't yet
+  const wasAtBeginning = oldTime === 0;
+  const haveNotSkippedFromBeginning = !hasSkippedFromZero.value;
+  const shouldSkipFirstTimestamp = Utils.isSkipped(activeTimestamps.value[0], preferences.value);
+  if (wasAtBeginning && haveNotSkippedFromBeginning && shouldSkipFirstTimestamp) {
+    hasSkippedFromZero.value = true;
+    goToNextTimestampOnTimeChange(newTime);
+    return;
+  }
+
+  // Do nothing
+  // const oldNext as Api.AmbiguousTimestamp;
+  const willNotPastATimestamp = oldNext.at > newTime + timeDiff; // look forward a time update so we don't show the user a frame of the skipped section
+  const notSkippingThePassedTimestamp = !Utils.isSkipped(oldNext, preferences.value);
+  if (willNotPastATimestamp || notSkippingThePassedTimestamp) {
+    return;
+  }
+  const jumpedDirectlyToTimestamp =
+    activeTimestamps.value.find(timestamp => Math.abs(timestamp.at - oldTime) < 0.0001) != null;
+  if (jumpedDirectlyToTimestamp) {
+    return;
+  }
+
+  goToNextTimestampOnTimeChange(newTime);
 });
 </script>
 

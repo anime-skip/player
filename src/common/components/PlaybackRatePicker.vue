@@ -13,7 +13,7 @@
       "
     >
       <Icon path="M4 18L12.5 12L4 6V18ZM13 6V18L21.5 12L13 6Z" class="my-2 w-10" />
-      <div v-for="speed in rates" :key="speed.value" class="flex-1 min-w-10">
+      <div v-for="speed in PLAYBACK_SPEEDS" :key="speed.value" class="flex-1 min-w-10">
         <RaisedContainer
           class="cursor-pointer text-on-surface box-border w-full h-full"
           :down="!isRateSelected(speed.value)"
@@ -45,7 +45,8 @@
               'bg-error text-on-error': isCustomError,
             }"
             placeholder="?.?"
-            v-model="customRate"
+            :value="customRate"
+            @input="onChangeCustom"
             @blur="onBlurCustom()"
           />
         </RaisedContainer>
@@ -55,78 +56,90 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts">
 import { defineComponent } from 'vue';
 import { PLAYBACK_SPEEDS } from '~/common/utils/Constants';
+import { useUpdateVideoState } from '~/content-scripts/player/state/useVideoState';
 import { useGeneralPreferences, useUpdateNumberPref } from '../state/useGeneralPreferences';
 
-const props = defineProps<{
-  showLess?: boolean;
-}>();
+export default defineComponent({
+  props: {
+    showLess: Boolean,
+  },
+  mounted(): void {
+    if (!this.isConstantSelected) {
+      this.customRate = String(this.playbackRate);
+    }
+  },
+  setup() {
+    const updateNumberPref = useUpdateNumberPref();
+    const changePlaybackRate = (newRate: number) => updateNumberPref('playbackRate', newRate);
+    const generalPrefs = useGeneralPreferences();
+    const playbackRate = computed(() => generalPrefs.value.playbackRate);
 
-const { preferences } = useGeneralPreferences();
-const rate = computed(() => preferences.value.playbackRate);
-watch(rate, newRate => {
-  if (isConstantSelected.value) {
-    customRate.value = String(newRate);
-  }
+    return {
+      changePlaybackRate,
+      playbackRate,
+    };
+  },
+  data() {
+    return {
+      customRate: '',
+      PLAYBACK_SPEEDS: PLAYBACK_SPEEDS.filter(speed => !speed.hideWhenSmall || !this.showLess),
+    };
+  },
+  watch: {
+    playbackRate() {
+      this.onChangePlaybackRate();
+    },
+  },
+  computed: {
+    isConstantSelected(): boolean {
+      return !!this.PLAYBACK_SPEEDS.find(
+        (speed: PlaybackRate) => speed.value === this.playbackRate
+      );
+    },
+    isCustomError(): boolean {
+      if (!this.customRate) return false;
+
+      const value = Number(this.customRate);
+      if (!isFinite(value)) return true;
+
+      return value < 0.5 || value > 4;
+    },
+  },
+  methods: {
+    isRateSelected(speed: number): boolean {
+      return this.playbackRate === speed && !this.customRate;
+    },
+    onChangePlaybackRate() {
+      if (!this.isConstantSelected) {
+        this.customRate = this.playbackRate ? String(this.playbackRate) : '';
+      }
+    },
+    onClickOption(value: number) {
+      this.customRate = '';
+      this.changePlaybackRate(Number(value));
+    },
+    onChangeCustom(event: Event) {
+      const { value } = event.target as HTMLInputElement;
+      this.customRate = value;
+    },
+    onBlurCustom() {
+      const value = this.customRate;
+      this.changePlaybackRate(Number(value));
+      if (this.isConstantSelected) {
+        this.customRate = '';
+      }
+      if (this.isCustomError) {
+        return;
+      }
+    },
+  },
 });
-
-const customRate = ref('');
-const rates = PLAYBACK_SPEEDS.filter(speed => !props.showLess || !speed.hideWhenSmall);
-const isConstantSelected = computed(
-  () => !!rates.find((speed: PlaybackRate) => speed.value === rate.value)
-);
-const isCustomError = computed(() => {
-  if (!customRate.value) return false;
-
-  const value = Number(customRate.value);
-  if (!isFinite(value)) return true;
-
-  return value < 0.5 || value > 4;
-});
-
-onMounted(() => {
-  if (!isConstantSelected.value) {
-    customRate.value = String(rate.value);
-  }
-});
-
-// Selecting
-
-function isRateSelected(speed: number): boolean {
-  return rate.value === speed && !customRate.value;
-}
-
-const updateNumberPref = useUpdateNumberPref();
-function updateRate(newRate: number): void {
-  updateNumberPref('playbackRate', newRate);
-}
-
-function onClickOption(value: number): void {
-  customRate.value = '';
-  updateRate(value);
-}
-
-function onBlurCustom(): void {
-  const value = customRate.value;
-  updateRate(Number(value));
-  if (isConstantSelected.value) {
-    customRate.value = '';
-  }
-  if (isCustomError.value) {
-    return;
-  }
-}
 </script>
 
-<script lang="ts">
-defineComponent({
-  methods: {},
-});
-</script>
-
-<style scoped>
+<style lang="scss" scoped>
 .bg-transparent {
   background: transparent;
 }

@@ -31,7 +31,7 @@ defineProps({
   twoColumns: Boolean,
 });
 
-const { preferences } = useGeneralPreferences();
+const preferences = useGeneralPreferences();
 const toggleBooleanPref = useToggleBooleanPref();
 const autoSkipDisabled = computed<boolean>(() => !preferences.value.enableAutoSkip);
 </script>

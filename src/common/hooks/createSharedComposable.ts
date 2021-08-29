@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { EffectScope, effectScope, onScopeDispose } from 'vue';
 
 export function createSharedComposable<T extends (...args: unknown[]) => any>(composable: T) {

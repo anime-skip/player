@@ -31,12 +31,23 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import ShowAutocompleteMixin from '~/common/mixins/ShowAutocomplete';
+import { useShowAutocomplete } from '../../hooks/useShowAutocomplete';
+import { useHideDialog } from '../../state/useDialogState';
+import { useDuration } from '../../state/useVideoState';
+
+// TODO: Finish this component
 
 export default defineComponent({
-  mixins: [ShowAutocompleteMixin],
   props: {
     prefill: { type: Object as PropType<CreateEpisodePrefill>, default: undefined },
+  },
+  setup() {
+    const showAutocomplete = useShowAutocomplete(ref());
+    const hideDialog = useHideDialog();
+    return {
+      ...showAutocomplete,
+      hideDialog,
+    };
   },
   data() {
     return {
@@ -64,51 +75,49 @@ export default defineComponent({
     },
   },
   methods: {
-    hideDialog(): void {
-      this.$store.dispatch(ActionTypes.SHOW_DIALOG, undefined);
-    },
     async onClickCreate(): Promise<void> {
-      const url = this.$store.state.tabUrl;
-      if (url == null) {
-        throw new Error("Cannot create an episode without it's URL");
-      }
-      const duration = this.$store.state.playerState.duration;
-      const episode: Api.InputEpisode = {
-        name: this.name.trim() || undefined,
-        season: this.season.trim() || undefined,
-        number: this.number.trim() || undefined,
-        absoluteNumber: this.absoluteNumber.trim() || undefined,
-        baseDuration: duration,
-      };
-      const episodeUrl: Api.InputEpisodeUrl = {
-        url,
-        duration,
-        timestampsOffset: 0,
-      };
-
-      const payload: CreateEpisodeDataPayload = {
-        show:
-          this.show.data == null
-            ? {
-                create: true,
-                name: this.show.title,
-              }
-            : {
-                create: false,
-                showId: this.show.data.id,
-              },
-        episode: {
-          create: true,
-          data: episode,
-        },
-        episodeUrl: {
-          create: true,
-          data: episodeUrl,
-        },
-      };
-      await this.$store.dispatch(ActionTypes.CREATE_EPISODE_DATA, payload);
-
-      this.hideDialog();
+      // TODO
+      // const url = this.$store.state.tabUrl;
+      // if (url == null) {
+      //   throw new Error("Cannot create an episode without it's URL");
+      // }
+      // const duration = this.$store.state.playerState.duration;
+      // const episode: Api.InputEpisode = {
+      //   name: this.name.trim() || undefined,
+      //   season: this.season.trim() || undefined,
+      //   number: this.number.trim() || undefined,
+      //   absoluteNumber: this.absoluteNumber.trim() || undefined,
+      //   baseDuration: duration,
+      // };
+      // const episodeUrl: Api.InputEpisodeUrl = {
+      //   url,
+      //   duration,
+      //   timestampsOffset: 0,
+      // };
+      //
+      // const payload: CreateEpisodeDataPayload = {
+      //   show:
+      //     this.show.data == null
+      //       ? {
+      //           create: true,
+      //           name: this.show.title,
+      //         }
+      //       : {
+      //           create: false,
+      //           showId: this.show.data.id,
+      //         },
+      //   episode: {
+      //     create: true,
+      //     data: episode,
+      //   },
+      //   episodeUrl: {
+      //     create: true,
+      //     data: episodeUrl,
+      //   },
+      // };
+      // await this.$store.dispatch(ActionTypes.CREATE_EPISODE_DATA, payload);
+      //
+      // await this.hideDialog();
     },
   },
 });

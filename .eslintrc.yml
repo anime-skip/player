@@ -6,6 +6,7 @@ parserOptions:
 plugins:
   - '@typescript-eslint'
   - only-warn
+  - eslint-plugin-import
 extends:
   - eslint:recommended
 
@@ -20,6 +21,9 @@ rules:
       varsIgnorePattern: _.*
   generator-star-spacing:
     - 'off'
+  import/no-unused-modules:
+    - 'warn'
+    - unusedExports: true
 
 overrides:
   - files: ['*.js']
@@ -34,6 +38,10 @@ overrides:
         - argsIgnorePattern: _.*
           varsIgnorePattern: _.*
       '@typescript-eslint/explicit-module-boundary-types': 'off'
+  - files: ['vite.build.ts', 'scripts/*', 'vite/*']
+    rules:
+      '@typescript-eslint/triple-slash-reference': 'off'
+      '@typescript-eslint/no-non-null-assertion': 'off'
   - files: ['*.d.ts']
     rules:
       no-undef: 'off'

@@ -25,211 +25,214 @@
           :prefill="prefill"
           :suggestions="suggestions"
         />
-        <CreateNew v-else-if="shouldShowCreateNew" :prefill="prefill" />
+        <CreateNew v-if="shouldShowCreateNew" :prefill="prefill" />
       </template>
     </LoadingOverlay>
   </BasicDialog>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import Utils from '~/common/utils/Utils';
-import RequestState from '~/common/utils/RequestState';
+<script lang="ts" setup>
+import useRequestState from 'vue-use-request-state';
+import * as Api from '~/common/api';
+import {
+  FETCH_EPISODE_BY_NAME_QUERY,
+  FIND_INFERRED_EPISODE_QUERY,
+  LOAD_DEFAULT_SHOW_OPTION_QUERY,
+} from '~/common/api';
+import { useApiClient } from '~/common/hooks/useApiClient';
+import { useIsLoggedIn } from '~/common/state/useAuth';
 import Mappers from '~/common/utils/Mappers';
+import RequestState from '~/common/utils/RequestState';
+import { useInferredEpisode } from '../../state/useInferredEpisodeState';
 
-export default defineComponent({
-  data() {
-    const suggestions: Api.ThirdPartyEpisode[] = [];
-    const prefill: CreateEpisodePrefill = {
-      show: {
-        title: '',
-      },
-      episode: {
-        title: '',
-      },
-    };
-    return {
-      tab: 0,
-      prefill,
-      suggestions,
-      isLoadingSuggestions: false,
-      isLoadingDefaultShow: false,
-      isLoadingDefaultEpisode: false,
-      showing: false,
-    };
-  },
-  computed: {
-    inferredInfo(): InferredEpisodeInfo | undefined {
-      return this.$store.state.inferredEpisodeInfo;
-    },
-    isLoading(): boolean {
-      return (
-        this.$store.getters.IS_LOGGING_IN ||
-        this.$store.state.episodeRequestState === RequestState.LOADING ||
-        this.isLoadingSuggestions ||
-        this.isLoadingDefaultShow ||
-        this.isLoadingDefaultEpisode
-      );
-    },
-    isLoggedIn(): boolean {
-      return this.$store.state.isLoggedIn && !this.$store.getters.IS_LOGGING_IN;
-    },
-    shouldShowTabs(): boolean {
-      // don't show it while it's still loading so it properly fills the default show and episode values
-      return !this.isLoadingDefaultShow && !this.isLoadingDefaultEpisode;
-    },
-    shouldShowFindExisting(): boolean {
-      return this.shouldShowTabs && this.tab === 0;
-    },
-    shouldShowCreateNew(): boolean {
-      return this.shouldShowTabs && this.tab === 1;
-    },
-  },
-  watch: {
-    isLoggedIn(newValue, oldValue): void {
-      if (this.showing && newValue && !oldValue) {
-        // TODO: Fix race condition that leads to immeditate log out
-        setTimeout(() => {
-          this.loadSuggestions();
-          this.loadDefaultShowOption();
-        }, 200);
-      }
-    },
-  },
-  methods: {
-    onShow(): void {
-      this.tab = 0;
-      this.prefill = {
-        show: {
-          title: this.inferredInfo?.show || '',
-        },
-        episode: {
-          title: this.inferredInfo?.name || '',
-        },
-        season: this.inferredInfo?.season,
-        number: this.inferredInfo?.number,
-        absoluteNumber: this.inferredInfo?.absoluteNumber,
-      };
-      this.suggestions = [];
-
-      if (this.isLoggedIn) {
-        this.loadSuggestions();
-        this.loadDefaultShowOption();
-      }
-      this.showing = true;
-    },
-    onHide(): void {
-      this.showing = false;
-    },
-    async loadSuggestions(): Promise<void> {
-      if (this.inferredInfo?.name == null || this.inferredInfo.show == null) {
-        console.debug(
-          'Not fetching suggestions, episode or show name could not be inferred',
-          this.inferredInfo
-        );
-        return;
-      }
-      this.isLoadingSuggestions = true;
-      try {
-        const suggestions = await Utils.apiAction(
-          this.$store,
-          window.Api.fetchEpisodeByName,
-          this.inferredInfo.name,
-          this.inferredInfo.show
-        );
-        this.isLoadingSuggestions = false;
-        this.suggestions = suggestions;
-        if (suggestions.length === 0) {
-          this.onClickCreateNew();
-        }
-      } catch (err) {
-        console.log('Failed to load suggestions', err);
-        this.isLoadingSuggestions = false;
-        this.onClickCreateNew();
-      }
-    },
-    async loadDefaultShowOption(): Promise<void> {
-      const showName = this.inferredInfo?.show;
-      if (showName == null) {
-        console.debug('Not fetching default show, name could not be inferred');
-        return;
-      }
-
-      let showResult: Api.ShowSearchResult | undefined;
-      this.isLoadingDefaultShow = true;
-      try {
-        const searchResults = await Utils.apiAction(this.$store, window.Api.searchShows, showName);
-
-        const results = searchResults.filter(result => result.name === showName);
-        if (results.length === 1) {
-          showResult = results[0];
-        }
-      } catch (err) {
-        this.isLoadingDefaultShow = false;
-        console.warn('Failed to load default show option', err);
-        return;
-      }
-
-      if (showResult != null) {
-        const episodeResult = await this.loadDefaultEpisodeOption(showResult.id);
-        const newShow = Mappers.showSearchResultToAutocompleteItem(showResult);
-
-        if (episodeResult == null) {
-          this.prefill = {
-            ...this.prefill,
-            show: newShow,
-          };
-        } else {
-          this.prefill = {
-            ...this.prefill,
-            show: newShow,
-            episode: Mappers.episodeSearchResultToAutocompleteItem(episodeResult),
-          };
-        }
-      }
-      this.isLoadingDefaultShow = false;
-    },
-    async loadDefaultEpisodeOption(showId: string): Promise<Api.EpisodeSearchResult | undefined> {
-      const episodeName = this.inferredInfo?.name;
-      if (episodeName == null) {
-        console.debug('Not fetching default episode, name could not be inferred');
-        return undefined;
-      }
-
-      let episodeResult: Api.EpisodeSearchResult | undefined;
-      this.isLoadingDefaultEpisode = true;
-      try {
-        const searchResults = await Utils.apiAction(
-          this.$store,
-          window.Api.searchEpisodes,
-          episodeName,
-          showId
-        );
-
-        const results = searchResults.filter(result => result.name === episodeName);
-        if (results.length === 1) {
-          episodeResult = results[0];
-        }
-      } catch (err) {
-        this.isLoadingDefaultEpisode = false;
-        console.warn('Failed to load default episode option', err);
-      }
-
-      this.isLoadingDefaultEpisode = false;
-      return episodeResult;
-    },
-    enableCreateNew(prefill: CreateEpisodePrefill): void {
-      this.prefill = prefill;
-      this.onClickCreateNew();
-    },
-    onClickFindExisting(): void {
-      this.tab = 0;
-    },
-    onClickCreateNew(): void {
-      this.tab = 1;
-    },
-  },
+const prefill = ref<CreateEpisodePrefill>({
+  show: { title: '' },
+  episode: { title: '' },
 });
+const showing = ref(false);
+const inferredEpisode = useInferredEpisode();
+
+// Data Fetching
+
+const api = useApiClient();
+
+const { wrapRequest: wrapFetchSuggestionsByName, isLoading: isLoadingSuggestions } =
+  useRequestState();
+const fetchSuggestionsByName = wrapFetchSuggestionsByName(
+  async (episodeName: string, showName: string): Promise<Api.ThirdPartyEpisode[]> => {
+    try {
+      const res = await api.findEpisodeByName(FETCH_EPISODE_BY_NAME_QUERY, {
+        name: episodeName,
+      });
+      return (res as Api.ThirdPartyEpisode[]).filter(
+        episode => episode.show.name.toLowerCase() === showName.toLowerCase()
+      );
+    } catch (err) {
+      console.warn('failed to fetch suggestions:', { episodeName, showName }, err);
+      return [];
+    }
+  }
+);
+
+const { wrapRequest: wrapLoadDefaultShowOption, isLoading: isLoadingDefaultShow } =
+  useRequestState();
+const loadDefaultShowOption = wrapLoadDefaultShowOption(async (): Promise<void> => {
+  const showName = inferredEpisode.value?.show;
+  if (showName == null) {
+    console.debug('Not fetching default show, name could not be inferred');
+    return;
+  }
+
+  const searchResults: Api.ShowSearchResult[] = await api.searchShows(
+    LOAD_DEFAULT_SHOW_OPTION_QUERY,
+    { search: showName }
+  );
+
+  let showResult: Api.ShowSearchResult | undefined = searchResults.filter(
+    result => result.name.toLowerCase() === showName.toLowerCase()
+  )[0];
+
+  // If we found a show, try and find the episode
+  if (showResult != null) {
+    const episodeResult = await loadDefaultEpisodeOption(showResult.id);
+    const newShow = Mappers.showSearchResultToAutocompleteItem(showResult);
+
+    if (episodeResult == null) {
+      prefill.value = {
+        ...prefill.value,
+        show: newShow,
+      };
+    } else {
+      prefill.value = {
+        ...prefill.value,
+        show: newShow,
+        episode: Mappers.episodeSearchResultToAutocompleteItem(episodeResult),
+      };
+    }
+  }
+});
+
+const { wrapRequest: wrapLoadDefaultEpisodeOption, isLoading: isLoadingDefaultEpisode } =
+  useRequestState();
+const loadDefaultEpisodeOption = wrapLoadDefaultEpisodeOption(
+  async (showId: string): Promise<Api.EpisodeSearchResult | undefined> => {
+    const episodeName = inferredEpisode.value?.name;
+    if (episodeName == null) {
+      console.debug('Not fetching default episode, name could not be inferred');
+      return undefined;
+    }
+
+    const searchResults = await api.searchEpisodes(FIND_INFERRED_EPISODE_QUERY, {
+      search: episodeName,
+      showId,
+    });
+
+    const episodeResult: Api.EpisodeSearchResult | undefined = searchResults.filter(
+      result => result.name?.toLowerCase() === episodeName.toLowerCase()
+    )[0];
+
+    return episodeResult;
+  }
+);
+
+// Tab state
+
+enum Tab {
+  FIND_EXISTING,
+  CREATE_NEW,
+}
+const tab = ref(Tab.FIND_EXISTING);
+
+// don't show it while it's still loading so it properly fills the default show and episode values
+const shouldShowTabs = computed(
+  () => !isLoadingDefaultShow.value && !isLoadingDefaultEpisode.value
+);
+const shouldShowFindExisting = computed(
+  () => shouldShowTabs.value && tab.value === Tab.FIND_EXISTING
+);
+const shouldShowCreateNew = computed(() => shouldShowTabs.value && tab.value === Tab.CREATE_NEW);
+
+function onClickFindExisting(): void {
+  tab.value = Tab.FIND_EXISTING;
+}
+
+function onClickCreateNew(): void {
+  tab.value = Tab.CREATE_NEW;
+}
+
+function enableCreateNew(newPrefill: CreateEpisodePrefill): void {
+  prefill.value = newPrefill;
+  onClickCreateNew();
+}
+
+// Loading
+
+// TODO: excluded isLoggingIn from this condition
+const isLoggedIn = useIsLoggedIn();
+watch(isLoggedIn, (newIsLoggedIn, oldIsLoggedIn) => {
+  if (showing.value && newIsLoggedIn && !oldIsLoggedIn) {
+    // OLD-TODO: Fix race condition that leads to immeditate log out
+    setTimeout(loadData, 200);
+  }
+});
+const episodeRequestState = computed(() => RequestState.NOT_REQUESTED); // TODO
+const isLoading = computed(
+  () =>
+    episodeRequestState.value === RequestState.LOADING ||
+    isLoadingSuggestions.value ||
+    isLoadingDefaultShow.value ||
+    isLoadingDefaultEpisode.value
+);
+
+// Suggestions
+
+const suggestions = ref<Api.ThirdPartyEpisode[]>([]);
+
+function loadData() {
+  loadSuggestions();
+  loadDefaultShowOption();
+}
+
+async function loadSuggestions() {
+  if (inferredEpisode.value?.name == null || inferredEpisode.value.show == null) {
+    console.log(
+      'Not fetching suggestions, episode or show name could not be inferred',
+      inferredEpisode.value
+    );
+    return;
+  }
+  suggestions.value = await fetchSuggestionsByName(
+    inferredEpisode.value.name,
+    inferredEpisode.value.show
+  );
+
+  if (suggestions.value.length === 0) onClickCreateNew();
+}
+
+// Dialog lifecycle
+
+function onShow() {
+  tab.value = Tab.FIND_EXISTING;
+  prefill.value = {
+    show: {
+      title: inferredEpisode.value?.show || '',
+    },
+    episode: {
+      title: inferredEpisode.value?.name || '',
+    },
+    season: inferredEpisode.value?.season,
+    number: inferredEpisode.value?.number,
+    absoluteNumber: inferredEpisode.value?.absoluteNumber,
+  };
+  suggestions.value = [];
+
+  if (isLoggedIn) loadData();
+  showing.value = true;
+}
+
+function onHide() {
+  showing.value = false;
+}
 </script>
 
 <style lang="css">

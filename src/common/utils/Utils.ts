@@ -1,3 +1,5 @@
+import * as Api from '~/common/api';
+
 export default class Utils {
   /**
    * @param currentTime The time to begin looking for timestamps after
@@ -259,6 +261,7 @@ export default class Utils {
     };
   }
 
+  // TODO: Move to useSyncTimestamps
   public static computeTimestampDiffs(
     oldTimestamps: Api.Timestamp[],
     newTimestamps: Api.AmbiguousTimestamp[]
@@ -346,6 +349,15 @@ export default class Utils {
     return key;
   }
 
+  /**
+   * Calculate the offset of the timestamps because of a difference in duration length. The return
+   * value should be used with `applyTimestampOffset` and `undoTimestampOffset`, and math should not
+   * be done inline
+   *
+   * @param baseDuration The duration of the video the timestamps were based on
+   * @param duration The duration of the current video
+   * @returns The number of seconds difference between the two
+   */
   public static computeTimestampsOffset(baseDuration: number, duration: number): number {
     return duration - baseDuration;
   }

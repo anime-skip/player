@@ -126,3 +126,11 @@ export function useVideoController() {
     },
   };
 }
+
+/**
+ * Get the duration. Since the duration can sometimes be 0, return `undefined` instead for
+ * consistency. 0 durations just mean the video is still loading
+ */
+export function useDuration(videoState = useVideoState()) {
+  return computed(() => videoState.duration || 0);
+}

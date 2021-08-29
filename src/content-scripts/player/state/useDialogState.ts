@@ -1,6 +1,9 @@
+import { useIsLoggedIn } from '~/common/state/useAuth';
 import { createProvideInject } from '~/common/utils/createProvideInject';
+import { sleep } from '~/common/utils/GlobalUtils';
+import { useVideoController } from './useVideoState';
 
-type DialogId = 'PreferencesDialog' | 'TimestampsPanel';
+type DialogId = 'PreferencesDialog' | 'TimestampsPanel' | 'EditEpisodeDialog';
 
 export interface DialogState {
   /**
@@ -28,15 +31,29 @@ export { provideDialogState, useDialogState, useUpdateDialogState };
 
 export function useShowDialog() {
   const update = useUpdateDialogState();
-  return (dialogId: DialogId) => {
-    update({ activeDialog: dialogId });
+  const state = useDialogState();
+  return async (dialogId: DialogId) => {
+    if (state.activeDialog === dialogId) return;
+
+    if (state.activeDialog) {
+      update({ activeDialog: undefined });
+      await sleep(125); // TODO: test. Overlap with second dialog (timestamp panel -> preferences dialog)
+    }
+
+    if (dialogId) update({ activeDialog: dialogId });
   };
 }
 
 export function useHideDialog() {
   const update = useUpdateDialogState();
-  return () => {
-    update({ activeDialog: undefined });
+  const state = useDialogState();
+  return async () => {
+    if (state.activeDialog === undefined) return;
+
+    if (state.activeDialog) {
+      update({ activeDialog: undefined });
+      await sleep(125); // TODO: test. Overlap with second dialog (timestamp panel -> preferences dialog)
+    }
   };
 }
 
@@ -61,5 +78,19 @@ export function useHideLoginOverlay() {
   const update = useUpdateDialogState();
   return () => {
     update({ isShowingLoginOverlay: false });
+  };
+}
+
+export function useShowConnectEpisodeDialog() {
+  const showLoginOverlay = useShowLoginOverlay();
+  const showDialog = useShowDialog();
+  const isLoggedIn = useIsLoggedIn();
+  const { pause } = useVideoController();
+  return () => {
+    pause();
+    if (!isLoggedIn.value) {
+      showLoginOverlay();
+    }
+    showDialog('EditEpisodeDialog'); // TODO: rename to ConnectEpisodeDialog
   };
 }
