@@ -10,7 +10,8 @@
     "pnpm": ">=6"
   },
   "scripts": {
-    "start": "concurrently --kill-others -n extension,services -c magenta,cyan \"pnpm start:extension\" \"pnpm start:services\"",
+    "start": "concurrently --kill-others-on-fail -n extension,services -c magenta,cyan \"pnpm start:extension\" \"pnpm start:services\"",
+    "start:chrome": "concurrently --kill-others-on-fail -n extension,services -c magenta,cyan \"pnpm start:extension -- --for chrome\" \"pnpm start:services\"",
     "start:extension": "ts-node vite.build.ts --watch",
     "start:services": "docker-compose -f docker/docker-compose.yml up --abort-on-container-exit",
     "compile": "vue-tsc --noEmit",

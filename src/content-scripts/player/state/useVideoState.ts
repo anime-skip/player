@@ -1,3 +1,4 @@
+import { Utils as UiUtils } from '@anime-skip/ui';
 import { createProvideInject } from '~/common/utils/createProvideInject';
 
 export interface VideoState {
@@ -53,10 +54,10 @@ const {
   useUpdate: useUpdateVideoState,
 } = createProvideInject<VideoState>('video-state', {
   isActive: false,
-  isBuffering: initialVideo?.seeking ?? false,
+  isBuffering: true,
   isPaused: initialVideo?.paused ?? false,
-  isMuted: initialVideo?.muted ?? false,
-  volumePercent: initialVideo?.volume ?? 0,
+  isMuted: false,
+  volumePercent: 100,
   currentTime: 0,
   duration: undefined as number | undefined,
   playbackRate: 1,
@@ -105,7 +106,7 @@ export function useVideoController() {
 
     // Volume
     setVolumePercent(newPercent: number) {
-      update({ volumePercent: newPercent });
+      update({ volumePercent: UiUtils.boundedNumber(newPercent, [0, 100]) });
     },
     mute(): void {
       update({ isMuted: true });
@@ -118,8 +119,17 @@ export function useVideoController() {
     },
 
     // Time
-    setCurrentTime(newTime: number): void {
-      update({ currentTime: newTime });
+    setCurrentTime(newTime: number, updateVideo = true): void {
+      const newBoundedTime = UiUtils.boundedNumber(newTime, [0, state.duration ?? 0]);
+      update({ currentTime: newBoundedTime });
+
+      if (!updateVideo) return;
+
+      // always update the video unless the update is coming from the video element itself
+      const video = window.getVideo?.();
+      if (video) {
+        video.currentTime = newBoundedTime;
+      }
     },
     setDuration(newDuration: number | undefined): void {
       update({ duration: newDuration });

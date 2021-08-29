@@ -8,11 +8,10 @@
     }"
     @click.stop
   >
-    <!-- <TimelineWrapper
+    <TimelineWrapper
       class="timeline-alignment"
       :class="{ 'opacity-0 pointer-events-none': !hasDuration }"
-      :is-flipped="!showToolbar"
-      :duration="videoState.duration"
+      :is-flipped="!showToolbar && !videoState.isPaused"
     />
     <div class="h-toolbar flex flex-row items-center space-x-1 px-2 pt-0.5">
       <ToolbarButton @click="togglePlayPause()">
@@ -39,14 +38,13 @@
         @click="saveChanges()"
       />
       <ToolbarButton
-        class=""
         icon="M12 8C13.1 8 14 7.1 14 6C14 4.9 13.1 4 12 4C10.9 4 10 4.9 10 6C10 7.1 10.9 8 12 8ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10ZM12 16C10.9 16 10 16.9 10 18C10 19.1 10.9 20 12 20C13.1 20 14 19.1 14 18C14 16.9 13.1 16 12 16Z"
         @click="togglePreferencesDialog"
       />
       <ToolbarButton v-if="isFullscreenEnabled" @click="toggleFullscreen()">
         <FullscreenButton :state="fullscreenAnimationState" />
       </ToolbarButton>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -55,7 +53,7 @@ import { Utils as UiUtils } from '@anime-skip/ui';
 import { useFullscreen } from '@vueuse/core';
 import * as Api from '~/common/api';
 import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
-import { FRAME } from '~/common/utils/Constants';
+import { FRAME, LOOKUP_PREV_TIMESTAMP_OFFSET } from '~/common/utils/Constants';
 import Utils from '~/common/utils/Utils';
 import { useDisplayedTimestamps } from '../hooks/useDisplayedTimestamps';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
@@ -68,8 +66,6 @@ import {
   useUpdateEditTimestampMode,
 } from '../state/useEditingState';
 import { useDuration, useVideoController, useVideoState } from '../state/useVideoState';
-
-// TODO: Inject video state, remove from props
 
 // Video State
 
@@ -88,17 +84,15 @@ const formattedTime = computed(() =>
 );
 
 const duration = useDuration(videoState);
-const hasDuration = computed(() => !duration.value);
+const hasDuration = computed(() => !!duration.value);
 const formattedDuration = computed<string>(() =>
-  !hasDuration.value ? 'Loading...' : UiUtils.formatSeconds(videoState.duration, false)
+  videoState.duration ? UiUtils.formatSeconds(videoState.duration, false) : 'Loading...'
 );
 
 // Preferences
 
 const preferences = useGeneralPreferences();
-// TODO: use preferences directly
 const hideTimelineWhenMinimized = computed(() => preferences.value.hideTimelineWhenMinimized);
-// TODO: use preferences directly
 const minimizeToolbarWhenEditing = computed(() => preferences.value.minimizeToolbarWhenEditing);
 
 // Editing
@@ -119,7 +113,7 @@ const setEditTimestampMode = useUpdateEditTimestampMode();
 const playAnimationState = computed<1 | 0>(() => (isPaused.value ? 1 : 0));
 
 const isFullscreenEnabled = ref(document.fullscreenEnabled);
-const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(); // TODO: `document.fullscreenElement` for first param?
+const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(); // TODO-REQ: `document.fullscreenElement` for first param?
 const fullscreenAnimationState = computed<1 | 0>(() => (isFullscreen.value ? 0 : 1));
 
 // Dialogs
@@ -144,12 +138,12 @@ const updateActiveTimestamp = useUpdateActiveTimestamp();
 // Keyboard Shortcuts
 
 function createNewTimestamp(): void {
-  // TODO
+  // TODO-REQ
   // store.dispatch(ActionTypes.CREATE_NEW_TIMESTAMP, undefined);
 }
 
 function saveChanges(discard = false): void {
-  // TODO
+  // TODO-REQ
   // store.dispatch(ActionTypes.STOP_EDITING, discard);
 }
 
@@ -180,7 +174,11 @@ function gotoNextTimestamp(): void {
 }
 
 function gotoPreviousTimestamp(): void {
-  const previousTimestamp = Utils.previousTimestamp(currentTime.value, timestamps.value, undefined);
+  const previousTimestamp = Utils.previousTimestamp(
+    currentTime.value - LOOKUP_PREV_TIMESTAMP_OFFSET,
+    timestamps.value,
+    undefined
+  );
   if (previousTimestamp) {
     setCurrentTime(previousTimestamp.at);
     if (isEditing.value) editTimestampOnJump(previousTimestamp);
@@ -224,7 +222,7 @@ useKeyboardShortcuts('toolbar', {
 
 // Data Maintainence
 
-// TODO: Fix missing durations, then require it
+// TODO-REQ?: Fix missing durations, then require it
 // SELECT * FROM episodes WHERE duration IS NULL;
 // SELECT * FROM episodes WHERE base_duration IS NULL;
 // const addMissingDurations = (missingDuration: number) => {

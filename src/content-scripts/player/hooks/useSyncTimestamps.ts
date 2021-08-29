@@ -46,7 +46,7 @@ export function useSyncTimestamps() {
       oldTimestamps,
       newTimestamps
     );
-    // TODO: Does this change feel right without updating the displayed timestamps immediately?
+    // TODO-REQ: Does this change feel right without updating the displayed timestamps immediately?
     // updateEpisodeState({ savedTimestamps: newTimestamps });
     try {
       const { created } = await api.updateTimestamps(Api.SYNC_TIMESTAMPS_MUTATION, {

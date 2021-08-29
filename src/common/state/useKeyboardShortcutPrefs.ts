@@ -44,20 +44,21 @@ export function createUseKeyboardShortcutPrefs(
       useWebExtensionStorage(`keyboard-shortcut-${type}-action-mapping`, initialValue, 'local'); // TODO: Use sync here, or put them in the API
 
     const shortcutsKeyToActionsMap = computed(() => {
-      return Object.keys(
-        shortcutsActionToKeyMap.value
-      ).reduce<KeyboardShortcutKeyBindingToActionsMap>((map, str) => {
-        const action = str as KeyboardShortcutAction;
-        const keyBinding = shortcutsActionToKeyMap.value[action];
-        if (keyBinding) {
-          if (map[keyBinding] != null) {
-            map[keyBinding]?.push(action);
-          } else {
-            map[keyBinding] = [action];
+      return Object.keys(shortcutsActionToKeyMap).reduce<KeyboardShortcutKeyBindingToActionsMap>(
+        (map, str) => {
+          const action = str as KeyboardShortcutAction;
+          const keyBinding = shortcutsActionToKeyMap[action];
+          if (keyBinding) {
+            if (map[keyBinding] != null) {
+              map[keyBinding]?.push(action);
+            } else {
+              map[keyBinding] = [action];
+            }
           }
-        }
-        return map;
-      }, {});
+          return map;
+        },
+        {}
+      );
     });
 
     return {

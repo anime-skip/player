@@ -179,7 +179,7 @@ const clearHoveredTimestamp = useClearHoveredTimestamp();
 const onHoverTimestamp = (timestamp: Api.AmbiguousTimestamp): void => {
   clearHoveredTimeout();
   setHoveredTimestamp(timestamp);
-  setHoveredTimeout(clearHoveredTimestamp, 3 * SECONDS); // TODO test that hover goes away after 3 seconds
+  setHoveredTimeout(clearHoveredTimestamp, 3 * SECONDS); // TODO-REQ test that hover goes away after 3 seconds
 };
 const onStopHoverTimestamp = (): void => {
   clearHoveredTimeout();

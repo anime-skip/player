@@ -31,11 +31,9 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
+import { CreateEpisodePrefill } from '~/@types';
 import { useShowAutocomplete } from '../../hooks/useShowAutocomplete';
 import { useHideDialog } from '../../state/useDialogState';
-import { useDuration } from '../../state/useVideoState';
-
-// TODO: Finish this component
 
 export default defineComponent({
   props: {
@@ -76,7 +74,7 @@ export default defineComponent({
   },
   methods: {
     async onClickCreate(): Promise<void> {
-      // TODO
+      // TODO-REQ
       // const url = this.$store.state.tabUrl;
       // if (url == null) {
       //   throw new Error("Cannot create an episode without it's URL");

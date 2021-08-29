@@ -25,6 +25,7 @@
           :timestamps="timelineData"
           :normalized-progress="slotProps.progress"
           :editing="isEditing"
+          :duration="duration"
           @click.stop
         />
       </template>

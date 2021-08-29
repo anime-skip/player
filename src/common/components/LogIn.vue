@@ -1,6 +1,6 @@
 <template>
   <LoadingOverlay :is-loading="isLoggingIn">
-    <div class="w-popup-sm p-6 flex flex-col space-y-4">
+    <form class="w-popup-sm p-6 flex flex-col space-y-4" @submit.prevent.stop>
       <PopupHeader title="Log In" />
       <TextInput
         ref="usernameInput"
@@ -48,7 +48,7 @@
           />
         </a>
       </div>
-    </div>
+    </form>
   </LoadingOverlay>
 </template>
 
@@ -78,14 +78,14 @@ const login = wrapRequest(async () => {
 
   if (props.closeAfterLogin) {
     // Wait for login to be saved before closing
-    // TODO: Test this flow in options login [x], popup [x], web get started
+    // TODO-REQ: Test this flow in options login [x], popup [x], web get started [ ]
     const onChange = (changes: { [s: string]: Storage.StorageChange }, areaName: string) => {
       if (
         areaName === AUTH_STORAGE_LOCATION &&
         changes[AUTH_STORAGE_KEY]?.newValue?.token === res!.authToken
       ) {
         browser.storage.onChanged.removeListener(onChange);
-        window.close();
+        props.close?.();
       }
     };
     browser.storage.onChanged.addListener(onChange);

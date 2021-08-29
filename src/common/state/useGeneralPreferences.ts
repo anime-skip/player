@@ -42,7 +42,8 @@ const DEFAULT_GENERAL_PREFERENCES: GeneralPreferences = {
 };
 
 export function useUpdateGeneralPreferences() {
-  return _useGeneralPreferences().updatePreferences;
+  const { updatePreferences } = _useGeneralPreferences();
+  return updatePreferences;
 }
 
 function _useGeneralPreferences() {
@@ -74,7 +75,7 @@ export function useUpdateBooleanPref() {
   const { preferences, updatePreferences } = _useGeneralPreferences();
   const api = useApiClient();
   return (pref: StripOtherTypes<GeneralPreferences, boolean>, newValue: boolean) => {
-    const oldValue = preferences.value[pref];
+    const oldValue = preferences[pref];
     updatePreferences({ [pref]: newValue });
 
     api.savePreferences(Api.PREFERENCES_QUERY, { preferences: { [pref]: newValue } }).catch(err => {

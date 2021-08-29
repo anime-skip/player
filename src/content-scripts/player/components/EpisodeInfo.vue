@@ -1,5 +1,5 @@
 <template>
-  <div class="EpisodeInfo space-y-4" :class="{ visible: hasLoadedInferredEpisodeState }">
+  <div class="EpisodeInfo space-y-4" :class="{ visible: isShowing }">
     <h5 class="text-primary line-height-2.5">
       <a class="pr-1" href="https://anime-skip.com">
         <web-ext-img class="h-6 inline-block pb-1" src="logo-sm.svg" />
@@ -21,11 +21,13 @@
 
 <script lang="ts" setup>
 import EpisodeUtils from '~/common/utils/EpisodeUtils';
+import RequestState from '~/common/utils/RequestState';
 import { useEpisodeDisplayInfo } from '../hooks/useEpisodeDisplayInfo';
 import { useDialogState, useShowConnectEpisodeDialog } from '../state/useDialogState';
 import { useEpisodeState } from '../state/useEpisodeState';
-import { useHasLoadedInferredEpisodeState } from '../state/useInferredEpisodeState';
-import { useDuration } from '../state/useVideoState';
+import { useInferRequestState } from '../state/useInferredEpisodeState';
+import { usePlayHistory } from '../state/usePlayHistory';
+import { useDuration, useVideoState } from '../state/useVideoState';
 
 const serviceDisplayName = window.serviceDisplayName ?? 'Unknown';
 
@@ -41,14 +43,22 @@ const { activeDialog } = useDialogState();
 
 const showConnectEpisodeDialog = useShowConnectEpisodeDialog();
 
-const hasLoadedInferredEpisodeState = useHasLoadedInferredEpisodeState();
+const inferRequestState = useInferRequestState();
+const hasRequestedInferredDetails = computed(
+  () =>
+    inferRequestState.value === RequestState.SUCCESS ||
+    inferRequestState.value === RequestState.FAILURE
+);
+const videoState = useVideoState();
+const playHistory = usePlayHistory();
+const isShowing = computed<boolean>(() => videoState.isPaused || playHistory.isInitialBuffer);
 
 const duration = useDuration();
 const isConnectButtonShowing = computed(() => {
   const allowedActiveDialogs = [undefined, 'TimestampsPanel'];
   return (
     !hasEpisodeUrl.value &&
-    hasLoadedInferredEpisodeState.value &&
+    hasRequestedInferredDetails.value &&
     allowedActiveDialogs.includes(activeDialog) &&
     !!duration.value
   );

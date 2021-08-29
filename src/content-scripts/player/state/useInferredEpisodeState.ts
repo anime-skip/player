@@ -21,16 +21,9 @@ const {
 
 export { provideInferEpisodeState, useUpdateInferredEpisodeState, useInferredEpisodeState };
 
-export function useHasLoadedInferredEpisodeState(inferredState = useInferredEpisodeState()) {
-  return computed(
-    () =>
-      inferredState.requestState !== RequestState.NOT_REQUESTED &&
-      inferredState.requestState !== RequestState.LOADING
-  );
-}
-
-export function useInferredEpisode(inferredState = useInferredEpisodeState()) {
-  return computed(() => inferredState.inferredEpisode);
+export function useInferredEpisode() {
+  const value = useInferredEpisodeState();
+  return computed(() => value.inferredEpisode);
 }
 
 export function useUpdateInferredTimestamps() {
@@ -39,4 +32,15 @@ export function useUpdateInferredTimestamps() {
   return (newInferredTimestamps?: Api.AmbiguousTimestamp[]) => {
     update({ inferredTimestamps: newInferredTimestamps });
   };
+}
+
+export function useInferRequestState() {
+  const value = useInferredEpisodeState();
+  watch(
+    () => value,
+    () => {
+      console.log('is showing changed 2', value);
+    }
+  );
+  return computed(() => value.requestState);
 }

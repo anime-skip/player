@@ -3,6 +3,7 @@
 </template>
 
 <script lang="ts" setup>
+import { provideTimestampsPanelState } from './dialogs/TimestampsPanel/useTimestampPanelState';
 import { provideDialogState } from './state/useDialogState';
 import { provideEditingState } from './state/useEditingState';
 import { provideEpisodeState } from './state/useEpisodeState';
@@ -12,6 +13,7 @@ import { providePlayHistory } from './state/usePlayHistory';
 import { provideTemplateState } from './state/useTemplateState';
 import { provideVideoState } from './state/useVideoState';
 
+provideTimestampsPanelState();
 provideDialogState();
 provideEditingState();
 provideEpisodeState();

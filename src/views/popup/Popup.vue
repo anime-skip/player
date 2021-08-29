@@ -23,7 +23,7 @@ defineProps<{
 
 const browser = Browser.detect();
 
-// TODO: verify no INTIAL_LOAD call works
+// TODO-REQ: verify no INTIAL_LOAD call works
 
 const isLoggedIn = useIsLoggedIn();
 

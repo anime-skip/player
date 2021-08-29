@@ -13,7 +13,7 @@ export function useClearAllEpisodeState() {
     updateEpisodeState({
       episode: undefined,
       episodeUrl: undefined,
-      savedTimestamps: undefined,
+      savedTimestamps: [],
     });
     updateInferredTimestamps(undefined);
     updateTemplateState({ episodeTemplate: undefined });

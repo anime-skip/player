@@ -46,7 +46,7 @@ export function useLinkEpisodeUrl() {
     };
 
     try {
-      await api.createOrUpdateEpisodeUrl(Api.CREATE_EPISODE_URL_MUTATION, {
+      await api.createOrUpdateEpisodeUrl(Api.EPISODE_URL_NO_EPISODE_DATA, {
         episodeId: episode.id,
         episodeUrlInput: episodeUrl,
       });

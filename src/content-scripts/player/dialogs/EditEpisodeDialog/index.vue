@@ -33,12 +33,8 @@
 
 <script lang="ts" setup>
 import useRequestState from 'vue-use-request-state';
+import { CreateEpisodePrefill } from '~/@types';
 import * as Api from '~/common/api';
-import {
-  FETCH_EPISODE_BY_NAME_QUERY,
-  FIND_INFERRED_EPISODE_QUERY,
-  LOAD_DEFAULT_SHOW_OPTION_QUERY,
-} from '~/common/api';
 import { useApiClient } from '~/common/hooks/useApiClient';
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import Mappers from '~/common/utils/Mappers';
@@ -61,7 +57,7 @@ const { wrapRequest: wrapFetchSuggestionsByName, isLoading: isLoadingSuggestions
 const fetchSuggestionsByName = wrapFetchSuggestionsByName(
   async (episodeName: string, showName: string): Promise<Api.ThirdPartyEpisode[]> => {
     try {
-      const res = await api.findEpisodeByName(FETCH_EPISODE_BY_NAME_QUERY, {
+      const res = await api.findEpisodeByName(Api.THIRD_PARTY_EPISODE_DATA, {
         name: episodeName,
       });
       return (res as Api.ThirdPartyEpisode[]).filter(
@@ -83,10 +79,9 @@ const loadDefaultShowOption = wrapLoadDefaultShowOption(async (): Promise<void> 
     return;
   }
 
-  const searchResults: Api.ShowSearchResult[] = await api.searchShows(
-    LOAD_DEFAULT_SHOW_OPTION_QUERY,
-    { search: showName }
-  );
+  const searchResults: Api.ShowSearchResult[] = await api.searchShows(Api.SHOW_SEARCH_RESULT_DATA, {
+    search: showName,
+  });
 
   let showResult: Api.ShowSearchResult | undefined = searchResults.filter(
     result => result.name.toLowerCase() === showName.toLowerCase()
@@ -122,7 +117,7 @@ const loadDefaultEpisodeOption = wrapLoadDefaultEpisodeOption(
       return undefined;
     }
 
-    const searchResults = await api.searchEpisodes(FIND_INFERRED_EPISODE_QUERY, {
+    const searchResults = await api.searchEpisodes(Api.EPISODE_SEARCH_RESULT_DATA, {
       search: episodeName,
       showId,
     });
@@ -167,15 +162,15 @@ function enableCreateNew(newPrefill: CreateEpisodePrefill): void {
 
 // Loading
 
-// TODO: excluded isLoggingIn from this condition
 const isLoggedIn = useIsLoggedIn();
 watch(isLoggedIn, (newIsLoggedIn, oldIsLoggedIn) => {
   if (showing.value && newIsLoggedIn && !oldIsLoggedIn) {
-    // OLD-TODO: Fix race condition that leads to immeditate log out
+    // TODO-REQ: Fix race condition that leads to immeditate log out
+    // This shouldn't be needed anymore
     setTimeout(loadData, 200);
   }
 });
-const episodeRequestState = computed(() => RequestState.NOT_REQUESTED); // TODO
+const episodeRequestState = computed(() => RequestState.NOT_REQUESTED); // TODO-REQ
 const isLoading = computed(
   () =>
     episodeRequestState.value === RequestState.LOADING ||

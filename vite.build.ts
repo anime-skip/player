@@ -84,6 +84,7 @@ async function getConfig(
           }
         : undefined,
     },
+    mode: options.watch ? 'development' : 'production',
     resolve: {
       alias: {
         '~/': `${rootPath('src')}/`,

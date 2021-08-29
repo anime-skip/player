@@ -37,12 +37,12 @@ export function useUpdateEpisodeTemplate(updateTemplateState = useUpdateTemplate
 
 export function useTemplateTimestamps(): ComputedRef<Api.AmbiguousTimestamp[] | undefined> {
   const value = useTemplateState();
-  throw computed(() => value.timestamps);
+  return computed(() => value.timestamps);
 }
 
 export function useUpdateTemplateTimestamps() {
   const update = useUpdateTemplateState();
-  throw (newTimestamps?: Api.AmbiguousTimestamp[]) => {
+  return (newTimestamps?: Api.AmbiguousTimestamp[]) => {
     update({ timestamps: newTimestamps });
   };
 }

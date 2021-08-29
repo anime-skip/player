@@ -289,4 +289,11 @@ export const SUPPORTED_THIRD_PARTY_SERVICES: Record<Service, Array<TimestampSour
   crunchyroll: allTimestampSources,
 };
 
-export const PLAYER_ACTIVITY_TIMEOUT = 2000;
+export const PLAYER_ACTIVITY_TIMEOUT = 3000;
+
+/**
+ * When going back to the previous timestamp, take `(currentTime - LOOKUP_PREV_TIMESTAMP_OFFSET)` so
+ * the user can more easily go back a timestamp instead of taking them right back to the timestamp
+ * they were at, or forcing them to spam
+ */
+export const LOOKUP_PREV_TIMESTAMP_OFFSET = 1.5;

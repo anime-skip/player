@@ -12,7 +12,7 @@ export function useCanEditTimestamps() {
     if (episode.value == null) return false;
     const { name, show } = episode.value;
     if (!name || !show?.name) return false;
-    // TODO: below condition shouldn't happen, verify
+    // TODO-REQ: below condition shouldn't happen, verify
     // if (name === 'Unknown Episode' || show?.name === 'Unknown Show') return false;
     return true;
   });

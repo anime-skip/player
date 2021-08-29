@@ -1,6 +1,7 @@
 import ui from '@anime-skip/ui';
 import { createApp } from 'vue';
 import 'vue-global-api';
+import FakeRouterLink from '~/common/components/FakeRouterLink.vue';
 import '~/common/styles';
 import { loadedLog } from '~/common/utils/loadedLog';
 import Container from './Container.vue';
@@ -45,7 +46,7 @@ async function injectPlayer() {
   try {
     const container = document.createElement('div');
 
-    const app = createApp(Container).use(ui);
+    const app = createApp(Container).use(ui).component('RouterLink', FakeRouterLink);
     const mountedApp = app.mount(container);
 
     document.querySelector(rootQuery)?.appendChild(mountedApp.$el);

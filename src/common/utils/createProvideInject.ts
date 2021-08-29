@@ -1,18 +1,16 @@
-export function createProvideInject<T>(label: string, defaultValue: T | (() => T)) {
+export function createProvideInject<T extends object>(label: string, defaultValue: T) {
   const valueKey = label + '-value';
   const updateKey = label + '-update';
 
-  const getDefaultValue = (): T =>
-    // @ts-expect-error: Bad type infer on function type
-    typeof defaultValue !== 'function' ? defaultValue : defaultValue();
-
   function provideValue() {
-    const value = readonly(reactive(ref(getDefaultValue())));
+    const value = reactive(defaultValue);
     provide(valueKey, readonly(value));
 
-    const update = (newValue: T) => {
-      // @ts-expect-error: bad ref typing, should be fine
-      value.value = newValue;
+    const update = (newValue: Partial<T>) => {
+      for (const field in newValue) {
+        // @ts-expect-error: Bad key typing
+        value[field] = newValue[field];
+      }
     };
     provide(updateKey, update);
   }
@@ -24,13 +22,10 @@ export function createProvideInject<T>(label: string, defaultValue: T | (() => T
   }
 
   function useUpdate(): (newValue: Partial<T>) => void {
-    const value = useValue();
-    const update = inject<(newValue: T) => void>(updateKey, () => {
+    const update = inject<(newValue: Partial<T>) => void>(updateKey, () => {
       throw Error(`Injected update has not been provided for ${label}`);
     });
-    return newValue => {
-      update({ ...value, ...newValue });
-    };
+    return newValue => update({ ...newValue });
   }
 
   return {

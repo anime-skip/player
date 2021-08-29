@@ -17,7 +17,7 @@ export function useSaveTemplateTimestamps() {
 
     await Promise.all([
       ...toCreate.map(id =>
-        api.addTimestampToTemplate(Api.ADD_TIMESTAMP_TO_TEMPLATE_MUTATION, {
+        api.addTimestampToTemplate(Api.TEMPLATE_TIMESTAMPS_DATA, {
           templateTimestamp: {
             templateId: template.id,
             timestampId: id,
@@ -25,7 +25,7 @@ export function useSaveTemplateTimestamps() {
         })
       ),
       ...toDelete.map(id =>
-        api.removeTimestampFromTemplate(Api.REMOVE_TIMESTAMP_TO_TEMPLATE_MUTATION, {
+        api.removeTimestampFromTemplate(Api.TEMPLATE_TIMESTAMPS_DATA, {
           templateTimestamp: {
             templateId: template.id,
             timestampId: id,

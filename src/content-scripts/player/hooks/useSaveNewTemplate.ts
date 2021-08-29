@@ -23,7 +23,7 @@ export function useSaveNewTemplate() {
       if (!episode?.show) throw Error('Cannot create a template when there is no episode or show');
 
       // Publish and build local template
-      const template = await api.createTemplate(Api.CREATE_TEMPLATE_MUTATION, {
+      const template = await api.createTemplate(Api.TEMPLATE_DATA, {
         newTemplate: {
           showId: episode.show.id,
           type,

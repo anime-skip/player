@@ -23,7 +23,7 @@ export function useSaveTemplate() {
       const episode = episodeRef.value as Api.Episode | undefined;
       if (!episode?.show) throw Error('Cannot save a template when there is no episode or show');
 
-      const template = await api.updateTemplate(Api.UPDATE_TEMPLATE_MUTATION, {
+      const template = await api.updateTemplate(Api.TEMPLATE_DATA, {
         templateId,
         newTemplate: {
           showId: episode.show.id,

@@ -56,7 +56,7 @@ export function useCreateEpisodeData() {
       let showId: string;
       if (showData.create) {
         // TODO: allow custom type argument to specify return type
-        const result = await api.createShow(Api.CREATE_SHOW_MUTATION, {
+        const result = await api.createShow(Api.SHOW_DATA, {
           showInput: { name: showData.name },
           becomeAdmin: false,
         });
@@ -68,7 +68,7 @@ export function useCreateEpisodeData() {
       // Episode
       let episodeId: string;
       if (episodeData.create) {
-        const result = await api.createEpisode(Api.CREATE_EPISODE_MUTATION, {
+        const result = await api.createEpisode(Api.EPISODE_SEARCH_RESULT_DATA, {
           showId,
           episodeInput: episodeData.data,
         });
@@ -80,7 +80,7 @@ export function useCreateEpisodeData() {
       // EpisodeUrl
       let episodeUrl: Api.EpisodeUrlNoEpisode;
       if (episodeUrlData.create) {
-        episodeUrl = await api.createOrUpdateEpisodeUrl(Api.CREATE_EPISODE_URL_MUTATION, {
+        episodeUrl = await api.createOrUpdateEpisodeUrl(Api.EPISODE_URL_NO_EPISODE_DATA, {
           episodeId,
           episodeUrlInput: episodeUrlData.data,
         });

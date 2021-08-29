@@ -24,9 +24,10 @@ export function useCreateEpisodeFromThirdParty() {
     updateEpisodeRequestState(RequestState.LOADING);
     try {
       const showName = thirdPartyEpisode.show.name;
-      const showSearchResults: Api.Show[] = await api.searchShows(Api.SHOW_SEARCH_QUERY, {
-        search: showName,
-      });
+      const showSearchResults: Api.ShowSearchResult[] = await api.searchShows(
+        Api.SHOW_SEARCH_RESULT_DATA,
+        { search: showName }
+      );
       const existingShow: Api.ShowSearchResult | undefined = showSearchResults.filter(
         searchResult => searchResult.name.toLowerCase() === showName.toLowerCase()
       )[0];

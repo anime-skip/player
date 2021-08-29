@@ -15,7 +15,7 @@ export function useFetchThirdPartyEpisode() {
     try {
       updateEpisodeRequestState(RequestState.LOADING);
       const episodes: Api.ThirdPartyEpisode[] = await api.findEpisodesByEpisodeAndShowName(
-        Api.FETCH_EPISODE_BY_EPISODE_AND_SHOW_NAME_QUERY,
+        Api.THIRD_PARTY_EPISODE_DATA,
         { episodeName, showName }
       );
       const episodesWithTimestamps = episodes.filter(episode => episode.timestamps.length > 0);

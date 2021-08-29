@@ -153,7 +153,7 @@ watch(activeTimestamp, (newTimestamp, oldTimestamp) => {
 
 onMounted(() => {
   reset();
-  // TODO
+  // TODO-REQ
   // Because this happens after the render, we have to render again, otherwise when you click edit
   // on the list ite, it will not start with a type selected on this component. This should be
   // solved by vue3/composition
@@ -164,7 +164,7 @@ onMounted(() => {
 const clearActiveTimestamp = useClearActiveTimestamp();
 onUnmounted(() => {
   clearActiveTimestamp();
-  // TODO: Not necessary?
+  // TODO-REQ: Not necessary?
   // this.clearEditTimestampMode();
   selectedType.value = undefined;
 });
@@ -201,7 +201,7 @@ const typeFilter = ref('');
 
 function selectType(type: Api.TimestampType) {
   selectedType.value = type;
-  // TODO: Necessary?
+  // TODO-REQ: Necessary?
   // this.$forceUpdate();
 }
 
@@ -213,7 +213,7 @@ const filteredResults = computed<Api.TimestampType[]>(() => {
   return fuzzysort.go(filter, TIMESTAMP_TYPES, { key: 'name', limit: 5 }).map(({ obj }) => obj);
 });
 watch(filteredResults, results => {
-  if (results.length > 0) selectType(results[0]); // TODO: Always select 0 so you can't continue when there are no results?
+  if (results.length > 0) selectType(results[0]); // TODO-REQ: test that invalid filter prevents you from saving
 });
 
 function isTypeSelected(type: Api.TimestampType): boolean {
@@ -256,12 +256,12 @@ const title = computed(() => {
 });
 
 function saveDraftTimestamp(newTimestamp: Api.AmbiguousTimestamp) {
-  // TODO: Add draftTimestamps to editingState
+  // TODO-REQ: Add draftTimestamps to editingState
   // this.$store.commit(MutationTypes.UPDATE_TIMESTAMP_IN_DRAFTS, newTimestamp);
 }
 
 function deleteDraftTimestamp(deletedTimestamp: Api.AmbiguousTimestamp): void {
-  // TODO: Add draftTimestamps to editingState
+  // TODO-REQ: Add draftTimestamps to editingState
   // this.$store.commit(MutationTypes.DELETE_DRAFT_TIMESTAMP, deletedTimestamp);
 }
 

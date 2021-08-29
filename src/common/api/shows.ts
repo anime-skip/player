@@ -1,14 +1,22 @@
 import { GqlShow, GqlThirdPartyShow } from '@anime-skip/axios-api';
 
+// ShowSearchResult
+
 export type ShowSearchResult = Pick<GqlShow, 'id' | 'name' | 'originalName'>;
-
-export type ThirdPartyShow = Pick<GqlThirdPartyShow, 'name'>;
-
-export type Show = Pick<GqlShow, 'id' | 'name' | 'originalName' | 'website' | 'image'>;
-export const SHOW_SEARCH_QUERY = `{
-  id name season number absoluteNumber baseDuration
+export const SHOW_SEARCH_RESULT_DATA = `{
+  id name originalName
 }`;
 
-export const LOAD_DEFAULT_SHOW_OPTION_QUERY = `{}`; // TODO
+// ThirdPartyShow
 
-export const CREATE_SHOW_MUTATION = `{}`; // TODO
+export type ThirdPartyShow = Pick<GqlThirdPartyShow, 'name'>;
+export const THIRD_PARTY_SHOW_DATA = `{
+  name
+}`;
+
+// Show
+
+export type Show = Pick<GqlShow, 'id' | 'name' | 'originalName' | 'website' | 'image'>;
+export const SHOW_DATA = `{
+  id name originalName website image
+}`;

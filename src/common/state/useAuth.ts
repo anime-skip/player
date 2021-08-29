@@ -23,8 +23,7 @@ export function useAuth() {
 
 export function useIsLoggedIn() {
   const { auth } = useAuth();
-  // TODO: validate this is correct
-  return computed(() => !!auth.value?.token);
+  return computed(() => !!auth?.token);
 }
 
 export function useClearTokens() {

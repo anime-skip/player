@@ -4,7 +4,6 @@ import {
   useInferredEpisode,
   useUpdateInferredEpisodeState,
 } from '../state/useInferredEpisodeState';
-import { useUpdatePlayHistory } from '../state/usePlayHistory';
 import { useClearAllEpisodeState } from './useClearAllEpisodeState';
 import { useFetchEpisodeByUrl } from './useFetchEpisodeByUrl';
 import { useFetchThirdPartyEpisode } from './useFetchThirdPartyEpisode';
@@ -13,7 +12,6 @@ import { useInferEpisodeDetails } from './useInferEpisodeDetails';
 export function useLoadAllEpisodeData() {
   const clearAllEpisodeState = useClearAllEpisodeState();
   const updateInferredEpisodeState = useUpdateInferredEpisodeState();
-  const updatePlayHistory = useUpdatePlayHistory();
   const fetchEpisodeByUrl = useFetchEpisodeByUrl();
   const inferEpisodeDetails = useInferEpisodeDetails();
   const fetchThirdPartyEpisode = useFetchThirdPartyEpisode();
@@ -26,7 +24,6 @@ export function useLoadAllEpisodeData() {
       inferredEpisode: undefined,
       requestState: RequestState.NOT_REQUESTED,
     });
-    updatePlayHistory({ isInitialBuffer: true });
 
     await fetchEpisodeByUrl(tabUrl).catch(() =>
       console.warn('No matching episode url found for ' + tabUrl)

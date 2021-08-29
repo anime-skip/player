@@ -27,7 +27,7 @@ export function useFindTemplate() {
 
   return async (showName?: string, season?: string, episodeId?: string): Promise<void> => {
     try {
-      const inferredTemplate = await api.findTemplateByDetails(Api.FIND_TEMPLATE_QUERY, {
+      const inferredTemplate = await api.findTemplateByDetails(Api.TEMPLATE_DATA, {
         episodeId,
         showName,
         season,

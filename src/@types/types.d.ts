@@ -1,6 +1,6 @@
 declare type Service = 'test-service' | 'vrv' | 'funimation' | 'crunchyroll';
 declare type ServiceDisplayName =
-  | 'Anime Skip Test Service'
+  | 'Anime Skip Test'
   | 'VRV'
   | 'Funimation'
   | 'Crunchyroll'
@@ -25,7 +25,6 @@ declare interface PlayerState {
   isBuffering: boolean;
   isPaused: boolean;
 }
-// TODO: fix all Api.* references in .d.ts files
 
 declare interface PlaybackRate {
   value: number;
@@ -85,14 +84,6 @@ interface PlayerOption {
   title: string;
   isSelected: boolean;
   node: HTMLElement;
-}
-
-interface CreateEpisodePrefill {
-  show: AutocompleteItem<Api.ShowSearchResult>;
-  episode: AutocompleteItem<Api.EpisodeSearchResult>;
-  season?: string;
-  number?: string;
-  absoluteNumber?: string;
 }
 
 declare interface TextInputRef {

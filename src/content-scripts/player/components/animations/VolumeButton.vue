@@ -24,7 +24,7 @@ import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 import { useVideoController, useVideoState } from '../../state/useVideoState';
 
 onMounted(() => {
-  // TODO - was this working in the first place?
+  // TODO-REQ - was this working in the first place?
   // function onIgnoredVolumeChange(): void {
   //   const video = getVideoOrThrow();
   //   if (!video?.muted && video?.volume === this.volume) return;

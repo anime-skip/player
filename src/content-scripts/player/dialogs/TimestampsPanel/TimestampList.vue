@@ -219,10 +219,10 @@ const isSavingTimestamps = useIsSavingChanges();
 const updateEditTimestampMode = useUpdateEditTimestampMode();
 
 function startEditing(onStartedEditing?: () => void): void {
-  // TODO this.$store.dispatch(ActionTypes.START_EDITING, onStartedEditing);
+  // TODO-REQ this.$store.dispatch(ActionTypes.START_EDITING, onStartedEditing);
 }
 async function stopEditing(discard?: boolean): Promise<void> {
-  // TODO await this.$store.dispatch(ActionTypes.STOP_EDITING, discard);
+  // TODO-REQ await this.$store.dispatch(ActionTypes.STOP_EDITING, discard);
 }
 
 function editTimestamp(timestamp: Api.AmbiguousTimestamp): void {
@@ -236,12 +236,12 @@ function editTimestamp(timestamp: Api.AmbiguousTimestamp): void {
 
 function deleteTimestamp(deletedTimestamp: Api.AmbiguousTimestamp) {
   startEditing(() => {
-    // TODO: this.$store.commit(MutationTypes.DELETE_DRAFT_TIMESTAMP, deletedTimestamp)
+    // TODO-REQ: this.$store.commit(MutationTypes.DELETE_DRAFT_TIMESTAMP, deletedTimestamp)
   });
 }
 
 function onClickAddNew(): void {
-  // TODO this.$store.dispatch(ActionTypes.CREATE_NEW_TIMESTAMP, undefined);
+  // TODO-REQ this.$store.dispatch(ActionTypes.CREATE_NEW_TIMESTAMP, undefined);
 }
 
 const hideDialog = useHideDialog();
@@ -254,7 +254,7 @@ async function onClickDiscard(): Promise<void> {
   await hideDialog();
 }
 function onClickOpenTemplate(): void {
-  // TODO: this.$store.commit(MutationTypes.TOGGLE_EDIT_TEMPLATE, true);
+  // TODO-REQ: this.$store.commit(MutationTypes.TOGGLE_EDIT_TEMPLATE, true);
 }
 </script>
 

@@ -80,7 +80,7 @@ import {
 } from '~/common/state/useKeyboardShortcutPrefs';
 import Utils from '~/common/utils/Utils';
 
-// TODO: Test full behavior
+// TODO-REQ: Test full behavior
 
 const props = defineProps<{
   shortcut?: string;

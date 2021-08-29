@@ -18,7 +18,7 @@ export function useFetchEpisodeByUrl() {
       const {
         episode: { template, timestamps, ...episode },
         ...episodeUrl
-      } = await api.findEpisodeUrl(Api.FIND_EPISODE_BY_URL_QUERY, { episodeUrl: url });
+      } = await api.findEpisodeUrl(Api.EPISODE_URL_DATA, { episodeUrl: url });
       updateEpisodeState({ episode, episodeUrl, savedTimestamps: timestamps });
       updateTemplate(template);
       updateEpisodeRequestState(RequestState.SUCCESS);

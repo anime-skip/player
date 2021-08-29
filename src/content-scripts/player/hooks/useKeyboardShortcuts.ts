@@ -6,7 +6,6 @@ import {
 } from '~/common/state/useKeyboardShortcutPrefs';
 import Utils from '~/common/utils/Utils';
 
-// TODO: make sure new keyboard shortcut optimizations work
 export function useKeyboardShortcuts(
   componentName: string,
   shortcuts: KeyboardShortcutActionToExecuteMap

@@ -16,8 +16,8 @@
     <div v-if="showBufferLoading" class="absolute inset-0 flex items-center justify-center">
       <Loading />
     </div>
-    <div class="left-content opacity-0 pointer-events-none pl-8 pt-8 box-border">
-      <EpisodeInfo />
+    <div class="left-content pointer-events-none pl-8 pt-8 box-border">
+      <episode-info />
     </div>
     <div class="right-content" />
     <controls-toolbar class="bottom-content" />
@@ -65,11 +65,11 @@ const { video, togglePlayPause, setActive, setInactive, setDuration } = useVideo
 watch(video, newVideo => {
   if (!newVideo) return;
   newVideo.playbackRate = videoState.playbackRate;
-  // setCurrentTime(newVideo.currentTime); // TODO: This needed? timeupdate listener should handle this...
+  // setCurrentTime(newVideo.currentTime); // TODO-REQ: This needed? timeupdate listener should handle this...
 });
 
 onMounted(() => {
-  // TODO: waitForVideo rounds the duration, does that need to happen in useVideoElement?
+  // TODO-REQ: waitForVideo rounds the duration, does that need to happen in useVideoElement?
   Utils.waitForVideoLoad().then(setDuration);
 });
 

@@ -4,7 +4,8 @@
     class="bg-control-variant bg-opacity-medium z-50"
     gravity-x="center"
     gravity-y="center"
-    v-bind="{ isShowing, hideLoginOverlay }"
+    :is-showing="isShowing"
+    :hide-dialog="hideLoginOverlay"
   >
     <LogIn close-after-login :close="hideLoginOverlay" />
   </BasicDialog>
@@ -14,7 +15,7 @@
 import { useDialogState, useHideLoginOverlay } from '../state/useDialogState';
 
 const dialogState = useDialogState();
-const isShowing = () => dialogState.isShowingLoginOverlay; // TODO: This was a computed with another arrow function layered on top of this. Does the login overlay still show up and dismiss correctly?
+const isShowing = () => dialogState.isShowingLoginOverlay;
 const hideLoginOverlay = useHideLoginOverlay();
 </script>
 

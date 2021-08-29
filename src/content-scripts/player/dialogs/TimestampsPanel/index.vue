@@ -15,14 +15,12 @@
 <script lang="ts" setup>
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 import { useEditingState } from '../../state/useEditingState';
-import { provideTimestampsPanelState } from './useTimestampPanelState';
-
-provideTimestampsPanelState();
+import { useIsEditingTemplate } from './useTimestampPanelState';
 
 const editingState = useEditingState();
 const activeTimestamp = computed(() => editingState.activeTimestamp);
 const isShowingEditTimestamp = computed(() => activeTimestamp.value != null);
-const isShowingTemplate = computed(() => true); // TODO this.$store.state.showEditTemplate in useTimestampPanelState()
+const isShowingTemplate = useIsEditingTemplate();
 
 const initialTab = ref<'details' | 'edit'>('details');
 function onShow(): void {
@@ -32,7 +30,7 @@ function onShow(): void {
 // Update timestamp on manual advances
 
 function updateTimestamp(): void {
-  // TODO - should this keyboard listener be in `EditTimestamp`?
+  // TODO-REQ - should this keyboard listener be in `EditTimestamp`?
   // timeSelectRef.value?.focus();
   // if (this.activeTimestamp != null) {
   //   const newTimestamp = this.$store.getters[GetterTypes.APPLY_TIMESTAMP_DIFF]({ // useApplyTimestampDiff

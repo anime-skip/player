@@ -75,6 +75,7 @@ import { useEpisodeAutocomplete } from '../../hooks/useEpisodeAutocomplete';
 import { useShowAutocomplete } from '../../hooks/useShowAutocomplete';
 import { useApiClient } from '~/common/hooks/useApiClient';
 import { useHideDialog } from '../../state/useDialogState';
+import { CreateEpisodePrefill } from '~/@types';
 
 export default defineComponent({
   props: {
@@ -197,7 +198,7 @@ export default defineComponent({
       this.linkToExistingEpisode(episode);
     },
     async linkToExistingEpisode(episode: Api.EpisodeSearchResult): Promise<void> {
-      // TODO
+      // TODO-REQ
       // try {
       //   await this.$store.dispatch(ActionTypes.LINK_EPISODE_URL, {
       //     episode,
@@ -208,7 +209,7 @@ export default defineComponent({
       // }
     },
     async createFromThirdParty(thirdPartyEpisode: Api.ThirdPartyEpisode) {
-      // TODO
+      // TODO-REQ
       // await this.$store.dispatch(ActionTypes.CREATE_EPISODE_FROM_THIRD_PARTY, {
       //   thirdPartyEpisode,
       //   onSuccess: this.hideDialog,

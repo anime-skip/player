@@ -9,14 +9,14 @@ export function useWebExtensionStorage<T extends Record<string, any>>(
   initialValue: T,
   area: AreaName
 ) {
-  const value = ref(initialValue);
+  const value = reactive(initialValue);
   browser.storage[area].get(key).then(results => {
     const newValue = results[key];
     if (newValue == null) {
       browser.storage[area].set({ [key]: initialValue });
-      value.value = initialValue;
+      updateValue(initialValue);
     } else {
-      value.value = newValue;
+      updateValue(newValue);
     }
   });
 
@@ -27,11 +27,10 @@ export function useWebExtensionStorage<T extends Record<string, any>>(
   ) => {
     if (areaName !== area) return;
     if (isEqual(changes[key]?.oldValue, changes[key]?.newValue)) return;
-    console.log(`${key}: ${areaName} storage changed:`, { changes, area, key });
 
     // TODO: Put this listener in a sharedComposable so it only gets added once
 
-    value.value = changes[key]?.newValue ?? initialValue;
+    updateValue(changes[key]?.newValue ?? initialValue);
   };
   onMounted(() => browser.storage.onChanged.addListener(onChangeStorageKey));
   onUnmounted(() => browser.storage.onChanged.removeListener(onChangeStorageKey));
@@ -44,7 +43,11 @@ export function useWebExtensionStorage<T extends Record<string, any>>(
     if (!isEqual(value.value, newValue)) {
       browser.storage[area].set({ [key]: newValue });
     }
-    value.value = newValue;
+
+    for (const field in newValue) {
+      // @ts-expect-error: Bad key typing
+      value[field] = newValue[field];
+    }
     console.log(`Updated ${area} storage:`, newValue);
   };
   return {

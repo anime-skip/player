@@ -24,7 +24,7 @@ export function createCustomAnimeSkipClient(baseUrl: string, clientId: string) {
       args: { episodeId: string; episodeUrlInput: GqlInputEpisodeUrl }
     ): Promise<GqlEpisodeUrl> {
       await methods
-        .deleteEpisodeUrl(Api.DELETE_EPISODE_URL_MUTATION, { episodeUrl: args.episodeUrlInput.url })
+        .deleteEpisodeUrl(Api.EPISODE_URL_NO_EPISODE_DATA, { episodeUrl: args.episodeUrlInput.url })
         .then(() => console.log('Deleted existing episode url'))
         .catch(err => console.log('Did not delete existing episode url:', err));
       return await methods.createEpisodeUrl(query, args);

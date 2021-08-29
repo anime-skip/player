@@ -34,11 +34,9 @@ export const PREFERENCES_QUERY = `{
   skipBranding skipIntros skipNewIntros skipMixedIntros skipRecaps skipFiller skipCanon skipTransitions skipTitleCard skipCredits skipMixedCredits skipNewCredits skipPreview
 }`;
 
-// TODO: Do we need account details?? (username, email verified)
 export const LOGIN_QUERY = `{
   authToken refreshToken
   account {
-    username emailVerified
     preferences ${PREFERENCES_QUERY}
   }
 }`;

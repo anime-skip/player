@@ -23,7 +23,7 @@ export interface EditingState {
   /**
    * If we're editing an existing timestamp, adding a new timestamp, or
    *
-   * @deprecated TODO Can the timestamp panel title be computed based on the timestamp id?
+   * @deprecated TODO-REQ Can the timestamp panel title be computed based on the timestamp id?
    */
   editTimestampMode: EditTimestampMode;
   /**

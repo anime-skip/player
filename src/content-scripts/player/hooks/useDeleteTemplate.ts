@@ -11,7 +11,7 @@ export function useDeleteTemplate() {
   return async (templateId: string): Promise<void> => {
     updateTemplateRequestState(RequestState.LOADING);
     try {
-      await api.deleteTemplate(Api.DELETE_TEMPLATE_MUTATION, { templateId });
+      await api.deleteTemplate(Api.TEMPLATE_DATA, { templateId });
       updateTemplateState({ episodeTemplate: undefined, timestamps: undefined });
       updateTemplateRequestState(RequestState.SUCCESS);
     } catch (err) {

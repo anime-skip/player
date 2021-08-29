@@ -1,6 +1,8 @@
 import { GqlTemplate, GqlTemplateType } from '@anime-skip/axios-api';
 import { Episode } from './episodes';
 
+// Template
+
 export interface Template
   extends Pick<
     GqlTemplate,
@@ -8,17 +10,26 @@ export interface Template
   > {
   sourceEpisode: Episode;
 }
+export const TEMPLATE_DATA = `{
+  id
+  showId
+  sourceEpisodeId
+  timestampIds
+  type
+  seasons
+}`;
+
+// TemplateType
 
 export { GqlTemplateType as TemplateType };
 
-export const FIND_TEMPLATE_QUERY = `{}`; // TODO
+// Template Timestamp
 
-export const CREATE_TEMPLATE_MUTATION = `{}`; // TODO
-
-export const UPDATE_TEMPLATE_MUTATION = `{}`; // TODO
-
-export const DELETE_TEMPLATE_MUTATION = `{}`; // TODO
-
-export const ADD_TIMESTAMP_TO_TEMPLATE_MUTATION = `{}`; // TODO
-
-export const REMOVE_TIMESTAMP_TO_TEMPLATE_MUTATION = `{}`; // TODO
+export interface TemplateTimestamp {
+  templateId: string;
+  timestampId: string;
+}
+export const TEMPLATE_TIMESTAMPS_DATA = `{
+  templateId
+  timestampId
+}`;

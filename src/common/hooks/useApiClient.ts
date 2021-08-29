@@ -61,9 +61,9 @@ if (modesToLog.includes(mode)) {
 export function useApiClient() {
   const { auth } = useAuth();
   client.axios.interceptors.request.use(config => {
-    // TODO: fetch with refresh token if necessary (exclude login functions)
-    if (auth.value.token) {
-      config.headers['Authorization'] = `Bearer ${auth.value.token}`;
+    // TODO-REQ: fetch with refresh token (exclude login functions)
+    if (auth.token) {
+      config.headers['Authorization'] = `Bearer ${auth.token}`;
     }
     return config;
   });
@@ -77,7 +77,7 @@ export function useApiClient() {
         } catch (err) {
           if (err.status === 401) {
             console.warn('Token expired, logging out');
-            // TODO: Try refresh token
+            // TODO-REQ: Try refresh token
           } else {
             throw err;
           }

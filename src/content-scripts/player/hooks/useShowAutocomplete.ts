@@ -1,6 +1,5 @@
 import { Ref } from 'vue';
 import * as Api from '~/common/api';
-import { SHOW_SEARCH_QUERY } from '~/common/api';
 import { useApiClient } from '~/common/hooks/useApiClient';
 import Mappers from '~/common/utils/Mappers';
 import Utils from '~/common/utils/Utils';
@@ -21,7 +20,7 @@ export function useShowAutocomplete(
   );
 
   const searchShows = async (search: string): Promise<void> => {
-    showSearchResults.value = await api.searchShows(SHOW_SEARCH_QUERY, {
+    showSearchResults.value = await api.searchShows(Api.SHOW_SEARCH_RESULT_DATA, {
       limit: 5,
       search,
     });

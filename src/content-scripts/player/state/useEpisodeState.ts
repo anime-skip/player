@@ -37,11 +37,10 @@ export function useEpisodeUrl(episodeState = useEpisodeState()) {
 /**
  * Returns the saved remote timestamps, inferred episode timestamps, or template timestamps
  */
-export function useUneditedTimestamps(
-  episodeState = useEpisodeState(),
-  duration = useDuration(),
-  templateTimestamps = useTemplateTimestamps()
-) {
+export function useUneditedTimestamps() {
+  const episodeState = useEpisodeState();
+  const duration = useDuration();
+  const templateTimestamps = useTemplateTimestamps();
   const inferredEpisodeState = useInferredEpisodeState();
 
   function getBaseTimestamps(): Api.AmbiguousTimestamp[] {
@@ -49,8 +48,9 @@ export function useUneditedTimestamps(
     if (
       inferredEpisodeState.inferredTimestamps != null &&
       inferredEpisodeState.inferredTimestamps.length > 0
-    )
+    ) {
       return inferredEpisodeState.inferredTimestamps;
+    }
 
     return templateTimestamps.value ?? [];
   }

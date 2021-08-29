@@ -58,11 +58,9 @@ function updateSecondaryKeyBinding(newKeyBinding: string | undefined): void {
 }
 
 const { primaryShortcutsActionToKeyMap } = usePrimaryKeyboardShortcutPrefs();
-const primaryKeyBinding = computed(() => primaryShortcutsActionToKeyMap.value[props.actionName]);
+const primaryKeyBinding = computed(() => primaryShortcutsActionToKeyMap[props.actionName]);
 const { secondaryShortcutsActionToKeyMap } = useSecondaryKeyboardShortcutPrefs();
-const secondaryKeyBinding = computed(
-  () => secondaryShortcutsActionToKeyMap.value[props.actionName]
-);
+const secondaryKeyBinding = computed(() => secondaryShortcutsActionToKeyMap[props.actionName]);
 </script>
 
 <style scoped>
