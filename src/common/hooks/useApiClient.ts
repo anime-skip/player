@@ -1,8 +1,11 @@
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import createAuthRefreshInterceptor from 'axios-auth-refresh';
+import * as Api from '~/common/api';
 import { createCustomAnimeSkipClient } from '~/common/utils/CustomApiClient';
-import { useAuth } from '../state/useAuth';
+import { useAuth, useClearTokens } from '../state/useAuth';
+import { useResetPreferences } from '../state/useGeneralPreferences';
 import Utils from '../utils/Utils';
 
 const baseUrls: Record<ExtensionMode, string> = {
@@ -59,9 +62,24 @@ if (modesToLog.includes(mode)) {
 }
 
 export function useApiClient() {
-  const { auth } = useAuth();
+  const { auth, updateAuth } = useAuth();
+  const clearTokens = useClearTokens();
+  const resetPreferences = useResetPreferences();
+
+  createAuthRefreshInterceptor(
+    // @ts-expect-error: Odd axios type/version mismatch?
+    client.axios,
+    async failedRequest => {
+      if (!auth.refreshToken) return;
+      const newAuth = await client.loginRefresh(Api.LOGIN_QUERY, {
+        refreshToken: auth.refreshToken,
+      });
+      failedRequest.response.config.headers['Authorization'] = 'Bearer ' + newAuth.authToken;
+      updateAuth({ refreshToken: newAuth.refreshToken, token: newAuth.authToken });
+    },
+    { pauseInstanceWhileRefreshing: true }
+  );
   client.axios.interceptors.request.use(config => {
-    // TODO-REQ: fetch with refresh token (exclude login functions)
     if (auth.token) {
       config.headers['Authorization'] = `Bearer ${auth.token}`;
     }
@@ -77,7 +95,8 @@ export function useApiClient() {
         } catch (err) {
           if (err.status === 401) {
             console.warn('Token expired, logging out');
-            // TODO-REQ: Try refresh token
+            clearTokens();
+            resetPreferences();
           } else {
             throw err;
           }

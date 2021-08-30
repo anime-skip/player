@@ -36,6 +36,7 @@
     "@anime-skip/axios-api": "^2.3.2",
     "@anime-skip/ui": "^1.2.1",
     "axios": "^0.21.1",
+    "axios-auth-refresh": "^3.1.0",
     "fuzzysort": "^1.1.4",
     "lodash.isequal": "^4.5.0",
     "md5": "^2.3.0",
