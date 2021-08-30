@@ -67,6 +67,7 @@ import {
   useUpdateActiveTimestamp,
   useUpdateEditTimestampMode,
 } from '../state/useEditingState';
+import { usePlayHistory } from '../state/usePlayHistory';
 import { useDuration, useVideoController, useVideoState } from '../state/useVideoState';
 
 // Video State
@@ -100,10 +101,14 @@ const minimizeToolbarWhenEditing = computed(() => preferences.value.minimizeTool
 // Editing
 
 const editingState = useEditingState();
+const playHistory = usePlayHistory();
 const isEditing = useIsEditing(editingState);
 const canSaveEdits = computed(() => editingState.isEditing && !editingState.isSaving);
 const showToolbar = computed(
-  () => videoState.isActive || (isEditing.value && !minimizeToolbarWhenEditing.value)
+  () =>
+    playHistory.isInitialBuffer ||
+    videoState.isActive ||
+    (isEditing.value && !minimizeToolbarWhenEditing.value)
 );
 const fullyHideToolbar = computed(
   () => !videoState.isActive && !videoState.isPaused && hideTimelineWhenMinimized.value
@@ -115,7 +120,9 @@ const setEditTimestampMode = useUpdateEditTimestampMode();
 const playAnimationState = computed<1 | 0>(() => (isPaused.value ? 1 : 0));
 
 const isFullscreenEnabled = ref(document.fullscreenEnabled);
-const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(); // TODO-REQ: `document.fullscreenElement` for first param?
+const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(
+  document.querySelector(window.getRootQuery())
+); // TODO-REQ: `document.fullscreenElement` for first param?
 const fullscreenAnimationState = computed<1 | 0>(() => (isFullscreen.value ? 0 : 1));
 
 // Dialogs
@@ -218,21 +225,9 @@ useKeyboardShortcuts('toolbar', {
 
 // Data Maintainence
 
-// TODO-REQ?: Fix missing durations, then require it
+// TODO: Fix missing durations, then require it
 // SELECT * FROM episodes WHERE duration IS NULL;
 // SELECT * FROM episodes WHERE base_duration IS NULL;
-// const addMissingDurations = (missingDuration: number) => {
-//   store.dispatch(ActionTypes.ADD_MISSING_DURATIONS, missingDuration);
-// };
-// const updateDuration = (newDuration: number) => {
-//   setDuration(newDuration);
-//   if (newDuration === 0) {
-//     displayDuration.value = 'Loading...';
-//   } else {
-//     displayDuration.value = Utils.formatSeconds(newDuration, false);
-//   }
-//   addMissingDurations(newDuration);
-// };
 </script>
 
 <style lang="scss" scoped>
