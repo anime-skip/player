@@ -11,7 +11,7 @@
     @mouseenter.prevent="onMouseMove"
     @mousemove.prevent="onMouseMove"
     @mouseleave.prevent="onMouseLeave"
-    @click="togglePlayPause"
+    @click="togglePlayPause()"
   >
     <div v-if="showBufferLoading" class="absolute inset-0 flex items-center justify-center">
       <Loading />
