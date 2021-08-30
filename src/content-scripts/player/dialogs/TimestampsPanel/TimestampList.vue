@@ -130,8 +130,11 @@ import * as Api from '~/common/api';
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import { SECONDS, TIMESTAMP_SOURCES, TIMESTAMP_TYPES } from '~/common/utils/Constants';
 import { useCanEditTimestamps } from '../../hooks/useCanEditTimestamps';
+import { useCreateNewTimestamp } from '../../hooks/useCreateNewTimestamp';
 import { useDisplayedTimestamps } from '../../hooks/useDisplayedTimestamps';
 import { useMatchingTemplate } from '../../hooks/useMatchingTemplate';
+import { useStartEditing } from '../../hooks/useStartEditing';
+import { useStopEditing } from '../../hooks/useStopEditing';
 import { useGetTimestampColor } from '../../hooks/useTimelineColors';
 import { useHideDialog } from '../../state/useDialogState';
 import {
@@ -147,6 +150,7 @@ import {
   useUpdateHoveredTimestamp,
 } from '../../state/useHoveredTimestamp';
 import { useVideoController } from '../../state/useVideoState';
+import { useUpdateIsEditingTemplate } from './useTimestampPanelState';
 
 const timestampTypeMap = TIMESTAMP_TYPES.reduce<{ [typeId: string]: Api.TimestampType }>(
   (map, timestamp) => {
@@ -218,12 +222,8 @@ const canEditTimestamps = useCanEditTimestamps();
 const isSavingTimestamps = useIsSavingChanges();
 const updateEditTimestampMode = useUpdateEditTimestampMode();
 
-function startEditing(onStartedEditing?: () => void): void {
-  // TODO-REQ this.$store.dispatch(ActionTypes.START_EDITING, onStartedEditing);
-}
-async function stopEditing(discard?: boolean): Promise<void> {
-  // TODO-REQ await this.$store.dispatch(ActionTypes.STOP_EDITING, discard);
-}
+const startEditing = useStartEditing();
+const stopEditing = useStopEditing();
 
 function editTimestamp(timestamp: Api.AmbiguousTimestamp): void {
   pause();
@@ -240,8 +240,9 @@ function deleteTimestamp(deletedTimestamp: Api.AmbiguousTimestamp) {
   });
 }
 
+const createNewTimestamp = useCreateNewTimestamp();
 function onClickAddNew(): void {
-  // TODO-REQ this.$store.dispatch(ActionTypes.CREATE_NEW_TIMESTAMP, undefined);
+  createNewTimestamp();
 }
 
 const hideDialog = useHideDialog();
@@ -253,8 +254,9 @@ async function onClickDiscard(): Promise<void> {
   await stopEditing(true);
   await hideDialog();
 }
+const updateIsEditingTemplate = useUpdateIsEditingTemplate();
 function onClickOpenTemplate(): void {
-  // TODO-REQ: this.$store.commit(MutationTypes.TOGGLE_EDIT_TEMPLATE, true);
+  updateIsEditingTemplate(true);
 }
 </script>
 

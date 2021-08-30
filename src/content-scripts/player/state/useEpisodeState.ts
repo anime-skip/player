@@ -87,6 +87,11 @@ export function useUneditedTimestamps() {
   });
 }
 
+export function useEpisodeRequestState() {
+  const value = useEpisodeState();
+  return computed(() => value.episodeRequestState);
+}
+
 export function useUpdateEpisodeRequestState() {
   const update = useUpdateEpisodeState();
   return (newRequestState: RequestState) => {

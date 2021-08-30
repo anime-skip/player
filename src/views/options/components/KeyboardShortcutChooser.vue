@@ -82,7 +82,7 @@ import Utils from '~/common/utils/Utils';
 
 // TODO-REQ: Test full behavior
 
-const props = defineProps<{
+defineProps<{
   shortcut?: string;
   secondary?: boolean;
 }>();

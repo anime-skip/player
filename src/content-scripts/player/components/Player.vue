@@ -36,6 +36,7 @@ import { useTimeout } from '@anime-skip/ui';
 import { PLAYER_ACTIVITY_TIMEOUT } from '~/common/utils/Constants';
 import Utils from '~/common/utils/Utils';
 import { useLoadAllEpisodeData } from '../hooks/useLoadAllEpisodeData';
+import { usePlaybackRateConnector } from '../hooks/usePlaybackRateConnector';
 import { useTabUrl } from '../hooks/useTabUrl';
 import { useVideoElement } from '../hooks/useVideoElement';
 import {
@@ -65,11 +66,12 @@ const { video, togglePlayPause, setActive, setInactive, setDuration } = useVideo
 watch(video, newVideo => {
   if (!newVideo) return;
   newVideo.playbackRate = videoState.playbackRate;
-  // setCurrentTime(newVideo.currentTime); // TODO-REQ: This needed? timeupdate listener should handle this...
 });
 
+// Sync the playback rate between prefs and videoState
+usePlaybackRateConnector();
+
 onMounted(() => {
-  // TODO-REQ: waitForVideo rounds the duration, does that need to happen in useVideoElement?
   Utils.waitForVideoLoad().then(setDuration);
 });
 

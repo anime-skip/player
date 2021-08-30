@@ -1,4 +1,3 @@
-import { Utils as UiUtils } from '@anime-skip/ui';
 import { createSharedComposable } from '~/common/hooks/createSharedComposable';
 import {
   useIncrementPlayTicks,
@@ -63,7 +62,7 @@ export const useVideoElement = createSharedComposable(function () {
     if (!video.value) return;
 
     if (video.value.volume !== videoState.playbackRate) {
-      video.value.volume = UiUtils.boundedNumber(videoState.playbackRate, [0, 1]);
+      video.value.volume = videoState.playbackRate;
       console.log('Enforced playback rate at', videoState.playbackRate);
     }
   };

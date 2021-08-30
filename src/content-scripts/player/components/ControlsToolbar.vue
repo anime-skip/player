@@ -122,7 +122,7 @@ const playAnimationState = computed<1 | 0>(() => (isPaused.value ? 1 : 0));
 const isFullscreenEnabled = ref(document.fullscreenEnabled);
 const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(
   document.querySelector(window.getRootQuery())
-); // TODO-REQ: `document.fullscreenElement` for first param?
+);
 const fullscreenAnimationState = computed<1 | 0>(() => (isFullscreen.value ? 0 : 1));
 
 // Dialogs

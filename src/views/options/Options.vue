@@ -27,8 +27,6 @@ import { computed } from 'vue';
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import { useGeneralPreferences, useToggleBooleanPref } from '~/common/state/useGeneralPreferences';
 
-// TODO-REQ: verify no INTIAL_LOAD call works
-
 const isLoggedIn = useIsLoggedIn();
 const preferences = useGeneralPreferences();
 const toggleBooleanPreference = useToggleBooleanPref();

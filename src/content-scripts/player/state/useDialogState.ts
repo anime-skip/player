@@ -37,7 +37,8 @@ export function useShowDialog() {
 
     if (state.activeDialog) {
       update({ activeDialog: undefined });
-      await sleep(125); // TODO-REQ: test, overlap with second dialog (timestamp panel -> preferences dialog)
+      // Overlay animations of closing this dialog and opening the next
+      await sleep(125);
     }
 
     if (dialogId) update({ activeDialog: dialogId });
@@ -52,7 +53,6 @@ export function useHideDialog() {
 
     if (state.activeDialog) {
       update({ activeDialog: undefined });
-      await sleep(125); // TODO-REQ: test. Overlap with second dialog (timestamp panel -> preferences dialog)
     }
   };
 }

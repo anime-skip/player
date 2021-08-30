@@ -38,6 +38,7 @@ import * as Api from '~/common/api';
 import { useApiClient } from '~/common/hooks/useApiClient';
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import Mappers from '~/common/utils/Mappers';
+import { useEpisodeRequestState } from '../../state/useEpisodeState';
 import { useInferredEpisode } from '../../state/useInferredEpisodeState';
 
 const prefill = ref<CreateEpisodePrefill>({
@@ -169,7 +170,7 @@ watch(isLoggedIn, (newIsLoggedIn, oldIsLoggedIn) => {
     setTimeout(loadData, 200);
   }
 });
-const episodeRequestState = computed(() => RequestState.NOT_REQUESTED); // TODO-REQ
+const episodeRequestState = useEpisodeRequestState();
 const isLoading = computed(
   () =>
     episodeRequestState.value === RequestState.LOADING ||

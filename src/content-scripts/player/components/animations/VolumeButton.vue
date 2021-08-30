@@ -23,19 +23,6 @@
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 import { useVideoController, useVideoState } from '../../state/useVideoState';
 
-onMounted(() => {
-  // TODO-REQ - was this working in the first place?
-  // function onIgnoredVolumeChange(): void {
-  //   const video = getVideoOrThrow();
-  //   if (!video?.muted && video?.volume === this.volume) return;
-  //   console.debug(`Ignoring volume change event, reset to ${this.volume}`);
-  //   video.volume = this.volume;
-  // }
-  // global.onVideoChanged(video => {
-  //   video.addEventListener('volumechange', onIgnoredVolumeChange);
-  // });
-});
-
 const isDragging = ref(false);
 
 const videoState = useVideoState();

@@ -139,7 +139,7 @@ export default class Utils {
         const timeout = window.setInterval(function () {
           const video = window.getVideo?.();
           if (video && video.readyState > 0) {
-            res(Math.round(video.duration));
+            res(video.duration);
             clearInterval(timeout);
           }
         }, 250);
