@@ -1,6 +1,10 @@
 import { Utils as UiUtils } from '@anime-skip/ui';
 import { createSharedComposable } from '~/common/hooks/createSharedComposable';
-import { useUpdatePlayHistory } from '../state/usePlayHistory';
+import {
+  useIncrementPlayTicks,
+  usePlayHistory,
+  useUpdatePlayHistory,
+} from '../state/usePlayHistory';
 import { useVideoController, useVideoState } from '../state/useVideoState';
 import { areNumbersWithin } from '../utils/areNumbersWithin';
 
@@ -8,6 +12,8 @@ export const useVideoElement = createSharedComposable(function () {
   const videoState = useVideoState();
   const controls = useVideoController();
   const updatePlayHistory = useUpdatePlayHistory();
+  const incrementPlayTicks = useIncrementPlayTicks();
+  const playHistory = usePlayHistory();
   const video = ref(window.getVideo?.());
 
   // Reactive - the video can change this state, and we can change the video
@@ -19,20 +25,23 @@ export const useVideoElement = createSharedComposable(function () {
   };
   const updateCurrentTime = () => {
     const newTime = video.value?.currentTime ?? 0;
-    if (videoState.currentTime !== newTime) controls.setCurrentTime(newTime, false);
+    controls.setCurrentTime(newTime, false);
+    incrementPlayTicks();
   };
-  // watch(
-  //   () => videoState.currentTime,
-  //   newCurrentTime => {
-  //     if (video.value) video.value.currentTime = newCurrentTime;
-  //   }
-  // );
   const setBuffering = () => controls.buffering();
 
   // Enforced - the video element will be reverted if it changes away from what we specify
 
   const enforcePlayPause = () => {
     if (!video.value) return;
+
+    // respect the player for the first couple of time updates
+    console.log('Play ticks', playHistory.playTicks);
+    if (playHistory.playTicks < 2) {
+      if (video.value.paused) controls.pause();
+      else controls.play();
+      return;
+    }
 
     if (video.value.paused !== videoState.isPaused) {
       if (videoState.isPaused) video.value.pause();

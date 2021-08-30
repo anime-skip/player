@@ -16,6 +16,7 @@ export interface PlayHistory {
    * connecting immediately is fine...
    */
   isInitialBuffer: boolean;
+  playTicks: number;
 }
 
 const {
@@ -25,6 +26,7 @@ const {
 } = createProvideInject<PlayHistory>('play-history', {
   hasSkippedFromZero: false,
   isInitialBuffer: true,
+  playTicks: 0,
 });
 
 export { providePlayHistory, usePlayHistory, useUpdatePlayHistory };
@@ -37,4 +39,15 @@ export function useResetSkippedFromZero() {
 export function useResetInitialBuffer() {
   const update = useUpdatePlayHistory();
   return () => update({ isInitialBuffer: false });
+}
+
+export function useResetPlayTicks() {
+  const update = useUpdatePlayHistory();
+  return () => update({ playTicks: 0 });
+}
+
+export function useIncrementPlayTicks() {
+  const update = useUpdatePlayHistory();
+  const value = usePlayHistory();
+  return () => update({ playTicks: value.playTicks + 1 });
 }
