@@ -4,7 +4,7 @@
       v-if="!isLoggedIn"
       :small="small"
       :close-after-login="shouldCloseAfterLogin"
-      :close="close"
+      :close="closePopup"
     />
     <div v-else-if="shouldCloseAfterLogin" class="mt-20">
       <Loading />
@@ -23,26 +23,33 @@ defineProps<{
 
 const browser = Browser.detect();
 
-// TODO-REQ: verify no INTIAL_LOAD call works
-
 const isLoggedIn = useIsLoggedIn();
 
 const shouldCloseAfterLogin = computed(() => {
   const urlParams = new URLSearchParams(window?.location.search);
   const closePopupAfterLogin = urlParams.get('closeAfterLogin');
+  console.log('Closing after login:', closePopupAfterLogin);
   return closePopupAfterLogin === 'true';
 });
 
-function close() {
+const autoclose = () => {
+  if (isLoggedIn.value && shouldCloseAfterLogin.value) {
+    setTimeout(closePopup, 500);
+  }
+};
+watch(isLoggedIn, autoclose);
+onMounted(autoclose);
+
+function closePopup() {
   window.close();
 }
 </script>
 
 <style scoped>
 .chrome {
-  min-width: 600px;
+  min-width: 700px;
   width: 100%;
-  height: 500px;
   margin: auto 0;
+  min-height: 600px;
 }
 </style>

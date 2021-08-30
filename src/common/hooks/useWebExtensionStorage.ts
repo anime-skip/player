@@ -1,6 +1,10 @@
 import isEqual from 'lodash.isequal';
 import { browser, Storage } from 'webextension-polyfill-ts';
 
+type PartialNulls<T> = {
+  [K in keyof T]?: T[K] | null;
+};
+
 type AreaName = 'sync' | 'local' | 'managed';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -27,6 +31,8 @@ export function useWebExtensionStorage<T extends Record<string, any>>(
   ) => {
     if (areaName !== area) return;
     if (isEqual(changes[key]?.oldValue, changes[key]?.newValue)) return;
+    const currentValue = JSON.parse(JSON.stringify(value));
+    if (isEqual(currentValue, changes[key].newValue)) return;
 
     // TODO: Put this listener in a sharedComposable so it only gets added once
 
@@ -35,20 +41,19 @@ export function useWebExtensionStorage<T extends Record<string, any>>(
   onMounted(() => browser.storage.onChanged.addListener(onChangeStorageKey));
   onUnmounted(() => browser.storage.onChanged.removeListener(onChangeStorageKey));
 
-  const updateValue = (newPartial: Partial<T>): void => {
+  const updateValue = (newPartial: PartialNulls<T>): void => {
     const newValue = {
-      ...value.value,
+      ...value,
       ...newPartial,
     };
-    if (!isEqual(value.value, newValue)) {
+    if (!isEqual(value, newValue)) {
       browser.storage[area].set({ [key]: newValue });
     }
 
     for (const field in newValue) {
-      // @ts-expect-error: Bad key typing
-      value[field] = newValue[field];
+      // @ts-expect-error: Bad key typing, null is required to maintain reactivity in chrome
+      value[field] = newValue[field] ?? null;
     }
-    console.log(`Updated ${area} storage:`, newValue);
   };
   return {
     value,

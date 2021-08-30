@@ -60,8 +60,6 @@
 import { PLAYBACK_SPEEDS } from '~/common/utils/Constants';
 import { useGeneralPreferences, useUpdateNumberPref } from '../state/useGeneralPreferences';
 
-// TODO-REQ test
-
 const props = defineProps<{
   showLess: boolean;
 }>();

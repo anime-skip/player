@@ -30,8 +30,8 @@ export function useClearTokens() {
   const { updateAuth } = useAuth();
   return () => {
     updateAuth({
-      token: undefined,
-      refreshToken: undefined,
+      token: null,
+      refreshToken: null,
     });
   };
 }

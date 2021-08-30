@@ -12,11 +12,22 @@
 </template>
 
 <script lang="ts" setup>
+import { useIsLoggedIn } from '~/common/state/useAuth';
 import { useDialogState, useHideLoginOverlay } from '../state/useDialogState';
 
 const dialogState = useDialogState();
 const isShowing = () => dialogState.isShowingLoginOverlay;
 const hideLoginOverlay = useHideLoginOverlay();
+
+const isLoggedIn = useIsLoggedIn();
+
+const autoclose = () => {
+  if (isLoggedIn.value) {
+    hideLoginOverlay();
+  }
+};
+watch(isLoggedIn, autoclose);
+onMounted(autoclose);
 </script>
 
 <style lang="scss">

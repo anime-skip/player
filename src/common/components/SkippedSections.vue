@@ -25,15 +25,20 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { SKIPPABLE_PREFERENCES } from '~/common/utils/Constants';
+import { useIsLoggedIn } from '../state/useAuth';
 import { useGeneralPreferences, useToggleBooleanPref } from '../state/useGeneralPreferences';
 
 defineProps({
   twoColumns: Boolean,
 });
 
+const isLoggedIn = useIsLoggedIn();
+
 const preferences = useGeneralPreferences();
 const toggleBooleanPref = useToggleBooleanPref();
-const autoSkipDisabled = computed<boolean>(() => !preferences.value.enableAutoSkip);
+const autoSkipDisabled = computed<boolean>(
+  () => !isLoggedIn.value || !preferences.value.enableAutoSkip
+);
 </script>
 
 <style scoped>

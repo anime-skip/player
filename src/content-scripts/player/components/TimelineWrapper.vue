@@ -36,6 +36,7 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
 import * as Api from '~/common/api';
+import { useIsLoggedIn } from '~/common/state/useAuth';
 import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
 import Utils from '~/common/utils/Utils';
 import { useDisplayedTimestamps } from '../hooks/useDisplayedTimestamps';
@@ -69,6 +70,7 @@ const timestampBeingEdited = computed(() => editingState.activeTimestamp);
 
 // Timestamps
 
+const isLoggedIn = useIsLoggedIn();
 const getTimestampColor = useGetTimestampColor(false); // Use darker blue on the actual timeline
 const activeTimestamps = useDisplayedTimestamps();
 const duration = useDuration(videoState);
@@ -78,7 +80,7 @@ const timelineData = computed(() => {
   return activeTimestamps.value.map(timestamp => ({
     key: timestamp.id,
     normalizedAt: (timestamp.at / duration.value) * 100,
-    skipped: !isEditing.value && Utils.isSkipped(timestamp, preferences.value),
+    skipped: isLoggedIn.value && !isEditing.value && Utils.isSkipped(timestamp, preferences.value),
     color: getTimestampColor(timestamp),
     active:
       hoveredTimestampId.value === timestamp.id || timestamp.id === timestampBeingEdited.value?.id,

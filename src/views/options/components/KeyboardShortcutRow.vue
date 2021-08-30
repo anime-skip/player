@@ -46,15 +46,15 @@ const props = defineProps<{
   groupBottom?: boolean;
 }>();
 const emit = defineEmits({
-  updatePrimary: (_newKeyBinding: string | undefined) => true,
-  updateSecondary: (_newKeyBinding: string | undefined) => true,
+  updatePrimary: (_newKeyBinding: string | null) => true,
+  updateSecondary: (_newKeyBinding: string | null) => true,
 });
 
 function updatePrimaryKeyBinding(newKeyBinding: string | undefined): void {
-  emit('updatePrimary', newKeyBinding);
+  emit('updatePrimary', newKeyBinding ?? null);
 }
 function updateSecondaryKeyBinding(newKeyBinding: string | undefined): void {
-  emit('updatePrimary', newKeyBinding);
+  emit('updateSecondary', newKeyBinding ?? null);
 }
 
 const { primaryShortcutsActionToKeyMap } = usePrimaryKeyboardShortcutPrefs();

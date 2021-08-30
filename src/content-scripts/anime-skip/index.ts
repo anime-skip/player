@@ -15,8 +15,8 @@ setInterval(() => {
   window.postMessage('@anime-skip/install-check', '*');
 
   // Login check
-  browser.storage.sync.get('auth').then(token => {
-    if (token) window.postMessage('@anime-skip/login-check', '*');
+  browser.storage.local.get('auth').then(({ auth }) => {
+    if (auth.token) window.postMessage('@anime-skip/login-check', '*');
   });
 }, 1000);
 

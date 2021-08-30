@@ -55,8 +55,10 @@ import * as Api from '~/common/api';
 import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
 import { FRAME, LOOKUP_PREV_TIMESTAMP_OFFSET } from '~/common/utils/Constants';
 import Utils from '~/common/utils/Utils';
+import { useCreateNewTimestamp } from '../hooks/useCreateNewTimestamp';
 import { useDisplayedTimestamps } from '../hooks/useDisplayedTimestamps';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
+import { useStopEditing } from '../hooks/useStopEditing';
 import { useHideDialog, useShowDialog, useToggleDialog } from '../state/useDialogState';
 import {
   EditTimestampMode,
@@ -137,15 +139,9 @@ const updateActiveTimestamp = useUpdateActiveTimestamp();
 
 // Keyboard Shortcuts
 
-function createNewTimestamp(): void {
-  // TODO-REQ
-  // store.dispatch(ActionTypes.CREATE_NEW_TIMESTAMP, undefined);
-}
+const createNewTimestamp = useCreateNewTimestamp();
 
-function saveChanges(discard = false): void {
-  // TODO-REQ
-  // store.dispatch(ActionTypes.STOP_EDITING, discard);
-}
+const saveChanges = useStopEditing();
 
 function editTimestampOnJump(timestamp: Api.AmbiguousTimestamp): void {
   pause();

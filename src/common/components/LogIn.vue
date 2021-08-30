@@ -54,10 +54,8 @@
 
 <script lang="ts" setup>
 import useRequestState from 'vue-use-request-state';
-import { browser, Storage } from 'webextension-polyfill-ts';
 import * as Api from '~/common/api';
 import { useApiClient } from '../hooks/useApiClient';
-import { AUTH_STORAGE_KEY, AUTH_STORAGE_LOCATION } from '../state/useAuth';
 
 const props = defineProps<{
   closeAfterLogin?: boolean;
@@ -72,24 +70,9 @@ const username = ref('');
 const password = ref('');
 const performLogin = Api.useLogin(api);
 const login = wrapRequest(async () => {
-  const res = await performLogin(username.value, password.value);
+  await performLogin(username.value, password.value);
   username.value = '';
   password.value = '';
-
-  if (props.closeAfterLogin) {
-    // Wait for login to be saved before closing
-    // TODO-REQ: Test this flow in options login [x], popup [x], web get started [ ]
-    const onChange = (changes: { [s: string]: Storage.StorageChange }, areaName: string) => {
-      if (
-        areaName === AUTH_STORAGE_LOCATION &&
-        changes[AUTH_STORAGE_KEY]?.newValue?.token === res!.authToken
-      ) {
-        browser.storage.onChanged.removeListener(onChange);
-        props.close?.();
-      }
-    };
-    browser.storage.onChanged.addListener(onChange);
-  }
 });
 
 // Input Ref Focus
