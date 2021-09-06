@@ -147,8 +147,8 @@ export default defineComponent({
 
     const onClickOption = (option: AutocompleteItem): void => {
       emit('update:value', option);
-      emit('select');
       onPressEsc();
+      emit('select');
     };
     const onSubmit = (): void => {
       const highlightedOption = props.options[highlightedIndex.value ?? -1];

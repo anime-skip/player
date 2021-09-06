@@ -26,7 +26,7 @@
       <AutocompleteTextInput
         class="mx-4"
         placeholder="Enter the show name..."
-        v-model:value="show"
+        v-model:value="showItem"
         :options="showOptions"
         @select="onSelectShow"
         @search="searchShows"
@@ -92,6 +92,7 @@ const api = useApiClient();
 const episodeInputRef = ref<TextInputRef>();
 const {
   show: selectedShow,
+  showItem,
   isExistingShow,
   showOptions,
   searchShows,
