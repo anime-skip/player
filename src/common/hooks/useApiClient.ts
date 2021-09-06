@@ -20,6 +20,11 @@ const modesToLog: ExtensionMode[] = ['dev', 'staged'];
 
 const client = createCustomAnimeSkipClient(baseUrls[mode], clientId);
 if (modesToLog.includes(mode)) {
+  // Uncomment if status code 422 is coming back
+  // client.axios.interceptors.request.use(config => {
+  //   console.log(JSON.stringify(config, null, 2));
+  //   return config;
+  // });
   client.axios.interceptors.response.use(
     /* eslint-disable no-console */
     response => {
@@ -41,15 +46,18 @@ if (modesToLog.includes(mode)) {
         'font-weight: 600; color: default;',
         'font-weight: 400; color: default;'
       );
-      console.debug(`URL: %c${response.config.baseURL}${response.config.url}`, 'color: #137AF8');
+      console.debug(
+        `URL: %c${response.config.baseURL! + response.config.url?.replace('/', '')}`,
+        'color: #137AF8'
+      );
       console.debug('Headers: ', headers);
       if (response.config.params) {
         console.debug('Parameters: ', response.config.params);
       }
       if (response.config.data) {
         console.debug(`GraphQL:\n%c${formattedGraphql}`, 'color: #137AF8');
-        if (response.config.data.variables) {
-          console.debug('Variables: ', response.config.data.variables);
+        if (requestBody.variables) {
+          console.debug('Variables: ', requestBody.variables);
         }
       }
       console.debug('Response: ', response.data);

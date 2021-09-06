@@ -55,7 +55,7 @@ export function useFindTemplate() {
         clearTemplateData();
       }
     } catch (err) {
-      console.info('Could not find episode template for', { episodeId, showName, season }, err);
+      console.log('Could not find episode template for', { episodeId, showName, season }, err);
       clearTemplateData();
     }
   };

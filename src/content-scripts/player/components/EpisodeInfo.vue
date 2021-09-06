@@ -24,7 +24,7 @@ import { RequestState } from 'vue-use-request-state';
 import EpisodeUtils from '~/common/utils/EpisodeUtils';
 import { useEpisodeDisplayInfo } from '../hooks/useEpisodeDisplayInfo';
 import { useDialogState, useShowConnectEpisodeDialog } from '../state/useDialogState';
-import { useEpisodeState } from '../state/useEpisodeState';
+import { useEpisodeUrl } from '../state/useEpisodeState';
 import { useInferRequestState } from '../state/useInferredEpisodeState';
 import { usePlayHistory } from '../state/usePlayHistory';
 import { useDuration, useVideoState } from '../state/useVideoState';
@@ -36,8 +36,8 @@ const episodeDetails = computed(() =>
   EpisodeUtils.seasonAndNumberFromEpisodeInfo(episodeDisplayInfo.value)
 );
 
-const { episodeUrl } = useEpisodeState();
-const hasEpisodeUrl = computed(() => episodeUrl != null);
+const episodeUrl = useEpisodeUrl();
+const hasEpisodeUrl = computed(() => episodeUrl.value != null);
 
 const { activeDialog } = useDialogState();
 

@@ -35,7 +35,6 @@ export const useVideoElement = createSharedComposable(function () {
     if (!video.value) return;
 
     // respect the player for the first couple of time updates
-    console.log('Play ticks', playHistory.playTicks);
     if (playHistory.playTicks < 2) {
       if (video.value.paused) controls.pause();
       else controls.play();
@@ -78,9 +77,15 @@ export const useVideoElement = createSharedComposable(function () {
   const enforceVolumeChange = () => {
     if (!video.value) return;
 
-    if (!areNumbersWithin(video.value.volume * 100, videoState.volumePercent, 0.01)) {
+    const newVolume = video.value.volume * 100;
+    const closeToAllowedChange =
+      videoState.allowVolumeChangeTo != null &&
+      areNumbersWithin(newVolume, videoState.allowVolumeChangeTo, 1);
+    if (!closeToAllowedChange) {
       console.log('Enforced volume at', videoState.volumePercent);
       video.value.volume = videoState.volumePercent / 100;
+    } else {
+      controls.clearVolumeChange();
     }
   };
   watch(

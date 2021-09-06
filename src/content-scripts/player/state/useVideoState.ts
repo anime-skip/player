@@ -33,6 +33,10 @@ export interface VideoState {
    * The percentage (0-100) that the volume is set at.
    */
   volumePercent: number;
+  /**
+   * The next volume it's ok to change the video to
+   */
+  allowVolumeChangeTo?: number;
 
   /**
    * Whether or not the video is muted. Muting is separate from volume percent because after
@@ -58,6 +62,7 @@ const {
   isPaused: initialVideo?.paused ?? false,
   isMuted: false,
   volumePercent: 100,
+  allowVolumeChangeTo: undefined,
   currentTime: 0,
   duration: undefined as number | undefined,
   playbackRate: 1,
@@ -106,7 +111,11 @@ export function useVideoController() {
 
     // Volume
     setVolumePercent(newPercent: number) {
-      update({ volumePercent: UiUtils.boundedNumber(newPercent, [0, 100]) });
+      const newValue = UiUtils.boundedNumber(newPercent, [0, 100]);
+      update({ volumePercent: newValue, allowVolumeChangeTo: newValue });
+    },
+    clearVolumeChange(): void {
+      update({ allowVolumeChangeTo: undefined });
     },
     mute(): void {
       update({ isMuted: true });

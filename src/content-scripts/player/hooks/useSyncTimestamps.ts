@@ -53,11 +53,19 @@ export function useSyncTimestamps() {
         create: toCreate.map(timestamp => ({
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           episodeId: currentEpisode.id!,
-          timestamp,
+          timestamp: {
+            at: timestamp.at,
+            typeId: timestamp.typeId,
+            source: timestamp.source,
+          },
         })),
         update: toUpdate.map(timestamp => ({
           id: timestamp.id,
-          timestamp,
+          timestamp: {
+            at: timestamp.at,
+            typeId: timestamp.typeId,
+            source: timestamp.source,
+          },
         })),
         delete: toDelete.map(({ id }) => id),
       });

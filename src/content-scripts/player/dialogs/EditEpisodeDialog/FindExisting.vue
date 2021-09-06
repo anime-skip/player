@@ -66,157 +66,159 @@
   </form>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue';
-import EpisodeUtils from '~/common/utils/EpisodeUtils';
-import { TIMESTAMP_SOURCES } from '~/common/utils/Constants';
-import * as Api from '~/common/api';
-import { useEpisodeAutocomplete } from '../../hooks/useEpisodeAutocomplete';
-import { useShowAutocomplete } from '../../hooks/useShowAutocomplete';
-import { useApiClient } from '~/common/hooks/useApiClient';
-import { useHideDialog } from '../../state/useDialogState';
+<script lang="ts" setup>
 import { CreateEpisodePrefill } from '~/@types';
+import * as Api from '~/common/api';
+import { useApiClient } from '~/common/hooks/useApiClient';
+import { TIMESTAMP_SOURCES } from '~/common/utils/Constants';
+import EpisodeUtils from '~/common/utils/EpisodeUtils';
+import { useCreateEpisodeFromThirdParty } from '../../hooks/useCreateEpisodeFromThirdParty';
+import { useEpisodeAutocomplete } from '../../hooks/useEpisodeAutocomplete';
+import { useLinkEpisodeUrl } from '../../hooks/useLinkEpisodeUrl';
+import { useShowAutocomplete } from '../../hooks/useShowAutocomplete';
+import { useHideDialog } from '../../state/useDialogState';
 
-export default defineComponent({
-  props: {
-    suggestions: {
-      type: Array as PropType<Api.ThirdPartyEpisode[]>,
-      required: true,
-    },
-    prefill: { type: Object as PropType<CreateEpisodePrefill | undefined>, default: undefined },
-  },
-  emits: {
-    createNew: (_arg: CreateEpisodePrefill) => true,
-  },
-  setup() {
-    const api = useApiClient();
-    const episodeInputRef = ref<TextInputRef>();
-    const { show, ...showAutocomplete } = useShowAutocomplete(episodeInputRef, api);
-    const episodeAutocomplete = useEpisodeAutocomplete(show, api);
-    const hideDialog = useHideDialog();
-    return {
-      episodeInputRef,
-      ...showAutocomplete,
-      ...episodeAutocomplete,
-      hideDialog,
-    };
-  },
-  data() {
-    return {
-      show: this.prefill?.show || {
-        title: '',
-      },
-      episode: this.prefill?.episode || {
-        title: '',
-      },
-      isShowingSuggestions: this.suggestions.length > 0,
-    };
-  },
-  computed: {
-    suggestionsHeader(): string {
-      const count = this.suggestionListItems.length;
-      if (count === 1) {
-        return '1 Suggestion';
-      }
-      return `${count} Suggestions`;
-    },
-    suggestionListItems(): Array<{
-      index: number;
-      show: string;
-      episode: string;
-      subtitle: string;
-      timestamps: string;
-      source: string | null | undefined;
-      value: Api.ThirdPartyEpisode;
-    }> {
-      return this.suggestions.map((suggestion, index) => {
-        const timestamps = `${suggestion.timestamps.length} timestamp${
-          suggestion.timestamps.length === 1 ? '' : 's'
-        }`;
-        const source = TIMESTAMP_SOURCES[suggestion.source];
-        return {
-          index,
-          show: suggestion.show.name ?? 'Unknown Show',
-          episode: suggestion.name ?? 'Unknown Episode',
-          subtitle: EpisodeUtils.seasonAndNumberDisplay(suggestion),
-          timestamps,
-          source,
-          value: suggestion,
-        };
-      });
-    },
-    shouldCreateNew(): boolean {
-      if (!this.isExistingShow) {
-        return this.show.title !== '' && this.show.data == null;
-      }
-      return this.episode.title !== '' && this.episode.data == null;
-    },
-    isSaveDisabled(): boolean {
-      return this.show.data == null || this.episode.data == null;
-    },
-    hasSuggestions(): boolean {
-      return !!this.suggestions?.length;
-    },
-  },
-  watch: {
-    suggestions() {
-      this.isShowingSuggestions = this.suggestions.length > 0;
-    },
-  },
-  methods: {
-    onClickSuggestion(suggestion: Api.ThirdPartyEpisode): void {
-      if (suggestion.source !== 'ANIME_SKIP') {
-        this.createFromThirdParty(suggestion);
-      } else {
-        this.linkToExistingEpisode(suggestion);
-      }
-    },
-    onClickCreateNew(): void {
-      const prefill: CreateEpisodePrefill = {
-        show: this.show,
-        episode: this.episode,
-        season: this.prefill?.season,
-        number: this.prefill?.number,
-        absoluteNumber: this.prefill?.absoluteNumber,
-      };
-      this.$emit('createNew', prefill);
-    },
-    toggleSuggestions(isShowingSuggestions: boolean): void {
-      this.isShowingSuggestions = isShowingSuggestions;
-    },
-    onClickSave(): void {
-      const show = this.show.data;
-      const episode = this.episode.data;
-      if (show == null || episode == null) {
-        console.error('Failed to save, show or episode were not selected', {
-          show: this.show.data,
-          episode: this.episode.data,
-        });
-        return;
-      }
-
-      this.linkToExistingEpisode(episode);
-    },
-    async linkToExistingEpisode(episode: Api.EpisodeSearchResult): Promise<void> {
-      // TODO-REQ
-      // try {
-      //   await this.$store.dispatch(ActionTypes.LINK_EPISODE_URL, {
-      //     episode,
-      //     onSuccess: this.hideDialog,
-      //   });
-      // } catch (err) {
-      //   // do nothing
-      // }
-    },
-    async createFromThirdParty(thirdPartyEpisode: Api.ThirdPartyEpisode) {
-      // TODO-REQ
-      // await this.$store.dispatch(ActionTypes.CREATE_EPISODE_FROM_THIRD_PARTY, {
-      //   thirdPartyEpisode,
-      //   onSuccess: this.hideDialog,
-      // });
-    },
-  },
+const props = defineProps<{
+  suggestions: Api.ThirdPartyEpisode[];
+  prefill?: CreateEpisodePrefill;
+}>();
+const emit = defineEmits({
+  createNew: (_arg: CreateEpisodePrefill) => true,
 });
+const api = useApiClient();
+
+// Autocomplete
+
+const episodeInputRef = ref<TextInputRef>();
+const {
+  show: selectedShow,
+  isExistingShow,
+  showOptions,
+  searchShows,
+  onSelectShow,
+} = useShowAutocomplete(episodeInputRef, api);
+const { episodeOptions, searchEpisodes } = useEpisodeAutocomplete(selectedShow, api);
+const hideDialog = useHideDialog();
+
+const episode = ref<AutocompleteItem<Api.EpisodeSearchResult>>(
+  props.prefill?.episode ?? {
+    title: '',
+  }
+);
+const show = ref<AutocompleteItem<Api.ShowSearchResult>>(
+  props.prefill?.show ?? {
+    title: '',
+  }
+);
+
+// Suggestions
+
+const isShowingSuggestions = ref<boolean>(props.suggestions.length > 0);
+
+watch(
+  () => props.suggestions,
+  newSuggestions => {
+    isShowingSuggestions.value = newSuggestions.length > 0;
+  }
+);
+
+function toggleSuggestions(newIsShowingSuggestions: boolean): void {
+  isShowingSuggestions.value = newIsShowingSuggestions;
+}
+
+const suggestionListItems = computed<
+  Array<{
+    index: number;
+    show: string;
+    episode: string;
+    subtitle: string;
+    timestamps: string;
+    source: string | null | undefined;
+    value: Api.ThirdPartyEpisode;
+  }>
+>(() => {
+  return props.suggestions.map((suggestion, index) => {
+    const timestamps = `${suggestion.timestamps.length} timestamp${
+      suggestion.timestamps.length === 1 ? '' : 's'
+    }`;
+    const source = TIMESTAMP_SOURCES[suggestion.source];
+    return {
+      index,
+      show: suggestion.show.name ?? 'Unknown Show',
+      episode: suggestion.name ?? 'Unknown Episode',
+      subtitle: EpisodeUtils.seasonAndNumberDisplay(suggestion),
+      timestamps,
+      source,
+      value: suggestion,
+    };
+  });
+});
+const suggestionsHeader = computed<string>(() => {
+  const count = suggestionListItems.value.length;
+  if (count === 1) {
+    return '1 Suggestion';
+  }
+  return `${count} Suggestions`;
+});
+
+const shouldCreateNew = computed<boolean>(() => {
+  if (!isExistingShow.value) {
+    return show.value.title !== '' && show.value.data == null;
+  }
+
+  return episode.value.title !== '' && episode.value.data == null;
+});
+
+const isSaveDisabled = computed<boolean>(() => {
+  return show.value.data == null || episode.value.data == null;
+});
+
+const hasSuggestions = computed<boolean>(() => {
+  return !!props.suggestions?.length;
+});
+
+function onClickSuggestion(suggestion: Api.ThirdPartyEpisode): void {
+  if (suggestion.source !== 'ANIME_SKIP') {
+    createFromThirdParty(suggestion);
+  } else {
+    linkToExistingEpisode(suggestion);
+  }
+}
+
+function onClickCreateNew(): void {
+  const prefill: CreateEpisodePrefill = {
+    show: show.value,
+    episode: episode.value,
+    season: props.prefill?.season,
+    number: props.prefill?.number,
+    absoluteNumber: props.prefill?.absoluteNumber,
+  };
+  emit('createNew', prefill);
+}
+
+function onClickSave(): void {
+  const s = show.value.data;
+  const e = episode.value.data;
+  if (s == null || e == null) {
+    console.error('Failed to save, show or episode were not selected', {
+      show: s,
+      episode: e,
+    });
+    return;
+  }
+
+  linkToExistingEpisode(e);
+}
+
+const _linkEpisodeUrl = useLinkEpisodeUrl();
+function linkToExistingEpisode(episodeToSave: Api.EpisodeSearchResult) {
+  _linkEpisodeUrl(episodeToSave, hideDialog).catch(console.warn);
+}
+
+const _createFromThirdParty = useCreateEpisodeFromThirdParty();
+function createFromThirdParty(thirdPartyEpisodeToSave: Api.ThirdPartyEpisode) {
+  _createFromThirdParty(thirdPartyEpisodeToSave, hideDialog).catch(console.warn);
+}
 </script>
 
 <style lang="css" scoped>

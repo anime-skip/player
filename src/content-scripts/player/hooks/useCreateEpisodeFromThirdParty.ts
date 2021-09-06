@@ -78,16 +78,7 @@ export function useCreateEpisodeFromThirdParty() {
       // Publish timestamps if present
       if (thirdPartyEpisode.timestamps.length > 0) {
         const timestamps = Mappers.thirdPartyEpisodeToAmbiguousTimestamps(thirdPartyEpisode);
-        console.info(
-          'Timestamps:',
-          JSON.parse(
-            JSON.stringify({
-              original: thirdPartyEpisode.timestamps,
-              prepared: Mappers.thirdPartyEpisodeToAmbiguousTimestamps(thirdPartyEpisode),
-            })
-          )
-        );
-        const offsetTimestamps = timestamps.map(timestamp => ({
+        const offsetTimestamps: Api.AmbiguousTimestamp[] = timestamps.map(timestamp => ({
           ...timestamp,
           at: Utils.applyTimestampsOffset(episodeUrl.timestampsOffset, timestamp.at),
         }));

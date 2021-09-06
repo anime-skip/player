@@ -28,7 +28,9 @@ export function useKeyboardShortcuts(
     ];
 
     console.debug(`[${componentName}] Pressed ${keyCombo} -> [${keyActions.join(', ')}]`);
-    keyActions.forEach(action => shortcuts[action]?.());
+    setTimeout(() => {
+      keyActions.forEach(action => shortcuts[action]?.());
+    }, 0);
   };
 
   window.addKeyDownListener(onKeyDownInstance);

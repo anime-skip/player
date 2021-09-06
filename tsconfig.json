@@ -24,7 +24,7 @@
     "resolveJsonModule": true,
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["vite/client", "mocha"],
+    "types": ["vite/client", "jest"],
     "paths": {
       "~/*": ["src/*"]
     }

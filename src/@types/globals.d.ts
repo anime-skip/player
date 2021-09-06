@@ -30,7 +30,7 @@ declare function inferEpisodeInfo(): Promise<InferredEpisodeInfo>;
  * Convert a raw URL string to one that can be used with Anime Skip (remove query params, etc)
  * @param inputUrl The raw URL
  */
-declare var transformServiceUrl: undefined | ((inputUrl: string) => string);
+declare var transformServiceUrl: (inputUrl: string) => string;
 
 /**
  * Get the options the the player provides (quality, subtitles, etc). Return enough info to

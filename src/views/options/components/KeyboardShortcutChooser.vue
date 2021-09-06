@@ -12,8 +12,9 @@
       v-if="shortcut"
       class="font-mono-2 font-size-body"
       :class="{
-        'text-on-primary': !secondary,
-        'text-on-surface': secondary,
+        'text-on-primary': !isDuplicate && !secondary,
+        'text-on-surface': !isDuplicate && secondary,
+        'text-on-error': isDuplicate,
       }"
       :tabindex="0"
       >{{ shortcut }}</pre
@@ -74,21 +75,22 @@ unset</pre
 </template>
 
 <script lang="ts" setup>
-import {
-  usePrimaryKeyboardShortcutPrefs,
-  useSecondaryKeyboardShortcutPrefs,
-} from '~/common/state/useKeyboardShortcutPrefs';
 import Utils from '~/common/utils/Utils';
+import { useDuplicateBindingChecker } from '~/content-scripts/player/hooks/useDubplicateBindingChecker';
 
 // TODO-REQ: Test full behavior
 
-defineProps<{
+const props = defineProps<{
   shortcut?: string;
   secondary?: boolean;
 }>();
 const emit = defineEmits({
   update: (_pressedKey: string | undefined) => true,
 });
+
+const selectedShortcut = computed(() => props.shortcut);
+const duplicateChecker = useDuplicateBindingChecker();
+const isDuplicate = duplicateChecker(selectedShortcut);
 
 // Editor
 
@@ -100,7 +102,7 @@ function showKeyBindingEditor() {
   currentKeyBinding.value = '';
 }
 function hideKeyBindingEditor() {
-  isShowingKeyBindingEditor.value = true;
+  isShowingKeyBindingEditor.value = false;
 }
 function onKeyDown(event: KeyboardEvent) {
   event.preventDefault();
@@ -132,16 +134,6 @@ watch(isShowingKeyBindingEditor, isShowing => {
   } else {
     document.removeEventListener('keydown', onKeyDown);
   }
-});
-
-const { primaryShortcutsKeyToActionsMap } = usePrimaryKeyboardShortcutPrefs();
-const { secondaryShortcutsKeyToActionsMap } = useSecondaryKeyboardShortcutPrefs();
-const isDuplicate = computed(() => {
-  const actions = [
-    ...(primaryShortcutsKeyToActionsMap.value[currentKeyBinding.value] ?? []),
-    ...(secondaryShortcutsKeyToActionsMap.value[currentKeyBinding.value] ?? []),
-  ];
-  return actions.length > 1;
 });
 </script>
 

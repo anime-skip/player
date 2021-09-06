@@ -12,7 +12,7 @@
       :max="100"
       background-color="#ffffff48"
       foreground-color="white"
-      @seek="setVolume"
+      @seek="setVolumePercent"
       @seek:start="isDragging = true"
       @seek:end="isDragging = false"
     />
@@ -43,9 +43,6 @@ useKeyboardShortcuts('VolumeButton', {
     setVolumePercent(videoState.volumePercent - VOLUME_STEP);
   },
 });
-function setVolume(volumeDecimal: number) {
-  setVolumePercent(volumeDecimal * 100);
-}
 </script>
 
 <style lang="scss" scoped>

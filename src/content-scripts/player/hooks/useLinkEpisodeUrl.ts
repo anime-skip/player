@@ -14,13 +14,7 @@ export function useLinkEpisodeUrl() {
   const loadAllEpisodeData = useLoadAllEpisodeData();
   const api = useApiClient();
 
-  return async ({
-    episode,
-    onSuccess,
-  }: {
-    episode: Api.EpisodeSearchResult;
-    onSuccess?: () => void;
-  }): Promise<void> => {
+  return async (episode: Api.EpisodeSearchResult, onSuccess?: () => void): Promise<void> => {
     const url = tabUrl.value;
     const duration = durationRef.value;
     const baseDuration = episode.baseDuration;

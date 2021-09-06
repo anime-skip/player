@@ -40,6 +40,7 @@ import { useIsLoggedIn } from '~/common/state/useAuth';
 import Mappers from '~/common/utils/Mappers';
 import { useEpisodeRequestState } from '../../state/useEpisodeState';
 import { useInferredEpisode } from '../../state/useInferredEpisodeState';
+import { deref } from '../../utils/deref';
 
 const prefill = ref<CreateEpisodePrefill>({
   show: { title: '' },
@@ -192,7 +193,7 @@ async function loadSuggestions() {
   if (inferredEpisode.value?.name == null || inferredEpisode.value.show == null) {
     console.log(
       'Not fetching suggestions, episode or show name could not be inferred',
-      inferredEpisode.value
+      deref(inferredEpisode)
     );
     return;
   }

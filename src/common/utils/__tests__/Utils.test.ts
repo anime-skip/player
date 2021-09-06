@@ -1,6 +1,5 @@
 import expect from 'expect';
 import * as Api from '~/common/api';
-import { TimestampSource } from '~/common/api';
 import Utils from '../Utils';
 
 describe('Utils', () => {
@@ -223,7 +222,7 @@ describe('Utils', () => {
     it('should return the correct toCreate', () => {
       const oldTimestamps: Api.Timestamp[] = [];
       const newTimestamps: Api.AmbiguousTimestamp[] = [
-        { id: '0', at: 0, typeId: 'intro', source: TimestampSource.ANIME_SKIP },
+        { id: '0', at: 0, typeId: 'intro', source: Api.TimestampSource.ANIME_SKIP },
       ];
 
       const expectedToCreate: Api.AmbiguousTimestamp[] = newTimestamps;
@@ -242,20 +241,20 @@ describe('Utils', () => {
 
     it('should return the correct toUpdate containing only updated timestamps', () => {
       const oldTimestamps: Api.Timestamp[] = [
-        { id: '0', at: 0, typeId: 'intro', source: TimestampSource.ANIME_SKIP },
-        { id: '1', at: 1, typeId: 'intro', source: TimestampSource.ANIME_SKIP },
-        { id: '2', at: 2, typeId: 'intro', source: TimestampSource.ANIME_SKIP },
+        { id: '0', at: 0, typeId: 'intro', source: Api.TimestampSource.ANIME_SKIP },
+        { id: '1', at: 1, typeId: 'intro', source: Api.TimestampSource.ANIME_SKIP },
+        { id: '2', at: 2, typeId: 'intro', source: Api.TimestampSource.ANIME_SKIP },
       ];
       const newTimestamps: Api.AmbiguousTimestamp[] = [
-        { id: '0', at: 0, typeId: 'branding', source: TimestampSource.ANIME_SKIP },
-        { id: '1', at: 1, typeId: 'intro', source: TimestampSource.ANIME_SKIP },
-        { id: '2', at: 3, typeId: 'intro', source: TimestampSource.ANIME_SKIP },
+        { id: '0', at: 0, typeId: 'branding', source: Api.TimestampSource.ANIME_SKIP },
+        { id: '1', at: 1, typeId: 'intro', source: Api.TimestampSource.ANIME_SKIP },
+        { id: '2', at: 3, typeId: 'intro', source: Api.TimestampSource.ANIME_SKIP },
       ];
 
       const expectedToCreate: Api.AmbiguousTimestamp[] = [];
       const expectedToUpdate: Api.Timestamp[] = [
-        { id: '0', at: 0, typeId: 'branding', source: TimestampSource.ANIME_SKIP },
-        { id: '2', at: 3, typeId: 'intro', source: TimestampSource.ANIME_SKIP },
+        { id: '0', at: 0, typeId: 'branding', source: Api.TimestampSource.ANIME_SKIP },
+        { id: '2', at: 3, typeId: 'intro', source: Api.TimestampSource.ANIME_SKIP },
       ];
       const expectedToDelete: Api.Timestamp[] = [];
 
@@ -271,7 +270,7 @@ describe('Utils', () => {
 
     it('should return the correct toDelete', () => {
       const oldTimestamps: Api.Timestamp[] = [
-        { id: '0', at: 0, typeId: 'branding', source: TimestampSource.ANIME_SKIP },
+        { id: '0', at: 0, typeId: 'branding', source: Api.TimestampSource.ANIME_SKIP },
       ];
       const newTimestamps: Api.AmbiguousTimestamp[] = [];
 
@@ -291,35 +290,35 @@ describe('Utils', () => {
 
     it('should return the correct toCreate, toUpdate (only updated items), toDelete for a complete example', () => {
       const oldTimestamps: Api.Timestamp[] = [
-        { id: '0', at: 0, typeId: 'branding', source: TimestampSource.ANIME_SKIP },
-        { id: '1', at: 2, typeId: 'recap', source: TimestampSource.ANIME_SKIP },
-        { id: '2', at: 4, typeId: 'intro', source: TimestampSource.BETTER_VRV },
-        { id: '3', at: 6, typeId: 'cannon', source: TimestampSource.ANIME_SKIP },
-        { id: '4', at: 8, typeId: 'credits', source: TimestampSource.ANIME_SKIP },
-        { id: '5', at: 8, typeId: 'filler', source: TimestampSource.ANIME_SKIP },
+        { id: '0', at: 0, typeId: 'branding', source: Api.TimestampSource.ANIME_SKIP },
+        { id: '1', at: 2, typeId: 'recap', source: Api.TimestampSource.ANIME_SKIP },
+        { id: '2', at: 4, typeId: 'intro', source: Api.TimestampSource.BETTER_VRV },
+        { id: '3', at: 6, typeId: 'cannon', source: Api.TimestampSource.ANIME_SKIP },
+        { id: '4', at: 8, typeId: 'credits', source: Api.TimestampSource.ANIME_SKIP },
+        { id: '5', at: 8, typeId: 'filler', source: Api.TimestampSource.ANIME_SKIP },
       ];
       const newTimestamps: Api.AmbiguousTimestamp[] = [
-        { id: '0', at: 1, typeId: 'filler', source: TimestampSource.ANIME_SKIP },
-        { id: '1', at: 2, typeId: 'recap', source: TimestampSource.ANIME_SKIP },
-        { id: '2', at: 3, typeId: 'intro', source: TimestampSource.BETTER_VRV },
-        { id: '6', at: 4, typeId: 'filler', source: TimestampSource.ANIME_SKIP },
-        { id: '3', at: 6, typeId: 'cannon', source: TimestampSource.ANIME_SKIP },
-        { id: '7', at: 7, typeId: 'credits', source: TimestampSource.ANIME_SKIP },
-        { id: '8', at: 8, typeId: 'preview', source: TimestampSource.ANIME_SKIP },
+        { id: '0', at: 1, typeId: 'filler', source: Api.TimestampSource.ANIME_SKIP },
+        { id: '1', at: 2, typeId: 'recap', source: Api.TimestampSource.ANIME_SKIP },
+        { id: '2', at: 3, typeId: 'intro', source: Api.TimestampSource.BETTER_VRV },
+        { id: '6', at: 4, typeId: 'filler', source: Api.TimestampSource.ANIME_SKIP },
+        { id: '3', at: 6, typeId: 'cannon', source: Api.TimestampSource.ANIME_SKIP },
+        { id: '7', at: 7, typeId: 'credits', source: Api.TimestampSource.ANIME_SKIP },
+        { id: '8', at: 8, typeId: 'preview', source: Api.TimestampSource.ANIME_SKIP },
       ];
 
       const expectedToCreate: Api.AmbiguousTimestamp[] = [
-        { id: '6', at: 4, typeId: 'filler', source: TimestampSource.ANIME_SKIP },
-        { id: '7', at: 7, typeId: 'credits', source: TimestampSource.ANIME_SKIP },
-        { id: '8', at: 8, typeId: 'preview', source: TimestampSource.ANIME_SKIP },
+        { id: '6', at: 4, typeId: 'filler', source: Api.TimestampSource.ANIME_SKIP },
+        { id: '7', at: 7, typeId: 'credits', source: Api.TimestampSource.ANIME_SKIP },
+        { id: '8', at: 8, typeId: 'preview', source: Api.TimestampSource.ANIME_SKIP },
       ];
       const expectedToUpdate: Api.Timestamp[] = [
-        { id: '0', at: 1, typeId: 'filler', source: TimestampSource.ANIME_SKIP },
-        { id: '2', at: 3, typeId: 'intro', source: TimestampSource.BETTER_VRV },
+        { id: '0', at: 1, typeId: 'filler', source: Api.TimestampSource.ANIME_SKIP },
+        { id: '2', at: 3, typeId: 'intro', source: Api.TimestampSource.BETTER_VRV },
       ];
       const expectedToDelete: Api.Timestamp[] = [
-        { id: '4', at: 8, typeId: 'credits', source: TimestampSource.ANIME_SKIP },
-        { id: '5', at: 8, typeId: 'filler', source: TimestampSource.ANIME_SKIP },
+        { id: '4', at: 8, typeId: 'credits', source: Api.TimestampSource.ANIME_SKIP },
+        { id: '5', at: 8, typeId: 'filler', source: Api.TimestampSource.ANIME_SKIP },
       ];
 
       const { toCreate, toUpdate, toDelete } = Utils.computeTimestampDiffs(

@@ -100,7 +100,6 @@ export function useSecondaryKeyboardShortcutPrefs() {
 export function useUpdatePrimaryKeyBinding() {
   const { updatePrimaryShortcutsActionToKeyMap } = usePrimaryKeyboardShortcutPrefs();
   return (action: KeyboardShortcutAction) => (keyBinding: string | null) => {
-    // TODO: Make API call
     updatePrimaryShortcutsActionToKeyMap({ [action]: keyBinding });
   };
 }
@@ -108,7 +107,6 @@ export function useUpdatePrimaryKeyBinding() {
 export function useUpdateSecondaryKeyBinding() {
   const { updateSecondaryShortcutsActionToKeyMap } = useSecondaryKeyboardShortcutPrefs();
   return (action: KeyboardShortcutAction) => (keyBinding: string | null) => {
-    // TODO: Make API call
     updateSecondaryShortcutsActionToKeyMap({ [action]: keyBinding });
   };
 }

@@ -16,16 +16,18 @@ export const useTabUrl = createSharedComposable(function () {
   onMounted(async () => {
     const initialUrl = await browser.runtime.sendMessage({ type: '@anime-skip/get-url' });
 
-    console.log('Initial URL: ' + initialUrl);
-    tabUrl.value = initialUrl;
+    const correctedNewUrl = window.transformServiceUrl(initialUrl);
+    console.log('Initial URL: ' + correctedNewUrl);
+    tabUrl.value = correctedNewUrl;
   });
 
   const onReceiveMessage = (message: ChangeUrlMessage | UnknownMessage) => {
     if (message.type != '@anime-skip/changeUrl') return;
     const newUrl = message.payload;
 
-    console.log('Change URL: ' + newUrl);
-    tabUrl.value = newUrl;
+    const correctedNewUrl = window.transformServiceUrl(newUrl);
+    console.log('Change URL: ' + correctedNewUrl);
+    tabUrl.value = correctedNewUrl;
   };
   browser.runtime.onMessage.addListener(onReceiveMessage);
   onScopeDispose(() => {
