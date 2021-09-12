@@ -57,17 +57,14 @@ jobs:
       - name: Upload Firefox ZIP
         uses: actions/upload-artifact@v2
         with:
-          name: firefox-beta.zip
           path: artifacts/firefox-beta.zip
 
       - name: Upload Chrome ZIP
         uses: actions/upload-artifact@v2
         with:
-          name: chrome-beta.zip
           path: artifacts/chrome-beta.zip
 
       - name: Upload Sources ZIP
         uses: actions/upload-artifact@v2
         with:
-          name: sources.zip
           path: artifacts/sources.zip
