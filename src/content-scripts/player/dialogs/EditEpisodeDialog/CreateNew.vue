@@ -1,10 +1,10 @@
 <template>
   <div class="p-4 space-y-4">
     <AutocompleteTextInput
-      ref="showName"
+      ref="showNameInput"
       class="horizontal-margin"
       placeholder="Show name"
-      v-model:value="show"
+      v-model:value="showItem"
       :options="showOptions"
       @select="onSelectShow"
       @search="searchShows"
@@ -29,96 +29,91 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue';
+<script lang="ts" setup>
 import { CreateEpisodePrefill } from '~/@types';
+import * as Api from '~api';
+import { useCreateEpisodeData } from '../../hooks/useCreateEpisodeData';
 import { useShowAutocomplete } from '../../hooks/useShowAutocomplete';
+import { useTabUrl } from '../../hooks/useTabUrl';
 import { useHideDialog } from '../../state/useDialogState';
+import { useDuration } from '../../state/useVideoState';
 
-export default defineComponent({
-  props: {
-    prefill: { type: Object as PropType<CreateEpisodePrefill>, default: undefined },
-  },
-  setup() {
-    const showAutocomplete = useShowAutocomplete(ref());
-    const hideDialog = useHideDialog();
-    return {
-      ...showAutocomplete,
-      hideDialog,
-    };
-  },
-  data() {
-    return {
-      show: this.prefill?.show || {
-        title: '',
-      },
-      name: this.prefill?.episode?.title ?? '',
-      number: this.prefill?.number ?? '',
-      absoluteNumber: this.prefill?.absoluteNumber ?? '',
-      season: this.prefill?.season ?? '',
-    };
-  },
-  mounted(): void {
-    (this.$refs.showName as TextInputRef | null)?.focus();
-  },
-  computed: {
-    createButtonText(): string {
-      if (this.show.data == null) {
-        return 'Create Show & Episode';
-      }
-      return 'Create Episode';
-    },
-    isCreateDisabled(): boolean {
-      return this.show.title.trim() === '' || this.name.trim() === '';
-    },
-  },
-  methods: {
-    async onClickCreate(): Promise<void> {
-      // TODO-REQ
-      // const url = this.$store.state.tabUrl;
-      // if (url == null) {
-      //   throw new Error("Cannot create an episode without it's URL");
-      // }
-      // const duration = this.$store.state.playerState.duration;
-      // const episode: Api.InputEpisode = {
-      //   name: this.name.trim() || undefined,
-      //   season: this.season.trim() || undefined,
-      //   number: this.number.trim() || undefined,
-      //   absoluteNumber: this.absoluteNumber.trim() || undefined,
-      //   baseDuration: duration,
-      // };
-      // const episodeUrl: Api.InputEpisodeUrl = {
-      //   url,
-      //   duration,
-      //   timestampsOffset: 0,
-      // };
-      //
-      // const payload: CreateEpisodeDataPayload = {
-      //   show:
-      //     this.show.data == null
-      //       ? {
-      //           create: true,
-      //           name: this.show.title,
-      //         }
-      //       : {
-      //           create: false,
-      //           showId: this.show.data.id,
-      //         },
-      //   episode: {
-      //     create: true,
-      //     data: episode,
-      //   },
-      //   episodeUrl: {
-      //     create: true,
-      //     data: episodeUrl,
-      //   },
-      // };
-      // await this.$store.dispatch(ActionTypes.CREATE_EPISODE_DATA, payload);
-      //
-      // await this.hideDialog();
-    },
-  },
+const props = defineProps<{
+  prefill?: CreateEpisodePrefill;
+}>();
+
+const {
+  showItem,
+  show: selectedShow,
+  showOptions,
+  onSelectShow,
+  searchShows,
+} = useShowAutocomplete(ref());
+const hideDialog = useHideDialog();
+
+const showNameInput = ref<TextInputRef>();
+
+const name = ref(props.prefill?.episode?.title ?? '');
+const number = ref(props.prefill?.number ?? '');
+const absoluteNumber = ref(props.prefill?.absoluteNumber ?? '');
+const season = ref(props.prefill?.season ?? '');
+
+onMounted(() => {
+  showNameInput.value?.focus();
 });
+
+const createButtonText = computed(() =>
+  selectedShow.value == null ? 'Create Show & Episode' : 'Create Episode'
+);
+const isCreateDisabled = computed<boolean>(() => {
+  return showItem.value.title.trim() === '' || name.value.trim() === '';
+});
+
+const tabUrl = useTabUrl();
+const createEpisodeData = useCreateEpisodeData();
+const durationRef = useDuration();
+async function onClickCreate(): Promise<void> {
+  const url = tabUrl.value;
+  if (url == null) {
+    throw new Error("Cannot create an episode without it's URL");
+  }
+  const duration = durationRef.value;
+  const episode: Api.InputEpisode = {
+    name: name.value.trim() || undefined,
+    season: season.value.trim() || undefined,
+    number: number.value.trim() || undefined,
+    absoluteNumber: absoluteNumber.value.trim() || undefined,
+    baseDuration: duration,
+  };
+  const episodeUrl: Api.InputEpisodeUrl = {
+    url,
+    duration,
+    timestampsOffset: 0,
+  };
+
+  await createEpisodeData({
+    show:
+      showItem.value.data == null
+        ? {
+            create: true,
+            name: showItem.value.title,
+          }
+        : {
+            create: false,
+            showId: showItem.value.data.id,
+          },
+    episode: {
+      create: true,
+      data: episode,
+    },
+    episodeUrl: {
+      create: true,
+      data: episodeUrl,
+    },
+  });
+
+  hideDialog();
+}
 </script>
 
 <style lang="scss" scoped>

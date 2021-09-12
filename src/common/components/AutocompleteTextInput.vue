@@ -150,11 +150,14 @@ export default defineComponent({
       onPressEsc();
       emit('select');
     };
-    const onSubmit = (): void => {
+    const selectHighlightedItem = () => {
       const highlightedOption = props.options[highlightedIndex.value ?? -1];
       if (highlightedOption != null) {
         onClickOption(highlightedOption);
       }
+    };
+    const onSubmit = (): void => {
+      selectHighlightedItem();
     };
 
     const isFocused = ref(false);
@@ -167,6 +170,7 @@ export default defineComponent({
     const onBlurInput = (): void => {
       wasEscPressed.value = false;
       isFocused.value = false;
+      if (searchValue.value.trim() !== '') selectHighlightedItem();
       emit('blur');
     };
 
@@ -177,10 +181,8 @@ export default defineComponent({
     return {
       searchValue,
 
-      wasEscPressed,
       onPressEsc,
 
-      isFocused,
       onFocusInput,
       onBlurInput,
 
