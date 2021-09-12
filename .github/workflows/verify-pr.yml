@@ -54,17 +54,11 @@ jobs:
           CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
           CHROME_BETA_APP_ID: ${{ secrets.CHROME_APP_ID }}
 
-      - name: Upload Firefox ZIP
+      - name: Upload Zips
         uses: actions/upload-artifact@v2
         with:
-          path: artifacts/firefox-beta.zip
-
-      - name: Upload Chrome ZIP
-        uses: actions/upload-artifact@v2
-        with:
-          path: artifacts/chrome-beta.zip
-
-      - name: Upload Sources ZIP
-        uses: actions/upload-artifact@v2
-        with:
-          path: artifacts/sources.zip
+          name: Dry Run
+          path: |
+            artifacts/firefox-beta.zip
+            artifacts/chrome-beta.zip
+            artifacts/sources.zip
