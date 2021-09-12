@@ -18,8 +18,10 @@ export async function zipSources(OUTPUT_DIR: string) {
   const tempFolder = path.join(OUTPUT_DIR, '.temp-sources');
   const sourcesZip = path.join(OUTPUT_DIR, 'sources.zip');
   const sources = [
-    'src/',
+    'extension/',
     'scripts/',
+    'src/',
+    'vite/',
     '.nvmrc',
     'package.json',
     'pnpm-lock.yaml',

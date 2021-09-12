@@ -13,7 +13,7 @@ This is the document that contains all the necessary steps to building the submi
 `extension/` is what gets zipped and submitted.
 
 ```bash
-pnpm i
+pnpm i --ignore-scripts
 
 # build extension/ directory
 pnpm build
