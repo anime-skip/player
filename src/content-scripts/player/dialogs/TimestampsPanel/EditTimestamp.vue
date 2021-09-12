@@ -2,39 +2,44 @@
   <TimestampPanelLayout mode="back" :title="title" @back="clearActiveTimestamp">
     <template #content>
       <div class="flex flex-col flex-1 space-y-2 pt-3 px-4 pb-2 overflow-y-hidden">
-        <div class="flex flex-row space-x-4 pb-2 items-center">
-          <div
-            ref="timeSelectRef"
-            class="self-start flex-shrink-0 rounded-sm ring-primary no-firefox-dots"
-            :class="{
-              'ring ring-opacity-low': isTimeSelectFocused,
-            }"
-            :tabindex="0"
-            @focus="isTimeSelectFocused = true"
-            @blur="isTimeSelectFocused = false"
-            @click.stop.prevent="focusOnTimeSelect"
+        <div
+          ref="timeSelectRef"
+          class="self-start flex-shrink-0 rounded-sm ring-primary no-firefox-dots"
+          :class="{
+            'ring ring-opacity-low': isTimeSelectFocused,
+            'opacity-medium': !canAdjustTime,
+          }"
+          :tabindex="canAdjustTime ? 0 : -1"
+          @focus="isTimeSelectFocused = true"
+          @blur="isTimeSelectFocused = false"
+          @click.stop.prevent="focusOnTimeSelect"
+        >
+          <RaisedContainer
+            :down="isTimeSelectFocused"
+            dark
+            :disabled="!canAdjustTime"
+            :tabindex="-1"
+            class="no-firefox-dots"
           >
-            <RaisedContainer
-              :down="isTimeSelectFocused"
-              dark
-              :tabindex="-1"
-              class="no-firefox-dots"
-            >
-              <div class="w-full h-10 pl-3 pr-4 flex items-center space-x-3 no-firefox-dots">
-                <WebExtImg class="icon" src="ic_clock.svg" :draggable="false" />
-                <p class="time">
-                  {{ timestampAtFormatted }}
-                </p>
-              </div>
-            </RaisedContainer>
-          </div>
-          <p class="body-2 text-opacity-medium text-on-surface">
-            Use J and L keys to move left and right
-          </p>
+            <div class="w-full h-10 pl-3 pr-4 flex items-center space-x-3 no-firefox-dots">
+              <WebExtImg class="icon" src="ic_clock.svg" :draggable="false" />
+              <p class="time">
+                {{ timestampAtFormatted }}
+              </p>
+            </div>
+          </RaisedContainer>
         </div>
+        <p
+          class="body-2 pb-2"
+          :class="{
+            'text-error': !canAdjustTime,
+            'text-opacity-medium text-on-surface': canAdjustTime,
+          }"
+        >
+          {{ adjustTimeLabel }}
+        </p>
         <p class="subtitle-1 pt-2 pb-2">Timestamp type</p>
         <TextInput
-          ref="filterInput"
           class="flex row -mb-2"
           placeholder="Filter..."
           v-model:value="typeFilter"
@@ -115,13 +120,17 @@ import fuzzysort from 'fuzzysort';
 import { TIMESTAMP_TYPES, TIMESTAMP_TYPE_NOT_SELECTED } from '~/common/utils/Constants';
 import * as Api from '~api';
 import { useApplyTimestampDiff } from '../../hooks/useApplyTimestampDiff';
+import { useDeleteDraftTimestamp } from '../../hooks/useDeleteDraftTimestamp';
+import useKeyboardShortcutBindingDisplay from '../../hooks/useKeyboardShortcutBindingDisplay';
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
+import { useSaveDraftTimestamp } from '../../hooks/useSaveDraftTimestamp';
 import { useHideDialog } from '../../state/useDialogState';
 import {
   EditTimestampMode,
   useActiveTimestamp,
   useClearActiveTimestamp,
   useEditTimestampMode,
+  useUpdateActiveTimestamp,
 } from '../../state/useEditingState';
 import { useEpisodeUrl } from '../../state/useEpisodeState';
 import { useVideoController, useVideoState } from '../../state/useVideoState';
@@ -153,25 +162,52 @@ watch(activeTimestamp, (newTimestamp, oldTimestamp) => {
 
 onMounted(() => {
   reset();
-  // TODO-REQ
-  // Because this happens after the render, we have to render again, otherwise when you click edit
-  // on the list ite, it will not start with a type selected on this component. This should be
-  // solved by vue3/composition
-  // this.$forceUpdate();
-  focusOnTimeSelect();
+  if (canAdjustTime.value) focusOnTimeSelect();
 });
 
 const clearActiveTimestamp = useClearActiveTimestamp();
-onUnmounted(() => {
-  clearActiveTimestamp();
-  // TODO-REQ: Not necessary?
-  // this.clearEditTimestampMode();
-  selectedType.value = undefined;
-});
+onUnmounted(clearActiveTimestamp);
 
 // Keyboard Shortcuts
 
-useKeyboardShortcuts('Edit Timestamp', {});
+const updateActiveTimestamp = useUpdateActiveTimestamp();
+
+function updateTimestampAt() {
+  if (activeTimestamp.value == null) {
+    console.warn('Cannot update timestamp position when none are selected');
+    return;
+  }
+  focusOnTimeSelect();
+  const newTimestamp = applyTimestampDiff({
+    ...activeTimestamp.value,
+    at: videoState.currentTime,
+  });
+  updateActiveTimestamp(newTimestamp);
+}
+
+useKeyboardShortcuts('Edit Timestamp', {
+  rewindFrame: updateTimestampAt,
+  advanceFrame: updateTimestampAt,
+});
+
+const frameRewindShortcut = useKeyboardShortcutBindingDisplay('rewindFrame');
+
+const frameAdvanceShortcut = useKeyboardShortcutBindingDisplay('advanceFrame');
+
+const adjustTimeLabel = computed<string>(() => {
+  if (frameRewindShortcut.value && frameAdvanceShortcut.value)
+    return `Use ${frameRewindShortcut.value} and ${frameAdvanceShortcut.value} keys to move left and right`;
+  if (frameRewindShortcut.value)
+    return `Use ${frameRewindShortcut.value} key to move left, no key shortcut to move right`;
+  if (frameAdvanceShortcut.value)
+    return `Use ${frameAdvanceShortcut.value} key to move right, no key shortcut to move left`;
+
+  return `No keyboard shortcuts setup to adjust placement`;
+});
+
+const canAdjustTime = computed<boolean>(
+  () => !!frameRewindShortcut.value || !!frameAdvanceShortcut.value
+);
 
 // Time selection
 
@@ -201,8 +237,6 @@ const typeFilter = ref('');
 
 function selectType(type: Api.TimestampType) {
   selectedType.value = type;
-  // TODO-REQ: Necessary?
-  // this.$forceUpdate();
 }
 
 const selectedType = ref<Api.TimestampType>();
@@ -255,15 +289,8 @@ const title = computed(() => {
   return 'Edit Timestamp';
 });
 
-function saveDraftTimestamp(newTimestamp: Api.AmbiguousTimestamp) {
-  // TODO-REQ: Add draftTimestamps to editingState
-  // this.$store.commit(MutationTypes.UPDATE_TIMESTAMP_IN_DRAFTS, newTimestamp);
-}
-
-function deleteDraftTimestamp(deletedTimestamp: Api.AmbiguousTimestamp): void {
-  // TODO-REQ: Add draftTimestamps to editingState
-  // this.$store.commit(MutationTypes.DELETE_DRAFT_TIMESTAMP, deletedTimestamp);
-}
+const saveDraftTimestamp = useSaveDraftTimestamp();
+const deleteDraftTimestamp = useDeleteDraftTimestamp();
 
 function leaveDialog() {
   play();
@@ -283,7 +310,7 @@ function onClickDone() {
     throw new Error("Cannot click done when the timestamp type hasn't been selected");
   }
   const base = activeTimestamp.value;
-  // Update the timestamp's `editing` field before saving it
+  // Makes sure the timestamp shows as edited
   const updatedTimestamp = applyTimestampDiff({
     at: base.at,
     typeId: selectedType.value.id,
