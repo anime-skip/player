@@ -46,10 +46,6 @@ export function useSyncTimestamps() {
       oldTimestamps,
       newTimestamps
     );
-    console.log(
-      'Updating...',
-      JSON.parse(JSON.stringify({ toUpdate, oldTimestamps, newTimestamps }))
-    );
 
     if (toCreate.length + toUpdate.length + toDelete.length === 0) {
       console.log('No timestamps to update');

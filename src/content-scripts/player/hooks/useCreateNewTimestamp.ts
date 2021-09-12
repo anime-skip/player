@@ -8,9 +8,11 @@ import {
   useUpdateActiveTimestamp,
   useUpdateEditTimestampMode,
 } from '../state/useEditingState';
+import { useVideoController } from '../state/useVideoState';
 import { useStartEditing } from './useStartEditing';
 
 export function useCreateNewTimestamp() {
+  const { pause } = useVideoController();
   const startEditing = useStartEditing();
   const updateEditTimestampMode = useUpdateEditTimestampMode();
   const updateActiveTimestamp = useUpdateActiveTimestamp();
@@ -28,7 +30,7 @@ export function useCreateNewTimestamp() {
       console.warn('Tried adding timestamp in a context without a video');
       return;
     }
-    video.pause();
+    pause();
 
     if (!isLoggedIn.value) {
       showLoginOverlay();

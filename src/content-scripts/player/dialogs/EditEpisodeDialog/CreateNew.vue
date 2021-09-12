@@ -52,8 +52,6 @@ const props = defineProps<{
   prefill: CreateEpisodePrefill;
 }>();
 
-console.log('Prefill', JSON.parse(JSON.stringify(props.prefill)));
-
 const {
   showItem,
   show: selectedShow,
