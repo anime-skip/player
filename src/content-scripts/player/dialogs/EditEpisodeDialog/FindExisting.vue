@@ -22,7 +22,6 @@
       </div>
     </div>
     <div v-else class="space-y-4 mt-2">
-      <p class="caption mb-2 mx-4 text-on-surface text-opacity-medium">Manual Search</p>
       <AutocompleteTextInput
         class="mx-4"
         placeholder="Enter the show name..."
@@ -80,7 +79,7 @@ import { useHideDialog } from '../../state/useDialogState';
 
 const props = defineProps<{
   suggestions: Api.ThirdPartyEpisode[];
-  prefill?: CreateEpisodePrefill;
+  prefill: CreateEpisodePrefill;
 }>();
 const emit = defineEmits({
   createNew: (_arg: CreateEpisodePrefill) => true,
@@ -97,17 +96,17 @@ const {
   showOptions,
   searchShows,
   onSelectShow,
-} = useShowAutocomplete(episodeInputRef, api);
+} = useShowAutocomplete(props.prefill.show, episodeInputRef, api);
 const { episodeOptions, searchEpisodes } = useEpisodeAutocomplete(selectedShow, api);
 const hideDialog = useHideDialog();
 
 const episode = ref<AutocompleteItem<Api.EpisodeSearchResult>>(
-  props.prefill?.episode ?? {
+  props.prefill.episode ?? {
     title: '',
   }
 );
 const show = ref<AutocompleteItem<Api.ShowSearchResult>>(
-  props.prefill?.show ?? {
+  props.prefill.show ?? {
     title: '',
   }
 );
@@ -190,9 +189,9 @@ function onClickCreateNew(): void {
   const prefill: CreateEpisodePrefill = {
     show: show.value,
     episode: episode.value,
-    season: props.prefill?.season,
-    number: props.prefill?.number,
-    absoluteNumber: props.prefill?.absoluteNumber,
+    season: props.prefill.season,
+    number: props.prefill.number,
+    absoluteNumber: props.prefill.absoluteNumber,
   };
   emit('createNew', prefill);
 }

@@ -6,7 +6,7 @@
     @show="onShow"
     @hide="onHide"
   >
-    <LoadingOverlay class="min-h-6" :is-loading="isLoading">
+    <LoadingOverlay class="min-h-6" :is-loading="isLoading || !prefill">
       <div v-if="!isLoggedIn" class="px-16 py-8 text-center self-center justify-self-center">
         <LoginWarning before="connecting this episode to Anime Skip" />
       </div>
@@ -19,13 +19,15 @@
             Create a new episode
           </p>
         </div>
-        <FindExisting
-          v-if="shouldShowFindExisting"
-          @createNew="enableCreateNew"
-          :prefill="prefill"
-          :suggestions="suggestions"
-        />
-        <CreateNew v-if="shouldShowCreateNew" :prefill="prefill" />
+        <template v-if="prefill">
+          <FindExisting
+            v-if="shouldShowFindExisting"
+            @createNew="enableCreateNew"
+            :prefill="prefill"
+            :suggestions="suggestions"
+          />
+          <CreateNew v-if="shouldShowCreateNew" :prefill="prefill" />
+        </template>
       </template>
     </LoadingOverlay>
   </BasicDialog>

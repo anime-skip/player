@@ -5,12 +5,11 @@ import Utils from '~/common/utils/Utils';
 import * as Api from '~api';
 
 export function useShowAutocomplete(
+  defaultShowItem: AutocompleteItem<Api.ShowSearchResult>,
   episodeInputRef: Ref<TextInputRef | undefined>,
   api = useApiClient()
 ) {
-  const showItem = ref<AutocompleteItem<Api.ShowSearchResult>>({
-    title: '',
-  });
+  const showItem = ref<AutocompleteItem<Api.ShowSearchResult>>(defaultShowItem);
   const show = computed(() => showItem.value.data);
   const isExistingShow = computed(() => show.value != null);
 

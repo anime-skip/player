@@ -170,7 +170,6 @@ export default defineComponent({
     const onBlurInput = (): void => {
       wasEscPressed.value = false;
       isFocused.value = false;
-      if (searchValue.value.trim() !== '') selectHighlightedItem();
       emit('blur');
     };
 

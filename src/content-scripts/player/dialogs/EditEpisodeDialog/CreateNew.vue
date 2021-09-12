@@ -16,9 +16,19 @@
       @submit="onClickCreate"
     />
     <div class="flex flex-row space-x-4">
-      <TextInput label="Season" v-model:value="season" @submit="onClickCreate" />
-      <TextInput label="Number in Season" v-model:value="number" @submit="onClickCreate" />
-      <TextInput label="Watch Order" v-model:value="absoluteNumber" @submit="onClickCreate" />
+      <TextInput label="Season" placeholder="" v-model:value="season" @submit="onClickCreate" />
+      <TextInput
+        label="Number in Season"
+        placeholder=""
+        v-model:value="number"
+        @submit="onClickCreate"
+      />
+      <TextInput
+        label="Watch Order"
+        placeholder=""
+        v-model:value="absoluteNumber"
+        @submit="onClickCreate"
+      />
     </div>
     <div class="flex flex-row-reverse justify-between pt-2">
       <RaisedButton :disabled="isCreateDisabled" @click.stop.prevent="onClickCreate">
@@ -39,8 +49,10 @@ import { useHideDialog } from '../../state/useDialogState';
 import { useDuration } from '../../state/useVideoState';
 
 const props = defineProps<{
-  prefill?: CreateEpisodePrefill;
+  prefill: CreateEpisodePrefill;
 }>();
+
+console.log('Prefill', JSON.parse(JSON.stringify(props.prefill)));
 
 const {
   showItem,
@@ -48,15 +60,16 @@ const {
   showOptions,
   onSelectShow,
   searchShows,
-} = useShowAutocomplete(ref());
+} = useShowAutocomplete(props.prefill.show, ref());
+
 const hideDialog = useHideDialog();
 
 const showNameInput = ref<TextInputRef>();
 
-const name = ref(props.prefill?.episode?.title ?? '');
-const number = ref(props.prefill?.number ?? '');
-const absoluteNumber = ref(props.prefill?.absoluteNumber ?? '');
-const season = ref(props.prefill?.season ?? '');
+const name = ref(props.prefill.episode?.title ?? '');
+const number = ref(props.prefill.number ?? '');
+const absoluteNumber = ref(props.prefill.absoluteNumber ?? '');
+const season = ref(props.prefill.season ?? '');
 
 onMounted(() => {
   showNameInput.value?.focus();
