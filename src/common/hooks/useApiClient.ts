@@ -47,6 +47,7 @@ if (modesToLog.includes(mode)) {
         'font-weight: 400; color: default;'
       );
       console.debug(
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         `URL: %c${response.config.baseURL! + response.config.url?.replace('/', '')}`,
         'color: #137AF8'
       );

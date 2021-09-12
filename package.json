@@ -15,11 +15,11 @@
     "start:extension": "ts-node vite.build.ts --watch",
     "start:services": "docker-compose -f docker/docker-compose.yml up --abort-on-container-exit",
     "compile": "vue-tsc --noEmit",
-    "test": "jest --runInBand",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules ./node_modules/.bin/jest --runInBand",
     "test:watch": "pnpm test --watchAll",
     "test:e2e": "echo 'TODO'",
-    "lint": "eslint . --ext .js,.ts,.vue --max-warnings 0 --fix",
-    "lint:no-fix": "eslint . --ext .js,.ts,.vue --max-warnings 0",
+    "lint": "eslint . --ext .ts,.vue --max-warnings 0 --fix",
+    "lint:check": "eslint . --ext .js,.ts,.vue --max-warnings 0",
     "lint:web-ext": "web-ext lint -s extension",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -30,7 +30,11 @@
     "build:beta": "ts-node vite.build.ts --mode beta --for firefox",
     "build:beta:chrome": "ts-node vite.build.ts --mode beta --for chrome",
     "build:staged": "ts-node vite.build.ts --mode staged --for firefox",
-    "build:staged:chrome": "ts-node vite.build.ts --mode staged --for chrome"
+    "build:staged:chrome": "ts-node vite.build.ts --mode staged --for chrome",
+    "package": "ts-node scripts/package/index.ts",
+    "package:dry": "cross-env DRY_RUN=true pnpm package",
+    "preinstall": "npx only-allow pnpm",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@anime-skip/ui": "^1.2.1",
@@ -38,6 +42,7 @@
     "axios": "^0.21.1",
     "axios-auth-refresh": "^3.1.0",
     "fuzzysort": "^1.1.4",
+    "jest-mock-extended": "^2.0.2-beta2",
     "lodash.isequal": "^4.5.0",
     "md5": "^2.3.0",
     "vite-plugin-components": "^0.13.2",
@@ -83,9 +88,10 @@
     "eslint-plugin-vue": "^7.16.0",
     "esno": "^0.8.0",
     "express": "4.17.1",
+    "form-data": "^4.0.0",
     "fs-extra": "^10.0.0",
     "husky": "^7.0.1",
-    "jest": "^27.1.0",
+    "jest": "^27.1.1",
     "kolorist": "^1.5.0",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.3.6",
@@ -103,6 +109,7 @@
     "vite-tsconfig-paths": "^3.3.13",
     "vue-global-api": "^0.2.4",
     "vue-tsc": "^0.2.2",
-    "web-ext": "^6.2.0"
+    "web-ext": "^6.2.0",
+    "zip-a-folder": "^1.1.0"
   }
 }

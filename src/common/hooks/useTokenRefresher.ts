@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type createAnimeSkipClient from '@anime-skip/axios-api';
 import { Mutex } from 'async-mutex';
 import { AxiosResponse } from 'axios';

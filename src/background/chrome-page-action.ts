@@ -7,7 +7,6 @@ loadedLog('background/chrome-page-action.ts');
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const chrome = browser as any;
 browser.runtime.onInstalled.addListener(function (_details) {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const hosts: Array<{ scheme: string; host: string }> = services
     .flatMap(service => service.page_matches)
     .map(pageMatch => {

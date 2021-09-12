@@ -38,10 +38,11 @@ overrides:
         - argsIgnorePattern: _.*
           varsIgnorePattern: _.*
       '@typescript-eslint/explicit-module-boundary-types': 'off'
-  - files: ['vite.build.ts', 'scripts/*', 'vite/*']
+  - files: ['vite.build.ts', 'scripts/**/*', 'vite/**/*']
     rules:
       '@typescript-eslint/triple-slash-reference': 'off'
       '@typescript-eslint/no-non-null-assertion': 'off'
+      '@typescript-eslint/no-explicit-any': 'off'
   - files: ['*.d.ts']
     rules:
       no-undef: 'off'

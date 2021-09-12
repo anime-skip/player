@@ -187,7 +187,13 @@ function updateTimestampAt() {
 
 useKeyboardShortcuts('Edit Timestamp', {
   rewindFrame: updateTimestampAt,
+  rewindSmall: updateTimestampAt,
+  rewindMedium: updateTimestampAt,
+  rewindLarge: updateTimestampAt,
   advanceFrame: updateTimestampAt,
+  advanceSmall: updateTimestampAt,
+  advanceMedium: updateTimestampAt,
+  advanceLarge: updateTimestampAt,
 });
 
 const frameRewindShortcut = useKeyboardShortcutBindingDisplay('rewindFrame');

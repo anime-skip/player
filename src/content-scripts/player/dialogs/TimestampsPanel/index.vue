@@ -13,7 +13,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 import { useEditingState } from '../../state/useEditingState';
 import { useIsEditingTemplate } from './useTimestampPanelState';
 
@@ -26,32 +25,6 @@ const initialTab = ref<'details' | 'edit'>('details');
 function onShow(): void {
   initialTab.value = activeTimestamp.value == null ? 'details' : 'edit';
 }
-
-// Update timestamp on manual advances
-
-function updateTimestamp(): void {
-  // TODO-REQ - should this keyboard listener be in `EditTimestamp`?
-  // timeSelectRef.value?.focus();
-  // if (this.activeTimestamp != null) {
-  //   const newTimestamp = this.$store.getters[GetterTypes.APPLY_TIMESTAMP_DIFF]({ // useApplyTimestampDiff
-  //     ...this.activeTimestamp,
-  //     at: this.getCurrentTime(),
-  //   });
-  //   this.$store.commit(MutationTypes.SET_ACTIVE_TIMESTAMP, newTimestamp);
-  // }
-}
-useKeyboardShortcuts('Timestamps Panel', {
-  // Advance
-  advanceFrame: updateTimestamp,
-  advanceSmall: updateTimestamp,
-  advanceMedium: updateTimestamp,
-  advanceLarge: updateTimestamp,
-  // Rewind
-  rewindFrame: updateTimestamp,
-  rewindSmall: updateTimestamp,
-  rewindMedium: updateTimestamp,
-  rewindLarge: updateTimestamp,
-});
 </script>
 
 <style lang="scss">

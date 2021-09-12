@@ -54,21 +54,19 @@
 
 <script lang="ts" setup>
 import useRequestState from 'vue-use-request-state';
-import * as Api from '~api';
-import { useApiClient } from '../hooks/useApiClient';
+import { useLogin } from '../hooks/useLogin';
 
-const props = defineProps<{
+defineProps<{
   closeAfterLogin?: boolean;
   close?: () => void;
 }>();
-const api = useApiClient();
 
 // Login
 
 const { wrapRequest, isFailure: isLogInError, isLoading: isLoggingIn } = useRequestState();
 const username = ref('');
 const password = ref('');
-const performLogin = Api.useLogin(api);
+const performLogin = useLogin();
 const login = wrapRequest(async () => {
   await performLogin(username.value, password.value);
   username.value = '';

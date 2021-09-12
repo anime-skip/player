@@ -1,4 +1,3 @@
-import { isTimestampRemote } from '~/content-scripts/player/utils/isTimestampLocal';
 import * as Api from '~api';
 
 export default class Utils {
@@ -269,26 +268,28 @@ export default class Utils {
   ): { toCreate: Api.InputTimestamp[]; toUpdate: Api.Timestamp[]; toDelete: Api.Timestamp[] } {
     const intersect = newTimestamps.filter(newItem =>
       Utils.arrayIncludes(oldTimestamps, 'id', newItem)
-    );
+    ) as Api.Timestamp[];
 
     // Remove unchanged items
     const oldItemMap: { [id: string]: Api.Timestamp } = {};
     oldTimestamps.forEach(item => {
       oldItemMap[item.id] = item;
     });
-    const editedAndRemote = intersect
-      .filter(({ edited }) => edited)
-      .filter(timestamp => isTimestampRemote(timestamp)) as Api.Timestamp[];
 
     const toCreate = newTimestamps.filter(
       newItem => !Utils.arrayIncludes(oldTimestamps, 'id', newItem)
     ) as Api.InputTimestamp[];
-    const toUpdate = editedAndRemote.map(item => ({
-      id: item.id,
-      source: item.source ?? 'ANIME_SKIP',
-      at: item.at,
-      typeId: item.typeId,
-    }));
+    const toUpdate = intersect
+      .filter(newItem => {
+        const oldItem = oldItemMap[newItem.id];
+        return newItem.at !== oldItem.at || newItem.typeId !== oldItem.typeId;
+      })
+      .map(item => ({
+        id: item.id,
+        source: item.source ?? 'ANIME_SKIP',
+        at: item.at,
+        typeId: item.typeId,
+      }));
     const toDelete = oldTimestamps.filter(
       oldItem => !Utils.arrayIncludes(newTimestamps, 'id', oldItem)
     );

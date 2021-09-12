@@ -27,7 +27,8 @@
     "types": ["vite/client", "jest"],
     "paths": {
       "~/*": ["src/*"],
-      "~api": ["src/common/api"]
+      "~api": ["src/common/api"],
+      "~env": ["src/common/utils/env"]
     }
   },
   "exclude": ["extension/dist", "node_modules"]

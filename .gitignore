@@ -20,6 +20,7 @@ extension/content-scripts
 extension/options
 extension/popup
 extension/manifest.json
+artifacts
 
 # Environment
 #

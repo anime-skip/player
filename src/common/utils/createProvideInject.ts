@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function createProvideInject<T extends object>(label: string, defaultValue: T) {
   const valueKey = label + '-value';
   const updateKey = label + '-update';

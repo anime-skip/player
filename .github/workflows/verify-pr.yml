@@ -40,14 +40,15 @@ jobs:
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.ANIME_SKIP_PACKAGES_TOKEN }}
 
-      - run: yarn package:dry
+      - run: pnpm package:dry
         env:
           CI: true
+          PACKAGE_MODE: beta
           NODE_AUTH_TOKEN: ${{ secrets.ANIME_SKIP_PACKAGES_TOKEN }}
-          FIREFOX_SIGNING_ISSUER: ${{ secrets.FIREFOX_SIGNING_ISSUER }}
-          FIREFOX_SIGNING_SECRET: ${{ secrets.FIREFOX_SIGNING_SECRET }}
-          FIREFOX_SIGNING_ID: ${{ secrets.FIREFOX_SIGNING_ID }}
+          FIREFOX_BETA_SIGNING_ISSUER: ${{ secrets.FIREFOX_SIGNING_ISSUER }}
+          FIREFOX_BETA_SIGNING_SECRET: ${{ secrets.FIREFOX_SIGNING_SECRET }}
+          FIREFOX_BETA_SIGNING_ID: ${{ secrets.FIREFOX_SIGNING_ID }}
           CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
           CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
           CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
-          CHROME_APP_ID: ${{ secrets.CHROME_APP_ID }}
+          CHROME_BETA_APP_ID: ${{ secrets.CHROME_APP_ID }}
