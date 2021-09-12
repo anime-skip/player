@@ -1,6 +1,6 @@
-import * as Api from '~/common/api';
 import { createProvideInject } from '~/common/utils/createProvideInject';
 import Utils from '~/common/utils/Utils';
+import * as Api from '~api';
 
 export enum EditTimestampMode {
   ADD,
@@ -111,4 +111,11 @@ export function useUpdateEditTimestampMode(update = useUpdateEditingState()) {
  */
 export function useUpdateIsSavingChanges(update = useUpdateEditingState()) {
   return (isSaving: boolean) => update({ isSaving });
+}
+
+export function useUpdateDraftTimestamps() {
+  const update = useUpdateEditingState();
+  return (newTimestamps: Api.AmbiguousTimestamp[]) => {
+    update({ draftTimestamps: newTimestamps });
+  };
 }

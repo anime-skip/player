@@ -34,10 +34,10 @@
 <script lang="ts" setup>
 import useRequestState, { RequestState } from 'vue-use-request-state';
 import { CreateEpisodePrefill } from '~/@types';
-import * as Api from '~/common/api';
 import { useApiClient } from '~/common/hooks/useApiClient';
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import Mappers from '~/common/utils/Mappers';
+import * as Api from '~api';
 import { useEpisodeRequestState } from '../../state/useEpisodeState';
 import { useInferredEpisode } from '../../state/useInferredEpisodeState';
 import { deref } from '../../utils/deref';
@@ -168,7 +168,8 @@ watch(isLoggedIn, (newIsLoggedIn, oldIsLoggedIn) => {
   if (showing.value && newIsLoggedIn && !oldIsLoggedIn) {
     // TODO-REQ: Fix race condition that leads to immeditate log out
     // This shouldn't be needed anymore
-    setTimeout(loadData, 200);
+    // setTimeout(loadData, 200);
+    loadData();
   }
 });
 const episodeRequestState = useEpisodeRequestState();

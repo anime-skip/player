@@ -88,6 +88,7 @@ async function getConfig(
     resolve: {
       alias: {
         '~/': `${rootPath('src')}/`,
+        '~api': rootPath('src/common/api'),
       },
     },
     optimizeDeps: !options.watch

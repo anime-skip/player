@@ -54,7 +54,7 @@
 
 <script lang="ts" setup>
 import useRequestState from 'vue-use-request-state';
-import * as Api from '~/common/api';
+import * as Api from '~api';
 import { useApiClient } from '../hooks/useApiClient';
 
 const props = defineProps<{

@@ -77,11 +77,11 @@
 import { useTimeout } from '@anime-skip/ui';
 import { computed, ref } from 'vue';
 import { RequestState } from 'vue-use-request-state';
-import * as Api from '~/common/api';
-import { TemplateType } from '~/common/api';
 import useRadioIcon from '~/common/composition/useRadioIcon';
 import { SECONDS, TIMESTAMP_TYPES } from '~/common/utils/Constants';
 import Utils from '~/common/utils/Utils';
+import * as Api from '~api';
+import { TemplateType } from '~api';
 import { useDeleteTemplate } from '../../hooks/useDeleteTemplate';
 import { useDisplayedTimestamps } from '../../hooks/useDisplayedTimestamps';
 import { useEpisodeDisplayInfo } from '../../hooks/useEpisodeDisplayInfo';

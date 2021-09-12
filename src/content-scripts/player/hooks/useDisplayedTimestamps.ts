@@ -1,4 +1,4 @@
-import * as Api from '~/common/api';
+import * as Api from '~api';
 import { useDraftTimestamps, useIsEditing } from '../state/useEditingState';
 import { useUneditedTimestamps } from '../state/useEpisodeState';
 

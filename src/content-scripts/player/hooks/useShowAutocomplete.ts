@@ -1,8 +1,8 @@
 import { Ref } from 'vue';
-import * as Api from '~/common/api';
 import { useApiClient } from '~/common/hooks/useApiClient';
 import Mappers from '~/common/utils/Mappers';
 import Utils from '~/common/utils/Utils';
+import * as Api from '~api';
 
 export function useShowAutocomplete(
   episodeInputRef: Ref<TextInputRef | undefined>,

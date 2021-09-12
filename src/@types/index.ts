@@ -1,4 +1,4 @@
-import * as Api from '~/common/api';
+import * as Api from '~api';
 
 export interface CreateEpisodePrefill {
   show: AutocompleteItem<Api.ShowSearchResult>;

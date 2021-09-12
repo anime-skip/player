@@ -1,4 +1,4 @@
-import * as Api from '~/common/api';
+import * as Api from '~api';
 
 export function isTimestampLocal(timestamp: Api.AmbiguousTimestamp): boolean {
   return typeof timestamp.id === 'number';

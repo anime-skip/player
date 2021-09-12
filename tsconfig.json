@@ -26,7 +26,8 @@
     "forceConsistentCasingInFileNames": true,
     "types": ["vite/client", "jest"],
     "paths": {
-      "~/*": ["src/*"]
+      "~/*": ["src/*"],
+      "~api": ["src/common/api"]
     }
   },
   "exclude": ["extension/dist", "node_modules"]

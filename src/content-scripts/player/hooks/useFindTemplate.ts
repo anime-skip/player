@@ -1,6 +1,6 @@
-import * as Api from '~/common/api';
 import { useApiClient } from '~/common/hooks/useApiClient';
 import Utils from '~/common/utils/Utils';
+import * as Api from '~api';
 import { useEpisodeTemplate, useUpdateTemplateState } from '../state/useTemplateState';
 import { useDuration } from '../state/useVideoState';
 

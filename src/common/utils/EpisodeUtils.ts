@@ -1,4 +1,4 @@
-import * as Api from '~/common/api';
+import * as Api from '~api';
 
 export default class EpisodeUtils {
   public static seasonAndNumberFromEpisodeUrl(episodeUrl?: Api.EpisodeUrl): string {

@@ -51,10 +51,10 @@
 <script lang="ts" setup>
 import { Utils as UiUtils } from '@anime-skip/ui';
 import { useFullscreen } from '@vueuse/core';
-import * as Api from '~/common/api';
 import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
 import { FRAME, LOOKUP_PREV_TIMESTAMP_OFFSET } from '~/common/utils/Constants';
 import Utils from '~/common/utils/Utils';
+import * as Api from '~api';
 import { useCreateNewTimestamp } from '../hooks/useCreateNewTimestamp';
 import { useDisplayedTimestamps } from '../hooks/useDisplayedTimestamps';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';

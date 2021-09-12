@@ -1,5 +1,5 @@
 import { theme } from '@anime-skip/ui';
-import * as Api from '~/common/api';
+import * as Api from '~api';
 import { isTimestampLocal } from '../utils/isTimestampLocal';
 
 export function useTimelineColors() {

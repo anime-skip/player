@@ -112,8 +112,8 @@
 <script lang="ts" setup>
 import { Utils } from '@anime-skip/ui';
 import fuzzysort from 'fuzzysort';
-import * as Api from '~/common/api';
 import { TIMESTAMP_TYPES, TIMESTAMP_TYPE_NOT_SELECTED } from '~/common/utils/Constants';
+import * as Api from '~api';
 import { useApplyTimestampDiff } from '../../hooks/useApplyTimestampDiff';
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
 import { useHideDialog } from '../../state/useDialogState';

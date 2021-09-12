@@ -114,7 +114,9 @@
           </RaisedButton>
         </template>
         <template v-else>
-          <RaisedButton class="text-on-primary flex-grow" @click="startEditing">Edit</RaisedButton>
+          <RaisedButton class="text-on-primary flex-grow" @click="startEditing()">
+            Edit
+          </RaisedButton>
           <RaisedButton dark class="text-on-secondary flex-grow" @click="onClickOpenTemplate">
             {{ editTemplateText }}
           </RaisedButton>
@@ -126,11 +128,12 @@
 
 <script lang="ts" setup>
 import { useTimeout, Utils } from '@anime-skip/ui';
-import * as Api from '~/common/api';
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import { SECONDS, TIMESTAMP_SOURCES, TIMESTAMP_TYPES } from '~/common/utils/Constants';
+import * as Api from '~api';
 import { useCanEditTimestamps } from '../../hooks/useCanEditTimestamps';
 import { useCreateNewTimestamp } from '../../hooks/useCreateNewTimestamp';
+import { useDeleteDraftTimestamp } from '../../hooks/useDeleteDraftTimestamp';
 import { useDisplayedTimestamps } from '../../hooks/useDisplayedTimestamps';
 import { useMatchingTemplate } from '../../hooks/useMatchingTemplate';
 import { useStartEditing } from '../../hooks/useStartEditing';
@@ -234,11 +237,7 @@ function editTimestamp(timestamp: Api.AmbiguousTimestamp): void {
   });
 }
 
-function deleteTimestamp(deletedTimestamp: Api.AmbiguousTimestamp) {
-  startEditing(() => {
-    // TODO-REQ: this.$store.commit(MutationTypes.DELETE_DRAFT_TIMESTAMP, deletedTimestamp)
-  });
-}
+const deleteTimestamp = useDeleteDraftTimestamp();
 
 const createNewTimestamp = useCreateNewTimestamp();
 function onClickAddNew(): void {

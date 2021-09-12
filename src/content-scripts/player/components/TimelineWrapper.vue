@@ -35,10 +35,10 @@
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
-import * as Api from '~/common/api';
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
 import Utils from '~/common/utils/Utils';
+import * as Api from '~api';
 import { useDisplayedTimestamps } from '../hooks/useDisplayedTimestamps';
 import { useGetTimestampColor } from '../hooks/useTimelineColors';
 import { useEditingState, useIsEditing } from '../state/useEditingState';

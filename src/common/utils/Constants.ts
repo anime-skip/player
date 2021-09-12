@@ -1,5 +1,5 @@
-import type * as Api from '~/common/api';
-import { TimestampSource } from '~/common/api';
+import type * as Api from '~api';
+import { TimestampSource } from '~api';
 import { KeyboardShortcutActionToKeyBindingMap } from '../state/useKeyboardShortcutPrefs';
 
 export const persistedKeys = [

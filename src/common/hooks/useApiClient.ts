@@ -1,12 +1,12 @@
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import createAuthRefreshInterceptor from 'axios-auth-refresh';
-import * as Api from '~/common/api';
 import { createCustomAnimeSkipClient } from '~/common/utils/CustomApiClient';
-import { useAuth, useClearTokens } from '../state/useAuth';
+import { useClearTokens } from '../state/useAuth';
 import { useResetPreferences } from '../state/useGeneralPreferences';
+import { LogoutError } from '../utils/LogoutError';
 import Utils from '../utils/Utils';
+import useTokenRefresher from './useTokenRefresher';
 
 const baseUrls: Record<ExtensionMode, string> = {
   prod: 'https://api.anime-skip.com/',
@@ -70,29 +70,30 @@ if (modesToLog.includes(mode)) {
 }
 
 export function useApiClient() {
-  const { auth, updateAuth } = useAuth();
   const clearTokens = useClearTokens();
   const resetPreferences = useResetPreferences();
 
-  createAuthRefreshInterceptor(
-    // @ts-expect-error: Odd axios type/version mismatch?
-    client.axios,
-    async failedRequest => {
-      if (!auth.refreshToken) return;
-      const newAuth = await client.loginRefresh(Api.LOGIN_QUERY, {
-        refreshToken: auth.refreshToken,
-      });
-      failedRequest.response.config.headers['Authorization'] = 'Bearer ' + newAuth.authToken;
-      updateAuth({ refreshToken: newAuth.refreshToken, token: newAuth.authToken });
-    },
-    { pauseInstanceWhileRefreshing: true }
-  );
-  client.axios.interceptors.request.use(config => {
-    if (auth.token) {
-      config.headers['Authorization'] = `Bearer ${auth.token}`;
-    }
-    return config;
-  });
+  useTokenRefresher(client);
+
+  // createAuthRefreshInterceptor(
+  //   // @ts-expect-error: Odd axios type/version mismatch?
+  //   client.axios,
+  //   async failedRequest => {
+  //     if (!auth.refreshToken) return;
+  //     const newAuth = await client.loginRefresh(Api.LOGIN_QUERY, {
+  //       refreshToken: auth.refreshToken,
+  //     });
+  //     failedRequest.response.config.headers['Authorization'] = 'Bearer ' + newAuth.authToken;
+  //     updateAuth({ refreshToken: newAuth.refreshToken, token: newAuth.authToken });
+  //   },
+  //   { pauseInstanceWhileRefreshing: true,  }
+  // // );
+  // client.axios.interceptors.request.use(config => {
+  //   if (auth.token) {
+  //     config.headers['Authorization'] = `Bearer ${auth.token}`;
+  //   }
+  //   return config;
+  // });
 
   const apiProxy = new Proxy(client, {
     get(target, field, _receiver) {
@@ -101,13 +102,12 @@ export function useApiClient() {
         try {
           return await (target as any)[field](...args);
         } catch (err) {
-          if (err.status === 401) {
-            console.warn('Token expired, logging out');
+          if (err instanceof LogoutError) {
+            console.warn('Logging out...');
             clearTokens();
             resetPreferences();
-          } else {
-            throw err;
           }
+          throw err;
         }
       };
     },

@@ -1,3 +1,4 @@
+import { browser } from 'webextension-polyfill-ts';
 import { useWebExtensionStorage } from '../hooks/useWebExtensionStorage';
 
 interface Auth {
@@ -34,4 +35,12 @@ export function useClearTokens() {
       refreshToken: null,
     });
   };
+}
+
+export async function updateAuthAsync(newAuth: Auth) {
+  await browser.storage.local.set({ [AUTH_STORAGE_KEY]: newAuth });
+}
+
+export async function getAuthAsync(): Promise<Auth> {
+  return (await browser.storage.local.get(AUTH_STORAGE_KEY))[AUTH_STORAGE_KEY];
 }

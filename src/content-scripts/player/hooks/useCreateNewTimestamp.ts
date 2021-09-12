@@ -1,7 +1,7 @@
-import { TimestampSource } from '~/common/api';
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import { TIMESTAMP_TYPE_NOT_SELECTED } from '~/common/utils/Constants';
 import Utils from '~/common/utils/Utils';
+import { TimestampSource } from '~api';
 import { useShowDialog, useShowLoginOverlay } from '../state/useDialogState';
 import {
   EditTimestampMode,

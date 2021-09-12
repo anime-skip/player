@@ -1,6 +1,6 @@
-import * as Api from '~/common/api';
 import { useApiClient } from '~/common/hooks/useApiClient';
 import Utils from '~/common/utils/Utils';
+import * as Api from '~api';
 import { useUpdateEditingState } from '../state/useEditingState';
 import { useEpisode, useEpisodeUrl, useUpdateEpisodeState } from '../state/useEpisodeState';
 import { isTimestampRemote } from '../utils/isTimestampLocal';
@@ -46,8 +46,13 @@ export function useSyncTimestamps() {
       oldTimestamps,
       newTimestamps
     );
-    // TODO-REQ: Does this change feel right without updating the displayed timestamps immediately?
-    // updateEpisodeState({ savedTimestamps: newTimestamps });
+
+    if (toCreate.length + toUpdate.length + toDelete.length === 0) {
+      console.log('No timestamps to update');
+      updateEditingState({ isSaving: false });
+      return;
+    }
+
     try {
       const { created } = await api.updateTimestamps(Api.SYNC_TIMESTAMPS_MUTATION, {
         create: toCreate.map(timestamp => ({

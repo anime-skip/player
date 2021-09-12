@@ -1,6 +1,6 @@
 import { RequestState } from 'vue-use-request-state';
-import * as Api from '~/common/api';
 import { useApiClient } from '~/common/hooks/useApiClient';
+import * as Api from '~api';
 import { useUpdateTemplateRequestState, useUpdateTemplateState } from '../state/useTemplateState';
 
 export function useDeleteTemplate() {

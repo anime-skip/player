@@ -1,8 +1,8 @@
 import { Ref } from 'vue';
-import * as Api from '~/common/api';
-import { EPISODE_SEARCH_RESULT_DATA } from '~/common/api';
 import { useApiClient } from '~/common/hooks/useApiClient';
 import Mappers from '~/common/utils/Mappers';
+import * as Api from '~api';
+import { EPISODE_SEARCH_RESULT_DATA } from '~api';
 
 export function useEpisodeAutocomplete(show: Ref<Api.Show | undefined>, api = useApiClient()) {
   const episodeItem = ref<AutocompleteItem<Api.EpisodeSearchResult>>({

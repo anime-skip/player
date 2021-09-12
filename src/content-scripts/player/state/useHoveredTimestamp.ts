@@ -1,6 +1,6 @@
 import { ComputedRef } from 'vue';
-import * as Api from '~/common/api';
 import { createProvideInject } from '~/common/utils/createProvideInject';
+import * as Api from '~api';
 
 interface HoveredTimestamp {
   timestamp?: Api.AmbiguousTimestamp;

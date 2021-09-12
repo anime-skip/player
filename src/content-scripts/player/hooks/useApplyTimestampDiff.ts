@@ -1,4 +1,4 @@
-import * as Api from '~/common/api';
+import * as Api from '~api';
 import { useEpisodeState } from '../state/useEpisodeState';
 
 /**

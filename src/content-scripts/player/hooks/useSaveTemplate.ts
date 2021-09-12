@@ -1,6 +1,6 @@
 import { RequestState } from 'vue-use-request-state';
-import * as Api from '~/common/api';
 import { useApiClient } from '~/common/hooks/useApiClient';
+import * as Api from '~api';
 import { useEpisode } from '../state/useEpisodeState';
 import { useUpdateEpisodeTemplate, useUpdateTemplateRequestState } from '../state/useTemplateState';
 import { useSaveTemplateTimestamps } from './useSaveTemplateTimestamps';
