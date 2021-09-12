@@ -40,7 +40,8 @@ jobs:
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.ANIME_SKIP_PACKAGES_TOKEN }}
 
-      - run: pnpm package:dry
+      - name: Publish Dry Run
+        run: pnpm package:dry
         env:
           CI: true
           PACKAGE_MODE: beta
@@ -52,3 +53,15 @@ jobs:
           CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
           CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
           CHROME_BETA_APP_ID: ${{ secrets.CHROME_APP_ID }}
+
+      - name: Upload Firefox ZIP
+        uses: actions/upload-artifact@v2
+        with:
+          name: firefox-beta.zip
+          path: artifacts/firefox-beta.zip
+
+      - name: Upload Chrome ZIP
+        uses: actions/upload-artifact@v2
+        with:
+          name: chrome-beta.zip
+          path: artifacts/chrome-beta.zip

@@ -11,7 +11,7 @@ export async function buildChrome(config: PackageConfig) {
   const chromeZip = path.join(config.OUTPUT_DIR, `chrome-${config.PACKAGE_MODE}.zip`);
   const dist = rootPath('extension');
 
-  await run(`Building ${CODE}dist/${RESET} for Chrome`, () =>
+  await run(`Building ${CODE}extension/${RESET} for Chrome`, () =>
     bash(`pnpm build --mode ${config.PACKAGE_MODE} --for chrome`)
   );
 
