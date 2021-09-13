@@ -27,7 +27,7 @@ export function useFindTemplate() {
 
   return async (showName?: string, season?: string, episodeId?: string): Promise<void> => {
     try {
-      const inferredTemplate = await api.findTemplateByDetails(Api.TEMPLATE_DATA, {
+      const inferredTemplate: Api.Template = await api.findTemplateByDetails(Api.TEMPLATE_DATA, {
         episodeId,
         showName,
         season,
@@ -42,10 +42,10 @@ export function useFindTemplate() {
         const offset = Utils.computeTimestampsOffset(templatesBaseDuration, currentDuration);
 
         const timestamps = inferredTemplate.timestamps?.map(
-          (timestamp): Api.AmbiguousTimestamp => ({
+          (timestamp): Api.Timestamp => ({
+            id: timestamp.id,
             at: Utils.applyTimestampsOffset(offset, timestamp.at),
-            id: Utils.randomId(),
-            source: timestamp.source,
+            source: Api.TimestampSource.ANIME_SKIP,
             typeId: timestamp.typeId,
           })
         );

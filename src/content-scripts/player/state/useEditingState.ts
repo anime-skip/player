@@ -22,8 +22,6 @@ export interface EditingState {
   activeTimestamp?: Api.AmbiguousTimestamp;
   /**
    * If we're editing an existing timestamp, adding a new timestamp, or
-   *
-   * @deprecated TODO-REQ Can the timestamp panel title be computed based on the timestamp id?
    */
   editTimestampMode: EditTimestampMode;
   /**

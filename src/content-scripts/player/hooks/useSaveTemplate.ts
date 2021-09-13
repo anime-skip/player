@@ -1,15 +1,18 @@
 import { RequestState } from 'vue-use-request-state';
 import { useApiClient } from '~/common/hooks/useApiClient';
 import * as Api from '~api';
-import { useEpisode } from '../state/useEpisodeState';
-import { useUpdateEpisodeTemplate, useUpdateTemplateRequestState } from '../state/useTemplateState';
+import { useEpisode, useEpisodeUrl } from '../state/useEpisodeState';
+import { useTemplateTimestamps, useUpdateTemplateRequestState } from '../state/useTemplateState';
+import { useFetchEpisodeByUrl } from './useFetchEpisodeByUrl';
 import { useSaveTemplateTimestamps } from './useSaveTemplateTimestamps';
 
 export function useSaveTemplate() {
   const api = useApiClient();
   const updateTemplateRequestState = useUpdateTemplateRequestState();
-  const updateTemplate = useUpdateEpisodeTemplate();
+  const fetchEpisodeUrl = useFetchEpisodeByUrl();
+  const episodeUrl = useEpisodeUrl();
   const episodeRef = useEpisode();
+  const templateTimestamps = useTemplateTimestamps();
   const saveTemplateTimestamps = useSaveTemplateTimestamps();
 
   return async (
@@ -23,7 +26,7 @@ export function useSaveTemplate() {
       const episode = episodeRef.value as Api.Episode | undefined;
       if (!episode?.show) throw Error('Cannot save a template when there is no episode or show');
 
-      const template = await api.updateTemplate(Api.TEMPLATE_DATA, {
+      const template: Api.Template = await api.updateTemplate(Api.TEMPLATE_DATA, {
         templateId,
         newTemplate: {
           showId: episode.show.id,
@@ -32,9 +35,14 @@ export function useSaveTemplate() {
           seasons,
         },
       });
-      template.timestampIds = await saveTemplateTimestamps(template, selectedTimestampIds);
+      await saveTemplateTimestamps(
+        template,
+        (templateTimestamps.value?.map(ts => ts.id) as string[]) ?? [],
+        selectedTimestampIds
+      );
 
-      updateTemplate(template);
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      void fetchEpisodeUrl(episodeUrl.value!.url);
       updateTemplateRequestState(RequestState.SUCCESS);
     } catch (err) {
       console.info('Failed to save template:', err);

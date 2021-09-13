@@ -8,8 +8,8 @@ interface TemplateState {
    * the template that is attached to the current episode being watched. `undefined` if there is no
    * template for the specific episode
    */
-  episodeTemplate?: Api.Template;
-  timestamps?: Api.AmbiguousTimestamp[];
+  episodeTemplate?: Omit<Api.Template, 'timestamps'>;
+  timestamps?: Api.Timestamp[];
   requestState: RequestState;
 }
 
@@ -30,19 +30,19 @@ export function useEpisodeTemplate(templateState = useTemplateState()) {
 }
 
 export function useUpdateEpisodeTemplate(updateTemplateState = useUpdateTemplateState()) {
-  return (newTemplate?: Api.Template) => {
+  return (newTemplate?: TemplateState['episodeTemplate']) => {
     updateTemplateState({ episodeTemplate: newTemplate });
   };
 }
 
-export function useTemplateTimestamps(): ComputedRef<Api.AmbiguousTimestamp[] | undefined> {
+export function useTemplateTimestamps(): ComputedRef<Api.Timestamp[] | undefined> {
   const value = useTemplateState();
   return computed(() => value.timestamps);
 }
 
 export function useUpdateTemplateTimestamps() {
   const update = useUpdateTemplateState();
-  return (newTimestamps?: Api.AmbiguousTimestamp[]) => {
+  return (newTimestamps?: Api.Timestamp[]) => {
     update({ timestamps: newTimestamps });
   };
 }

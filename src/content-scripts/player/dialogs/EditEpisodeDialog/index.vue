@@ -168,9 +168,6 @@ function enableCreateNew(newPrefill: CreateEpisodePrefill): void {
 const isLoggedIn = useIsLoggedIn();
 watch(isLoggedIn, (newIsLoggedIn, oldIsLoggedIn) => {
   if (showing.value && newIsLoggedIn && !oldIsLoggedIn) {
-    // TODO-REQ: Fix race condition that leads to immeditate log out
-    // This shouldn't be needed anymore
-    // setTimeout(loadData, 200);
     loadData();
   }
 });

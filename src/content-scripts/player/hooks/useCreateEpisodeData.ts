@@ -1,8 +1,10 @@
 import { RequestState } from 'vue-use-request-state';
 import { useApiClient } from '~/common/hooks/useApiClient';
+import Utils from '~/common/utils/Utils';
 import * as Api from '~api';
 import { useHideDialog } from '../state/useDialogState';
 import { useEpisodeUrl, useUpdateEpisodeRequestState } from '../state/useEpisodeState';
+import { useTemplateTimestamps } from '../state/useTemplateState';
 import { useFetchEpisodeByUrl } from './useFetchEpisodeByUrl';
 
 export interface CreateEpisodeDataPayload {
@@ -39,6 +41,7 @@ export function useCreateEpisodeData() {
   const hideDialog = useHideDialog();
   const updateEpisodeRequestState = useUpdateEpisodeRequestState();
   const fetchEpisodeByUrl = useFetchEpisodeByUrl();
+  const templateTimestamps = useTemplateTimestamps();
   const episodeUrlRef = useEpisodeUrl();
   const api = useApiClient();
 
@@ -91,8 +94,27 @@ export function useCreateEpisodeData() {
         episodeUrl = episodeUrlRef.value;
       }
 
+      // Copy Over Template Timestamps
+      const timestampsToCreate = templateTimestamps.value;
+      if (timestampsToCreate) {
+        await api.updateTimestamps(Api.SYNC_TIMESTAMPS_MUTATION, {
+          create: timestampsToCreate.map(timestamp => ({
+            episodeId: episodeId,
+            timestamp: {
+              typeId: timestamp.typeId,
+              source: timestamp.source,
+              at: Utils.applyTimestampsOffset(episodeUrl.timestampsOffset, timestamp.at),
+            },
+          })),
+          delete: [],
+          update: [],
+        });
+      }
+
       // Reload the data
       await fetchEpisodeByUrl(episodeUrl.url);
+
+      // Update template timestamps
 
       updateEpisodeRequestState(RequestState.SUCCESS);
     } catch (err) {

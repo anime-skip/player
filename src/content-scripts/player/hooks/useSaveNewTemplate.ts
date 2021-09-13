@@ -1,15 +1,17 @@
 import { RequestState } from 'vue-use-request-state';
 import { useApiClient } from '~/common/hooks/useApiClient';
 import * as Api from '~api';
-import { useEpisode } from '../state/useEpisodeState';
-import { useUpdateEpisodeTemplate, useUpdateTemplateRequestState } from '../state/useTemplateState';
+import { useEpisode, useEpisodeUrl } from '../state/useEpisodeState';
+import { useUpdateTemplateRequestState } from '../state/useTemplateState';
+import { useFetchEpisodeByUrl } from './useFetchEpisodeByUrl';
 import { useSaveTemplateTimestamps } from './useSaveTemplateTimestamps';
 
 export function useSaveNewTemplate() {
   const api = useApiClient();
   const updateTemplateRequestState = useUpdateTemplateRequestState();
-  const updateTemplate = useUpdateEpisodeTemplate();
   const saveTemplateTimestamps = useSaveTemplateTimestamps();
+  const fetchEpisodeUrl = useFetchEpisodeByUrl();
+  const episodeUrl = useEpisodeUrl();
   const episodeRef = useEpisode();
 
   return async (
@@ -31,9 +33,10 @@ export function useSaveNewTemplate() {
           sourceEpisodeId: episode.id,
         },
       });
-      template.timestampIds = await saveTemplateTimestamps(template, selectedTimestampIds);
+      await saveTemplateTimestamps(template, [], selectedTimestampIds);
 
-      updateTemplate(template);
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      void fetchEpisodeUrl(episodeUrl.value!.url);
       updateTemplateRequestState(RequestState.SUCCESS);
     } catch (err) {
       console.warn('Failed to create template:', { type, seasons, selectedTimestampIds }, err);

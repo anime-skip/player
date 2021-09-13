@@ -188,7 +188,7 @@ onUnmounted(onStopHoverTimestamp);
 
 const existingTemplate = useMatchingTemplate();
 const editTemplateText = computed(() =>
-  existingTemplate.value ? 'Create Template' : 'Edit Template'
+  !existingTemplate.value ? 'Create Template' : 'Edit Template'
 );
 
 // List Items

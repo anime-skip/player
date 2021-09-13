@@ -5,12 +5,14 @@ import * as Api from '~api';
 export function useSaveTemplateTimestamps() {
   const api = useApiClient();
 
-  return async (template: Api.Template, newTimestampIds: string[]): Promise<string[]> => {
-    const oldTimestamps = template.timestampIds;
-    const newTimestamps = newTimestampIds;
+  return async (
+    template: Api.Template,
+    oldTimestampsIds: string[],
+    newTimestampIds: string[]
+  ): Promise<string[]> => {
     const { toCreate, toDelete, toLeave } = Utils.computeListDiffs(
-      newTimestamps,
-      oldTimestamps,
+      newTimestampIds,
+      oldTimestampsIds,
       item => item,
       (l, r) => l != r
     );

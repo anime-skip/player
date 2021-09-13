@@ -253,7 +253,7 @@ const filteredResults = computed<Api.TimestampType[]>(() => {
   return fuzzysort.go(filter, TIMESTAMP_TYPES, { key: 'name', limit: 5 }).map(({ obj }) => obj);
 });
 watch(filteredResults, results => {
-  if (results.length > 0) selectType(results[0]); // TODO-REQ: test that invalid filter prevents you from saving
+  selectType(results[0]);
 });
 
 function isTypeSelected(type: Api.TimestampType): boolean {

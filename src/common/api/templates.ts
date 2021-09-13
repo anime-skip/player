@@ -1,22 +1,21 @@
 import { GqlTemplate, GqlTemplateType } from '@anime-skip/axios-api';
 import { Episode } from './episodes';
+import { Timestamp, TIMESTAMP_DATA } from './timestamps';
 
 // Template
 
 export interface Template
-  extends Pick<
-    GqlTemplate,
-    'id' | 'showId' | 'sourceEpisodeId' | 'type' | 'seasons' | 'timestampIds'
-  > {
+  extends Pick<GqlTemplate, 'id' | 'showId' | 'sourceEpisodeId' | 'type' | 'seasons'> {
   sourceEpisode: Episode;
+  timestamps: Timestamp[];
 }
 export const TEMPLATE_DATA = `{
   id
   showId
   sourceEpisodeId
-  timestampIds
   type
   seasons
+  timestamps ${TIMESTAMP_DATA}
 }`;
 
 // TemplateType

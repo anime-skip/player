@@ -92,7 +92,7 @@ import {
   useClearHoveredTimestamp,
   useUpdateHoveredTimestamp,
 } from '../../state/useHoveredTimestamp';
-import { useTemplateRequestState } from '../../state/useTemplateState';
+import { useTemplateRequestState, useTemplateTimestamps } from '../../state/useTemplateState';
 import { useUpdateIsEditingTemplate } from './useTimestampPanelState';
 
 const deleteTemplate = useDeleteTemplate();
@@ -100,6 +100,7 @@ const updateIsEditingTemplate = useUpdateIsEditingTemplate();
 const templateRequestState = useTemplateRequestState();
 
 const template = useMatchingTemplate();
+const templateTimestamps = useTemplateTimestamps();
 
 const onClickDelete = () => {
   if (template.value == null) {
@@ -129,11 +130,6 @@ const {
   getLabelClass: getShowLabelClass,
 } = useRadioIcon();
 const isSeasonSelected = computed(() => type.value === TemplateType.SEASONS);
-const {
-  getRadioIcon: getSeasonRadioIcon,
-  getRadioIconClass: getSeasonRadioIconClass,
-  getLabelClass: getSeasonLabelClass,
-} = useRadioIcon();
 const episodeDisplayInfo = useEpisodeDisplayInfo();
 const season = ref<string>(template.value?.seasons?.[0] ?? episodeDisplayInfo.value.season ?? '');
 const seasonsToSave = computed<string[] | undefined>(() =>
@@ -146,17 +142,11 @@ const seasonErrorMessage = computed(() =>
 
 const timestamps = useDisplayedTimestamps();
 const selectedTimestamps = ref(
-  template.value?.timestampIds.reduce((map, id) => {
-    map[id] = true;
+  templateTimestamps.value?.reduce((map, timestamp) => {
+    map[timestamp.id] = true;
     return map;
   }, {} as Record<string, boolean>) ?? {}
 );
-const toggleTimestamp = (id: string) => {
-  selectedTimestamps.value = {
-    ...selectedTimestamps.value,
-    [id]: !selectedTimestamps.value?.[id],
-  };
-};
 const typeMap = TIMESTAMP_TYPES.reduce<{ [typeId: string]: Api.TimestampType }>(
   (map, timestamp) => {
     map[timestamp.id] = timestamp;
@@ -168,7 +158,7 @@ const time = (timestamp: Api.AmbiguousTimestamp): string => {
   return Utils.formatSeconds(timestamp.at, false);
 };
 const timestampType = (timestamp: Api.AmbiguousTimestamp): string => {
-  return typeMap[timestamp.typeId].name;
+  return typeMap[timestamp.typeId]?.name ?? 'Unknown';
 };
 
 // Hovered Timestamps

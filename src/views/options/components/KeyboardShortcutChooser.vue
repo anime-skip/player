@@ -78,8 +78,6 @@ unset</pre
 import Utils from '~/common/utils/Utils';
 import { useDuplicateBindingChecker } from '~/content-scripts/player/hooks/useDubplicateBindingChecker';
 
-// TODO-REQ: Test full behavior
-
 const props = defineProps<{
   shortcut?: string;
   secondary?: boolean;
