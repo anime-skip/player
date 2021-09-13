@@ -13,7 +13,8 @@ export function useWebExtensionStorage<T extends Record<string, any>>(
   initialValue: T,
   area: AreaName
 ) {
-  const value = reactive(initialValue);
+  const cachedValue = sessionStorage.getItem(key);
+  const value = reactive(cachedValue ? JSON.parse(cachedValue) : initialValue);
   browser.storage[area].get(key).then(results => {
     const newValue = results[key];
     if (newValue == null) {
@@ -48,10 +49,10 @@ export function useWebExtensionStorage<T extends Record<string, any>>(
     };
     if (!isEqual(value, newValue)) {
       browser.storage[area].set({ [key]: newValue });
+      sessionStorage.setItem(key, JSON.stringify(newValue));
     }
 
     for (const field in newValue) {
-      // @ts-expect-error: Bad key typing, null is required to maintain reactivity in chrome
       value[field] = newValue[field] ?? null;
     }
   };
