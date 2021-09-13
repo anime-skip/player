@@ -38,7 +38,7 @@ export function useResetSkippedFromZero() {
 
 export function useResetInitialBuffer() {
   const update = useUpdatePlayHistory();
-  return () => update({ isInitialBuffer: false });
+  return () => update({ isInitialBuffer: true });
 }
 
 export function useResetPlayTicks() {

@@ -85,20 +85,6 @@ const duration = useDuration(videoState);
 const timelineData = computed(() => {
   if (duration.value == null) return [];
 
-  console.log(
-    'types',
-    activeTimestamps.value.map(timestamp => ({
-      key: timestamp.id,
-      title: TIMESTAMP_TYPES.find(ttype => ttype.id === timestamp.typeId)?.name,
-      normalizedAt: (timestamp.at / duration.value) * 100,
-      skipped:
-        isLoggedIn.value && !isEditing.value && Utils.isSkipped(timestamp, preferences.value),
-      color: getTimestampColor(timestamp),
-      active:
-        hoveredTimestampId.value === timestamp.id ||
-        timestamp.id === timestampBeingEdited.value?.id,
-    }))
-  );
   return activeTimestamps.value.map(timestamp => ({
     key: timestamp.id,
     title: TIMESTAMP_TYPES.find(ttype => ttype.id === timestamp.typeId)?.name ?? 'Unknown',
@@ -129,10 +115,7 @@ const normalizedTime = computed(() => {
   if (!duration.value) return 0;
   return Utils.boundedNumber((currentTime.value / duration.value) * 100, [0, 100]);
 });
-const hasSkippedFromZero = computed({
-  get: () => playHistory.hasSkippedFromZero,
-  set: value => updatePlayHistory({ hasSkippedFromZero: value }),
-});
+const hasSkippedFromZero = computed(() => playHistory.hasSkippedFromZero);
 watch(currentTime, (newTime, oldTime) => {
   if (!duration.value) return;
 
@@ -158,11 +141,11 @@ watch(currentTime, (newTime, oldTime) => {
   oldNext = oldNext as Api.AmbiguousTimestamp;
 
   // Skip timestamp at 0:00 if we haven't yet
-  const wasAtBeginning = oldTime === 0;
+  const wasAtBeginning = oldTime < 1;
   const haveNotSkippedFromBeginning = !hasSkippedFromZero.value;
   const shouldSkipFirstTimestamp = Utils.isSkipped(activeTimestamps.value[0], preferences.value);
   if (wasAtBeginning && haveNotSkippedFromBeginning && shouldSkipFirstTimestamp) {
-    hasSkippedFromZero.value = true;
+    updatePlayHistory({ hasSkippedFromZero: true });
     goToNextTimestampOnTimeChange(newTime);
     return;
   }

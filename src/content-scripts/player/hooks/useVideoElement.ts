@@ -18,6 +18,13 @@ export const useVideoElement = createSharedComposable(function () {
   // Reactive - the video can change this state, and we can change the video
 
   const updateDuration = () => controls.setDuration(video.value?.duration);
+  const initialLoad = () => {
+    updateDuration();
+    if (video.value) {
+      console.warn('Setup initial playback rate:', videoState.playbackRate);
+      video.value.playbackRate = videoState.playbackRate;
+    }
+  };
   const clearBuffering = () => {
     controls.clearBuffering();
     updatePlayHistory({ isInitialBuffer: false });
@@ -107,7 +114,7 @@ export const useVideoElement = createSharedComposable(function () {
 
   const setListeners = (video: HTMLVideoElement) => {
     video.addEventListener('durationchange', updateDuration);
-    video.addEventListener('loadedmetadata', updateDuration);
+    video.addEventListener('loadedmetadata', initialLoad);
     video.addEventListener('play', enforcePlayPause);
     video.addEventListener('playing', clearBuffering);
     video.addEventListener('pause', enforcePlayPause);
