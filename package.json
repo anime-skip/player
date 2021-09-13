@@ -37,7 +37,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@anime-skip/ui": "^1.2.1",
+    "@anime-skip/ui": "^1.2.3",
     "async-mutex": "^0.3.2",
     "axios": "^0.21.1",
     "axios-auth-refresh": "^3.1.0",

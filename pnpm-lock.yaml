@@ -2,7 +2,7 @@ lockfileVersion: 5.3
 
 specifiers:
   '@anime-skip/axios-api': ^2.3.3
-  '@anime-skip/ui': ^1.2.1
+  '@anime-skip/ui': ^1.2.3
   '@antfu/eslint-config': ^0.7.0
   '@iconify/json': ^1.1.386
   '@tailwindcss/line-clamp': ^0.2.1
@@ -75,7 +75,7 @@ specifiers:
   zip-a-folder: ^1.1.0
 
 dependencies:
-  '@anime-skip/ui': 1.2.1_ec1b06fcfbd6e462bf1374dd899f0179
+  '@anime-skip/ui': 1.2.3_ec1b06fcfbd6e462bf1374dd899f0179
   async-mutex: 0.3.2
   axios: 0.21.1
   axios-auth-refresh: 3.1.0_axios@0.21.1
@@ -159,8 +159,8 @@ packages:
       md5: 2.3.0
     dev: true
 
-  /@anime-skip/ui/1.2.1_ec1b06fcfbd6e462bf1374dd899f0179:
-    resolution: {integrity: sha512-K8rVYqKmZYT4Ft1cXfZAKSD3jwMji1dZ/f+coTXgNfAxGWcRo1/U3MmhbKOlUAv5min1C83CtBys9jxlcC9BMA==, tarball: download/@anime-skip/ui/1.2.1/f8c41c1d8ffa5affc761b745ae9ccf73473d6c9b1b1d2e7d3bee1a126bc8e80a}
+  /@anime-skip/ui/1.2.3_ec1b06fcfbd6e462bf1374dd899f0179:
+    resolution: {integrity: sha512-1SSrPtbq9nTnoA/1XJa0dkN7hg7FwfxvumnABRkqOLONyXPhOZRGb5F8DRHOCUQSHXrs+CrXrdKHqA4/OaDqdg==, tarball: download/@anime-skip/ui/1.2.3/a092abc8e56b6080ff63cb9b3c08dd24afceb1ca4fd863a36f0c0f509642887c}
     peerDependencies:
       '@tailwindcss/line-clamp': ^0.2.1
       autoprefixer: ^10.2.4
@@ -961,7 +961,7 @@ packages:
       vue: ^2 || ^3
     dependencies:
       vue: 3.2.2
-      vue-demi: 0.11.2_vue@3.2.2
+      vue-demi: 0.11.4_vue@3.2.2
     transitivePeerDependencies:
       - '@vue/composition-api'
     dev: false
@@ -8660,7 +8660,6 @@ packages:
         optional: true
     dependencies:
       vue: 3.2.2
-    dev: true
 
   /vue-eslint-parser/7.10.0_eslint@7.32.0:
     resolution: {integrity: sha512-7tc/ewS9Vq9Bn741pvpg8op2fWJPH3k32aL+jcIcWGCTzh/zXSdh7pZ5FV3W2aJancP9+ftPAv292zY5T5IPCg==}

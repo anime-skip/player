@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="wrapperRef"
     class="TimelineWrapper"
     :class="{
       'add-margin': isEditing,
@@ -13,6 +14,9 @@
       disable-update-during-seek
       :default-thumb-size="thumbSize"
       @seek="onSeek"
+      @mouseenter="toggleHovering(true)"
+      @mouseleave="toggleHovering(false)"
+      @mousemove="updateHoverPosition"
     >
       <template #background>
         <div />
@@ -26,6 +30,8 @@
           :normalized-progress="slotProps.progress"
           :editing="isEditing"
           :duration="duration"
+          :allow-overlay="isHovering"
+          :force-overlay-normalized-at="hoverNormalizedAt"
           @click.stop
         />
       </template>
@@ -34,9 +40,11 @@
 </template>
 
 <script lang="ts" setup>
+import { Utils as UiUtils } from '@anime-skip/ui';
 import { computed, ref, watch } from 'vue';
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
+import { TIMESTAMP_TYPES } from '~/common/utils/Constants';
 import Utils from '~/common/utils/Utils';
 import * as Api from '~api';
 import { useDisplayedTimestamps } from '../hooks/useDisplayedTimestamps';
@@ -77,8 +85,23 @@ const duration = useDuration(videoState);
 const timelineData = computed(() => {
   if (duration.value == null) return [];
 
+  console.log(
+    'types',
+    activeTimestamps.value.map(timestamp => ({
+      key: timestamp.id,
+      title: TIMESTAMP_TYPES.find(ttype => ttype.id === timestamp.typeId)?.name,
+      normalizedAt: (timestamp.at / duration.value) * 100,
+      skipped:
+        isLoggedIn.value && !isEditing.value && Utils.isSkipped(timestamp, preferences.value),
+      color: getTimestampColor(timestamp),
+      active:
+        hoveredTimestampId.value === timestamp.id ||
+        timestamp.id === timestampBeingEdited.value?.id,
+    }))
+  );
   return activeTimestamps.value.map(timestamp => ({
     key: timestamp.id,
+    title: TIMESTAMP_TYPES.find(ttype => ttype.id === timestamp.typeId)?.name ?? 'Unknown',
     normalizedAt: (timestamp.at / duration.value) * 100,
     skipped: isLoggedIn.value && !isEditing.value && Utils.isSkipped(timestamp, preferences.value),
     color: getTimestampColor(timestamp),
@@ -159,6 +182,27 @@ watch(currentTime, (newTime, oldTime) => {
 
   goToNextTimestampOnTimeChange(newTime);
 });
+
+// Hover position
+
+const wrapperRef = ref();
+
+const isHovering = ref(false);
+function toggleHovering(newIsHovering: boolean) {
+  isHovering.value = newIsHovering;
+}
+
+const hoverNormalizedAt = ref<number>();
+function updateHoverPosition(event: MouseEvent) {
+  const wrapper = wrapperRef.value as HTMLDivElement;
+  const bar = wrapper.querySelector('.bar-container') as HTMLDivElement;
+  const screenWidth = document.body.clientWidth;
+  const barWidth = bar.clientWidth;
+  const offsetX = (screenWidth - barWidth) / 2;
+  const x = event.clientX - offsetX;
+  const percent = UiUtils.boundedNumber((x / barWidth) * 100, [0, 100]);
+  hoverNormalizedAt.value = percent;
+}
 </script>
 
 <style lang="scss" scoped>
