@@ -18,6 +18,10 @@ on:
         description: 'Skip sources (true|false)'
         required: true
         default: 'false'
+      dryRun:
+        description: 'Dry Run? (true|false)'
+        required: true
+        default: 'false'
 
 jobs:
   verify:
@@ -73,7 +77,7 @@ jobs:
           git --no-pager log -n 20 --oneline
 
       - name: Package Extensions
-        run: pnpm package:dry
+        run: pnpm package
         env:
           CI: true
           PACKAGE_MODE: beta
@@ -89,6 +93,7 @@ jobs:
           SKIP_CHROME: ${{ github.event.inputs.skipChrome }}
           SKIP_SOURCES: ${{ github.event.inputs.skipSources }}
           SKIP_CHECKS: ${{ github.event.inputs.skipChecks }}
+          DRY_RUN: ${{ github.event.inputs.dryRun }}
 
       - name: Upload firefox.zip
         if: ${{ steps.changelog.outputs.skipped == 'false' }}
