@@ -61,10 +61,6 @@ jobs:
           git commit -am "chore: format package.json after release"
           git push
 
-      - name: Reset after no commit
-        if: ${{ steps.changelog.outputs.skipped == 'true' }}
-        run: git reset ${{ github.head_ref }}
-
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -76,8 +72,12 @@ jobs:
           release_name: ${{ steps.changelog.outputs.tag }}
           body: ${{ steps.changelog.outputs.clean_changelog }}
 
+      - name: Reset after no release
+        if: ${{ steps.changelog.outputs.skipped == 'true' }}
+        run: git reset ${{ github.head_ref }}
+
       - name: Package Extensions
-        run: pnpm package
+        run: pnpm package:dry
         env:
           CI: true
           PACKAGE_MODE: beta
