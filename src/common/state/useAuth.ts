@@ -41,5 +41,5 @@ export async function updateAuthAsync(newAuth: Auth) {
 }
 
 export async function getAuthAsync(): Promise<Auth> {
-  return (await browser.storage.local.get(AUTH_STORAGE_KEY))[AUTH_STORAGE_KEY];
+  return (await browser.storage.local.get(AUTH_STORAGE_KEY))[AUTH_STORAGE_KEY] || {};
 }

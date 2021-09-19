@@ -2,7 +2,7 @@ lockfileVersion: 5.3
 
 specifiers:
   '@anime-skip/axios-api': ^2.3.3
-  '@anime-skip/ui': ^1.2.3
+  '@anime-skip/ui': ^1.2.4
   '@antfu/eslint-config': ^0.7.0
   '@iconify/json': ^1.1.386
   '@tailwindcss/line-clamp': ^0.2.1
@@ -75,7 +75,7 @@ specifiers:
   zip-a-folder: ^1.1.0
 
 dependencies:
-  '@anime-skip/ui': 1.2.3_ec1b06fcfbd6e462bf1374dd899f0179
+  '@anime-skip/ui': 1.2.4_ec1b06fcfbd6e462bf1374dd899f0179
   async-mutex: 0.3.2
   axios: 0.21.1
   axios-auth-refresh: 3.1.0_axios@0.21.1
@@ -159,8 +159,8 @@ packages:
       md5: 2.3.0
     dev: true
 
-  /@anime-skip/ui/1.2.3_ec1b06fcfbd6e462bf1374dd899f0179:
-    resolution: {integrity: sha512-1SSrPtbq9nTnoA/1XJa0dkN7hg7FwfxvumnABRkqOLONyXPhOZRGb5F8DRHOCUQSHXrs+CrXrdKHqA4/OaDqdg==, tarball: download/@anime-skip/ui/1.2.3/a092abc8e56b6080ff63cb9b3c08dd24afceb1ca4fd863a36f0c0f509642887c}
+  /@anime-skip/ui/1.2.4_ec1b06fcfbd6e462bf1374dd899f0179:
+    resolution: {integrity: sha512-ObtVgHkUKw07Dx+UvzKVThjy6IrqkNpOAR3uMPk+Q9yMqyNME+cu7w9L4xhnSaT5dE44mjybPyspBEiBMSX7Eg==, tarball: download/@anime-skip/ui/1.2.4/582d29cb5b28a5ac7187ef915914d89b15eb791eb4e2fbda9d2a5bfb82971cae}
     peerDependencies:
       '@tailwindcss/line-clamp': ^0.2.1
       autoprefixer: ^10.2.4
