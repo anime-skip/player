@@ -47,7 +47,6 @@ jobs:
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.ANIME_SKIP_PACKAGES_TOKEN }}
 
-      # Bump version, create release if necessary
       - name: Create Changelog
         id: changelog
         uses: TriPSs/conventional-changelog-action@v3
@@ -61,6 +60,10 @@ jobs:
           pnpm format
           git commit -am "chore: format package.json after release"
           git push
+
+      - name: Reset after no commit
+        if: ${{ steps.changelog.outputs.skipped == 'true' }}
+        run: git reset ${{ github.head_ref }}
 
       - name: Create Release
         id: create_release
@@ -92,6 +95,7 @@ jobs:
           SKIP_CHECKS: ${{ github.event.inputs.skipChecks }}
 
       - name: Upload firefox.zip
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -102,6 +106,7 @@ jobs:
           asset_content_type: application/zip
 
       - name: Upload sources.zip
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -112,6 +117,7 @@ jobs:
           asset_content_type: application/zip
 
       - name: Upload chrome.zip
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
