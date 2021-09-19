@@ -8,10 +8,17 @@ export function usePlaybackRateConnector() {
   const videoController = useVideoController();
   const videoState = useVideoState();
   const generalPrefs = useGeneralPreferences();
-  const playbackRate = computed(() => generalPrefs.value.playbackRate);
-  watch(playbackRate, newPlaybackRate => {
-    if (newPlaybackRate !== videoState.playbackRate) {
-      videoController.setPlaybackRate(newPlaybackRate);
+  // onMounted(() => {
+  //   videoController.setPlaybackRate(videoState.playbackRate);
+  // });
+  watch(
+    () => generalPrefs.value.playbackRate,
+    newPlaybackRate => {
+      // if (newPlaybackRate !== videoState.playbackRate) {
+      if (newPlaybackRate !== videoState.playbackRate) {
+        videoController.setPlaybackRate(newPlaybackRate);
+      }
+      // }
     }
-  });
+  );
 }

@@ -1,5 +1,5 @@
 import { browser } from 'webextension-polyfill-ts';
-import { useWebExtensionStorage } from '../hooks/useWebExtensionStorage';
+import { createWebExtProvideInject } from '../utils/createWebExtProvideInject';
 
 interface Auth {
   token?: string;
@@ -9,30 +9,29 @@ interface Auth {
 export const AUTH_STORAGE_KEY = 'auth';
 export const AUTH_STORAGE_LOCATION = 'local';
 
-export function useAuth() {
-  const { value: auth, updateValue: updateAuth } = useWebExtensionStorage<Auth>(
-    AUTH_STORAGE_KEY,
-    {},
-    AUTH_STORAGE_LOCATION
-  );
+const {
+  provideValue: provideAuth,
+  useInitStorageListener: useInitAuthListener,
+  useUpdate: useUpdateAuth,
+  useValue: useAuth,
+} = createWebExtProvideInject<Auth>(AUTH_STORAGE_KEY, AUTH_STORAGE_LOCATION, {
+  token: undefined,
+  refreshToken: undefined,
+});
 
-  return {
-    auth,
-    updateAuth,
-  };
-}
+export { provideAuth, useInitAuthListener, useUpdateAuth, useAuth };
 
 export function useIsLoggedIn() {
-  const { auth } = useAuth();
+  const auth = useAuth();
   return computed(() => !!auth?.token);
 }
 
 export function useClearTokens() {
-  const { updateAuth } = useAuth();
+  const update = useUpdateAuth();
   return () => {
-    updateAuth({
-      token: null,
-      refreshToken: null,
+    update({
+      token: undefined,
+      refreshToken: undefined,
     });
   };
 }

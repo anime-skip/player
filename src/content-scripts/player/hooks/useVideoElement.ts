@@ -1,4 +1,3 @@
-import { createSharedComposable } from '~/common/hooks/createSharedComposable';
 import {
   useIncrementPlayTicks,
   usePlayHistory,
@@ -7,7 +6,7 @@ import {
 import { useVideoController, useVideoState } from '../state/useVideoState';
 import { areNumbersWithin } from '../utils/areNumbersWithin';
 
-export const useVideoElement = createSharedComposable(function () {
+export function useVideoElement() {
   const videoState = useVideoState();
   const controls = useVideoController();
   const updatePlayHistory = useUpdatePlayHistory();
@@ -20,14 +19,14 @@ export const useVideoElement = createSharedComposable(function () {
   const updateDuration = () => controls.setDuration(video.value?.duration);
   const initialLoad = () => {
     updateDuration();
-    if (video.value) {
-      console.warn('Setup initial playback rate:', videoState.playbackRate);
-      video.value.playbackRate = videoState.playbackRate;
-    }
+    updateCurrentTime();
   };
-  const clearBuffering = () => {
+  const startedPlaying = () => {
     controls.clearBuffering();
     updatePlayHistory({ isInitialBuffer: false });
+    if (video.value && !video.value.paused) {
+      controls.play();
+    }
   };
   const updateCurrentTime = () => {
     const newTime = video.value?.currentTime ?? 0;
@@ -67,8 +66,8 @@ export const useVideoElement = createSharedComposable(function () {
   const enforceRateChange = () => {
     if (!video.value) return;
 
-    if (video.value.volume !== videoState.playbackRate) {
-      video.value.volume = videoState.playbackRate;
+    if (video.value.playbackRate !== videoState.playbackRate) {
+      video.value.playbackRate = videoState.playbackRate;
       console.log('Enforced playback rate at', videoState.playbackRate);
     }
   };
@@ -116,7 +115,7 @@ export const useVideoElement = createSharedComposable(function () {
     video.addEventListener('durationchange', updateDuration);
     video.addEventListener('loadedmetadata', initialLoad);
     video.addEventListener('play', enforcePlayPause);
-    video.addEventListener('playing', clearBuffering);
+    video.addEventListener('playing', startedPlaying);
     video.addEventListener('pause', enforcePlayPause);
     video.addEventListener('ratechange', enforceRateChange);
     video.addEventListener('timeupdate', updateCurrentTime);
@@ -125,9 +124,9 @@ export const useVideoElement = createSharedComposable(function () {
   };
   const clearListeners = (video: HTMLVideoElement) => {
     video.removeEventListener('durationchange', updateDuration);
-    video.removeEventListener('loadedmetadata', updateDuration);
+    video.removeEventListener('loadedmetadata', initialLoad);
     video.removeEventListener('play', enforcePlayPause);
-    video.removeEventListener('playing', clearBuffering);
+    video.removeEventListener('playing', startedPlaying);
     video.removeEventListener('pause', enforcePlayPause);
     video.removeEventListener('ratechange', enforceRateChange);
     video.removeEventListener('timeupdate', updateCurrentTime);
@@ -141,4 +140,4 @@ export const useVideoElement = createSharedComposable(function () {
   });
 
   return { video, ...controls };
-});
+}

@@ -1,7 +1,7 @@
 import { GqlPreferences } from '@anime-skip/axios-api';
-import * as Api from '../api';
+import * as Api from '~api';
 import { useApiClient } from '../hooks/useApiClient';
-import { useWebExtensionStorage } from '../hooks/useWebExtensionStorage';
+import { createWebExtProvideInject } from '../utils/createWebExtProvideInject';
 
 type RemotePreferences = Omit<
   GqlPreferences,
@@ -41,31 +41,28 @@ const DEFAULT_GENERAL_PREFERENCES: GeneralPreferences = {
   skipTransitions: false,
 };
 
-export function useUpdateGeneralPreferences() {
-  const { updatePreferences } = _useGeneralPreferences();
-  return updatePreferences;
-}
+const {
+  provideValue: provideGeneralPreferences,
+  useUpdate: useUpdateGeneralPreferences,
+  useValue: _useGeneralPreferences,
+  useInitStorageListener: useInitGeneralPreferencesListener,
+} = createWebExtProvideInject<GeneralPreferences>(
+  'general-preferences',
+  'local',
+  DEFAULT_GENERAL_PREFERENCES
+);
 
-function _useGeneralPreferences() {
-  const { value: preferences, updateValue: updatePreferences } =
-    useWebExtensionStorage<GeneralPreferences>(
-      'general-preferences',
-      DEFAULT_GENERAL_PREFERENCES,
-      'local'
-    );
-
-  return {
-    preferences,
-    updatePreferences,
-  };
-}
+export {
+  provideGeneralPreferences,
+  useUpdateGeneralPreferences,
+  useInitGeneralPreferencesListener,
+};
 
 /**
  * Current preferences with the defaults applied first so new local preferences aren't left out
  */
 export function useGeneralPreferences() {
-  const { preferences } = _useGeneralPreferences();
-
+  const preferences = _useGeneralPreferences();
   return computed<GeneralPreferences>(() => ({
     ...DEFAULT_GENERAL_PREFERENCES,
     ...preferences,
@@ -73,10 +70,12 @@ export function useGeneralPreferences() {
 }
 
 export function useUpdateBooleanPref() {
-  const { preferences, updatePreferences } = _useGeneralPreferences();
+  const preferences = useGeneralPreferences();
+  const updatePreferences = useUpdateGeneralPreferences();
   const api = useApiClient();
+
   return (pref: StripOtherTypes<GeneralPreferences, boolean>, newValue: boolean) => {
-    const oldValue = preferences[pref];
+    const oldValue = preferences.value[pref];
     updatePreferences({ [pref]: newValue });
 
     api.savePreferences(Api.PREFERENCES_QUERY, { preferences: { [pref]: newValue } }).catch(err => {
@@ -96,14 +95,14 @@ export function useToggleBooleanPref() {
 }
 
 export function useUpdateNumberPref() {
-  const { updatePreferences } = _useGeneralPreferences();
+  const updatePreferences = useUpdateGeneralPreferences();
   return (pref: StripOtherTypes<GeneralPreferences, number>, newValue: number) => {
     updatePreferences({ [pref]: newValue });
   };
 }
 
 export function useResetPreferences() {
-  const { updatePreferences } = _useGeneralPreferences();
+  const updatePreferences = useUpdateGeneralPreferences();
   return () => {
     updatePreferences(DEFAULT_GENERAL_PREFERENCES);
   };

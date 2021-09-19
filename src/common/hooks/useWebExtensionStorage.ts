@@ -8,6 +8,10 @@ type PartialNulls<T> = {
 type AreaName = 'sync' | 'local' | 'managed';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+/**
+ * @deprecated in favor of `createWebExtProvideInject` - The reactivity of this solution was causing
+ *             problems and not working all the time
+ */
 export function useWebExtensionStorage<T extends Record<string, any>>(
   key: string,
   initialValue: T,
