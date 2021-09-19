@@ -53,13 +53,7 @@ jobs:
         with:
           github-token: ${{ secrets.github_token }}
           output-file: 'false'
-
-      - name: Format package.json
-        if: ${{ steps.changelog.outputs.skipped == 'false' }}
-        run: |
-          pnpm format
-          git commit -am "chore: format package.json after release"
-          git push
+          pre-commit: .github/pre-commit.js
 
       - name: Create Release
         id: create_release
@@ -72,7 +66,7 @@ jobs:
           release_name: ${{ steps.changelog.outputs.tag }}
           body: ${{ steps.changelog.outputs.clean_changelog }}
 
-      - name: Reset after no release
+      - name: Reset version bump after no release
         if: ${{ steps.changelog.outputs.skipped == 'true' }}
         run: |
           git reset --hard ${{ github.head_ref }}
