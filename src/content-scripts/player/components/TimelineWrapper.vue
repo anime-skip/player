@@ -143,7 +143,16 @@ watch(currentTime, (newTime, oldTime) => {
   // Skip timestamp at 0:00 if we haven't yet
   const wasAtBeginning = oldTime < 1;
   const haveNotSkippedFromBeginning = !hasSkippedFromZero.value;
-  const shouldSkipFirstTimestamp = Utils.isSkipped(activeTimestamps.value[0], preferences.value);
+  const firstTimestamp = activeTimestamps.value[0];
+  let shouldSkipFirstTimestamp = false;
+  if (firstTimestamp) {
+    if (firstTimestamp.at === 0) {
+      shouldSkipFirstTimestamp = Utils.isSkipped(firstTimestamp, preferences.value);
+    } else {
+      // There are timestamps, but the first one is not at 0, skip to it
+      shouldSkipFirstTimestamp = true;
+    }
+  }
   if (wasAtBeginning && haveNotSkippedFromBeginning && shouldSkipFirstTimestamp) {
     updatePlayHistory({ hasSkippedFromZero: true });
     goToNextTimestampOnTimeChange(newTime);
