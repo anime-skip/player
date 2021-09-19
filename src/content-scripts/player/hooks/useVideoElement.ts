@@ -63,14 +63,6 @@ export function useVideoElement() {
     }
   );
 
-  const enforceRateChange = () => {
-    if (!video.value) return;
-
-    if (video.value.playbackRate !== videoState.playbackRate) {
-      video.value.playbackRate = videoState.playbackRate;
-      console.log('Enforced playback rate at', videoState.playbackRate);
-    }
-  };
   watch(
     () => videoState.playbackRate,
     newPlaybackRate => {
@@ -117,7 +109,6 @@ export function useVideoElement() {
     video.addEventListener('play', enforcePlayPause);
     video.addEventListener('playing', startedPlaying);
     video.addEventListener('pause', enforcePlayPause);
-    // video.addEventListener('ratechange', enforceRateChange); // Breaks chrome & VRV
     video.addEventListener('timeupdate', updateCurrentTime);
     video.addEventListener('volumechange', enforceVolumeChange);
     video.addEventListener('waiting', setBuffering);
@@ -128,7 +119,6 @@ export function useVideoElement() {
     video.removeEventListener('play', enforcePlayPause);
     video.removeEventListener('playing', startedPlaying);
     video.removeEventListener('pause', enforcePlayPause);
-    // video.removeEventListener('ratechange', enforceRateChange); // Breaks chrome & VRV
     video.removeEventListener('timeupdate', updateCurrentTime);
     video.removeEventListener('volumechange', enforceVolumeChange);
     video.removeEventListener('waiting', setBuffering);
