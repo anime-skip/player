@@ -75,7 +75,7 @@ jobs:
       - name: Reset after no release
         if: ${{ steps.changelog.outputs.skipped == 'true' }}
         run: |
-          git reset ${{ github.head_ref }}
+          git reset --hard ${{ github.head_ref }}
           git --no-pager log -n 20 --oneline
 
       - name: Package Extensions
