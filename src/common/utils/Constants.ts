@@ -1,3 +1,7 @@
+import type * as Api from '~api';
+import { TimestampSource } from '~api';
+import { KeyboardShortcutActionToKeyBindingMap } from '../state/useKeyboardShortcutPrefs';
+
 export const persistedKeys = [
   'token' as const,
   'tokenExpiresAt' as const,
@@ -74,7 +78,7 @@ export const PLAYBACK_SPEEDS: PlaybackRate[] = [
   },
 ];
 
-export const DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS: KeyboardShortcutsMap = {
+export const DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS: KeyboardShortcutActionToKeyBindingMap = {
   playPause: 'D',
   toggleFullscreen: 'G',
   volumeUp: '↑',
@@ -93,10 +97,10 @@ export const DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS: KeyboardShortcutsMap = {
   createTimestamp: 'K',
   saveTimestamps: 'ctrl+ENTER',
   discardChanges: 'ctrl+`',
-  takeScreenshot: 'ctrl+k',
+  takeScreenshot: 'ctrl+K',
 };
 
-export const DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS: KeyboardShortcutsMap = {
+export const DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS: KeyboardShortcutActionToKeyBindingMap = {
   playPause: 'Space',
   advanceMedium: '→',
   rewindMedium: '←',
@@ -188,10 +192,16 @@ export const TIMESTAMP_TYPE_NOT_SELECTED = '';
  * `null` return type means nothing should be displayed
  * `undefined` return type means the source was unknown, and "Unknown Source" should be displayed
  */
-export const TIMESTAMP_SOURCES: { [source in Api.TimestampSource]: string | undefined | null } = {
+export const TIMESTAMP_SOURCES: { [source in TimestampSource]: string | undefined | null } = {
   ANIME_SKIP: null,
   BETTER_VRV: 'BetterVRV',
 };
+
+interface SkippablePreference {
+  key: keyof Api.Preferences;
+  title: string;
+  help: string;
+}
 
 /**
  * The content to show in the skipped preferences section
@@ -205,14 +215,12 @@ export const SKIPPABLE_PREFERENCES: SkippablePreference[] = [
   {
     key: 'skipRecaps',
     title: 'Recaps',
-    help:
-      'Any plot recap, filler or cannon, that happened in the previous. Recaps are not flashbacks, unless flashbacks are also shown in the recap',
+    help: 'Any plot recap, filler or cannon, that happened in the previous. Recaps are not flashbacks, unless flashbacks are also shown in the recap',
   },
   {
     key: 'skipTitleCard',
     title: 'Title Cards',
-    help:
-      'A dedicated still shot that shows the title of the episode. Any titles that are overlaid and blended into opening shots are not considered a title card',
+    help: 'A dedicated still shot that shows the title of the episode. Any titles that are overlaid and blended into opening shots are not considered a title card',
   },
   {
     key: 'skipIntros',
@@ -227,8 +235,7 @@ export const SKIPPABLE_PREFERENCES: SkippablePreference[] = [
   {
     key: 'skipMixedIntros',
     title: 'Mixed Intros',
-    help:
-      'Introduction sequences that has the regular intro music playing in the background but instead of the standard intro animation, a different, plot oriented, animation is played',
+    help: 'Introduction sequences that has the regular intro music playing in the background but instead of the standard intro animation, a different, plot oriented, animation is played',
   },
   {
     key: 'skipCanon',
@@ -243,8 +250,7 @@ export const SKIPPABLE_PREFERENCES: SkippablePreference[] = [
   {
     key: 'skipTransitions',
     title: 'Transitions',
-    help:
-      'Short animation that plays before and after a commercial break. Most of the time, this is an info card about the world or characters',
+    help: 'Short animation that plays before and after a commercial break. Most of the time, this is an info card about the world or characters',
   },
   {
     key: 'skipCredits',
@@ -259,8 +265,7 @@ export const SKIPPABLE_PREFERENCES: SkippablePreference[] = [
   {
     key: 'skipMixedCredits',
     title: 'Mixed Credits',
-    help:
-      'Closing sequences that has the regular credits music playing in the background but instead of the standard credit animation, a different, plot oriented, animation is played',
+    help: 'Closing sequences that has the regular credits music playing in the background but instead of the standard credit animation, a different, plot oriented, animation is played',
   },
   {
     key: 'skipPreview',
@@ -269,23 +274,26 @@ export const SKIPPABLE_PREFERENCES: SkippablePreference[] = [
   },
 ];
 
-const allTimestampSources: Array<Api.TimestampSource> = ['ANIME_SKIP', 'BETTER_VRV'];
+const allTimestampSources = Object.values(TimestampSource);
 
 /**
  * Some services don't mess well with each other, so the integrations have been disabled
  */
-export const SUPPORTED_THIRD_PARTY_SERVICES: Record<
-  Service,
-  Array<Api.TimestampSource | undefined>
-> = {
-  example: allTimestampSources,
+export const SUPPORTED_THIRD_PARTY_SERVICES: Record<Service, Array<TimestampSource>> = {
+  'test-service': allTimestampSources,
   vrv: allTimestampSources,
   funimation: allTimestampSources.filter(
-    source =>
-      // TODO: Don't support BETTER_VRV because...
-      source !== 'BETTER_VRV'
+    // Don't support BETTER_VRV because show names and durations are completely different
+    source => source !== 'BETTER_VRV'
   ),
   crunchyroll: allTimestampSources,
 };
 
-export const PLAYER_ACTIVITY_TIMEOUT = 2000;
+export const PLAYER_ACTIVITY_TIMEOUT = 3000;
+
+/**
+ * When going back to the previous timestamp, take `(currentTime - LOOKUP_PREV_TIMESTAMP_OFFSET)` so
+ * the user can more easily go back a timestamp instead of taking them right back to the timestamp
+ * they were at, or forcing them to spam
+ */
+export const LOOKUP_PREV_TIMESTAMP_OFFSET = 1.5;

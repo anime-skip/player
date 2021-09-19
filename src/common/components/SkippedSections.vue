@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-4">
     <h6 class="section-header">What do you want to watch?</h6>
-    <p v-if="autoPlayDisabled" class="text-error body-2">Auto-skipping has been turned off</p>
+    <p v-if="autoSkipDisabled" class="text-error body-2">Auto-skipping has been turned off</p>
     <div
       class="grid gap-3"
       :class="{
@@ -13,50 +13,36 @@
         class="checkbox"
         v-for="preference in SKIPPABLE_PREFERENCES"
         :key="preference.key"
-        :checked="!getBooleanPreference(preference.key)"
-        :disabled="autoPlayDisabled"
+        :checked="!preferences[preference.key]"
+        :disabled="autoSkipDisabled"
         :label="preference.title"
-        @click="togglePreference(preference.key)"
+        @click="toggleBooleanPref(preference.key)"
       />
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue';
-import { SKIPPABLE_PREFERENCES } from '@/common/utils/Constants';
-import usePreferenceEditor from '../composition/preferenceEditor';
+<script lang="ts" setup>
+import { computed } from 'vue';
+import { SKIPPABLE_PREFERENCES } from '~/common/utils/Constants';
+import { useIsLoggedIn } from '../state/useAuth';
+import { useGeneralPreferences, useToggleBooleanPref } from '../state/useGeneralPreferences';
 
-export default defineComponent({
-  props: {
-    twoColumns: Boolean,
-  },
-  setup() {
-    const { togglePreference, getBooleanPreference } = usePreferenceEditor();
-    const autoPlayDisabled = computed<boolean>(() => !getBooleanPreference('enableAutoSkip'));
-
-    return {
-      getBooleanPreference,
-      togglePreference,
-      autoPlayDisabled,
-    };
-  },
-  data() {
-    return {
-      SKIPPABLE_PREFERENCES,
-    };
-  },
+defineProps({
+  twoColumns: Boolean,
 });
+
+const isLoggedIn = useIsLoggedIn();
+
+const preferences = useGeneralPreferences();
+const toggleBooleanPref = useToggleBooleanPref();
+const autoSkipDisabled = computed<boolean>(
+  () => !isLoggedIn.value || !preferences.value.enableAutoSkip
+);
 </script>
 
-<style scoped lang="scss">
-@import '@anime-skip/ui/theme.scss';
-
+<style scoped>
 .checkbox {
   min-width: 11rem;
-}
-
-.text-error {
-  color: $textColor-error;
 }
 </style>

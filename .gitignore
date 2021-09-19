@@ -1,11 +1,37 @@
-node_modules/
-dist/
-artifacts/
+# Vite
+#
+.vite-ssg-dist
+.vite-ssg-temp
+dist
+dist-ssr
 
-*.log
-example/video.mp4
+# PNPM
+#
+node_modules
+
+# Editors
+#
+.idea/
+
+# Build
+#
+extension/background
+extension/content-scripts
+extension/options
+extension/popup
+extension/manifest.json
+artifacts
+
+# Environment
+#
 .env*
+*.env
 .chrome.pem
-stats.json
 
+# Other
+#
+.DS_Store
+components.d.ts
+*.log
 TODO.md
+.old-webpack-extension

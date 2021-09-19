@@ -11,32 +11,41 @@ jobs:
     steps:
       - uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: '14.x'
           registry-url: 'https://npm.pkg.github.com'
           scope: '@anime-skip'
+
       - uses: actions/checkout@v2
-      - run: chmod +x webpack.js
-      - uses: actions/cache@v2
+
+      - name: Cache .pnpm-store
+        uses: actions/cache@v1
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-      - run: yarn install --frozen-lockfile
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: Install pnpm
+        run: curl -f https://get.pnpm.io/v6.14.js | node - add --global pnpm@6
+
+      - name: Install dependencies
+        run: pnpm install
         env:
-          NOYARNPOSTINSTALL: 1
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.ANIME_SKIP_PACKAGES_TOKEN }}
+
       - name: Package Extensions
-        run: yarn package
+        run: pnpm package
         env:
           CI: true
+          PACKAGE_MODE: beta
           NODE_AUTH_TOKEN: ${{ secrets.ANIME_SKIP_PACKAGES_TOKEN }}
-          FIREFOX_SIGNING_ISSUER: ${{ secrets.FIREFOX_SIGNING_ISSUER }}
-          FIREFOX_SIGNING_SECRET: ${{ secrets.FIREFOX_SIGNING_SECRET }}
-          FIREFOX_SIGNING_ID: ${{ secrets.FIREFOX_SIGNING_ID }}
+          FIREFOX_BETA_SIGNING_ISSUER: ${{ secrets.FIREFOX_SIGNING_ISSUER }}
+          FIREFOX_BETA_SIGNING_SECRET: ${{ secrets.FIREFOX_SIGNING_SECRET }}
+          FIREFOX_BETA_SIGNING_ID: ${{ secrets.FIREFOX_SIGNING_ID }}
           CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
           CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
           CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
-          CHROME_APP_ID: ${{ secrets.CHROME_APP_ID }}
+          CHROME_BETA_APP_ID: ${{ secrets.CHROME_APP_ID }}
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -47,6 +56,7 @@ jobs:
           release_name: ${{ github.ref }}
           draft: false
           prerelease: false
+
       - name: Upload firefox.zip
         uses: actions/upload-release-asset@v1
         env:
@@ -56,6 +66,7 @@ jobs:
           asset_path: ./artifacts/firefox-prod.zip
           asset_name: firefox.zip
           asset_content_type: application/zip
+
       - name: Upload sources.zip
         uses: actions/upload-release-asset@v1
         env:
@@ -65,6 +76,7 @@ jobs:
           asset_path: ./artifacts/sources.zip
           asset_name: sources.zip
           asset_content_type: application/zip
+
       - name: Upload chrome.zip
         uses: actions/upload-release-asset@v1
         env:

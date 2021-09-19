@@ -1,3 +1,5 @@
+import * as Api from '~api';
+
 export default class EpisodeUtils {
   public static seasonAndNumberFromEpisodeUrl(episodeUrl?: Api.EpisodeUrl): string {
     if (episodeUrl?.episode == null) return '';

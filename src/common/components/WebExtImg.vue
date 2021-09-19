@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import Browser from '@/common/utils/Browser';
+import Browser from '~/common/utils/Browser';
 
 export default defineComponent({
   props: {

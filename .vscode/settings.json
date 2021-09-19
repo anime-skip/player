@@ -1,4 +1,16 @@
 {
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "volar.tsPlugin": true,
+  "volar.tsPluginStatus": false,
+  "vite.autoStart": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.organizeImports": true
+  },
+  "files.associations": {
+    "*.css": "postcss",
+    ".env.package": "dotenv"
+  },
   "[vue]": {
     "editor.tabSize": 2,
     "editor.formatOnSave": true,
@@ -54,6 +66,21 @@
     "brightcove",
     "konqueror",
     "edgechromium",
-    "endregion"
-  ]
+    "endregion",
+    "vite",
+    "demi"
+  ],
+  "css.lint.unknownAtRules": "ignore",
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/components.d.ts": true,
+    ".old-webpack-extension/**/*": true
+  },
+  "workbench.editorAssociations": {
+    ".env.package": "dotenv"
+  }
 }

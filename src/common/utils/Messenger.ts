@@ -1,3 +1,5 @@
+import { browser, Runtime } from 'webextension-polyfill-ts';
+
 export default class Messenger<
   K extends MessageTypes = MessageTypes,
   L extends MessageListenerMap<K> = MessageListenerMap<K>,
@@ -14,9 +16,8 @@ export default class Messenger<
     this.forwardTypes = forwardTypes;
 
     if (listeners != null || forwardTypes != null) {
-      // @ts-expect-error: difficult typing
       browser.runtime.onMessage.addListener(this.onReceiveMessage);
-      console.debug(`Started ${source} messenger`);
+      console.log(`Started ${source} messenger`);
     }
   }
 
@@ -25,7 +26,7 @@ export default class Messenger<
     payload: AllMessagePayloads[T],
     tabId?: number
   ): Promise<AllMessageResponses[T]> => {
-    console.debug(`${this.source} sending message: ${type}`, { payload, tabId });
+    console.log(`${this.source} sending message: ${type}`, { payload, tabId });
     let response;
     if (tabId != null) {
       response = await browser.tabs.sendMessage(tabId, {
@@ -47,7 +48,7 @@ export default class Messenger<
 
   private onReceiveMessage = async (
     { type, payload }: { type: K; payload: P[K] },
-    sender: browser.runtime.MessageSender
+    sender: Runtime.MessageSender
   ): Promise<R[K] | void> => {
     console.debug(
       'Received Message on ' + this.source,
@@ -56,7 +57,7 @@ export default class Messenger<
     );
     if (!this.listeners) return;
 
-    const callback = (this.listeners[type] as unknown) as MessageListener<K>;
+    const callback = this.listeners[type] as unknown as MessageListener<K>;
     if (callback) {
       let response;
       try {

@@ -20,7 +20,13 @@
     <div v-if="shouldShowSuggestions" class="h-0 overflow-y-visible z-10">
       <!-- @mousedown.prevent: prevent input from losing focus when clicking on an item -->
       <Card
-        class="max-h-72 mt-1 rounded divide-y divide-on-surface divide-opacity-divider overflow-auto"
+        class="
+          max-h-72
+          mt-1
+          rounded
+          divide-y divide-on-surface divide-opacity-divider
+          overflow-auto
+        "
         :elevation="4"
         @mousedown.prevent
         @mouseover="onHoverOptions"
@@ -141,14 +147,17 @@ export default defineComponent({
 
     const onClickOption = (option: AutocompleteItem): void => {
       emit('update:value', option);
-      emit('select');
       onPressEsc();
+      emit('select');
     };
-    const onSubmit = (): void => {
+    const selectHighlightedItem = () => {
       const highlightedOption = props.options[highlightedIndex.value ?? -1];
       if (highlightedOption != null) {
         onClickOption(highlightedOption);
       }
+    };
+    const onSubmit = (): void => {
+      selectHighlightedItem();
     };
 
     const isFocused = ref(false);
@@ -171,10 +180,8 @@ export default defineComponent({
     return {
       searchValue,
 
-      wasEscPressed,
       onPressEsc,
 
-      isFocused,
       onFocusInput,
       onBlurInput,
 

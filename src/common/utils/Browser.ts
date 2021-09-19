@@ -1,89 +1,8 @@
-import { State } from '../store/state';
-import {
-  persistedKeys,
-  REFRESH_TOKEN_DURATION,
-  ACCESS_TOKEN_DURATION,
-  UNAUTHORIZED_ERROR_MESSAGE,
-} from './Constants';
+// TODO: Is this file still needed, or can things be moved elsewhere?
 
-function prepareChangedStorage(object: Record<string, { newValue: string }>): Partial<State> {
-  for (const key in object) {
-    object[key] = JSON.parse(object[key].newValue);
-  }
-  return object;
-}
+import { browser } from 'webextension-polyfill-ts';
 
 export default class Browser {
-  public static async getAccessToken(): Promise<string> {
-    const {
-      token,
-      tokenExpiresAt,
-      refreshToken,
-      refreshTokenExpiresAt,
-    } = await Browser.storage.getAll<Partial<State>>(persistedKeys);
-    const now = Date.now();
-
-    if (tokenExpiresAt != null && token != null && now <= tokenExpiresAt) {
-      return token;
-    }
-
-    if (refreshTokenExpiresAt != null && refreshToken != null && now <= refreshTokenExpiresAt) {
-      const { authToken: newToken, refreshToken: newRefreshToken } = await global.Api.loginRefresh(
-        refreshToken
-      );
-      const newNow = Date.now();
-      await Promise.all([
-        Browser.storage.setItem('token', newToken),
-        Browser.storage.setItem('tokenExpiresAt', newNow + ACCESS_TOKEN_DURATION),
-        Browser.storage.setItem('refreshToken', newRefreshToken),
-        Browser.storage.setItem('refreshTokenExpiresAt', newNow + REFRESH_TOKEN_DURATION),
-      ]);
-      return newToken;
-    }
-
-    throw Error(UNAUTHORIZED_ERROR_MESSAGE);
-  }
-
-  public static storage = {
-    getItem: async <T>(key: string): Promise<T | undefined> => {
-      const keyMap = await browser.storage.local.get(key);
-      const value = keyMap[key] as string | T;
-      try {
-        return JSON.parse(value as string) as T;
-      } catch (err) {
-        return value as T;
-      }
-    },
-    getAll: async <T extends { [key: string]: string | unknown }>(
-      keys: (keyof T)[]
-    ): Promise<T> => {
-      // @ts-expect-error: difficult typing
-      const storage = await browser.storage.local.get(keys);
-      const data = {} as { [key in keyof T]: T[key] };
-      keys.forEach(key => {
-        try {
-          // @ts-expect-error: difficult typing
-          data[key] = JSON.parse(storage[key]);
-        } catch (err) {
-          // @ts-expect-error: difficult typing
-          data[key] = storage[key];
-        }
-      });
-      return data;
-    },
-    setItem: async (key: string, value: unknown): Promise<void> => {
-      await browser.storage.local.set({ [key]: JSON.stringify(value) });
-    },
-    addListener: (callback: (changes: Partial<State>) => void): void => {
-      browser.storage.onChanged.addListener((changes, area) => {
-        if (area === 'local') {
-          // @ts-expect-error: difficult typing
-          callback(prepareChangedStorage(changes));
-        }
-      });
-    },
-  };
-
   public static resolveUrl(extUrl: string): string {
     let getURL = (_?: string): string => extUrl;
     // @ts-expect-error: difficult typing
@@ -139,6 +58,6 @@ export default class Browser {
   }
 
   public static transformServiceUrl(tabUrl: string): string {
-    return global.transformServiceUrl?.(tabUrl) ?? tabUrl;
+    return window.transformServiceUrl?.(tabUrl) ?? tabUrl;
   }
 }

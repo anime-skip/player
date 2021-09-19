@@ -1,10 +1,14 @@
-declare type Service = 'example' | 'vrv' | 'funimation' | 'crunchyroll';
+declare type Service = 'test-service' | 'vrv' | 'funimation' | 'crunchyroll';
 declare type ServiceDisplayName =
-  | 'Anime Skip Example'
+  | 'Anime Skip Test'
   | 'VRV'
   | 'Funimation'
   | 'Crunchyroll'
   | undefined;
+
+declare type SupportedBrowser = 'firefox' | 'chrome';
+
+declare type ExtensionMode = 'dev' | 'staged' | 'beta' | 'prod';
 
 declare interface LoginManualPayload {
   username: string;
@@ -22,12 +26,6 @@ declare interface PlayerState {
   isPaused: boolean;
 }
 
-declare interface SkippablePreference {
-  key: keyof Api.Preferences;
-  title: string;
-  help: string;
-}
-
 declare interface PlaybackRate {
   value: number;
   display: string;
@@ -36,36 +34,6 @@ declare interface PlaybackRate {
 
 type ValueOf<T> = T[keyof T];
 type Implements<T, U extends T> = {};
-
-interface CreateEpisodeDataPayload {
-  show:
-    | {
-        create: false;
-        showId: string;
-      }
-    | {
-        create: true;
-        name: string;
-      };
-  episode:
-    | {
-        create: false;
-        episodeId: string;
-      }
-    | {
-        create: true;
-        data: Api.InputEpisode;
-      };
-  episodeUrl:
-    | {
-        create: false;
-        url: string;
-      }
-    | {
-        create: true;
-        data: Api.InputEpisodeUrl;
-      };
-}
 
 type BrowserType =
   | 'chrome'
@@ -117,37 +85,6 @@ interface PlayerOption {
   isSelected: boolean;
   node: HTMLElement;
 }
-
-interface CreateEpisodePrefill {
-  show: AutocompleteItem<Api.ShowSearchResult>;
-  episode: AutocompleteItem<Api.EpisodeSearchResult>;
-  season?: string;
-  number?: string;
-  absoluteNumber?: string;
-}
-
-type KeyboardShortcutAction =
-  | 'playPause'
-  | 'toggleFullscreen'
-  | 'volumeUp'
-  | 'volumeDown'
-  | 'hideDialog'
-  | 'nextTimestamp'
-  | 'previousTimestamp'
-  | 'advanceFrame'
-  | 'advanceSmall'
-  | 'advanceMedium'
-  | 'advanceLarge'
-  | 'rewindFrame'
-  | 'rewindSmall'
-  | 'rewindMedium'
-  | 'rewindLarge'
-  | 'createTimestamp'
-  | 'saveTimestamps'
-  | 'discardChanges'
-  | 'takeScreenshot';
-
-type KeyboardShortcutsMap = { [keyCombo in KeyboardShortcutAction]?: string };
 
 declare interface TextInputRef {
   focus(selectAll?: boolean): void;

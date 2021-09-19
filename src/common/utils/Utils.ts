@@ -1,5 +1,4 @@
-import { Store } from '@/common/store';
-import { ActionTypes } from '../store/actionTypes';
+import * as Api from '~api';
 
 export default class Utils {
   /**
@@ -79,7 +78,7 @@ export default class Utils {
   }
 
   public static enterFullscreen(): void {
-    const elem = document.querySelector(global.getRootQuery());
+    const elem = document.querySelector(window.getRootQuery());
     if (!elem) {
       console.warn('Could not find player to enter fullscreen');
       return;
@@ -138,9 +137,9 @@ export default class Utils {
     if (!this._videoLoadPromise) {
       this._videoLoadPromise = new Promise(res => {
         const timeout = window.setInterval(function () {
-          const video = global.getVideo?.();
+          const video = window.getVideo?.();
           if (video && video.readyState > 0) {
-            res(Math.round(video.duration));
+            res(video.duration);
             clearInterval(timeout);
           }
         }, 250);
@@ -262,6 +261,7 @@ export default class Utils {
     };
   }
 
+  // TODO: Move to useSyncTimestamps
   public static computeTimestampDiffs(
     oldTimestamps: Api.Timestamp[],
     newTimestamps: Api.AmbiguousTimestamp[]
@@ -275,25 +275,28 @@ export default class Utils {
     oldTimestamps.forEach(item => {
       oldItemMap[item.id] = item;
     });
+
+    const toCreate = newTimestamps.filter(
+      newItem => !Utils.arrayIncludes(oldTimestamps, 'id', newItem)
+    ) as Api.InputTimestamp[];
     const toUpdate = intersect
       .filter(newItem => {
-        return (
-          newItem.at !== oldItemMap[newItem.id].at ||
-          newItem.typeId !== oldItemMap[newItem.id].typeId
-        );
+        const oldItem = oldItemMap[newItem.id];
+        return newItem.at !== oldItem.at || newItem.typeId !== oldItem.typeId;
       })
-      .map<Api.Timestamp>(item => ({
+      .map(item => ({
         id: item.id,
         source: item.source ?? 'ANIME_SKIP',
         at: item.at,
         typeId: item.typeId,
       }));
-
-    // prettier-ignore
+    const toDelete = oldTimestamps.filter(
+      oldItem => !Utils.arrayIncludes(newTimestamps, 'id', oldItem)
+    );
     return {
-      toCreate: newTimestamps.filter(newItem => !Utils.arrayIncludes(oldTimestamps, "id", newItem)) as Api.InputTimestamp[],
+      toCreate,
       toUpdate,
-      toDelete: oldTimestamps.filter(oldItem => !Utils.arrayIncludes(newTimestamps, "id", oldItem))
+      toDelete,
     };
   }
 
@@ -349,18 +352,15 @@ export default class Utils {
     return key;
   }
 
-  public static findShortcutAction(
-    keyCombo: string,
-    keyMapping: KeyboardShortcutsMap
-  ): KeyboardShortcutAction | undefined {
-    for (const action in keyMapping) {
-      if (keyMapping[action as KeyboardShortcutAction] === keyCombo) {
-        return action as KeyboardShortcutAction;
-      }
-    }
-    return undefined;
-  }
-
+  /**
+   * Calculate the offset of the timestamps because of a difference in duration length. The return
+   * value should be used with `applyTimestampOffset` and `undoTimestampOffset`, and math should not
+   * be done inline
+   *
+   * @param baseDuration The duration of the video the timestamps were based on
+   * @param duration The duration of the current video
+   * @returns The number of seconds difference between the two
+   */
   public static computeTimestampsOffset(baseDuration: number, duration: number): number {
     return duration - baseDuration;
   }
@@ -386,15 +386,6 @@ export default class Utils {
     if (lowBound != null && value < lowBound) return lowBound;
     if (highBound != null && value > highBound) return highBound;
     return value;
-  }
-
-  public static async apiAction<R, A extends unknown[]>(
-    store: Store,
-    apiCall: (...args: A) => Promise<R>,
-    ...args: A
-  ): Promise<R> {
-    // @ts-expect-error: Type generics did not make it through to dispatch()
-    return await store.dispatch(ActionTypes.API_CALL, { apiCall, args });
   }
 
   public static setIntervalUntil(callback: () => boolean, interval: number, timeout: number): void {

@@ -5,14 +5,20 @@ This is the document that contains all the necessary steps to building the submi
 ## Environment
 
 - Linux: `ubuntu-20`
-- Yarn: `v1.22.4`
-- Node: `v14.15.3`
+- pnpm: `npm i -g pnpm@6`
+- Node: `v14.17.4`
 
 ## Build Process
 
-```bash
-yarn install
-yarn build --mode prod
-```
+`extension/` is what gets zipped and submitted.
 
-> The `dist/` folder created during `build` is what gets zipped and submitted
+```bash
+# Prevent crash from husky
+git init
+
+# Install dependencies
+pnpm i
+
+# build extension/ directory
+pnpm build
+```

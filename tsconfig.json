@@ -1,24 +1,35 @@
 {
-  "compilerOptions": {
-    "target": "ES2018",
-    "module": "ESNext",
-    "lib": ["esnext", "esnext.asynciterable", "dom"],
-    "jsx": "preserve",
-    "sourceMap": true,
-    "outDir": "./dist",
-    "strict": true,
-    "moduleResolution": "node",
-    "baseUrl": "./",
-    "paths": {
-      "@/*": ["src/*"]
-    },
-    "typeRoots": ["node_modules/@types", "node_modules/web-ext-types", "types/*"],
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS",
+      "noUnusedLocals": false,
+      "noImplicitOverride": false,
+      "noImplicitReturns": false,
+      "noImplicitThis": false,
+      "noFallthroughCasesInSwitch": false,
+      "noImplicitUseStrict": false,
+      "noUnusedParameters": false
+    }
   },
-  "include": ["src/**/*.ts", "src/**/*.vue", "types/*.d.ts", "scripts/webpack.ts"],
-  "exclude": ["node_modules"]
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "ESNext",
+    "target": "ESNext",
+    "lib": ["DOM", "ESNext"],
+    "strict": true,
+    "esModuleInterop": true,
+    "incremental": false,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["vite/client", "jest"],
+    "paths": {
+      "~/*": ["src/*"],
+      "~api": ["src/common/api"],
+      "~env": ["src/common/utils/env"]
+    }
+  },
+  "exclude": ["extension/dist", "node_modules"]
 }
