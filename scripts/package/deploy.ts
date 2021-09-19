@@ -54,7 +54,7 @@ export async function deploy(config: PackageConfig) {
           WEB_EXT_API_KEY: config.FIREFOX_BETA_SIGNING_ISSUER,
           WEB_EXT_API_SECRET: config.FIREFOX_BETA_SIGNING_SECRET,
           WEB_EXT_ID: config.FIREFOX_BETA_SIGNING_ID,
-          WEB_EXT_CHANNEL: 'unlisted',
+          WEB_EXT_CHANNEL: 'listed',
           WEB_EXT_SOURCE_DIR: firefoxDist,
         }
       : {
@@ -68,7 +68,7 @@ export async function deploy(config: PackageConfig) {
   const chromeAppId =
     config.PACKAGE_MODE === 'beta' ? config.CHROME_BETA_APP_ID : config.CHROME_APP_ID;
   const chromeReviewQueryParams =
-    config.PACKAGE_MODE === 'beta' ? { publishTarget: 'trustedTesters' } : undefined;
+    config.PACKAGE_MODE === 'beta' ? undefined /*{ publishTarget: 'trustedTesters' }*/ : undefined;
 
   if (config.DO_FIREFOX) {
     title('Deploy');
