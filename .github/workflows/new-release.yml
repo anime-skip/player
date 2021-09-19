@@ -4,24 +4,19 @@ on:
     inputs:
       skipChrome:
         description: 'Skip Chrome (true|false)'
-        required: true
-        default: 'false'
+        required: false
       skipFirefox:
         description: 'Skip Firefox (true|false)'
-        required: true
-        default: 'false'
+        required: false
       skipChecks:
         description: 'Skip checks (true|false)'
-        required: true
-        default: 'false'
+        required: false
       skipSources:
         description: 'Skip sources (true|false)'
-        required: true
-        default: 'false'
+        required: false
       dryRun:
         description: 'Dry Run? (true|false)'
-        required: true
-        default: 'false'
+        required: false
 
 jobs:
   verify:
