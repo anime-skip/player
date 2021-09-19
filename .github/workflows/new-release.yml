@@ -1,8 +1,23 @@
 name: Prod Release
 on:
-  push:
-    tags:
-      - v*
+  workflow_dispatch:
+    inputs:
+      skipChrome:
+        description: 'Skip Chrome (true|false)'
+        required: true
+        default: 'false'
+      skipFirefox:
+        description: 'Skip Firefox (true|false)'
+        required: true
+        default: 'false'
+      skipChecks:
+        description: 'Skip checks (true|false)'
+        required: true
+        default: 'false'
+      skipSources:
+        description: 'Skip sources (true|false)'
+        required: true
+        default: 'false'
 
 jobs:
   verify:
@@ -32,6 +47,32 @@ jobs:
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.ANIME_SKIP_PACKAGES_TOKEN }}
 
+      # Bump version, create release if necessary
+      - name: Create Changelog
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@v3
+        with:
+          github-token: ${{ secrets.github_token }}
+          output-file: 'false'
+
+      - name: Format package.json
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
+        run: |
+          pnpm format
+          git commit -am "chore: format package.json after release"
+          git push
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.github_token }}
+        with:
+          tag_name: ${{ steps.changelog.outputs.tag }}
+          release_name: ${{ steps.changelog.outputs.tag }}
+          body: ${{ steps.changelog.outputs.clean_changelog }}
+
       - name: Package Extensions
         run: pnpm package
         env:
@@ -45,17 +86,10 @@ jobs:
           CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
           CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
           CHROME_BETA_APP_ID: ${{ secrets.CHROME_APP_ID }}
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          draft: false
-          prerelease: false
+          SKIP_FIREFOX: ${{ github.event.inputs.skipFirefox }}
+          SKIP_CHROME: ${{ github.event.inputs.skipChrome }}
+          SKIP_SOURCES: ${{ github.event.inputs.skipSources }}
+          SKIP_CHECKS: ${{ github.event.inputs.skipChecks }}
 
       - name: Upload firefox.zip
         uses: actions/upload-release-asset@v1
