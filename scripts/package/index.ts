@@ -21,6 +21,9 @@ script(async () => {
   console.log(`  ${DIM}PACKAGE_NAME:    ${RESET}${BOLD}${config.PACKAGE_NAME}${RESET}`);
   console.log(`  ${DIM}BUILD_NAME:      ${RESET}${BOLD}${config.BUILD_NAME}${RESET}`);
   console.log(`  ${DIM}OUTPUT_DIR:      ${RESET}${BOLD}${config.OUTPUT_DIR_DISPLAY}${RESET}`);
+  console.log(`  ${DIM}SKIP_CHECKS:     ${RESET}${BOLD}${config.SKIP_CHECKS}${RESET}`);
+  console.log(`  ${DIM}SKIP_FIREFOX:    ${RESET}${BOLD}${config.SKIP_FIREFOX}${RESET}`);
+  console.log(`  ${DIM}SKIP_CHROME:     ${RESET}${BOLD}${config.SKIP_CHROME}${RESET}`);
 
   title('Prepare Outputs');
   await run(`Ensuring ${CODE}${config.OUTPUT_DIR_DISPLAY}/${RESET} exists`, () =>
@@ -35,7 +38,7 @@ script(async () => {
     fs.emptyDirSync(config.OUTPUT_DIR)
   );
 
-  if (config.DO_CHECKS) {
+  if (!config.SKIP_CHECKS) {
     title('Run Checks');
     // prettier-ignore
     await (async () => {
@@ -48,10 +51,9 @@ script(async () => {
     })()
   }
 
-  await zipSources(config.OUTPUT_DIR);
-
-  if (config.DO_FIREFOX) await buildFirefox(config);
-  if (config.DO_CHROME) await buildChrome(config);
+  if (!config.SKIP_SOURCES) await zipSources(config.OUTPUT_DIR);
+  if (!config.SKIP_FIREFOX) await buildFirefox(config);
+  if (!config.SKIP_CHROME) await buildChrome(config);
 
   await deploy(config);
 });

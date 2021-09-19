@@ -8,9 +8,10 @@ export function getConfig() {
     path: '.env.package',
   });
   const PACKAGE_MODE = process.env.PACKAGE_MODE as 'prod' | 'beta';
-  const DO_CHECKS = (process.env.DO_CHECKS ?? 'true') === 'true';
-  const DO_FIREFOX = (process.env.DO_FIREFOX ?? 'true') === 'true';
-  const DO_CHROME = (process.env.DO_CHROME ?? 'true') === 'true';
+  const SKIP_CHECKS = process.env.SKIP_CHECKS === 'true';
+  const SKIP_SOURCES = process.env.SKIP_SOURCES === 'true';
+  const SKIP_FIREFOX = process.env.SKIP_FIREFOX === 'true';
+  const SKIP_CHROME = process.env.SKIP_CHROME === 'true';
   const BUILD_NAME = `${packageJson.name}-${packageJson.version}-${PACKAGE_MODE}`;
   const artifactsDir = ['artifacts'];
 
@@ -39,9 +40,10 @@ export function getConfig() {
     OUTPUT_DIR_DISPLAY: path.join('.', ...artifactsDir),
 
     // Flags
-    DO_CHECKS,
-    DO_FIREFOX,
-    DO_CHROME,
+    SKIP_CHECKS,
+    SKIP_SOURCES,
+    SKIP_FIREFOX,
+    SKIP_CHROME,
   };
 }
 

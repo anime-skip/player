@@ -70,7 +70,7 @@ export async function deploy(config: PackageConfig) {
   const chromeReviewQueryParams =
     config.PACKAGE_MODE === 'beta' ? undefined /*{ publishTarget: 'trustedTesters' }*/ : undefined;
 
-  if (config.DO_FIREFOX) {
+  if (!config.SKIP_FIREFOX) {
     title('Deploy');
 
     await run(`Signing and downloading ${CODE}firefox.xpi`, () =>
@@ -95,7 +95,7 @@ export async function deploy(config: PackageConfig) {
     });
   }
 
-  if (config.DO_CHROME) {
+  if (!config.SKIP_CHROME) {
     await run(`Uploading and submitting ${CODE}chrome.zip${RESET} for review`, async () => {
       // Get a new access token
       const accessToken = (
