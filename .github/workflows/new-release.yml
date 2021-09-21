@@ -52,7 +52,6 @@ jobs:
         with:
           github-token: ${{ secrets.github_token }}
           output-file: 'false'
-          pre-commit: .github/pre-commit.js
 
       - name: Create Release
         id: create_release
