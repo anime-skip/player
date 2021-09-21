@@ -89,17 +89,6 @@ jobs:
           SKIP_CHECKS: ${{ github.event.inputs.skipChecks }}
           DRY_RUN: ${{ github.event.inputs.dryRun }}
 
-      - name: Upload firefox.zip
-        if: ${{ steps.changelog.outputs.skipped == 'false' }}
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/firefox-prod.zip
-          asset_name: firefox.zip
-          asset_content_type: application/zip
-
       - name: Upload sources.zip
         if: ${{ steps.changelog.outputs.skipped == 'false' }}
         uses: actions/upload-release-asset@v1
@@ -111,6 +100,17 @@ jobs:
           asset_name: sources.zip
           asset_content_type: application/zip
 
+      - name: Upload firefox.zip
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/firefox-beta.zip
+          asset_name: firefox.zip
+          asset_content_type: application/zip
+
       - name: Upload chrome.zip
         if: ${{ steps.changelog.outputs.skipped == 'false' }}
         uses: actions/upload-release-asset@v1
@@ -118,6 +118,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/chrome-prod.zip
+          asset_path: ./artifacts/chrome-beta.zip
           asset_name: chrome.zip
           asset_content_type: application/zip
