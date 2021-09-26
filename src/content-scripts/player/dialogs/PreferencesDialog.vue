@@ -95,7 +95,7 @@ const getSelectedOption = (optionGroup: PlayerOptionGroup) => {
 const playerOptions = ref<PlayerOptionGroup[]>([]);
 const loadPlayerOptions = async () => {
   playerOptions.value =
-    (await window.getPlayerOptions())?.filter(group => group.options.length > 1) ?? [];
+    (await window.getPlayerOptions())?.filter(group => group.options.length > 0) ?? [];
 };
 
 const activeOptions = computed(() => activePlayerGroup.value?.options ?? []);
