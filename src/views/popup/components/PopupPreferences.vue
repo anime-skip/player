@@ -28,7 +28,7 @@
 import useRequestState from 'vue-use-request-state';
 import { useClearTokens } from '~/common/state/useAuth';
 import { useResetPreferences } from '~/common/state/useGeneralPreferences';
-import { sleep } from '~/common/utils/GlobalUtils';
+import { sleep } from '~/common/utils/EventLoop';
 import Messenger from '~/common/utils/Messenger';
 
 const clearTokens = useClearTokens();

@@ -14,8 +14,15 @@ export const services = [
   {
     folder: 'funimation',
     player_matches: ['https://www.funimation.com/player/*'],
-    parent_matches: ['https://www.funimation.com/*'],
+    parent_matches: ['https://www.funimation.com/*/shows/*'],
     page_matches: ['https://www.funimation.com/*'],
+  },
+  {
+    // New, fullscreen player that came out
+    folder: 'funimation-2021-09-26',
+    player_matches: ['https://www.funimation.com/v/*'],
+    parent_matches: ['https://www.funimation.com/v/*'],
+    page_matches: ['https://www.funimation.com/v/*'],
   },
   {
     folder: 'crunchyroll',

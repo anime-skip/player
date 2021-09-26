@@ -1,6 +1,6 @@
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import { createProvideInject } from '~/common/utils/createProvideInject';
-import { sleep } from '~/common/utils/GlobalUtils';
+import { sleep } from '~/common/utils/EventLoop';
 import { useVideoController } from './useVideoState';
 
 type DialogId = 'PreferencesDialog' | 'TimestampsPanel' | 'EditEpisodeDialog';
