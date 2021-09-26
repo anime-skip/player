@@ -9,10 +9,10 @@ function getPlayerOptions(): PlayerOptionGroup[] {
   const optionGroups: PlayerOptionGroup[] = [];
 
   function addRadioOptionGroup(id: string, title: string, icon?: string): void {
-    const languageSubMenu = document.getElementById(id);
-    if (languageSubMenu != null) {
+    const subMenu = document.getElementById(id);
+    if (subMenu != null) {
       const options = Array.from(
-        languageSubMenu.querySelectorAll('li.funimation-li-option a.funimation-toggle-option')
+        subMenu.querySelectorAll('li.funimation-li-option a.funimation-toggle-option')
       );
       if (options.length > 0) {
         optionGroups.push({
