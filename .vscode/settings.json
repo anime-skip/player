@@ -77,8 +77,7 @@
     "**/.hg": true,
     "**/CVS": true,
     "**/.DS_Store": true,
-    "**/components.d.ts": true,
-    ".old-webpack-extension/**/*": true
+    "**/components.d.ts": true
   },
   "workbench.editorAssociations": {
     ".env.package": "dotenv"
