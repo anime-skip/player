@@ -34,4 +34,3 @@ artifacts
 components.d.ts
 *.log
 TODO.md
-.old-webpack-extension

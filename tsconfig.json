@@ -31,5 +31,5 @@
       "~env": ["src/common/utils/env"]
     }
   },
-  "exclude": ["extension/dist", "node_modules"]
+  "exclude": ["extension", "node_modules"]
 }

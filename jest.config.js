@@ -1,27 +1,17 @@
 const { pathsToModuleNameMapper } = require('ts-jest/utils');
 const { compilerOptions } = require('./tsconfig');
 
+// Respect tsconfig paths
+const tsconfigPathsModuleNameMapper = pathsToModuleNameMapper(compilerOptions.paths);
+const tsconfigModulePaths = ['<rootDir>'];
+
+/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
-  roots: ['<rootDir>/src'],
-  testMatch: ['**/__tests__/**/*.test.(ts|tsx|js)'],
-  transform: {
-    '^.+\\.(ts|tsx)$': 'ts-jest',
-  },
+  preset: 'ts-jest',
+  testEnvironment: 'jsdom',
   moduleNameMapper: {
-    // Respect path aliases
-    ...pathsToModuleNameMapper(compilerOptions.paths),
-
-    // Global mocks
-    // None
+    ...tsconfigPathsModuleNameMapper,
+    'webextension-polyfill-ts': '<rootDir>/src/__mocks__/webextension-polyfill-ts.mock.ts',
   },
-  // Respect path aliases
-  modulePaths: ['<rootDir>'],
-
-  // ESM & Vite (import.meta)
-  preset: 'ts-jest/presets/default-esm',
-  globals: {
-    'ts-jest': {
-      useESM: true,
-    },
-  },
+  modulePaths: [...tsconfigModulePaths],
 };
