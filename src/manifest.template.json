@@ -22,7 +22,6 @@
       "48": "assets/extension-logo/48.png",
       "128": "assets/extension-logo/128.png"
     },
-    "default_title": "Anime Skip Player",
     "default_popup": "popup/index.html"
   },
   "options_ui": {

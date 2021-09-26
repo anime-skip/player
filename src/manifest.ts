@@ -34,9 +34,10 @@ export async function getManifest(
   mode: 'prod' | 'beta' | 'staged' | 'dev'
 ): Promise<Manifest.WebExtensionManifest> {
   // Fill out missing fields from template
+  const extName = pkg.displayName + (nameSuffix ?? '');
   const manifest: Manifest.WebExtensionManifest = {
     ...manifestTemplate,
-    name: pkg.displayName + (nameSuffix ?? ''),
+    name: extName,
     version: pkg.version,
     description: pkg.description,
     content_security_policy:
@@ -44,6 +45,9 @@ export async function getManifest(
         ? `script-src 'self'; object-src 'self'` // old: "script-src 'self' 'unsafe-eval'; object-src 'self'"
         : undefined,
   };
+  if (manifest.page_action) {
+    manifest.page_action.default_title = extName;
+  }
 
   // Apply dynamic service content scripts
   services.forEach(service => {
@@ -71,8 +75,8 @@ export async function getManifest(
         'content-scripts/player/index.js',
       ],
       css: [
-        'content-scripts/player/style.css',
         `content-scripts/services/${service.folder}/style.css`,
+        'content-scripts/player/style.css',
       ],
       all_frames: true,
     });
@@ -99,6 +103,13 @@ export async function getManifest(
     resolvedManifest.permissions?.push('http://localhost/*');
     // @ts-expect-error: Typing only for firefox, chrome specific fields missing
     resolvedManifest.host_permissions?.push('http://localhost:8081/*');
+  }
+
+  // Remove duplicates from manifest fields
+  if (resolvedManifest.page_action?.show_matches) {
+    resolvedManifest.page_action.show_matches = Array.from(
+      new Set(resolvedManifest.page_action.show_matches).values()
+    );
   }
 
   return resolvedManifest;
