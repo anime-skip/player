@@ -1,0 +1,54 @@
+// Hide the existing player
+.hide-for-anime-skip {
+  #vjs_video_3 {
+    .meta-overlay,
+    .thumb-overlay,
+    .vjs-poster,
+    .vjs-control-bar,
+    .vjs-loading-spinner,
+    .video-player-controls__core-player {
+      display: none !important;
+    }
+  }
+}
+
+// Unset existing styles that effect the player
+#AnimeSkipPlayer {
+  text-rendering: unset;
+  word-break: unset;
+
+  .row {
+    margin: unset;
+  }
+  .flex {
+    flex: unset;
+    max-width: unset;
+  }
+  button,
+  input,
+  select,
+  textarea {
+    border-style: unset;
+  }
+  button {
+    overflow: unset;
+  }
+  button,
+  input,
+  optgroup,
+  select,
+  textarea {
+    font: unset;
+  }
+  *,
+  ::after,
+  ::before {
+    background-repeat: unset;
+    box-sizing: unset;
+  }
+
+  // Reapply some
+  .flex-1 {
+    flex: 1 1 0%;
+  }
+}
