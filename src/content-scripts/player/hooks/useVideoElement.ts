@@ -127,6 +127,8 @@ export function useVideoElement() {
     if (video.value) clearListeners(video.value);
     setListeners(newVideo);
     video.value = newVideo;
+    newVideo.playbackRate = videoState.playbackRate;
+    newVideo.volume = videoState.volumePercent / 100;
   });
 
   return { video, ...controls };
