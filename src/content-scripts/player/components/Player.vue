@@ -34,6 +34,7 @@
 <script lang="ts" setup>
 import { useTimeout } from '@anime-skip/ui';
 import { PLAYER_ACTIVITY_TIMEOUT } from '~/common/utils/Constants';
+import UsageStats from '~/common/utils/UsageStats';
 import Utils from '~/common/utils/Utils';
 import { useLoadAllEpisodeData } from '../hooks/useLoadAllEpisodeData';
 import { usePlaybackRateConnector } from '../hooks/usePlaybackRateConnector';
@@ -45,6 +46,10 @@ import {
   useResetSkippedFromZero,
 } from '../state/usePlayHistory';
 import { useVideoState } from '../state/useVideoState';
+
+onMounted(() => {
+  void UsageStats.saveEvent('player_injected');
+});
 
 const resetHasSkippedFromZero = useResetSkippedFromZero();
 const resetInitialBuffer = useResetInitialBuffer();
