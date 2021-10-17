@@ -5,6 +5,7 @@
     "tabs",
     "{{chrome}}.declarativeContent",
     "{{firefox}}.*://api.anime-skip.com/*",
+    "{{firefox}}.*://usage-stats.anime-skip.com/*",
     "{{firefox}}.*://staged.api.anime-skip.com/*"
   ],
   "{{manifest-v3:remove-this-qualifier-once-v3}}.host_permissions": [

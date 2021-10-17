@@ -3,6 +3,7 @@ lockfileVersion: 5.3
 specifiers:
   '@anime-skip/axios-api': ^2.3.3
   '@anime-skip/ui': ^1.2.5
+  '@anime-skip/usage-stats-client': ^1.1.4
   '@antfu/eslint-config': ^0.7.0
   '@iconify/json': ^1.1.386
   '@tailwindcss/line-clamp': ^0.2.1
@@ -76,6 +77,7 @@ specifiers:
 
 dependencies:
   '@anime-skip/ui': 1.2.5_ec1b06fcfbd6e462bf1374dd899f0179
+  '@anime-skip/usage-stats-client': 1.1.4_axios@0.21.1
   async-mutex: 0.3.2
   axios: 0.21.1
   axios-auth-refresh: 3.1.0_axios@0.21.1
@@ -176,6 +178,15 @@ packages:
       vue-router: 4.0.11_vue@3.2.2
     transitivePeerDependencies:
       - '@vue/composition-api'
+    dev: false
+
+  /@anime-skip/usage-stats-client/1.1.4_axios@0.21.1:
+    resolution: {integrity: sha512-syt3i1Te6UZrsQ2u7uyJUUwVDVj6eN8WgOXIE7EtbWS9335ERdNXk67H7A/91nNuIygYL//FcF77qvUBfXkusQ==, tarball: download/@anime-skip/usage-stats-client/1.1.4/072fcce198d9acde03914c3b63e6021c450255c8f499b2a2b70163257171a453}
+    peerDependencies:
+      axios: '>=0.23'
+    dependencies:
+      axios: 0.21.1
+      uuid: 8.3.2
     dev: false
 
   /@antfu/eslint-config-basic/0.7.0_eslint@7.32.0:
@@ -8413,7 +8424,6 @@ packages:
   /uuid/8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
     hasBin: true
-    dev: true
 
   /v8-compile-cache/2.3.0:
     resolution: {integrity: sha512-l8lCEmLcLYZh4nbunNZvQCJc5pv7+RCwa8q/LdUx8u7lsWvPDKmpodJAJNwkAhJC//dFY48KuIEmjtd4RViDrA==}

@@ -1,5 +1,6 @@
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import { TIMESTAMP_TYPE_NOT_SELECTED } from '~/common/utils/Constants';
+import UsageStats from '~/common/utils/UsageStats';
 import Utils from '~/common/utils/Utils';
 import { TimestampSource } from '~api';
 import { useShowDialog, useShowLoginOverlay } from '../state/useDialogState';
@@ -38,6 +39,7 @@ export function useCreateNewTimestamp() {
       return;
     }
 
+    void UsageStats.saveEvent('started_creating_timestamp', { atTime: video.currentTime });
     startEditing(() => {
       updateEditTimestampMode(EditTimestampMode.ADD);
       updateActiveTimestamp({

@@ -45,6 +45,7 @@ import { computed, ref, watch } from 'vue';
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
 import { TIMESTAMP_TYPES } from '~/common/utils/Constants';
+import UsageStats from '~/common/utils/UsageStats';
 import Utils from '~/common/utils/Utils';
 import * as Api from '~api';
 import { useDisplayedTimestamps } from '../hooks/useDisplayedTimestamps';
@@ -156,6 +157,12 @@ watch(currentTime, (newTime, oldTime) => {
   if (wasAtBeginning && haveNotSkippedFromBeginning && shouldSkipFirstTimestamp) {
     updatePlayHistory({ hasSkippedFromZero: true });
     goToNextTimestampOnTimeChange(newTime);
+    void UsageStats.saveEvent('skipped_timestamp', {
+      fromTime: oldTime,
+      toTime: newTime,
+      skippedDuration: oldTime - newTime,
+      typeId: oldNext.typeId,
+    });
     return;
   }
 

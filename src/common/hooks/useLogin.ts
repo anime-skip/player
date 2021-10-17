@@ -2,6 +2,7 @@ import md5 from 'md5';
 import * as Api from '~api';
 import { useUpdateAuth } from '../state/useAuth';
 import { useUpdateGeneralPreferences } from '../state/useGeneralPreferences';
+import UsageStats from '../utils/UsageStats';
 import { useApiClient } from './useApiClient';
 
 export function useLogin(api = useApiClient()) {
@@ -21,6 +22,8 @@ export function useLogin(api = useApiClient()) {
     updatePreferences({
       ...res.account.preferences,
     });
+    await UsageStats.setUserId(res.account.id);
+    void UsageStats.saveEvent('login');
 
     return res;
   };

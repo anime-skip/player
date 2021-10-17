@@ -4,6 +4,7 @@ import {
   usePrimaryKeyboardShortcutPrefs,
   useSecondaryKeyboardShortcutPrefs,
 } from '~/common/state/useKeyboardShortcutPrefs';
+import UsageStats from '~/common/utils/UsageStats';
 import Utils from '~/common/utils/Utils';
 
 export function useKeyboardShortcuts(
@@ -29,7 +30,10 @@ export function useKeyboardShortcuts(
 
     console.debug(`[${componentName}] Pressed ${keyCombo} -> [${keyActions.join(', ')}]`);
     setTimeout(() => {
-      keyActions.forEach(action => shortcuts[action]?.());
+      keyActions.forEach(action => {
+        void UsageStats.saveEvent('used_keyboard_shortcut', { keyCombo, operation: action });
+        shortcuts[action]?.();
+      });
     }, 0);
   };
 

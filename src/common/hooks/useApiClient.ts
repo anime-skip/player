@@ -5,6 +5,7 @@ import { createCustomAnimeSkipClient } from '~/common/utils/CustomApiClient';
 import { useClearTokens } from '../state/useAuth';
 import { useResetPreferences } from '../state/useGeneralPreferences';
 import { LogoutError } from '../utils/LogoutError';
+import UsageStats from '../utils/UsageStats';
 import Utils from '../utils/Utils';
 import useTokenRefresher from './useTokenRefresher';
 
@@ -107,6 +108,7 @@ export function useApiClient() {
             console.warn('Logging out...');
             clearTokens();
             resetPreferences();
+            void UsageStats.saveEvent('forced_logout').then(UsageStats.clearUserId);
           }
           throw err;
         }

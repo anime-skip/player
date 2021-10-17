@@ -13,6 +13,7 @@
     "start": "concurrently --kill-others-on-fail -n extension,services -c magenta,cyan \"pnpm start:extension\" \"pnpm start:services\"",
     "start:chrome": "concurrently --kill-others-on-fail -n extension,services -c magenta,cyan \"pnpm start:extension -- --for chrome\" \"pnpm start:services\"",
     "start:extension": "ts-node vite.build.ts --watch",
+    "start:prod": "ts-node vite.build.ts --watch --mode prod",
     "start:services": "docker-compose -f docker/docker-compose.yml up --abort-on-container-exit",
     "compile": "vue-tsc --noEmit",
     "test": "jest --runInBand",
@@ -38,6 +39,7 @@
   },
   "dependencies": {
     "@anime-skip/ui": "^1.2.5",
+    "@anime-skip/usage-stats-client": "^1.1.4",
     "async-mutex": "^0.3.2",
     "axios": "^0.21.1",
     "axios-auth-refresh": "^3.1.0",

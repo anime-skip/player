@@ -1,3 +1,4 @@
+import UsageStats from '~/common/utils/UsageStats';
 import {
   useIncrementPlayTicks,
   usePlayHistory,
@@ -22,6 +23,9 @@ export function useVideoElement() {
     updateCurrentTime();
   };
   const startedPlaying = () => {
+    if (playHistory.isInitialBuffer && videoState.duration) {
+      void UsageStats.saveEvent('episode_started', { episodeDuration: videoState.duration });
+    }
     controls.clearBuffering();
     updatePlayHistory({ isInitialBuffer: false });
     if (video.value && !video.value.paused) {
@@ -103,6 +107,12 @@ export function useVideoElement() {
     }
   );
 
+  const onVideoEnded = () => {
+    if (videoState.duration) {
+      void UsageStats.saveEvent('episode_finished', { episodeDuration: videoState.duration });
+    }
+  };
+
   const setListeners = (video: HTMLVideoElement) => {
     video.addEventListener('durationchange', updateDuration);
     video.addEventListener('loadedmetadata', initialLoad);
@@ -112,6 +122,7 @@ export function useVideoElement() {
     video.addEventListener('timeupdate', updateCurrentTime);
     video.addEventListener('volumechange', enforceVolumeChange);
     video.addEventListener('waiting', setBuffering);
+    video.addEventListener('ended', onVideoEnded);
   };
   const clearListeners = (video: HTMLVideoElement) => {
     video.removeEventListener('durationchange', updateDuration);
@@ -122,6 +133,7 @@ export function useVideoElement() {
     video.removeEventListener('timeupdate', updateCurrentTime);
     video.removeEventListener('volumechange', enforceVolumeChange);
     video.removeEventListener('waiting', setBuffering);
+    video.removeEventListener('ended', onVideoEnded);
   };
   window.onVideoChanged(newVideo => {
     if (video.value) clearListeners(video.value);

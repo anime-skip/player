@@ -1,4 +1,4 @@
-import { GqlLoginData, GqlPreferences } from '@anime-skip/axios-api';
+import { GqlAccount, GqlLoginData, GqlPreferences } from '@anime-skip/axios-api';
 
 export type Preferences = Pick<
   GqlPreferences,
@@ -18,8 +18,7 @@ export type Preferences = Pick<
   | 'skipNewCredits'
   | 'skipPreview'
 >;
-export interface Account {
-  // extends Pick<GqlAccount, ...>
+export interface Account extends Pick<GqlAccount, 'id'> {
   preferences: Preferences;
 }
 export interface LoginResponse extends Pick<GqlLoginData, 'authToken' | 'refreshToken'> {
@@ -33,6 +32,7 @@ export const PREFERENCES_QUERY = `{
 export const LOGIN_QUERY = `{
   authToken refreshToken
   account {
+    id
     preferences ${PREFERENCES_QUERY}
   }
 }`;

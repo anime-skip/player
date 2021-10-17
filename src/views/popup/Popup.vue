@@ -16,10 +16,15 @@
 <script lang="ts" setup>
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import Browser from '~/common/utils/Browser';
+import UsageStats from '~/common/utils/UsageStats';
 
 defineProps<{
   small?: boolean;
 }>();
+
+onMounted(() => {
+  void UsageStats.saveEvent('opened_popup');
+});
 
 const browser = Browser.detect();
 

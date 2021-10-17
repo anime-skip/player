@@ -4,6 +4,7 @@ import 'vue-global-api';
 import FakeRouterLink from '~/common/components/FakeRouterLink.vue';
 import '~/common/styles';
 import { loadedLog } from '~/common/utils/loadedLog';
+import UsageStats from '~/common/utils/UsageStats';
 import Container from './Container.vue';
 
 loadedLog('content-scripts/player/index.ts');
@@ -52,6 +53,7 @@ async function injectPlayer() {
     document.querySelector(rootQuery)?.appendChild(mountedApp.$el);
 
     console.log(`Added player to ${rootQuery}`);
+    void UsageStats.saveEvent('player_injected');
   } catch (err) {
     console.warn('Failed to inject player UI', err);
   }

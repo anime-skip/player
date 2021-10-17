@@ -26,6 +26,11 @@
 import { computed } from 'vue';
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import { useGeneralPreferences, useToggleBooleanPref } from '~/common/state/useGeneralPreferences';
+import UsageStats from '~/common/utils/UsageStats';
+
+onMounted(() => {
+  void UsageStats.saveEvent('opened_all_settings');
+});
 
 const isLoggedIn = useIsLoggedIn();
 const preferences = useGeneralPreferences();

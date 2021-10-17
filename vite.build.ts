@@ -9,6 +9,7 @@ import path from 'path';
 import * as Vite from 'vite';
 import ViteComponents from 'vite-plugin-components';
 import ViteIcons, { ViteIconsResolver } from 'vite-plugin-icons';
+import packageJson from './package.json';
 import { rootPath } from './scripts/utils';
 import { getManifest } from './src/manifest';
 import AssetsRewrite from './vite/plugin-assets-rewrite';
@@ -83,6 +84,9 @@ async function getConfig(
             clearScreen: false,
           }
         : undefined,
+    },
+    define: {
+      EXTENSION_VERSION: `'${packageJson.version}'`,
     },
     mode: options.watch ? 'development' : 'production',
     resolve: {

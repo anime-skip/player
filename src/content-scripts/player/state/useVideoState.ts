@@ -1,5 +1,6 @@
 import { Utils as UiUtils } from '@anime-skip/ui';
 import { createProvideInject } from '~/common/utils/createProvideInject';
+import UsageStats from '~/common/utils/UsageStats';
 
 export interface VideoState {
   /**
@@ -83,6 +84,8 @@ export function useVideoController() {
       update({ isPaused: true });
     },
     togglePlayPause(): void {
+      if (state.isPaused) void UsageStats.saveEvent('play', { atTime: state.currentTime });
+      else void UsageStats.saveEvent('pause', { atTime: state.currentTime });
       update({ isPaused: !state.isPaused });
     },
     setPlaybackRate(newPlaybackRate: number): void {

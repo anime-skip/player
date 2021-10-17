@@ -26,20 +26,11 @@
 
 <script lang="ts" setup>
 import useRequestState from 'vue-use-request-state';
-import { useClearTokens } from '~/common/state/useAuth';
-import { useResetPreferences } from '~/common/state/useGeneralPreferences';
-import { sleep } from '~/common/utils/EventLoop';
 import Messenger from '~/common/utils/Messenger';
-
-const clearTokens = useClearTokens();
-const resetPreferences = useResetPreferences();
+import { useLogout } from '../composition/useLogout';
 
 const { wrapRequest, isLoading: isLoggingOut } = useRequestState();
-const logOut = wrapRequest(async () => {
-  await sleep(500);
-  clearTokens();
-  resetPreferences();
-});
+const logOut = wrapRequest(useLogout());
 
 const openExtensionOptions = () => {
   new Messenger<RuntimeMessageTypes>('General Settings').send(

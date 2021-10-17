@@ -6,6 +6,7 @@ import { AxiosResponse } from 'axios';
 import * as Api from '~api';
 import { getAuthAsync, updateAuthAsync } from '../state/useAuth';
 import { LogoutError } from '../utils/LogoutError';
+import UsageStats from '../utils/UsageStats';
 
 const lock = new Mutex();
 
@@ -46,6 +47,7 @@ export default function useTokenRefresher(client: ReturnType<typeof createAnimeS
         refreshToken: auth.refreshToken,
       });
       await updateAuthAsync({ refreshToken: newTokens.refreshToken, token: newTokens.authToken });
+      void UsageStats.saveEvent('login_refresh');
       console.log('Refreshed token!');
       release();
     } catch (err) {
