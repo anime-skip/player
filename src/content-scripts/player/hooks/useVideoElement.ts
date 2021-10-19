@@ -35,6 +35,9 @@ export function useVideoElement() {
   const updateCurrentTime = () => {
     const newTime = video.value?.currentTime ?? 0;
     controls.setCurrentTime(newTime, false);
+    if (video.value && !video.value.paused) {
+      controls.clearBuffering();
+    }
     incrementPlayTicks();
   };
   const setBuffering = () => controls.buffering();

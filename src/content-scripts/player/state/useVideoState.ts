@@ -64,7 +64,7 @@ const {
   isMuted: false,
   volumePercent: 100,
   allowVolumeChangeTo: undefined,
-  currentTime: 0,
+  currentTime: initialVideo?.currentTime ?? 0,
   duration: undefined as number | undefined,
   playbackRate: 1,
 });
