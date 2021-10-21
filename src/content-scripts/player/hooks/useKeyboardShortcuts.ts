@@ -7,10 +7,15 @@ import {
 import UsageStats from '~/common/utils/UsageStats';
 import Utils from '~/common/utils/Utils';
 
+// The first instance of this helper should only report usage stats
+let instanceCount = 0;
+
 export function useKeyboardShortcuts(
   componentName: string,
   shortcuts: KeyboardShortcutActionToExecuteMap
 ) {
+  const isFirst = instanceCount == 0;
+  instanceCount++;
   console.debug(`[${componentName}] useKeyboardShortcuts()`);
 
   const { primaryShortcutsKeyToActionsMap } = usePrimaryKeyboardShortcutPrefs();
@@ -31,7 +36,8 @@ export function useKeyboardShortcuts(
     console.debug(`[${componentName}] Pressed ${keyCombo} -> [${keyActions.join(', ')}]`);
     setTimeout(() => {
       keyActions.forEach(action => {
-        void UsageStats.saveEvent('used_keyboard_shortcut', { keyCombo, operation: action });
+        if (isFirst)
+          void UsageStats.saveEvent('used_keyboard_shortcut', { keyCombo, operation: action });
         shortcuts[action]?.();
       });
     }, 0);
