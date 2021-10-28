@@ -3,7 +3,7 @@ lockfileVersion: 5.3
 specifiers:
   '@anime-skip/axios-api': ^2.3.3
   '@anime-skip/ui': ^1.2.5
-  '@anime-skip/usage-stats-client': ^1.1.4
+  '@anime-skip/usage-stats-client': ^1.1.5
   '@antfu/eslint-config': ^0.7.0
   '@iconify/json': ^1.1.386
   '@tailwindcss/line-clamp': ^0.2.1
@@ -77,7 +77,7 @@ specifiers:
 
 dependencies:
   '@anime-skip/ui': 1.2.5_ec1b06fcfbd6e462bf1374dd899f0179
-  '@anime-skip/usage-stats-client': 1.1.4_axios@0.21.1
+  '@anime-skip/usage-stats-client': 1.1.5_axios@0.21.1
   async-mutex: 0.3.2
   axios: 0.21.1
   axios-auth-refresh: 3.1.0_axios@0.21.1
@@ -180,8 +180,8 @@ packages:
       - '@vue/composition-api'
     dev: false
 
-  /@anime-skip/usage-stats-client/1.1.4_axios@0.21.1:
-    resolution: {integrity: sha512-syt3i1Te6UZrsQ2u7uyJUUwVDVj6eN8WgOXIE7EtbWS9335ERdNXk67H7A/91nNuIygYL//FcF77qvUBfXkusQ==, tarball: download/@anime-skip/usage-stats-client/1.1.4/072fcce198d9acde03914c3b63e6021c450255c8f499b2a2b70163257171a453}
+  /@anime-skip/usage-stats-client/1.1.5_axios@0.21.1:
+    resolution: {integrity: sha512-1Gm1g4CNt/WrLFyEWQa5ckchN83BviFo38B9StaixRioDj/tbeJU6uhfo8t6llXo9ML0qlz2pWisUeJaARumTQ==, tarball: download/@anime-skip/usage-stats-client/1.1.5/f7ff72c3dfa3377bd6b51a22ad8f713c60f922073d655ccca8727e8047cf35a9}
     peerDependencies:
       axios: '>=0.23'
     dependencies:
@@ -972,7 +972,7 @@ packages:
       vue: ^2 || ^3
     dependencies:
       vue: 3.2.2
-      vue-demi: 0.11.4_vue@3.2.2
+      vue-demi: 0.12.0_vue@3.2.2
     transitivePeerDependencies:
       - '@vue/composition-api'
     dev: false
@@ -8666,8 +8666,8 @@ packages:
     dependencies:
       vue: 3.2.2
 
-  /vue-demi/0.11.4_vue@3.2.2:
-    resolution: {integrity: sha512-/3xFwzSykLW2HiiLie43a+FFgNOcokbBJ+fzvFXd0r2T8MYohqvphUyDQ8lbAwzQ3Dlcrb1c9ykifGkhSIAk6A==}
+  /vue-demi/0.12.0_vue@3.2.2:
+    resolution: {integrity: sha512-eggsbQSQEJKlvQrtrJLx4J44MIVq5+Z7QetIEh1Na+ZWLgt5Fq0qskQ1QmckTTEoFcUdn36c4K23EjtXZhws7w==}
     engines: {node: '>=12'}
     hasBin: true
     requiresBuild: true
@@ -8701,7 +8701,7 @@ packages:
   /vue-global-api/0.2.4_vue@3.2.2:
     resolution: {integrity: sha512-Cm84AZiALt8f4CJZzPvbForTzAUYe41msnzUnRK6B7YkaDaN8g87ap8CpHWvTU0+XtyDeLLAeQoRr+uwamxfpQ==}
     dependencies:
-      vue-demi: 0.11.4_vue@3.2.2
+      vue-demi: 0.12.0_vue@3.2.2
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue

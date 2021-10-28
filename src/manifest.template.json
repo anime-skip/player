@@ -41,6 +41,7 @@
     "scripts": [
       "background/messenger.js",
       "background/on-install.js",
+      "background/uninstall-feedback.js",
       "background/tab-change.js",
       "{{chrome}}.background/chrome-page-action.js"
     ]
