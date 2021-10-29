@@ -2,8 +2,6 @@ import { createUsageStatsClient, UsageStatsClientConfig } from '@anime-skip/usag
 import { browser } from 'webextension-polyfill-ts';
 import Browser from './Browser';
 
-declare const EXTENSION_VERSION: string;
-
 export const USAGE_STATS_USER_ID_STORAGE_KEY = 'usage-stats-user-id';
 
 const getUserId: UsageStatsClientConfig['getUserId'] = async () => {

@@ -49,3 +49,5 @@ declare var serviceDisplayName: ServiceDisplayName;
 
 declare function addKeyDownListener(callback: (event: KeyboardEvent) => void): void;
 declare function removeKeyDownListener(callback: (event: KeyboardEvent) => void): void;
+
+declare const EXTENSION_VERSION: string;
