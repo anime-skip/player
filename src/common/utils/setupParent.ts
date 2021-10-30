@@ -1,10 +1,23 @@
 import Messenger from '~/common/utils/Messenger';
 import Utils from '~/common/utils/Utils';
+import { fallbackBound } from './videoBounds';
+
+function defaultGetScreenshotDetails() {
+  const iframe = document.querySelector('iframe');
+  const bounds = iframe?.getBoundingClientRect();
+  return {
+    height: fallbackBound(bounds?.height),
+    left: fallbackBound(bounds?.left),
+    top: fallbackBound(bounds?.top),
+    width: fallbackBound(bounds?.width),
+  };
+}
 
 export default function setupParent(
   service: Service,
   options: {
     getEpisodeInfo(): Promise<InferredEpisodeInfo> | InferredEpisodeInfo;
+    getScreenshotDetails?(): ScreenshotDetails;
   }
 ): void {
   // Sites using HTML5 History mode don't update immediately, so we track the url to know if we
@@ -41,6 +54,9 @@ export default function setupParent(
         console.error('Failed to infer episode info', err, { previousUrl, currentUrl, episode });
       }
       return episode;
+    },
+    '@anime-skip/parent-screenshot-details': async () => {
+      return options.getScreenshotDetails?.() ?? defaultGetScreenshotDetails();
     },
   });
 }

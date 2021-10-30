@@ -19,20 +19,35 @@ const messenger = new Messenger<
   '@anime-skip/remove-context-menu': async () => browser.contextMenus.removeAll(),
 });
 
-async function screenshot(info: Menus.OnClickData, tab?: Tabs.Tab) {
+async function screenshot(_info: Menus.OnClickData, tab?: Tabs.Tab) {
   console.log('Taking screenshot');
   try {
     // Get size & position for cropping
-    // const parentSize = await messenger.send('@anime-skip/parent-screenshot-details');
-    // const iframeSize = await messenger.send('@anime-skip/player-screenshot-details');
+    const iframeBounds: ScreenshotDetails = await messenger.send(
+      '@anime-skip/parent-screenshot-details',
+      undefined,
+      tab?.id
+    );
+    const videoBounds: ScreenshotDetails = await messenger.send(
+      '@anime-skip/player-screenshot-details',
+      undefined,
+      tab?.id
+    );
+    const x = iframeBounds.left + videoBounds.left;
+    const y = iframeBounds.top + videoBounds.top;
+    const width = videoBounds.width;
+    const height = videoBounds.height;
+    console.log({ iframeBounds, videoBounds, x, y, width, height });
+
+    if (width == 0 || height == 0) throw Error(`Video dimension was 0 (w=${width}, h=${height})`);
 
     // Take screenshot
-    console.log(Object.keys(browser.tabs));
-    const data = await browser.tabs.captureVisibleTab(tab?.windowId, { format: 'png' });
-
-    // Save it
+    const data = await browser.tabs.captureVisibleTab(tab?.windowId, {
+      format: 'png',
+      rect: { height, width, x, y },
+    });
     await browser.storage.local.set({ screenshot: data });
-    await sleep(200);
+    await sleep(200); // TODO: Double check that this is needed for some reason
   } catch (err) {
     console.error(err);
     throw err;
@@ -42,7 +57,7 @@ async function screenshot(info: Menus.OnClickData, tab?: Tabs.Tab) {
 const menuItems: Menus.CreateCreatePropertiesType[] = [
   {
     title: 'Take Screenshot',
-    contexts: ['frame'],
+    contexts: ['all'],
     id: MENU_ITEM_SCREENSHOT,
     onclick: screenshot,
   },

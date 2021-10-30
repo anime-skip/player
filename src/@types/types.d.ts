@@ -89,3 +89,10 @@ interface PlayerOption {
 declare interface TextInputRef {
   focus(selectAll?: boolean): void;
 }
+
+interface ScreenshotDetails {
+  width: number;
+  height: number;
+  left: number;
+  top: number;
+}

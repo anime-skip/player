@@ -29,14 +29,16 @@ type MessageListenerMap<K extends MessageTypes> = { [type in K]: MessageListener
 
 //#region Parent Messenger
 
-type ParentMessageTypes = '@anime-skip/inferEpisodeInfo';
+type ParentMessageTypes = '@anime-skip/inferEpisodeInfo' | '@anime-skip/parent-screenshot-details';
 
 interface ParentMessagePayloadMap extends MessagePayloadMap<ParentMessageTypes> {
   '@anime-skip/inferEpisodeInfo': undefined;
+  '@anime-skip/parent-screenshot-details': undefined;
 }
 
 interface ParentMessageResponseMap extends MessageResponseMap<ParentMessageTypes> {
   '@anime-skip/inferEpisodeInfo': InferredEpisodeInfo;
+  '@anime-skip/parent-screenshot-details': ScreenshotDetails;
 }
 
 type ParentMessageListener<T extends ParentMessageTypes> = (
