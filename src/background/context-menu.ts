@@ -1,6 +1,5 @@
 import { browser, Menus, Tabs } from 'webextension-polyfill-ts';
 import Browser from '~/common/utils/Browser';
-import { sleep } from '~/common/utils/EventLoop';
 import { loadedLog } from '~/common/utils/loadedLog';
 import Messenger from '~/common/utils/Messenger';
 
@@ -22,6 +21,7 @@ const messenger = new Messenger<
 async function screenshot(_info: Menus.OnClickData, tab?: Tabs.Tab) {
   console.log('Taking screenshot');
   try {
+    await messenger.send('@anime-skip/start-screenshot', undefined, tab?.id);
     // Get size & position for cropping
     const iframeBounds: ScreenshotDetails = await messenger.send(
       '@anime-skip/parent-screenshot-details',
@@ -50,10 +50,11 @@ async function screenshot(_info: Menus.OnClickData, tab?: Tabs.Tab) {
     console.log('cropped:', cropped.length);
     console.log('full:', data.length);
     await browser.storage.local.set({ screenshot: cropped });
-    await sleep(200); // TODO: Double check that this is needed for some reason
   } catch (err) {
     console.error(err);
     throw err;
+  } finally {
+    await messenger.send('@anime-skip/stop-screenshot', undefined, tab?.id);
   }
 }
 

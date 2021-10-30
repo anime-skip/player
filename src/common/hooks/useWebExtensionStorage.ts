@@ -76,7 +76,11 @@ export function useWebExtensionStorageValue<T>(key: string, initialValue: T, are
   }
   function setValue(newValue: T) {
     value.value = newValue;
-    browser.storage[area].set({ [key]: newValue });
+    if (newValue == null) {
+      browser.storage[area].remove(key);
+    } else {
+      browser.storage[area].set({ [key]: newValue });
+    }
   }
 
   onMounted(() => {

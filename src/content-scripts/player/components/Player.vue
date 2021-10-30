@@ -7,6 +7,7 @@
       'paused bg-opacity-medium': videoState.isPaused,
       'buffering bg-opacity-medium': videoState.isBuffering,
       showing: isEpisodeInfoShowing,
+      'opacity-0': isHidden,
     }"
     @mouseenter.prevent="onMouseEnter"
     @mousemove.prevent="onMouseMove"
@@ -46,6 +47,7 @@ import {
   useResetInitialBuffer,
   useResetSkippedFromZero,
 } from '../state/usePlayHistory';
+import { useHidePlayer, useIsPlayerHidden, useShowPlayer } from '../state/userPlayerVisibility';
 import { useVideoState } from '../state/useVideoState';
 
 onMounted(() => {
@@ -100,21 +102,13 @@ function onMouseMove() {
   setActive();
   setActiveTimeout(setInactive, PLAYER_ACTIVITY_TIMEOUT);
 }
-
-// Manage context menu items
-
-const messenger = new Messenger<
-  ContextMenuMessageTypes,
-  ContextMenuMessageListenerMap,
-  ContextMenuMessagePayloadMap,
-  ContextMenuMessageResponseMap
->('context-menu');
 function setupContextMenu() {
   messenger.send('@anime-skip/setup-context-menu', undefined);
 }
 function removeContextMenu() {
   messenger.send('@anime-skip/remove-context-menu', undefined);
 }
+
 // Display flags
 
 const playHistory = usePlayHistory();
@@ -123,6 +117,16 @@ const isEpisodeInfoShowing = computed<boolean>(
   () => videoState.isPaused || (videoState.isBuffering && playHistory.isInitialBuffer)
 );
 const showBufferLoading = computed<boolean>(() => videoState.isBuffering && !videoState.isPaused);
+
+const showPlayer = useShowPlayer();
+const hidePlayer = useHidePlayer();
+
+const messenger = new Messenger('player', {
+  '@anime-skip/start-screenshot': async () => hidePlayer(),
+  '@anime-skip/stop-screenshot': async () => showPlayer(),
+});
+
+const isHidden = useIsPlayerHidden();
 </script>
 
 <style lang="scss">

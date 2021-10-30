@@ -12,6 +12,7 @@ import { provideEpisodeState } from './state/useEpisodeState';
 import { provideHoveredTimestamp } from './state/useHoveredTimestamp';
 import { provideInferEpisodeState } from './state/useInferredEpisodeState';
 import { providePlayHistory } from './state/usePlayHistory';
+import { providePlayerVisibility } from './state/userPlayerVisibility';
 import { provideTemplateState } from './state/useTemplateState';
 import { provideVideoState } from './state/useVideoState';
 import WebExtListeners from './WebExtListeners.vue';
@@ -25,6 +26,7 @@ provideEpisodeState();
 provideHoveredTimestamp();
 provideInferEpisodeState();
 providePlayHistory();
+providePlayerVisibility();
 provideTemplateState();
 provideVideoState();
 </script>
