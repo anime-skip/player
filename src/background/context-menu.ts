@@ -65,7 +65,7 @@ function cropDataUrl(
   newWidth: number,
   newHeight: number
 ): Promise<string> {
-  return new Promise(async function (resolve, reject) {
+  return new Promise(function (res) {
     const img = document.createElement('img');
     img.onload = () => {
       const canvas = document.createElement('canvas');
@@ -74,7 +74,7 @@ function cropDataUrl(
       canvas.height = newHeight;
       ctx?.drawImage(img, -x, -y);
       const dataURI = canvas.toDataURL();
-      resolve(dataURI);
+      res(dataURI);
     };
     img.src = data;
   });
