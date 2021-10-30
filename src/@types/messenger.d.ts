@@ -84,9 +84,11 @@ type ContextMenuMessageTypes = '@anime-skip/setup-context-menu' | '@anime-skip/r
 
 interface ContextMenuMessagePayloadMap extends MessagePayloadMap<ContextMenuMessageTypes> {
   '@anime-skip/setup-context-menu': undefined;
+  '@anime-skip/remove-context-menu': undefined;
 }
 
 interface ContextMenuMessageResponseMap extends MessageResponseMap<ContextMenuMessageTypes> {
+  '@anime-skip/setup-context-menu': void;
   '@anime-skip/remove-context-menu': void;
 }
 

@@ -125,7 +125,7 @@ const hidePlayer = useHidePlayer();
 const messenger = new Messenger('player', {
   '@anime-skip/start-screenshot': async () => {
     hidePlayer();
-    // Wait for player to re-render as hidden before contiuing the screenshot process
+    // Wait for player to re-render as hidden before continuing the screenshot process
     await nextFrame();
   },
   '@anime-skip/stop-screenshot': async () => showPlayer(),
