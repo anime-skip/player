@@ -75,7 +75,7 @@ const addImage = (imageData: string) => {
   activeTimeouts.push(
     setTimeout(() => {
       image.value = undefined;
-      setBase64Screenshot(undefined);
+      setBase64Screenshot(null);
     }, dismissAfter)
   );
 };
@@ -83,8 +83,8 @@ const addImage = (imageData: string) => {
 // capturing
 
 const { value: base64Screenshot, setValue: setBase64Screenshot } = useWebExtensionStorageValue<
-  string | undefined
->('screenshot', undefined, 'local');
+  string | null
+>('screenshot', null, 'local');
 
 const captureTimeout = ref<number>();
 

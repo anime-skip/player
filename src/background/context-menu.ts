@@ -44,9 +44,12 @@ async function screenshot(_info: Menus.OnClickData, tab?: Tabs.Tab) {
     // Take screenshot
     const data = await browser.tabs.captureVisibleTab(tab?.windowId, {
       format: 'png',
-      rect: { height, width, x, y },
     });
-    await browser.storage.local.set({ screenshot: data });
+    const cropped = await cropDataUrl(data, x, y, width, height);
+    console.log('saved screenshot');
+    console.log('cropped:', cropped.length);
+    console.log('full:', data.length);
+    await browser.storage.local.set({ screenshot: cropped });
     await sleep(200); // TODO: Double check that this is needed for some reason
   } catch (err) {
     console.error(err);
@@ -54,10 +57,32 @@ async function screenshot(_info: Menus.OnClickData, tab?: Tabs.Tab) {
   }
 }
 
+function cropDataUrl(
+  data: string,
+  x: number,
+  y: number,
+  newWidth: number,
+  newHeight: number
+): Promise<string> {
+  return new Promise(async function (resolve, reject) {
+    const img = document.createElement('img');
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = newWidth;
+      canvas.height = newHeight;
+      ctx?.drawImage(img, -x, -y);
+      const dataURI = canvas.toDataURL();
+      resolve(dataURI);
+    };
+    img.src = data;
+  });
+}
+
 const menuItems: Menus.CreateCreatePropertiesType[] = [
   {
     title: 'Take Screenshot',
-    contexts: ['all'],
+    contexts: ['all', 'frame'],
     id: MENU_ITEM_SCREENSHOT,
     onclick: screenshot,
   },
