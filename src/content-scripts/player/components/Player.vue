@@ -43,12 +43,12 @@ import { useLoadAllEpisodeData } from '../hooks/useLoadAllEpisodeData';
 import { usePlaybackRateConnector } from '../hooks/usePlaybackRateConnector';
 import { useTabUrl } from '../hooks/useTabUrl';
 import { useVideoElement } from '../hooks/useVideoElement';
+import { useHidePlayer, useIsPlayerHidden, useShowPlayer } from '../state/usePlayerVisibility';
 import {
   usePlayHistory,
   useResetInitialBuffer,
   useResetSkippedFromZero,
 } from '../state/usePlayHistory';
-import { useHidePlayer, useIsPlayerHidden, useShowPlayer } from '../state/userPlayerVisibility';
 import { useVideoState } from '../state/useVideoState';
 
 onMounted(() => {
