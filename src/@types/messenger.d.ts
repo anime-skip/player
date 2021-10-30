@@ -29,14 +29,16 @@ type MessageListenerMap<K extends MessageTypes> = { [type in K]: MessageListener
 
 //#region Parent Messenger
 
-type ParentMessageTypes = '@anime-skip/inferEpisodeInfo';
+type ParentMessageTypes = '@anime-skip/inferEpisodeInfo' | '@anime-skip/parent-screenshot-details';
 
 interface ParentMessagePayloadMap extends MessagePayloadMap<ParentMessageTypes> {
   '@anime-skip/inferEpisodeInfo': undefined;
+  '@anime-skip/parent-screenshot-details': undefined;
 }
 
 interface ParentMessageResponseMap extends MessageResponseMap<ParentMessageTypes> {
   '@anime-skip/inferEpisodeInfo': InferredEpisodeInfo;
+  '@anime-skip/parent-screenshot-details': ScreenshotDetails;
 }
 
 type ParentMessageListener<T extends ParentMessageTypes> = (
@@ -73,5 +75,28 @@ type RuntimeMessageListener<T extends RuntimeMessageTypes> = (
 ) => Promise<RuntimeMessageResponseMap[T]>;
 
 type RuntimeMessageListenerMap = { [type in RuntimeMessageTypes]: RuntimeMessageListener<type> };
+
+//#endregion
+
+//#region Context Menu Messenger
+
+type ContextMenuMessageTypes = '@anime-skip/setup-context-menu' | '@anime-skip/remove-context-menu';
+
+interface ContextMenuMessagePayloadMap extends MessagePayloadMap<ContextMenuMessageTypes> {
+  '@anime-skip/setup-context-menu': undefined;
+}
+
+interface ContextMenuMessageResponseMap extends MessageResponseMap<ContextMenuMessageTypes> {
+  '@anime-skip/remove-context-menu': void;
+}
+
+type ContextMenuMessageListener<T extends ContextMenuMessageTypes> = (
+  payload: ContextMenuMessagePayloadMap[T],
+  sender: browser.ContextMenu.MessageSender
+) => Promise<ContextMenuMessageResponseMap[T]>;
+
+type ContextMenuMessageListenerMap = {
+  [type in ContextMenuMessageTypes]: ContextMenuMessageListener<type>;
+};
 
 //#endregion

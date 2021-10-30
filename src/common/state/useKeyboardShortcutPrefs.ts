@@ -22,8 +22,7 @@ export type KeyboardShortcutAction =
   | 'rewindLarge'
   | 'createTimestamp'
   | 'saveTimestamps'
-  | 'discardChanges'
-  | 'takeScreenshot';
+  | 'discardChanges';
 
 export type KeyboardShortcutActionToKeyBindingMap = {
   [action in KeyboardShortcutAction]?: string;

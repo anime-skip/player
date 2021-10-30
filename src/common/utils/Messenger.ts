@@ -1,4 +1,5 @@
 import { browser, Runtime } from 'webextension-polyfill-ts';
+import { sleep } from './EventLoop';
 
 export default class Messenger<
   K extends MessageTypes = MessageTypes,
@@ -70,6 +71,9 @@ export default class Messenger<
     } else if (sender.tab?.id != null && this.forwardTypes?.includes(type)) {
       return this.send(type, payload, sender.tab.id);
     }
+
+    // Wait for a different messenger to handle the message
+    await sleep(1000);
     return;
   };
 }

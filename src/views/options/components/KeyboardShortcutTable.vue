@@ -50,15 +50,6 @@
         }"
       />
       <KeyboardShortcutRow
-        v-if="isFirefox"
-        name="Take screenshot"
-        action-name="takeScreenshot"
-        v-on="{
-          updatePrimary: updatePrimaryKeyBinding('takeScreenshot'),
-          updateSecondary: updateSecondaryKeyBinding('takeScreenshot'),
-        }"
-      />
-      <KeyboardShortcutRow
         group-bottom
         name="Close dialog"
         action-name="hideDialog"
@@ -195,16 +186,11 @@ import {
   useUpdatePrimaryKeyBinding,
   useUpdateSecondaryKeyBinding,
 } from '~/common/state/useKeyboardShortcutPrefs';
-import Browser from '~/common/utils/Browser';
 
 // Updates
 
 const updatePrimaryKeyBinding = useUpdatePrimaryKeyBinding();
 const updateSecondaryKeyBinding = useUpdateSecondaryKeyBinding();
-
-// Browser Specific Settings
-
-const isFirefox = Browser.detect() === 'firefox';
 </script>
 
 <style scoped>

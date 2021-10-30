@@ -3,7 +3,10 @@
   "permissions": [
     "storage",
     "tabs",
+    "contextMenus",
+    "{{chrome}}.activeTab",
     "{{chrome}}.declarativeContent",
+    "{{firefox}}.<all_urls>",
     "{{firefox}}.*://api.anime-skip.com/*",
     "{{firefox}}.*://usage-stats.anime-skip.com/*",
     "{{firefox}}.*://staged.api.anime-skip.com/*"
@@ -41,6 +44,7 @@
     "scripts": [
       "background/messenger.js",
       "background/on-install.js",
+      "background/context-menu.js",
       "background/uninstall-feedback.js",
       "background/tab-change.js",
       "{{chrome}}.background/chrome-page-action.js"

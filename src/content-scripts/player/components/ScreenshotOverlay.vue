@@ -1,41 +1,45 @@
 <template>
-  <div class="ScreenshotOverlay absolute inset-0 w-full h-full pointer-events-none">
+  <div class="ScreenshotOverlay">
     <div
       v-if="image"
-      class="overlay"
+      class="absolute transition-all"
       :class="{
         [`overlay-large`]: image.mode === 'full',
         [`overlay-small`]: image.mode === 'small',
       }"
       @click.stop
     >
-      <img
-        class="image"
-        :class="{
-          [`image-large`]: image.mode === 'full',
-          [`image-small`]: image.mode === 'small',
-        }"
-        :src="image.url"
-      />
+      <img class="object-contain object-center" :src="image.url" />
       <div class="buttons">
         <a
           :href="image.url"
           target="_blank"
           title="Download"
           :download="image.filename"
-          @click="image = undefined"
+          @click="clearImage()"
         >
           <web-ext-img src="ic_save.svg" />
         </a>
-        <!-- <a class="mr-16x5" :href="image.url" target="_blank" title="View Full Size" @click="image = undefined">
+        <a
+          v-if="browser == 'firefox'"
+          :href="image.url"
+          target="_blank"
+          title="Open in tab"
+          @click="clearImage()"
+        >
           <web-ext-img src="ic_open_in_new.svg" />
-        </a> -->
+        </a>
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+import { useTimeout } from '@anime-skip/ui';
+import { ref } from 'vue';
+import { useWebExtensionStorageValue } from '~/common/hooks/useWebExtensionStorage';
+import Browser from '~/common/utils/Browser';
+
 interface ImageDetails {
   url: string;
   mode: 'full' | 'small';
@@ -43,18 +47,23 @@ interface ImageDetails {
 }
 const smallAfter = 100;
 const dismissAfter = 10000;
-</script>
-
-<script lang="ts" setup>
-import { ref } from 'vue';
-import Browser from '~/common/utils/Browser';
-import CaptureScreenshot from '~/common/utils/CaptureScreenshot';
-import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 
 const image = ref<ImageDetails | undefined>();
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const activeTimeouts: any[] = [];
-const addImage = (imageData: string) => {
+
+function clearImage() {
+  image.value = undefined;
+  setBase64Screenshot(undefined);
+  clearPreviewTimeout();
+  clearMakeSmallTimeout();
+}
+
+const [setPreviewTimeout, clearPreviewTimeout] = useTimeout();
+const [setMakeSmallTimeout, clearMakeSmallTimeout] = useTimeout();
+function addImage(imageData: string) {
+  clearPreviewTimeout();
+  clearMakeSmallTimeout();
+
   // Set it
   image.value = {
     url: imageData,
@@ -63,74 +72,60 @@ const addImage = (imageData: string) => {
   };
 
   // Make it small
-  activeTimeouts.push(
-    setTimeout(() => {
-      if (image.value == null) return;
-      image.value = {
-        ...image.value,
-        mode: 'small',
-      };
-    }, smallAfter)
-  );
+  setMakeSmallTimeout(() => {
+    if (image.value == null) return;
+    image.value = {
+      ...image.value,
+      mode: 'small',
+    };
+  }, smallAfter);
 
   // Remove it
-  activeTimeouts.push(
-    setTimeout(() => {
-      image.value = undefined;
-    }, dismissAfter)
-  );
-};
-
-const isFirefox = Browser.detect() === 'firefox';
-useKeyboardShortcuts('Screenshot Overlay', {
-  takeScreenshot() {
-    if (!isFirefox) return;
-    while (activeTimeouts.length > 0) {
-      clearTimeout(activeTimeouts.pop());
-    }
+  setPreviewTimeout(() => {
     image.value = undefined;
-    const video = window.getVideo?.();
-    if (video == null) throw Error('Video is not loaded yet');
-    CaptureScreenshot(video).then(addImage).catch(console.error);
-  },
+    setBase64Screenshot(undefined);
+  }, dismissAfter);
+}
+
+// capturing
+
+const { value: base64Screenshot, setValue: setBase64Screenshot } = useWebExtensionStorageValue<
+  string | undefined
+>('screenshot', undefined, 'local');
+
+watch(base64Screenshot, data => {
+  if (data != null) {
+    console.log('Screenshot recieved', data);
+    addImage(data);
+  }
 });
+
+const browser = Browser.detect();
 </script>
 
 <style scoped>
 .ScreenshotOverlay {
+  @apply absolute inset-0 w-full h-full pointer-events-none;
   z-index: 2;
 }
 
-.overlay {
-  @apply absolute transition-all duration-200 overflow-hidden;
-  transform-origin: 100% 100%;
-}
-.image {
-  @apply w-full h-full object-contain object-center;
-}
-.buttons {
-  @apply absolute inset-0 bg-background bg-opacity-medium opacity-0 transition-all flex items-center justify-center cursor-pointer;
-}
-.buttons img {
-  scale: 500%;
-  transform-origin: 50% 50%;
-}
-
 .overlay-large {
-  @apply bottom-0 right-0 w-full h-full rounded-none opacity-medium;
-  scale: 100%;
+  @apply bottom-0 right-0 w-full h-full rounded-none opacity-0;
+  max-width: 100vw;
 }
 
 .overlay-small {
-  @apply opacity-100 right-4 rounded pointer-events-auto;
+  @apply opacity-100 right-4 rounded overflow-hidden pointer-events-auto shadow-md;
   bottom: 4.5rem;
-  scale: 20%;
-}
-.overlay-small:hover .buttons {
-  @apply opacity-100;
+  max-width: 10vw;
+  min-width: 200px;
 }
 
-.mr-16x5 {
-  margin-right: 20rem;
+.buttons {
+  @apply absolute inset-0 bg-on-primary bg-blend-multiply bg-opacity-medium opacity-0 transition-all flex items-center justify-center cursor-pointer space-x-4;
+}
+
+.overlay-small:hover .buttons {
+  @apply opacity-100;
 }
 </style>

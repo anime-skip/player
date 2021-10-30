@@ -11,6 +11,7 @@ import { provideEditingState } from './state/useEditingState';
 import { provideEpisodeState } from './state/useEpisodeState';
 import { provideHoveredTimestamp } from './state/useHoveredTimestamp';
 import { provideInferEpisodeState } from './state/useInferredEpisodeState';
+import { providePlayerVisibility } from './state/usePlayerVisibility';
 import { providePlayHistory } from './state/usePlayHistory';
 import { provideTemplateState } from './state/useTemplateState';
 import { provideVideoState } from './state/useVideoState';
@@ -25,6 +26,7 @@ provideEpisodeState();
 provideHoveredTimestamp();
 provideInferEpisodeState();
 providePlayHistory();
+providePlayerVisibility();
 provideTemplateState();
 provideVideoState();
 </script>
