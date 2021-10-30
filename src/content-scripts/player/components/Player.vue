@@ -8,7 +8,7 @@
       'buffering bg-opacity-medium': videoState.isBuffering,
       showing: isEpisodeInfoShowing,
     }"
-    @mouseenter.prevent="onMouseMove"
+    @mouseenter.prevent="onMouseEnter"
     @mousemove.prevent="onMouseMove"
     @mouseleave.prevent="onMouseLeave"
     @click="togglePlayPause()"
@@ -34,6 +34,7 @@
 <script lang="ts" setup>
 import { useTimeout } from '@anime-skip/ui';
 import { PLAYER_ACTIVITY_TIMEOUT } from '~/common/utils/Constants';
+import Messenger from '~/common/utils/Messenger';
 import UsageStats from '~/common/utils/UsageStats';
 import Utils from '~/common/utils/Utils';
 import { useLoadAllEpisodeData } from '../hooks/useLoadAllEpisodeData';
@@ -86,16 +87,34 @@ const videoState = useVideoState();
 
 const [setActiveTimeout, clearActiveTimeout] = useTimeout();
 const isActive = computed(() => videoState.isActive);
+function onMouseEnter() {
+  setupContextMenu();
+  onMouseMove();
+}
 function onMouseLeave() {
+  removeContextMenu();
   clearActiveTimeout();
   setInactive();
 }
 function onMouseMove() {
-  clearActiveTimeout();
   setActive();
   setActiveTimeout(setInactive, PLAYER_ACTIVITY_TIMEOUT);
 }
 
+// Manage context menu items
+
+const messenger = new Messenger<
+  ContextMenuMessageTypes,
+  ContextMenuMessageListenerMap,
+  ContextMenuMessagePayloadMap,
+  ContextMenuMessageResponseMap
+>('context-menu');
+function setupContextMenu() {
+  messenger.send('@anime-skip/setup-context-menu', undefined);
+}
+function removeContextMenu() {
+  messenger.send('@anime-skip/remove-context-menu', undefined);
+}
 // Display flags
 
 const playHistory = usePlayHistory();

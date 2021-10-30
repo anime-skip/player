@@ -47,9 +47,7 @@ const dismissAfter = 10000;
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import Browser from '~/common/utils/Browser';
-import CaptureScreenshot from '~/common/utils/CaptureScreenshot';
-import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
+import { useWebExtensionStorageValue } from '~/common/hooks/useWebExtensionStorage';
 
 const image = ref<ImageDetails | undefined>();
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -77,22 +75,23 @@ const addImage = (imageData: string) => {
   activeTimeouts.push(
     setTimeout(() => {
       image.value = undefined;
+      setBase64Screenshot(undefined);
     }, dismissAfter)
   );
 };
 
-const isFirefox = Browser.detect() === 'firefox';
-useKeyboardShortcuts('Screenshot Overlay', {
-  takeScreenshot() {
-    if (!isFirefox) return;
-    while (activeTimeouts.length > 0) {
-      clearTimeout(activeTimeouts.pop());
-    }
-    image.value = undefined;
-    const video = window.getVideo?.();
-    if (video == null) throw Error('Video is not loaded yet');
-    CaptureScreenshot(video).then(addImage).catch(console.error);
-  },
+// capturing
+
+const { value: base64Screenshot, setValue: setBase64Screenshot } = useWebExtensionStorageValue<
+  string | undefined
+>('screenshot', undefined, 'local');
+
+const captureTimeout = ref<number>();
+
+watch(base64Screenshot, data => {
+  window.clearTimeout(captureTimeout.value);
+  console.log('Screenshot recieved');
+  if (data != null) addImage(data);
 });
 </script>
 

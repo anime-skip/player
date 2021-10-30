@@ -1,4 +1,5 @@
 import isEqual from 'lodash.isequal';
+import { Ref } from 'vue';
 import { browser, Storage } from 'webextension-polyfill-ts';
 
 type PartialNulls<T> = {
@@ -64,4 +65,29 @@ export function useWebExtensionStorage<T extends Record<string, any>>(
     value,
     updateValue,
   };
+}
+
+export function useWebExtensionStorageValue<T>(key: string, initialValue: T, area: AreaName) {
+  const value = ref<T>(initialValue) as Ref<T>;
+
+  function onChange(changes: Record<string, Storage.StorageChange | undefined>, areaName: string) {
+    if (areaName !== area || changes[key] == null) return;
+    value.value = changes[key]?.newValue;
+  }
+  function setValue(newValue: T) {
+    value.value = newValue;
+    browser.storage[area].set({ [key]: newValue });
+  }
+
+  onMounted(() => {
+    browser.storage.onChanged.addListener(onChange);
+    browser.storage[area].get(key).then(res => {
+      value.value = res[key];
+    });
+  });
+  onUnmounted(() => {
+    browser.storage.onChanged.removeListener(onChange);
+  });
+
+  return { value, setValue };
 }

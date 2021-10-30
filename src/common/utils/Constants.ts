@@ -97,7 +97,6 @@ export const DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS: KeyboardShortcutActionToKeyBind
   createTimestamp: 'K',
   saveTimestamps: 'ctrl+ENTER',
   discardChanges: 'ctrl+`',
-  takeScreenshot: 'ctrl+K',
 };
 
 export const DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS: KeyboardShortcutActionToKeyBindingMap = {

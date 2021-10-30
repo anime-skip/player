@@ -75,3 +75,26 @@ type RuntimeMessageListener<T extends RuntimeMessageTypes> = (
 type RuntimeMessageListenerMap = { [type in RuntimeMessageTypes]: RuntimeMessageListener<type> };
 
 //#endregion
+
+//#region Context Menu Messenger
+
+type ContextMenuMessageTypes = '@anime-skip/setup-context-menu' | '@anime-skip/remove-context-menu';
+
+interface ContextMenuMessagePayloadMap extends MessagePayloadMap<ContextMenuMessageTypes> {
+  '@anime-skip/setup-context-menu': undefined;
+}
+
+interface ContextMenuMessageResponseMap extends MessageResponseMap<ContextMenuMessageTypes> {
+  '@anime-skip/remove-context-menu': void;
+}
+
+type ContextMenuMessageListener<T extends ContextMenuMessageTypes> = (
+  payload: ContextMenuMessagePayloadMap[T],
+  sender: browser.ContextMenu.MessageSender
+) => Promise<ContextMenuMessageResponseMap[T]>;
+
+type ContextMenuMessageListenerMap = {
+  [type in ContextMenuMessageTypes]: ContextMenuMessageListener<type>;
+};
+
+//#endregion
