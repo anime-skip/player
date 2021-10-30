@@ -35,6 +35,7 @@
 <script lang="ts" setup>
 import { useTimeout } from '@anime-skip/ui';
 import { PLAYER_ACTIVITY_TIMEOUT } from '~/common/utils/Constants';
+import { nextFrame } from '~/common/utils/EventLoop';
 import Messenger from '~/common/utils/Messenger';
 import UsageStats from '~/common/utils/UsageStats';
 import Utils from '~/common/utils/Utils';
@@ -122,7 +123,11 @@ const showPlayer = useShowPlayer();
 const hidePlayer = useHidePlayer();
 
 const messenger = new Messenger('player', {
-  '@anime-skip/start-screenshot': async () => hidePlayer(),
+  '@anime-skip/start-screenshot': async () => {
+    hidePlayer();
+    // Wait for player to re-render as hidden before contiuing the screenshot process
+    await nextFrame();
+  },
   '@anime-skip/stop-screenshot': async () => showPlayer(),
 });
 

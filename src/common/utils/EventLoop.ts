@@ -2,6 +2,10 @@ export function nextTask(): Promise<void> {
   return new Promise(res => setTimeout(res, 0));
 }
 
+export function nextFrame(): Promise<void> {
+  return new Promise(res => requestAnimationFrame(() => res()));
+}
+
 export function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
