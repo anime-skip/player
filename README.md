@@ -48,9 +48,6 @@ Hover over filenames to see description
   - [`views/`](# 'Regular, front-end styled webpages that are entrypoints, like the popup and options pages')
   - [**`manifest.template.json`**](# 'Template for the extension/manifest.json. This file includes all the browser specific flags that will be stripped out by manifest.ts')
   - [**`manifest.ts`**](# 'Parse the manifest.template.ts, strip out browser specific code for other browsers, and append all the content scripts, background, and views to the template')
-- [`vite/`](# 'Any custom vite plugins or tools')
-  - [**`plugin-assets-rewrite.ts`**](# 'Rewires all the asset paths in the output files to match the path changes when they are in the extension/ folder compared to the src/ folder')
-  - [**`plugin-web-ext.ts`**](# 'Hook up the web-ext tool to reload the extension when a file changes')
 - [**`vite.build.ts`**](# 'CLI application that performs the builds for views, background scripts, and content scripts')
 
 <br/>
