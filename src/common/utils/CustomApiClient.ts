@@ -1,4 +1,4 @@
-import createAnimeSkipClient, { GqlEpisodeUrl, GqlInputEpisodeUrl } from '@anime-skip/axios-api';
+import createAnimeSkipClient, { GqlEpisodeUrl, GqlInputEpisodeUrl } from '@anime-skip/api-client';
 import * as Api from '~api';
 
 export function createCustomAnimeSkipClient(baseUrl: string, clientId: string) {

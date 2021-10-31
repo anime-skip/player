@@ -4,7 +4,7 @@ import {
   GqlTimestamp,
   GqlTimestampSource,
   GqlTimestampType,
-} from '@anime-skip/axios-api';
+} from '@anime-skip/api-client';
 
 // TimestampSource
 

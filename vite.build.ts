@@ -31,14 +31,12 @@ const services = listFiles(servicesDir);
 const backgroundDir = rootPath('src/background');
 const background = listFiles(backgroundDir);
 
-export async function writeManifest(
-  browser: SupportedBrowser,
-  mode: 'prod' | 'beta' | 'staged' | 'dev'
-) {
+export async function writeManifest(browser: SupportedBrowser, mode: ExtensionMode) {
   const suffixes = {
     prod: '',
     beta: ' (Beta)',
     staged: ' (Staged)',
+    test: ' (Dev)',
     dev: ' (Dev)',
   };
   await fs.writeJSON(

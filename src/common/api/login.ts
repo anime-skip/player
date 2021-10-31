@@ -1,4 +1,4 @@
-import { GqlAccount, GqlLoginData, GqlPreferences } from '@anime-skip/axios-api';
+import { GqlAccount, GqlLoginData, GqlPreferences } from '@anime-skip/api-client';
 
 export type Preferences = Pick<
   GqlPreferences,

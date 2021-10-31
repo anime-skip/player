@@ -4,7 +4,7 @@ import {
   GqlInputEpisode,
   GqlInputEpisodeUrl,
   GqlThirdPartyEpisode,
-} from '@anime-skip/axios-api';
+} from '@anime-skip/api-client';
 import { Show, SHOW_DATA, ThirdPartyShow, THIRD_PARTY_SHOW_DATA } from './shows';
 import { Template, TEMPLATE_DATA } from './templates';
 import {

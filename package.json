@@ -3,6 +3,7 @@
   "displayName": "Anime Skip Player",
   "description": "Skip intros, credits, filler and more on supported services",
   "version": "1.4.6",
+  "license": "GPL-3.0-or-later",
   "private": true,
   "author": "Aaron Klinker <aaronklinker1@gmail.com>",
   "engines": {
@@ -10,11 +11,11 @@
     "pnpm": ">=6"
   },
   "scripts": {
-    "start": "concurrently --kill-others-on-fail -n extension,services -c magenta,cyan \"pnpm start:extension\" \"pnpm start:services\"",
-    "start:chrome": "concurrently --kill-others-on-fail -n extension,services -c magenta,cyan \"pnpm start:extension -- --for chrome\" \"pnpm start:services\"",
-    "start:extension": "ts-node vite.build.ts --watch",
-    "start:prod": "ts-node vite.build.ts --watch --mode prod",
+    "start": "ts-node vite.build.ts --watch --mode test",
+    "start:chrome": "pnpm start -- --for chrome",
     "start:services": "docker-compose -f docker/docker-compose.yml up --abort-on-container-exit",
+    "dev": "concurrently --kill-others-on-fail -n extension,services -c magenta,cyan \"ts-node vite.build.ts --watch\" \"pnpm start:services\"",
+    "dev:chrome": "concurrently --kill-others-on-fail -n extension,services -c magenta,cyan \"ts-node vite.build.ts --watch --for chrome\" \"pnpm start:services\"",
     "compile": "vue-tsc --noEmit",
     "test": "jest --runInBand",
     "test:watch": "jest --runInBand --watchAll",
@@ -38,10 +39,11 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@anime-skip/api-client": "^2.6.1",
     "@anime-skip/ui": "^1.2.5",
     "@anime-skip/usage-stats-client": "^1.1.5",
     "async-mutex": "^0.3.2",
-    "axios": "^0.21.1",
+    "axios": "^0.24.0",
     "axios-auth-refresh": "^3.1.0",
     "fuzzysort": "^1.1.4",
     "lodash.isequal": "^4.5.0",
@@ -57,7 +59,6 @@
     "webextension-polyfill-ts": "0.26.0"
   },
   "devDependencies": {
-    "@anime-skip/axios-api": "^2.3.3",
     "@antfu/eslint-config": "^0.7.0",
     "@iconify/json": "^1.1.386",
     "@tailwindcss/line-clamp": "^0.2.1",
