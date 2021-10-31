@@ -1,4 +1,4 @@
-import { GqlTemplate, GqlTemplateType } from '@anime-skip/axios-api';
+import { GqlTemplate, GqlTemplateType } from '@anime-skip/api-client';
 import { Episode } from './episodes';
 import { Timestamp, TIMESTAMP_DATA } from './timestamps';
 

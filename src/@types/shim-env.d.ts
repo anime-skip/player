@@ -9,7 +9,7 @@ interface ImportMeta {
 namespace NodeJS {
   interface ProcessEnv extends [ImportMeta['env']] {
     BUILD_FOR?: 'firefox' | 'chrome';
-    BUILD_MODE?: 'prod' | 'beta' | 'staged' | 'dev';
+    BUILD_MODE?: ExtensionMode;
     BUILD_FIREFOX_PROFILE?: string;
     BUILD_CHROME_PROFILE?: string;
 

@@ -141,8 +141,8 @@ export async function deploy(config: PackageConfig) {
               params: chromeReviewQueryParams,
               headers: {
                 Authorization,
-                'x-goog-api-version': 2,
-                'Content-Length': 0,
+                'x-goog-api-version': '2',
+                'Content-Length': '0',
               },
             }
           )

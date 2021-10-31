@@ -1,7 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
-  '@anime-skip/axios-api': ^2.3.3
+  '@anime-skip/api-client': ^2.6.1
   '@anime-skip/ui': ^1.2.5
   '@anime-skip/usage-stats-client': ^1.1.5
   '@antfu/eslint-config': ^0.7.0
@@ -22,7 +22,7 @@ specifiers:
   argparse: ^2.0.1
   async-mutex: ^0.3.2
   autoprefixer: ^10.3.1
-  axios: ^0.21.1
+  axios: ^0.24.0
   axios-auth-refresh: ^3.1.0
   body-parser: 1.19.0
   chokidar: ^3.5.2
@@ -76,11 +76,12 @@ specifiers:
   zip-a-folder: ^1.1.0
 
 dependencies:
+  '@anime-skip/api-client': 2.6.1
   '@anime-skip/ui': 1.2.5_ec1b06fcfbd6e462bf1374dd899f0179
-  '@anime-skip/usage-stats-client': 1.1.5_axios@0.21.1
+  '@anime-skip/usage-stats-client': 1.1.5_axios@0.24.0
   async-mutex: 0.3.2
-  axios: 0.21.1
-  axios-auth-refresh: 3.1.0_axios@0.21.1
+  axios: 0.24.0
+  axios-auth-refresh: 3.1.0_axios@0.24.0
   fuzzysort: 1.1.4
   lodash.isequal: 4.5.0
   md5: 2.3.0
@@ -95,7 +96,6 @@ dependencies:
   webextension-polyfill-ts: 0.26.0
 
 devDependencies:
-  '@anime-skip/axios-api': 2.3.3
   '@antfu/eslint-config': 0.7.0_eslint@7.32.0+typescript@4.3.5
   '@iconify/json': 1.1.386
   '@tailwindcss/line-clamp': 0.2.1_tailwindcss@2.2.7
@@ -154,12 +154,14 @@ devDependencies:
 
 packages:
 
-  /@anime-skip/axios-api/2.3.3:
-    resolution: {integrity: sha512-LzCpxj/pYxMQ8IAhWEjjtQAesUXCmi2Ki/7U2pn3775sa1yoP/DG86LlOgCJNqnnmnun2r9LDOx2Rx3Qb3wdQQ==, tarball: download/@anime-skip/axios-api/2.3.3/4605cb09bdc45de5af70def5eb3cfd5c99c86182c004a5824174b1ec27c08467}
+  /@anime-skip/api-client/2.6.1:
+    resolution: {integrity: sha512-tV4GASiE4m2HB+8phgZH6YAcQZrS6wYswNX64tltiQE4VtE8EK16hj4D3ZNkN/Z33OqV5qyPNtqxKcjUxt4sRg==, tarball: download/@anime-skip/api-client/2.6.1/8fda83a37c0a61d567d65d38af0314ffcfe8cce3c816240264465554819a17ca}
     dependencies:
-      axios: 0.19.2
+      axios: 0.22.0
       md5: 2.3.0
-    dev: true
+    transitivePeerDependencies:
+      - debug
+    dev: false
 
   /@anime-skip/ui/1.2.5_ec1b06fcfbd6e462bf1374dd899f0179:
     resolution: {integrity: sha512-kmhtRmAUwClYZNnX3kIjw8RWjSkyB08viZ1vZDowIm+TiH8HvVfujiCWZqvCIxwwfC4YUOTPfyVkFF424NCyfA==, tarball: download/@anime-skip/ui/1.2.5/a1ce40b80a4eefa5bf6d85122cad121d9ad7ba07fd698eeeb051d9b1c5e6ca28}
@@ -180,12 +182,12 @@ packages:
       - '@vue/composition-api'
     dev: false
 
-  /@anime-skip/usage-stats-client/1.1.5_axios@0.21.1:
+  /@anime-skip/usage-stats-client/1.1.5_axios@0.24.0:
     resolution: {integrity: sha512-1Gm1g4CNt/WrLFyEWQa5ckchN83BviFo38B9StaixRioDj/tbeJU6uhfo8t6llXo9ML0qlz2pWisUeJaARumTQ==, tarball: download/@anime-skip/usage-stats-client/1.1.5/f7ff72c3dfa3377bd6b51a22ad8f713c60f922073d655ccca8727e8047cf35a9}
     peerDependencies:
       axios: '>=0.23'
     dependencies:
-      axios: 0.21.1
+      axios: 0.24.0
       uuid: 8.3.2
     dev: false
 
@@ -1856,25 +1858,26 @@ packages:
     resolution: {integrity: sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==}
     dev: true
 
-  /axios-auth-refresh/3.1.0_axios@0.21.1:
+  /axios-auth-refresh/3.1.0_axios@0.24.0:
     resolution: {integrity: sha512-PLNrXDU8qYo+R4+7nUSkwtPGosTajq4EViBswr+ymJiyBzxKhPCfX2vDFuf6KfyNhsC1wub6RhB62st4wgXKOA==}
     peerDependencies:
       axios: ~0.18.0 || ~0.19.1 || ~0.20.0 || ~0.21.1
     dependencies:
-      axios: 0.21.1
+      axios: 0.24.0
     dev: false
 
-  /axios/0.19.2:
-    resolution: {integrity: sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==}
-    deprecated: Critical security vulnerability fixed in v0.21.1. For more information, see https://github.com/axios/axios/pull/3410
+  /axios/0.22.0:
+    resolution: {integrity: sha512-Z0U3uhqQeg1oNcihswf4ZD57O3NrR1+ZXhxaROaWpDmsDTx7T2HNBV2ulBtie2hwJptu8UvgnJoK+BIqdzh/1w==}
     dependencies:
-      follow-redirects: 1.5.10
-    dev: true
+      follow-redirects: 1.14.5
+    transitivePeerDependencies:
+      - debug
+    dev: false
 
-  /axios/0.21.1:
-    resolution: {integrity: sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==}
+  /axios/0.24.0:
+    resolution: {integrity: sha512-Q6cWsys88HoPgAaFAVUb0WpPk0O8iTeisR9IMqy9G8AbO4NlpVknrnQS03zzF9PGAWgO3cgletO3VjV/P7VztA==}
     dependencies:
-      follow-redirects: 1.14.1
+      follow-redirects: 1.14.5
     transitivePeerDependencies:
       - debug
     dev: false
@@ -2245,6 +2248,7 @@ packages:
 
   /charenc/0.0.2:
     resolution: {integrity: sha1-wKHS86cJLgN3S/qD8UwPxXkKhmc=}
+    dev: false
 
   /cheerio-select/1.5.0:
     resolution: {integrity: sha512-qocaHPv5ypefh6YNxvnbABM07KMxExbtbfuJoIie3iZXX1ERwYmJcIiRrr9H05ucQP1k28dav8rpdDgjQd8drg==}
@@ -2593,6 +2597,7 @@ packages:
 
   /crypt/0.0.2:
     resolution: {integrity: sha1-iNf/fsDfuG9xPch7u0LQRNPmxBs=}
+    dev: false
 
   /crypto-random-string/2.0.0:
     resolution: {integrity: sha512-v1plID3y9r/lPhviJ1wrXpLeyUIGAZ2SHNYTEapm7/8A9nLPoyvVp3RK/EPFqn5kEznyWgYZNsRtYYIWbuG8KA==}
@@ -2670,12 +2675,6 @@ packages:
 
   /debug/2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
-    dependencies:
-      ms: 2.0.0
-    dev: true
-
-  /debug/3.1.0:
-    resolution: {integrity: sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==}
     dependencies:
       ms: 2.0.0
     dev: true
@@ -3933,8 +3932,8 @@ packages:
     engines: {node: '>=8.9.0'}
     dev: true
 
-  /follow-redirects/1.14.1:
-    resolution: {integrity: sha512-HWqDgT7ZEkqRzBvc2s64vSZ/hfOceEol3ac/7tKwzuvEyWx3/4UegXh5oBOIotkGsObyk3xznnSRVADBgWSQVg==}
+  /follow-redirects/1.14.5:
+    resolution: {integrity: sha512-wtphSXy7d4/OR+MvIFbCVBDzZ5520qV8XfPklSN5QtxuMUJZ+b0Wnst1e1lCDocfzuCkHqj8k0FpZqO+UIaKNA==}
     engines: {node: '>=4.0'}
     peerDependencies:
       debug: '*'
@@ -3942,13 +3941,6 @@ packages:
       debug:
         optional: true
     dev: false
-
-  /follow-redirects/1.5.10:
-    resolution: {integrity: sha512-0V5l4Cizzvqt5D44aTXbFZz+FtyXV1vrDN6qrelxtfYQKW0KO0W2T/hkE8xvGa/540LkZlkaUjO4ailYTFtHVQ==}
-    engines: {node: '>=4.0'}
-    dependencies:
-      debug: 3.1.0
-    dev: true
 
   /forever-agent/0.6.1:
     resolution: {integrity: sha1-+8cfDEGt6zf5bFd60e1C2P2sypE=}
@@ -4634,6 +4626,7 @@ packages:
 
   /is-buffer/1.1.6:
     resolution: {integrity: sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==}
+    dev: false
 
   /is-builtin-module/3.1.0:
     resolution: {integrity: sha512-OV7JjAgOTfAFJmHZLvpSTb4qi0nIILDV1gWPYDnDJUTNFM5aGlRAhk4QcT8i7TuAleeEV5Fdkqn3t4mS+Q11fg==}
@@ -5924,6 +5917,7 @@ packages:
       charenc: 0.0.2
       crypt: 0.0.2
       is-buffer: 1.1.6
+    dev: false
 
   /media-typer/0.3.0:
     resolution: {integrity: sha1-hxDXrwqmJvj/+hzgAWhUUmMlV0g=}

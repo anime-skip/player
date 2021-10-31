@@ -1,4 +1,4 @@
-import { GqlShow, GqlThirdPartyShow } from '@anime-skip/axios-api';
+import { GqlShow, GqlThirdPartyShow } from '@anime-skip/api-client';
 
 // ShowSearchResult
 

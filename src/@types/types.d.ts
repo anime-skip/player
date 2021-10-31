@@ -8,7 +8,7 @@ declare type ServiceDisplayName =
 
 declare type SupportedBrowser = 'firefox' | 'chrome';
 
-declare type ExtensionMode = 'dev' | 'staged' | 'beta' | 'prod';
+declare type ExtensionMode = 'dev' | 'test' | 'staged' | 'beta' | 'prod';
 
 declare interface LoginManualPayload {
   username: string;

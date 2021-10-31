@@ -31,7 +31,7 @@ function resolveBrowserTagsInObject(browser: SupportedBrowser, object: any): any
 export async function getManifest(
   nameSuffix: string | undefined,
   browser: SupportedBrowser,
-  mode: 'prod' | 'beta' | 'staged' | 'dev'
+  mode: ExtensionMode
 ): Promise<Manifest.WebExtensionManifest> {
   // Fill out missing fields from template
   const extName = pkg.displayName + (nameSuffix ?? '');

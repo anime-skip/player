@@ -11,10 +11,10 @@ import ViteComponents from 'vite-plugin-components';
 import ViteIcons, { ViteIconsResolver } from 'vite-plugin-icons';
 import packageJson from './package.json';
 import { rootPath } from './scripts/utils';
+import AssetsRewrite from './scripts/vite/plugin-assets-rewrite';
+import type { ParallelizeController } from './scripts/vite/plugin-parallelize';
+import { createWebExtController } from './scripts/vite/plugin-web-ext';
 import { getManifest } from './src/manifest';
-import AssetsRewrite from './vite/plugin-assets-rewrite';
-import type { ParallelizeController } from './vite/plugin-parallelize';
-import { createWebExtController } from './vite/plugin-web-ext';
 
 DotEnv.config();
 
@@ -31,14 +31,12 @@ const services = listFiles(servicesDir);
 const backgroundDir = rootPath('src/background');
 const background = listFiles(backgroundDir);
 
-export async function writeManifest(
-  browser: SupportedBrowser,
-  mode: 'prod' | 'beta' | 'staged' | 'dev'
-) {
+export async function writeManifest(browser: SupportedBrowser, mode: ExtensionMode) {
   const suffixes = {
     prod: '',
     beta: ' (Beta)',
     staged: ' (Staged)',
+    test: ' (Dev)',
     dev: ' (Dev)',
   };
   await fs.writeJSON(

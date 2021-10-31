@@ -1,4 +1,4 @@
-import { GqlPreferences } from '@anime-skip/axios-api';
+import { GqlPreferences } from '@anime-skip/api-client';
 import * as Api from '~api';
 import { useApiClient } from '../hooks/useApiClient';
 import { createWebExtProvideInject } from '../utils/createWebExtProvideInject';

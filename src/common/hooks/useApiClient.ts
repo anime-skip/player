@@ -12,6 +12,7 @@ import useTokenRefresher from './useTokenRefresher';
 const baseUrls: Record<ExtensionMode, string> = {
   prod: 'https://api.anime-skip.com/',
   beta: 'https://api.anime-skip.com/',
+  test: 'http://test.api.anime-skip.com/',
   staged: 'https://staged.api.anime-skip.com/',
   dev: 'http://localhost:8081/',
 };
@@ -29,11 +30,15 @@ if (modesToLog.includes(mode)) {
   client.axios.interceptors.response.use(
     /* eslint-disable no-console */
     response => {
-      const requestBody = JSON.parse(response.config.data);
+      // disabled since axios@0.24
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const requestBody = JSON.parse(response.config.data!);
       const formattedGraphql = Utils.formatGraphql(requestBody.query);
       const headers = {
         ...response.config.headers,
+        // @ts-expect-error: Common headers should still exist... Failed when upgrading to axios@0.24
         ...response.config.headers.common,
+        // @ts-expect-error: method specific headers should still exist... Failed when upgrading to axios@0.24
         ...response.config.headers[response.config.method || 'get'],
       };
       delete headers.get;

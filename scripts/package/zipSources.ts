@@ -21,7 +21,6 @@ export async function zipSources(OUTPUT_DIR: string) {
     'extension/',
     'scripts/',
     'src/',
-    'vite/',
     '.nvmrc',
     'package.json',
     'pnpm-lock.yaml',
