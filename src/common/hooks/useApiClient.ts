@@ -30,6 +30,8 @@ if (modesToLog.includes(mode)) {
   client.axios.interceptors.response.use(
     /* eslint-disable no-console */
     response => {
+      // disabled since axios@0.24
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const requestBody = JSON.parse(response.config.data!);
       const formattedGraphql = Utils.formatGraphql(requestBody.query);
       const headers = {
