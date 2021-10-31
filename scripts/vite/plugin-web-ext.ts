@@ -1,5 +1,5 @@
 import webExt, { CliRunOptions, Runner } from 'web-ext';
-import { rootPath } from '../scripts/utils';
+import { rootPath } from '../utils';
 import { ParallelizeController } from './plugin-parallelize';
 
 export function createWebExtController(
