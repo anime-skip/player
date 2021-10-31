@@ -24,11 +24,5 @@ const client = createUsageStatsClient({
 
 export default {
   getUserId,
-  async setUserId(userId: string): Promise<void> {
-    await browser.storage.local.set({ [USAGE_STATS_USER_ID_STORAGE_KEY]: userId });
-  },
-  async clearUserId(): Promise<void> {
-    await browser.storage.local.remove(USAGE_STATS_USER_ID_STORAGE_KEY);
-  },
   ...client,
 };

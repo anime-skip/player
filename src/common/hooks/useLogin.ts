@@ -22,7 +22,6 @@ export function useLogin(api = useApiClient()) {
     updatePreferences({
       ...res.account.preferences,
     });
-    await UsageStats.setUserId(res.account.id);
     void UsageStats.saveEvent('login');
 
     return res;
