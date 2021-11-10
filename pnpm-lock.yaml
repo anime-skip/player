@@ -2,7 +2,7 @@ lockfileVersion: 5.3
 
 specifiers:
   '@anime-skip/api-client': ^2.6.1
-  '@anime-skip/ui': ^1.2.5
+  '@anime-skip/ui': ^1.2.6
   '@anime-skip/usage-stats-client': ^1.1.5
   '@antfu/eslint-config': ^0.7.0
   '@iconify/json': ^1.1.386
@@ -77,7 +77,7 @@ specifiers:
 
 dependencies:
   '@anime-skip/api-client': 2.6.1
-  '@anime-skip/ui': 1.2.5_ec1b06fcfbd6e462bf1374dd899f0179
+  '@anime-skip/ui': 1.2.6_ec1b06fcfbd6e462bf1374dd899f0179
   '@anime-skip/usage-stats-client': 1.1.5_axios@0.24.0
   async-mutex: 0.3.2
   axios: 0.24.0
@@ -163,8 +163,8 @@ packages:
       - debug
     dev: false
 
-  /@anime-skip/ui/1.2.5_ec1b06fcfbd6e462bf1374dd899f0179:
-    resolution: {integrity: sha512-kmhtRmAUwClYZNnX3kIjw8RWjSkyB08viZ1vZDowIm+TiH8HvVfujiCWZqvCIxwwfC4YUOTPfyVkFF424NCyfA==, tarball: download/@anime-skip/ui/1.2.5/a1ce40b80a4eefa5bf6d85122cad121d9ad7ba07fd698eeeb051d9b1c5e6ca28}
+  /@anime-skip/ui/1.2.6_ec1b06fcfbd6e462bf1374dd899f0179:
+    resolution: {integrity: sha512-3mRH0Co0AQuXPn2f9X8o+HkF0D/1glTjVdOppSbjrHjkPrbIj+AnJEao1uLPJk4tdZnmcMepZ85VcgTJXLZm+g==, tarball: download/@anime-skip/ui/1.2.6/92c64084c0006541bca78dd78a919078f7ae0910d27673a979868753fff07884}
     peerDependencies:
       '@tailwindcss/line-clamp': ^0.2.1
       autoprefixer: ^10.2.4
@@ -974,7 +974,7 @@ packages:
       vue: ^2 || ^3
     dependencies:
       vue: 3.2.2
-      vue-demi: 0.12.0_vue@3.2.2
+      vue-demi: 0.12.1_vue@3.2.2
     transitivePeerDependencies:
       - '@vue/composition-api'
     dev: false
@@ -8660,8 +8660,8 @@ packages:
     dependencies:
       vue: 3.2.2
 
-  /vue-demi/0.12.0_vue@3.2.2:
-    resolution: {integrity: sha512-eggsbQSQEJKlvQrtrJLx4J44MIVq5+Z7QetIEh1Na+ZWLgt5Fq0qskQ1QmckTTEoFcUdn36c4K23EjtXZhws7w==}
+  /vue-demi/0.12.1_vue@3.2.2:
+    resolution: {integrity: sha512-QL3ny+wX8c6Xm1/EZylbgzdoDolye+VpCXRhI2hug9dJTP3OUJ3lmiKN3CsVV3mOJKwFi0nsstbgob0vG7aoIw==}
     engines: {node: '>=12'}
     hasBin: true
     requiresBuild: true
@@ -8695,7 +8695,7 @@ packages:
   /vue-global-api/0.2.4_vue@3.2.2:
     resolution: {integrity: sha512-Cm84AZiALt8f4CJZzPvbForTzAUYe41msnzUnRK6B7YkaDaN8g87ap8CpHWvTU0+XtyDeLLAeQoRr+uwamxfpQ==}
     dependencies:
-      vue-demi: 0.12.0_vue@3.2.2
+      vue-demi: 0.12.1_vue@3.2.2
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
