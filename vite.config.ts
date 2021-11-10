@@ -1,4 +1,5 @@
 import Vue from '@vitejs/plugin-vue';
+import Components from 'unplugin-vue-components/vite';
 import { defineConfig } from 'vite';
 import WebExtension from 'vite-plugin-web-extension';
 import pkg from './package.json';
@@ -21,11 +22,11 @@ export default defineConfig({
   root: rootPath('src'),
   mode: viteModes[mode],
   plugins: [
+    Components({ dts: true, allowOverrides: true, dirs: [rootPath('src')] }),
     WebExtension({
       assets: 'assets',
       manifest: () => generateManifest({ browser, mode }),
       browser,
-      verbose: true,
     }),
     Vue(),
   ],

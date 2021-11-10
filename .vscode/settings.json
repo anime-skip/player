@@ -52,22 +52,23 @@
   ],
   "cSpell.ignoreWords": [
     "asynciterable",
+    "brightcove",
     "builtins",
     "camelcase",
-    "webextension",
-    "webextensions",
-    "lrgdkj",
-    "fuzzysort",
     "corejs",
-    "parens",
-    "vilos",
-    "softsubs",
-    "brightcove",
-    "konqueror",
+    "demi",
     "edgechromium",
     "endregion",
+    "fuzzysort",
+    "konqueror",
+    "lrgdkj",
+    "parens",
+    "softsubs",
+    "vilos",
     "vite",
-    "demi"
+    "vueuse",
+    "webextension",
+    "webextensions"
   ],
   "css.lint.unknownAtRules": "ignore",
   "files.exclude": {
@@ -75,8 +76,7 @@
     "**/.svn": true,
     "**/.hg": true,
     "**/CVS": true,
-    "**/.DS_Store": true,
-    "**/components.d.ts": true
+    "**/.DS_Store": true
   },
   "workbench.editorAssociations": {
     ".env.package": "dotenv"
