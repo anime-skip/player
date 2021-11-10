@@ -9,10 +9,13 @@ import { PackageConfig } from './config';
 export async function buildChrome(config: PackageConfig) {
   title('Chrome');
   const chromeZip = path.join(config.OUTPUT_DIR, `chrome-${config.PACKAGE_MODE}.zip`);
-  const dist = rootPath('extension');
+  const dist = rootPath('dist');
 
-  await run(`Building ${CODE}extension/${RESET} for Chrome`, () =>
-    bash(`pnpm build --mode ${config.PACKAGE_MODE} --for chrome`)
+  await run(`Building ${CODE}dist/${RESET} for Chrome`, () =>
+    bash(`pnpm vite build`, {
+      BUILD_MODE: config.PACKAGE_MODE,
+      BUILD_FOR: 'chrome',
+    })
   );
 
   await run(`Checking Chrome ${CODE}manifest.json${RESET}`, () => bash(`pnpm lint:web-ext`));

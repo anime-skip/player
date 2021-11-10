@@ -15,11 +15,6 @@ node_modules
 
 # Build
 #
-extension/background
-extension/content-scripts
-extension/options
-extension/popup
-extension/manifest.json
 artifacts
 
 # Environment

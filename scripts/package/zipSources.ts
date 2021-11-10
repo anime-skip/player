@@ -18,7 +18,6 @@ export async function zipSources(OUTPUT_DIR: string) {
   const tempFolder = path.join(OUTPUT_DIR, '.temp-sources');
   const sourcesZip = path.join(OUTPUT_DIR, 'sources.zip');
   const sources = [
-    'extension/',
     'scripts/',
     'src/',
     '.nvmrc',
@@ -28,7 +27,7 @@ export async function zipSources(OUTPUT_DIR: string) {
     'SOURCE_CODE_REVIEW.md',
     'tailwind.config.js',
     'tsconfig.json',
-    'vite.build.ts',
+    'vite.config.ts',
   ];
 
   await run(`Moving essential sources to temp folder`, async () => {
@@ -44,7 +43,7 @@ export async function zipSources(OUTPUT_DIR: string) {
 
   const privateDeps = Object.keys(packageJson.dependencies).filter(isPrivateDependency);
   if (privateDeps.length > 0) {
-    await run(`Download private modules tp ${CODE}local_modules/`, async () => {
+    await run(`Download private modules to ${CODE}local_modules/`, async () => {
       const localModulesDir = path.resolve(tempFolder, 'local_modules');
       fs.mkdirSync(localModulesDir);
       await Promise.all(
