@@ -2,3 +2,4 @@ extension
 !extension/assets/**/*
 pnpm-lock.yaml
 components.d.ts
+dist
