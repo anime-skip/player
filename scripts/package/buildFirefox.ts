@@ -9,17 +9,20 @@ import { PackageConfig } from './config';
  */
 export async function buildFirefox(config: PackageConfig) {
   title('Firefox');
-  const dist = rootPath('extension');
+  const dist = rootPath('dist');
   const firefoxZip = path.join(config.OUTPUT_DIR, `firefox-${config.PACKAGE_MODE}.zip`);
   const firefoxDistTemp = path.join(config.OUTPUT_DIR, '.firefox-dist');
 
-  await run(`Building ${CODE}extension/${RESET} for Firefox`, () =>
-    bash(`pnpm build --mode ${config.PACKAGE_MODE}`)
+  await run(`Building ${CODE}dist/${RESET} for Firefox`, () =>
+    bash(`pnpm vite build`, {
+      BUILD_MODE: config.PACKAGE_MODE,
+      BUILD_FOR: 'firefox',
+    })
   );
 
   await run(`Checking Firefox ${CODE}manifest.json${RESET}`, () => bash(`pnpm lint:web-ext`));
 
-  await run(`Caching ${CODE}extension/${RESET} for signing`, () =>
+  await run(`Caching ${CODE}dist/${RESET} for signing`, () =>
     bash(`cp -r ${dist} "${firefoxDistTemp}"`)
   );
 

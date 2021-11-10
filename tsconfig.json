@@ -1,35 +1,19 @@
 {
-  "ts-node": {
-    "compilerOptions": {
-      "module": "CommonJS",
-      "noUnusedLocals": false,
-      "noImplicitOverride": false,
-      "noImplicitReturns": false,
-      "noImplicitThis": false,
-      "noFallthroughCasesInSwitch": false,
-      "noImplicitUseStrict": false,
-      "noUnusedParameters": false
-    }
-  },
   "compilerOptions": {
-    "baseUrl": ".",
     "module": "ESNext",
     "target": "ESNext",
     "lib": ["DOM", "ESNext"],
     "strict": true,
     "esModuleInterop": true,
-    "incremental": false,
     "skipLibCheck": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["vite/client", "jest"],
+    "types": ["vite/client", "jest", "vue-global-api"],
     "paths": {
-      "~/*": ["src/*"],
-      "~api": ["src/common/api"],
-      "~env": ["src/common/utils/env"]
+      "~/*": ["./src/*"],
+      "~api": ["./src/common/api"],
+      "~env": ["./src/common/utils/env"]
     }
-  },
-  "exclude": ["extension", "node_modules"]
+  }
 }

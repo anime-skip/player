@@ -11,12 +11,6 @@
     "{{firefox}}.*://usage-stats.anime-skip.com/*",
     "{{firefox}}.*://staged.api.anime-skip.com/*"
   ],
-  "{{manifest-v3:remove-this-qualifier-once-v3}}.host_permissions": [
-    "https://www.anime-skip.com/*",
-    "https://anime-skip.com/*",
-    "https://api.anime-skip.com/*",
-    "https://staged.api.anime-skip.com/*"
-  ],
   "page_action": {
     "{{firefox}}.show_matches": ["https://www.anime-skip.com/*", "https://anime-skip.com/*"],
     "browser_style": false,
@@ -37,17 +31,17 @@
   "content_scripts": [
     {
       "matches": ["https://www.anime-skip.com/*", "https://anime-skip.com/*"],
-      "js": ["content-scripts/anime-skip/index.js"]
+      "js": ["content-scripts/anime-skip/index.ts"]
     }
   ],
   "background": {
     "scripts": [
-      "background/messenger.js",
-      "background/on-install.js",
-      "background/context-menu.js",
-      "background/uninstall-feedback.js",
-      "background/tab-change.js",
-      "{{chrome}}.background/chrome-page-action.js"
+      "background/messenger.ts",
+      "background/on-install.ts",
+      "background/context-menu.ts",
+      "background/uninstall-feedback.ts",
+      "background/tab-change.ts",
+      "{{chrome}}.background/chrome-page-action.ts"
     ]
   },
   "icons": {

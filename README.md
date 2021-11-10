@@ -35,18 +35,18 @@ See the [contributing guidelines](https://github.com/anime-skip/docs/wiki) for a
 
 Hover over filenames to see description
 
-- [`extension/`](# 'The build directory that all the extension is output to. This is the directory that gets zipped up and published')
-  - [`assets/`](# 'Any static assets, like images, that the extension consumes')
+- [`dist/`](# 'The build directory that all the extension is output to. This is the directory that gets zipped up and published')
   - [**`manifest.json`**](# 'This is the final manifest file that is generated during the build process')
   - [`*`](# 'All other outputs by vite are output here')
 - [`scripts/`](# "Any useful files needed to develop the extension, but aren't apart of the packaged extension")
 - [`src/`](# 'Directory containing all code that will end up in the packaged extension')
   - [`@types/`](# 'Global types for the extension')
+  - [`assets/`](# 'Any static assets, like images, that the extension consumes')
   - [`background/`](# 'All the different background scripts')
   - [`common/`](# 'Any shared or common utilities')
   - [`content-scripts/`](# 'Any JS that is injected into webpages')
   - [`views/`](# 'Regular, front-end styled webpages that are entrypoints, like the popup and options pages')
-  - [**`manifest.template.json`**](# 'Template for the extension/manifest.json. This file includes all the browser specific flags that will be stripped out by manifest.ts')
+  - [**`manifest.template.json`**](# 'Template for the dist/manifest.json. This file includes all the browser specific flags that will be stripped out by manifest.ts')
   - [**`manifest.ts`**](# 'Parse the manifest.template.ts, strip out browser specific code for other browsers, and append all the content scripts, background, and views to the template')
 - [**`vite.build.ts`**](# 'CLI application that performs the builds for views, background scripts, and content scripts')
 

@@ -2,8 +2,9 @@ const { pathsToModuleNameMapper } = require('ts-jest/utils');
 const { compilerOptions } = require('./tsconfig');
 
 // Respect tsconfig paths
-const tsconfigPathsModuleNameMapper = pathsToModuleNameMapper(compilerOptions.paths);
-const tsconfigModulePaths = ['<rootDir>'];
+const tsconfigPathsModuleNameMapper = pathsToModuleNameMapper(compilerOptions.paths, {
+  prefix: '<rootDir>/',
+});
 
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
@@ -11,7 +12,6 @@ module.exports = {
   testEnvironment: 'jsdom',
   moduleNameMapper: {
     ...tsconfigPathsModuleNameMapper,
-    'webextension-polyfill-ts': '<rootDir>/src/__mocks__/webextension-polyfill-ts.mock.ts',
+    'webextension-polyfill': '<rootDir>/src/__mocks__/webextension-polyfill.mock.ts',
   },
-  modulePaths: [...tsconfigModulePaths],
 };

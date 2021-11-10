@@ -1,4 +1,4 @@
-import { browser } from 'webextension-polyfill-ts';
+import browser from 'webextension-polyfill';
 import { services } from '~/common/utils/CompileTimeConstants';
 import { loadedLog } from '~/common/utils/loadedLog';
 

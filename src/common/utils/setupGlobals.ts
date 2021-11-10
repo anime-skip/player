@@ -1,4 +1,4 @@
-import { browser } from 'webextension-polyfill-ts';
+import browser from 'webextension-polyfill';
 import Utils from '~/common/utils/Utils';
 import Messenger from './Messenger';
 import { centerFitVideoBounds, fallbackBound } from './videoBounds';

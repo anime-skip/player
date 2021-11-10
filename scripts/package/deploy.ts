@@ -89,7 +89,7 @@ export async function deploy(config: PackageConfig) {
       `Finish submission: ${UNDERLINE}https://addons.mozilla.org/en-US/developers/addon/anime-skip/versions`
     );
 
-    await run(`Removing firefox ${CODE}extension/${RESET} cache`, () => {
+    await run(`Removing firefox ${CODE}dist/${RESET} cache`, () => {
       fs.emptyDirSync(firefoxDist);
       fs.rmdirSync(firefoxDist);
     });

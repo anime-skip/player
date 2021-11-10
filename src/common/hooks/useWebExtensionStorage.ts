@@ -1,6 +1,6 @@
 import isEqual from 'lodash.isequal';
 import { Ref } from 'vue';
-import { browser, Storage } from 'webextension-polyfill-ts';
+import browser, { Storage } from 'webextension-polyfill';
 
 type PartialNulls<T> = {
   [K in keyof T]?: T[K] | null;

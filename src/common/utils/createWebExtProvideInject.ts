@@ -1,5 +1,5 @@
 import isEqual from 'lodash.isequal';
-import { browser, Storage } from 'webextension-polyfill-ts';
+import browser, { Storage } from 'webextension-polyfill';
 import { createProvideInject } from './createProvideInject';
 
 type AreaName = 'sync' | 'local' | 'managed';
