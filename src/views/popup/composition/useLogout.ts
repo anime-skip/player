@@ -11,6 +11,6 @@ export function useLogout() {
     await sleep(500);
     clearTokens();
     resetPreferences();
-    void UsageStats.saveEvent('logout').then(UsageStats.clearUserId);
+    void UsageStats.saveEvent('logout');
   };
 }

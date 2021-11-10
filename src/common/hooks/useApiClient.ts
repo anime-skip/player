@@ -113,7 +113,7 @@ export function useApiClient() {
             console.warn('Logging out...');
             clearTokens();
             resetPreferences();
-            void UsageStats.saveEvent('forced_logout').then(UsageStats.clearUserId);
+            void UsageStats.saveEvent('forced_logout');
           }
           throw err;
         }
