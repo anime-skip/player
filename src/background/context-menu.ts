@@ -1,4 +1,4 @@
-import { browser, Menus, Tabs } from 'webextension-polyfill-ts';
+import browser, { Menus, Tabs } from 'webextension-polyfill';
 import Browser from '~/common/utils/Browser';
 import { loadedLog } from '~/common/utils/loadedLog';
 import Messenger from '~/common/utils/Messenger';

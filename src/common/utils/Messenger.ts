@@ -1,4 +1,4 @@
-import { browser, Runtime } from 'webextension-polyfill-ts';
+import browser, { Runtime } from 'webextension-polyfill';
 import { sleep } from './EventLoop';
 
 export default class Messenger<

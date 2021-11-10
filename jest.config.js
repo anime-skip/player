@@ -11,7 +11,7 @@ module.exports = {
   testEnvironment: 'jsdom',
   moduleNameMapper: {
     ...tsconfigPathsModuleNameMapper,
-    'webextension-polyfill-ts': '<rootDir>/src/__mocks__/webextension-polyfill-ts.mock.ts',
+    'webextension-polyfill': '<rootDir>/src/__mocks__/webextension-polyfill.mock.ts',
   },
   modulePaths: [...tsconfigModulePaths],
 };

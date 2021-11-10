@@ -48,8 +48,7 @@
     "skippable",
     "unitless",
     "unmount",
-    "vrv",
-    "vuex"
+    "vrv"
   ],
   "cSpell.ignoreWords": [
     "asynciterable",

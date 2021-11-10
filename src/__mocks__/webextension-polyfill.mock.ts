@@ -1,5 +1,6 @@
 import { mock } from 'jest-mock-extended';
 
-export const browser = mock();
+const browser = mock();
+export default browser;
 
 export type Runtime = unknown;

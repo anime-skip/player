@@ -1,6 +1,6 @@
 // TODO: Is this file still needed, or can things be moved elsewhere?
 
-import { browser } from 'webextension-polyfill-ts';
+import browser from 'webextension-polyfill';
 
 export default class Browser {
   public static resolveUrl(extUrl: string): string {

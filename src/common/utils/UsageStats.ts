@@ -1,5 +1,5 @@
 import { createUsageStatsClient, UsageStatsClientConfig } from '@anime-skip/usage-stats-client';
-import { browser } from 'webextension-polyfill-ts';
+import browser from 'webextension-polyfill';
 import Browser from './Browser';
 
 export const USAGE_STATS_USER_ID_STORAGE_KEY = 'usage-stats-user-id';

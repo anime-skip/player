@@ -1,5 +1,5 @@
 import { onScopeDispose } from 'vue';
-import { browser } from 'webextension-polyfill-ts';
+import browser from 'webextension-polyfill';
 import { createSharedComposable } from '~/common/hooks/createSharedComposable';
 
 interface ChangeUrlMessage {
