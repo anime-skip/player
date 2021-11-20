@@ -25,9 +25,15 @@ export default function setupGlobals(
   window.getVideoQuery = options.getVideoQuery;
   window.transformServiceUrl = options.transformServiceUrl ?? Utils.stripUrl;
   window.getPlayerOptions = async () => {
-    const optionGroups = (await options.getPlayerOptions?.()) ?? [];
-    console.log(`${service}.getPlayerOptions`, optionGroups);
-    return optionGroups;
+    try {
+      const optionGroups = await options.getPlayerOptions?.();
+      console.log(`${service}.getPlayerOptions`, optionGroups);
+      if (optionGroups && optionGroups.length > 0) return optionGroups;
+      return undefined;
+    } catch (err) {
+      console.warn('Failed to get player options, falling back to undefined');
+      return undefined;
+    }
   };
 
   window.inferEpisodeInfo = async (): Promise<InferredEpisodeInfo> => {

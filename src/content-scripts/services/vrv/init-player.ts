@@ -1,6 +1,6 @@
 import { loadedLog } from '~/common/utils/loadedLog';
 import setupGlobals from '~/common/utils/setupGlobals';
-import './init-player.css';
+import './init-player.scss';
 
 loadedLog('content-scripts/services/vrv/init-player.ts');
 
@@ -49,10 +49,6 @@ function getPlayerOptions(): PlayerOptionGroup[] {
 setupGlobals('vrv', {
   serviceDisplayName: 'VRV',
   getPlayerOptions,
-  getRootQuery() {
-    return 'body>div';
-  },
-  getVideoQuery() {
-    return 'video';
-  },
+  getRootQuery: () => 'body>div',
+  getVideoQuery: () => 'video',
 });

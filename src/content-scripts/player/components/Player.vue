@@ -1,35 +1,39 @@
 <template>
-  <div
-    id="AnimeSkipPlayer"
-    class="absolute inset-0 grid overflow-hidden bg-background bg-opacity-0"
-    :class="{
-      active: isActive,
-      'paused bg-opacity-medium': videoState.isPaused,
-      'buffering bg-opacity-medium': videoState.isBuffering,
-      showing: isEpisodeInfoShowing,
-      'opacity-0': isHidden,
-    }"
-    @mouseenter.prevent="onMouseEnter"
-    @mousemove.prevent="onMouseMove"
-    @mouseleave.prevent="onMouseLeave"
-    @click="togglePlayPause()"
-  >
-    <div v-if="showBufferLoading" class="absolute inset-0 flex items-center justify-center">
-      <Loading />
-    </div>
-    <div class="left-content pointer-events-none pl-8 pt-8 box-border">
-      <episode-info />
-    </div>
-    <div class="right-content" />
-    <controls-toolbar class="bottom-content" />
+  <ScopedStylesRoot>
+    <div
+      v-if="!isOriginalPlayerVisible"
+      id="AnimeSkipPlayer"
+      class="absolute inset-0 grid overflow-hidden bg-background bg-opacity-0"
+      :class="{
+        active: isActive,
+        'paused bg-opacity-medium': videoState.isPaused,
+        'buffering bg-opacity-medium': videoState.isBuffering,
+        showing: isEpisodeInfoShowing,
+        'opacity-0': !isPlayerVisible,
+      }"
+      @mouseenter.prevent="onMouseEnter"
+      @mousemove.prevent="onMouseMove"
+      @mouseleave.prevent="onMouseLeave"
+      @click="togglePlayPause()"
+    >
+      <div v-if="showBufferLoading" class="absolute inset-0 flex items-center justify-center">
+        <Loading />
+      </div>
+      <div class="left-content pointer-events-none pl-8 pt-8 box-border">
+        <episode-info />
+      </div>
+      <div class="right-content" />
+      <controls-toolbar class="bottom-content" />
 
-    <!-- Dialogs -->
-    <ScreenshotOverlay />
-    <TimestampsPanel />
-    <PreferencesDialog />
-    <EditEpisodeDialog />
-    <LoginDialog />
-  </div>
+      <!-- Dialogs -->
+      <ScreenshotOverlay />
+      <TimestampsPanel />
+      <PreferencesDialog />
+      <EditEpisodeDialog />
+      <LoginDialog />
+    </div>
+    <return-button />
+  </ScopedStylesRoot>
 </template>
 
 <script lang="ts" setup>
@@ -43,7 +47,12 @@ import { useLoadAllEpisodeData } from '../hooks/useLoadAllEpisodeData';
 import { usePlaybackRateConnector } from '../hooks/usePlaybackRateConnector';
 import { useTabUrl } from '../hooks/useTabUrl';
 import { useVideoElement } from '../hooks/useVideoElement';
-import { useHidePlayer, useIsPlayerHidden, useShowPlayer } from '../state/usePlayerVisibility';
+import {
+  useHideAnimeSkipPlayer,
+  useIsAnimeSkipPlayerVisible,
+  useIsOriginalPlayerVisible,
+  useShowAnimeSkipPlayer,
+} from '../state/usePlayerVisibility';
 import {
   usePlayHistory,
   useResetInitialBuffer,
@@ -120,8 +129,10 @@ const isEpisodeInfoShowing = computed<boolean>(
 );
 const showBufferLoading = computed<boolean>(() => videoState.isBuffering && !videoState.isPaused);
 
-const showPlayer = useShowPlayer();
-const hidePlayer = useHidePlayer();
+const showPlayer = useShowAnimeSkipPlayer();
+const hidePlayer = useHideAnimeSkipPlayer();
+const isPlayerVisible = useIsAnimeSkipPlayerVisible();
+const isOriginalPlayerVisible = useIsOriginalPlayerVisible();
 
 const messenger = new Messenger('player', {
   '@anime-skip/start-screenshot': async () => {
@@ -131,8 +142,6 @@ const messenger = new Messenger('player', {
   },
   '@anime-skip/stop-screenshot': async () => showPlayer(),
 });
-
-const isHidden = useIsPlayerHidden();
 </script>
 
 <style lang="scss">

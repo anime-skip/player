@@ -1,19 +1,6 @@
-html,
-body,
-#app {
+.anime-skip-remove-margin,
+.anime-skip-remove-margin body,
+.anime-skip-remove-margin #app {
   margin: 0;
   padding: 0;
-}
-
-.btn {
-  @apply px-4 py-1 rounded inline-block
-    bg-primary text-on-primary cursor-pointer
-    hover:bg-primary;
-}
-
-.icon-btn {
-  @apply inline-block cursor-pointer select-none
-    opacity-medium transition duration-200 ease-in-out
-    hover:opacity-100 hover:text-primary;
-  font-size: 0.9em;
 }
