@@ -17,11 +17,10 @@ const baseUrls: Record<ExtensionMode, string> = {
   dev: 'http://localhost:8081/',
 };
 const clientId = 'OB3AfF3fZg9XlZhxtLvhwLhDcevslhnr';
-const mode = import.meta.env.VITE_EXT_MODE;
 const modesToLog: ExtensionMode[] = ['dev', 'staged'];
 
-const client = createCustomAnimeSkipClient(baseUrls[mode], clientId);
-if (modesToLog.includes(mode)) {
+const client = createCustomAnimeSkipClient(baseUrls[EXTENSION_MODE], clientId);
+if (modesToLog.includes(EXTENSION_MODE)) {
   // Uncomment if status code 422 is coming back
   // client.axios.interceptors.request.use(config => {
   //   console.log(JSON.stringify(config, null, 2));
