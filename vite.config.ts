@@ -6,6 +6,14 @@ import pkg from './package.json';
 import { generateManifest } from './scripts/generate-manifest';
 import { rootPath } from './scripts/utils';
 
+let webExtConfig = {};
+try {
+  webExtConfig = require('./.web-ext.config.json');
+} catch (_) {
+  // noop
+}
+console.log(webExtConfig);
+
 const browser = process.env.BUILD_FOR || 'firefox';
 const mode = process.env.BUILD_MODE || 'test';
 
@@ -27,6 +35,7 @@ export default defineConfig({
       assets: 'assets',
       manifest: () => generateManifest({ browser, mode }),
       browser,
+      webExtConfig,
     }),
     Vue(),
   ],

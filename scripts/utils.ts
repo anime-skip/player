@@ -120,3 +120,11 @@ export async function bash(command: string, env?: any): Promise<void> {
     throw Error(`Command failed with status ${status}\n${output}`);
   }
 }
+
+export function requireOr<T>(callback: () => T, fallback: T): T {
+  try {
+    return callback();
+  } catch (err) {
+    return fallback;
+  }
+}

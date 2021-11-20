@@ -17,6 +17,22 @@ See the [contributing guidelines](https://github.com/anime-skip/docs/wiki) for a
 
 <br/>
 
+### Configuring `web-ext`
+
+Create a `.web-ext.config.json` file. This file specifies the browser startup behavior in dev mode. Here's an example to change the URLs the browser opens on startup:
+
+```json
+{
+  "firefox": "firefox",
+  "chromiumBinary": "/opt/google/chrome/chrome",
+  "startUrl": ["http://localhost:7238"]
+}
+```
+
+You need to add one of `firefox` or `chromiumPath` (or both) depending on the browser you're doing developing on. The `startUrl` is just an example of how to configure additional startup behavior.
+
+> See official [`web-ext` docs](https://extensionworkshop.com/documentation/develop/web-ext-command-reference/#web-ext-run) for a list of all run options. All the flags that can be passed into `web-ext run` can be included as camelCase in this JSON file.
+
 ## Additional System Requirements
 
 - `firefox` binary in path (ie: `which firefox` finds the Firefox executable/alias)
