@@ -39,12 +39,8 @@ function getPlayerOptions(): PlayerOptionGroup[] {
 setupGlobals('funimation', {
   serviceDisplayName: 'Funimation',
   getPlayerOptions,
-  getRootQuery() {
-    return 'body #funimation-player';
-  },
-  getVideoQuery() {
-    return '#brightcove-player > video';
-  },
+  getRootQuery: () => 'body #funimation-player',
+  getVideoQuery: () => '#brightcove-player > video',
   doNotReplacePlayer() {
     const path = Utils.stripUrl(window.parent.location.href)
       .replace('https://www.funimation.com/', '')

@@ -1,52 +1,59 @@
 import { createProvideInject } from '~/common/utils/createProvideInject';
 
 export interface PlayerVisibility {
-  playerHidden: boolean;
-  originalPlayerHidden: boolean;
+  isAnimeSkipPlayerVisible: boolean;
+  isOriginalPlayerVisible: boolean;
 }
+
+const HIDE_ORIGINAL_PLAYER_CLASS = 'hide-for-anime-skip';
 
 const {
   provideValue: providePlayerVisibility,
   useValue: usePlayerVisibility,
   useUpdate,
 } = createProvideInject<PlayerVisibility>('player-visibility', {
-  playerHidden: false,
-  originalPlayerHidden: true,
+  isAnimeSkipPlayerVisible: true,
+  isOriginalPlayerVisible: !document.body.classList.contains(HIDE_ORIGINAL_PLAYER_CLASS),
 });
 
 export { providePlayerVisibility, usePlayerVisibility };
 
-export function useIsPlayerHidden() {
+export function useIsAnimeSkipPlayerVisible() {
   const state = usePlayerVisibility();
-  return computed(() => state.playerHidden);
+  return computed(() => state.isAnimeSkipPlayerVisible);
 }
 
-export function useShowPlayer() {
+export function useShowAnimeSkipPlayer() {
   const update = useUpdate();
   return () => {
-    update({ playerHidden: false });
+    update({ isAnimeSkipPlayerVisible: false });
   };
 }
 
-export function useHidePlayer() {
+export function useHideAnimeSkipPlayer() {
   const update = useUpdate();
   return () => {
-    update({ playerHidden: true });
+    update({ isAnimeSkipPlayerVisible: true });
   };
+}
+
+export function useIsOriginalPlayerVisible() {
+  const state = usePlayerVisibility();
+  return computed(() => state.isOriginalPlayerVisible);
 }
 
 export function useShowOriginalPlayer() {
   const update = useUpdate();
   return () => {
-    document.body.classList.remove('hide-for-anime-skip');
-    update({ originalPlayerHidden: false });
+    document.body.classList.remove(HIDE_ORIGINAL_PLAYER_CLASS);
+    update({ isOriginalPlayerVisible: true, isAnimeSkipPlayerVisible: false });
   };
 }
 
 export function useHideOriginalPlayer() {
   const update = useUpdate();
   return () => {
-    document.body.classList.add('hide-for-anime-skip');
-    update({ originalPlayerHidden: true });
+    document.body.classList.add(HIDE_ORIGINAL_PLAYER_CLASS);
+    update({ isOriginalPlayerVisible: false, isAnimeSkipPlayerVisible: true });
   };
 }

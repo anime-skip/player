@@ -35,9 +35,14 @@ declare var transformServiceUrl: (inputUrl: string) => string;
 /**
  * Get the options the the player provides (quality, subtitles, etc). Return enough info to
  * display the items (icon, name), as well as the actual HTML node so that it can be clicked on to
- * trigger the change
+ * trigger the change.
+ *
+ * Set to undefined or return undefined if player options are not available for the service
  */
-declare function getPlayerOptions(): Promise<PlayerOptionGroup[]> | PlayerOptionGroup[] | undefined;
+declare function getPlayerOptions():
+  | Promise<PlayerOptionGroup[] | undefined>
+  | PlayerOptionGroup[]
+  | undefined;
 
 /**
  * Add a callback that gets called when a video changes (duration is different than before)

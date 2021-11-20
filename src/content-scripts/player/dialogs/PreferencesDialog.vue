@@ -7,21 +7,28 @@
   >
     <template v-if="!hasActivePlayerGroup">
       <GeneralSettings small>
-        <RaisedContainer
-          v-for="optionGroup of playerOptions"
-          :key="optionGroup.title"
-          dark
-          @click="setActiveOptionGroup(optionGroup)"
-        >
-          <div class="h-10 px-4 flex flex-row items-center text-left w-full space-x-4">
-            <WebExtImg v-if="optionGroup.icon != null" :src="optionGroup.icon" class="left" />
-            <p class="flex-1">{{ optionGroup.title }}</p>
-            <p class="text-on-surface text-opacity-medium">
-              {{ getSelectedOption(optionGroup) }}
-            </p>
-            <WebExtImg src="ic_chevron_right.svg" class="opacity-medium" />
+        <template v-if="playerOptions != null">
+          <RaisedContainer
+            v-for="optionGroup of playerOptions"
+            :key="optionGroup.title"
+            dark
+            @click="setActiveOptionGroup(optionGroup)"
+          >
+            <div class="h-10 px-4 flex flex-row items-center text-left w-full space-x-4">
+              <WebExtImg v-if="optionGroup.icon != null" :src="optionGroup.icon" class="left" />
+              <p class="flex-1">{{ optionGroup.title }}</p>
+              <p class="text-on-surface text-opacity-medium">
+                {{ getSelectedOption(optionGroup) }}
+              </p>
+              <WebExtImg src="ic_chevron_right.svg" class="opacity-medium" />
+            </div>
+          </RaisedContainer>
+        </template>
+        <RaisedButton v-else dark @click="showOriginalPlayer">
+          <div class="flex justify-between w-full">
+            <p class="remove-text body-1">{{ serviceName }} Settings</p>
           </div>
-        </RaisedContainer>
+        </RaisedButton>
         <RaisedButton dark @click="openExtensionOptions">
           <div class="flex justify-between w-full">
             <p class="remove-text body-1">All Settings</p>
@@ -74,6 +81,7 @@ import { computed, onMounted, ref } from 'vue';
 import useRadioIcon from '~/common/composition/useRadioIcon';
 import Messenger from '~/common/utils/Messenger';
 import { useHideDialog } from '../state/useDialogState';
+import { useShowOriginalPlayer } from '../state/usePlayerVisibility';
 
 const openExtensionOptions = () => {
   new Messenger<RuntimeMessageTypes>('General Settings').send(
@@ -92,10 +100,11 @@ const getSelectedOption = (optionGroup: PlayerOptionGroup) => {
   if (selected.length === 0) return '';
   return selected[0].title;
 };
-const playerOptions = ref<PlayerOptionGroup[]>([]);
+const playerOptions = ref<PlayerOptionGroup[]>();
 const loadPlayerOptions = async () => {
-  playerOptions.value =
-    (await window.getPlayerOptions())?.filter(group => group.options.length > 0) ?? [];
+  playerOptions.value = (await window.getPlayerOptions())?.filter(
+    group => group.options.length > 0
+  );
 };
 
 const activeOptions = computed(() => activePlayerGroup.value?.options ?? []);
@@ -106,6 +115,13 @@ const onClickOption = (option: PlayerOption) => {
   hideDialog();
   setActiveOptionGroup(undefined);
 };
+
+const serviceName = window.serviceDisplayName;
+const _showOriginalPlayer = useShowOriginalPlayer();
+function showOriginalPlayer() {
+  hideDialog();
+  _showOriginalPlayer();
+}
 </script>
 
 <style lang="scss">
@@ -123,12 +139,15 @@ const onClickOption = (option: PlayerOption) => {
     }
   }
 }
+</style>
 
+<style scoped>
 .opacity-100 {
   opacity: 1 !important;
 }
 
 .py-2 {
+  /* TODO: THIS IS NOT JUST PY, ITS P */
   padding: 0.5rem !important;
 }
 

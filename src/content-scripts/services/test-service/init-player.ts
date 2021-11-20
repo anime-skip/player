@@ -6,10 +6,6 @@ loadedLog('content-scripts/services/test-service/init-player.ts');
 
 setupGlobals('test-service', {
   serviceDisplayName: 'Anime Skip Test',
-  getRootQuery() {
-    return '.video-container';
-  },
-  getVideoQuery() {
-    return '#video';
-  },
+  getRootQuery: () => '.video-container',
+  getVideoQuery: () => '#video',
 });

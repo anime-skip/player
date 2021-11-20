@@ -1,0 +1,13 @@
+.hide-for-anime-skip {
+  .vjs-pause-screen,
+  .vjs-text-track-display,
+  .vjs-loading-spinner,
+  .vjs-control-bar,
+  #android_div,
+  .vilos-spinner-overlay,
+  .vilos_stats_display,
+  #miniProgressContainer,
+  #standalone_softsubs {
+    display: none !important;
+  }
+}
