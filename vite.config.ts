@@ -12,7 +12,6 @@ try {
 } catch (_) {
   // noop
 }
-console.log(webExtConfig);
 
 const browser = process.env.BUILD_FOR || 'firefox';
 const mode = process.env.BUILD_MODE || 'test';
