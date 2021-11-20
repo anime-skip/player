@@ -99,9 +99,6 @@ export function useVideoController() {
     setInactive(): void {
       update({ isActive: false });
     },
-    toggleActive(): void {
-      update({ isActive: !state.isActive });
-    },
     buffering(): void {
       update({ isBuffering: true });
     },
