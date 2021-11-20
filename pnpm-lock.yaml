@@ -51,7 +51,7 @@ specifiers:
   typescript: ^4.3.5
   unplugin-vue-components: ^0.17.2
   vite: ^2.6.14
-  vite-plugin-web-extension: ^0.7.2
+  vite-plugin-web-extension: ^0.8.1
   vue: ^3.2.2
   vue-global-api: ^0.2.4
   vue-router: ^4.0.11
@@ -117,7 +117,7 @@ devDependencies:
   typescript: 4.3.5
   unplugin-vue-components: 0.17.2_vite@2.6.14+vue@3.2.2
   vite: 2.6.14_sass@1.38.0
-  vite-plugin-web-extension: 0.7.2_sass@1.38.0
+  vite-plugin-web-extension: 0.8.1_sass@1.38.0
   vue-global-api: 0.2.4_vue@3.2.2
   vue-tsc: 0.2.2_typescript@4.3.5
   zip-a-folder: 1.1.0
@@ -1426,6 +1426,17 @@ packages:
       - supports-color
     dev: true
 
+  /ajv-draft-04/1.0.0_ajv@8.8.1:
+    resolution: {integrity: sha512-mv00Te6nmYbRp5DCwclxtt7yV/joXJPGS7nM+97GdxvuttCOfgI3K4U25zboyeX0O+myI8ERluxQe5wljMmVIw==}
+    peerDependencies:
+      ajv: ^8.5.0
+    peerDependenciesMeta:
+      ajv:
+        optional: true
+    dependencies:
+      ajv: 8.8.1
+    dev: true
+
   /ajv-merge-patch/4.1.0_ajv@6.12.6:
     resolution: {integrity: sha512-0mAYXMSauA8RZ7r+B4+EAOYcZEcO9OK5EiQCR7W7Cv4E44pJj56ZnkKLJ9/PAcOc0dT+LlV9fdDcq2TxVJfOYw==}
     peerDependencies:
@@ -1447,6 +1458,15 @@ packages:
 
   /ajv/8.6.2:
     resolution: {integrity: sha512-9807RlWAgT564wT+DjeyU5OFMPjmzxVobvDFmNAhY+5zD6A2ly3jDp6sgnfyDtlIQ+7H97oc/DGCzzfu9rjw9w==}
+    dependencies:
+      fast-deep-equal: 3.1.3
+      json-schema-traverse: 1.0.0
+      require-from-string: 2.0.2
+      uri-js: 4.4.1
+    dev: true
+
+  /ajv/8.8.1:
+    resolution: {integrity: sha512-6CiMNDrzv0ZR916u2T+iRunnD60uWmNn8SkdB44/6stVORUg0aAkWO7PkOhpCmjmW8f2I/G/xnowD66fxGyQJg==}
     dependencies:
       fast-deep-equal: 3.1.3
       json-schema-traverse: 1.0.0
@@ -7231,9 +7251,11 @@ packages:
       extsprintf: 1.3.0
     dev: true
 
-  /vite-plugin-web-extension/0.7.2_sass@1.38.0:
-    resolution: {integrity: sha512-SypMqZE7f+ob5B+Smobk6K+xxn8B0hR2tHwU4kFvOREjfpxphUklnb4DlPxJ4+o5Xx/lKpl37O1R7BToru2kNQ==}
+  /vite-plugin-web-extension/0.8.1_sass@1.38.0:
+    resolution: {integrity: sha512-8XI4luWKWnRabW1cCxiFr5mflldn5J4pCDHZlHnOs1isHo34HcLNzwQ5E+iRokXOagitgylMqEZ3IbSVIpRfRg==}
     dependencies:
+      ajv: 8.8.1
+      ajv-draft-04: 1.0.0_ajv@8.8.1
       vite: 2.6.14_sass@1.38.0
       web-ext: 6.5.0
     transitivePeerDependencies:
