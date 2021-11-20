@@ -2,7 +2,7 @@
   "name": "anime-skip-player",
   "displayName": "Anime Skip Player",
   "description": "Skip intros, credits, filler and more on supported services",
-  "version": "1.4.7",
+  "version": "1.5.0",
   "license": "GPL-3.0-or-later",
   "private": true,
   "author": "Aaron Klinker <aaronklinker1@gmail.com>",
