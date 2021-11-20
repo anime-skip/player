@@ -9,6 +9,8 @@ const getUserId: UsageStatsClientConfig['getUserId'] = async () => {
   return results[USAGE_STATS_USER_ID_STORAGE_KEY];
 };
 
+const reportModes: ExtensionMode[] = ['prod', 'beta'];
+
 const client = createUsageStatsClient({
   app: 'Anime Skip Player',
   appVersion: EXTENSION_VERSION,
@@ -18,7 +20,7 @@ const client = createUsageStatsClient({
   async persistGuestUserId(userId) {
     browser.storage.local.set({ [USAGE_STATS_USER_ID_STORAGE_KEY]: userId });
   },
-  send: import.meta.env.VITE_EXT_MODE === 'prod' || import.meta.env.VITE_EXT_MODE === 'beta',
+  send: reportModes.includes(EXTENSION_MODE),
   source: 'browser',
 });
 

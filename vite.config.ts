@@ -45,6 +45,7 @@ export default defineConfig({
   },
   define: {
     EXTENSION_VERSION: `'${pkg.version}'`,
+    EXTENSION_MODE: `'${mode}'`,
   },
   resolve: {
     alias: {
