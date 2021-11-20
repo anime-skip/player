@@ -101,6 +101,7 @@ function onMouseLeave() {
 }
 function onMouseMove() {
   setActive();
+  clearActiveTimeout();
   setActiveTimeout(setInactive, PLAYER_ACTIVITY_TIMEOUT);
 }
 function setupContextMenu() {
