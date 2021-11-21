@@ -1,4 +1,10 @@
-declare type Service = 'test-service' | 'vrv' | 'funimation' | 'crunchyroll';
+declare type Service =
+  | 'test-service'
+  | 'vrv'
+  | 'funimation'
+  | 'funimation-2021-09-26'
+  | 'crunchyroll';
+
 declare type ServiceDisplayName =
   | 'Anime Skip Test'
   | 'VRV'
