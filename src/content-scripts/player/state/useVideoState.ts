@@ -61,12 +61,12 @@ const {
   isActive: false,
   isBuffering: true,
   isPaused: initialVideo?.paused ?? false,
-  isMuted: false,
+  isMuted: initialVideo?.muted ?? false,
   volumePercent: 100,
   allowVolumeChangeTo: undefined,
   currentTime: initialVideo?.currentTime ?? 0,
-  duration: undefined as number | undefined,
-  playbackRate: 1,
+  duration: initialVideo?.duration || (undefined as number | undefined),
+  playbackRate: initialVideo?.playbackRate ?? 1,
 });
 
 export { provideVideoState, useVideoState, useUpdateVideoState };
