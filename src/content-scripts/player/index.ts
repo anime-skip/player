@@ -42,9 +42,6 @@ export function loadPlayerUi() {
       await sleep(100);
     }
 
-    // Set the style to hide all the old elements
-    document.body.classList.add('hide-for-anime-skip');
-
     try {
       const container = document.createElement('div');
 

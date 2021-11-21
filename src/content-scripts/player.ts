@@ -1,3 +1,4 @@
+import { PlayerHosts } from '~/common/utils/CompileTimeConstants';
 import { loadedLog } from '~/common/utils/loadedLog';
 import { urlPatternMatch } from '~/common/utils/strings';
 import { initKeyboardShortcutBlocker } from './misc/keyboard-shortcut-blocker';
@@ -10,11 +11,11 @@ import { initTestServicePlayer } from './services/test-service/player';
 import { initVrvPlayer } from './services/vrv/player';
 
 const services: Record<string, () => void> = {
-  'https://static.crunchyroll.com/vilos-v2/web/vilos/player.html*': initCrunchyrollPlayer,
-  'https://www.funimation.com/player/*': initFunimationPlayer,
-  'https://www.funimation.com/v/*': initFunimation20210926Player,
-  'https://static.vrv.co/*': initVrvPlayer,
-  'http://localhost/*': initTestServicePlayer,
+  [PlayerHosts.CRUNCHYROLL]: initCrunchyrollPlayer,
+  [PlayerHosts.FUNIMATION_20210926]: initFunimation20210926Player,
+  [PlayerHosts.FUNIMATION]: initFunimationPlayer,
+  [PlayerHosts.VRV]: initVrvPlayer,
+  [PlayerHosts.TEST_SERVICE]: initTestServicePlayer,
 };
 
 function init() {
@@ -28,7 +29,7 @@ function init() {
       return;
     }
   }
-  console.warn('Nothing injected');
+  console.warn('No player injected');
 }
 
 try {

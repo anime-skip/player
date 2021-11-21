@@ -13,7 +13,7 @@ const {
   useUpdate,
 } = createProvideInject<PlayerVisibility>('player-visibility', {
   isAnimeSkipPlayerVisible: true,
-  isOriginalPlayerVisible: !document.body.classList.contains(HIDE_ORIGINAL_PLAYER_CLASS),
+  isOriginalPlayerVisible: false,
 });
 
 export { providePlayerVisibility, usePlayerVisibility };

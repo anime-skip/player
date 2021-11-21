@@ -9,6 +9,7 @@ export enum ParentHosts {
   CRUNCHYROLL_BETA = 'https://beta.crunchyroll.com/*',
   FUNIMATION = 'https://www.funimation.com/*/shows/*',
   FUNIMATION_20210926 = 'https://www.funimation.com/v/*',
+  VRV = 'https://vrv.co/*',
 }
 
 /**

@@ -1,3 +1,4 @@
+import { ParentHosts } from '~/common/utils/CompileTimeConstants';
 import { loadedLog } from '~/common/utils/loadedLog';
 import { urlPatternMatch } from '~/common/utils/strings';
 import { initCrunchyrollParent } from './services/crunchyroll/parent';
@@ -7,12 +8,12 @@ import { initTestServiceParent } from './services/test-service/parent';
 import { initVrvParent } from './services/vrv/parent';
 
 const services: Record<string, () => void> = {
-  'https://www.crunchyroll.com/*': initCrunchyrollParent,
-  'https://beta.crunchyroll.com/*': initCrunchyrollParent,
-  'https://www.funimation.com/*/shows/*': initFunimationParent,
-  'https://www.funimation.com/v/*': initFunimation20210926Parent,
-  'https://vrv.co/*': initVrvParent,
-  'http://localhost/*': initTestServiceParent,
+  [ParentHosts.CRUNCHYROLL_BETA]: initCrunchyrollParent,
+  [ParentHosts.CRUNCHYROLL]: initCrunchyrollParent,
+  [ParentHosts.FUNIMATION_20210926]: initFunimation20210926Parent,
+  [ParentHosts.FUNIMATION]: initFunimationParent,
+  [ParentHosts.TEST_SERVICE]: initTestServiceParent,
+  [ParentHosts.VRV]: initVrvParent,
 };
 
 function initParent() {
@@ -21,6 +22,7 @@ function initParent() {
       return services[pattern]?.();
     }
   }
+  console.warn('No parent injected');
 }
 
 try {

@@ -39,7 +39,8 @@
   "content_scripts": [
     {
       "js": ["content-scripts/parent.ts", "content-scripts/player.ts"],
-      "css": ["generated:content-scripts/style.css"]
+      "css": ["generated:content-scripts/style.css"],
+      "all_frames": true
     }
   ],
   "web_accessible_resources": ["assets/*", "assets/**/*"]
