@@ -5,6 +5,8 @@ declare type Service =
   | 'funimation-2021-09-26'
   | 'crunchyroll';
 
+declare type ReportableService = Service | 'crunchyroll-beta';
+
 declare type ServiceDisplayName =
   | 'Anime Skip Test'
   | 'VRV'
