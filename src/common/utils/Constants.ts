@@ -285,6 +285,10 @@ export const SUPPORTED_THIRD_PARTY_SERVICES: Record<Service, Array<TimestampSour
     // Don't support BETTER_VRV because show names and durations are completely different
     source => source !== 'BETTER_VRV'
   ),
+  'funimation-2021-09-26': allTimestampSources.filter(
+    // Don't support BETTER_VRV because show names and durations are completely different
+    source => source !== 'BETTER_VRV'
+  ),
   crunchyroll: allTimestampSources,
 };
 
