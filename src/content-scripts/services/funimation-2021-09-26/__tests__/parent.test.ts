@@ -1,5 +1,6 @@
 import tsJest from 'ts-jest/utils';
 import setupParent from '~/common/utils/setupParent';
+import { initFunimation20210926Parent } from '../parent';
 
 console.log = jest.fn();
 
@@ -21,7 +22,8 @@ function setupDom(show: string, episode: string, details: string) {
 
 describe('Parent functionalities', () => {
   beforeAll(() => {
-    require('../parent');
+    jest.resetModules();
+    initFunimation20210926Parent();
   });
 
   it('should mock the setupParent function so these tests can be ran', () => {

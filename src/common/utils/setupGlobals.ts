@@ -44,7 +44,7 @@ export default function setupGlobals(
   };
 
   // Prepare the body so the old player can be hidden
-  document.body.classList.add('hide-for-anime-skip');
+  document.body.classList.add('hide-for-anime-skip', service);
 
   new Messenger(`${service} player messenger`, {
     // Get the bounds, then center fit the video
