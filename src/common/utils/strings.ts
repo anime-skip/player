@@ -2,6 +2,12 @@ function escapeForRegex(string: string): string {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+function convertPatternToRegex(pattern: string): RegExp {
+  const escaped = escapeForRegex(pattern);
+  const starsReplaced = escaped.replace(/\\\*/g, '.*');
+  return RegExp(`^${starsReplaced}$`);
+}
+
 export function urlPatternMatch(
   pattern: string,
   url: { hostname: string; protocol: string; pathname: string }
@@ -9,9 +15,9 @@ export function urlPatternMatch(
   try {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const [_, protocol, host, path] = /(.*:)\/\/(.*?)(\/.*)/.exec(pattern)!;
-    const protocolRegex = RegExp('^' + escapeForRegex(protocol).replace(/\\\*/g, '.*') + '$');
-    const hostRegex = RegExp('^' + escapeForRegex(host).replace(/\\\*/g, '.*') + '$');
-    const pathRegex = RegExp('^' + escapeForRegex(path).replace(/\\\*/g, '.*') + '$');
+    const protocolRegex = convertPatternToRegex(protocol);
+    const hostRegex = convertPatternToRegex(host);
+    const pathRegex = convertPatternToRegex(path);
     return (
       !!protocolRegex.exec(url.protocol) &&
       !!hostRegex.exec(url.hostname) &&

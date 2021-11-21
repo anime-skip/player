@@ -22,10 +22,11 @@ const services: Record<ParentHosts, () => void> = {
 function initParent() {
   for (const pattern in services) {
     if (urlPatternMatch(pattern, window.location)) {
-      return services[pattern as ParentHosts]?.();
+      const initServiceParent = services[pattern as ParentHosts];
+      initServiceParent();
+      return;
     }
   }
-  console.warn('No parent injected');
 }
 
 try {

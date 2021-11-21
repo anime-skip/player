@@ -29,7 +29,6 @@ function init() {
       return;
     }
   }
-  console.warn('No player injected');
 }
 
 try {

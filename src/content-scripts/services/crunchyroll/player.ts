@@ -1,7 +1,7 @@
 import { loadedLog } from '~/common/utils/loadedLog';
 import setupGlobals from '~/common/utils/setupGlobals';
 import Utils from '~/common/utils/Utils';
-import './player.scss';
+import './player-overrides.scss';
 
 export function initCrunchyrollPlayer() {
   loadedLog('content-scripts/services/crunchyroll/player.ts');

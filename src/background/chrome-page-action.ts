@@ -15,15 +15,6 @@ export function initChromePageAction() {
         host: url.hostname,
       };
     });
-    // TODO: Do these need to be explicitly added?
-    // hosts.push({
-    //   host: 'www.anime-skip.com',
-    //   scheme: 'https',
-    // });
-    // hosts.push({
-    //   host: 'anime-skip.com',
-    //   scheme: 'https',
-    // });
     console.log('Browser action enabled hosts', hosts);
 
     const rules = hosts.map(({ host, scheme }) => {

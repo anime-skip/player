@@ -1,6 +1,6 @@
 import { loadedLog } from '~/common/utils/loadedLog';
 import setupGlobals from '~/common/utils/setupGlobals';
-import './player.css';
+import './player-overrides.css';
 
 export function initTestServicePlayer() {
   loadedLog('content-scripts/services/test-service/player.ts');

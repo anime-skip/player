@@ -1,6 +1,6 @@
 import { loadedLog } from '~/common/utils/loadedLog';
 import setupGlobals from '~/common/utils/setupGlobals';
-import './player.scss';
+import './player-overrides.scss';
 
 function getPlayerOptions(): PlayerOptionGroup[] {
   const optionGroups: PlayerOptionGroup[] = [];
