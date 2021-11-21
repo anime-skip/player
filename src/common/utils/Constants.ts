@@ -290,6 +290,7 @@ export const SUPPORTED_THIRD_PARTY_SERVICES: Record<Service, Array<TimestampSour
     source => source !== 'BETTER_VRV'
   ),
   crunchyroll: allTimestampSources,
+  'crunchyroll-beta': allTimestampSources,
 };
 
 export const PLAYER_ACTIVITY_TIMEOUT = 3000;
