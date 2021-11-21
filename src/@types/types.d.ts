@@ -3,15 +3,15 @@ declare type Service =
   | 'vrv'
   | 'funimation'
   | 'funimation-2021-09-26'
-  | 'crunchyroll'
-  | 'crunchyroll-beta';
+  | 'crunchyroll';
+
+declare type ReportableService = Service | 'crunchyroll-beta';
 
 declare type ServiceDisplayName =
   | 'Anime Skip Test'
   | 'VRV'
   | 'Funimation'
   | 'Crunchyroll'
-  | 'Crunchyroll Beta'
   | undefined;
 
 declare type SupportedBrowser = 'firefox' | 'chrome';

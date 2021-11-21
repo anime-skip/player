@@ -5,6 +5,7 @@ import {
   useUpdatePlayHistory,
 } from '../state/usePlayHistory';
 import { useVideoController, useVideoState } from '../state/useVideoState';
+import { useTabUrl } from './useTabUrl';
 
 export function useVideoElement() {
   const videoState = useVideoState();
@@ -13,6 +14,7 @@ export function useVideoElement() {
   const incrementPlayTicks = useIncrementPlayTicks();
   const playHistory = usePlayHistory();
   const video = ref(window.getVideo?.());
+  const url = useTabUrl();
 
   // Reactive - the video can change this state, and we can change the video
 
@@ -23,9 +25,17 @@ export function useVideoElement() {
   };
   const startedPlaying = () => {
     if (playHistory.isInitialBuffer && videoState.duration) {
+      let service: ReportableService = window.service;
+      if (
+        service === 'crunchyroll' &&
+        url.value &&
+        new URL(url.value).hostname.startsWith('beta')
+      ) {
+        service = 'crunchyroll-beta';
+      }
       void UsageStats.saveEvent('episode_started', {
         episodeDuration: videoState.duration,
-        service: window.service,
+        service: service,
       });
     }
     controls.clearBuffering();
