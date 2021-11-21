@@ -1,8 +1,6 @@
 import { loadedLog } from '~/common/utils/loadedLog';
 import setupGlobals from '~/common/utils/setupGlobals';
-import './init-player.scss';
-
-loadedLog('content-scripts/services/vrv/init-player.ts');
+import './player.scss';
 
 function getPlayerOptions(): PlayerOptionGroup[] {
   const optionGroups: PlayerOptionGroup[] = [];
@@ -46,9 +44,13 @@ function getPlayerOptions(): PlayerOptionGroup[] {
   return optionGroups;
 }
 
-setupGlobals('vrv', {
-  serviceDisplayName: 'VRV',
-  getPlayerOptions,
-  getRootQuery: () => 'body>div',
-  getVideoQuery: () => 'video',
-});
+export function initVrvPlayer() {
+  loadedLog('content-scripts/services/vrv/player.ts');
+
+  setupGlobals('vrv', {
+    serviceDisplayName: 'VRV',
+    getPlayerOptions,
+    getRootQuery: () => 'body>div',
+    getVideoQuery: () => 'video',
+  });
+}

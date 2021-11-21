@@ -2,10 +2,6 @@ import { waitUntil } from '~/common/utils/EventLoop';
 import { loadedLog } from '~/common/utils/loadedLog';
 import setupParent from '~/common/utils/setupParent';
 
-loadedLog('content-scripts/services/crunchyroll/parent.ts');
-
-const GET_EPISODE_INFO_TIMEOUT = 5000; // ms
-
 async function getEpisodeInfo() {
   const pageHasLoaded = () =>
     Promise.resolve(
@@ -51,6 +47,7 @@ async function getEpisodeInfo() {
   return {};
 }
 
-setupParent('crunchyroll', {
-  getEpisodeInfo,
-});
+export function initCrunchyrollParent() {
+  loadedLog('content-scripts/services/crunchyroll/parent.ts');
+  setupParent('crunchyroll', { getEpisodeInfo });
+}

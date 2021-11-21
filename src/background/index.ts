@@ -1,0 +1,21 @@
+import { loadedLog } from '~/common/utils/loadedLog';
+import { initChromePageAction } from './chrome-page-action';
+import { initContextMenu } from './context-menu';
+import { initMessenger } from './messenger';
+import { initMetrics } from './metrics';
+import { initTabChange } from './tab-change';
+
+function init() {
+  initMessenger();
+  initMetrics();
+  initContextMenu();
+  initTabChange();
+  if (TARGET_BROWSER === 'chrome') initChromePageAction();
+}
+
+try {
+  loadedLog('background/index.ts');
+  init();
+} catch (err) {
+  console.error(err);
+}

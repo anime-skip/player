@@ -1,9 +1,7 @@
 import { loadedLog } from '~/common/utils/loadedLog';
 import setupGlobals from '~/common/utils/setupGlobals';
 import Utils from '~/common/utils/Utils';
-import './init-player.scss';
-
-loadedLog('content-scripts/services/funimation/init-player.ts');
+import './player.scss';
 
 function getPlayerOptions(): PlayerOptionGroup[] {
   const optionGroups: PlayerOptionGroup[] = [];
@@ -36,17 +34,21 @@ function getPlayerOptions(): PlayerOptionGroup[] {
   return optionGroups;
 }
 
-setupGlobals('funimation', {
-  serviceDisplayName: 'Funimation',
-  getPlayerOptions,
-  getRootQuery: () => 'body #funimation-player',
-  getVideoQuery: () => '#brightcove-player > video',
-  doNotReplacePlayer() {
-    const path = Utils.stripUrl(window.parent.location.href)
-      .replace('https://www.funimation.com/', '')
-      .replace(/\/$/, '');
-    // something like "show/{show-name}/..." or "show/{show-name}" so if the last slash is at position 5, it is a show
-    const isShowPage = path.lastIndexOf('/') === 5;
-    return isShowPage;
-  },
-});
+export function initFunimationPlayer() {
+  loadedLog('content-scripts/services/funimation/player.ts');
+
+  setupGlobals('funimation', {
+    serviceDisplayName: 'Funimation',
+    getPlayerOptions,
+    getRootQuery: () => 'body #funimation-player',
+    getVideoQuery: () => '#brightcove-player > video',
+    doNotReplacePlayer() {
+      const path = Utils.stripUrl(window.parent.location.href)
+        .replace('https://www.funimation.com/', '')
+        .replace(/\/$/, '');
+      // something like "show/{show-name}/..." or "show/{show-name}" so if the last slash is at position 5, it is a show
+      const isShowPage = path.lastIndexOf('/') === 5;
+      return isShowPage;
+    },
+  });
+}
