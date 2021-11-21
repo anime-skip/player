@@ -11,6 +11,7 @@ declare type ServiceDisplayName =
   | 'VRV'
   | 'Funimation'
   | 'Crunchyroll'
+  | 'Crunchyroll Beta'
   | undefined;
 
 declare type SupportedBrowser = 'firefox' | 'chrome';

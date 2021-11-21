@@ -6,12 +6,12 @@ import './player-overrides.scss';
 export function initCrunchyrollPlayer() {
   loadedLog('content-scripts/services/crunchyroll/player.ts');
 
-  const service: Service = window.location.hostname.startsWith('beta')
-    ? 'crunchyroll-beta'
-    : 'crunchyroll';
+  const isBeta = window.location.hostname.startsWith('beta');
+  const service: Service = isBeta ? 'crunchyroll-beta' : 'crunchyroll';
+  const serviceDisplayName: ServiceDisplayName = isBeta ? 'Crunchyroll Beta' : 'Crunchyroll';
 
   setupGlobals(service, {
-    serviceDisplayName: 'Crunchyroll',
+    serviceDisplayName,
     getRootQuery: () => 'body',
     getVideoQuery: () => 'video',
     transformServiceUrl(inputUrl) {
