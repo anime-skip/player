@@ -23,7 +23,10 @@ export function useVideoElement() {
   };
   const startedPlaying = () => {
     if (playHistory.isInitialBuffer && videoState.duration) {
-      void UsageStats.saveEvent('episode_started', { episodeDuration: videoState.duration });
+      void UsageStats.saveEvent('episode_started', {
+        episodeDuration: videoState.duration,
+        service: window.service,
+      });
     }
     controls.clearBuffering();
     updatePlayHistory({ isInitialBuffer: false });
