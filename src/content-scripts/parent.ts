@@ -8,7 +8,7 @@ import { initFunimationParent } from './services/funimation/parent';
 import { initTestServiceParent } from './services/test-service/parent';
 import { initVrvParent } from './services/vrv/parent';
 
-const services: Record<string, () => void> = {
+const services: Record<ParentHosts, () => void> = {
   [ParentHosts.ANIME_SKIP]: initAnimeSkipParent,
   [ParentHosts.ANIME_SKIP_WWW]: initAnimeSkipParent,
   [ParentHosts.CRUNCHYROLL_BETA]: initCrunchyrollParent,
@@ -22,7 +22,7 @@ const services: Record<string, () => void> = {
 function initParent() {
   for (const pattern in services) {
     if (urlPatternMatch(pattern, window.location)) {
-      return services[pattern]?.();
+      return services[pattern as ParentHosts]?.();
     }
   }
   console.warn('No parent injected');

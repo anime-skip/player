@@ -10,7 +10,7 @@ import { initFunimationPlayer } from './services/funimation/player';
 import { initTestServicePlayer } from './services/test-service/player';
 import { initVrvPlayer } from './services/vrv/player';
 
-const services: Record<string, () => void> = {
+const services: Record<PlayerHosts, () => void> = {
   [PlayerHosts.CRUNCHYROLL]: initCrunchyrollPlayer,
   [PlayerHosts.FUNIMATION_20210926]: initFunimation20210926Player,
   [PlayerHosts.FUNIMATION]: initFunimationPlayer,
@@ -21,7 +21,7 @@ const services: Record<string, () => void> = {
 function init() {
   for (const pattern in services) {
     if (urlPatternMatch(pattern, window.location)) {
-      const initServicePlayer = services[pattern];
+      const initServicePlayer = services[pattern as PlayerHosts];
       initKeyboardShortcutBlocker();
       initVideoChangeWatcher();
       initServicePlayer();
