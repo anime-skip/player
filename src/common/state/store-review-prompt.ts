@@ -1,6 +1,7 @@
 import browser from 'webextension-polyfill';
-import { DAYS, today } from '~/common/utils/time';
+import { DAYS, SECONDS, today } from '~/common/utils/time';
 import { useWebExtensionStorageValue } from '../hooks/useWebExtensionStorage';
+import { sleep } from '../utils/EventLoop';
 
 const REVIEW_PROMPT_AT_KEY = 'storeReviewPromptAt';
 const DONT_SHOW_AGAIN_KEY = 'dontShowStoreReviewPromptAgain';
@@ -23,17 +24,22 @@ export const getDontShowStoreReviewPromptAgain = () =>
 export const setDontShowStoreReviewPromptAgain = (value: boolean | null) =>
   setLocalStorage(DONT_SHOW_AGAIN_KEY, value);
 
-export async function initStoreReviewPrompt() {
-  // If they've selected "Don't show again", stop
-  if (await getDontShowStoreReviewPromptAgain()) return undefined;
-
-  // Initialize for existing users
-  const currentDate = await getStoreReviewPromptAt();
-  if (currentDate == null) await setStoreReviewPromptAt(today() + DAYS(1));
-
-  // Initialize for new users
+export function initStoreReviewPrompt() {
+  // Initialize for new users, NEEDS TO BE BEFORE FIRST AWAIT so it adds the listener synchronously
   browser.runtime.onInstalled.addListener(async () => {
     await setStoreReviewPromptAt(today() + DAYS(3));
+  });
+
+  setDontShowStoreReviewPromptAgain(true);
+
+  // Initialize for existing users
+  getDontShowStoreReviewPromptAgain().then(async dontPrompt => {
+    if (dontPrompt) return undefined;
+    const currentDate = await getStoreReviewPromptAt();
+    if (currentDate == null) {
+      await sleep(SECONDS(10));
+      await setStoreReviewPromptAt(today() + DAYS(1));
+    }
   });
 }
 

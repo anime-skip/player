@@ -4,8 +4,10 @@
       <div class="p-4 space-y-4 flex flex-col">
         <div class="flex flex-row items-start">
           <div class="flex-1 space-y-4">
-            <p v-if="title" class="subtitle-1 text-on-surface font-semibold">{{ title }}</p>
-            <p class="body-2 text-on-surface text-opacity-high">{{ message }}</p>
+            <p v-if="title" class="subtitle-1 text-on-surface font-semibold text-left">
+              {{ title }}
+            </p>
+            <p class="body-2 text-on-surface text-opacity-high text-left">{{ message }}</p>
           </div>
           <div
             class="

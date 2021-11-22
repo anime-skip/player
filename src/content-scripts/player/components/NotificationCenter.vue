@@ -81,8 +81,12 @@ if (isDev) addDevNotification();
 // Prompting for review
 
 const { value: promptReviewAt, setValue: setPromptReviewAt } = useStoreReviewPromptDate();
-const { setValue: setDontShowReviewPromptAgain } = useDontShowStoreReviewPromptAgain();
+const { value: dontshowReviewPromptAgain, setValue: setDontShowReviewPromptAgain } =
+  useDontShowStoreReviewPromptAgain();
+
 function addPromptReviewNotifications() {
+  if (dontshowReviewPromptAgain.value) return;
+
   void UsageStats.saveEvent('prompt_store_review');
   // Setup the next notification if ignored
   setPromptReviewAt(today() + DAYS(3));

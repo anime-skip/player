@@ -59,7 +59,6 @@ import {
   useResetSkippedFromZero,
 } from '../state/usePlayHistory';
 import { useVideoState } from '../state/useVideoState';
-import NotificationCenter from './NotificationCenter.vue';
 
 onMounted(() => {
   void UsageStats.saveEvent('player_injected');
@@ -146,8 +145,6 @@ const messenger = new Messenger('player', {
 </script>
 
 <style lang="scss">
-@import '../utils/constants.scss';
-
 #AnimeSkipPlayer {
   transition: 200ms;
   transition-property: background-color;
