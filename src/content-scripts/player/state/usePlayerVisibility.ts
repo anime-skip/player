@@ -26,14 +26,14 @@ export function useIsAnimeSkipPlayerVisible() {
 export function useShowAnimeSkipPlayer() {
   const update = useUpdate();
   return () => {
-    update({ isAnimeSkipPlayerVisible: false });
+    update({ isAnimeSkipPlayerVisible: true });
   };
 }
 
 export function useHideAnimeSkipPlayer() {
   const update = useUpdate();
   return () => {
-    update({ isAnimeSkipPlayerVisible: true });
+    update({ isAnimeSkipPlayerVisible: false });
   };
 }
 
