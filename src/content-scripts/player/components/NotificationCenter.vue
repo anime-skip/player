@@ -45,35 +45,34 @@ const notifications = ref<Notification[]>([]);
 function addDevNotification() {
   const id1 = randomStringId();
   const id2 = randomStringId();
-  notifications.value.push(
-    {
-      id: id1,
-      title: 'No buttons',
-      message: 'This is the notification body',
-      dismissAt: Date.now() + SECONDS(15),
-      buttons: [],
-    },
-    {
-      id: id2,
-      title: 'Multiple buttons',
-      message: 'Click the add button to add more of these test notifications',
-      dismissAt: Date.now() + SECONDS(10),
-      buttons: [
-        {
-          text: 'Add',
-          onClick: () => {
+  addNotification({
+    id: id1,
+    title: 'No buttons',
+    message: 'This is the notification body',
+    dismissAt: Date.now() + SECONDS(15),
+    buttons: [],
+  });
+  addNotification({
+    id: id2,
+    title: 'Multiple buttons',
+    message: 'Click the add button to add more of these test notifications',
+    dismissAt: Date.now() + SECONDS(10),
+    buttons: [
+      {
+        text: 'Add',
+        onClick: () =>
+          setTimeout(() => {
             addDevNotification();
             addDevNotification();
-          },
-          primary: true,
-        },
-        {
-          text: 'Dismiss',
-          onClick: () => dismissNotificationById(id2),
-        },
-      ],
-    }
-  );
+          }, SECONDS(2)),
+        primary: true,
+      },
+      {
+        text: 'Dismiss',
+        onClick: () => dismissNotificationById(id2),
+      },
+    ],
+  });
 }
 
 if (isDev) addDevNotification();
@@ -90,7 +89,7 @@ function addPromptReviewNotifications() {
   void UsageStats.saveEvent('prompt_store_review');
   // Setup the next notification if ignored
   setPromptReviewAt(today() + DAYS(3));
-  notifications.value.push({
+  addNotification({
     id: randomStringId(),
     title: 'Enjoying Anime Skip?',
     message: 'Leave a rating! A higher rating means more users and more timestamps to skip 😊',
@@ -133,19 +132,36 @@ watch(now, nextNow => {
 function dismissNotificationById(dismissedId: string) {
   notifications.value = notifications.value.filter(({ id }) => id !== dismissedId);
 }
+
+const mounted = ref(false);
+onMounted(() => {
+  mounted.value = true;
+});
+onUnmounted(() => {
+  mounted.value = false;
+});
+
+/**
+ * Add it with a delay so if it is loaded on mount, it still gets animated
+ */
+function addNotification(notificaiton: Notification) {
+  setTimeout(() => notifications.value.push(notificaiton), SECOND);
+}
 </script>
 
 <style>
 .slide-left-enter-active,
 .slide-left-leave-active {
-  @apply transform transition-transform duration-500;
+  transition: transform ease-out 500ms;
 }
-.slide-left-enter,
+
+.slide-left-enter-from,
 .slide-left-leave-to {
-  --tw-translate-x: 120%;
+  transform: translateX(120%);
 }
+
 .slide-left-enter-to,
-.slide-left-leave {
-  @apply translate-x-0;
+.slide-left-leave-from {
+  transform: translateX(0%);
 }
 </style>
