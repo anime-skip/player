@@ -78,7 +78,8 @@ import { useTimeout } from '@anime-skip/ui';
 import { computed, ref } from 'vue';
 import { RequestState } from 'vue-use-request-state';
 import useRadioIcon from '~/common/composition/useRadioIcon';
-import { SECONDS, TIMESTAMP_TYPES } from '~/common/utils/Constants';
+import { TIMESTAMP_TYPES } from '~/common/utils/Constants';
+import { SECONDS } from '~/common/utils/time';
 import Utils from '~/common/utils/Utils';
 import * as Api from '~api';
 import { TemplateType } from '~api';
@@ -169,7 +170,7 @@ const clearHoveredTimestamp = useClearHoveredTimestamp();
 const onHoverTimestamp = (timestamp: Api.AmbiguousTimestamp): void => {
   clearHoveredTimeout();
   setHoveredTimestamp(timestamp);
-  setHoveredTimeout(clearHoveredTimestamp, 3 * SECONDS);
+  setHoveredTimeout(clearHoveredTimestamp, SECONDS(3));
 };
 const onStopHoverTimestamp = (): void => {
   clearHoveredTimeout();

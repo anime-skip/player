@@ -22,7 +22,7 @@
       <div class="left-content pointer-events-none pl-8 pt-8 box-border">
         <episode-info />
       </div>
-      <div class="right-content" />
+      <notification-center class="right-content" />
       <controls-toolbar class="bottom-content" />
 
       <!-- Dialogs -->
