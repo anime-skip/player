@@ -101,9 +101,9 @@ function addPromptReviewNotifications() {
         primary: true,
         onClick() {
           void UsageStats.saveEvent('prompt_store_review_rate');
+          setDontShowReviewPromptAgain(true);
           // Links shorted by https://apk.rip
           window.open(TARGET_BROWSER === 'firefox' ? 'https://apk.rip/17' : 'https://apk.rip/1s');
-          setDontShowReviewPromptAgain(true);
         },
       },
       {
