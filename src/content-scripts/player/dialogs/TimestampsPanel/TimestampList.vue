@@ -129,7 +129,8 @@
 <script lang="ts" setup>
 import { useTimeout, Utils } from '@anime-skip/ui';
 import { useIsLoggedIn } from '~/common/state/useAuth';
-import { SECONDS, TIMESTAMP_SOURCES, TIMESTAMP_TYPES } from '~/common/utils/Constants';
+import { TIMESTAMP_SOURCES, TIMESTAMP_TYPES } from '~/common/utils/Constants';
+import { SECONDS } from '~/common/utils/time';
 import * as Api from '~api';
 import { useCanEditTimestamps } from '../../hooks/useCanEditTimestamps';
 import { useCreateNewTimestamp } from '../../hooks/useCreateNewTimestamp';
@@ -174,7 +175,7 @@ const updateHoveredTimestamp = useUpdateHoveredTimestamp();
 function onHoverTimestamp(timestamp: Api.AmbiguousTimestamp): void {
   clearTimestampHoverTimeout();
   updateHoveredTimestamp(timestamp);
-  setTimestampHoverTimeout(clearHoveredTimestamp, 3 * SECONDS);
+  setTimestampHoverTimeout(clearHoveredTimestamp, SECONDS(3));
 }
 
 const clearHoveredTimestamp = useClearHoveredTimestamp(updateHoveredTimestamp);
