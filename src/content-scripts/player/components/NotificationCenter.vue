@@ -97,11 +97,8 @@ function addPromptReviewNotifications() {
         primary: true,
         onClick() {
           void UsageStats.saveEvent('prompt_store_review_rate');
-          const link =
-            TARGET_BROWSER === 'firefox'
-              ? 'https://addons.mozilla.org/en-US/firefox/addon/anime-skip/reviews/'
-              : 'https://chrome.google.com/webstore/detail/anime-skip-player-beta/mgmdkjcljneegjfajchedjpdhbadklcf';
-          window.open(link);
+          // Links shorted by https://apk.rip
+          window.open(TARGET_BROWSER === 'firefox' ? 'https://apk.rip/17' : 'https://apk.rip/1s');
           setDontShowReviewPromptAgain(true);
         },
       },
