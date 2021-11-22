@@ -30,8 +30,6 @@ export function initStoreReviewPrompt() {
     await setStoreReviewPromptAt(today() + DAYS(3));
   });
 
-  setDontShowStoreReviewPromptAgain(true);
-
   // Initialize for existing users
   getDontShowStoreReviewPromptAgain().then(async dontPrompt => {
     if (dontPrompt) return undefined;
