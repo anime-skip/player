@@ -1,5 +1,6 @@
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import { TIMESTAMP_TYPE_NOT_SELECTED } from '~/common/utils/Constants';
+import { warn } from '~/common/utils/log';
 import UsageStats from '~/common/utils/UsageStats';
 import Utils from '~/common/utils/Utils';
 import { TimestampSource } from '~api';
@@ -28,7 +29,7 @@ export function useCreateNewTimestamp() {
   return (): void => {
     const video = window.getVideo?.();
     if (video == null) {
-      console.warn('Tried adding timestamp in a context without a video');
+      warn('Tried adding timestamp in a context without a video');
       return;
     }
     pause();

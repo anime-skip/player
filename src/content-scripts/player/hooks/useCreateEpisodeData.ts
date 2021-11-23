@@ -1,5 +1,6 @@
 import { RequestState } from 'vue-use-request-state';
 import { useApiClient } from '~/common/hooks/useApiClient';
+import { warn } from '~/common/utils/log';
 import Utils from '~/common/utils/Utils';
 import * as Api from '~api';
 import { useHideDialog } from '../state/useDialogState';
@@ -118,7 +119,7 @@ export function useCreateEpisodeData() {
 
       updateEpisodeRequestState(RequestState.SUCCESS);
     } catch (err) {
-      console.warn('actions.createEpisodeData', err);
+      warn('actions.createEpisodeData', err);
       updateEpisodeRequestState(RequestState.FAILURE);
     }
   };

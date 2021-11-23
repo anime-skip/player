@@ -1,5 +1,6 @@
 import Messenger from '~/common/utils/Messenger';
 import Utils from '~/common/utils/Utils';
+import { error } from './log';
 import { fallbackBound } from './videoBounds';
 
 function defaultGetScreenshotDetails() {
@@ -51,7 +52,7 @@ export default function setupParent(
         previousEpisodeName = episode.name;
       } catch (err) {
         episode = {};
-        console.error('Failed to infer episode info', err, { previousUrl, currentUrl, episode });
+        error('Failed to infer episode info', err, { previousUrl, currentUrl, episode });
       }
       return episode;
     },

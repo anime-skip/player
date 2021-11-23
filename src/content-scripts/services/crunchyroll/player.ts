@@ -1,4 +1,4 @@
-import { loadedLog } from '~/common/utils/loadedLog';
+import { loadedLog } from '~/common/utils/log';
 import setupGlobals from '~/common/utils/setupGlobals';
 import Utils from '~/common/utils/Utils';
 import './player-overrides.scss';

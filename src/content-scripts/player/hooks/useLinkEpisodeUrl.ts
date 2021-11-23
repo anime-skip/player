@@ -1,5 +1,6 @@
 import { RequestState } from 'vue-use-request-state';
 import { useApiClient } from '~/common/hooks/useApiClient';
+import { warn } from '~/common/utils/log';
 import Utils from '~/common/utils/Utils';
 import * as Api from '~api';
 import { useUpdateEpisodeRequestState } from '../state/useEpisodeState';
@@ -20,7 +21,7 @@ export function useLinkEpisodeUrl() {
     const baseDuration = episode.baseDuration;
 
     if (!url || !duration || !baseDuration) {
-      console.warn('Cannot link a URL without a URL, duration, and base duration', {
+      warn('Cannot link a URL without a URL, duration, and base duration', {
         url,
         duration,
         baseDuration,
@@ -48,7 +49,7 @@ export function useLinkEpisodeUrl() {
       onSuccess?.();
       await loadAllEpisodeData(episodeUrl.url);
     } catch (err) {
-      console.warn('Failed to create new EpisodeUrl', err);
+      warn('Failed to create new EpisodeUrl', err);
       updateEpisodeRequestState(RequestState.FAILURE);
     }
   };

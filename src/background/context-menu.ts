@@ -1,6 +1,6 @@
 import browser, { Menus, Tabs } from 'webextension-polyfill';
 import Browser from '~/common/utils/Browser';
-import { loadedLog } from '~/common/utils/loadedLog';
+import { error, loadedLog, log } from '~/common/utils/log';
 import Messenger from '~/common/utils/Messenger';
 
 const MENU_ITEM_SCREENSHOT = 'screenshot';
@@ -20,7 +20,7 @@ export function initContextMenu() {
   });
 
   async function screenshot(_info: Menus.OnClickData, tab?: Tabs.Tab) {
-    console.log('Taking screenshot');
+    log('Taking screenshot');
     try {
       await messenger.send('@anime-skip/start-screenshot', undefined, tab?.id);
       // Get size & position for cropping
@@ -38,7 +38,7 @@ export function initContextMenu() {
       const y = iframeBounds.top + videoBounds.top;
       const width = videoBounds.width;
       const height = videoBounds.height;
-      console.log({ iframeBounds, videoBounds, x, y, width, height });
+      log({ iframeBounds, videoBounds, x, y, width, height });
 
       if (width == 0 || height == 0) throw Error(`Video dimension was 0 (w=${width}, h=${height})`);
 
@@ -47,12 +47,12 @@ export function initContextMenu() {
         format: 'png',
       });
       const cropped = await cropDataUrl(data, x, y, width, height);
-      console.log('saved screenshot');
-      console.log('cropped:', cropped.length);
-      console.log('full:', data.length);
+      log('saved screenshot');
+      log('cropped:', cropped.length);
+      log('full:', data.length);
       await browser.storage.local.set({ screenshot: cropped });
     } catch (err) {
-      console.error(err);
+      error(err);
       throw err;
     } finally {
       await messenger.send('@anime-skip/stop-screenshot', undefined, tab?.id);

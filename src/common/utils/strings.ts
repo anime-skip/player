@@ -1,3 +1,5 @@
+import { error } from './log';
+
 function escapeForRegex(string: string): string {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
@@ -24,7 +26,7 @@ export function urlPatternMatch(
       !!pathRegex.exec(url.pathname)
     );
   } catch (err) {
-    console.error(err);
+    error(err);
     return false;
   }
 }

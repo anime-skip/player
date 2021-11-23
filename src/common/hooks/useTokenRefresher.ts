@@ -5,6 +5,7 @@ import { Mutex } from 'async-mutex';
 import { AxiosResponse } from 'axios';
 import * as Api from '~api';
 import { getAuthAsync, updateAuthAsync } from '../state/useAuth';
+import { log, warn } from '../utils/log';
 import { LogoutError } from '../utils/LogoutError';
 import UsageStats from '../utils/UsageStats';
 
@@ -31,7 +32,7 @@ export default function useTokenRefresher(client: ReturnType<typeof createAnimeS
     // @ts-expect-error: Different versions of axios installed
     if (!isResponseExpiredToken(res)) return res;
 
-    console.log('Found invalid token, refreshing...');
+    log('Found invalid token, refreshing...');
     delete res.config.headers!['Authorization'];
     if (lock.isLocked()) {
       await lock.waitForUnlock();
@@ -48,11 +49,11 @@ export default function useTokenRefresher(client: ReturnType<typeof createAnimeS
       });
       await updateAuthAsync({ refreshToken: newTokens.refreshToken, token: newTokens.authToken });
       void UsageStats.saveEvent('login_refresh');
-      console.log('Refreshed token!');
+      log('Refreshed token!');
       release();
     } catch (err) {
       release();
-      console.warn('Could not refresh token:', err);
+      warn('Could not refresh token:', err);
       throw new LogoutError();
     }
     return client.axios.request(res.config);

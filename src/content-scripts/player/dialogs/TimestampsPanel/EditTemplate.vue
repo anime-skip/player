@@ -79,6 +79,7 @@ import { computed, ref } from 'vue';
 import { RequestState } from 'vue-use-request-state';
 import useRadioIcon from '~/common/composition/useRadioIcon';
 import { TIMESTAMP_TYPES } from '~/common/utils/Constants';
+import { warn } from '~/common/utils/log';
 import { SECONDS } from '~/common/utils/time';
 import Utils from '~/common/utils/Utils';
 import * as Api from '~api';
@@ -105,10 +106,7 @@ const templateTimestamps = useTemplateTimestamps();
 
 const onClickDelete = () => {
   if (template.value == null) {
-    console.warn(
-      "Cannot delete a template that doesn't exist",
-      JSON.stringify(template.value, null, 2)
-    );
+    warn("Cannot delete a template that doesn't exist", JSON.stringify(template.value, null, 2));
     return;
   }
   void deleteTemplate(template.value.id)
@@ -197,7 +195,7 @@ const onClickSave = () => {
     savePromise = saveNewTemplate(type.value, seasonsToSave.value, newTimestampIds);
   } else {
     if (template.value == null) {
-      console.warn('Cannot update an undefined template');
+      warn('Cannot update an undefined template');
       return;
     }
     savePromise = saveTemplate(template.value.id, type.value, seasonsToSave.value, newTimestampIds);

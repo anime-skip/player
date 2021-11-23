@@ -1,6 +1,6 @@
 import browser from 'webextension-polyfill';
 import { PAGE_ACTION_MATCHES } from '~/common/utils/CompileTimeConstants';
-import { loadedLog } from '~/common/utils/loadedLog';
+import { loadedLog, log } from '~/common/utils/log';
 
 export function initChromePageAction() {
   loadedLog('background/chrome-page-action.ts');
@@ -15,7 +15,7 @@ export function initChromePageAction() {
         host: url.hostname,
       };
     });
-    console.log('Browser action enabled hosts', hosts);
+    log('Browser action enabled hosts', hosts);
 
     const rules = hosts.map(({ host, scheme }) => {
       return {

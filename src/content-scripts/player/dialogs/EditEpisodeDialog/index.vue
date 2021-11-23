@@ -38,6 +38,7 @@ import useRequestState, { RequestState } from 'vue-use-request-state';
 import { CreateEpisodePrefill } from '~/@types';
 import { useApiClient } from '~/common/hooks/useApiClient';
 import { useIsLoggedIn } from '~/common/state/useAuth';
+import { debug, log, warn } from '~/common/utils/log';
 import Mappers from '~/common/utils/Mappers';
 import * as Api from '~api';
 import { useEpisodeRequestState } from '../../state/useEpisodeState';
@@ -67,7 +68,7 @@ const fetchSuggestionsByName = wrapFetchSuggestionsByName(
         episode => episode.show.name.toLowerCase() === showName.toLowerCase()
       );
     } catch (err) {
-      console.warn('failed to fetch suggestions:', { episodeName, showName }, err);
+      warn('failed to fetch suggestions:', { episodeName, showName }, err);
       return [];
     }
   }
@@ -78,7 +79,7 @@ const { wrapRequest: wrapLoadDefaultShowOption, isLoading: isLoadingDefaultShow 
 const loadDefaultShowOption = wrapLoadDefaultShowOption(async (): Promise<void> => {
   const showName = inferredEpisode.value?.show;
   if (showName == null) {
-    console.debug('Not fetching default show, name could not be inferred');
+    debug('Not fetching default show, name could not be inferred');
     return;
   }
 
@@ -116,7 +117,7 @@ const loadDefaultEpisodeOption = wrapLoadDefaultEpisodeOption(
   async (showId: string): Promise<Api.EpisodeSearchResult | undefined> => {
     const episodeName = inferredEpisode.value?.name;
     if (episodeName == null) {
-      console.debug('Not fetching default episode, name could not be inferred');
+      debug('Not fetching default episode, name could not be inferred');
       return undefined;
     }
 
@@ -191,7 +192,7 @@ function loadData() {
 
 async function loadSuggestions() {
   if (inferredEpisode.value?.name == null || inferredEpisode.value.show == null) {
-    console.log(
+    log(
       'Not fetching suggestions, episode or show name could not be inferred',
       deref(inferredEpisode)
     );

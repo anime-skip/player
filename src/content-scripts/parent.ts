@@ -1,5 +1,5 @@
 import { ParentHosts } from '~/common/utils/CompileTimeConstants';
-import { loadedLog } from '~/common/utils/loadedLog';
+import { error, loadedLog } from '~/common/utils/log';
 import { urlPatternMatch } from '~/common/utils/strings';
 import { initAnimeSkipParent } from './anime-skip';
 import { initCrunchyrollParent } from './services/crunchyroll/parent';
@@ -33,5 +33,5 @@ try {
   loadedLog('content-scripts/parent.ts');
   initParent();
 } catch (err) {
-  console.error(err);
+  error(err);
 }

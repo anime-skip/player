@@ -1,4 +1,4 @@
-import { loadedLog } from '~/common/utils/loadedLog';
+import { debug, loadedLog } from '~/common/utils/log';
 
 export function initKeyboardShortcutBlocker() {
   loadedLog('content-scripts/misc/keyboard-shortcut-blocker.ts');
@@ -19,7 +19,7 @@ export function initKeyboardShortcutBlocker() {
    */
   document.addEventListener('keydown', function (event) {
     setTimeout(() => {
-      console.log('calling keyboard listeners');
+      debug('calling keyboard listeners');
       keyboardListeners.forEach(listener => listener(event));
     }, 0);
     event.stopImmediatePropagation();

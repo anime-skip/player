@@ -35,11 +35,5 @@ export function useUpdateInferredTimestamps() {
 
 export function useInferRequestState() {
   const value = useInferredEpisodeState();
-  watch(
-    () => value,
-    () => {
-      console.log('is showing changed 2', value);
-    }
-  );
   return computed(() => value.requestState);
 }

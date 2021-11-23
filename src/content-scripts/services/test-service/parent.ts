@@ -1,4 +1,4 @@
-import { loadedLog } from '~/common/utils/loadedLog';
+import { loadedLog } from '~/common/utils/log';
 import setupParent from '~/common/utils/setupParent';
 
 export function initTestServiceParent() {

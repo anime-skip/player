@@ -1,5 +1,5 @@
 import browser from 'webextension-polyfill';
-import { loadedLog } from '~/common/utils/loadedLog';
+import { loadedLog } from '~/common/utils/log';
 import Messenger from '~/common/utils/Messenger';
 
 export function initAnimeSkipParent() {

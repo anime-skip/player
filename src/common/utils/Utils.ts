@@ -1,4 +1,5 @@
 import * as Api from '~api';
+import { warn } from './log';
 
 export default class Utils {
   /**
@@ -80,7 +81,7 @@ export default class Utils {
   public static enterFullscreen(): void {
     const elem = document.querySelector(window.getRootQuery());
     if (!elem) {
-      console.warn('Could not find player to enter fullscreen');
+      warn('Could not find player to enter fullscreen');
       return;
     }
     if (elem.requestFullscreen) {
@@ -109,7 +110,7 @@ export default class Utils {
 
   public static exitFullscreen(): void {
     if (!this.isFullscreen()) {
-      console.warn('Not in full screen mode, tried to exit');
+      warn('Not in full screen mode, tried to exit');
       return;
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

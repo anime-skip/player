@@ -1,5 +1,6 @@
 import createAnimeSkipClient, { GqlEpisodeUrl, GqlInputEpisodeUrl } from '@anime-skip/api-client';
 import * as Api from '~api';
+import { log } from './log';
 
 export function createCustomAnimeSkipClient(baseUrl: string, clientId: string) {
   const { axios, ...methods } = createAnimeSkipClient(baseUrl, clientId);
@@ -25,8 +26,8 @@ export function createCustomAnimeSkipClient(baseUrl: string, clientId: string) {
     ): Promise<GqlEpisodeUrl> {
       await methods
         .deleteEpisodeUrl(Api.EPISODE_URL_NO_EPISODE_DATA, { episodeUrl: args.episodeUrlInput.url })
-        .then(() => console.log('Deleted existing episode url'))
-        .catch(err => console.log('Did not delete existing episode url:', err));
+        .then(() => log('Deleted existing episode url'))
+        .catch(err => log('Did not delete existing episode url:', err));
       return await methods.createEpisodeUrl(query, args);
     },
   };

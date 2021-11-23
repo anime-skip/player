@@ -1,5 +1,6 @@
 import { RequestState } from 'vue-use-request-state';
 import { useApiClient } from '~/common/hooks/useApiClient';
+import { warn } from '~/common/utils/log';
 import Mappers from '~/common/utils/Mappers';
 import * as Api from '~api';
 import { useUpdateEpisodeRequestState, useUpdateEpisodeState } from '../state/useEpisodeState';
@@ -32,7 +33,7 @@ export function useFetchThirdPartyEpisode() {
       }
       updateEpisodeRequestState(RequestState.SUCCESS);
     } catch (err) {
-      console.warn('Failed to load suggestions', err);
+      warn('Failed to load suggestions', err);
       updateEpisodeRequestState(RequestState.FAILURE);
       updateEpisodeState({ episodeUrl: undefined, episode: undefined });
     }

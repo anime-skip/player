@@ -1,4 +1,5 @@
 import { RequestState } from 'vue-use-request-state';
+import { warn } from '~/common/utils/log';
 import { useEpisode } from '../state/useEpisodeState';
 import { useUpdateInferredEpisodeState } from '../state/useInferredEpisodeState';
 import { useEpisodeTemplate } from '../state/useTemplateState';
@@ -20,7 +21,7 @@ export function useInferEpisodeDetails() {
       }
       updateInferredEpisodeState({ requestState: RequestState.SUCCESS });
     } catch (err) {
-      console.warn('failed to infer episode details:', err);
+      warn('failed to infer episode details:', err);
       updateInferredEpisodeState({
         requestState: RequestState.FAILURE,
         inferredEpisode: undefined,

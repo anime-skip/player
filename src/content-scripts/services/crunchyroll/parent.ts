@@ -1,5 +1,5 @@
 import { waitUntil } from '~/common/utils/EventLoop';
-import { loadedLog } from '~/common/utils/loadedLog';
+import { loadedLog, log } from '~/common/utils/log';
 import setupParent from '~/common/utils/setupParent';
 
 async function getEpisodeInfo() {
@@ -8,9 +8,9 @@ async function getEpisodeInfo() {
       document.querySelector('.erc-current-media-info') != null ||
         document.querySelector('#showmedia_about_media') != null
     );
-  console.log('Waiting for page to load...');
+  log('Waiting for page to load...');
   await waitUntil(pageHasLoaded, 10 * 1000, 1, 200);
-  console.log('Page has loaded!');
+  log('Page has loaded!');
 
   // X - 06/2021 (Crunchyroll Classic)
   if (document.querySelector('#showmedia_about_media a') != null) {

@@ -1,4 +1,5 @@
 import { useApiClient } from '~/common/hooks/useApiClient';
+import { log, warn } from '~/common/utils/log';
 import Utils from '~/common/utils/Utils';
 import * as Api from '~api';
 import { useUpdateEditingState } from '../state/useEditingState';
@@ -48,7 +49,7 @@ export function useSyncTimestamps() {
     );
 
     if (toCreate.length + toUpdate.length + toDelete.length === 0) {
-      console.log('No timestamps to update');
+      log('No timestamps to update');
       updateEditingState({ isSaving: false });
       return;
     }
@@ -90,7 +91,7 @@ export function useSyncTimestamps() {
       });
       updateEpisodeState({ savedTimestamps: newSavedTimestamps });
     } catch (err) {
-      console.warn('Failed to sync timestamp changes:', err);
+      warn('Failed to sync timestamp changes:', err);
     } finally {
       updateEditingState({ isSaving: false });
       void loadEpisodeByUrl(currentEpisodeUrl.url);

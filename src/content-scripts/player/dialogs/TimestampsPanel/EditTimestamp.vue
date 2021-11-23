@@ -118,6 +118,7 @@
 import { Utils } from '@anime-skip/ui';
 import fuzzysort from 'fuzzysort';
 import { TIMESTAMP_TYPES, TIMESTAMP_TYPE_NOT_SELECTED } from '~/common/utils/Constants';
+import { warn } from '~/common/utils/log';
 import * as Api from '~api';
 import { useApplyTimestampDiff } from '../../hooks/useApplyTimestampDiff';
 import { useDeleteDraftTimestamp } from '../../hooks/useDeleteDraftTimestamp';
@@ -174,7 +175,7 @@ const updateActiveTimestamp = useUpdateActiveTimestamp();
 
 function updateTimestampAt() {
   if (activeTimestamp.value == null) {
-    console.warn('Cannot update timestamp position when none are selected');
+    warn('Cannot update timestamp position when none are selected');
     return;
   }
   focusOnTimeSelect();

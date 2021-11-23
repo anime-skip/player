@@ -1,4 +1,4 @@
-import { loadedLog } from '~/common/utils/loadedLog';
+import { debug, loadedLog, warn } from '~/common/utils/log';
 
 export function initVideoChangeWatcher() {
   loadedLog('content-scripts/misc/video-changed-watcher');
@@ -20,7 +20,7 @@ export function initVideoChangeWatcher() {
     }
     const newVideo = window.getVideo();
     if (newVideo?.src !== oldVideoSrc) {
-      console.debug('Video changed, calling callbacks:', {
+      debug('Video changed, calling callbacks:', {
         oldVideo: oldVideoSrc,
         newVideo: newVideo.src,
         videoCallbacks,
@@ -29,7 +29,7 @@ export function initVideoChangeWatcher() {
         try {
           callback(newVideo);
         } catch (err) {
-          console.warn('onVideoChangedCallback failed', err);
+          warn('onVideoChangedCallback failed', err);
         }
       });
       oldVideoSrc = newVideo.src;

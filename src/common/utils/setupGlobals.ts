@@ -1,5 +1,6 @@
 import browser from 'webextension-polyfill';
 import Utils from '~/common/utils/Utils';
+import { debug, log, warn } from './log';
 import Messenger from './Messenger';
 import { centerFitVideoBounds, fallbackBound } from './videoBounds';
 
@@ -27,17 +28,17 @@ export default function setupGlobals(
   window.getPlayerOptions = async () => {
     try {
       const optionGroups = await options.getPlayerOptions?.();
-      console.log(`${service}.getPlayerOptions`, optionGroups);
+      log(`${service}.getPlayerOptions`, optionGroups);
       if (optionGroups && optionGroups.length > 0) return optionGroups;
       return undefined;
     } catch (err) {
-      console.warn('Failed to get player options, falling back to undefined');
+      warn('Failed to get player options, falling back to undefined');
       return undefined;
     }
   };
 
   window.inferEpisodeInfo = async (): Promise<InferredEpisodeInfo> => {
-    console.debug(`${service}.inferEpisodeInfo`);
+    debug(`${service}.inferEpisodeInfo`);
     return await browser.runtime.sendMessage({
       type: '@anime-skip/inferEpisodeInfo',
     });
