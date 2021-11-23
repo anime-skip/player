@@ -49,17 +49,17 @@ if (modesToLog.includes(EXTENSION_MODE)) {
           `URL: %c${response.config.baseURL! + response.config.url?.replace('/', '')}`,
           'color: #137AF8'
         );
-        debug('Headers: ', headers);
+        debug('Headers:', headers);
         if (response.config.params) {
-          debug('Parameters: ', response.config.params);
+          debug('Parameters:', response.config.params);
         }
         if (response.config.data) {
           debug(`GraphQL:\n%c${formattedGraphql}`, 'color: #137AF8');
           if (requestBody.variables) {
-            debug('Variables: ', requestBody.variables);
+            debug('Variables:', requestBody.variables);
           }
         }
-        debug('Response: ', response.data);
+        debug('Response:', response.data);
       }
     );
 
