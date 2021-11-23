@@ -1,6 +1,6 @@
 import browser from 'webextension-polyfill';
 import Browser from '~/common/utils/Browser';
-import { loadedLog } from '~/common/utils/loadedLog';
+import { loadedLog, log } from '~/common/utils/log';
 import UsageStats from '~/common/utils/UsageStats';
 
 function getUninstallUrl(userId: string | undefined): string | undefined {
@@ -24,7 +24,7 @@ export function initMetrics() {
       const uninstallUrl = userId ? getUninstallUrl(userId) : undefined;
       if (uninstallUrl !== prevUninstallUrl) {
         browser.runtime.setUninstallURL(uninstallUrl);
-        console.log('Updated uninstall url:', uninstallUrl);
+        log('Updated uninstall url:', uninstallUrl);
       }
       prevUninstallUrl = uninstallUrl;
     });

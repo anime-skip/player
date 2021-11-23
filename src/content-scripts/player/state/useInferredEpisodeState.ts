@@ -1,5 +1,6 @@
 import { RequestState } from 'vue-use-request-state';
 import { createProvideInject } from '~/common/utils/createProvideInject';
+import { log } from '~/common/utils/log';
 import * as Api from '~api';
 
 interface InferredEpisodeState {
@@ -37,9 +38,7 @@ export function useInferRequestState() {
   const value = useInferredEpisodeState();
   watch(
     () => value,
-    () => {
-      console.log('is showing changed 2', value);
-    }
+    () => log('is showing changed 2', value)
   );
   return computed(() => value.requestState);
 }

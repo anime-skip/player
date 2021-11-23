@@ -1,5 +1,5 @@
 import browser from 'webextension-polyfill';
-import { loadedLog } from '~/common/utils/loadedLog';
+import { loadedLog, warn } from '~/common/utils/log';
 import Messenger from '~/common/utils/Messenger';
 
 export function initTabChange() {
@@ -11,7 +11,7 @@ export function initTabChange() {
     if (url == null) return;
 
     messenger.send('@anime-skip/changeUrl', url, tabId).catch(err => {
-      console.warn('Tab url change update failed', err);
+      warn('Tab url change update failed', err);
     });
   });
 }

@@ -1,5 +1,5 @@
 import { PlayerHosts } from '~/common/utils/CompileTimeConstants';
-import { loadedLog } from '~/common/utils/loadedLog';
+import { error, loadedLog } from '~/common/utils/log';
 import { urlPatternMatch } from '~/common/utils/strings';
 import { initKeyboardShortcutBlocker } from './misc/keyboard-shortcut-blocker';
 import { initVideoChangeWatcher } from './misc/video-changed-watcher';
@@ -35,5 +35,5 @@ try {
   loadedLog('content-scripts/player.ts');
   init();
 } catch (err) {
-  console.error(err);
+  error(err);
 }

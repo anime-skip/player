@@ -2,6 +2,7 @@ import { GqlPreferences } from '@anime-skip/api-client';
 import * as Api from '~api';
 import { useApiClient } from '../hooks/useApiClient';
 import { createWebExtProvideInject } from '../utils/createWebExtProvideInject';
+import { warn } from '../utils/log';
 
 type RemotePreferences = Omit<
   GqlPreferences,
@@ -79,7 +80,7 @@ export function useUpdateBooleanPref() {
     updatePreferences({ [pref]: newValue });
 
     api.savePreferences(Api.PREFERENCES_QUERY, { preferences: { [pref]: newValue } }).catch(err => {
-      console.warn('Failed to update preference', { pref, newValue }, err);
+      warn('Failed to update preference', { pref, newValue }, err);
       // Slight delay for a better animation
       setTimeout(() => updatePreferences({ [pref]: oldValue }), 200);
     });

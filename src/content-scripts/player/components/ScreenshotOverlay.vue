@@ -39,6 +39,7 @@ import { useTimeout } from '@anime-skip/ui';
 import { ref } from 'vue';
 import { useWebExtensionStorageValue } from '~/common/hooks/useWebExtensionStorage';
 import Browser from '~/common/utils/Browser';
+import { log } from '~/common/utils/log';
 
 interface ImageDetails {
   url: string;
@@ -95,7 +96,7 @@ const { value: base64Screenshot, setValue: setBase64Screenshot } = useWebExtensi
 
 watch(base64Screenshot, data => {
   if (data != null) {
-    console.log('Screenshot recieved', data);
+    log('Screenshot recieved', data);
     addImage(data);
   }
 });

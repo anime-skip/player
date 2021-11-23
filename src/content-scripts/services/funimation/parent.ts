@@ -1,4 +1,4 @@
-import { loadedLog } from '~/common/utils/loadedLog';
+import { loadedLog } from '~/common/utils/log';
 import setupParent from '~/common/utils/setupParent';
 
 function getEpisodeInfo() {
@@ -38,6 +38,5 @@ function getEpisodeInfo() {
 
 export function initFunimationParent() {
   loadedLog('content-scripts/services/funimation/parent.ts');
-
   setupParent('funimation', { getEpisodeInfo });
 }

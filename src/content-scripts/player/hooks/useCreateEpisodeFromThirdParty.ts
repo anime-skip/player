@@ -1,5 +1,6 @@
 import { RequestState } from 'vue-use-request-state';
 import { useApiClient } from '~/common/hooks/useApiClient';
+import { warn } from '~/common/utils/log';
 import Mappers from '~/common/utils/Mappers';
 import Utils from '~/common/utils/Utils';
 import * as Api from '~api';
@@ -87,7 +88,7 @@ export function useCreateEpisodeFromThirdParty() {
       onSuccess?.();
       updateEpisodeRequestState(RequestState.SUCCESS);
     } catch (err) {
-      console.warn('Failed to create episode from third party data', err);
+      warn('Failed to create episode from third party data', err);
       updateEpisodeRequestState(RequestState.FAILURE);
     }
   };

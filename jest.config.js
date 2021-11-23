@@ -10,6 +10,9 @@ const tsconfigPathsModuleNameMapper = pathsToModuleNameMapper(compilerOptions.pa
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
+  globals: {
+    EXTENSION_MODE: 'prod',
+  },
   moduleNameMapper: {
     ...tsconfigPathsModuleNameMapper,
     'webextension-polyfill': '<rootDir>/src/__mocks__/webextension-polyfill.mock.ts',

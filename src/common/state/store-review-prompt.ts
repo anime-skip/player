@@ -2,6 +2,7 @@ import browser from 'webextension-polyfill';
 import { DAYS, SECONDS, today } from '~/common/utils/time';
 import { useWebExtensionStorageValue } from '../hooks/useWebExtensionStorage';
 import { sleep } from '../utils/EventLoop';
+import { debug } from '../utils/log';
 
 const REVIEW_PROMPT_AT_KEY = 'storeReviewPromptAt';
 const DONT_SHOW_AGAIN_KEY = 'dontShowStoreReviewPromptAgain';
@@ -15,7 +16,7 @@ async function setLocalStorage<T>(key: string, value: T | null): Promise<void> {
 
 export const getStoreReviewPromptAt = () => getLocalStorage<number | null>(REVIEW_PROMPT_AT_KEY);
 export const setStoreReviewPromptAt = async (value: number | null) => {
-  console.log('Set store review prompt at:', value);
+  debug('Set store review prompt at:', value);
   await setLocalStorage(REVIEW_PROMPT_AT_KEY, value);
 };
 

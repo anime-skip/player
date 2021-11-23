@@ -1,5 +1,6 @@
 import { RequestState } from 'vue-use-request-state';
 import { useApiClient } from '~/common/hooks/useApiClient';
+import { log } from '~/common/utils/log';
 import * as Api from '~api';
 import { useUpdateTemplateRequestState, useUpdateTemplateState } from '../state/useTemplateState';
 
@@ -15,7 +16,7 @@ export function useDeleteTemplate() {
       updateTemplateState({ episodeTemplate: undefined, timestamps: undefined });
       updateTemplateRequestState(RequestState.SUCCESS);
     } catch (err) {
-      console.info('Failed to delete template:', err);
+      log('Failed to delete template:', err);
       updateTemplateRequestState(RequestState.FAILURE);
     }
   };

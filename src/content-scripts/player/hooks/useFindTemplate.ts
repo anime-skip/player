@@ -1,4 +1,5 @@
 import { useApiClient } from '~/common/hooks/useApiClient';
+import { debug, log } from '~/common/utils/log';
 import Utils from '~/common/utils/Utils';
 import * as Api from '~api';
 import { useEpisodeTemplate, useUpdateTemplateState } from '../state/useTemplateState';
@@ -16,7 +17,7 @@ export function useFindTemplate() {
         return durationRef.value;
       }
       await Utils.sleep(50);
-      console.debug('Waiting for player duration...');
+      debug('Waiting for player duration...');
       // eslint-disable-next-line no-constant-condition
     } while (true);
   }
@@ -55,7 +56,7 @@ export function useFindTemplate() {
         clearTemplateData();
       }
     } catch (err) {
-      console.log('Could not find episode template for', { episodeId, showName, season }, err);
+      log('Could not find episode template for', { episodeId, showName, season }, err);
       clearTemplateData();
     }
   };

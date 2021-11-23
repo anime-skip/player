@@ -1,13 +1,9 @@
-import tsJest from 'ts-jest/utils';
+import { mocked } from 'ts-jest/utils';
 import setupParent from '~/common/utils/setupParent';
 import { initFunimation20210926Parent } from '../parent';
 
-console.log = jest.fn();
-
-jest.mock('~/common/utils/loadedLog');
-
 jest.mock('~/common/utils/setupParent');
-const setupParentMock = tsJest.mocked(setupParent);
+const setupParentMock = mocked(setupParent);
 
 function setupDom(show: string, episode: string, details: string) {
   document.body.innerHTML = `

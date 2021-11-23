@@ -69,6 +69,7 @@ import {
 } from '../state/useEditingState';
 import { usePlayHistory } from '../state/usePlayHistory';
 import { useDuration, useVideoController, useVideoState } from '../state/useVideoState';
+import { warn } from '~/common/utils/log';
 
 // Video State
 
@@ -171,7 +172,7 @@ function gotoNextTimestamp(): void {
     return;
   }
 
-  console.warn(
+  warn(
     'Tried to go to next timestamp, but there was not one and the duration had not been initalized'
   );
 }

@@ -4,6 +4,7 @@ import {
   usePrimaryKeyboardShortcutPrefs,
   useSecondaryKeyboardShortcutPrefs,
 } from '~/common/state/useKeyboardShortcutPrefs';
+import { debug } from '~/common/utils/log';
 import UsageStats from '~/common/utils/UsageStats';
 import Utils from '~/common/utils/Utils';
 
@@ -16,7 +17,7 @@ export function useKeyboardShortcuts(
 ) {
   const isFirst = instanceCount == 0;
   instanceCount++;
-  console.debug(`[${componentName}] useKeyboardShortcuts()`);
+  debug(`[${componentName}] useKeyboardShortcuts()`);
 
   const { primaryShortcutsKeyToActionsMap } = usePrimaryKeyboardShortcutPrefs();
   const { secondaryShortcutsKeyToActionsMap } = useSecondaryKeyboardShortcutPrefs();
@@ -33,7 +34,7 @@ export function useKeyboardShortcuts(
       ...(secondaryShortcutsKeyToActionsMap.value[keyCombo] ?? []),
     ];
 
-    console.debug(`[${componentName}] Pressed ${keyCombo} -> [${keyActions.join(', ')}]`);
+    debug(`[${componentName}] Pressed ${keyCombo} -> [${keyActions.join(', ')}]`);
     setTimeout(() => {
       keyActions.forEach(action => {
         if (isFirst)

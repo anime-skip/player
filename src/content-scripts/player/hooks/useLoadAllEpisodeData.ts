@@ -1,4 +1,5 @@
 import { RequestState } from 'vue-use-request-state';
+import { log, warn } from '~/common/utils/log';
 import { useEpisodeUrl } from '../state/useEpisodeState';
 import {
   useInferredEpisode,
@@ -26,16 +27,16 @@ export function useLoadAllEpisodeData() {
     });
 
     await fetchEpisodeByUrl(tabUrl).catch(() =>
-      console.warn('No matching episode url found for ' + tabUrl)
+      warn('No matching episode url found for ' + tabUrl)
     );
-    await inferEpisodeDetails().catch(err => console.warn('Could not infer episode info:', err));
+    await inferEpisodeDetails().catch(err => warn('Could not infer episode info:', err));
 
     if (
       episodeUrl.value == null &&
       inferredEpisode.value?.name != null &&
       inferredEpisode.value?.show != null
     ) {
-      console.log('Could not load URL, use inferred details to load suggestions');
+      log('Could not load URL, use inferred details to load suggestions');
       void fetchThirdPartyEpisode(inferredEpisode.value.name, inferredEpisode.value.show);
     }
   };

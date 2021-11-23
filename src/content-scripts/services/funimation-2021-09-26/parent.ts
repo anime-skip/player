@@ -1,12 +1,12 @@
 import { waitUntil } from '~/common/utils/EventLoop';
-import { loadedLog } from '~/common/utils/loadedLog';
+import { loadedLog, log } from '~/common/utils/log';
 import setupParent from '~/common/utils/setupParent';
 
 async function getEpisodeInfo() {
   const pageHasLoaded = () => Promise.resolve(document.querySelector('.meta-overlay') != null);
-  console.log('Waiting for page to load...');
+  log('Waiting for page to load...');
   await waitUntil(pageHasLoaded, 10 * 1000, 1, 200);
-  console.log('Page has loaded!');
+  log('Page has loaded!');
 
   // 2021/09/26 - Current
   const show = document.querySelector('.meta-overlay__data-block--title')?.textContent ?? undefined;

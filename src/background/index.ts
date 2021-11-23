@@ -1,5 +1,5 @@
 import { initStoreReviewPrompt } from '~/common/state/store-review-prompt';
-import { loadedLog } from '~/common/utils/loadedLog';
+import { error, loadedLog } from '~/common/utils/log';
 import { initChromePageAction } from './chrome-page-action';
 import { initContextMenu } from './context-menu';
 import { initMessenger } from './messenger';
@@ -20,5 +20,5 @@ try {
   loadedLog('background/index.ts');
   init();
 } catch (err) {
-  console.error(err);
+  error(err);
 }

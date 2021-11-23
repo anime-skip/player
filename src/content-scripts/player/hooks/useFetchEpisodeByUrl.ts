@@ -1,5 +1,6 @@
 import { RequestState } from 'vue-use-request-state';
 import { useApiClient } from '~/common/hooks/useApiClient';
+import { warn } from '~/common/utils/log';
 import * as Api from '~api';
 import { useUpdateEpisodeRequestState, useUpdateEpisodeState } from '../state/useEpisodeState';
 import { useUpdateEpisodeTemplate, useUpdateTemplateTimestamps } from '../state/useTemplateState';
@@ -34,7 +35,7 @@ export function useFetchEpisodeByUrl() {
       updateEpisodeRequestState(RequestState.SUCCESS);
       return true;
     } catch (err) {
-      console.warn('Failed to load episode url for ' + url, err);
+      warn('Failed to load episode url for ' + url, err);
       updateEpisodeRequestState(RequestState.FAILURE);
       clearAllEpisodeState();
       return false;

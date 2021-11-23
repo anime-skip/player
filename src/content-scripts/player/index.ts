@@ -3,7 +3,7 @@ import { createApp } from 'vue';
 import 'vue-global-api';
 import FakeRouterLink from '~/common/components/FakeRouterLink.vue';
 import '~/common/styles';
-import { loadedLog } from '~/common/utils/loadedLog';
+import { debug, loadedLog, log, warn } from '~/common/utils/log';
 import Container from './Container.vue';
 
 // TODO git mv to player-ui
@@ -21,7 +21,7 @@ export function loadPlayerUi() {
 
   const existingPlayers = document.querySelectorAll('#AnimeSkipPlayer');
   if (existingPlayers.length > 0) {
-    console.debug('Player already added, removing');
+    debug('Player already added, removing');
     existingPlayers.forEach(player => {
       player.remove();
     });
@@ -35,10 +35,10 @@ export function loadPlayerUi() {
 
   async function injectPlayer() {
     const rootQuery = window.getRootQuery();
-    console.debug(`Adding player to ${rootQuery}`);
+    debug(`Adding player to ${rootQuery}`);
 
     while (document.querySelector(rootQuery) == null) {
-      console.debug("Player's root node not found, trying again");
+      debug("Player's root node not found, trying again");
       await sleep(100);
     }
 
@@ -50,14 +50,14 @@ export function loadPlayerUi() {
 
       document.querySelector(rootQuery)?.appendChild(mountedApp.$el);
 
-      console.log(`Added player to ${rootQuery}`);
+      debug(`Added player to ${rootQuery}`);
     } catch (err) {
-      console.warn('Failed to inject player UI', err);
+      warn('Failed to inject player UI', err);
     }
   }
 
   if (window.doNotReplacePlayer?.()) {
-    console.log('Did not inject Anime Skip on purpose');
+    log('Did not inject Anime Skip on purpose');
   } else {
     injectPlayer();
   }

@@ -1,5 +1,6 @@
 import { RequestState } from 'vue-use-request-state';
 import { useApiClient } from '~/common/hooks/useApiClient';
+import { log } from '~/common/utils/log';
 import * as Api from '~api';
 import { useEpisode, useEpisodeUrl } from '../state/useEpisodeState';
 import { useTemplateTimestamps, useUpdateTemplateRequestState } from '../state/useTemplateState';
@@ -45,7 +46,7 @@ export function useSaveTemplate() {
       void fetchEpisodeUrl(episodeUrl.value!.url);
       updateTemplateRequestState(RequestState.SUCCESS);
     } catch (err) {
-      console.info('Failed to save template:', err);
+      log('Failed to save template:', err);
       updateTemplateRequestState(RequestState.FAILURE);
     }
   };

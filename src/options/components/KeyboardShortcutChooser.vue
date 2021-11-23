@@ -75,6 +75,7 @@ unset</pre
 </template>
 
 <script lang="ts" setup>
+import { debug } from '~/common/utils/log';
 import Utils from '~/common/utils/Utils';
 import { useDuplicateBindingChecker } from '~/content-scripts/player/hooks/useDubplicateBindingChecker';
 
@@ -112,7 +113,7 @@ function onKeyDown(event: KeyboardEvent) {
       case 'Escape':
         return hideKeyBindingEditor();
       case 'Enter':
-        console.debug('emitting', currentKeyBinding.value);
+        debug('emitting', currentKeyBinding.value);
         if (currentKeyBinding.value) emit('update', currentKeyBinding.value);
         return hideKeyBindingEditor();
       case 'Backspace':

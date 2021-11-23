@@ -70,6 +70,7 @@ import { CreateEpisodePrefill } from '~/@types';
 import { useApiClient } from '~/common/hooks/useApiClient';
 import { TIMESTAMP_SOURCES } from '~/common/utils/Constants';
 import EpisodeUtils from '~/common/utils/EpisodeUtils';
+import { error, warn } from '~/common/utils/log';
 import * as Api from '~api';
 import { useCreateEpisodeFromThirdParty } from '../../hooks/useCreateEpisodeFromThirdParty';
 import { useEpisodeAutocomplete } from '../../hooks/useEpisodeAutocomplete';
@@ -200,7 +201,7 @@ function onClickSave(): void {
   const s = show.value.data;
   const e = episode.value.data;
   if (s == null || e == null) {
-    console.error('Failed to save, show or episode were not selected', {
+    error('Failed to save, show or episode were not selected', {
       show: s,
       episode: e,
     });
@@ -212,12 +213,12 @@ function onClickSave(): void {
 
 const _linkEpisodeUrl = useLinkEpisodeUrl();
 function linkToExistingEpisode(episodeToSave: Api.EpisodeSearchResult) {
-  _linkEpisodeUrl(episodeToSave, hideDialog).catch(console.warn);
+  _linkEpisodeUrl(episodeToSave, hideDialog).catch(warn);
 }
 
 const _createFromThirdParty = useCreateEpisodeFromThirdParty();
 function createFromThirdParty(thirdPartyEpisodeToSave: Api.ThirdPartyEpisode) {
-  _createFromThirdParty(thirdPartyEpisodeToSave, hideDialog).catch(console.warn);
+  _createFromThirdParty(thirdPartyEpisodeToSave, hideDialog).catch(warn);
 }
 </script>
 

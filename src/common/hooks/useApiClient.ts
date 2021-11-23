@@ -4,6 +4,7 @@
 import { createCustomAnimeSkipClient } from '~/common/utils/CustomApiClient';
 import { useClearTokens } from '../state/useAuth';
 import { useResetPreferences } from '../state/useGeneralPreferences';
+import { groupCollapsed, warn } from '../utils/log';
 import { LogoutError } from '../utils/LogoutError';
 import UsageStats from '../utils/UsageStats';
 import Utils from '../utils/Utils';
@@ -21,58 +22,49 @@ const modesToLog: ExtensionMode[] = ['dev', 'staged'];
 
 const client = createCustomAnimeSkipClient(baseUrls[EXTENSION_MODE], clientId);
 if (modesToLog.includes(EXTENSION_MODE)) {
-  // Uncomment if status code 422 is coming back
-  // client.axios.interceptors.request.use(config => {
-  //   console.log(JSON.stringify(config, null, 2));
-  //   return config;
-  // });
-  client.axios.interceptors.response.use(
-    /* eslint-disable no-console */
-    response => {
-      // disabled since axios@0.24
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const requestBody = JSON.parse(response.config.data!);
-      const formattedGraphql = Utils.formatGraphql(requestBody.query);
-      const headers = {
-        ...response.config.headers,
-        // @ts-expect-error: Common headers should still exist... Failed when upgrading to axios@0.24
-        ...response.config.headers.common,
-        // @ts-expect-error: method specific headers should still exist... Failed when upgrading to axios@0.24
-        ...response.config.headers[response.config.method || 'get'],
-      };
-      delete headers.get;
-      delete headers.post;
-      delete headers.put;
-      delete headers.delete;
-      delete headers.patch;
-      delete headers.head;
-      console.groupCollapsed(
-        `%cAPI  %c${response.config.method} ${response.config.url} (${requestBody.operationName})`,
-        'font-weight: 600; color: default;',
-        'font-weight: 400; color: default;'
-      );
-      console.debug(
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        `URL: %c${response.config.baseURL! + response.config.url?.replace('/', '')}`,
-        'color: #137AF8'
-      );
-      console.debug('Headers: ', headers);
-      if (response.config.params) {
-        console.debug('Parameters: ', response.config.params);
-      }
-      if (response.config.data) {
-        console.debug(`GraphQL:\n%c${formattedGraphql}`, 'color: #137AF8');
-        if (requestBody.variables) {
-          console.debug('Variables: ', requestBody.variables);
-        }
-      }
-      console.debug('Response: ', response.data);
-      console.groupEnd();
+  client.axios.interceptors.response.use(response => {
+    // disabled since axios@0.24
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const requestBody = JSON.parse(response.config.data!);
+    const formattedGraphql = Utils.formatGraphql(requestBody.query);
+    const headers = {
+      ...response.config.headers,
+      // @ts-expect-error: Common headers should still exist... Failed when upgrading to axios@0.24
+      ...response.config.headers.common,
+      // @ts-expect-error: method specific headers should still exist... Failed when upgrading to axios@0.24
+      ...response.config.headers[response.config.method || 'get'],
+    };
+    delete headers.get;
+    delete headers.post;
+    delete headers.put;
+    delete headers.delete;
+    delete headers.patch;
+    delete headers.head;
 
-      return response;
-    }
-    /* eslint-enable no-console */
-  );
+    groupCollapsed(
+      `API ${response.config.method} ${response.config.url} (${requestBody.operationName})`,
+      ({ log }) => {
+        log(
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          `URL: %c${response.config.baseURL! + response.config.url?.replace('/', '')}`,
+          'color: #137AF8'
+        );
+        log('Headers: ', headers);
+        if (response.config.params) {
+          log('Parameters: ', response.config.params);
+        }
+        if (response.config.data) {
+          log(`GraphQL:\n%c${formattedGraphql}`, 'color: #137AF8');
+          if (requestBody.variables) {
+            log('Variables: ', requestBody.variables);
+          }
+        }
+        log('Response: ', response.data);
+      }
+    );
+
+    return response;
+  });
 }
 
 export function useApiClient() {
@@ -109,7 +101,7 @@ export function useApiClient() {
           return await (target as any)[field](...args);
         } catch (err) {
           if (err instanceof LogoutError) {
-            console.warn('Logging out...');
+            warn('Logging out...');
             clearTokens();
             resetPreferences();
             void UsageStats.saveEvent('forced_logout');

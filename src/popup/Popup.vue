@@ -16,6 +16,7 @@
 <script lang="ts" setup>
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import Browser from '~/common/utils/Browser';
+import { log } from '~/common/utils/log';
 import UsageStats from '~/common/utils/UsageStats';
 
 defineProps<{
@@ -33,7 +34,7 @@ const isLoggedIn = useIsLoggedIn();
 const shouldCloseAfterLogin = computed(() => {
   const urlParams = new URLSearchParams(window?.location.search);
   const closePopupAfterLogin = urlParams.get('closeAfterLogin');
-  console.log('Closing after login:', closePopupAfterLogin);
+  log('Closing after login:', closePopupAfterLogin);
   return closePopupAfterLogin === 'true';
 });
 
