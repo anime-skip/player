@@ -43,23 +43,23 @@ if (modesToLog.includes(EXTENSION_MODE)) {
 
     groupCollapsed(
       `API ${response.config.method} ${response.config.url} (${requestBody.operationName})`,
-      ({ log }) => {
-        log(
+      ({ debug }) => {
+        debug(
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           `URL: %c${response.config.baseURL! + response.config.url?.replace('/', '')}`,
           'color: #137AF8'
         );
-        log('Headers: ', headers);
+        debug('Headers: ', headers);
         if (response.config.params) {
-          log('Parameters: ', response.config.params);
+          debug('Parameters: ', response.config.params);
         }
         if (response.config.data) {
-          log(`GraphQL:\n%c${formattedGraphql}`, 'color: #137AF8');
+          debug(`GraphQL:\n%c${formattedGraphql}`, 'color: #137AF8');
           if (requestBody.variables) {
-            log('Variables: ', requestBody.variables);
+            debug('Variables: ', requestBody.variables);
           }
         }
-        log('Response: ', response.data);
+        debug('Response: ', response.data);
       }
     );
 
