@@ -1,7 +1,6 @@
 import { PlayerHosts } from '~/common/utils/CompileTimeConstants';
 import { error, loadedLog } from '~/common/utils/log';
 import { urlPatternMatch } from '~/common/utils/strings';
-import { initKeyboardShortcutBlocker } from './misc/keyboard-shortcut-blocker';
 import { initVideoChangeWatcher } from './misc/video-changed-watcher';
 import { loadPlayerUi } from './player/index';
 import { initCrunchyrollPlayer } from './services/crunchyroll/player';
@@ -22,7 +21,6 @@ function init() {
   for (const pattern in services) {
     if (urlPatternMatch(pattern, window.location)) {
       const initServicePlayer = services[pattern as PlayerHosts];
-      initKeyboardShortcutBlocker();
       initVideoChangeWatcher();
       initServicePlayer();
       loadPlayerUi();

@@ -41,6 +41,11 @@
       "js": ["content-scripts/parent.ts", "content-scripts/player.ts"],
       "css": ["generated:content-scripts/style.css"],
       "all_frames": true
+    },
+    {
+      "js": ["content-scripts/keyboard-shortcut-blocker.ts"],
+      "all_frames": true,
+      "run_at": "document_start"
     }
   ],
   "web_accessible_resources": ["assets/*", "assets/**/*"]

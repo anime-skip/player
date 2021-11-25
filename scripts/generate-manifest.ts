@@ -42,6 +42,9 @@ export function generateManifest(config: GenerateManifestConfig): Manifest.WebEx
       {
         matches: Array.from(contentScriptMatches.values()),
       },
+      {
+        matches: Object.values(PlayerHosts),
+      },
     ],
   });
 }
