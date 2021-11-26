@@ -31,26 +31,10 @@ unset</pre
     <teleport to="body">
       <div
         v-if="isShowingKeyBindingEditor"
-        class="
-          fixed
-          inset-0
-          bg-control-variant bg-opacity-high
-          select-none
-          flex flex-col
-          justify-center
-          items-center
-        "
+        class="fixed inset-0 bg-control-variant bg-opacity-high select-none flex flex-col justify-center items-center"
       >
         <h5
-          class="
-            w-full
-            max-w-xs
-            p-4
-            rounded-md
-            ring-2 ring-on-surface ring-opacity-low
-            text-center
-            font-bold
-          "
+          class="w-full max-w-xs p-4 rounded-md ring-2 ring-on-surface ring-opacity-low text-center font-bold"
         >
           <span v-if="!currentKeyBinding" class="no-selection">[Press a key]</span>
           <pre v-else class="font-mono-2">{{ currentKeyBinding }}</pre>

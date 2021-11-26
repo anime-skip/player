@@ -30,16 +30,7 @@
           <template v-else>
             <tr
               v-for="timestamp of activeTimestamps"
-              class="
-                bg-on-surface bg-opacity-0
-                hover:bg-opacity-hover
-                focus-within:bg-opacity-active
-                transition-colors
-                cursor-pointer
-                py-2
-                px-4
-                group
-              "
+              class="bg-on-surface bg-opacity-0 hover:bg-opacity-hover focus-within:bg-opacity-active transition-colors cursor-pointer py-2 px-4 group"
               :key="timestamp.id"
               @click="onClickTimestamp(timestamp)"
               @mouseenter="onHoverTimestamp(timestamp)"
@@ -68,32 +59,14 @@
               <template v-if="canEditTimestamps">
                 <td class="w-10 py-1">
                   <div
-                    class="
-                      w-6
-                      p-2
-                      rounded-full
-                      box-content
-                      opacity-0
-                      group-hover:opacity-medium
-                      hover:bg-on-surface hover:bg-opacity-active
-                      transition-all
-                    "
+                    class="w-6 p-2 rounded-full box-content opacity-0 group-hover:opacity-medium hover:bg-on-surface hover:bg-opacity-active transition-all"
                   >
                     <WebExtImg src="ic_delete.svg" @click.stop="deleteTimestamp(timestamp)" />
                   </div>
                 </td>
                 <td class="w-10 py-1">
                   <div
-                    class="
-                      w-6
-                      p-2
-                      mr-2
-                      rounded-full
-                      box-content
-                      opacity-low
-                      group-hover:opacity-medium
-                      hover:bg-on-surface hover:bg-opacity-active
-                    "
+                    class="w-6 p-2 mr-2 rounded-full box-content opacity-low group-hover:opacity-medium hover:bg-on-surface hover:bg-opacity-active"
                   >
                     <WebExtImg src="ic_edit.svg" @click.stop="editTimestamp(timestamp)" />
                   </div>

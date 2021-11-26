@@ -1,16 +1,7 @@
 <template>
   <div class="PlaybackRatePicker">
     <div
-      class="
-        flex
-        items-stretch
-        justify-items-stretch
-        h-10
-        w-full
-        divide-x-2 divide-background
-        rounded-sm
-        bg-control
-      "
+      class="flex items-stretch justify-items-stretch h-10 w-full divide-x-2 divide-background rounded-sm bg-control"
     >
       <Icon path="M4 18L12.5 12L4 6V18ZM13 6V18L21.5 12L13 6Z" class="my-2 w-10" />
       <div v-for="speed in playbackSpeeds" :key="speed.value" class="flex-1 min-w-10">

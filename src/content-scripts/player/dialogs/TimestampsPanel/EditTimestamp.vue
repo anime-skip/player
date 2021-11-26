@@ -63,16 +63,7 @@
             <li
               v-for="t of filteredResults"
               :key="t.id"
-              class="
-                flex flex-row
-                space-x-4
-                px-3
-                py-2
-                bg-on-surface bg-opacity-0
-                hover:bg-opacity-hover
-                cursor-pointer
-                rounded
-              "
+              class="flex flex-row space-x-4 px-3 py-2 bg-on-surface bg-opacity-0 hover:bg-opacity-hover cursor-pointer rounded"
               @click="selectType(t)"
             >
               <Icon

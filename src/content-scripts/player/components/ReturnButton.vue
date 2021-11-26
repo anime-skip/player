@@ -3,20 +3,7 @@
     <scoped-styles-root>
       <div
         v-if="shouldShowReturnButton"
-        class="
-          fixed
-          right-16
-          top-16
-          z-1000000
-          bg-background
-          shadow-md
-          flex flex-row
-          items-center
-          py-2
-          px-3
-          cursor-pointer
-          rounded-lg
-        "
+        class="fixed right-16 top-16 z-1000000 bg-background shadow-md flex flex-row items-center py-2 px-3 cursor-pointer rounded-lg"
         @click="hideOriginalPlayer()"
       >
         <web-ext-img src="extension-logo/48.png" class="w-8 h-8 mr-3" />

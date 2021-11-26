@@ -10,16 +10,7 @@
             <p class="body-2 text-on-surface text-opacity-high text-left">{{ message }}</p>
           </div>
           <div
-            class="
-              p-2
-              rounded-full
-              select-none
-              bg-on-surface bg-opacity-0
-              hover:bg-opacity-hover
-              cursor-pointer
-              -mt-2
-              -mr-2
-            "
+            class="p-2 rounded-full select-none bg-on-surface bg-opacity-0 hover:bg-opacity-hover cursor-pointer -mt-2 -mr-2"
             title="Hide notification"
             @click="emit('dismiss-self')"
           >

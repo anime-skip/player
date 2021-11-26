@@ -20,13 +20,7 @@
     <div v-if="shouldShowSuggestions" class="h-0 overflow-y-visible z-10">
       <!-- @mousedown.prevent: prevent input from losing focus when clicking on an item -->
       <Card
-        class="
-          max-h-72
-          mt-1
-          rounded
-          divide-y divide-on-surface divide-opacity-divider
-          overflow-auto
-        "
+        class="max-h-72 mt-1 rounded divide-y divide-on-surface divide-opacity-divider overflow-auto"
         :elevation="4"
         @mousedown.prevent
         @mouseover="onHoverOptions"

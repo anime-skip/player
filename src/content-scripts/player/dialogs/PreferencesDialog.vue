@@ -39,12 +39,7 @@
     </template>
     <template v-else>
       <div
-        class="
-          flex flex-row
-          items-center
-          space-x-4
-          border-b border-on-surface border-opacity-divider
-        "
+        class="flex flex-row items-center space-x-4 border-b border-on-surface border-opacity-divider"
       >
         <WebExtImg
           class="w-6 h-6"
