@@ -1,4 +1,5 @@
 import { useIsLoggedIn } from '~/common/state/useAuth';
+import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
 import { TIMESTAMP_TYPE_NOT_SELECTED } from '~/common/utils/Constants';
 import { warn } from '~/common/utils/log';
 import UsageStats from '~/common/utils/UsageStats';
@@ -14,13 +15,14 @@ import { useVideoController } from '../state/useVideoState';
 import { useStartEditing } from './useStartEditing';
 
 export function useCreateNewTimestamp() {
-  const { pause } = useVideoController();
+  const { pause, rewindToNearest } = useVideoController();
   const startEditing = useStartEditing();
   const updateEditTimestampMode = useUpdateEditTimestampMode();
   const updateActiveTimestamp = useUpdateActiveTimestamp();
   const showDialog = useShowDialog();
   const showLoginOverlay = useShowLoginOverlay();
   const isLoggedIn = useIsLoggedIn();
+  const preferences = useGeneralPreferences();
 
   function showTimestampsPanel() {
     showDialog('TimestampsPanel');
@@ -33,6 +35,9 @@ export function useCreateNewTimestamp() {
       return;
     }
     pause();
+    if (preferences.value.createTimestampSnapBack) {
+      rewindToNearest(0.5);
+    }
 
     if (!isLoggedIn.value) {
       showLoginOverlay();
