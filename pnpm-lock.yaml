@@ -2,7 +2,7 @@ lockfileVersion: 5.3
 
 specifiers:
   '@anime-skip/api-client': ^2.6.1
-  '@anime-skip/ui': ^1.2.6
+  '@anime-skip/ui': ^1.2.9
   '@anime-skip/usage-stats-client': ^1.2.2
   '@iconify/json': ^1.1.386
   '@tailwindcss/line-clamp': ^0.2.1
@@ -43,8 +43,8 @@ specifiers:
   md5: ^2.3.0
   postcss: ^8.3.6
   postcss-selector-parser: ^6.0.6
-  prettier: ^2.3.2
-  pretty-quick: ^3.1.1
+  prettier: ^2.5.0
+  pretty-quick: ^3.1.2
   rimraf: ^3.0.2
   sass: ^1.38.0
   tailwindcss: ^2.2.7
@@ -52,7 +52,7 @@ specifiers:
   typescript: ^4.3.5
   unplugin-vue-components: ^0.17.2
   vite: ^2.6.14
-  vite-plugin-web-extension: ^0.8.1
+  vite-plugin-web-extension: ^0.8.2
   vue: ^3.2.2
   vue-global-api: ^0.2.4
   vue-router: ^4.0.11
@@ -63,7 +63,7 @@ specifiers:
 
 dependencies:
   '@anime-skip/api-client': 2.6.1
-  '@anime-skip/ui': 1.2.6_ec1b06fcfbd6e462bf1374dd899f0179
+  '@anime-skip/ui': 1.2.9_ec1b06fcfbd6e462bf1374dd899f0179
   '@anime-skip/usage-stats-client': 1.2.2_axios@0.24.0
   '@vueuse/core': 5.3.0_vue@3.2.2
   async-mutex: 0.3.2
@@ -110,8 +110,8 @@ devDependencies:
   lodash.merge: 4.6.2
   postcss: 8.3.6
   postcss-selector-parser: 6.0.6
-  prettier: 2.3.2
-  pretty-quick: 3.1.1_prettier@2.3.2
+  prettier: 2.5.0
+  pretty-quick: 3.1.2_prettier@2.5.0
   rimraf: 3.0.2
   sass: 1.38.0
   tailwindcss: 2.2.7_7b69a43ec4689fa7484dee35f79a7806
@@ -119,7 +119,7 @@ devDependencies:
   typescript: 4.3.5
   unplugin-vue-components: 0.17.2_vite@2.6.14+vue@3.2.2
   vite: 2.6.14_sass@1.38.0
-  vite-plugin-web-extension: 0.8.1_sass@1.38.0
+  vite-plugin-web-extension: 0.8.2_sass@1.38.0
   vue-global-api: 0.2.4_vue@3.2.2
   vue-tsc: 0.2.2_typescript@4.3.5
   zip-a-folder: 1.1.0
@@ -135,8 +135,8 @@ packages:
       - debug
     dev: false
 
-  /@anime-skip/ui/1.2.6_ec1b06fcfbd6e462bf1374dd899f0179:
-    resolution: {integrity: sha512-3mRH0Co0AQuXPn2f9X8o+HkF0D/1glTjVdOppSbjrHjkPrbIj+AnJEao1uLPJk4tdZnmcMepZ85VcgTJXLZm+g==, tarball: download/@anime-skip/ui/1.2.6/92c64084c0006541bca78dd78a919078f7ae0910d27673a979868753fff07884}
+  /@anime-skip/ui/1.2.9_ec1b06fcfbd6e462bf1374dd899f0179:
+    resolution: {integrity: sha512-PEDJaUwrzYbu5NJ61A51kckobzLzsDRMBOlqQxqifOJMN4nClxy9kopSPfxu8hI+bfc3XB5Cg7/cZc15BoUT3g==, tarball: download/@anime-skip/ui/1.2.9/746129c6253a1b8e02eaacb18a619eba2995097915d12ae7df72c31d9a45527a}
     peerDependencies:
       '@tailwindcss/line-clamp': ^0.2.1
       autoprefixer: ^10.2.4
@@ -5920,8 +5920,8 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /prettier/2.3.2:
-    resolution: {integrity: sha512-lnJzDfJ66zkMy58OL5/NY5zp70S7Nz6KqcKkXYzn2tMVrNxvbqaBpg7H3qHaLxCJ5lNMsGuM8+ohS7cZrthdLQ==}
+  /prettier/2.5.0:
+    resolution: {integrity: sha512-FM/zAKgWTxj40rH03VxzIPdXmj39SwSjwG0heUcNFwI+EMZJnY93yAiKXM3dObIKAM5TA88werc8T/EwhB45eg==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     dev: true
@@ -5951,8 +5951,8 @@ packages:
     engines: {node: '>= 0.8'}
     dev: true
 
-  /pretty-quick/3.1.1_prettier@2.3.2:
-    resolution: {integrity: sha512-ZYLGiMoV2jcaas3vTJrLvKAYsxDoXQBUn8OSTxkl67Fyov9lyXivJTl0+2WVh+y6EovGcw7Lm5ThYpH+Sh3XxQ==}
+  /pretty-quick/3.1.2_prettier@2.5.0:
+    resolution: {integrity: sha512-T+fpTJrDjTzewql4p3lKrRA7z3MrNyjBK1MKeaBm5PpKwATgVm885TpY7TgY8KFt5Q1Qn3QDseRQcyX9AKTKkA==}
     engines: {node: '>=10.13'}
     hasBin: true
     peerDependencies:
@@ -5964,7 +5964,7 @@ packages:
       ignore: 5.1.8
       mri: 1.1.6
       multimatch: 4.0.0
-      prettier: 2.3.2
+      prettier: 2.5.0
     dev: true
 
   /printj/1.1.2:
@@ -7253,8 +7253,8 @@ packages:
       extsprintf: 1.3.0
     dev: true
 
-  /vite-plugin-web-extension/0.8.1_sass@1.38.0:
-    resolution: {integrity: sha512-8XI4luWKWnRabW1cCxiFr5mflldn5J4pCDHZlHnOs1isHo34HcLNzwQ5E+iRokXOagitgylMqEZ3IbSVIpRfRg==}
+  /vite-plugin-web-extension/0.8.2_sass@1.38.0:
+    resolution: {integrity: sha512-ueQXB7UqNgsfSLHo7CICSidrWoepe4R0F67dVDaON9t47B9M92JPuecgIaDhPpaGOPqy4FGUuEaSRz/nBaVOgw==}
     dependencies:
       ajv: 8.8.1
       ajv-draft-04: 1.0.0_ajv@8.8.1
