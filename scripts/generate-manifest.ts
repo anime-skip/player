@@ -5,7 +5,7 @@ import {
   PAGE_ACTION_MATCHES,
   ParentHosts,
   PlayerHosts,
-} from '../src/common/utils/CompileTimeConstants';
+} from '../src/common/utils/compile-time-constants';
 import { rootPath } from './utils';
 
 interface GenerateManifestConfig {

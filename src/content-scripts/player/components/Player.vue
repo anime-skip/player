@@ -38,11 +38,11 @@
 
 <script lang="ts" setup>
 import { useTimeout } from '@anime-skip/ui';
-import { PLAYER_ACTIVITY_TIMEOUT } from '~/common/utils/Constants';
-import { nextFrame } from '~/common/utils/EventLoop';
+import { PLAYER_ACTIVITY_TIMEOUT } from '~/common/utils/constants';
+import { nextFrame } from '~/common/utils/event-loop';
 import Messenger from '~/common/utils/Messenger';
 import UsageStats from '~/common/utils/UsageStats';
-import Utils from '~/common/utils/Utils';
+import Utils from '~/common/utils/GeneralUtils';
 import { useLoadAllEpisodeData } from '../hooks/useLoadAllEpisodeData';
 import { usePlaybackRateConnector } from '../hooks/usePlaybackRateConnector';
 import { useTabUrl } from '../hooks/useTabUrl';

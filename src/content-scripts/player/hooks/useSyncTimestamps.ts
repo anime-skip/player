@@ -1,6 +1,6 @@
 import { useApiClient } from '~/common/hooks/useApiClient';
+import GeneralUtils from '~/common/utils/GeneralUtils';
 import { log, warn } from '~/common/utils/log';
-import Utils from '~/common/utils/Utils';
 import * as Api from '~api';
 import { useUpdateEditingState } from '../state/useEditingState';
 import { useEpisode, useEpisodeUrl, useUpdateEpisodeState } from '../state/useEpisodeState';
@@ -16,7 +16,7 @@ export function useSyncTimestamps() {
   const loadEpisodeByUrl = useFetchEpisodeByUrl();
 
   function removeOffset<T extends Api.AmbiguousTimestamp>(timestamp: T): T {
-    const at = Utils.undoTimestampOffset(episodeUrl.value?.timestampsOffset, timestamp.at);
+    const at = GeneralUtils.undoTimestampOffset(episodeUrl.value?.timestampsOffset, timestamp.at);
     return {
       ...timestamp,
       at,
@@ -43,7 +43,7 @@ export function useSyncTimestamps() {
     const newTimestamps = newTimestampsWithOffset.map(removeOffset);
 
     updateEditingState({ isSaving: true });
-    const { toCreate, toUpdate, toDelete } = Utils.computeTimestampDiffs(
+    const { toCreate, toUpdate, toDelete } = GeneralUtils.computeTimestampDiffs(
       oldTimestamps,
       newTimestamps
     );

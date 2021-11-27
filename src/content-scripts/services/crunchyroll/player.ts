@@ -1,6 +1,6 @@
+import GeneralUtils from '~/common/utils/GeneralUtils';
 import { loadedLog } from '~/common/utils/log';
 import setupGlobals from '~/common/utils/setupGlobals';
-import Utils from '~/common/utils/Utils';
 import './player-overrides.scss';
 
 export function initCrunchyrollPlayer() {
@@ -12,7 +12,7 @@ export function initCrunchyrollPlayer() {
     getVideoQuery: () => 'video',
     transformServiceUrl(inputUrl) {
       // Strip and remove -XXXXXX from end of url
-      return Utils.stripUrl(inputUrl).replace(/-[0-9]+$/, '');
+      return GeneralUtils.stripUrl(inputUrl).replace(/-[0-9]+$/, '');
     },
     doNotReplacePlayer() {
       // Crunchyroll has two iframes, one for preloading and one for the actual video. This skips the preloading one

@@ -1,4 +1,4 @@
-import { PlayerHosts } from '~/common/utils/CompileTimeConstants';
+import { PlayerHosts } from '~/common/utils/compile-time-constants';
 import { error, loadedLog } from '~/common/utils/log';
 import { urlPatternMatch } from '~/common/utils/strings';
 import { initVideoChangeWatcher } from './misc/video-changed-watcher';

@@ -1,5 +1,5 @@
 import * as Api from '~api';
-import EpisodeUtils from '../EpisodeUtils';
+import EpisodeUtils from '../episode-utils';
 
 describe('EpisodeUtils', () => {
   describe('seasonAndNumberDisplay', () => {

@@ -1,7 +1,7 @@
 import Messenger from '~/common/utils/Messenger';
-import Utils from '~/common/utils/Utils';
+import { fallbackBound } from './drawing';
 import { error } from './log';
-import { fallbackBound } from './videoBounds';
+import { sleep } from './time';
 
 function defaultGetScreenshotDetails() {
   const iframe = document.querySelector('iframe');
@@ -39,9 +39,9 @@ export default function setupParent(
       try {
         if (previousUrl != null && currentUrl !== previousUrl) {
           // Wait for a little bit, then loop until the episode name is different
-          await Utils.sleep(400);
+          await sleep(400);
           do {
-            await Utils.sleep(100);
+            await sleep(100);
             episode = await options.getEpisodeInfo();
           } while (episode.name === previousEpisodeName);
         } else {

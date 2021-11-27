@@ -1,5 +1,4 @@
 import browser, { Menus, Tabs } from 'webextension-polyfill';
-import Browser from '~/common/utils/Browser';
 import { error, loadedLog, log } from '~/common/utils/log';
 import Messenger from '~/common/utils/Messenger';
 
@@ -90,7 +89,7 @@ export function initContextMenu() {
     },
   ];
 
-  if (Browser.detect() === 'firefox') {
+  if (TARGET_BROWSER === 'firefox') {
     browser.contextMenus.onClicked.addListener((info, tab) => {
       switch (info.menuItemId) {
         case MENU_ITEM_SCREENSHOT:

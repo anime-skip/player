@@ -21,7 +21,7 @@
 
 <script lang="ts" setup>
 import { RequestState } from 'vue-use-request-state';
-import EpisodeUtils from '~/common/utils/EpisodeUtils';
+import EpisodeUtils from '~/common/utils/episode-utils';
 import { useEpisodeDisplayInfo } from '../hooks/useEpisodeDisplayInfo';
 import { useDialogState, useShowConnectEpisodeDialog } from '../state/useDialogState';
 import { useEpisodeUrl } from '../state/useEpisodeState';

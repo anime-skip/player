@@ -1,19 +1,19 @@
 import * as Api from '~api';
 
-export default class EpisodeUtils {
-  public static seasonAndNumberFromEpisodeUrl(episodeUrl?: Api.EpisodeUrl): string {
+export default {
+  seasonAndNumberFromEpisodeUrl(episodeUrl?: Api.EpisodeUrl): string {
     if (episodeUrl?.episode == null) return '';
 
-    return EpisodeUtils.seasonAndNumberDisplay(episodeUrl.episode);
-  }
+    return this.seasonAndNumberDisplay(episodeUrl.episode);
+  },
 
-  public static seasonAndNumberFromEpisodeInfo(episodeInfo?: DisplayEpisodeInfo): string {
+  seasonAndNumberFromEpisodeInfo(episodeInfo?: DisplayEpisodeInfo): string {
     if (episodeInfo == null) return '';
 
-    return EpisodeUtils.seasonAndNumberDisplay(episodeInfo);
-  }
+    return this.seasonAndNumberDisplay(episodeInfo);
+  },
 
-  public static seasonAndNumberDisplay({
+  seasonAndNumberDisplay({
     absoluteNumber,
     number,
     season,
@@ -41,5 +41,5 @@ export default class EpisodeUtils {
       return `Episode #${absoluteNumber}`;
     }
     return '';
-  }
-}
+  },
+};

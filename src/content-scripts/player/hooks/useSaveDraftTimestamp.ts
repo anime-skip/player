@@ -1,4 +1,4 @@
-import Utils from '~/common/utils/Utils';
+import GeneralUtils from '~/common/utils/GeneralUtils';
 import * as Api from '~api';
 import { useDraftTimestamps, useUpdateDraftTimestamps } from '../state/useEditingState';
 
@@ -17,6 +17,6 @@ export function useSaveDraftTimestamp() {
       unsortedTimestamps = [...draftTimestamps.value];
       unsortedTimestamps[index] = newTimestamp;
     }
-    updateDraftTimestamps(unsortedTimestamps.sort(Utils.timestampSorter));
+    updateDraftTimestamps(unsortedTimestamps.sort(GeneralUtils.timestampSorter));
   };
 }

@@ -1,6 +1,6 @@
-import { waitUntil } from '~/common/utils/EventLoop';
 import { loadedLog, log } from '~/common/utils/log';
 import setupParent from '~/common/utils/setupParent';
+import { waitUntil } from '~/common/utils/time';
 
 async function getEpisodeInfo() {
   const pageHasLoaded = () =>

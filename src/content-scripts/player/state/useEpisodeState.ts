@@ -1,6 +1,6 @@
 import { RequestState } from 'vue-use-request-state';
 import { createProvideInject } from '~/common/utils/createProvideInject';
-import Utils from '~/common/utils/Utils';
+import GeneralUtils from '~/common/utils/GeneralUtils';
 import * as Api from '~api';
 import { useInferredEpisodeState } from './useInferredEpisodeState';
 import { useTemplateTimestamps } from './useTemplateState';
@@ -63,7 +63,7 @@ export function useUneditedTimestamps() {
       episodeState.episode?.baseDuration != null &&
       duration.value != null
     ) {
-      timestampsOffset = Utils.computeTimestampsOffset(
+      timestampsOffset = GeneralUtils.computeTimestampsOffset(
         episodeState.episode.baseDuration,
         duration.value
       );
@@ -72,7 +72,7 @@ export function useUneditedTimestamps() {
     // Apply the offset
     const baseTimestamps = getBaseTimestamps();
     const properlyOffsetTimestamps = baseTimestamps.map(timestamp => {
-      const at = Utils.applyTimestampsOffset(timestampsOffset, timestamp.at);
+      const at = GeneralUtils.applyTimestampsOffset(timestampsOffset, timestamp.at);
       return {
         ...timestamp,
         at,

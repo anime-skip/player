@@ -4,10 +4,10 @@
 import { createCustomAnimeSkipClient } from '~/common/utils/CustomApiClient';
 import { useClearTokens } from '../state/useAuth';
 import { useResetPreferences } from '../state/useGeneralPreferences';
+import GeneralUtils from '../utils/GeneralUtils';
 import { groupCollapsed, warn } from '../utils/log';
 import { LogoutError } from '../utils/LogoutError';
 import UsageStats from '../utils/UsageStats';
-import Utils from '../utils/Utils';
 import useTokenRefresher from './useTokenRefresher';
 
 const baseUrls: Record<ExtensionMode, string> = {
@@ -26,7 +26,7 @@ if (modesToLog.includes(EXTENSION_MODE)) {
     // disabled since axios@0.24
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const requestBody = JSON.parse(response.config.data!);
-    const formattedGraphql = Utils.formatGraphql(requestBody.query);
+    const formattedGraphql = GeneralUtils.formatGraphql(requestBody.query);
     const headers = {
       ...response.config.headers,
       // @ts-expect-error: Common headers should still exist... Failed when upgrading to axios@0.24

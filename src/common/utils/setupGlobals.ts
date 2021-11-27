@@ -1,8 +1,8 @@
 import browser from 'webextension-polyfill';
-import Utils from '~/common/utils/Utils';
+import GeneralUtils from '~/common/utils/GeneralUtils';
+import { centerFitVideoBounds, fallbackBound } from './drawing';
 import { debug, log, warn } from './log';
 import Messenger from './Messenger';
-import { centerFitVideoBounds, fallbackBound } from './videoBounds';
 
 export default function setupGlobals(
   service: Service,
@@ -24,7 +24,7 @@ export default function setupGlobals(
 
   window.getRootQuery = options.getRootQuery;
   window.getVideoQuery = options.getVideoQuery;
-  window.transformServiceUrl = options.transformServiceUrl ?? Utils.stripUrl;
+  window.transformServiceUrl = options.transformServiceUrl ?? GeneralUtils.stripUrl;
   window.getPlayerOptions = async () => {
     try {
       const optionGroups = await options.getPlayerOptions?.();

@@ -1,6 +1,7 @@
 import { useApiClient } from '~/common/hooks/useApiClient';
+import GeneralUtils from '~/common/utils/GeneralUtils';
 import { debug, log } from '~/common/utils/log';
-import Utils from '~/common/utils/Utils';
+import { sleep } from '~/common/utils/time';
 import * as Api from '~api';
 import { useEpisodeTemplate, useUpdateTemplateState } from '../state/useTemplateState';
 import { useDuration } from '../state/useVideoState';
@@ -16,7 +17,7 @@ export function useFindTemplate() {
       if (durationRef.value) {
         return durationRef.value;
       }
-      await Utils.sleep(50);
+      await sleep(50);
       debug('Waiting for player duration...');
       // eslint-disable-next-line no-constant-condition
     } while (true);
@@ -40,12 +41,12 @@ export function useFindTemplate() {
 
         const templatesBaseDuration =
           template.value?.sourceEpisode?.baseDuration ?? currentDuration;
-        const offset = Utils.computeTimestampsOffset(templatesBaseDuration, currentDuration);
+        const offset = GeneralUtils.computeTimestampsOffset(templatesBaseDuration, currentDuration);
 
         const timestamps = inferredTemplate.timestamps?.map(
           (timestamp): Api.Timestamp => ({
             id: timestamp.id,
-            at: Utils.applyTimestampsOffset(offset, timestamp.at),
+            at: GeneralUtils.applyTimestampsOffset(offset, timestamp.at),
             source: Api.TimestampSource.ANIME_SKIP,
             typeId: timestamp.typeId,
           })

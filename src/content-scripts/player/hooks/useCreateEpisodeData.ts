@@ -1,7 +1,7 @@
 import { RequestState } from 'vue-use-request-state';
 import { useApiClient } from '~/common/hooks/useApiClient';
+import GeneralUtils from '~/common/utils/GeneralUtils';
 import { warn } from '~/common/utils/log';
-import Utils from '~/common/utils/Utils';
 import * as Api from '~api';
 import { useHideDialog } from '../state/useDialogState';
 import { useEpisodeUrl, useUpdateEpisodeRequestState } from '../state/useEpisodeState';
@@ -104,7 +104,7 @@ export function useCreateEpisodeData() {
             timestamp: {
               typeId: timestamp.typeId,
               source: timestamp.source,
-              at: Utils.applyTimestampsOffset(episodeUrl.timestampsOffset, timestamp.at),
+              at: GeneralUtils.applyTimestampsOffset(episodeUrl.timestampsOffset, timestamp.at),
             },
           })),
           delete: [],

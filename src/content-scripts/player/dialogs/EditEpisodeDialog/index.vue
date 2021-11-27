@@ -39,7 +39,7 @@ import { CreateEpisodePrefill } from '~/@types';
 import { useApiClient } from '~/common/hooks/useApiClient';
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import { debug, log, warn } from '~/common/utils/log';
-import Mappers from '~/common/utils/Mappers';
+import Mappers from '~/common/utils/mappers';
 import * as Api from '~api';
 import { useEpisodeRequestState } from '../../state/useEpisodeState';
 import { useInferredEpisode } from '../../state/useInferredEpisodeState';
