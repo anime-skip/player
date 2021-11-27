@@ -1,6 +1,6 @@
 import { Ref } from 'vue';
 import { useApiClient } from '~/common/hooks/useApiClient';
-import Mappers from '~/common/utils/Mappers';
+import Mappers from '~/common/utils/mappers';
 import Utils from '~/common/utils/Utils';
 import * as Api from '~api';
 
