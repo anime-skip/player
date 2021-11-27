@@ -1,9 +1,9 @@
 import { Ref } from 'vue';
-import Utils from '~/common/utils/Utils';
+import GeneralUtils from '~/common/utils/Utils';
 
 export default function useFormattedTime(
   currentTimeInS: Ref<number>,
   showDecimals: Ref<boolean>
 ): Ref<string> {
-  return computed(() => Utils.formatSeconds(currentTimeInS.value, showDecimals.value));
+  return computed(() => GeneralUtils.formatSeconds(currentTimeInS.value, showDecimals.value));
 }

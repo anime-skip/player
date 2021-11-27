@@ -2,7 +2,7 @@ import { RequestState } from 'vue-use-request-state';
 import { useApiClient } from '~/common/hooks/useApiClient';
 import { warn } from '~/common/utils/log';
 import Mappers from '~/common/utils/mappers';
-import Utils from '~/common/utils/Utils';
+import GeneralUtils from '~/common/utils/Utils';
 import * as Api from '~api';
 import { useUpdateEpisodeRequestState } from '../state/useEpisodeState';
 import { useDuration } from '../state/useVideoState';
@@ -51,7 +51,7 @@ export function useCreateEpisodeFromThirdParty() {
         timestampsOffset:
           // TODO: Api require baseDuration
           duration != null && thirdPartyEpisode.baseDuration != null
-            ? Utils.computeTimestampsOffset(thirdPartyEpisode.baseDuration, duration)
+            ? GeneralUtils.computeTimestampsOffset(thirdPartyEpisode.baseDuration, duration)
             : undefined,
       };
 
@@ -81,7 +81,7 @@ export function useCreateEpisodeFromThirdParty() {
         const timestamps = Mappers.thirdPartyEpisodeToAmbiguousTimestamps(thirdPartyEpisode);
         const offsetTimestamps: Api.AmbiguousTimestamp[] = timestamps.map(timestamp => ({
           ...timestamp,
-          at: Utils.applyTimestampsOffset(episodeUrl.timestampsOffset, timestamp.at),
+          at: GeneralUtils.applyTimestampsOffset(episodeUrl.timestampsOffset, timestamp.at),
         }));
         await syncTimestamps([], offsetTimestamps);
       }

@@ -1,7 +1,7 @@
 import * as Api from '~api';
 import { warn } from './log';
 
-export default class Utils {
+export default class GeneralUtils {
   /**
    * @param currentTime The time to begin looking for timestamps after
    * @param timestamps The list of timestamps, sorted by `timestamp.at`
@@ -23,7 +23,7 @@ export default class Utils {
       return timestamps.find(timestamp => timestamp.at > currentTime);
     }
     return timestamps.find(
-      timestamp => timestamp.at > currentTime && !Utils.isSkipped(timestamp, preferences)
+      timestamp => timestamp.at > currentTime && !GeneralUtils.isSkipped(timestamp, preferences)
     );
   }
 
@@ -36,7 +36,9 @@ export default class Utils {
       return timestamps.filter(timestamp => timestamp.at < time - 0.1).pop();
     }
     return timestamps
-      .filter(timestamp => !Utils.isSkipped(timestamp, preferences) && timestamp.at < time - 0.1)
+      .filter(
+        timestamp => !GeneralUtils.isSkipped(timestamp, preferences) && timestamp.at < time - 0.1
+      )
       .pop();
   }
 
@@ -161,11 +163,11 @@ export default class Utils {
   public static formatSeconds(seconds: number, includeDecimals: boolean) {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    const secStr = Utils.padLeft(Math.floor(secs), 2);
+    const secStr = GeneralUtils.padLeft(Math.floor(secs), 2);
     if (includeDecimals) {
       let decimal = Math.round((secs - Math.floor(secs)) * 100);
       if (decimal === 100) decimal = 99;
-      return `${mins}:${secStr}.${Utils.padLeft(decimal, 2)}`;
+      return `${mins}:${secStr}.${GeneralUtils.padLeft(decimal, 2)}`;
     } else {
       return `${mins}:${secStr}`;
     }
@@ -268,7 +270,7 @@ export default class Utils {
     newTimestamps: Api.AmbiguousTimestamp[]
   ): { toCreate: Api.InputTimestamp[]; toUpdate: Api.Timestamp[]; toDelete: Api.Timestamp[] } {
     const intersect = newTimestamps.filter(newItem =>
-      Utils.arrayIncludes(oldTimestamps, 'id', newItem)
+      GeneralUtils.arrayIncludes(oldTimestamps, 'id', newItem)
     ) as Api.Timestamp[];
 
     // Remove unchanged items
@@ -278,7 +280,7 @@ export default class Utils {
     });
 
     const toCreate = newTimestamps.filter(
-      newItem => !Utils.arrayIncludes(oldTimestamps, 'id', newItem)
+      newItem => !GeneralUtils.arrayIncludes(oldTimestamps, 'id', newItem)
     ) as Api.InputTimestamp[];
     const toUpdate = intersect
       .filter(newItem => {
@@ -292,7 +294,7 @@ export default class Utils {
         typeId: item.typeId,
       }));
     const toDelete = oldTimestamps.filter(
-      oldItem => !Utils.arrayIncludes(newTimestamps, 'id', oldItem)
+      oldItem => !GeneralUtils.arrayIncludes(newTimestamps, 'id', oldItem)
     );
     return {
       toCreate,

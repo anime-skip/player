@@ -1,5 +1,5 @@
 import { useApiClient } from '~/common/hooks/useApiClient';
-import Utils from '~/common/utils/Utils';
+import GeneralUtils from '~/common/utils/Utils';
 import * as Api from '~api';
 
 export function useSaveTemplateTimestamps() {
@@ -10,7 +10,7 @@ export function useSaveTemplateTimestamps() {
     oldTimestampsIds: string[],
     newTimestampIds: string[]
   ): Promise<string[]> => {
-    const { toCreate, toDelete, toLeave } = Utils.computeListDiffs(
+    const { toCreate, toDelete, toLeave } = GeneralUtils.computeListDiffs(
       newTimestampIds,
       oldTimestampsIds,
       item => item,

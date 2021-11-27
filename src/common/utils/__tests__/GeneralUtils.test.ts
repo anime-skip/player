@@ -1,23 +1,25 @@
 import * as Api from '~api';
-import Utils from '../Utils';
+import GeneralUtils from '../Utils';
 
 describe('Utils', () => {
   describe('stripUrl()', () => {
     it('should only return the protocol, host, and path of the input so that all urls are standardized', () => {
-      expect(Utils.stripUrl('https://anime-skip.com')).toBe('https://anime-skip.com/');
-      expect(Utils.stripUrl('https://anime-skip.com/test')).toBe('https://anime-skip.com/test');
-      expect(Utils.stripUrl('https://anime-skip.com/test#heading')).toBe(
+      expect(GeneralUtils.stripUrl('https://anime-skip.com')).toBe('https://anime-skip.com/');
+      expect(GeneralUtils.stripUrl('https://anime-skip.com/test')).toBe(
         'https://anime-skip.com/test'
       );
-      expect(Utils.stripUrl('https://anime-skip.com/test?query=param')).toBe(
+      expect(GeneralUtils.stripUrl('https://anime-skip.com/test#heading')).toBe(
         'https://anime-skip.com/test'
       );
-      expect(Utils.stripUrl('https://anime-skip.com/test#heading?query=param')).toBe(
+      expect(GeneralUtils.stripUrl('https://anime-skip.com/test?query=param')).toBe(
+        'https://anime-skip.com/test'
+      );
+      expect(GeneralUtils.stripUrl('https://anime-skip.com/test#heading?query=param')).toBe(
         'https://anime-skip.com/test'
       );
 
       expect(
-        Utils.stripUrl(
+        GeneralUtils.stripUrl(
           'https://www.funimation.com/shows/the-irregular-at-magic-high-school/yokohama-disturbance-part-ii/uncut/?lang=japanese&qid=undefined'
         )
       ).toBe(
@@ -29,61 +31,61 @@ describe('Utils', () => {
   describe('formatSeconds()', () => {
     describe('includeDecimals = true', () => {
       it('should return the correct minutes, seconds, and decimal seconds', () => {
-        expect(Utils.formatSeconds(100.247, true)).toBe('1:40.25');
-        expect(Utils.formatSeconds(290, true)).toBe('4:50.00');
-        expect(Utils.formatSeconds(0, true)).toBe('0:00.00');
-        expect(Utils.formatSeconds(20.0, true)).toBe('0:20.00');
-        expect(Utils.formatSeconds(5.6, true)).toBe('0:05.60');
-        expect(Utils.formatSeconds(7.03, true)).toBe('0:07.03');
-        expect(Utils.formatSeconds(65.3, true)).toBe('1:05.30');
-        expect(Utils.formatSeconds(65.3, true)).toBe('1:05.30');
+        expect(GeneralUtils.formatSeconds(100.247, true)).toBe('1:40.25');
+        expect(GeneralUtils.formatSeconds(290, true)).toBe('4:50.00');
+        expect(GeneralUtils.formatSeconds(0, true)).toBe('0:00.00');
+        expect(GeneralUtils.formatSeconds(20.0, true)).toBe('0:20.00');
+        expect(GeneralUtils.formatSeconds(5.6, true)).toBe('0:05.60');
+        expect(GeneralUtils.formatSeconds(7.03, true)).toBe('0:07.03');
+        expect(GeneralUtils.formatSeconds(65.3, true)).toBe('1:05.30');
+        expect(GeneralUtils.formatSeconds(65.3, true)).toBe('1:05.30');
       });
 
       it('should floor the decimal only when it rounds up to the next whole number', () => {
-        expect(Utils.formatSeconds(65.996, true)).toBe('1:05.99');
+        expect(GeneralUtils.formatSeconds(65.996, true)).toBe('1:05.99');
       });
     });
 
     describe('includeDecimals = false', () => {
       it('should return the correct minutes and floored seconds', () => {
-        expect(Utils.formatSeconds(100.247, false)).toBe('1:40');
-        expect(Utils.formatSeconds(290, false)).toBe('4:50');
-        expect(Utils.formatSeconds(0, false)).toBe('0:00');
-        expect(Utils.formatSeconds(20.0, false)).toBe('0:20');
-        expect(Utils.formatSeconds(5.6, false)).toBe('0:05');
-        expect(Utils.formatSeconds(65.3, false)).toBe('1:05');
-        expect(Utils.formatSeconds(65.996, false)).toBe('1:05');
+        expect(GeneralUtils.formatSeconds(100.247, false)).toBe('1:40');
+        expect(GeneralUtils.formatSeconds(290, false)).toBe('4:50');
+        expect(GeneralUtils.formatSeconds(0, false)).toBe('0:00');
+        expect(GeneralUtils.formatSeconds(20.0, false)).toBe('0:20');
+        expect(GeneralUtils.formatSeconds(5.6, false)).toBe('0:05');
+        expect(GeneralUtils.formatSeconds(65.3, false)).toBe('1:05');
+        expect(GeneralUtils.formatSeconds(65.996, false)).toBe('1:05');
       });
     });
   });
 
   describe('padLeft()', () => {
     it('should pad the number with zeros', () => {
-      expect(Utils.padLeft(123, 0)).toBe('123');
-      expect(Utils.padLeft(1, 0)).toBe('1');
-      expect(Utils.padLeft(123, 2)).toBe('123');
-      expect(Utils.padLeft(1, 2)).toBe('01');
-      expect(Utils.padLeft(0, 2)).toBe('00');
+      expect(GeneralUtils.padLeft(123, 0)).toBe('123');
+      expect(GeneralUtils.padLeft(1, 0)).toBe('1');
+      expect(GeneralUtils.padLeft(123, 2)).toBe('123');
+      expect(GeneralUtils.padLeft(1, 2)).toBe('01');
+      expect(GeneralUtils.padLeft(0, 2)).toBe('00');
 
-      expect(Utils.padLeft('test', 6, ' ')).toBe('  test');
-      expect(Utils.padLeft('test', 6, '-')).toBe('--test');
-      expect(Utils.padLeft('test', 4, ' ')).toBe('test');
-      expect(Utils.padLeft('test', 1, ' ')).toBe('test');
+      expect(GeneralUtils.padLeft('test', 6, ' ')).toBe('  test');
+      expect(GeneralUtils.padLeft('test', 6, '-')).toBe('--test');
+      expect(GeneralUtils.padLeft('test', 4, ' ')).toBe('test');
+      expect(GeneralUtils.padLeft('test', 1, ' ')).toBe('test');
     });
   });
 
   describe('padRight()', () => {
     it('should pad the number with zeros', () => {
-      expect(Utils.padRight(123, 0)).toBe('123');
-      expect(Utils.padRight(1, 0)).toBe('1');
-      expect(Utils.padRight(123, 2)).toBe('123');
-      expect(Utils.padRight(1, 2)).toBe('10');
-      expect(Utils.padRight(0, 2)).toBe('00');
+      expect(GeneralUtils.padRight(123, 0)).toBe('123');
+      expect(GeneralUtils.padRight(1, 0)).toBe('1');
+      expect(GeneralUtils.padRight(123, 2)).toBe('123');
+      expect(GeneralUtils.padRight(1, 2)).toBe('10');
+      expect(GeneralUtils.padRight(0, 2)).toBe('00');
 
-      expect(Utils.padRight('test', 6, ' ')).toBe('test  ');
-      expect(Utils.padRight('test', 6, '-')).toBe('test--');
-      expect(Utils.padRight('test', 4, ' ')).toBe('test');
-      expect(Utils.padRight('test', 1, ' ')).toBe('test');
+      expect(GeneralUtils.padRight('test', 6, ' ')).toBe('test  ');
+      expect(GeneralUtils.padRight('test', 6, '-')).toBe('test--');
+      expect(GeneralUtils.padRight('test', 4, ' ')).toBe('test');
+      expect(GeneralUtils.padRight('test', 1, ' ')).toBe('test');
     });
   });
 
@@ -95,11 +97,11 @@ describe('Utils', () => {
     ];
 
     it('should return true when there is a matching value at the key', () => {
-      expect(Utils.arrayIncludes(array, 'id', { id: '1' })).toBeTruthy();
+      expect(GeneralUtils.arrayIncludes(array, 'id', { id: '1' })).toBeTruthy();
     });
 
     it('should return false when there is NOT a matching value at the key', () => {
-      expect(Utils.arrayIncludes(array, 'name', { id: '4', name: 'item 4' })).toBeFalsy();
+      expect(GeneralUtils.arrayIncludes(array, 'name', { id: '4', name: 'item 4' })).toBeFalsy();
     });
   });
 
@@ -115,8 +117,8 @@ describe('Utils', () => {
       const oldItems: Item[] = [];
       const newItems: Item[] = [{ id: 1 }, { id: 2 }];
 
-      const actual = Utils.computeListDiffs(newItems, oldItems, getId, compareNeedsUpdated);
-      const expected: ReturnType<typeof Utils.computeListDiffs> = {
+      const actual = GeneralUtils.computeListDiffs(newItems, oldItems, getId, compareNeedsUpdated);
+      const expected: ReturnType<typeof GeneralUtils.computeListDiffs> = {
         toCreate: [{ id: 1 }, { id: 2 }],
         toUpdate: [],
         toDelete: [],
@@ -130,8 +132,8 @@ describe('Utils', () => {
       const oldItems: Item[] = [{ id: 1 }, { id: 2 }];
       const newItems: Item[] = [];
 
-      const actual = Utils.computeListDiffs(newItems, oldItems, getId, compareNeedsUpdated);
-      const expected: ReturnType<typeof Utils.computeListDiffs> = {
+      const actual = GeneralUtils.computeListDiffs(newItems, oldItems, getId, compareNeedsUpdated);
+      const expected: ReturnType<typeof GeneralUtils.computeListDiffs> = {
         toCreate: [],
         toUpdate: [],
         toDelete: [{ id: 1 }, { id: 2 }],
@@ -151,8 +153,8 @@ describe('Utils', () => {
         { id: 2, value: 20 },
       ];
 
-      const actual = Utils.computeListDiffs(newItems, oldItems, getId, compareNeedsUpdated);
-      const expected: ReturnType<typeof Utils.computeListDiffs> = {
+      const actual = GeneralUtils.computeListDiffs(newItems, oldItems, getId, compareNeedsUpdated);
+      const expected: ReturnType<typeof GeneralUtils.computeListDiffs> = {
         toCreate: [],
         toUpdate: [],
         toDelete: [],
@@ -175,8 +177,8 @@ describe('Utils', () => {
         { id: 2, value: 40 },
       ];
 
-      const actual = Utils.computeListDiffs(newItems, oldItems, getId, compareNeedsUpdated);
-      const expected: ReturnType<typeof Utils.computeListDiffs> = {
+      const actual = GeneralUtils.computeListDiffs(newItems, oldItems, getId, compareNeedsUpdated);
+      const expected: ReturnType<typeof GeneralUtils.computeListDiffs> = {
         toCreate: [],
         toUpdate: [
           { id: 1, value: 30 },
@@ -202,8 +204,8 @@ describe('Utils', () => {
         { id: 5, value: 50 },
       ];
 
-      const actual = Utils.computeListDiffs(newItems, oldItems, getId, compareNeedsUpdated);
-      const expected: ReturnType<typeof Utils.computeListDiffs> = {
+      const actual = GeneralUtils.computeListDiffs(newItems, oldItems, getId, compareNeedsUpdated);
+      const expected: ReturnType<typeof GeneralUtils.computeListDiffs> = {
         toCreate: [{ id: 5, value: 50 }],
         toUpdate: [{ id: 4, value: -40 }],
         toDelete: [
@@ -228,7 +230,7 @@ describe('Utils', () => {
       const expectedToUpdate: Api.Timestamp[] = [];
       const expectedToDelete: Api.Timestamp[] = [];
 
-      const { toCreate, toUpdate, toDelete } = Utils.computeTimestampDiffs(
+      const { toCreate, toUpdate, toDelete } = GeneralUtils.computeTimestampDiffs(
         oldTimestamps,
         newTimestamps
       );
@@ -257,7 +259,7 @@ describe('Utils', () => {
       ];
       const expectedToDelete: Api.Timestamp[] = [];
 
-      const { toCreate, toUpdate, toDelete } = Utils.computeTimestampDiffs(
+      const { toCreate, toUpdate, toDelete } = GeneralUtils.computeTimestampDiffs(
         oldTimestamps,
         newTimestamps
       );
@@ -277,7 +279,7 @@ describe('Utils', () => {
       const expectedToUpdate: Api.Timestamp[] = [];
       const expectedToDelete: Api.Timestamp[] = oldTimestamps;
 
-      const { toCreate, toUpdate, toDelete } = Utils.computeTimestampDiffs(
+      const { toCreate, toUpdate, toDelete } = GeneralUtils.computeTimestampDiffs(
         oldTimestamps,
         newTimestamps
       );
@@ -320,7 +322,7 @@ describe('Utils', () => {
         { id: '5', at: 8, typeId: 'filler', source: Api.TimestampSource.ANIME_SKIP },
       ];
 
-      const { toCreate, toUpdate, toDelete } = Utils.computeTimestampDiffs(
+      const { toCreate, toUpdate, toDelete } = GeneralUtils.computeTimestampDiffs(
         oldTimestamps,
         newTimestamps
       );

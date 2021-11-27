@@ -1,5 +1,5 @@
 import Messenger from '~/common/utils/Messenger';
-import Utils from '~/common/utils/Utils';
+import GeneralUtils from '~/common/utils/Utils';
 import { error } from './log';
 import { fallbackBound } from './videoBounds';
 
@@ -39,9 +39,9 @@ export default function setupParent(
       try {
         if (previousUrl != null && currentUrl !== previousUrl) {
           // Wait for a little bit, then loop until the episode name is different
-          await Utils.sleep(400);
+          await GeneralUtils.sleep(400);
           do {
-            await Utils.sleep(100);
+            await GeneralUtils.sleep(100);
             episode = await options.getEpisodeInfo();
           } while (episode.name === previousEpisodeName);
         } else {

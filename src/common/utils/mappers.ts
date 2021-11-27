@@ -1,6 +1,6 @@
 import type * as Api from '~api';
 import EpisodeUtils from './episode-utils';
-import Utils from './Utils';
+import GeneralUtils from './Utils';
 
 export default {
   showSearchResultToAutocompleteItem(
@@ -25,7 +25,7 @@ export default {
   },
   thirdPartyEpisodeToAmbiguousTimestamps(episode: Api.ThirdPartyEpisode): Api.AmbiguousTimestamp[] {
     return episode.timestamps.map(timestamp => ({
-      id: timestamp.id ?? Utils.randomId(),
+      id: timestamp.id ?? GeneralUtils.randomId(),
       source: episode.source ?? 'ANIME_SKIP',
       at: timestamp.at,
       typeId: timestamp.typeId,

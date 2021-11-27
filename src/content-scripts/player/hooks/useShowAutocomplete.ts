@@ -1,7 +1,7 @@
 import { Ref } from 'vue';
 import { useApiClient } from '~/common/hooks/useApiClient';
 import Mappers from '~/common/utils/mappers';
-import Utils from '~/common/utils/Utils';
+import GeneralUtils from '~/common/utils/Utils';
 import * as Api from '~api';
 
 export function useShowAutocomplete(
@@ -25,7 +25,7 @@ export function useShowAutocomplete(
     });
   };
   const onSelectShow = (): void => {
-    Utils.setIntervalUntil(
+    GeneralUtils.setIntervalUntil(
       () => {
         const focus = episodeInputRef.value?.focus;
         focus?.();

@@ -1,7 +1,7 @@
 import { RequestState } from 'vue-use-request-state';
 import { useApiClient } from '~/common/hooks/useApiClient';
 import { warn } from '~/common/utils/log';
-import Utils from '~/common/utils/Utils';
+import GeneralUtils from '~/common/utils/Utils';
 import * as Api from '~api';
 import { useUpdateEpisodeRequestState } from '../state/useEpisodeState';
 import { useDuration } from '../state/useVideoState';
@@ -32,7 +32,7 @@ export function useLinkEpisodeUrl() {
     updateEpisodeRequestState(RequestState.LOADING);
     let timestampsOffset: number | undefined;
     if (baseDuration != null && duration != null) {
-      timestampsOffset = Utils.computeTimestampsOffset(baseDuration, duration);
+      timestampsOffset = GeneralUtils.computeTimestampsOffset(baseDuration, duration);
     }
     const episodeUrl: Api.InputEpisodeUrl = {
       url,

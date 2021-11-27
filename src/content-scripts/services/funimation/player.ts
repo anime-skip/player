@@ -1,6 +1,6 @@
 import { loadedLog } from '~/common/utils/log';
 import setupGlobals from '~/common/utils/setupGlobals';
-import Utils from '~/common/utils/Utils';
+import GeneralUtils from '~/common/utils/Utils';
 import './player-overrides.scss';
 
 function getPlayerOptions(): PlayerOptionGroup[] {
@@ -43,7 +43,7 @@ export function initFunimationPlayer() {
     getRootQuery: () => 'body #funimation-player',
     getVideoQuery: () => '#brightcove-player > video',
     doNotReplacePlayer() {
-      const path = Utils.stripUrl(window.parent.location.href)
+      const path = GeneralUtils.stripUrl(window.parent.location.href)
         .replace('https://www.funimation.com/', '')
         .replace(/\/$/, '');
       // something like "show/{show-name}/..." or "show/{show-name}" so if the last slash is at position 5, it is a show

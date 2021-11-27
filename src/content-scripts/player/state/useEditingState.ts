@@ -1,5 +1,5 @@
 import { createProvideInject } from '~/common/utils/createProvideInject';
-import Utils from '~/common/utils/Utils';
+import GeneralUtils from '~/common/utils/Utils';
 import * as Api from '~api';
 
 export enum EditTimestampMode {
@@ -69,7 +69,7 @@ export function useDraftTimestamps(editingState = useEditingState()) {
       if (activeIsExisting) {
         drafts.splice(activeIndex, 1, editingState.activeTimestamp);
       } else {
-        drafts = [...drafts, editingState.activeTimestamp].sort(Utils.timestampSorter);
+        drafts = [...drafts, editingState.activeTimestamp].sort(GeneralUtils.timestampSorter);
       }
     }
     return drafts;

@@ -6,7 +6,7 @@ import {
 } from '~/common/state/useKeyboardShortcutPrefs';
 import { debug } from '~/common/utils/log';
 import UsageStats from '~/common/utils/UsageStats';
-import Utils from '~/common/utils/Utils';
+import GeneralUtils from '~/common/utils/Utils';
 
 // The first instance of this helper should only report usage stats
 let instanceCount = 0;
@@ -24,11 +24,11 @@ export function useKeyboardShortcuts(
 
   const onKeyDownInstance = (event: KeyboardEvent) => {
     // Prevent triggers from firing while typing
-    if (document.activeElement?.tagName === 'INPUT' || !Utils.isKeyComboAllowed(event)) {
+    if (document.activeElement?.tagName === 'INPUT' || !GeneralUtils.isKeyComboAllowed(event)) {
       return;
     }
 
-    const keyCombo = Utils.keyComboFromEvent(event);
+    const keyCombo = GeneralUtils.keyComboFromEvent(event);
     const keyActions = [
       ...(primaryShortcutsKeyToActionsMap.value[keyCombo] ?? []),
       ...(secondaryShortcutsKeyToActionsMap.value[keyCombo] ?? []),

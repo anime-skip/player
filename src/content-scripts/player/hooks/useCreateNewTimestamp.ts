@@ -3,7 +3,7 @@ import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
 import { TIMESTAMP_TYPE_NOT_SELECTED } from '~/common/utils/Constants';
 import { warn } from '~/common/utils/log';
 import UsageStats from '~/common/utils/UsageStats';
-import Utils from '~/common/utils/Utils';
+import GeneralUtils from '~/common/utils/Utils';
 import { TimestampSource } from '~api';
 import { useShowDialog, useShowLoginOverlay } from '../state/useDialogState';
 import {
@@ -51,7 +51,7 @@ export function useCreateNewTimestamp() {
       updateActiveTimestamp({
         at: video.currentTime,
         typeId: TIMESTAMP_TYPE_NOT_SELECTED,
-        id: Utils.randomId(),
+        id: GeneralUtils.randomId(),
         source: TimestampSource.ANIME_SKIP,
         edited: true,
       });
