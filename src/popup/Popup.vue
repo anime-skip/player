@@ -15,7 +15,7 @@
 
 <script lang="ts" setup>
 import { useIsLoggedIn } from '~/common/state/useAuth';
-import Browser from '~/common/utils/Browser';
+import { detectBrowser } from '~/common/utils/browser';
 import { log } from '~/common/utils/log';
 import UsageStats from '~/common/utils/UsageStats';
 
@@ -27,7 +27,7 @@ onMounted(() => {
   void UsageStats.saveEvent('opened_popup');
 });
 
-const browser = Browser.detect();
+const browser = detectBrowser();
 
 const isLoggedIn = useIsLoggedIn();
 

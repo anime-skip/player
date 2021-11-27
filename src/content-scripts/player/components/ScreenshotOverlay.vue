@@ -20,15 +20,6 @@
         >
           <web-ext-img src="ic_save.svg" />
         </a>
-        <a
-          v-if="browser == 'firefox'"
-          :href="image.url"
-          target="_blank"
-          title="Open in tab"
-          @click="clearImage()"
-        >
-          <web-ext-img src="ic_open_in_new.svg" />
-        </a>
       </div>
     </div>
   </div>
@@ -38,7 +29,6 @@
 import { useTimeout } from '@anime-skip/ui';
 import { ref } from 'vue';
 import { useWebExtensionStorageValue } from '~/common/hooks/useWebExtensionStorage';
-import Browser from '~/common/utils/Browser';
 import { log } from '~/common/utils/log';
 
 interface ImageDetails {
@@ -96,12 +86,10 @@ const { value: base64Screenshot, setValue: setBase64Screenshot } = useWebExtensi
 
 watch(base64Screenshot, data => {
   if (data != null) {
-    log('Screenshot recieved', data);
+    log('Screenshot received', data);
     addImage(data);
   }
 });
-
-const browser = Browser.detect();
 </script>
 
 <style scoped>

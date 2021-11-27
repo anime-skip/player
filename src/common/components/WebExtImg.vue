@@ -2,19 +2,13 @@
   <img :src="webExtSrc" :draggable="draggable" ondragstart="return false;" />
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import Browser from '~/common/utils/Browser';
+<script lang="ts" setup>
+import browser from 'webextension-polyfill';
 
-export default defineComponent({
-  props: {
-    src: { type: String, default: undefined },
-    draggable: Boolean,
-  },
-  computed: {
-    webExtSrc(): string {
-      return Browser.resolveUrl('assets/' + this.src);
-    },
-  },
-});
+const props = defineProps<{
+  src: string;
+  draggable?: boolean;
+}>();
+
+const webExtSrc = computed(() => browser.runtime.getURL('assets/' + props.src));
 </script>

@@ -1,6 +1,6 @@
 import { createUsageStatsClient, UsageStatsClientConfig } from '@anime-skip/usage-stats-client';
 import browser from 'webextension-polyfill';
-import Browser from './Browser';
+import { detectBrowser } from './browser';
 import { debug } from './log';
 
 export const USAGE_STATS_USER_ID_STORAGE_KEY = 'usage-stats-user-id';
@@ -15,7 +15,7 @@ const reportModes: ExtensionMode[] = ['prod', 'beta'];
 const client = createUsageStatsClient({
   app: 'Anime Skip Player',
   appVersion: EXTENSION_VERSION,
-  browser: Browser.detect(),
+  browser: detectBrowser(),
   getUserId,
   log: debug,
   async persistGuestUserId(userId) {

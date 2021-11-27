@@ -1,12 +1,12 @@
 import browser from 'webextension-polyfill';
-import Browser from '~/common/utils/Browser';
+import { detectBrowser } from '~/common/utils/browser';
 import { loadedLog, log } from '~/common/utils/log';
 import UsageStats from '~/common/utils/UsageStats';
 
 function getUninstallUrl(userId: string | undefined): string | undefined {
   if (userId == null) return undefined;
   const encodedUserId = encodeURIComponent(userId);
-  const browserName = encodeURIComponent(Browser.detect());
+  const browserName = encodeURIComponent(detectBrowser());
   const appVersion = encodeURIComponent(EXTENSION_VERSION);
   return `https://usage-stats.anime-skip.com/redirects/extension-uninstalled?user_id=${encodedUserId}&app_version=${appVersion}&browser=${browserName}`;
 }
