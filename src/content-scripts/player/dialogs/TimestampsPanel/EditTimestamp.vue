@@ -108,7 +108,7 @@
 <script lang="ts" setup>
 import { Utils } from '@anime-skip/ui';
 import fuzzysort from 'fuzzysort';
-import { TIMESTAMP_TYPES, TIMESTAMP_TYPE_NOT_SELECTED } from '~/common/utils/Constants';
+import { TIMESTAMP_TYPES, TIMESTAMP_TYPE_NOT_SELECTED } from '~/common/utils/constants';
 import { warn } from '~/common/utils/log';
 import * as Api from '~api';
 import { useApplyTimestampDiff } from '../../hooks/useApplyTimestampDiff';

@@ -1,5 +1,5 @@
 import browser from 'webextension-polyfill';
-import { PAGE_ACTION_MATCHES } from '~/common/utils/CompileTimeConstants';
+import { PAGE_ACTION_MATCHES } from '~/common/utils/compile-time-constants';
 import { loadedLog, log } from '~/common/utils/log';
 
 export function initChromePageAction() {

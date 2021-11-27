@@ -52,7 +52,7 @@
 import { Utils as UiUtils } from '@anime-skip/ui';
 import { useFullscreen } from '@vueuse/core';
 import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
-import { FRAME, LOOKUP_PREV_TIMESTAMP_OFFSET } from '~/common/utils/Constants';
+import { FRAME, LOOKUP_PREV_TIMESTAMP_OFFSET } from '~/common/utils/constants';
 import Utils from '~/common/utils/Utils';
 import * as Api from '~api';
 import { useCreateNewTimestamp } from '../hooks/useCreateNewTimestamp';

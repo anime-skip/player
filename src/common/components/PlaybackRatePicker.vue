@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts" setup>
-import { PLAYBACK_SPEEDS } from '~/common/utils/Constants';
+import { PLAYBACK_SPEEDS } from '~/common/utils/constants';
 import { useGeneralPreferences, useUpdateNumberPref } from '../state/useGeneralPreferences';
 
 const props = defineProps<{

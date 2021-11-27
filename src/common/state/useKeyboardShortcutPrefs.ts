@@ -2,7 +2,7 @@ import { useWebExtensionStorage } from '../hooks/useWebExtensionStorage';
 import {
   DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS,
   DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS,
-} from '../utils/Constants';
+} from '../utils/constants';
 
 export type KeyboardShortcutAction =
   | 'playPause'

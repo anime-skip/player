@@ -1,4 +1,4 @@
-import { ParentHosts } from '~/common/utils/CompileTimeConstants';
+import { ParentHosts } from '~/common/utils/compile-time-constants';
 import { error, loadedLog } from '~/common/utils/log';
 import { urlPatternMatch } from '~/common/utils/strings';
 import { initAnimeSkipParent } from './anime-skip';

@@ -44,7 +44,7 @@ import { Utils as UiUtils } from '@anime-skip/ui';
 import { computed, ref, watch } from 'vue';
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
-import { TIMESTAMP_TYPES } from '~/common/utils/Constants';
+import { TIMESTAMP_TYPES } from '~/common/utils/constants';
 import UsageStats from '~/common/utils/UsageStats';
 import Utils from '~/common/utils/Utils';
 import * as Api from '~api';

@@ -102,7 +102,7 @@
 <script lang="ts" setup>
 import { useTimeout, Utils } from '@anime-skip/ui';
 import { useIsLoggedIn } from '~/common/state/useAuth';
-import { TIMESTAMP_SOURCES, TIMESTAMP_TYPES } from '~/common/utils/Constants';
+import { TIMESTAMP_SOURCES, TIMESTAMP_TYPES } from '~/common/utils/constants';
 import { SECONDS } from '~/common/utils/time';
 import * as Api from '~api';
 import { useCanEditTimestamps } from '../../hooks/useCanEditTimestamps';

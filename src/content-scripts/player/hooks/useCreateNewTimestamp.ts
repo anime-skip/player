@@ -1,6 +1,6 @@
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
-import { TIMESTAMP_TYPE_NOT_SELECTED } from '~/common/utils/Constants';
+import { TIMESTAMP_TYPE_NOT_SELECTED } from '~/common/utils/constants';
 import { warn } from '~/common/utils/log';
 import UsageStats from '~/common/utils/UsageStats';
 import GeneralUtils from '~/common/utils/Utils';

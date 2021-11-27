@@ -38,7 +38,7 @@
 
 <script lang="ts" setup>
 import { useTimeout } from '@anime-skip/ui';
-import { PLAYER_ACTIVITY_TIMEOUT } from '~/common/utils/Constants';
+import { PLAYER_ACTIVITY_TIMEOUT } from '~/common/utils/constants';
 import { nextFrame } from '~/common/utils/event-loop';
 import Messenger from '~/common/utils/Messenger';
 import UsageStats from '~/common/utils/UsageStats';

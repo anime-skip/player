@@ -78,7 +78,7 @@ import { useTimeout } from '@anime-skip/ui';
 import { computed, ref } from 'vue';
 import { RequestState } from 'vue-use-request-state';
 import useRadioIcon from '~/common/composition/useRadioIcon';
-import { TIMESTAMP_TYPES } from '~/common/utils/Constants';
+import { TIMESTAMP_TYPES } from '~/common/utils/constants';
 import { warn } from '~/common/utils/log';
 import { SECONDS } from '~/common/utils/time';
 import Utils from '~/common/utils/Utils';
