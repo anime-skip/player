@@ -81,7 +81,7 @@ import useRadioIcon from '~/common/composition/useRadioIcon';
 import { TIMESTAMP_TYPES } from '~/common/utils/constants';
 import { warn } from '~/common/utils/log';
 import { SECONDS } from '~/common/utils/time';
-import Utils from '~/common/utils/Utils';
+import Utils from '~/common/utils/GeneralUtils';
 import * as Api from '~api';
 import { TemplateType } from '~api';
 import { useDeleteTemplate } from '../../hooks/useDeleteTemplate';

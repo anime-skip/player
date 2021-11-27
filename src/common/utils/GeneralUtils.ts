@@ -1,6 +1,8 @@
 import * as Api from '~api';
 import { warn } from './log';
 
+// TODO: Refactor all the functions out of "GeneralUtils" and into targeted files
+
 export default class GeneralUtils {
   /**
    * @param currentTime The time to begin looking for timestamps after
@@ -405,9 +407,5 @@ export default class GeneralUtils {
         clearBothTimers();
       }
     }, interval);
-  }
-
-  public static sleep(ms: number): Promise<void> {
-    return new Promise(res => setTimeout(res, ms));
   }
 }

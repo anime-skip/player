@@ -1,6 +1,6 @@
 import type * as Api from '~api';
 import EpisodeUtils from './episode-utils';
-import GeneralUtils from './Utils';
+import GeneralUtils from './GeneralUtils';
 
 export default {
   showSearchResultToAutocompleteItem(

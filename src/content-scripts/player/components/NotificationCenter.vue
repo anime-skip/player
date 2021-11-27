@@ -21,7 +21,7 @@ import {
 } from '~/common/state/store-review-prompt';
 import { DAYS, MINUTES, SECOND, SECONDS, today } from '~/common/utils/time';
 import UsageStats from '~/common/utils/UsageStats';
-import Utils from '~/common/utils/Utils';
+import Utils from '~/common/utils/GeneralUtils';
 import { NotificationButton } from './Notification.vue';
 
 interface Notification {

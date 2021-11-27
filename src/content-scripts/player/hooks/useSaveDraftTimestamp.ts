@@ -1,4 +1,4 @@
-import GeneralUtils from '~/common/utils/Utils';
+import GeneralUtils from '~/common/utils/GeneralUtils';
 import * as Api from '~api';
 import { useDraftTimestamps, useUpdateDraftTimestamps } from '../state/useEditingState';
 

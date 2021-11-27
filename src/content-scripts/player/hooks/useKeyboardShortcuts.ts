@@ -4,9 +4,9 @@ import {
   usePrimaryKeyboardShortcutPrefs,
   useSecondaryKeyboardShortcutPrefs,
 } from '~/common/state/useKeyboardShortcutPrefs';
+import GeneralUtils from '~/common/utils/GeneralUtils';
 import { debug } from '~/common/utils/log';
 import UsageStats from '~/common/utils/UsageStats';
-import GeneralUtils from '~/common/utils/Utils';
 
 // The first instance of this helper should only report usage stats
 let instanceCount = 0;

@@ -1,5 +1,5 @@
 import * as Api from '~api';
-import GeneralUtils from '../Utils';
+import GeneralUtils from '../GeneralUtils';
 
 describe('Utils', () => {
   describe('stripUrl()', () => {

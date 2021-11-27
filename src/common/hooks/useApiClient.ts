@@ -4,10 +4,10 @@
 import { createCustomAnimeSkipClient } from '~/common/utils/CustomApiClient';
 import { useClearTokens } from '../state/useAuth';
 import { useResetPreferences } from '../state/useGeneralPreferences';
+import GeneralUtils from '../utils/GeneralUtils';
 import { groupCollapsed, warn } from '../utils/log';
 import { LogoutError } from '../utils/LogoutError';
 import UsageStats from '../utils/UsageStats';
-import GeneralUtils from '../utils/Utils';
 import useTokenRefresher from './useTokenRefresher';
 
 const baseUrls: Record<ExtensionMode, string> = {

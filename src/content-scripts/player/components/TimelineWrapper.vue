@@ -46,7 +46,7 @@ import { useIsLoggedIn } from '~/common/state/useAuth';
 import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
 import { TIMESTAMP_TYPES } from '~/common/utils/constants';
 import UsageStats from '~/common/utils/UsageStats';
-import Utils from '~/common/utils/Utils';
+import Utils from '~/common/utils/GeneralUtils';
 import * as Api from '~api';
 import { useDisplayedTimestamps } from '../hooks/useDisplayedTimestamps';
 import { useGetTimestampColor } from '../hooks/useTimelineColors';

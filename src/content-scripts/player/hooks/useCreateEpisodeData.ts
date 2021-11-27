@@ -1,7 +1,7 @@
 import { RequestState } from 'vue-use-request-state';
 import { useApiClient } from '~/common/hooks/useApiClient';
+import GeneralUtils from '~/common/utils/GeneralUtils';
 import { warn } from '~/common/utils/log';
-import GeneralUtils from '~/common/utils/Utils';
 import * as Api from '~api';
 import { useHideDialog } from '../state/useDialogState';
 import { useEpisodeUrl, useUpdateEpisodeRequestState } from '../state/useEpisodeState';

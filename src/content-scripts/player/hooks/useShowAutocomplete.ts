@@ -1,7 +1,7 @@
 import { Ref } from 'vue';
 import { useApiClient } from '~/common/hooks/useApiClient';
+import GeneralUtils from '~/common/utils/GeneralUtils';
 import Mappers from '~/common/utils/mappers';
-import GeneralUtils from '~/common/utils/Utils';
 import * as Api from '~api';
 
 export function useShowAutocomplete(

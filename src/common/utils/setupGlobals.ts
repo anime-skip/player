@@ -1,5 +1,5 @@
 import browser from 'webextension-polyfill';
-import GeneralUtils from '~/common/utils/Utils';
+import GeneralUtils from '~/common/utils/GeneralUtils';
 import { centerFitVideoBounds, fallbackBound } from './drawing';
 import { debug, log, warn } from './log';
 import Messenger from './Messenger';

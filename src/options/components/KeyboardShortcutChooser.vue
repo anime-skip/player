@@ -60,7 +60,7 @@ unset</pre
 
 <script lang="ts" setup>
 import { debug } from '~/common/utils/log';
-import Utils from '~/common/utils/Utils';
+import Utils from '~/common/utils/GeneralUtils';
 import { useDuplicateBindingChecker } from '~/content-scripts/player/hooks/useDubplicateBindingChecker';
 
 const props = defineProps<{
