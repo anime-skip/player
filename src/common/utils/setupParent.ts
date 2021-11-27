@@ -1,7 +1,7 @@
 import Messenger from '~/common/utils/Messenger';
 import GeneralUtils from '~/common/utils/Utils';
+import { fallbackBound } from './drawing';
 import { error } from './log';
-import { fallbackBound } from './videoBounds';
 
 function defaultGetScreenshotDetails() {
   const iframe = document.querySelector('iframe');

@@ -1,8 +1,8 @@
 import browser from 'webextension-polyfill';
 import GeneralUtils from '~/common/utils/Utils';
+import { centerFitVideoBounds, fallbackBound } from './drawing';
 import { debug, log, warn } from './log';
 import Messenger from './Messenger';
-import { centerFitVideoBounds, fallbackBound } from './videoBounds';
 
 export default function setupGlobals(
   service: Service,
