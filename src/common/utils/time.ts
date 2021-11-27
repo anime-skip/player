@@ -1,3 +1,5 @@
+import { nextTask } from './event-loop';
+
 export const SECOND = 1000;
 export const MINUTE = 60 * SECOND;
 export const HOUR = 60 * MINUTE;
@@ -23,4 +25,44 @@ export function today(): number {
   date.setSeconds(0);
   date.setMilliseconds(0);
   return date.getTime();
+}
+
+export function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export function waitUntil(
+  callback: () => Promise<boolean>,
+  timeoutMs: number,
+  backoffRate = 2,
+  initilSleepMs = 10
+): Promise<void> {
+  let done = false;
+  let resolve: () => void;
+  const promise = new Promise<void>(res => {
+    resolve = res;
+  });
+  setTimeout(() => {
+    if (!done) return;
+    done = true;
+    resolve();
+  }, timeoutMs);
+
+  let sleepMs = initilSleepMs;
+  callback().then(async res => {
+    done = res;
+    if (!done) {
+      await nextTask();
+    }
+    while (!done) {
+      done = await callback();
+      if (!done) {
+        await sleep(sleepMs);
+        sleepMs *= backoffRate;
+      }
+    }
+    resolve();
+  });
+
+  return promise;
 }

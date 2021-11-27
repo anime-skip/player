@@ -1,8 +1,8 @@
 import browser from 'webextension-polyfill';
 import { DAYS, SECONDS, today } from '~/common/utils/time';
 import { useWebExtensionStorageValue } from '../hooks/useWebExtensionStorage';
-import { sleep } from '../utils/EventLoop';
 import { debug } from '../utils/log';
+import { sleep } from '../utils/time';
 
 const REVIEW_PROMPT_AT_KEY = 'storeReviewPromptAt';
 const DONT_SHOW_AGAIN_KEY = 'dontShowStoreReviewPromptAgain';
