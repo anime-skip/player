@@ -11,6 +11,7 @@ type RemotePreferences = Omit<
 
 interface LocalPreferences {
   playbackRate: number;
+  createTimestampSnapBack: boolean;
 }
 
 // const LOCAL_PREFERENCES: Array<keyof LocalPreferences> = ['playbackRate'];
@@ -27,6 +28,7 @@ const DEFAULT_GENERAL_PREFERENCES: GeneralPreferences = {
   hideTimelineWhenMinimized: false,
   minimizeToolbarWhenEditing: false,
   playbackRate: 1,
+  createTimestampSnapBack: true,
   skipBranding: false,
   skipCanon: false,
   skipCredits: false,
@@ -75,23 +77,30 @@ export function useUpdateBooleanPref() {
   const updatePreferences = useUpdateGeneralPreferences();
   const api = useApiClient();
 
-  return (pref: StripOtherTypes<GeneralPreferences, boolean>, newValue: boolean) => {
+  return (
+    pref: StripOtherTypes<GeneralPreferences, boolean>,
+    newValue: boolean,
+    isLocal = false
+  ) => {
     const oldValue = preferences.value[pref];
     updatePreferences({ [pref]: newValue });
 
-    api.savePreferences(Api.PREFERENCES_QUERY, { preferences: { [pref]: newValue } }).catch(err => {
-      warn('Failed to update preference', { pref, newValue }, err);
-      // Slight delay for a better animation
-      setTimeout(() => updatePreferences({ [pref]: oldValue }), 200);
-    });
+    if (!isLocal)
+      api
+        .savePreferences(Api.PREFERENCES_QUERY, { preferences: { [pref]: newValue } })
+        .catch(err => {
+          warn('Failed to update preference', { pref, newValue }, err);
+          // Slight delay for a better animation
+          setTimeout(() => updatePreferences({ [pref]: oldValue }), 200);
+        });
   };
 }
 
 export function useToggleBooleanPref() {
   const update = useUpdateBooleanPref();
   const preferences = useGeneralPreferences();
-  return (pref: StripOtherTypes<GeneralPreferences, boolean>) => {
-    update(pref, !preferences.value[pref]);
+  return (pref: StripOtherTypes<GeneralPreferences, boolean>, isLocal = false) => {
+    update(pref, !preferences.value[pref], isLocal);
   };
 }
 

@@ -140,6 +140,14 @@ export function useVideoController() {
         video.currentTime = newBoundedTime;
       }
     },
+    rewindToNearest(second: number) {
+      const video = window.getVideo?.();
+      if (!video) return;
+
+      const currentTime = video.currentTime;
+      const newTime = currentTime - (currentTime % second);
+      video.currentTime = UiUtils.boundedNumber(newTime, [0, state.duration ?? 0]);
+    },
     setDuration(newDuration: number | undefined): void {
       update({ duration: newDuration });
     },

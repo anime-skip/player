@@ -15,6 +15,12 @@
           @click="toggleBooleanPreference('minimizeToolbarWhenEditing')"
           :disabled="!isLoggedIn"
         />
+        <RaisedCheckbox
+          label="Snap to the previous 0.5s when inserting a timestamp"
+          :checked="createTimestampSnapBack"
+          @click="toggleBooleanPreference('createTimestampSnapBack', true)"
+          :disabled="!isLoggedIn"
+        />
       </GeneralSettings>
       <SkippedSections />
       <KeyboardShortcutTable />
@@ -38,4 +44,5 @@ const toggleBooleanPreference = useToggleBooleanPref();
 
 const hideTimelineWhenMinimized = computed(() => preferences.value.hideTimelineWhenMinimized);
 const minimizeToolbarWhenEditing = computed(() => preferences.value.minimizeToolbarWhenEditing);
+const createTimestampSnapBack = computed(() => preferences.value.createTimestampSnapBack);
 </script>
