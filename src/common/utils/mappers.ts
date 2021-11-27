@@ -1,5 +1,5 @@
 import type * as Api from '~api';
-import EpisodeUtils from './EpisodeUtils';
+import EpisodeUtils from './episode-utils';
 import Utils from './Utils';
 
 export default {

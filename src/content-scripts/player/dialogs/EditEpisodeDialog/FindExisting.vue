@@ -69,7 +69,7 @@
 import { CreateEpisodePrefill } from '~/@types';
 import { useApiClient } from '~/common/hooks/useApiClient';
 import { TIMESTAMP_SOURCES } from '~/common/utils/Constants';
-import EpisodeUtils from '~/common/utils/EpisodeUtils';
+import EpisodeUtils from '~/common/utils/episode-utils';
 import { error, warn } from '~/common/utils/log';
 import * as Api from '~api';
 import { useCreateEpisodeFromThirdParty } from '../../hooks/useCreateEpisodeFromThirdParty';
