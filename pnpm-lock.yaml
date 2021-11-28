@@ -52,7 +52,7 @@ specifiers:
   typescript: ^4.3.5
   unplugin-vue-components: ^0.17.2
   vite: ^2.6.14
-  vite-plugin-web-extension: ^0.8.3
+  vite-plugin-web-extension: ^0.8.4
   vue: ^3.2.2
   vue-global-api: ^0.2.4
   vue-router: ^4.0.11
@@ -119,7 +119,7 @@ devDependencies:
   typescript: 4.3.5
   unplugin-vue-components: 0.17.2_vite@2.6.14+vue@3.2.2
   vite: 2.6.14_sass@1.38.0
-  vite-plugin-web-extension: 0.8.3_sass@1.38.0
+  vite-plugin-web-extension: 0.8.4_sass@1.38.0
   vue-global-api: 0.2.4_vue@3.2.2
   vue-tsc: 0.2.2_typescript@4.3.5
   zip-a-folder: 1.1.0
@@ -7253,8 +7253,8 @@ packages:
       extsprintf: 1.3.0
     dev: true
 
-  /vite-plugin-web-extension/0.8.3_sass@1.38.0:
-    resolution: {integrity: sha512-mVC+VWXCoYw712EkrLvv3up7XbFxJdFqISIO2OVObae7VDC04LCvJHzrUO2Mu9fRanIhywwjHq9rMcxZlnyb0g==}
+  /vite-plugin-web-extension/0.8.4_sass@1.38.0:
+    resolution: {integrity: sha512-AmsFJKGQOc0Wcjc4LNvRrWKCe2nc0+nj7vZwG4YCHFtA/w1FXk5dqWZ7MN36Kf6uuXzef15XcP6i7SttaRaxFg==}
     dependencies:
       ajv: 8.8.1
       ajv-draft-04: 1.0.0_ajv@8.8.1
