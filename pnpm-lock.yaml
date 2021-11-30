@@ -52,7 +52,7 @@ specifiers:
   typescript: ^4.3.5
   unplugin-vue-components: ^0.17.2
   vite: ^2.6.14
-  vite-plugin-web-extension: ^0.8.4
+  vite-plugin-web-extension: ^0.9.0
   vue: ^3.2.2
   vue-global-api: ^0.2.4
   vue-router: ^4.0.11
@@ -119,7 +119,7 @@ devDependencies:
   typescript: 4.3.5
   unplugin-vue-components: 0.17.2_vite@2.6.14+vue@3.2.2
   vite: 2.6.14_sass@1.38.0
-  vite-plugin-web-extension: 0.8.4_sass@1.38.0
+  vite-plugin-web-extension: 0.9.0_sass@1.38.0
   vue-global-api: 0.2.4_vue@3.2.2
   vue-tsc: 0.2.2_typescript@4.3.5
   zip-a-folder: 1.1.0
@@ -1426,17 +1426,6 @@ packages:
       debug: 4.3.2
     transitivePeerDependencies:
       - supports-color
-    dev: true
-
-  /ajv-draft-04/1.0.0_ajv@8.8.1:
-    resolution: {integrity: sha512-mv00Te6nmYbRp5DCwclxtt7yV/joXJPGS7nM+97GdxvuttCOfgI3K4U25zboyeX0O+myI8ERluxQe5wljMmVIw==}
-    peerDependencies:
-      ajv: ^8.5.0
-    peerDependenciesMeta:
-      ajv:
-        optional: true
-    dependencies:
-      ajv: 8.8.1
     dev: true
 
   /ajv-merge-patch/4.1.0_ajv@6.12.6:
@@ -7253,11 +7242,10 @@ packages:
       extsprintf: 1.3.0
     dev: true
 
-  /vite-plugin-web-extension/0.8.4_sass@1.38.0:
-    resolution: {integrity: sha512-AmsFJKGQOc0Wcjc4LNvRrWKCe2nc0+nj7vZwG4YCHFtA/w1FXk5dqWZ7MN36Kf6uuXzef15XcP6i7SttaRaxFg==}
+  /vite-plugin-web-extension/0.9.0_sass@1.38.0:
+    resolution: {integrity: sha512-yGBnmAP9oN44IjS1gS45BS79kfBOsOTXFBti+7fk+ix0i849W/Nriacv4YEi7XLkh21Kvrp/bakdvgqCJy2UGw==}
     dependencies:
       ajv: 8.8.1
-      ajv-draft-04: 1.0.0_ajv@8.8.1
       vite: 2.6.14_sass@1.38.0
       web-ext: 6.5.0
     transitivePeerDependencies:
