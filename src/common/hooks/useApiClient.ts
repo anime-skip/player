@@ -104,7 +104,11 @@ export function useApiClient() {
             warn('Logging out...');
             clearTokens();
             resetPreferences();
-            void UsageStats.saveEvent('forced_logout');
+            void UsageStats.saveEvent('forced_logout', {
+              tokenExpiredAt: err.tokenExpiresAt(),
+              refreshTokenExpiredAt: err.refreshTokenExpiresAt(),
+              apiError: err.apiError,
+            });
           }
           throw err;
         }

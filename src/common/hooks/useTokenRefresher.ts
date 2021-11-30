@@ -41,7 +41,7 @@ export default function useTokenRefresher(client: ReturnType<typeof createAnimeS
 
     const release = await lock.acquire();
     const auth = await getAuthAsync();
-    if (!auth.refreshToken) throw new LogoutError();
+    if (!auth.refreshToken) throw new LogoutError(auth.token, auth.refreshToken, undefined);
 
     try {
       const newTokens = await client.loginRefresh(Api.LOGIN_QUERY, {
@@ -50,11 +50,11 @@ export default function useTokenRefresher(client: ReturnType<typeof createAnimeS
       await updateAuthAsync({ refreshToken: newTokens.refreshToken, token: newTokens.authToken });
       void UsageStats.saveEvent('login_refresh');
       log('Refreshed token!');
-      release();
     } catch (err) {
-      release();
       warn('Could not refresh token:', err);
-      throw new LogoutError();
+      throw new LogoutError(auth.token, auth.refreshToken, err.message ?? JSON.stringify(err));
+    } finally {
+      release();
     }
     return client.axios.request(res.config);
   });
