@@ -19,6 +19,7 @@ script(async () => {
 
   console.log(`  ${DIM}PACKAGE_VERSION: ${RESET}${BOLD}${config.PACKAGE_VERSION}${RESET}`);
   console.log(`  ${DIM}PACKAGE_NAME:    ${RESET}${BOLD}${config.PACKAGE_NAME}${RESET}`);
+  console.log(`  ${DIM}PACKAGE_MODE:    ${RESET}${BOLD}${config.PACKAGE_MODE}${RESET}`);
   console.log(`  ${DIM}BUILD_NAME:      ${RESET}${BOLD}${config.BUILD_NAME}${RESET}`);
   console.log(`  ${DIM}OUTPUT_DIR:      ${RESET}${BOLD}${config.OUTPUT_DIR_DISPLAY}${RESET}`);
   console.log(`  ${DIM}SKIP_CHECKS:     ${RESET}${BOLD}${config.SKIP_CHECKS}${RESET}`);
