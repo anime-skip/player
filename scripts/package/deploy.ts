@@ -47,7 +47,7 @@ async function tryApiCall<T>(caller: () => Promise<T>) {
 
 export async function deploy(config: PackageConfig) {
   const firefoxDist = path.join(config.OUTPUT_DIR, '.firefox-dist');
-  const firefoxSigningconfig =
+  const firefoxSigningConfig =
     config.PACKAGE_MODE === 'beta'
       ? {
           WEB_EXT_ARTIFACTS_DIR: config.OUTPUT_DIR,
@@ -76,7 +76,7 @@ export async function deploy(config: PackageConfig) {
     await run(`Signing and downloading ${CODE}firefox.xpi`, () =>
       skipForDryRuns(async () => {
         try {
-          await bash(`pnpm web-ext --no-config-discovery sign`, firefoxSigningconfig);
+          await bash(`pnpm web-ext --no-config-discovery sign`, firefoxSigningConfig);
         } catch (err: any) {
           if (!err.message.includes('Your add-on has been submitted for review')) {
             throw err;
