@@ -24,6 +24,17 @@ export enum PlayerHosts {
 }
 
 /**
+ * All the host permission url matchers that run the injected player scripts for production
+ */
+
+export enum PlayerHostsProduction {
+  CRUNCHYROLL = 'https://static.crunchyroll.com/vilos-v2/web/vilos/player.html*',
+  FUNIMATION = 'https://www.funimation.com/player/*',
+  FUNIMATION_20210926 = 'https://www.funimation.com/v/*',
+  VRV = 'https://static.vrv.co/*',
+}
+
+/**
  * All the URL matches to show the action for. This is a superset fo the `ParentHosts` since some of
  * those have a path specified and the action should be shown for the entire website
  */

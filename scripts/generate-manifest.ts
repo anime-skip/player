@@ -4,7 +4,7 @@ import { Manifest } from 'webextension-polyfill';
 import {
   PAGE_ACTION_MATCHES,
   ParentHosts,
-  PlayerHosts,
+  PlayerHostsProduction,
 } from '../src/common/utils/compile-time-constants';
 import { rootPath } from './utils';
 
@@ -27,7 +27,7 @@ export function generateManifest(config: GenerateManifestConfig): Manifest.WebEx
   const name = pkg.displayName + suffixes[config.mode];
   const contentScriptMatches = new Set([
     ...Object.values(ParentHosts),
-    ...Object.values(PlayerHosts),
+    ...Object.values(PlayerHostsProduction),
   ]);
 
   return merge(manifestTemplate, {
@@ -43,7 +43,7 @@ export function generateManifest(config: GenerateManifestConfig): Manifest.WebEx
         matches: Array.from(contentScriptMatches.values()),
       },
       {
-        matches: Object.values(PlayerHosts),
+        matches: Object.values(PlayerHostsProduction),
       },
     ],
   });
