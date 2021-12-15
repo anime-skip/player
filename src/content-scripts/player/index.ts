@@ -35,10 +35,11 @@ export function loadPlayerUi() {
 
   async function injectPlayer() {
     const rootQuery = window.getRootQuery();
-    const waitForQuery = window.getWaitForQuery?.() ?? rootQuery;
+    const waitBeforePlayerInjection =
+      window.waitBeforePlayerInjection ?? (() => document.querySelector(rootQuery) != null);
     debug(`Adding player to ${rootQuery}`);
 
-    while (document.querySelector(waitForQuery) == null) {
+    while (!waitBeforePlayerInjection()) {
       debug("Player's wait for node not found, trying again");
       await sleep(100);
     }

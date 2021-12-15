@@ -8,6 +8,7 @@ export function initWakanimPlayer() {
   setupGlobals('wakanim', {
     serviceDisplayName: 'Wakanim',
     getRootQuery: () => '#jwplayer-container',
+    waitBeforePlayerInjection: () => !!window.getVideo?.()?.src,
     getVideoQuery: () => 'video.jw-video',
   });
 }

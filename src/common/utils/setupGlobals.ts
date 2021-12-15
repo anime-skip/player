@@ -10,6 +10,7 @@ export default function setupGlobals(
     serviceDisplayName: ServiceDisplayName;
     getRootQuery: typeof window.getRootQuery;
     getVideoQuery: typeof window.getVideoQuery;
+    waitBeforePlayerInjection?: typeof window.waitBeforePlayerInjection;
     transformServiceUrl?: typeof window.transformServiceUrl;
     getPlayerOptions?: typeof window.getPlayerOptions;
     doNotReplacePlayer?: typeof window.doNotReplacePlayer;
@@ -24,6 +25,7 @@ export default function setupGlobals(
 
   window.getRootQuery = options.getRootQuery;
   window.getVideoQuery = options.getVideoQuery;
+  window.waitBeforePlayerInjection = options.waitBeforePlayerInjection;
   window.transformServiceUrl = options.transformServiceUrl ?? GeneralUtils.stripUrl;
   window.getPlayerOptions = async () => {
     try {
