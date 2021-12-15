@@ -7,6 +7,7 @@ import { initFunimation20210926Parent } from './services/funimation-2021-09-26/p
 import { initFunimationParent } from './services/funimation/parent';
 import { initTestServiceParent } from './services/test-service/parent';
 import { initVrvParent } from './services/vrv/parent';
+import { initWakanimParent } from './services/wakanim/parent';
 
 const services: Record<ParentHosts, () => void> = {
   [ParentHosts.ANIME_SKIP]: initAnimeSkipParent,
@@ -17,6 +18,7 @@ const services: Record<ParentHosts, () => void> = {
   [ParentHosts.FUNIMATION]: initFunimationParent,
   [ParentHosts.TEST_SERVICE]: initTestServiceParent,
   [ParentHosts.VRV]: initVrvParent,
+  [ParentHosts.WAKANIM]: initWakanimParent,
 };
 
 function initParent() {

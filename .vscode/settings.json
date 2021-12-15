@@ -48,7 +48,8 @@
     "skippable",
     "unitless",
     "unmount",
-    "vrv"
+    "vrv",
+    "wakanim"
   ],
   "cSpell.ignoreWords": [
     "asynciterable",

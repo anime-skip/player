@@ -4,6 +4,8 @@
  */
 declare function getRootQuery(): string;
 
+declare var getWaitForQuery: undefined | (() => string);
+
 /**
  * Query used to get the video element the player wraps around
  */

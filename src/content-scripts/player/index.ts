@@ -35,10 +35,11 @@ export function loadPlayerUi() {
 
   async function injectPlayer() {
     const rootQuery = window.getRootQuery();
+    const waitForQuery = window.getWaitForQuery?.() ?? rootQuery;
     debug(`Adding player to ${rootQuery}`);
 
-    while (document.querySelector(rootQuery) == null) {
-      debug("Player's root node not found, trying again");
+    while (document.querySelector(waitForQuery) == null) {
+      debug("Player's wait for node not found, trying again");
       await sleep(100);
     }
 
@@ -49,6 +50,14 @@ export function loadPlayerUi() {
       const mountedApp = app.mount(container);
 
       document.querySelector(rootQuery)?.appendChild(mountedApp.$el);
+
+      setInterval(() => {
+        if (!document.getElementById('AnimeSkipPlayer')) {
+          const root = document.querySelector(rootQuery);
+          root?.appendChild(mountedApp.$el);
+          root?.classList.add('hide-for-anime-skip');
+        }
+      }, 1000);
 
       debug(`Added player to ${rootQuery}`);
     } catch (err) {

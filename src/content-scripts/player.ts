@@ -8,6 +8,7 @@ import { initFunimation20210926Player } from './services/funimation-2021-09-26/p
 import { initFunimationPlayer } from './services/funimation/player';
 import { initTestServicePlayer } from './services/test-service/player';
 import { initVrvPlayer } from './services/vrv/player';
+import { initWakanimPlayer } from './services/wakanim/player';
 
 const services: Record<PlayerHosts, () => void> = {
   [PlayerHosts.CRUNCHYROLL]: initCrunchyrollPlayer,
@@ -15,6 +16,7 @@ const services: Record<PlayerHosts, () => void> = {
   [PlayerHosts.FUNIMATION]: initFunimationPlayer,
   [PlayerHosts.VRV]: initVrvPlayer,
   [PlayerHosts.TEST_SERVICE]: initTestServicePlayer,
+  [PlayerHosts.WAKANIM]: initWakanimPlayer,
 };
 
 function init() {

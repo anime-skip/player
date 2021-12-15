@@ -3,7 +3,8 @@ declare type Service =
   | 'vrv'
   | 'funimation'
   | 'funimation-2021-09-26'
-  | 'crunchyroll';
+  | 'crunchyroll'
+  | 'wakanim';
 
 declare type ReportableService = Service | 'crunchyroll-beta';
 
@@ -12,6 +13,7 @@ declare type ServiceDisplayName =
   | 'VRV'
   | 'Funimation'
   | 'Crunchyroll'
+  | 'Wakanim'
   | undefined;
 
 declare type SupportedBrowser = 'firefox' | 'chrome';
