@@ -7,14 +7,6 @@ on:
     types: [assigned, opened, synchronize, reopened]
 
 jobs:
-  cancel:
-    name: Cancel Previous Checks
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cancel previous workflows
-        uses: styfle/cancel-workflow-action@0.6.0
-        with:
-          access_token: ${{ github.token }}
   verify:
     name: Verify Code
     runs-on: ubuntu-latest
