@@ -29,7 +29,19 @@ export default defineConfig({
   root: rootPath('src'),
   mode: viteModes[mode],
   plugins: [
-    Components({ dts: true, allowOverrides: true, dirs: [rootPath('src')] }),
+    Components({
+      dts: true,
+      allowOverrides: true,
+      dirs: [rootPath('src')],
+
+      /**
+       * Hack to fix:
+       * https://github.com/anime-skip/web-extension/issues/169
+       */
+      importPathTransform: path => {
+        return path.startsWith('C:') ? path.replaceAll('\\', '\\\\') : path;
+      },
+    }),
     WebExtension({
       assets: 'assets',
       manifest: () => generateManifest({ browser, mode }),
