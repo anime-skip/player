@@ -6,7 +6,7 @@ import {
   ParentHosts,
   PlayerHosts,
 } from '../src/common/utils/compile-time-constants';
-import { rootPath } from './utils';
+import { isDev, rootPath } from './utils';
 
 interface GenerateManifestConfig {
   mode: ExtensionMode;
@@ -21,14 +21,22 @@ const suffixes: Record<ExtensionMode, string> = {
   dev: ' (Dev)',
 };
 
+function removeLocalhostForProd(config: GenerateManifestConfig, matches: string[]): string[] {
+  return matches.filter(match => isDev(config.mode) || !match.includes('localhost'));
+}
+
+function getContentScriptMatches(config: GenerateManifestConfig): string[] {
+  return removeLocalhostForProd(
+    config,
+    Array.from(new Set([...Object.values(ParentHosts), ...Object.values(PlayerHosts)]))
+  );
+}
+
 export function generateManifest(config: GenerateManifestConfig): Manifest.WebExtensionManifest {
   const manifestTemplate = readJsonFile(rootPath('src/manifest.template.json'));
   const pkg = readJsonFile(rootPath('package.json'));
   const name = pkg.displayName + suffixes[config.mode];
-  const contentScriptMatches = new Set([
-    ...Object.values(ParentHosts),
-    ...Object.values(PlayerHosts),
-  ]);
+  const contentScriptMatches = getContentScriptMatches(config);
 
   return merge(manifestTemplate, {
     name,
@@ -36,14 +44,14 @@ export function generateManifest(config: GenerateManifestConfig): Manifest.WebEx
     version: pkg.version,
     page_action: {
       default_title: name,
-      '{{firefox}}.show_matches': PAGE_ACTION_MATCHES,
+      '{{firefox}}.show_matches': removeLocalhostForProd(config, PAGE_ACTION_MATCHES),
     },
     content_scripts: [
       {
-        matches: Array.from(contentScriptMatches.values()),
+        matches: contentScriptMatches,
       },
       {
-        matches: Object.values(PlayerHosts),
+        matches: removeLocalhostForProd(config, Object.values(PlayerHosts)),
       },
     ],
   });
