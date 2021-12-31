@@ -1,14 +1,14 @@
 <template>
-  <transition name="dialog">
+  <transition name="as-dialog">
     <div
       v-if="isVisible"
-      class="BasicDialog absolute inset-0 flex flex-col cursor-pointer overflow-visible"
+      class="BasicDialog as-absolute as-inset-0 as-flex as-flex-col as-cursor-pointer as-overflow-visible"
       :id="name"
       :style="`align-items: ${gravityX}; justify-content: ${gravityY}`"
       @click.stop="dismiss()"
     >
       <Card
-        class="dialog-root-container overflow-x-hidden overflow-y-auto cursor-auto rounded-md"
+        class="as-dialog-root-container as-overflow-x-hidden as-overflow-y-auto as-cursor-auto as-rounded-md"
         :elevation="8"
         @click.stop
       >
@@ -72,17 +72,17 @@ function dismiss() {
 <style lang="scss" scoped>
 @import '@anime-skip/ui/variables-theme.scss';
 
-.dialog-enter-active,
-.dialog-leave-active {
+.as-dialog-enter-active,
+.as-dialog-leave-active {
   transition-property: opacity;
   transition-duration: 250ms;
 }
-.dialog-enter,
-.dialog-leave-to {
+.as-dialog-enter,
+.as-dialog-leave-to {
   opacity: 0;
 }
-.dialog-enter-to,
-.dialog-leave {
+.as-dialog-enter-to,
+.as-dialog-leave {
   opacity: 1;
 }
 
@@ -94,7 +94,7 @@ function dismiss() {
     text-align: left;
   }
 
-  .dialog-root-container {
+  .as-dialog-root-container {
     background-color: $backgroundColor-background !important;
     transform: translate(0px, 0px);
     transition: 250ms;

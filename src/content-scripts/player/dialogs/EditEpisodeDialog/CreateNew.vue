@@ -1,8 +1,8 @@
 <template>
-  <div class="p-4 space-y-4">
+  <div class="as-p-4 as-space-y-4">
     <AutocompleteTextInput
       ref="showNameInput"
-      class="horizontal-margin"
+      class="as-horizontal-margin"
       placeholder="Show name"
       v-model:value="showItem"
       :options="showOptions"
@@ -10,12 +10,12 @@
       @search="searchShows"
     />
     <TextInput
-      class="row"
+      class="as-row"
       placeholder="Episode name"
       v-model:value="name"
       @submit="onClickCreate"
     />
-    <div class="flex flex-row space-x-4">
+    <div class="as-flex as-flex-row as-space-x-4">
       <TextInput label="Season" placeholder="" v-model:value="season" @submit="onClickCreate" />
       <TextInput
         label="Number in Season"
@@ -30,7 +30,7 @@
         @submit="onClickCreate"
       />
     </div>
-    <div class="flex flex-row-reverse justify-between pt-2">
+    <div class="as-flex as-flex-row-reverse as-justify-between as-pt-2">
       <RaisedButton :disabled="isCreateDisabled" @click.stop.prevent="onClickCreate">
         {{ createButtonText }}
       </RaisedButton>
@@ -128,14 +128,16 @@ async function onClickCreate(): Promise<void> {
 </script>
 
 <style lang="scss" scoped>
+// TODO: Tailwindify
+
 .CreateNew {
   padding: 16px;
 
-  .row {
+  .as-row {
     margin-top: 12px;
   }
 
-  .input-row {
+  .as-input-row {
     display: flex;
     flex-direction: row;
     & > * {
@@ -147,7 +149,7 @@ async function onClickCreate(): Promise<void> {
     }
   }
 
-  .buttons {
+  .as-buttons {
     display: flex;
     flex-direction: row-reverse;
 

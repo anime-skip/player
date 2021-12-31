@@ -3,27 +3,30 @@
     <div
       v-if="!isOriginalPlayerVisible"
       id="AnimeSkipPlayer"
-      class="absolute inset-0 grid overflow-hidden bg-background bg-opacity-0"
+      class="as-absolute as-inset-0 as-grid as-overflow-hidden as-bg-background as-bg-opacity-0"
       :class="{
-        active: isActive,
-        'paused bg-opacity-medium': videoState.isPaused,
-        'buffering bg-opacity-medium': videoState.isBuffering,
-        showing: isEpisodeInfoShowing,
-        'opacity-0': !isPlayerVisible,
+        'as-active': isActive,
+        'as-paused as-bg-opacity-medium': videoState.isPaused,
+        'as-buffering as-bg-opacity-medium': videoState.isBuffering,
+        'as-showing': isEpisodeInfoShowing,
+        'as-opacity-0': !isPlayerVisible,
       }"
       @mouseenter.prevent="onMouseEnter"
       @mousemove.prevent="onMouseMove"
       @mouseleave.prevent="onMouseLeave"
       @click="togglePlayPause()"
     >
-      <div v-if="showBufferLoading" class="absolute inset-0 flex items-center justify-center">
+      <div
+        v-if="showBufferLoading"
+        class="as-absolute as-inset-0 as-flex as-items-center as-justify-center"
+      >
         <Loading />
       </div>
-      <div class="left-content pointer-events-none pl-8 pt-8 box-border">
+      <div class="as-left-content as-pointer-events-none as-pl-8 as-pt-8 as-box-border">
         <episode-info />
       </div>
-      <notification-center class="right-content" />
-      <controls-toolbar class="bottom-content" />
+      <notification-center class="as-right-content" />
+      <controls-toolbar class="as-bottom-content" />
 
       <!-- Dialogs -->
       <ScreenshotOverlay />
@@ -40,9 +43,9 @@
 import { useTimeout } from '@anime-skip/ui';
 import { PLAYER_ACTIVITY_TIMEOUT } from '~/common/utils/constants';
 import { nextFrame } from '~/common/utils/event-loop';
+import Utils from '~/common/utils/GeneralUtils';
 import Messenger from '~/common/utils/Messenger';
 import UsageStats from '~/common/utils/UsageStats';
-import Utils from '~/common/utils/GeneralUtils';
 import { useLoadAllEpisodeData } from '../hooks/useLoadAllEpisodeData';
 import { usePlaybackRateConnector } from '../hooks/usePlaybackRateConnector';
 import { useTabUrl } from '../hooks/useTabUrl';
@@ -144,7 +147,7 @@ const messenger = new Messenger('player', {
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #AnimeSkipPlayer {
   transition: 200ms;
   transition-property: background-color;
@@ -152,30 +155,30 @@ const messenger = new Messenger('player', {
   grid-template-rows: 1fr auto;
   grid-template-areas: 'left-content right-content' 'toolbar toolbar';
   cursor: none;
-  &.active,
-  &.paused {
+  &.as-active,
+  &.as-paused {
     cursor: unset;
   }
 
-  .left-content {
+  .as-left-content {
     z-index: 1;
     grid-area: left-content;
     transition: 200ms;
     transition-property: opacity;
   }
-  &.showing {
-    .left-content {
+  &.as-showing {
+    .as-left-content {
       opacity: 1;
       pointer-events: unset;
     }
   }
 
-  .right-content {
+  .as-right-content {
     z-index: 1;
     grid-area: right-content;
   }
 
-  .bottom-content {
+  .as-bottom-content {
     z-index: 1;
     grid-area: toolbar;
   }

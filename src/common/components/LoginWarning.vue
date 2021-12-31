@@ -1,7 +1,7 @@
 <template>
-  <p class="text-error body-1">
+  <p class="as-text-error body-1">
     You need to be
-    <a href="#" @click.prevent.stop="onClickLogin" class="underline">logged in</a>
+    <a href="#" @click.prevent.stop="onClickLogin" class="as-underline">logged in</a>
     before {{ before }}
   </p>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <LoadingOverlay :is-loading="isLoggingIn">
-    <form class="w-popup-sm p-6 flex flex-col space-y-4" @submit.prevent.stop>
+    <form class="as-w-popup-sm as-p-6 as-flex as-flex-col as-space-y-4" @submit.prevent.stop>
       <PopupHeader title="Log In" />
       <TextInput
         ref="usernameInput"
@@ -33,16 +33,16 @@
           />
         </template>
       </TextInput>
-      <div class="flex flex-row-reverse justify-between items-center">
+      <div class="as-flex as-flex-row-reverse as-justify-between as-items-center">
         <RaisedButton @click="login">Log In</RaisedButton>
         <a
           href="https://www.anime-skip.com/sign-up"
           target="_blank"
-          class="space-x-2 body-1 text-on-surface"
+          class="as-space-x-2 as-body-1 as-text-on-surface"
         >
           Sign Up
           <Icon
-            class="inline"
+            class="as-inline"
             size="sm"
             path="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"
           />

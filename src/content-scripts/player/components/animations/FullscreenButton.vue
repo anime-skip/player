@@ -1,5 +1,5 @@
 <template>
-  <div class="FullscreenButton">
+  <div class="as-h-6">
     <svg width="24" height="24" viewBox="0 0 24 24">
       <path fill="white" :d="path" />
     </svg>
@@ -53,9 +53,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss" scoped>
-.FullscreenButton {
-  height: 24px;
-}
-</style>

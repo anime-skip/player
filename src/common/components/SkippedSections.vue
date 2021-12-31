@@ -1,16 +1,16 @@
 <template>
-  <div class="space-y-4">
-    <h6 class="section-header">What do you want to watch?</h6>
-    <p v-if="autoSkipDisabled" class="text-error body-2">Auto-skipping has been turned off</p>
+  <div class="as-space-y-4">
+    <h6>What do you want to watch?</h6>
+    <p v-if="autoSkipDisabled" class="as-text-error as-body-2">Auto-skipping has been turned off</p>
     <div
-      class="grid gap-3"
+      class="as-grid as-gap-3"
       :class="{
-        'grid-cols-2': twoColumns,
-        'grid-cols-3': !twoColumns,
+        'as-grid-cols-2': twoColumns,
+        'as-grid-cols-3': !twoColumns,
       }"
     >
       <RaisedCheckbox
-        class="checkbox"
+        class="as-checkbox"
         v-for="preference in SKIPPABLE_PREFERENCES"
         :key="preference.key"
         :checked="!preferences[preference.key]"
@@ -42,7 +42,7 @@ const autoSkipDisabled = computed<boolean>(
 </script>
 
 <style scoped>
-.checkbox {
+.as-checkbox {
   min-width: 11rem;
 }
 </style>

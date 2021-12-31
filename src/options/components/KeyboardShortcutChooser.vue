@@ -1,27 +1,27 @@
 <template>
   <div
-    class="select-none px-2.5 py-1 surface rounded cursor-pointer"
+    class="as-select-none as-px-2.5 as-py-1 as-surface as-rounded as-cursor-pointer"
     :class="{
-      'surface-4': !!shortcut && secondary,
-      'surface-primary': !!shortcut && !secondary,
-      'surface-error': isDuplicate,
+      'as-surface-4': !!shortcut && secondary,
+      'as-surface-primary': !!shortcut && !secondary,
+      'as-surface-error': isDuplicate,
     }"
     @click="showKeyBindingEditor"
   >
     <pre
       v-if="shortcut"
-      class="font-mono-2 font-size-body"
+      class="as-font-mono-2 as-font-size-body"
       :class="{
-        'text-on-primary': !isDuplicate && !secondary,
-        'text-on-surface': !isDuplicate && secondary,
-        'text-on-error': isDuplicate,
+        'as-text-on-primary': !isDuplicate && !secondary,
+        'as-text-on-surface': !isDuplicate && secondary,
+        'as-text-on-error': isDuplicate,
       }"
       :tabindex="0"
       >{{ shortcut }}</pre
     >
     <pre
       v-else
-      class="opacity-medium font-mono-2 font-size-body"
+      class="as-opacity-medium as-font-mono-2 as-font-size-body"
       :tabindex="0"
       @click="showKeyBindingEditor"
     >
@@ -31,26 +31,26 @@ unset</pre
     <teleport to="body">
       <div
         v-if="isShowingKeyBindingEditor"
-        class="fixed inset-0 bg-control-variant bg-opacity-high select-none flex flex-col justify-center items-center"
+        class="as-fixed as-inset-0 as-bg-control-variant as-bg-opacity-high as-select-none as-flex as-flex-col as-justify-center as-items-center"
       >
         <h5
-          class="w-full max-w-xs p-4 rounded-md ring-2 ring-on-surface ring-opacity-low text-center font-bold"
+          class="as-w-full as-max-w-xs as-p-4 as-rounded-md as-ring-2 as-ring-on-surface as-ring-opacity-low as-text-center as-font-bold"
         >
-          <span v-if="!currentKeyBinding" class="no-selection">[Press a key]</span>
-          <pre v-else class="font-mono-2">{{ currentKeyBinding }}</pre>
+          <span v-if="!currentKeyBinding" class="as-no-selection">[Press a key]</span>
+          <pre v-else class="as-font-mono-2">{{ currentKeyBinding }}</pre>
         </h5>
-        <table class="w-full max-w-xs mt-8">
+        <table class="as-w-full as-max-w-xs as-mt-8">
           <tr>
-            <td class="text-right"><code>Enter</code></td>
-            <td class="text-left">to save</td>
+            <td class="as-text-right"><code>Enter</code></td>
+            <td class="as-text-left">to save</td>
           </tr>
           <tr>
-            <td class="text-right"><code>Backspace</code></td>
-            <td class="text-left">to remove</td>
+            <td class="as-text-right"><code>Backspace</code></td>
+            <td class="as-text-left">to remove</td>
           </tr>
           <tr>
-            <td class="text-right"><code>Esc</code></td>
-            <td class="text-left">to cancel</td>
+            <td class="as-text-right"><code>Esc</code></td>
+            <td class="as-text-left">to cancel</td>
           </tr>
         </table>
       </div>
@@ -59,8 +59,8 @@ unset</pre
 </template>
 
 <script lang="ts" setup>
-import { debug } from '~/common/utils/log';
 import Utils from '~/common/utils/GeneralUtils';
+import { debug } from '~/common/utils/log';
 import { useDuplicateBindingChecker } from '~/content-scripts/player/hooks/useDubplicateBindingChecker';
 
 const props = defineProps<{
@@ -122,18 +122,18 @@ watch(isShowingKeyBindingEditor, isShowing => {
 
 <style scoped>
 td {
-  @apply px-1 pb-2;
+  @apply as-px-1 as-pb-2;
   width: 50%;
 }
 
 code {
-  @apply rounded bg-control-highlight px-2.5 pb-1 pt-2;
+  @apply as-rounded as-bg-control-highlight as-px-2.5 as-pb-1 as-pt-2;
 }
 
-.font-mono-2 {
+.as-font-mono-2 {
   font-family: monospace;
 }
-.font-size-body {
+.as-font-size-body {
   font-size: 16px;
 }
 </style>

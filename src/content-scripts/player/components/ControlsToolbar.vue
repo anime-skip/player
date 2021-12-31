@@ -1,19 +1,19 @@
 <template>
   <div
-    class="ToolBar relative cursor-default"
+    class="ToolBar as-relative as-cursor-default"
     :class="{
-      active: showToolbar,
-      paused: videoState.isPaused,
-      'hide-timeline-when-minimized': fullyHideToolbar,
+      'as-active': showToolbar,
+      'as-paused': videoState.isPaused,
+      'as-hide-timeline-when-minimized': fullyHideToolbar,
     }"
     @click.stop
   >
     <TimelineWrapper
-      class="timeline-alignment"
-      :class="{ 'opacity-0 pointer-events-none': !hasDuration }"
+      class="as-timeline-alignment"
+      :class="{ 'as-opacity-0 as-pointer-events-none': !hasDuration }"
       :is-flipped="!showToolbar && !videoState.isPaused"
     />
-    <div class="h-toolbar flex flex-row items-center space-x-1 px-2 pt-0.5">
+    <div class="as-h-toolbar as-flex as-flex-row as-items-center as-space-x-1 as-px-2 as-pt-0.5">
       <ToolbarButton @click="togglePlayPause()">
         <PlayPauseButton :state="playAnimationState" />
       </ToolbarButton>
@@ -28,8 +28,8 @@
         @click="gotoNextTimestamp()"
       />
       <VolumeButton />
-      <p class="body-2">{{ formattedTime }} / {{ formattedDuration }}</p>
-      <div class="flex-1" />
+      <p class="as-body-2">{{ formattedTime }} / {{ formattedDuration }}</p>
+      <div class="as-flex-1" />
       <ToolbarButton icon="ic_timestamps.svg" title="Timestamps" @click="toggleTimestampsDialog" />
       <ToolbarButton
         v-if="canSaveEdits"
@@ -54,6 +54,7 @@ import { useFullscreen } from '@vueuse/core';
 import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
 import { FRAME, LOOKUP_PREV_TIMESTAMP_OFFSET } from '~/common/utils/constants';
 import Utils from '~/common/utils/GeneralUtils';
+import { warn } from '~/common/utils/log';
 import * as Api from '~api';
 import { useCreateNewTimestamp } from '../hooks/useCreateNewTimestamp';
 import { useDisplayedTimestamps } from '../hooks/useDisplayedTimestamps';
@@ -69,7 +70,6 @@ import {
 } from '../state/useEditingState';
 import { usePlayHistory } from '../state/usePlayHistory';
 import { useDuration, useVideoController, useVideoState } from '../state/useVideoState';
-import { warn } from '~/common/utils/log';
 
 // Video State
 
@@ -235,7 +235,7 @@ useKeyboardShortcuts('toolbar', {
 @import '../utils/constants.scss';
 @import '@anime-skip/ui/variables-theme.scss';
 
-.h-toolbar {
+.as-h-toolbar {
   height: $toolbarHeight;
 }
 
@@ -245,12 +245,12 @@ useKeyboardShortcuts('toolbar', {
   transition-property: transform;
   user-select: none;
 
-  &.hide-timeline-when-minimized {
+  &.as-hide-timeline-when-minimized {
     transform: translateY($toolbarHeight + 6px);
   }
 
-  &.active,
-  &.paused {
+  &.as-active,
+  &.as-paused {
     transform: translateY(0px);
   }
 
@@ -270,18 +270,14 @@ useKeyboardShortcuts('toolbar', {
       rgba($color: $backgroundColor-background, $alpha: $opacity-medium)
     );
   }
-  &.active {
-    &::before {
-      opacity: 1;
-    }
+  &.as-active::before {
+    opacity: 1;
   }
-  &.paused {
-    &::before {
-      opacity: 0;
-    }
+  &.as-paused::before {
+    opacity: 0;
   }
 
-  .timeline-alignment {
+  .as-timeline-alignment {
     // Line bottom of background with top of buttons
     margin-bottom: -2px;
   }

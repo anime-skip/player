@@ -1,18 +1,18 @@
 <template>
-  <LoadingOverlay class="h-full" :is-loading="isSavingTimestamps">
+  <LoadingOverlay class="as-h-full" :is-loading="isSavingTimestamps">
     <TimestampPanelLayout mode="close" title="Timestamps" @close="hideDialog">
       <template #content>
-        <table class="w-full">
+        <table class="as-w-full">
           <tr>
-            <td :colspan="4" class="px-4 text-center">
+            <td :colspan="4" class="as-px-4 as-text-center">
               <ToolbarButton
                 v-if="isEditing"
-                class="w-full"
+                class="as-w-full"
                 title="New timestamp"
                 icon="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
                 @click="onClickAddNew"
               />
-              <p v-if="!canEditTimestamps" class="text-error my-2">
+              <p v-if="!canEditTimestamps" class="as-text-error as-my-2">
                 <LoginWarning v-if="!isLoggedIn" before="editing timestamps" />
                 <template v-else-if="episodeUrl == null">
                   Connect the episode to Anime Skip before editing timestamps
@@ -25,48 +25,55 @@
             </td>
           </tr>
           <tr v-if="activeTimestamps.length === 0">
-            <p class="py-4 text-center text-opacity-low">No timestamps</p>
+            <p class="as-py-4 as-text-center as-text-opacity-low">No timestamps</p>
           </tr>
           <template v-else>
             <tr
               v-for="timestamp of activeTimestamps"
-              class="bg-on-surface bg-opacity-0 hover:bg-opacity-hover focus-within:bg-opacity-active transition-colors cursor-pointer py-2 px-4 group"
+              class="as-bg-on-surface as-bg-opacity-0 hover:as-bg-opacity-hover focus-within:as-bg-opacity-active as-transition-colors as-cursor-pointer as-py-2 as-px-4 as-group"
               :key="timestamp.id"
               @click="onClickTimestamp(timestamp)"
               @mouseenter="onHoverTimestamp(timestamp)"
               @mouseleave.stop.prevent="onStopHoverTimestamp()"
             >
               <td>
-                <div class="pl-4 text-right">
-                  <h6 class="font-bold text-lg pt-0.5" :style="itemTimestampStyle(timestamp)">
+                <div class="as-pl-4 as-text-right">
+                  <h6
+                    class="as-font-bold as-text-lg as-pt-0.5"
+                    :style="itemTimestampStyle(timestamp)"
+                  >
                     {{ itemTime(timestamp) }}
                   </h6>
                   <p
                     v-if="timestamp.edited"
-                    class="overflow-y-visible -mt-2 text-2xs uppercase"
+                    class="as-overflow-y-visible as--mt-2 as-text-2xs as-uppercase"
                     :style="itemTimestampStyle(timestamp)"
                   >
                     {{ itemNote(timestamp) }}
                   </p>
                 </div>
               </td>
-              <td class="px-4 py-2 spacy-y-1 w-90%">
-                <p class="">{{ itemType(timestamp) }}</p>
-                <p v-if="itemHasSource(timestamp)" class="body-2 text-on-surface text-opacity-low">
+              <!-- TODO: as-spacy-y-1 -->
+              <td class="as-px-4 as-py-2 as-spacy-y-1 as-w-90%">
+                <p>{{ itemType(timestamp) }}</p>
+                <p
+                  v-if="itemHasSource(timestamp)"
+                  class="as-body-2 as-text-on-surface as-text-opacity-low"
+                >
                   {{ itemSouce(timestamp) }}
                 </p>
               </td>
               <template v-if="canEditTimestamps">
-                <td class="w-10 py-1">
+                <td class="as-w-10 as-py-1">
                   <div
-                    class="w-6 p-2 rounded-full box-content opacity-0 group-hover:opacity-medium hover:bg-on-surface hover:bg-opacity-active transition-all"
+                    class="as-w-6 as-p-2 as-rounded-full as-box-content as-opacity-0 group-hover:as-opacity-medium hover:as-bg-on-surface hover:as-bg-opacity-active as-transition-all"
                   >
                     <WebExtImg src="ic_delete.svg" @click.stop="deleteTimestamp(timestamp)" />
                   </div>
                 </td>
-                <td class="w-10 py-1">
+                <td class="as-w-10 as-py-1">
                   <div
-                    class="w-6 p-2 mr-2 rounded-full box-content opacity-low group-hover:opacity-medium hover:bg-on-surface hover:bg-opacity-active"
+                    class="as-w-6 as-p-2 as-mr-2 as-rounded-full as-box-content as-opacity-low group-hover:as-opacity-medium hover:as-bg-on-surface hover:as-bg-opacity-active"
                   >
                     <WebExtImg src="ic_edit.svg" @click.stop="editTimestamp(timestamp)" />
                   </div>
@@ -75,22 +82,22 @@
             </tr>
           </template>
         </table>
-        <div class="h-3" />
+        <div class="as-h-3" />
       </template>
       <template v-if="canEditTimestamps" #footer>
         <template v-if="isEditing">
-          <RaisedButton class="text-on-primary flex-grow" @click="onClickSave">
+          <RaisedButton class="as-text-on-primary as-flex-grow" @click="onClickSave">
             Save Changes
           </RaisedButton>
-          <RaisedButton dark class="text-on-secondary flex-grow" @click="onClickDiscard">
+          <RaisedButton dark class="as-text-on-secondary as-flex-grow" @click="onClickDiscard">
             Discard
           </RaisedButton>
         </template>
         <template v-else>
-          <RaisedButton class="text-on-primary flex-grow" @click="startEditing()">
+          <RaisedButton class="as-text-on-primary as-flex-grow" @click="startEditing()">
             Edit
           </RaisedButton>
-          <RaisedButton dark class="text-on-secondary flex-grow" @click="onClickOpenTemplate">
+          <RaisedButton dark class="as-text-on-secondary as-flex-grow" @click="onClickOpenTemplate">
             {{ editTemplateText }}
           </RaisedButton>
         </template>
@@ -233,32 +240,15 @@ function onClickOpenTemplate(): void {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 @import '@anime-skip/ui/variables-theme.scss';
 
-.scroll {
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba($color: $backgroundColor-primary, $alpha: $opacity-low)
-    $backgroundColor-background;
-  &::-webkit-scrollbar {
-    width: 8px;
-    padding: 1px;
-  }
-  &::-webkit-scrollbar-track {
-    background-color: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: #484848;
-    border-radius: 5px;
-  }
-}
-
-.w-90\% {
+// TODO: Hmm, interesting style...
+.as-w-90\% {
   width: 100%;
 }
 
-.text-2xs {
+.as-text-2xs {
   font-size: 0.575rem;
   line-height: 0.8rem;
 }

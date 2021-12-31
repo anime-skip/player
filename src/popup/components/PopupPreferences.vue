@@ -1,18 +1,18 @@
 <template>
   <LoadingOverlay :is-loading="isLoggingOut">
-    <div class="p-4 space-y-8">
-      <PopupHeader title="Preferences" class="header" />
+    <div class="as-p-4 as-space-y-8">
+      <PopupHeader title="Preferences" class="as-header" />
       <GeneralSettings>
         <RaisedButton dark @click="openExtensionOptions">
-          <div class="flex justify-between w-full">
-            <p class="remove-text body-1">All Settings</p>
+          <div class="as-flex as-justify-between as-w-full">
+            <p class="as-remove-text as-body-1">All Settings</p>
           </div>
         </RaisedButton>
       </GeneralSettings>
       <SkippedSections />
-      <div class="flex flex-row justify-between items-baseline">
+      <div class="as-flex as-flex-row as-justify-between as-items-baseline">
         <a
-          class="text-on-surface text-opacity-medium body-1"
+          class="as-text-on-surface as-text-opacity-medium as-body-1"
           href="https://www.anime-skip.com/support"
           target="_blank"
         >

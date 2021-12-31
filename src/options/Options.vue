@@ -1,7 +1,7 @@
 <template>
-  <div class="max-w-screen-md mx-auto space-y-8 py-16 px-16 md:px-0">
+  <div class="as-max-w-screen-md as-mx-auto as-space-y-8 as-py-16 as-px-16 md:as-px-0">
     <PopupHeader title="All Settings" />
-    <div class="space-y-16">
+    <div class="as-space-y-16">
       <GeneralSettings>
         <RaisedCheckbox
           label="Hide timeline when minimized"

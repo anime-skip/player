@@ -1,6 +1,6 @@
 <template>
-  <div id="notification-center" class="w-72 p-4 overflow-y-visible">
-    <transition-group name="slide-left" tag="div" class="mb-4" :duration="500">
+  <div id="notification-center" class="as-w-72 as-p-4 as-overflow-y-visible">
+    <transition-group name="as-slide-left" tag="div" class="as-mb-4" :duration="500">
       <notification
         v-for="notification in notifications"
         :key="notification.id"
@@ -19,9 +19,9 @@ import {
   useDontShowStoreReviewPromptAgain,
   useStoreReviewPromptDate,
 } from '~/common/state/store-review-prompt';
+import Utils from '~/common/utils/GeneralUtils';
 import { DAYS, MINUTES, SECOND, SECONDS, today } from '~/common/utils/time';
 import UsageStats from '~/common/utils/UsageStats';
-import Utils from '~/common/utils/GeneralUtils';
 import { NotificationButton } from './Notification.vue';
 
 interface Notification {
@@ -149,19 +149,19 @@ function addNotification(notificaiton: Notification) {
 }
 </script>
 
-<style>
-.slide-left-enter-active,
-.slide-left-leave-active {
+<style scoped>
+.as-slide-left-enter-active,
+.as-slide-left-leave-active {
   transition: transform ease-out 500ms;
 }
 
-.slide-left-enter-from,
-.slide-left-leave-to {
+.as-slide-left-enter-from,
+.as-slide-left-leave-to {
   transform: translateX(120%);
 }
 
-.slide-left-enter-to,
-.slide-left-leave-from {
+.as-slide-left-enter-to,
+.as-slide-left-leave-from {
   transform: translateX(0%);
 }
 </style>

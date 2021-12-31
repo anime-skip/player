@@ -7,13 +7,13 @@ export default function useRadioIcon() {
     },
     getRadioIconClass(isSelected: boolean): Record<string, boolean> {
       return {
-        'fill-secondary opacity-100 !important': isSelected,
+        'as-fill-secondary as-opacity-100 !important': isSelected,
       };
     },
     getLabelClass(isSelected: boolean): Record<string, boolean> {
       return {
-        'text-opacity-100': isSelected,
-        'text-opacity-medium': !isSelected,
+        'as-text-opacity-100': isSelected,
+        'as-text-opacity-medium': !isSelected,
       };
     },
   };

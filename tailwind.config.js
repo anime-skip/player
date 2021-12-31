@@ -1,6 +1,8 @@
+/** @type {import('tailwindcss/tailwind-config').TailwindConfig} */
 module.exports = {
   presets: [require('@anime-skip/ui/tailwind.preset')],
-  purge: [
+  prefix: 'as-',
+  content: [
     './src/**/*.html',
     './src/**/*.vue',
     './src/**/*.jsx',

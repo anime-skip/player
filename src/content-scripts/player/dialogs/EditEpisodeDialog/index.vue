@@ -6,16 +6,19 @@
     @show="onShow"
     @hide="onHide"
   >
-    <LoadingOverlay class="min-h-6" :is-loading="isLoading || !prefill">
-      <div v-if="!isLoggedIn" class="px-16 py-8 text-center self-center justify-self-center">
+    <LoadingOverlay class="as-min-h-6" :is-loading="isLoading || !prefill">
+      <div
+        v-if="!isLoggedIn"
+        class="as-px-16 as-py-8 as-text-center as-self-center as-justify-self-center"
+      >
         <LoginWarning before="connecting this episode to Anime Skip" />
       </div>
       <template v-else>
-        <div class="flex flex-row mx-2">
-          <p class="tab" :class="{ active: tab == 0 }" @click="onClickFindExisting">
+        <div class="as-flex as-flex-row as-mx-2">
+          <p class="as-tab" :class="{ 'as-active': tab == 0 }" @click="onClickFindExisting">
             Find an existing episode
           </p>
-          <p class="tab" :class="{ active: tab == 1 }" @click="onClickCreateNew">
+          <p class="as-tab" :class="{ 'as-active': tab == 1 }" @click="onClickCreateNew">
             Create a new episode
           </p>
         </div>
@@ -232,26 +235,27 @@ function onHide() {
 }
 </script>
 
-<style lang="css">
+<style>
+/* TODO: This style should be scoped... */
 * {
   padding: 0;
   margin: 0;
 }
 
-#EditEpisodeDialog .dialog-root-container {
+#EditEpisodeDialog .as-dialog-root-container {
   width: 480px;
   overflow: visible;
 }
 
-.tab {
-  @apply mx-2 pt-4 cursor-pointer border-b-2 text-on-surface border-primary border-opacity-0 text-opacity-medium font-bold transition-all;
+.as-tab {
+  @apply as-mx-2 as-pt-4 as-cursor-pointer as-border-b-2 as-text-on-surface as-border-primary as-border-opacity-0 as-text-opacity-medium as-font-bold as-transition-all;
 }
 
-.tab.active {
-  @apply text-primary border-opacity-100;
+.as-tab.as-active {
+  @apply as-text-primary as-border-opacity-100;
 }
 
-.min-h-6 {
+.as-min-h-6 {
   min-height: 6rem; /* 96px */
 }
 </style>
