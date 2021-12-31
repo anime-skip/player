@@ -3,12 +3,12 @@
     ref="wrapperRef"
     class="TimelineWrapper"
     :class="{
-      'add-margin': isEditing,
-      flipped: isFlipped,
+      'as-add-margin': isEditing,
+      'as-flipped': isFlipped,
     }"
   >
     <Slider
-      class="slider w-full"
+      class="as-slider as-w-full"
       :progress="normalizedTime"
       :max="100"
       disable-update-during-seek
@@ -24,7 +24,7 @@
       <template #foreground="slotProps">
         <Timeline
           :class="{
-            seeking: isSeeking,
+            'as-seeking': isSeeking,
           }"
           :timestamps="timelineData"
           :normalized-progress="slotProps.progress"
@@ -45,8 +45,8 @@ import { computed, ref, watch } from 'vue';
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
 import { TIMESTAMP_TYPES } from '~/common/utils/constants';
-import UsageStats from '~/common/utils/UsageStats';
 import Utils from '~/common/utils/GeneralUtils';
+import UsageStats from '~/common/utils/UsageStats';
 import * as Api from '~api';
 import { useDisplayedTimestamps } from '../hooks/useDisplayedTimestamps';
 import { useGetTimestampColor } from '../hooks/useTimelineColors';
@@ -215,20 +215,20 @@ $translationInactiveSliderDefault: 4px;
   transform: scaleY(1);
   transition: 200ms;
 
-  &.flipped {
+  &.as-flipped {
     transform: scaleY(-1);
   }
-  &.add-margin {
+  &.as-add-margin {
     margin-left: 24px;
     margin-right: 24px;
   }
 
-  &.flipped .slider {
+  &.as-flipped .as-slider {
     top: 0px;
   }
 }
 
-.slider {
+.as-slider {
   --default-foreground-color: #{$backgroundColor-primaryPalette-500} !important;
 }
 </style>

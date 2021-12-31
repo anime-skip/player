@@ -1,8 +1,8 @@
 <template>
-  <div class="relative flex flex-col">
+  <div class="as-relative as-flex as-flex-col">
     <TextInput
       ref="input"
-      class="relative"
+      class="as-relative"
       :label="label"
       :placeholder="placeholder"
       :error-message="errorMessage"
@@ -17,18 +17,18 @@
       @keydown.down.prevent.stop="selectDown"
       @click.prevent.stop
     />
-    <div v-if="shouldShowSuggestions" class="h-0 overflow-y-visible z-10">
+    <div v-if="shouldShowSuggestions" class="as-h-0 as-overflow-y-visible as-z-10">
       <!-- @mousedown.prevent: prevent input from losing focus when clicking on an item -->
       <Card
-        class="max-h-72 mt-1 rounded divide-y divide-on-surface divide-opacity-divider overflow-auto"
+        class="as-max-h-72 as-mt-1 as-rounded as-divide-y as-divide-on-surface as-divide-opacity-divider as-overflow-auto"
         :elevation="4"
         @mousedown.prevent
         @mouseover="onHoverOptions"
       >
         <div v-for="(option, index) of options" :key="option.key">
           <div
-            class="option clickable"
-            :class="{ highlighted: index === highlightedIndex }"
+            class="as-option as-clickable"
+            :class="{ 'as-highlighted': index === highlightedIndex }"
             @click="onClickOption(option)"
           >
             <slot
@@ -39,8 +39,13 @@
               :value="value"
               :click="onClickOption"
             >
-              <p class="subtitle-1 text-on-surface text-opacity-high">{{ option.title }}</p>
-              <p v-if="option.subtitle" class="subtitle-2 text-on-surface text-opacity-medium mt-1">
+              <p class="as-subtitle-1 as-text-on-surface as-text-opacity-high">
+                {{ option.title }}
+              </p>
+              <p
+                v-if="option.subtitle"
+                class="as-subtitle-2 as-text-on-surface as-text-opacity-medium as-mt-1"
+              >
                 {{ option.subtitle }}
               </p>
             </slot>
@@ -48,7 +53,7 @@
         </div>
         <p
           v-if="options.length === 0 && !!searchValue"
-          class="option text-opacity-medium text-center"
+          class="as-option as-text-opacity-medium as-text-center"
         >
           {{ noOptionsMessage }}
         </p>
@@ -198,23 +203,15 @@ export default defineComponent({
 });
 </script>
 
-<style lang="css">
-.surface-control {
-  --surface-color: theme('colors.control') !important;
-}
-
-.min-h-12 {
-  min-height: 3rem;
-}
-
-.option {
-  @apply flex flex-col justify-center px-4 py-2;
+<style>
+.as-option {
+  @apply as-flex as-flex-col as-justify-center as-px-4 as-py-2;
   min-height: 48px;
 }
-.option.clickable {
-  @apply bg-on-surface bg-opacity-0 transition-colors hover:bg-opacity-divider cursor-pointer;
+.as-option.as-clickable {
+  @apply as-bg-on-surface as-bg-opacity-0 as-transition-colors hover:as-bg-opacity-divider as-cursor-pointer;
 }
-.option.highlighted {
-  @apply bg-opacity-divider !important;
+.as-option.as-highlighted {
+  @apply as-bg-opacity-divider !important;
 }
 </style>

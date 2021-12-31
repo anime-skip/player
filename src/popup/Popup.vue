@@ -1,12 +1,12 @@
 <template>
-  <div :class="browser" class="flex items-center justify-center">
+  <div :class="'as-' + browser" class="as-flex as-items-center as-justify-center">
     <LogIn
       v-if="!isLoggedIn"
       :small="small"
       :close-after-login="shouldCloseAfterLogin"
       :close="closePopup"
     />
-    <div v-else-if="shouldCloseAfterLogin" class="mt-20">
+    <div v-else-if="shouldCloseAfterLogin" class="as-mt-20">
       <Loading />
     </div>
     <PopupPreferences v-else :small="small" />
@@ -52,7 +52,7 @@ function closePopup() {
 </script>
 
 <style scoped>
-.chrome {
+.as-chrome {
   min-width: 700px;
   width: 100%;
   margin: auto 0;

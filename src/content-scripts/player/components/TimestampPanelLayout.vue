@@ -1,27 +1,38 @@
 <template>
-  <div class="flex flex-col h-full">
+  <div class="as-flex as-flex-col as-h-full as-overflow-y-hidden">
     <header
-      class="pl-2 pr-2 pb-2 -mt-1.5 -mx-4 border-b border-on-surface border-opacity-divider flex-shrink-0"
+      class="as-p-2 as-border-b as-border-on-surface as-border-opacity-divider as-flex-shrink-0"
     >
-      <h6 class="section-header flex flex-row items-center justify-between">
+      <h6 class="as-flex as-flex-row as-items-center as-justify-between">
         <div
           v-if="mode == 'back'"
-          class="p-2 rounded-full select-none bg-on-surface bg-opacity-0 hover:bg-opacity-hover"
+          class="as-p-2 as-rounded-full as-bg-on-surface as-bg-opacity-0 hover:as-bg-opacity-hover as-cursor-pointer"
           title="Discard changes"
           @click="$emit('back')"
         >
-          <WebExtImg class="w-6 h-6" src="ic_chevron_left.svg" :draggable="false" />
+          <WebExtImg
+            class="as-w-6 as-h-6 as-select-none"
+            src="ic_chevron_left.svg"
+            :draggable="false"
+          />
         </div>
-        <span class="flex-1 pl-2 pt-0.5">{{ title }}</span>
-        <ToolbarButton v-if="mode == 'close'" icon="ic_close.svg" @click="$emit('close')" />
+        <span class="as-flex-1 as-pt-0.5 as-px-2">{{ title }}</span>
+        <div
+          v-if="mode == 'close'"
+          class="as-p-2 as-rounded-full as-bg-on-surface as-bg-opacity-0 hover:as-bg-opacity-hover as-cursor-pointer"
+          title="Discard changes"
+          @click="$emit('close')"
+        >
+          <WebExtImg class="as-w-6 as-h-6 as-select-none" src="ic_close.svg" :draggable="false" />
+        </div>
       </h6>
     </header>
-    <div class="scroll -mx-4 select-none pt-2 flex-1">
+    <div class="as-flex-1 as-min-h-0 as-pt-2 as-scroll">
       <slot name="content" />
     </div>
     <footer
       v-if="$slots['footer'] != null"
-      class="flex flex-row-reverse justify-center flex-shrink-0 space-x-4 space-x-reverse"
+      class="as-flex as-flex-row-reverse as-justify-center as-flex-shrink-0 as-space-x-4 as-space-x-reverse as-px-4 as-pb-4"
     >
       <slot name="footer" />
     </footer>
@@ -40,12 +51,11 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 @import '@anime-skip/ui/variables-theme.scss';
 
-.scroll {
+.as-scroll {
   overflow-y: auto;
-  scrollbar-width: thin;
   scrollbar-color: rgba($color: $backgroundColor-primary, $alpha: $opacity-low) transparent;
   &::-webkit-scrollbar {
     width: 8px;
@@ -58,9 +68,5 @@ export default defineComponent({
     background-color: $backgroundColor-control-disabled;
     border-radius: 5px;
   }
-}
-
-.no-firefox-dots::-moz-focus-inner {
-  border: 0;
 }
 </style>

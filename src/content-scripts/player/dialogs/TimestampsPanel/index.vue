@@ -31,7 +31,7 @@ function onShow(): void {
 #TimestampsPanel {
   pointer-events: none;
 
-  .dialog-root-container {
+  .as-dialog-root-container {
     width: 300px;
     min-height: 500px;
     height: 70%;
@@ -49,10 +49,6 @@ function onShow(): void {
       max-height: unset;
       margin-bottom: 60px;
       border-top-left-radius: 0px;
-    }
-
-    & > * {
-      padding: 14px 16px;
     }
   }
 }

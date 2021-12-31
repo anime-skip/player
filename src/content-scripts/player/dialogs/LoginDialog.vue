@@ -1,7 +1,7 @@
 <template>
   <BasicDialog
     name="LoginDialog"
-    class="bg-control-variant bg-opacity-medium z-50"
+    class="as-bg-control-variant as-bg-opacity-medium as-z-50"
     gravity-x="center"
     gravity-y="center"
     :is-showing="isShowing"
@@ -37,7 +37,7 @@ onMounted(autoclose);
   padding-right: 16px;
   padding-bottom: $toolbarHeight + 4px + 8px;
 
-  .dialog-root-container {
+  .as-dialog-root-container {
     max-width: 400px;
     padding: 16px;
   }

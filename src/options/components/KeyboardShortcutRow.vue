@@ -1,27 +1,27 @@
 <template>
   <tr>
     <td
-      class="bg-control overflow-hidden"
+      class="as-bg-control as-overflow-hidden"
       :class="{
-        'rounded-tl-md': groupTop,
-        'rounded-bl-md': groupBottom,
+        'as-rounded-tl-md': groupTop,
+        'as-rounded-bl-md': groupBottom,
       }"
     >
-      <p class="px-4 body-1">{{ name }}</p>
+      <p class="as-px-4 as-body-1">{{ name }}</p>
     </td>
-    <td class="bg-control">
-      <div class="flex items-center justify-center">
+    <td class="as-bg-control">
+      <div class="as-flex as-items-center as-justify-center">
         <KeyboardShortcutChooser :shortcut="primaryKeyBinding" @update="updatePrimaryKeyBinding" />
       </div>
     </td>
     <td
-      class="bg-control overflow-hidden"
+      class="as-bg-control as-overflow-hidden"
       :class="{
-        'rounded-tr-md': groupTop,
-        'rounded-br-md': groupBottom,
+        'as-rounded-tr-md': groupTop,
+        'as-rounded-br-md': groupBottom,
       }"
     >
-      <div class="flex items-center justify-center">
+      <div class="as-flex as-items-center as-justify-center">
         <KeyboardShortcutChooser
           secondary
           :shortcut="secondaryKeyBinding"
@@ -65,6 +65,6 @@ const secondaryKeyBinding = computed(() => secondaryShortcutsActionToKeyMap[prop
 
 <style scoped>
 td {
-  @apply h-12;
+  @apply as-h-12;
 }
 </style>

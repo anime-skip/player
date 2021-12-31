@@ -1,31 +1,33 @@
 <template>
-  <LoadingOverlay class="h-full" :is-loading="isSavingTemplate">
+  <LoadingOverlay class="as-h-full" :is-loading="isSavingTemplate">
     <TimestampPanelLayout mode="back" title="Template" @back="discardChanges">
       <template #content>
-        <div class="px-4 pt-2 pb-3 space-y-2">
-          <p class="body-2 text-on-surface text-opacity-medium">
+        <div class="as-px-4 as-pt-2 as-pb-3 as-space-y-2">
+          <p class="as-body-2 as-text-on-surface as-text-opacity-medium">
             Setup default timestamps for episodes
           </p>
           <ul>
             <li
-              class="flex flex-row items-center space-x-4 py-2"
+              class="as-flex as-flex-row as-items-center as-space-x-4 as-py-2"
               @click="changeType(TemplateType.SHOW)"
             >
               <Icon
                 :path="getShowRadioIcon(isShowSelected)"
                 :class="getShowRadioIconClass(isShowSelected)"
               />
-              <p class="text-on-surface" :class="getShowLabelClass(isShowSelected)">All Episodes</p>
+              <p class="as-text-on-surface" :class="getShowLabelClass(isShowSelected)">
+                All Episodes
+              </p>
             </li>
             <li
-              class="flex flex-row items-center space-x-4 py-2"
+              class="as-flex as-flex-row as-items-center as-space-x-4 as-py-2"
               @click="changeType(TemplateType.SEASONS)"
             >
               <Icon
                 :path="getShowRadioIcon(isSeasonSelected)"
                 :class="getShowRadioIconClass(isSeasonSelected)"
               />
-              <p class="text-on-surface" :class="getShowLabelClass(isSeasonSelected)">
+              <p class="as-text-on-surface" :class="getShowLabelClass(isSeasonSelected)">
                 Specific Season
               </p>
             </li>
@@ -33,12 +35,12 @@
               v-if="isSeasonSelected"
               v-model:value="season"
               placeholder="Enter a season..."
-              class="ml-12 mb-4"
+              class="as-ml-12 as-mb-4"
               :is-valid="isSeasonValid"
               :error-message="seasonErrorMessage"
             />
           </ul>
-          <p class="subtitle-1">Select Timestamps</p>
+          <p class="as-subtitle-1">Select Timestamps</p>
           <ul>
             <li
               v-for="timestamp in timestamps"
@@ -49,12 +51,12 @@
               <Checkbox v-model:checked="selectedTimestamps[timestamp.id]">
                 <p
                   :class="{
-                    'opacity-medium': !selectedTimestamps[timestamp.id],
+                    'as-opacity-medium': !selectedTimestamps[timestamp.id],
                   }"
                 >
-                  <span class="body-1 text-primary font-bold">{{ time(timestamp) }}</span>
+                  <span class="as-body-1 as-text-primary as-font-bold">{{ time(timestamp) }}</span>
                   &ensp;
-                  <span class="body-1 text-on-surface">{{ timestampType(timestamp) }}</span>
+                  <span class="as-body-1 as-text-on-surface">{{ timestampType(timestamp) }}</span>
                 </p>
               </Checkbox>
             </li>
@@ -62,10 +64,15 @@
         </div>
       </template>
       <template #footer>
-        <raised-button class="flex-grow" :disabled="isSaveDisabled" @click="onClickSave">
+        <raised-button class="as-flex-grow" :disabled="isSaveDisabled" @click="onClickSave">
           {{ saveButtonLabel }}
         </raised-button>
-        <raised-button class="flex-grow" error :disabled="isDeleteDisabled" @click="onClickDelete">
+        <raised-button
+          class="as-flex-grow"
+          error
+          :disabled="isDeleteDisabled"
+          @click="onClickDelete"
+        >
           Delete
         </raised-button>
       </template>
@@ -79,9 +86,9 @@ import { computed, ref } from 'vue';
 import { RequestState } from 'vue-use-request-state';
 import useRadioIcon from '~/common/composition/useRadioIcon';
 import { TIMESTAMP_TYPES } from '~/common/utils/constants';
+import Utils from '~/common/utils/GeneralUtils';
 import { warn } from '~/common/utils/log';
 import { SECONDS } from '~/common/utils/time';
-import Utils from '~/common/utils/GeneralUtils';
 import * as Api from '~api';
 import { TemplateType } from '~api';
 import { useDeleteTemplate } from '../../hooks/useDeleteTemplate';

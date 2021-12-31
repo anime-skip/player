@@ -1,13 +1,15 @@
 <template>
   <TimestampPanelLayout mode="back" :title="title" @back="clearActiveTimestamp">
     <template #content>
-      <div class="flex flex-col flex-1 space-y-2 pt-3 px-4 pb-2 overflow-y-hidden">
+      <div
+        class="as-flex as-flex-col as-flex-1 as-space-y-2 as-pt-3 as-px-4 as-pb-2 as-overflow-y-hidden"
+      >
         <div
           ref="timeSelectRef"
-          class="self-start flex-shrink-0 rounded-sm ring-primary no-firefox-dots"
+          class="as-self-start as-flex-shrink-0 as-rounded-sm as-ring-primary as-no-firefox-dots"
           :class="{
-            'ring ring-opacity-low': isTimeSelectFocused,
-            'opacity-medium': !canAdjustTime,
+            'as-ring as-ring-opacity-low': isTimeSelectFocused,
+            'as-opacity-medium': !canAdjustTime,
           }"
           :tabindex="canAdjustTime ? 0 : -1"
           @focus="isTimeSelectFocused = true"
@@ -19,28 +21,30 @@
             dark
             :disabled="!canAdjustTime"
             :tabindex="-1"
-            class="no-firefox-dots"
+            class="as-no-firefox-dots"
           >
-            <div class="w-full h-10 pl-3 pr-4 flex items-center space-x-3 no-firefox-dots">
-              <WebExtImg class="icon" src="ic_clock.svg" :draggable="false" />
-              <p class="time">
+            <div
+              class="as-w-full as-h-10 as-pl-3 as-pr-4 as-flex as-items-center as-space-x-3 as-no-firefox-dots"
+            >
+              <WebExtImg class="as-icon" src="ic_clock.svg" :draggable="false" />
+              <p class="as-time">
                 {{ timestampAtFormatted }}
               </p>
             </div>
           </RaisedContainer>
         </div>
         <p
-          class="body-2 pb-2"
+          class="as-body-2 as-pb-2"
           :class="{
-            'text-error': !canAdjustTime,
-            'text-opacity-medium text-on-surface': canAdjustTime,
+            'as-text-error': !canAdjustTime,
+            'as-text-opacity-medium as-text-on-surface': canAdjustTime,
           }"
         >
           {{ adjustTimeLabel }}
         </p>
-        <p class="subtitle-1 pt-2 pb-2">Timestamp type</p>
+        <p class="as-subtitle-1 as-pt-2 as-pb-2">Timestamp type</p>
         <TextInput
-          class="flex row -mb-2"
+          class="as-flex"
           placeholder="Filter..."
           v-model:value="typeFilter"
           @submit="onClickDone()"
@@ -56,19 +60,22 @@
           </template>
         </TextInput>
         <div>
-          <p v-if="filteredResults.length === 0" class="px-4 py-6 text-error body-2 text-center">
+          <p
+            v-if="filteredResults.length === 0"
+            class="as-px-4 as-py-6 as-text-error as-body-2 as-text-center"
+          >
             No results
           </p>
           <ul v-else>
             <li
               v-for="t of filteredResults"
               :key="t.id"
-              class="flex flex-row space-x-4 px-3 py-2 bg-on-surface bg-opacity-0 hover:bg-opacity-hover cursor-pointer rounded"
+              class="as-flex as-flex-row as-space-x-4 as-px-3 as-py-2 as-bg-on-surface as-bg-opacity-0 hover:as-bg-opacity-hover as-cursor-pointer as-rounded"
               @click="selectType(t)"
             >
               <Icon
                 v-if="isTypeSelected(t)"
-                class="fill-secondary opacity-100"
+                class="as-fill-secondary as-opacity-100"
                 path="M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7Z"
               />
               <Icon
@@ -77,8 +84,8 @@
               />
               <p
                 :class="{
-                  'text-opacity-100': isTypeSelected(t),
-                  'text-opacity-medium': !isTypeSelected(t),
+                  'as-text-opacity-100': isTypeSelected(t),
+                  'as-text-opacity-medium': !isTypeSelected(t),
                 }"
               >
                 {{ t.name }}
@@ -88,8 +95,8 @@
         </div>
       </div>
     </template>
-    <template #footer class="flex-row-reverse space-x-reverse">
-      <RaisedButton @click="onClickDone" :disabled="isSaveDisabled" class="flex-grow">
+    <template #footer class="as-flex-row-reverse as-space-x-reverse">
+      <RaisedButton @click="onClickDone" :disabled="isSaveDisabled" class="as-flex-grow">
         Save
       </RaisedButton>
       <RaisedButton
@@ -97,7 +104,7 @@
         error
         @click="onClickDelete"
         :disabled="isSaveDisabled"
-        class="flex-grow"
+        class="as-flex-grow"
       >
         Delete
       </RaisedButton>
@@ -328,7 +335,7 @@ function onClickDelete() {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 @import '@anime-skip/ui/variables-theme.scss';
 
 .opacity-100 {

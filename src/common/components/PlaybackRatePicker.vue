@@ -1,39 +1,42 @@
 <template>
   <div class="PlaybackRatePicker">
     <div
-      class="flex items-stretch justify-items-stretch h-10 w-full divide-x-2 divide-background rounded-sm bg-control"
+      class="as-flex as-items-stretch as-justify-items-stretch as-h-10 as-w-full as-divide-x-2 as-divide-background as-rounded-sm as-bg-control"
     >
-      <Icon path="M4 18L12.5 12L4 6V18ZM13 6V18L21.5 12L13 6Z" class="my-2 w-10" />
-      <div v-for="speed in playbackSpeeds" :key="speed.value" class="flex-1 min-w-10">
+      <div class="as-p-2 as-flex-shrink-0">
+        <Icon path="M4 18L12.5 12L4 6V18ZM13 6V18L21.5 12L13 6Z" />
+      </div>
+      <div v-for="speed in playbackSpeeds" :key="speed.value" class="as-flex-1 as-min-w-10">
         <RaisedContainer
-          class="cursor-pointer text-on-surface box-border w-full h-full"
+          class="as-cursor-pointer as-text-on-surface as-box-border as-w-full as-h-full"
           :down="!isRateSelected(speed.value)"
           :dark="!isRateSelected(speed.value)"
           @click="onClickOption(speed.value)"
         >
           <span
-            class="transition-colors body-1"
-            :class="{ 'text-on-primary': isRateSelected(speed.value) }"
+            class="as-transition-colors as-body-1"
+            :class="{ 'as-text-on-primary': isRateSelected(speed.value) }"
             >{{ speed.display }}</span
           >
         </RaisedContainer>
       </div>
-      <div class="flex-1 min-w-10 box-border">
+      <div class="as-flex-grow as-flex-shrink-0 as-w-10 as-box-border">
         <RaisedContainer
           :down="!customRate"
           :dark="!customRate"
           :error="isCustomError"
-          class="w-full p-0"
+          class="as-w-full as-p-0"
           :tabindex="-1"
         >
           <input
             type="text"
             step="0.01"
             :maxlength="4"
-            class="bg-transparent w-full h-10 text-center body-1"
+            class="as-bg-transparent as-w-full as-h-10 as-text-center as-body-1"
             :class="{
-              'caret-white': !isCustomError,
-              'bg-error text-on-error': isCustomError,
+              'as-caret-white as-text-on-surface': !isCustomError && !customRate,
+              'as-caret-black as-text-on-primary': !isCustomError && customRate,
+              'as-bg-error as-text-on-error': isCustomError,
             }"
             placeholder="?.?"
             :value="customRate"
@@ -43,7 +46,7 @@
         </RaisedContainer>
       </div>
     </div>
-    <div v-if="isCustomError" class="body-2 text-error mt-2">Custom speeds: 0.5 - 4</div>
+    <div v-if="isCustomError" class="as-body-2 as-text-error as-mt-2">Custom speeds: 0.5 - 4</div>
   </div>
 </template>
 
@@ -116,20 +119,27 @@ function onBlurCustom() {
 }
 </script>
 
-<style lang="scss" scoped>
-.bg-transparent {
+<style scoped>
+.as-bg-transparent {
   background: transparent;
 }
 
-.caret-white {
+.as-caret-white {
   caret-color: white;
+}
+
+.as-caret-black {
+  caret-color: black;
 }
 
 input {
   min-width: 0 !important;
 }
+input::placeholder {
+  @apply as-text-on-surface !important;
+}
 
-.min-w-10 {
+.as-min-w-10 {
   flex-basis: 2.5rem;
 }
 </style>

@@ -1,29 +1,33 @@
 <template>
-  <form class="FindExisting py-4 space-y-4 flex flex-col">
-    <div v-if="isShowingSuggestions" class="space-y-4 mt-2">
-      <p class="caption mb-2 mx-4 text-on-surface text-opacity-medium">{{ suggestionsHeader }}</p>
-      <div class="relative">
-        <div class="flex flex-row overflow-x-auto box-border space-x-4 px-4">
+  <form class="FindExisting as-py-4 as-space-y-4 as-flex as-flex-col">
+    <div v-if="isShowingSuggestions" class="as-space-y-4 as-mt-2">
+      <p class="as-caption as-mb-2 as-mx-4 as-text-on-surface as-text-opacity-medium">
+        {{ suggestionsHeader }}
+      </p>
+      <div class="as-relative">
+        <div class="as-flex as-flex-row as-overflow-x-auto as-box-border as-space-x-4 as-px-4">
           <div v-for="suggestion of suggestionListItems" :key="suggestion.index">
             <RaisedContainer dark @click.stop.prevent="onClickSuggestion(suggestion.value)">
-              <div class="box-border w-44 px-4 pt-4 pb-3 text-left space-y-1">
-                <p class="subtitle-1 text-primary font-semibold">
+              <div class="as-box-border as-w-44 as-px-4 as-pt-4 as-pb-3 as-text-left as-space-y-1">
+                <p class="as-subtitle-1 as-text-primary as-font-semibold">
                   {{ suggestion.timestamps }}
                 </p>
-                <p class="text-on-surface text-opacity-medium caption pb-2">
+                <p class="as-text-on-surface as-text-opacity-medium as-caption as-pb-2">
                   from <strong>{{ suggestion.source || 'Anime Skip' }}</strong>
                 </p>
-                <p class="body-2 text-on-surface text-opacity-high">{{ suggestion.subtitle }}</p>
+                <p class="as-body-2 as-text-on-surface as-text-opacity-high">
+                  {{ suggestion.subtitle }}
+                </p>
               </div>
             </RaisedContainer>
           </div>
         </div>
-        <div class="gradient-borders" />
+        <div class="as-gradient-borders" />
       </div>
     </div>
-    <div v-else class="space-y-4 mt-2">
+    <div v-else class="as-space-y-4 as-mt-2">
       <AutocompleteTextInput
-        class="mx-4"
+        class="as-mx-4"
         placeholder="Enter the show name..."
         v-model:value="showItem"
         :options="showOptions"
@@ -33,14 +37,14 @@
       <AutocompleteTextInput
         v-if="isExistingShow"
         ref="episodeInputRef"
-        class="mx-4"
+        class="as-mx-4"
         placeholder="Enter the episode name..."
         v-model:value="episode"
         :options="episodeOptions"
         @search="searchEpisodes"
       />
     </div>
-    <div class="flex flex-row-reverse mx-4 space-x-reverse space-x-4">
+    <div class="as-flex as-flex-row-reverse as-mx-4 as-space-x-reverse as-space-x-4">
       <template v-if="!isShowingSuggestions">
         <RaisedButton v-if="shouldCreateNew" @click.stop.prevent="onClickCreateNew">
           Create New
@@ -59,7 +63,7 @@
       >
         {{ suggestionsHeader }}
       </FlatButton>
-      <div class="flex-1" />
+      <div class="as-flex-1" />
       <FlatButton transparent @click.stop.prevent="hideDialog">Cancel</FlatButton>
     </div>
   </form>
@@ -222,17 +226,17 @@ function createFromThirdParty(thirdPartyEpisodeToSave: Api.ThirdPartyEpisode) {
 }
 </script>
 
-<style lang="css" scoped>
-.gradient-borders {
-  @apply pointer-events-none absolute inset-0;
+<style scoped>
+.as-gradient-borders {
+  @apply as-pointer-events-none as-absolute as-inset-0;
 }
-.gradient-borders:before {
-  @apply absolute inset-y-0 left-0 w-4;
+.as-gradient-borders:before {
+  @apply as-absolute as-inset-y-0 as-left-0 as-w-4;
   content: '';
   background: linear-gradient(90deg, #142026ff 25%, #14202600 100%);
 }
-.gradient-borders:after {
-  @apply absolute inset-y-0 right-0 w-4;
+.as-gradient-borders:after {
+  @apply as-absolute as-inset-y-0 as-right-0 as-w-4;
   content: '';
   background: linear-gradient(270deg, #142026ff 25%, #14202600 100%);
 }

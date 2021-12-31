@@ -2,15 +2,15 @@
   <div class="ScreenshotOverlay">
     <div
       v-if="image"
-      class="absolute transition-all"
+      class="as-absolute as-transition-all"
       :class="{
-        [`overlay-large`]: image.mode === 'full',
-        [`overlay-small`]: image.mode === 'small',
+        'as-overlay-large': image.mode === 'full',
+        'as-overlay-small': image.mode === 'small',
       }"
       @click.stop
     >
-      <img class="object-contain object-center" :src="image.url" />
-      <div class="buttons">
+      <img class="as-object-contain as-object-center" :src="image.url" />
+      <div class="as-buttons">
         <a
           :href="image.url"
           target="_blank"
@@ -94,27 +94,27 @@ watch(base64Screenshot, data => {
 
 <style scoped>
 .ScreenshotOverlay {
-  @apply absolute inset-0 w-full h-full pointer-events-none;
+  @apply as-absolute as-inset-0 as-w-full as-h-full as-pointer-events-none;
   z-index: 2;
 }
 
-.overlay-large {
-  @apply bottom-0 right-0 w-full h-full rounded-none opacity-0;
+.as-overlay-large {
+  @apply as-bottom-0 as-right-0 as-w-full as-h-full as-rounded-none as-opacity-0;
   max-width: 100vw;
 }
 
-.overlay-small {
-  @apply opacity-100 right-4 rounded overflow-hidden pointer-events-auto shadow-md;
+.as-overlay-small {
+  @apply as-opacity-100 as-right-4 as-rounded as-overflow-hidden as-pointer-events-auto as-shadow-md;
   bottom: 4.5rem;
   max-width: 10vw;
   min-width: 200px;
 }
 
-.buttons {
-  @apply absolute inset-0 bg-on-primary bg-blend-multiply bg-opacity-medium opacity-0 transition-all flex items-center justify-center cursor-pointer space-x-4;
+.as-buttons {
+  @apply as-absolute as-inset-0 as-bg-on-primary as-bg-blend-multiply as-bg-opacity-medium as-opacity-0 as-transition-all as-flex as-items-center as-justify-center as-cursor-pointer as-space-x-4;
 }
 
-.overlay-small:hover .buttons {
-  @apply opacity-100;
+.as-overlay-small:hover .as-buttons {
+  @apply as-opacity-100;
 }
 </style>

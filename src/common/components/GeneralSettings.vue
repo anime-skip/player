@@ -1,12 +1,12 @@
 <template>
-  <div class="space-y-4">
+  <div class="as-space-y-4">
     <h6>General Settings</h6>
     <login-warning v-if="!isLoggedIn && !hideLoginButton" before="all settings are available" />
     <div
-      class="grid gap-3 items-start"
+      class="as-grid as-gap-3 as-items-start"
       :class="{
-        'grid-cols-1': small,
-        'grid-cols-2': !small,
+        'as-grid-cols-1': small,
+        'as-grid-cols-2': !small,
       }"
     >
       <playback-rate-picker :show-less="!small" />
@@ -37,11 +37,3 @@ const toggleBooleanPref = useToggleBooleanPref();
 const preferences = useGeneralPreferences();
 const enableAutoSkip = computed(() => isLoggedIn.value && preferences.value.enableAutoSkip);
 </script>
-
-<style scoped>
-.remove-text {
-  text-transform: none;
-  letter-spacing: normal;
-  font-weight: normal;
-}
-</style>

@@ -1,23 +1,25 @@
 <template>
-  <div class="pb-4">
+  <div class="as-pb-4">
     <card :elevation="8" @click.stop>
-      <div class="p-4 space-y-4 flex flex-col">
-        <div class="flex flex-row items-start">
-          <div class="flex-1 space-y-4">
-            <p v-if="title" class="subtitle-1 text-on-surface font-semibold text-left">
+      <div class="as-p-4 as-space-y-4 as-flex as-flex-col">
+        <div class="as-flex as-flex-row as-items-start">
+          <div class="as-flex-1 as-space-y-4">
+            <p v-if="title" class="as-subtitle-1 as-text-on-surface as-font-semibold as-text-left">
               {{ title }}
             </p>
-            <p class="body-2 text-on-surface text-opacity-high text-left">{{ message }}</p>
+            <p class="as-body-2 as-text-on-surface as-text-opacity-high as-text-left">
+              {{ message }}
+            </p>
           </div>
           <div
-            class="p-2 rounded-full select-none bg-on-surface bg-opacity-0 hover:bg-opacity-hover cursor-pointer -mt-2 -mr-2"
+            class="as-p-2 as-rounded-full as-select-none as-bg-on-surface as-bg-opacity-0 hover:as-bg-opacity-hover as-cursor-pointer as--mt-2 as--mr-2"
             title="Hide notification"
             @click="emit('dismiss-self')"
           >
-            <WebExtImg class="w-6 h-6" src="ic_close.svg" :draggable="false" />
+            <WebExtImg class="as-w-6 as-h-6" src="ic_close.svg" :draggable="false" />
           </div>
         </div>
-        <div v-if="buttons.length > 0" class="flex flex-row space-x-2 flex-wrap">
+        <div v-if="buttons.length > 0" class="as-flex as-flex-row as-space-x-2 as-flex-wrap">
           <template v-for="button of buttons" :key="button.text">
             <raised-button
               v-if="button.primary"
