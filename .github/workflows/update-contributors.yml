@@ -1,12 +1,13 @@
+name: Update Contributors
 on:
   push:
     branches:
       - main
 
 jobs:
-  update-contributors:
+  update:
     runs-on: ubuntu-20.04
-    name: Update Contributors
+    name: Update
     steps:
       - name: Contribute List
         uses: akhilmhdh/contributors-readme-action@v2.3.3
@@ -14,3 +15,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           commit_message: 'docs: update collaborators'
+          use_username: true
+          pr_title_on_protected: 'docs: update collaborators'
