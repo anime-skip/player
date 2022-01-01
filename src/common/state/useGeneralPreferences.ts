@@ -1,5 +1,6 @@
 import { GqlPreferences } from '@anime-skip/api-client';
 import * as Api from '~api';
+import { ColorTheme } from '~api';
 import { useApiClient } from '../hooks/useApiClient';
 import { createWebExtProvideInject } from '../utils/createWebExtProvideInject';
 import { warn } from '../utils/log';
@@ -18,15 +19,18 @@ interface LocalPreferences {
 
 type GeneralPreferences = RemotePreferences & LocalPreferences;
 
-type StripOtherTypes<TObject, TKeepTypes> = {
-  [Key in keyof TObject]: TObject[Key] extends TKeepTypes ? Key : never;
-}[keyof TObject];
+export {
+  provideGeneralPreferences,
+  useUpdateGeneralPreferences,
+  useInitGeneralPreferencesListener,
+};
 
 const DEFAULT_GENERAL_PREFERENCES: GeneralPreferences = {
   enableAutoPlay: true,
   enableAutoSkip: false,
   hideTimelineWhenMinimized: false,
   minimizeToolbarWhenEditing: false,
+  colorTheme: ColorTheme.ANIME_SKIP_BLUE,
   playbackRate: 1,
   createTimestampSnapBack: true,
   skipBranding: false,
@@ -54,12 +58,6 @@ const {
   'local',
   DEFAULT_GENERAL_PREFERENCES
 );
-
-export {
-  provideGeneralPreferences,
-  useUpdateGeneralPreferences,
-  useInitGeneralPreferencesListener,
-};
 
 /**
  * Current preferences with the defaults applied first so new local preferences aren't left out
@@ -97,17 +95,40 @@ export function useUpdateBooleanPref() {
 }
 
 export function useToggleBooleanPref() {
-  const update = useUpdateBooleanPref();
+  const updateRemote = useUpdateRemotePref<boolean>();
+  const updateLocal = useUpdateLocalPref<boolean>();
+
   const preferences = useGeneralPreferences();
+
   return (pref: StripOtherTypes<GeneralPreferences, boolean>, isLocal = false) => {
-    update(pref, !preferences.value[pref], isLocal);
+    const newValue = !preferences.value[pref];
+    if (isLocal) updateLocal(pref, newValue);
+    else updateRemote(pref, newValue);
   };
 }
 
-export function useUpdateNumberPref() {
+export function useUpdateLocalPref<T>() {
   const updatePreferences = useUpdateGeneralPreferences();
-  return (pref: StripOtherTypes<GeneralPreferences, number>, newValue: number) => {
+  return (pref: StripOtherTypes<GeneralPreferences, T>, newValue: T) => {
     updatePreferences({ [pref]: newValue });
+  };
+}
+
+export function useUpdateRemotePref<T>() {
+  const preferences = useGeneralPreferences();
+  const updatePreferences = useUpdateGeneralPreferences();
+  const api = useApiClient();
+
+  return (pref: StripOtherTypes<GeneralPreferences, T>, newValue: T) => {
+    const oldValue = preferences.value[pref];
+    console.log({ newValue, pref, oldValue });
+    updatePreferences({ [pref]: newValue });
+
+    api.savePreferences(Api.PREFERENCES_QUERY, { preferences: { [pref]: newValue } }).catch(err => {
+      warn('Failed to update preference', { pref, newValue }, err);
+      // Slight delay for a better animation
+      setTimeout(() => updatePreferences({ [pref]: oldValue }), 200);
+    });
   };
 }
 

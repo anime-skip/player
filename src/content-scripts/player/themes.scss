@@ -89,7 +89,7 @@ $blue-variant: 0 138 209;
   --as-theme-error: #{$red};
   --as-theme-error-variant: #{$red-variant};
   --as-theme-success: #{$green};
-  @include backgrounds(0.7, 0, 0.84, $gold...);
+  @include backgrounds(0.7, 0, 0.8, $blue-variant...);
 }
 
 .as-crunchyroll-theme {
@@ -102,7 +102,7 @@ $blue-variant: 0 138 209;
   --as-theme-error: #{$red};
   --as-theme-error-variant: #{$red-variant};
   --as-theme-success: #{$green};
-  @include backgrounds(0.5, 0, 0.8, $orange...);
+  @include backgrounds(1, 0, 0.8, $orange...);
 }
 
 .as-funimation-theme {
@@ -111,6 +111,6 @@ $blue-variant: 0 138 209;
   --as-theme-secondary: #{$blue};
   --as-theme-secondary-variant: #{$blue-variant};
   --as-theme-timeline-foreground: #{$violet};
-  --as-theme-timeline-background: 126 120 126;
-  @include backgrounds(0.5, 0, 0.8, $violet...);
+  --as-theme-timeline-background: 100 95 100;
+  @include backgrounds(0.7, 0, 0.8, $violet...);
 }

@@ -1,8 +1,8 @@
 lockfileVersion: 5.3
 
 specifiers:
-  '@anime-skip/api-client': ^2.6.1
-  '@anime-skip/ui': ^3.0.3
+  '@anime-skip/api-client': ^2.6.2
+  '@anime-skip/ui': ^3.1.0
   '@anime-skip/usage-stats-client': ^1.3.1
   '@iconify/json': ^1.1.386
   '@tailwindcss/line-clamp': ^0.2.1
@@ -63,8 +63,8 @@ specifiers:
   zip-a-folder: ^1.1.0
 
 dependencies:
-  '@anime-skip/api-client': 2.6.1
-  '@anime-skip/ui': 3.0.3_2f04258c66cb86202acd13e91bd86310
+  '@anime-skip/api-client': 2.6.2
+  '@anime-skip/ui': 3.1.0_2f04258c66cb86202acd13e91bd86310
   '@anime-skip/usage-stats-client': 1.3.1_axios@0.24.0
   '@vueuse/core': 5.3.0_vue@3.2.2
   async-mutex: 0.3.2
@@ -128,8 +128,8 @@ devDependencies:
 
 packages:
 
-  /@anime-skip/api-client/2.6.1:
-    resolution: {integrity: sha512-tV4GASiE4m2HB+8phgZH6YAcQZrS6wYswNX64tltiQE4VtE8EK16hj4D3ZNkN/Z33OqV5qyPNtqxKcjUxt4sRg==, tarball: download/@anime-skip/api-client/2.6.1/8fda83a37c0a61d567d65d38af0314ffcfe8cce3c816240264465554819a17ca}
+  /@anime-skip/api-client/2.6.2:
+    resolution: {integrity: sha512-hJoZeclMav092Uvw+mAKXxJqohcpkVd5Et/kEpNA+FI8IRvZsf/rWkuwWt2tkyBU9JJq+kTPxjohvAuPmk1UMQ==, tarball: download/@anime-skip/api-client/2.6.2/123b8633cc9805bc373d90e064145ec1135407f35b7a4500f79cd200ed145ed8}
     dependencies:
       axios: 0.22.0
       md5: 2.3.0
@@ -137,8 +137,8 @@ packages:
       - debug
     dev: false
 
-  /@anime-skip/ui/3.0.3_2f04258c66cb86202acd13e91bd86310:
-    resolution: {integrity: sha512-6yea3WFMuqsadLzDuQLRZbdJeodzWlR128/Lx+09Ql3hI1QmIGjDyaXLulzy8p/QZSrKQexxYjvPPTcptDfCtA==, tarball: download/@anime-skip/ui/3.0.3/e8ca81c66af00d02ffb364fd0f04088fe1833d81ad7392b9b39bb5194e025029}
+  /@anime-skip/ui/3.1.0_2f04258c66cb86202acd13e91bd86310:
+    resolution: {integrity: sha512-d7cf5hBsKKAak00XEKp/jc8SFhIFgxUT4AmvZS/QSRJ028ZsOMvOk+ZohNAi+vTikQFZkh9RwfoDb2DHf0MeTA==, tarball: download/@anime-skip/ui/3.1.0/c5826ffbdc91a96fdb054d5c2ceff16cd4644e31d8dbcee0467e7d3de68b1564}
     peerDependencies:
       '@tailwindcss/line-clamp': ^0.2.1
       autoprefixer: ^10.2.4

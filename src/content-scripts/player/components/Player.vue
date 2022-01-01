@@ -10,7 +10,7 @@
         'as-buffering as-bg-opacity-medium': videoState.isBuffering,
         'as-showing': isEpisodeInfoShowing,
         'as-opacity-0': !isPlayerVisible,
-        [themeClass]: isThemeApplied,
+        [themeClass]: true,
       }"
       @mouseenter.prevent="onMouseEnter"
       @mousemove.prevent="onMouseMove"
@@ -148,7 +148,7 @@ const messenger = new Messenger('player', {
   '@anime-skip/stop-screenshot': async () => showPlayer(),
 });
 
-const { isThemeApplied, themeClass } = useTheme();
+const { themeClass } = useTheme();
 </script>
 
 <style lang="scss" scoped>

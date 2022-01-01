@@ -1,9 +1,12 @@
-import { GqlAccount, GqlLoginData, GqlPreferences } from '@anime-skip/api-client';
+import { GqlAccount, GqlColorTheme, GqlLoginData, GqlPreferences } from '@anime-skip/api-client';
+
+export { GqlColorTheme as ColorTheme };
 
 export type Preferences = Pick<
   GqlPreferences,
   | 'enableAutoSkip'
   | 'enableAutoPlay'
+  | 'colorTheme'
   | 'skipBranding'
   | 'skipIntros'
   | 'skipNewIntros'
@@ -25,7 +28,7 @@ export interface LoginResponse extends Pick<GqlLoginData, 'authToken' | 'refresh
   account: Account;
 }
 export const PREFERENCES_QUERY = `{
-  enableAutoSkip enableAutoPlay
+  enableAutoSkip enableAutoPlay colorTheme
   skipBranding skipIntros skipNewIntros skipMixedIntros skipRecaps skipFiller skipCanon skipTransitions skipTitleCard skipCredits skipMixedCredits skipNewCredits skipPreview
 }`;
 
