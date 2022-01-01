@@ -11,6 +11,9 @@ Inject a custom player over the top of the certain web players (`VRV`, `Funimati
 
 ## Contributing
 
+<!-- readme: contributors -start -->
+<!-- readme: contributors -end -->
+
 See the [contributing guidelines](https://github.com/anime-skip/docs/wiki) for all of Anime Skip
 
 **It's recommended develop the extension on Firefox**, the experience is much better than Chrome. Chrome doesn't reload the player when saving a file, firefox does
