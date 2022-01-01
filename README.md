@@ -12,6 +12,23 @@ Inject a custom player over the top of the certain web players (`VRV`, `Funimati
 ## Contributing
 
 <!-- readme: contributors -start -->
+<table>
+<tr>
+    <td align="center">
+        <a href="https://github.com/aklinker1">
+            <img src="https://avatars.githubusercontent.com/u/10101283?v=4" width="100;" alt="aklinker1"/>
+            <br />
+            <sub><b>Aaron Klinker</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/logiczsniper">
+            <img src="https://avatars.githubusercontent.com/u/31292294?v=4" width="100;" alt="logiczsniper"/>
+            <br />
+            <sub><b>Logan Czernel</b></sub>
+        </a>
+    </td></tr>
+</table>
 <!-- readme: contributors -end -->
 
 See the [contributing guidelines](https://github.com/anime-skip/docs/wiki) for all of Anime Skip
