@@ -40,14 +40,14 @@
                 <div class="as-pl-4 as-text-right">
                   <h6
                     class="as-font-bold as-text-lg as-pt-0.5"
-                    :style="itemTimestampStyle(timestamp)"
+                    :class="getTimestampClass(timestamp)"
                   >
                     {{ itemTime(timestamp) }}
                   </h6>
                   <p
                     v-if="timestamp.edited"
                     class="as-overflow-y-visible as--mt-2 as-text-2xs as-uppercase"
-                    :style="itemTimestampStyle(timestamp)"
+                    :class="getTimestampClass(timestamp)"
                   >
                     {{ itemNote(timestamp) }}
                   </p>
@@ -189,10 +189,7 @@ function itemSouce(timestamp: Api.AmbiguousTimestamp): string {
 function itemHasSource(timestamp: Api.AmbiguousTimestamp): boolean {
   return timestamp.source !== 'ANIME_SKIP';
 }
-const getTimestampColor = useGetTimestampColor('text');
-function itemTimestampStyle(timestamp: Api.AmbiguousTimestamp): string {
-  return `color: ${getTimestampColor(timestamp)}`;
-}
+const getTimestampClass = useGetTimestampColor('text');
 
 function onClickTimestamp(timestamp: Api.AmbiguousTimestamp) {
   setCurrentTime(timestamp.at);
