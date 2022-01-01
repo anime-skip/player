@@ -1,14 +1,16 @@
 <template>
   <div class="EpisodeInfo as-space-y-4" :class="{ 'as-visible': isShowing }">
-    <h5 class="as-text-primary as-line-height-2.5">
-      <a class="as-pr-1" href="https://anime-skip.com">
-        <web-ext-img class="as-h-6 as-inline-block as-pb-1" src="logo-sm.svg" />
+    <div class="as-flex as-flex-row as-items-center as-space-x-3">
+      <a v-if="showThemeLogo" class="as-pr-1" href="https://anime-skip.com">
+        <ThemedLogo class="as-w-8 as-h-8 as-object-contain" />
       </a>
-      {{ episodeDisplayInfo.show }}
-      <span class="as-font-normal as-text-opacity-low"
-        >&ensp;&bull;&ensp;{{ serviceDisplayName }}</span
-      >
-    </h5>
+      <h5 class="as-text-primary as-pt-1">
+        {{ episodeDisplayInfo.show }}
+        <span class="as-font-normal as-text-opacity-low"
+          >&ensp;&bull;&ensp;{{ serviceDisplayName }}</span
+        >
+      </h5>
+    </div>
     <h3>{{ episodeDisplayInfo.name }}</h3>
     <h6 class="as-text-on-surface as-text-opacity-high">{{ episodeDetails }}</h6>
     <FlatButton v-if="isConnectButtonShowing" transparent @click.stop="showConnectEpisodeDialog">
@@ -23,8 +25,10 @@
 
 <script lang="ts" setup>
 import { RequestState } from 'vue-use-request-state';
+import ThemedLogo from '~/common/components/ThemedLogo.vue';
 import EpisodeUtils from '~/common/utils/episode-utils';
 import { useEpisodeDisplayInfo } from '../hooks/useEpisodeDisplayInfo';
+import { useTheme } from '../hooks/useTheme';
 import { useDialogState, useShowConnectEpisodeDialog } from '../state/useDialogState';
 import { useEpisodeUrl } from '../state/useEpisodeState';
 import { useInferRequestState } from '../state/useInferredEpisodeState';
@@ -65,6 +69,8 @@ const isConnectButtonShowing = computed(() => {
     !!duration.value
   );
 });
+
+const { showThemeLogo } = useTheme();
 </script>
 
 <style lang="scss" scoped>
@@ -91,9 +97,5 @@ const isConnectButtonShowing = computed(() => {
 
 .as-opacity-100 {
   opacity: 1 !important;
-}
-
-.as-line-height-2\.5 {
-  line-height: 2.5rem;
 }
 </style>

@@ -7,6 +7,7 @@ module.exports = {
     './src/**/*.vue',
     './src/**/*.jsx',
     './src/**/*.tsx',
+    './src/**/*.ts',
     './node_modules/@anime-skip/ui/ui.*.js',
   ],
   theme: {

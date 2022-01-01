@@ -5,6 +5,7 @@ import FakeRouterLink from '~/common/components/FakeRouterLink.vue';
 import '~/common/styles';
 import { debug, loadedLog, log, warn } from '~/common/utils/log';
 import Container from './Container.vue';
+import './themes.scss';
 
 // TODO git mv to player-ui
 export function loadPlayerUi() {

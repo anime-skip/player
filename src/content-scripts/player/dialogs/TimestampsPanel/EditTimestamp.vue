@@ -336,27 +336,8 @@ function onClickDelete() {
 </script>
 
 <style lang="scss" scoped>
-@import '@anime-skip/ui/variables-theme.scss';
-
 .opacity-100 {
   opacity: 1 !important;
-}
-
-.scroll {
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba($color: $backgroundColor-primary, $alpha: $opacity-low) transparent;
-  &::-webkit-scrollbar {
-    width: 8px;
-    padding: 1px;
-  }
-  &::-webkit-scrollbar-track {
-    background-color: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: $backgroundColor-control-disabled;
-    border-radius: 5px;
-  }
 }
 
 .no-firefox-dots::-moz-focus-inner {

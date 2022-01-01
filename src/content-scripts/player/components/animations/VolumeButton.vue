@@ -7,11 +7,9 @@
       <WebExtImg src="ic_volume_high.svg" class="as-ic-high" :class="volumeClass" />
     </ToolbarButton>
     <Slider
-      class="as-slider as-white"
+      class="as-slider"
       :progress="videoState.volumePercent"
       :max="100"
-      background-color="#ffffff48"
-      foreground-color="white"
       @seek="setVolumePercent"
       @seek:start="isDragging = true"
       @seek:end="isDragging = false"
@@ -46,8 +44,6 @@ useKeyboardShortcuts('VolumeButton', {
 </script>
 
 <style lang="scss" scoped>
-@import '@anime-skip/ui/variables-theme.scss';
-
 .VolumeButton {
   display: flex;
   flex-direction: row;
@@ -139,8 +135,8 @@ useKeyboardShortcuts('VolumeButton', {
   }
 }
 
-.as-slider.as-white {
-  --default-background-color: #{rgba($color: $backgroundColor-on-surface, $alpha: $opacity-low)} !important;
-  --default-foreground-color: #{$backgroundColor-on-surface} !important;
+.as-slider {
+  --as-slider-background-color: rgba(255, 255, 255, #{theme('opacity.low')});
+  --as-slider-foreground-color: white;
 }
 </style>

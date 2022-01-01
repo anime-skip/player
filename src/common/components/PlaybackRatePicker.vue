@@ -120,10 +120,6 @@ function onBlurCustom() {
 </script>
 
 <style scoped>
-.as-bg-transparent {
-  background: transparent;
-}
-
 .as-caret-white {
   caret-color: white;
 }
