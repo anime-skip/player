@@ -1,23 +1,27 @@
-import { theme } from '@anime-skip/ui';
 import * as Api from '~api';
 import { isTimestampLocal } from '../utils/isTimestampLocal';
 
-export function useTimelineColors() {
+function useTimelineColors() {
   const values = {
-    default: theme['backgroundColor-primaryPalette-500'],
-    defaultLight: theme['fill-primary'],
-    new: theme['fill-success'],
-    edited: theme['backgroundColor-secondaryPalette-300'],
+    text: {
+      default: 'as-text-primary',
+      new: 'as-text-success',
+      edited: 'as-text-secondary',
+    },
+    icon: {
+      default: 'as-fill-timeline-foreground',
+      new: 'as-fill-success',
+      edited: 'as-fill-secondary',
+    },
   };
   return values;
 }
 
-export function useGetTimestampColor(useLighterDefault: boolean) {
+export function useGetTimestampColor(type: 'text' | 'icon') {
   const colors = useTimelineColors();
   return (timestamp: Api.AmbiguousTimestamp) => {
-    if (isTimestampLocal(timestamp)) return colors.new;
-    if (timestamp.edited) return colors.edited;
-
-    return colors[useLighterDefault ? 'defaultLight' : 'default'];
+    if (isTimestampLocal(timestamp)) return colors[type].new;
+    if (timestamp.edited) return colors[type].edited;
+    return colors[type].default;
   };
 }

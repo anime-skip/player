@@ -6,68 +6,72 @@
     @show="loadPlayerOptions"
   >
     <template v-if="!hasActivePlayerGroup">
-      <GeneralSettings small>
-        <template v-if="playerOptions != null">
-          <RaisedContainer
-            v-for="optionGroup of playerOptions"
-            :key="optionGroup.title"
-            dark
-            @click="setActiveOptionGroup(optionGroup)"
-          >
-            <div
-              class="as-h-10 as-px-4 as-flex as-flex-row as-items-center as-text-left as-w-full as-space-x-4"
+      <div class="as-p-4 as-space-y-8">
+        <GeneralSettings small>
+          <template v-if="playerOptions != null">
+            <RaisedContainer
+              v-for="optionGroup of playerOptions"
+              :key="optionGroup.title"
+              dark
+              @click="setActiveOptionGroup(optionGroup)"
             >
-              <WebExtImg v-if="optionGroup.icon != null" :src="optionGroup.icon" class="as-left" />
-              <p class="as-flex-1">{{ optionGroup.title }}</p>
-              <p class="as-text-on-surface as-text-opacity-medium">
-                {{ getSelectedOption(optionGroup) }}
-              </p>
-              <WebExtImg src="ic_chevron_right.svg" class="as-opacity-medium" />
+              <div
+                class="as-h-10 as-px-4 as-flex as-flex-row as-items-center as-text-left as-w-full as-space-x-4"
+              >
+                <WebExtImg
+                  v-if="optionGroup.icon != null"
+                  :src="optionGroup.icon"
+                  class="as-left"
+                />
+                <p class="as-flex-1">{{ optionGroup.title }}</p>
+                <p class="as-text-on-surface as-text-opacity-medium">
+                  {{ getSelectedOption(optionGroup) }}
+                </p>
+                <WebExtImg src="ic_chevron_right.svg" class="as-opacity-medium" />
+              </div>
+            </RaisedContainer>
+          </template>
+          <RaisedButton v-else dark @click="showOriginalPlayer">
+            <div class="as-flex as-justify-between as-w-full">
+              <p class="as-remove-text as-body-1">{{ serviceName }} Settings</p>
             </div>
-          </RaisedContainer>
-        </template>
-        <RaisedButton v-else dark @click="showOriginalPlayer">
-          <div class="as-flex as-justify-between as-w-full">
-            <p class="as-remove-text as-body-1">{{ serviceName }} Settings</p>
-          </div>
-        </RaisedButton>
-        <RaisedButton dark @click="openExtensionOptions">
-          <div class="as-flex as-justify-between as-w-full">
-            <p class="as-remove-text as-body-1">All Settings</p>
-          </div>
-        </RaisedButton>
-      </GeneralSettings>
-      <SkippedSections two-columns />
-    </template>
-    <template v-else>
-      <div
-        class="as-flex as-flex-row as-items-center as-space-x-4 as-border-b as-border-on-surface as-border-opacity-divider"
-      >
-        <WebExtImg
-          class="as-w-6 as-h-6"
-          src="ic_chevron_left.svg"
-          :draggable="false"
-          @click="setActiveOptionGroup(undefined)"
-        />
-        <h6>{{ activePlayerGroup?.title }}</h6>
+          </RaisedButton>
+          <RaisedButton dark @click="openExtensionOptions">
+            <div class="as-flex as-justify-between as-w-full">
+              <p class="as-remove-text as-body-1">All Settings</p>
+            </div>
+          </RaisedButton>
+        </GeneralSettings>
+        <SkippedSections two-columns />
       </div>
-      <div class="as-min-w-32 as-max-w-sm as-max-h-64 as-flex-1 as-flex as-flex-col">
-        <ul
-          v-for="option of activeOptions"
-          :key="option.title"
-          class="as-cursor-pointer"
-          @click="onClickOption(option)"
+    </template>
+
+    <template v-else>
+      <div class="as-flex as-flex-col as-min-w-32 as-max-w-sm as-h-64 as-overflow-y-hidden">
+        <div
+          class="as-flex as-flex-row as-items-center as-space-x-4 as-border-b as-border-on-surface as-border-opacity-divider as-flex-shrink-0 as-p-3"
         >
-          <li class="as-flex as-flex-row as-items-center as-space-x-4 as-py-2">
-            <Icon
-              :path="getRadioIcon(option.isSelected)"
-              :class="getRadioIconClass(option.isSelected)"
-            />
-            <p class="as-text-on-surface" :class="getLabelClass(option.isSelected)">
-              {{ option.title }}
-            </p>
-          </li>
-        </ul>
+          <WebExtImg
+            class="as-box-content as-w-6 as-h-6 as-p-1 as--m-1 as-bg-on-surface as-bg-opacity-0 hover:as-bg-opacity-hover as-cursor-pointer as-rounded-full"
+            src="ic_chevron_left.svg"
+            :draggable="false"
+            @click="setActiveOptionGroup(undefined)"
+          />
+          <h6 class="as-pt-0.5">{{ activePlayerGroup?.title }}</h6>
+        </div>
+        <div class="as-flex-1 as-overflow-y-auto as-p-2">
+          <ul v-for="option of activeOptions" :key="option.title" @click="onClickOption(option)">
+            <li class="as-flex as-flex-row as-items-center as-space-x-4 as-py-2 as-cursor-pointer">
+              <Icon
+                :path="getRadioIcon(option.isSelected)"
+                :class="getRadioIconClass(option.isSelected)"
+              />
+              <p class="as-text-on-surface" :class="getLabelClass(option.isSelected)">
+                {{ option.title }}
+              </p>
+            </li>
+          </ul>
+        </div>
       </div>
     </template>
   </BasicDialog>
@@ -131,9 +135,6 @@ function showOriginalPlayer() {
   .as-dialog-root-container {
     max-height: 300px;
     max-width: 400px;
-    & > * {
-      padding: 14px 16px;
-    }
   }
 }
 </style>

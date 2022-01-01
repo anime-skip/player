@@ -52,7 +52,7 @@
 
 <script lang="ts" setup>
 import { PLAYBACK_SPEEDS } from '~/common/utils/constants';
-import { useGeneralPreferences, useUpdateNumberPref } from '../state/useGeneralPreferences';
+import { useGeneralPreferences, useUpdateLocalPref } from '../state/useGeneralPreferences';
 
 const props = defineProps<{
   showLess: boolean;
@@ -64,7 +64,7 @@ onMounted(() => {
   }
 });
 
-const updateNumberPref = useUpdateNumberPref();
+const updateNumberPref = useUpdateLocalPref<number>();
 const changePlaybackRate = (newRate: number) => updateNumberPref('playbackRate', newRate);
 const generalPrefs = useGeneralPreferences();
 const playbackRate = computed(() => generalPrefs.value.playbackRate);
@@ -120,10 +120,6 @@ function onBlurCustom() {
 </script>
 
 <style scoped>
-.as-bg-transparent {
-  background: transparent;
-}
-
 .as-caret-white {
   caret-color: white;
 }

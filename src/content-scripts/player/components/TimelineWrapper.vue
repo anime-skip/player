@@ -80,7 +80,7 @@ const timestampBeingEdited = computed(() => editingState.activeTimestamp);
 // Timestamps
 
 const isLoggedIn = useIsLoggedIn();
-const getTimestampColor = useGetTimestampColor(false); // Use darker blue on the actual timeline
+const getTimestampColor = useGetTimestampColor('icon');
 const activeTimestamps = useDisplayedTimestamps();
 const duration = useDuration(videoState);
 const timelineData = computed(() => {
@@ -91,7 +91,7 @@ const timelineData = computed(() => {
     title: TIMESTAMP_TYPES.find(ttype => ttype.id === timestamp.typeId)?.name ?? 'Unknown',
     normalizedAt: (timestamp.at / duration.value) * 100,
     skipped: isLoggedIn.value && !isEditing.value && Utils.isSkipped(timestamp, preferences.value),
-    color: getTimestampColor(timestamp),
+    fillClass: getTimestampColor(timestamp),
     active:
       hoveredTimestampId.value === timestamp.id || timestamp.id === timestampBeingEdited.value?.id,
   }));
@@ -205,8 +205,6 @@ function updateHoverPosition(event: MouseEvent) {
 </script>
 
 <style lang="scss" scoped>
-@import '@anime-skip/ui/variables-theme.scss';
-
 $translationDefault: 4px;
 $translationInactiveSliderDefault: 4px;
 
@@ -229,6 +227,6 @@ $translationInactiveSliderDefault: 4px;
 }
 
 .as-slider {
-  --default-foreground-color: #{$backgroundColor-primaryPalette-500} !important;
+  --as-slider-foreground-color: #{theme('colors.timeline-foreground')};
 }
 </style>

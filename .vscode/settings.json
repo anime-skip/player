@@ -8,7 +8,6 @@
     "source.organizeImports": true
   },
   "files.associations": {
-    "*.css": "postcss",
     ".env.package": "dotenv"
   },
   "[vue]": {

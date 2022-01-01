@@ -10,6 +10,7 @@
         'as-buffering as-bg-opacity-medium': videoState.isBuffering,
         'as-showing': isEpisodeInfoShowing,
         'as-opacity-0': !isPlayerVisible,
+        [themeClass]: true,
       }"
       @mouseenter.prevent="onMouseEnter"
       @mousemove.prevent="onMouseMove"
@@ -49,6 +50,7 @@ import UsageStats from '~/common/utils/UsageStats';
 import { useLoadAllEpisodeData } from '../hooks/useLoadAllEpisodeData';
 import { usePlaybackRateConnector } from '../hooks/usePlaybackRateConnector';
 import { useTabUrl } from '../hooks/useTabUrl';
+import { useTheme } from '../hooks/useTheme';
 import { useVideoElement } from '../hooks/useVideoElement';
 import {
   useHideAnimeSkipPlayer,
@@ -145,6 +147,8 @@ const messenger = new Messenger('player', {
   },
   '@anime-skip/stop-screenshot': async () => showPlayer(),
 });
+
+const { themeClass } = useTheme();
 </script>
 
 <style lang="scss" scoped>

@@ -194,7 +194,7 @@ export const TIMESTAMP_SOURCES: { [source in TimestampSource]: string | undefine
 };
 
 interface SkippablePreference {
-  key: keyof Api.Preferences;
+  key: StripOtherTypes<Api.Preferences, boolean>;
   title: string;
   help: string;
 }

@@ -8,7 +8,7 @@
       @click.stop="dismiss()"
     >
       <Card
-        class="as-dialog-root-container as-overflow-x-hidden as-overflow-y-auto as-cursor-auto as-rounded-md"
+        class="as-dialog-root-container as-bg-background as-overflow-x-hidden as-overflow-y-auto as-cursor-auto as-rounded-md"
         :elevation="8"
         @click.stop
       >
@@ -70,8 +70,6 @@ function dismiss() {
 </script>
 
 <style lang="scss" scoped>
-@import '@anime-skip/ui/variables-theme.scss';
-
 .as-dialog-enter-active,
 .as-dialog-leave-active {
   transition-property: opacity;
@@ -95,26 +93,9 @@ function dismiss() {
   }
 
   .as-dialog-root-container {
-    background-color: $backgroundColor-background !important;
     transform: translate(0px, 0px);
     transition: 250ms;
     transition-property: transform, opacity;
-
-    scrollbar-width: thin;
-    scrollbar-color: rgba($color: $backgroundColor-primary, $alpha: $opacity-low)
-      $backgroundColor-background;
-
-    &::-webkit-scrollbar {
-      width: 8px;
-      padding: 1px;
-    }
-    &::-webkit-scrollbar-track {
-      background-color: transparent;
-    }
-    &::-webkit-scrollbar-thumb {
-      background-color: #484848;
-      border-radius: 5px;
-    }
   }
 }
 </style>

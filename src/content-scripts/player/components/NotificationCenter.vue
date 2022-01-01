@@ -123,7 +123,7 @@ watch(now, nextNow => {
   const ms = nextNow.getTime();
 
   // Remove notifications that should be dismissed
-  notifications.value = notifications.value.filter(({ dismissAt }) => dismissAt > ms);
+  // notifications.value = notifications.value.filter(({ dismissAt }) => dismissAt > ms);
 
   // Add schedule based notifications
   if (promptReviewAt.value && promptReviewAt.value <= ms) addPromptReviewNotifications();

@@ -1,0 +1,116 @@
+@use 'sass:math';
+
+@function lighten($channel, $decimalPercent) {
+  @return math.round($channel + (255 - $channel) * $decimalPercent);
+}
+
+@function darken($channel, $decimalPercent) {
+  @return math.round($channel - $channel * $decimalPercent);
+}
+
+@function desaturate($decimalPercent, $color...) {
+  $r: nth($color, 1);
+  $g: nth($color, 2);
+  $b: nth($color, 3);
+  $avg: math.div($r + $g + $b, 3);
+  $rDiff: $avg - $r;
+  $gDiff: $avg - $g;
+  $bDiff: $avg - $b;
+  @return math.round($r + $rDiff * $decimalPercent), math.round($g + $gDiff * $decimalPercent),
+    math.round($b + $bDiff * $decimalPercent);
+}
+
+@function lighten-all($r, $g, $b, $decimalPercent) {
+  @return lighten($r, $decimalPercent) lighten($g, $decimalPercent) lighten($b, $decimalPercent);
+}
+
+@function darken-all($r, $g, $b, $decimalPercent) {
+  @return darken($r, $decimalPercent) darken($g, $decimalPercent) darken($b, $decimalPercent);
+}
+
+// Generate all the background and surface colors based on a primary color - a tuple of "r g b"
+@mixin backgrounds($desaturatePercent, $lightenPercent, $darkenPercent, $color...) {
+  $bgRgb: desaturate(
+    $desaturatePercent,
+    darken(lighten(nth($color, 1), $lightenPercent), $darkenPercent),
+    darken(lighten(nth($color, 2), $lightenPercent), $darkenPercent),
+    darken(lighten(nth($color, 3), $lightenPercent), $darkenPercent)
+  );
+  $bgR: nth($bgRgb, 1);
+  $bgG: nth($bgRgb, 2);
+  $bgB: nth($bgRgb, 3);
+
+  --as-theme-background: #{$bgR} #{$bgG} #{$bgB};
+  --as-theme-surface-1: #{lighten-all($bgR, $bgG, $bgB, 0.05)};
+  --as-theme-surface-2: #{lighten-all($bgR, $bgG, $bgB, 0.07)};
+  --as-theme-surface-3: #{lighten-all($bgR, $bgG, $bgB, 0.08)};
+  --as-theme-surface-4: #{lighten-all($bgR, $bgG, $bgB, 0.09)};
+  --as-theme-surface-6: #{lighten-all($bgR, $bgG, $bgB, 0.11)};
+  --as-theme-surface-8: #{lighten-all($bgR, $bgG, $bgB, 0.12)};
+  --as-theme-surface-12: #{lighten-all($bgR, $bgG, $bgB, 0.14)};
+  --as-theme-surface-16: #{lighten-all($bgR, $bgG, $bgB, 0.15)};
+  --as-theme-surface-24: #{lighten-all($bgR, $bgG, $bgB, 0.16)};
+
+  $controlR: darken($bgR, 0.6);
+  $controlG: darken($bgG, 0.6);
+  $controlB: darken($bgB, 0.6);
+
+  --as-theme-control: #{$controlR} #{$controlG} #{$controlB};
+  --as-theme-control-variant: #{darken-all($bgR, $bgG, $bgB, 0.8)};
+  --as-theme-control-disabled: #{lighten-all($bgR, $bgG, $bgB, 0.1)};
+  --as-theme-control-highlight: #{lighten-all($bgR, $bgG, $bgB, 0.2)};
+}
+
+$gold: 255 221 0;
+$gold-variant: 221 174 9;
+
+$orange: 255 138 0;
+$orange-variant: 234 112 0;
+
+$violet: 168 117 235;
+$violet-variant: 118 71 190;
+
+$red: 233 42 42;
+$red-variant: 193 17 17;
+
+$green: 18 200 47;
+$green-variant: 59 170 32;
+
+$blue: 78 196 246;
+$blue-variant: 0 138 209;
+
+.as-vrv-theme {
+  --as-theme-primary: #{$gold};
+  --as-theme-primary-variant: #{$gold-variant};
+  --as-theme-secondary: #{$orange};
+  --as-theme-secondary-variant: #{$orange-variant};
+  --as-theme-timeline-foreground: #{$gold};
+  --as-theme-timeline-background: 126 126 120;
+  --as-theme-error: #{$red};
+  --as-theme-error-variant: #{$red-variant};
+  --as-theme-success: #{$green};
+  @include backgrounds(0.7, 0, 0.8, $blue-variant...);
+}
+
+.as-crunchyroll-theme {
+  --as-theme-primary: #{$orange};
+  --as-theme-primary-variant: #{$orange-variant};
+  --as-theme-secondary: #{$gold};
+  --as-theme-secondary-variant: #{$gold-variant};
+  --as-theme-timeline-foreground: #{$orange};
+  --as-theme-timeline-background: 126 126 120;
+  --as-theme-error: #{$red};
+  --as-theme-error-variant: #{$red-variant};
+  --as-theme-success: #{$green};
+  @include backgrounds(1, 0, 0.8, $orange...);
+}
+
+.as-funimation-theme {
+  --as-theme-primary: #{$violet};
+  --as-theme-primary-variant: #{$violet-variant};
+  --as-theme-secondary: #{$blue};
+  --as-theme-secondary-variant: #{$blue-variant};
+  --as-theme-timeline-foreground: #{$violet};
+  --as-theme-timeline-background: 100 95 100;
+  @include backgrounds(0.9, 0, 0.8, $violet...);
+}

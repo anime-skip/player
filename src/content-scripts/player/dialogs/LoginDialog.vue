@@ -39,7 +39,6 @@ onMounted(autoclose);
 
   .as-dialog-root-container {
     max-width: 400px;
-    padding: 16px;
   }
 }
 </style>

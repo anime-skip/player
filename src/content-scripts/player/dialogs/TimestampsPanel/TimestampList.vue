@@ -189,7 +189,7 @@ function itemSouce(timestamp: Api.AmbiguousTimestamp): string {
 function itemHasSource(timestamp: Api.AmbiguousTimestamp): boolean {
   return timestamp.source !== 'ANIME_SKIP';
 }
-const getTimestampColor = useGetTimestampColor(true); // Use lighter blue on the list so its easier to read
+const getTimestampColor = useGetTimestampColor('text');
 function itemTimestampStyle(timestamp: Api.AmbiguousTimestamp): string {
   return `color: ${getTimestampColor(timestamp)}`;
 }
@@ -241,8 +241,6 @@ function onClickOpenTemplate(): void {
 </script>
 
 <style lang="scss" scoped>
-@import '@anime-skip/ui/variables-theme.scss';
-
 // TODO: Hmm, interesting style...
 .as-w-90\% {
   width: 100%;

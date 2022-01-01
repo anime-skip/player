@@ -233,7 +233,6 @@ useKeyboardShortcuts('toolbar', {
 
 <style lang="scss" scoped>
 @import '../utils/constants.scss';
-@import '@anime-skip/ui/variables-theme.scss';
 
 .as-h-toolbar {
   height: $toolbarHeight;
@@ -264,17 +263,13 @@ useKeyboardShortcuts('toolbar', {
     height: 64px;
     transition: 200ms;
     transition-property: opacity;
-    opacity: 0;
-    background: linear-gradient(
-      transparent,
-      rgba($color: $backgroundColor-background, $alpha: $opacity-medium)
-    );
+    @apply as-opacity-0 as-bg-gradient-to-b as-from-transparent as-to-background;
   }
   &.as-active::before {
-    opacity: 1;
+    @apply as-opacity-medium;
   }
   &.as-paused::before {
-    opacity: 0;
+    @apply as-opacity-0;
   }
 
   .as-timeline-alignment {

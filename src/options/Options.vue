@@ -3,6 +3,17 @@
     <PopupHeader title="All Settings" />
     <div class="as-space-y-16">
       <GeneralSettings>
+        <SelectDropDown
+          label="Color Theme"
+          :value="colorTheme"
+          @update:value="onChangeColorTheme"
+          :disabled="!isLoggedIn"
+        >
+          <option v-for="theme in colorThemes" :key="theme.value" :value="theme.value">
+            {{ theme.display }}
+          </option>
+        </SelectDropDown>
+        <div />
         <RaisedCheckbox
           label="Hide timeline when minimized"
           :checked="hideTimelineWhenMinimized"
@@ -30,8 +41,13 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
+import { ColorTheme } from '~/common/api';
 import { useIsLoggedIn } from '~/common/state/useAuth';
-import { useGeneralPreferences, useToggleBooleanPref } from '~/common/state/useGeneralPreferences';
+import {
+  useGeneralPreferences,
+  useToggleBooleanPref,
+  useUpdateRemotePref,
+} from '~/common/state/useGeneralPreferences';
 import UsageStats from '~/common/utils/UsageStats';
 
 onMounted(() => {
@@ -45,4 +61,17 @@ const toggleBooleanPreference = useToggleBooleanPref();
 const hideTimelineWhenMinimized = computed(() => preferences.value.hideTimelineWhenMinimized);
 const minimizeToolbarWhenEditing = computed(() => preferences.value.minimizeToolbarWhenEditing);
 const createTimestampSnapBack = computed(() => preferences.value.createTimestampSnapBack);
+
+const updateColorTheme = useUpdateRemotePref<ColorTheme>();
+function onChangeColorTheme(newValue: ColorTheme) {
+  updateColorTheme('colorTheme', newValue);
+}
+const colorTheme = computed(() => preferences.value.colorTheme);
+const colorThemes: Array<{ value: ColorTheme; display: string }> = [
+  { value: ColorTheme.ANIME_SKIP_BLUE, display: 'Anime Skip (Blue)' },
+  { value: ColorTheme.PER_SERVICE, display: 'Dynamic' },
+  { value: ColorTheme.CRUNCHYROLL_ORANGE, display: 'Crunchyroll (Orange)' },
+  { value: ColorTheme.FUNIMATION_PURPLE, display: 'Funimation (Purple)' },
+  { value: ColorTheme.VRV_YELLOW, display: 'VRV (Yellow)' },
+];
 </script>

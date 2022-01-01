@@ -52,11 +52,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '@anime-skip/ui/variables-theme.scss';
-
 .as-scroll {
   overflow-y: auto;
-  scrollbar-color: rgba($color: $backgroundColor-primary, $alpha: $opacity-low) transparent;
+
   &::-webkit-scrollbar {
     width: 8px;
     padding: 1px;
@@ -65,7 +63,7 @@ export default defineComponent({
     background-color: transparent;
   }
   &::-webkit-scrollbar-thumb {
-    background-color: $backgroundColor-control-disabled;
+    background-color: #{theme('colors.control-disabled')};
     border-radius: 5px;
   }
 }
