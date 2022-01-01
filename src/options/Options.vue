@@ -6,7 +6,7 @@
         <SelectDropDown
           label="Color Theme"
           :value="colorTheme"
-          @update:value="colorThemeUpdate"
+          @update:value="onChangeColorTheme"
           :disabled="!isLoggedIn"
         >
           <option v-for="theme in colorThemes" :key="theme.value" :value="theme.value">
@@ -63,8 +63,7 @@ const minimizeToolbarWhenEditing = computed(() => preferences.value.minimizeTool
 const createTimestampSnapBack = computed(() => preferences.value.createTimestampSnapBack);
 
 const updateColorTheme = useUpdateRemotePref<ColorTheme>();
-function colorThemeUpdate(newValue: ColorTheme) {
-  console.log({ newValue });
+function onChangeColorTheme(newValue: ColorTheme) {
   updateColorTheme('colorTheme', newValue);
 }
 const colorTheme = computed(() => preferences.value.colorTheme);

@@ -121,7 +121,6 @@ export function useUpdateRemotePref<T>() {
 
   return (pref: StripOtherTypes<GeneralPreferences, T>, newValue: T) => {
     const oldValue = preferences.value[pref];
-    console.log({ newValue, pref, oldValue });
     updatePreferences({ [pref]: newValue });
 
     api.savePreferences(Api.PREFERENCES_QUERY, { preferences: { [pref]: newValue } }).catch(err => {
