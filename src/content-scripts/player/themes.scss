@@ -112,5 +112,5 @@ $blue-variant: 0 138 209;
   --as-theme-secondary-variant: #{$blue-variant};
   --as-theme-timeline-foreground: #{$violet};
   --as-theme-timeline-background: 100 95 100;
-  @include backgrounds(0.7, 0, 0.8, $violet...);
+  @include backgrounds(0.9, 0, 0.8, $violet...);
 }
