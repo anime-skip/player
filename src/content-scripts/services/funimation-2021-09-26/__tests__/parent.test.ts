@@ -57,7 +57,7 @@ describe('Parent functionalities', () => {
     });
 
     it('should parse the episode details and return the season and episode number when available', async () => {
-      const details = 'Season\n                1\n                Episode\n                11 - ';
+      const details = '\n    Season 1\n    Episode\n    11';
       setupDom('show', 'episode', details);
 
       const actual = await getEpisodeInfo();
@@ -69,7 +69,7 @@ describe('Parent functionalities', () => {
     });
 
     it('should parse the episode details and return the episode number when available', async () => {
-      const details = 'Episode\n                11 - ';
+      const details = 'Episode\n                11';
       setupDom('show', 'episode', details);
 
       const actual = await getEpisodeInfo();
@@ -80,7 +80,7 @@ describe('Parent functionalities', () => {
       });
     });
 
-    it.each(['Season 1, Episode 4', '1 #4', ''])(
+    it.each([''])(
       "should return undefined if it doesn't match one of the predefined text formats",
       async details => {
         setupDom('show', 'episode', details);

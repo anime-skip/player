@@ -21,13 +21,13 @@ async function getEpisodeInfo() {
     document.querySelector('[data-test=meta-overlay__data-block--episode-details]')?.textContent ??
     '';
   if (details) {
-    const seasonAndNumberRegex = /\s*Season\s*\n\s*(.*?)\s*\n\s*Episode\s*\n\s*(.*?)\s*-\s*/;
+    const seasonAndNumberRegex = /\s*Season\s*(.*?)\s*Episode\s*(.*)/;
     const seasonAndNumberMatch = seasonAndNumberRegex.exec(details);
     if (seasonAndNumberMatch) {
       season = seasonAndNumberMatch[1];
       number = seasonAndNumberMatch[2];
     } else {
-      const justNumberRegex = /\s*Episode\s*\n\s*(.*?)\s*-\s*/;
+      const justNumberRegex = /\s*Episode\s*(.*)/;
       const justNumberMatch = justNumberRegex.exec(details);
       if (justNumberMatch) {
         number = justNumberMatch[1];
