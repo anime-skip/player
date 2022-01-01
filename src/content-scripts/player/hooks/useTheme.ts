@@ -1,5 +1,5 @@
 export function useTheme() {
-  const themeService = ref<Service | null>('vrv');
+  const themeService = ref<Service | null>('funimation');
   const isThemeApplied = ref(true);
   const themeClass = computed(() => `as-theme as-${themeService.value}-theme`);
 
