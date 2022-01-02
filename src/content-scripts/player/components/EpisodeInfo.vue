@@ -6,7 +6,7 @@
         class="as-pr-1"
         href="https://anime-skip.com"
         target="_blank"
-        :onclick="event => event.stopPropagation()"
+        @click.stop
       >
         <ThemedLogo class="as-w-8 as-h-8 as-object-contain" />
       </a>
