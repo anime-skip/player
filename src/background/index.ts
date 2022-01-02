@@ -1,9 +1,9 @@
 import { initStoreReviewPrompt } from '~/common/state/store-review-prompt';
 import { error, loadedLog } from '~/common/utils/log';
-import { initChromePageAction } from './chrome-page-action';
 import { initContextMenu } from './context-menu';
 import { initMessenger } from './messenger';
 import { initMetrics } from './metrics';
+import { initPageAction } from './page-action';
 import { initTabChange } from './tab-change';
 
 function init() {
@@ -11,7 +11,7 @@ function init() {
   initMetrics();
   initContextMenu();
   initTabChange();
-  if (TARGET_BROWSER === 'chrome') initChromePageAction();
+  initPageAction();
 
   initStoreReviewPrompt();
 }
