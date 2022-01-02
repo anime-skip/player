@@ -2,7 +2,7 @@ lockfileVersion: 5.3
 
 specifiers:
   '@anime-skip/api-client': ^2.6.2
-  '@anime-skip/ui': ^3.1.0
+  '@anime-skip/ui': ^3.1.1
   '@anime-skip/usage-stats-client': ^1.3.1
   '@iconify/json': ^1.1.386
   '@tailwindcss/line-clamp': ^0.2.1
@@ -64,7 +64,7 @@ specifiers:
 
 dependencies:
   '@anime-skip/api-client': 2.6.2
-  '@anime-skip/ui': 3.1.0_2f04258c66cb86202acd13e91bd86310
+  '@anime-skip/ui': 3.1.1_2f04258c66cb86202acd13e91bd86310
   '@anime-skip/usage-stats-client': 1.3.1_axios@0.24.0
   '@vueuse/core': 5.3.0_vue@3.2.2
   async-mutex: 0.3.2
@@ -137,8 +137,8 @@ packages:
       - debug
     dev: false
 
-  /@anime-skip/ui/3.1.0_2f04258c66cb86202acd13e91bd86310:
-    resolution: {integrity: sha512-d7cf5hBsKKAak00XEKp/jc8SFhIFgxUT4AmvZS/QSRJ028ZsOMvOk+ZohNAi+vTikQFZkh9RwfoDb2DHf0MeTA==, tarball: download/@anime-skip/ui/3.1.0/c5826ffbdc91a96fdb054d5c2ceff16cd4644e31d8dbcee0467e7d3de68b1564}
+  /@anime-skip/ui/3.1.1_2f04258c66cb86202acd13e91bd86310:
+    resolution: {integrity: sha512-Fx++VW7iit9tvtpY5mbiR3vjLeawiY+M0diH0aWogfF2YasoNSOzRiMQbQJCBh/DzNueU73bGDb9PJBW9joSxw==, tarball: download/@anime-skip/ui/3.1.1/472dd5a1c7fc8f692cbba4966a6344938b55616d6f1fb11075ed04ee7e0ca221}
     peerDependencies:
       '@tailwindcss/line-clamp': ^0.2.1
       autoprefixer: ^10.2.4
