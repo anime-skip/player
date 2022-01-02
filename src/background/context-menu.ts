@@ -4,6 +4,17 @@ import Messenger from '~/common/utils/Messenger';
 
 const MENU_ITEM_SCREENSHOT = 'screenshot';
 
+const dataUrlToBlob = (dataUrl: string) => fetch(dataUrl).then(res => res.blob());
+function blobToDataURL(blob: Blob): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = _e => resolve(reader.result as string);
+    reader.onerror = _e => reject(reader.error);
+    reader.onabort = _e => reject(new Error('Read aborted'));
+    reader.readAsDataURL(blob);
+  });
+}
+
 export function initContextMenu() {
   loadedLog('background/context-menu.ts');
 
@@ -14,7 +25,14 @@ export function initContextMenu() {
     ContextMenuMessageResponseMap
   >('context-menu', {
     '@anime-skip/setup-context-menu': async () =>
-      menuItems.forEach(item => browser.contextMenus.create(item)),
+      menuItems.forEach(item => {
+        browser.contextMenus.create(item, () => {
+          const err = browser.runtime.lastError;
+          if (err && err.message !== `Cannot create item with duplicate id ${item.id}`) {
+            error(err);
+          }
+        });
+      }),
     '@anime-skip/remove-context-menu': async () => browser.contextMenus.removeAll(),
   });
 
@@ -65,18 +83,36 @@ export function initContextMenu() {
     newWidth: number,
     newHeight: number
   ): Promise<string> {
-    return new Promise(function (res) {
-      const img = document.createElement('img');
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = newWidth;
-        canvas.height = newHeight;
-        ctx?.drawImage(img, -x, -y);
-        const dataURI = canvas.toDataURL();
-        res(dataURI);
-      };
-      img.src = data;
+    return new Promise(function (res, rej) {
+      if (typeof createImageBitmap !== 'undefined' && typeof OffscreenCanvas !== 'undefined') {
+        dataUrlToBlob(data)
+          .then(async blob => {
+            const img = await createImageBitmap(blob);
+            const canvas = new OffscreenCanvas(newWidth, newHeight);
+            const ctx = canvas.getContext('2d');
+            ctx?.drawImage(img, -x, -y);
+            const outputBlob = await canvas.convertToBlob({ type: 'image/png' });
+            const url = await blobToDataURL(outputBlob);
+            res(url);
+          })
+          .catch(rej);
+      } else if (typeof document !== 'undefined') {
+        const img = document.createElement('img');
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = newWidth;
+          canvas.height = newHeight;
+          ctx?.drawImage(img, -x, -y);
+          const dataURI = canvas.toDataURL();
+          res(dataURI);
+        };
+        img.src = data;
+      } else {
+        error(
+          'Cannot take screenshot: document or createImageBitmap and OffscreenCanvas are not defined'
+        );
+      }
     });
   }
 
@@ -85,17 +121,14 @@ export function initContextMenu() {
       title: 'Take Screenshot',
       contexts: ['all', 'frame'],
       id: MENU_ITEM_SCREENSHOT,
-      onclick: screenshot,
     },
   ];
 
-  if (TARGET_BROWSER === 'firefox') {
-    browser.contextMenus.onClicked.addListener((info, tab) => {
-      switch (info.menuItemId) {
-        case MENU_ITEM_SCREENSHOT:
-          screenshot(info, tab);
-          break;
-      }
-    });
-  }
+  browser.contextMenus.onClicked.addListener((info, tab) => {
+    switch (info.menuItemId) {
+      case MENU_ITEM_SCREENSHOT:
+        screenshot(info, tab);
+        break;
+    }
+  });
 }

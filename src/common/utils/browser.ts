@@ -3,6 +3,9 @@
  * https://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser
  */
 export function detectBrowser(): BrowserType {
+  // Unknown for service workers, just use the target instead
+  if (typeof window === "undefined") return TARGET_BROWSER;
+
   // Opera 8.0+
   // @ts-expect-error: difficult typing
   if ((!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0)

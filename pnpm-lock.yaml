@@ -14,7 +14,7 @@ specifiers:
   '@types/node': ^16.6.0
   '@types/rimraf': ^3.0.2
   '@types/tailwindcss': ^3.0.0
-  '@types/webextension-polyfill': ^0.8.1
+  '@types/webextension-polyfill': ^0.8.2
   '@typescript-eslint/eslint-plugin': ^4.29.1
   '@typescript-eslint/parser': ^4.29.1
   '@vitejs/plugin-vue': ^1.4.0
@@ -89,7 +89,7 @@ devDependencies:
   '@types/node': 16.6.0
   '@types/rimraf': 3.0.2
   '@types/tailwindcss': 3.0.0
-  '@types/webextension-polyfill': 0.8.1
+  '@types/webextension-polyfill': 0.8.2
   '@typescript-eslint/eslint-plugin': 4.29.1_d4376362794b743c19f4cba25c7fc6f5
   '@typescript-eslint/parser': 4.29.1_eslint@7.32.0+typescript@4.3.5
   '@vitejs/plugin-vue': 1.4.0_@vue+compiler-sfc@3.2.2
@@ -1042,8 +1042,8 @@ packages:
     resolution: {integrity: sha512-5eQEtSCoESnh2FsiLTxE121IiE60hnMqcb435fShf4bpLRjEu1Eoekht23y6zXS9Ts3l+Szu3TARnTsA0GkOkQ==}
     dev: true
 
-  /@types/webextension-polyfill/0.8.1:
-    resolution: {integrity: sha512-FH1EwaQLzET/Bdy05yIcgMD2nlXchA1vnfC+QvQYMNW0RcTIDrNaVOOqmOY1nGRf0NaHZQmvfMy6cJV4nY7j2w==}
+  /@types/webextension-polyfill/0.8.2:
+    resolution: {integrity: sha512-Pd+p5AQx6s78jr4gDC2p3vbw+uxP2DLLqE9iAJJpZ+OUqDm3txr6uN2wUBEwjVgZTNdBHPsxawGvPCTipF2s6w==}
     dev: true
 
   /@types/yargs-parser/20.2.1:
