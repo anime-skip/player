@@ -3,8 +3,6 @@ import { detectBrowser } from '~/common/utils/browser';
 import { loadedLog, log } from '~/common/utils/log';
 import UsageStats from '~/common/utils/UsageStats';
 
-const EXTENSION_VERSION_STORAGE_KEY = 'extension-version';
-
 function getUninstallUrl(userId: string | undefined): string | undefined {
   if (userId == null) return undefined;
   const encodedUserId = encodeURIComponent(userId);
@@ -16,18 +14,16 @@ function getUninstallUrl(userId: string | undefined): string | undefined {
 export function initMetrics() {
   loadedLog('background/metrics.ts');
 
-  browser.runtime.onInstalled.addListener(async () => {
-    const result = await browser.storage.local.get(EXTENSION_VERSION_STORAGE_KEY);
-    const prevVersion = result[EXTENSION_VERSION_STORAGE_KEY] as string | undefined;
-    if (prevVersion == null) {
+  browser.runtime.onInstalled.addListener(event => {
+    if (event.reason === 'install') {
       UsageStats.saveEvent('extension_installed');
-    } else if (prevVersion !== EXTENSION_VERSION) {
+    } else if (event.reason === 'update') {
       UsageStats.saveEvent('extension_updated', {
-        fromVersion: prevVersion,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        fromVersion: event.previousVersion!,
         toVersion: EXTENSION_VERSION,
       });
     }
-    await browser.storage.local.set({ [EXTENSION_VERSION_STORAGE_KEY]: EXTENSION_VERSION });
   });
 
   let prevUninstallUrl: string | undefined = undefined;
