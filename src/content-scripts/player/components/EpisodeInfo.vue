@@ -1,7 +1,13 @@
 <template>
   <div class="EpisodeInfo as-space-y-4" :class="{ 'as-visible': isShowing }">
     <div class="as-flex as-flex-row as-items-center as-space-x-3">
-      <a v-if="showThemeLogo" class="as-pr-1" href="https://anime-skip.com">
+      <a
+        v-if="showThemeLogo"
+        class="as-pr-1"
+        href="https://anime-skip.com"
+        target="_blank"
+        @click.stop
+      >
         <ThemedLogo class="as-w-8 as-h-8 as-object-contain" />
       </a>
       <h5 class="as-text-primary as-pt-1">
