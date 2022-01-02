@@ -18,7 +18,5 @@ export async function buildChrome(config: PackageConfig) {
     })
   );
 
-  await run(`Checking Chrome ${CODE}manifest.json${RESET}`, () => bash(`pnpm lint:web-ext`));
-
   await run(`Creating ${CODE}${chromeZip}`, () => zip(dist, chromeZip));
 }
