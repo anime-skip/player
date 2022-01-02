@@ -2,7 +2,7 @@ import { ParentHosts } from '../utils/compile-time-constants';
 import { urlPatternMatch } from '../utils/strings';
 
 const supportedPatterns = Object.values(ParentHosts).map(urlPattern => {
-  const hostPatternRegex = /^(.*:\/\/[\w\.]+)\/.*$/;
+  const hostPatternRegex = /^(.*:\/\/[\w.]+)\/.*$/;
   const match = urlPattern.match(hostPatternRegex);
 
   if (match?.[1]) return match[1] + '/*';

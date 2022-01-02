@@ -77,7 +77,6 @@ const { value: currentUrl } = useWebExtensionStorageValue<string | null>(
 );
 const isSupported = computed<boolean>(() => !!currentUrl.value && isUrlSupported(currentUrl.value));
 const notSupportedMessage = computed(() => {
-  console.log('URL:', currentUrl.value);
   if (isSupported.value) return undefined;
   if (!currentUrl.value) return 'Anime Skip does not support this website';
   return `Anime Skip does not support ${new URL(currentUrl.value!).hostname}`;
