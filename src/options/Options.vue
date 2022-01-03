@@ -4,7 +4,7 @@
     <div class="as-space-y-16">
       <GeneralSettings>
         <SelectDropDown
-          label="Color Theme"
+          label="Player Color Theme"
           :value="colorTheme"
           @update:value="onChangeColorTheme"
           :disabled="!isLoggedIn"
