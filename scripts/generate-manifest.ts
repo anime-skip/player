@@ -42,9 +42,12 @@ export function generateManifest(config: GenerateManifestConfig): Manifest.WebEx
     name,
     description: pkg.description,
     version: pkg.version,
-    page_action: {
+    '{{chrome}}.action': {
       default_title: name,
-      '{{firefox}}.show_matches': removeLocalhostForProd(config, PAGE_ACTION_MATCHES),
+    },
+    '{{firefox}}.page_action': {
+      default_title: name,
+      show_matches: removeLocalhostForProd(config, PAGE_ACTION_MATCHES),
     },
     content_scripts: [
       {

@@ -65,7 +65,7 @@
     "@types/node": "^16.6.0",
     "@types/rimraf": "^3.0.2",
     "@types/tailwindcss": "^3.0.0",
-    "@types/webextension-polyfill": "^0.8.1",
+    "@types/webextension-polyfill": "^0.8.2",
     "@typescript-eslint/eslint-plugin": "^4.29.1",
     "@typescript-eslint/parser": "^4.29.1",
     "@vitejs/plugin-vue": "^1.4.0",

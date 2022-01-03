@@ -20,11 +20,12 @@ const disabledIcon = {
 export function initPageAction() {
   loadedLog('background/chrome-page-action.ts');
 
+  const action = browser.action ?? browser.pageAction;
+
   function enableAction(tab: browser.Tabs.Tab) {
     if (tab.id == null) return;
 
-    browser.pageAction.show(tab.id);
-    browser.pageAction.setIcon({
+    action.setIcon({
       tabId: tab.id,
       path: enabledIcon,
     });
@@ -32,8 +33,7 @@ export function initPageAction() {
   function disableAction(tab: browser.Tabs.Tab) {
     if (tab.id == null) return;
 
-    browser.pageAction.show(tab.id);
-    browser.pageAction.setIcon({
+    action.setIcon({
       tabId: tab.id,
       path: disabledIcon,
     });

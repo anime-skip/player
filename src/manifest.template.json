@@ -1,5 +1,6 @@
 {
-  "manifest_version": 2,
+  "{{chrome}}.manifest_version": 3,
+  "{{firefox}}.manifest_version": 2,
   "icons": {
     "16": "assets/extension-logo/16.png",
     "32": "assets/extension-logo/32.png",
@@ -18,24 +19,23 @@
     "{{firefox}}.*://staged.api.anime-skip.com/*"
   ],
   "background": {
-    "scripts": ["background/index.ts"]
+    "{{chrome}}.service_worker": "background/index.ts",
+    "{{firefox}}.scripts": ["background/index.ts"],
+    "{{firefox}}.persistent": false
   },
-  "page_action": {
-    "browser_style": false,
-    "default_icon": {
-      "16": "assets/extension-logo/16.png",
-      "32": "assets/extension-logo/32.png",
-      "48": "assets/extension-logo/48.png",
-      "128": "assets/extension-logo/128.png"
-    },
+  "{{chrome}}.action": {
     "default_popup": "popup/index.html"
   },
-  "options_ui": {
+  "{{firefox}}.page_action": {
+    "browser_style": false,
+    "default_popup": "popup/index.html"
+  },
+  "{{firefox}}.options_ui": {
     "page": "options/index.html",
     "open_in_tab": true,
-    "{{firefox}}.browser_style": false,
-    "{{chrome}}.chrome_style": false
+    "browser_style": false
   },
+  "{{chrome}}.options_page": "options/index.html",
   "content_scripts": [
     {
       "js": ["content-scripts/parent.ts", "content-scripts/player.ts"],
@@ -48,5 +48,11 @@
       "run_at": "document_start"
     }
   ],
-  "web_accessible_resources": ["assets/*", "assets/**/*"]
+  "{{firefox}}.web_accessible_resources": ["assets/*", "assets/**/*"],
+  "{{chrome}}.web_accessible_resources": [
+    {
+      "resources": ["assets/*", "assets/**/*"],
+      "matches": ["*://*/*"]
+    }
+  ]
 }
