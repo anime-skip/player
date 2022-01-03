@@ -79,6 +79,8 @@ const isSupported = computed<boolean>(() => !!currentUrl.value && isUrlSupported
 const notSupportedMessage = computed(() => {
   if (isSupported.value) return undefined;
   if (!currentUrl.value) return 'Anime Skip does not support this website';
+  if (currentUrl.value.includes('extension://'))
+    return 'Anime Skip does not support other extensions';
   return `Anime Skip does not support ${new URL(currentUrl.value!).hostname}`;
 });
 </script>
