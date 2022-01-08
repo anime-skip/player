@@ -120,7 +120,6 @@ export function useVideoElement() {
   watch(
     () => videoState.isPaused,
     newIsPaused => {
-      console.log('[video-state] isPaused=' + newIsPaused);
       if (!video.value) return;
 
       if (newIsPaused && !video.value.paused) video.value.pause();
@@ -129,16 +128,8 @@ export function useVideoElement() {
   );
 
   watch(
-    () => videoState.isBuffering,
-    newIsBuffering => {
-      console.log('[video-state] isBuffering=' + newIsBuffering);
-    }
-  );
-
-  watch(
     () => videoState.playbackRate,
     newPlaybackRate => {
-      console.log('[video-state] playbackRate=' + newPlaybackRate);
       if (!video.value) return;
 
       video.value.playbackRate = newPlaybackRate;
@@ -148,7 +139,6 @@ export function useVideoElement() {
   watch(
     () => videoState.volumePercent,
     newVolumePercent => {
-      console.log('[video-state] volumePercent=' + newVolumePercent);
       if (!video.value) return;
 
       video.value.volume = newVolumePercent / 100;
@@ -159,7 +149,6 @@ export function useVideoElement() {
   watch(
     () => videoState.isMuted,
     newIsMuted => {
-      console.log('[video-state] isMuted=' + newIsMuted);
       if (video.value) video.value.muted = newIsMuted;
     }
   );
@@ -179,18 +168,6 @@ export function useVideoElement() {
     video.addEventListener('timeupdate', onTimeUpdate);
     video.addEventListener('waiting', onWaiting);
     video.addEventListener('ended', onEnded);
-
-    video.addEventListener('loadeddata', () =>
-      console.log('[video-element] loadeddata', Date.now())
-    );
-    video.addEventListener('loadedmetadata', () =>
-      console.log('[video-element] loadedmetadata', Date.now())
-    );
-    video.addEventListener('playing', () => console.log('[video-element] playing', Date.now()));
-    video.addEventListener('waiting', () => console.log('[video-element] waiting', Date.now()));
-    video.addEventListener('play', () => console.log('[video-element] play', Date.now()));
-    video.addEventListener('pause', () => console.log('[video-element] pause', Date.now()));
-    video.addEventListener('canplay', () => console.log('[video-element] canplay', Date.now()));
   };
   const clearListeners = (video: HTMLVideoElement) => {
     video.removeEventListener('durationchange', onDurationChange);

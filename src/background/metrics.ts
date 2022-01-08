@@ -17,7 +17,6 @@ export function initMetrics() {
   browser.runtime.onInstalled.addListener(event => {
     log('onInstalled', event);
     if (event.temporary) return;
-    console.log('onInstalled', event);
 
     if (event.reason === 'install') {
       UsageStats.saveEvent('extension_installed');
