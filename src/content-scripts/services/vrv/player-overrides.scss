@@ -7,7 +7,8 @@
   .vilos-spinner-overlay,
   .vilos_stats_display,
   #miniProgressContainer,
-  #standalone_softsubs {
+  #standalone_softsubs,
+  .vjs-poster::before {
     display: none !important;
   }
 }
