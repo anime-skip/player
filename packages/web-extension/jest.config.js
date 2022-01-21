@@ -8,8 +8,7 @@ const tsconfigPathsModuleNameMapper = pathsToModuleNameMapper(compilerOptions.pa
 
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
-  preset: 'ts-jest',
-  testEnvironment: 'jsdom',
+  ...require('../../jest.config'),
   globals: {
     EXTENSION_MODE: 'prod',
   },
