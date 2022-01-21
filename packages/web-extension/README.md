@@ -4,34 +4,6 @@ Inject a custom player over the top of the certain web players (`VRV`, `Funimati
 
 - [Chrome Web Store](https://chrome.google.com/webstore/devconsole/331629b9-cf31-4391-ad30-77dd0a36958d?hl=en)
 - [Firefox Add-On Developer Hub](https://addons.mozilla.org/en-US/developers/addons)
-- ~~Edge~~ - [TODO](https://docs.microsoft.com/en-us/microsoft-edge/extensions-chromium/publish/publish-extension)
-- ~~Opera~~ - [TODO](https://dev.opera.com/extensions/publishing-guidelines/)
-
-<br/>
-
-## Contributing
-
-<!-- readme: contributors -start -->
-<table>
-<tr>
-    <td align="center">
-        <a href="https://github.com/aklinker1">
-            <img src="https://avatars.githubusercontent.com/u/10101283?v=4" width="100;" alt="aklinker1"/>
-            <br />
-            <sub><b>aklinker1</b></sub>
-        </a>
-    </td>
-    <td align="center">
-        <a href="https://github.com/logiczsniper">
-            <img src="https://avatars.githubusercontent.com/u/31292294?v=4" width="100;" alt="logiczsniper"/>
-            <br />
-            <sub><b>logiczsniper</b></sub>
-        </a>
-    </td></tr>
-</table>
-<!-- readme: contributors -end -->
-
-See the [contributing guidelines](https://github.com/anime-skip/docs/wiki) for all of Anime Skip
 
 **It's recommended develop the extension on Firefox**, the experience is much better than Chrome. Chrome doesn't reload the player when saving a file, firefox does
 
