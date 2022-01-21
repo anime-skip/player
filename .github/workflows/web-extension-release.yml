@@ -1,4 +1,4 @@
-name: Prod Release
+name: Web Extension Release
 on:
   workflow_dispatch:
     inputs:
@@ -41,7 +41,7 @@ jobs:
         run: curl -f https://get.pnpm.io/v6.14.js | node - add --global pnpm@6
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
         env:
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.ANIME_SKIP_PACKAGES_TOKEN }}
@@ -62,7 +62,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.github_token }}
         with:
           tag_name: ${{ steps.changelog.outputs.tag }}
-          release_name: ${{ steps.changelog.outputs.tag }}
+          release_name: Web Extension ${{ steps.changelog.outputs.tag }}
           body: ${{ steps.changelog.outputs.clean_changelog }}
 
       - name: Reset version bump after no release
@@ -72,7 +72,7 @@ jobs:
           git --no-pager log -n 20 --oneline
 
       - name: Package Extensions
-        run: pnpm package
+        run: pnpm recursive run package --filter web-extension
         env:
           CI: true
           PACKAGE_MODE: prod
@@ -97,7 +97,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/sources.zip
+          asset_path: ./packages/web-extension/artifacts/sources.zip
           asset_name: sources.zip
           asset_content_type: application/zip
 
@@ -108,7 +108,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/firefox-prod.zip
+          asset_path: ./packages/web-extension/artifacts/firefox-prod.zip
           asset_name: firefox.zip
           asset_content_type: application/zip
 
@@ -119,6 +119,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/chrome-prod.zip
+          asset_path: ./packages/web-extension/artifacts/chrome-prod.zip
           asset_name: chrome.zip
           asset_content_type: application/zip
