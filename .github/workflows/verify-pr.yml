@@ -35,7 +35,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.ANIME_SKIP_PACKAGES_TOKEN }}
 
       - name: Publish Dry Run
-        run: pnpm package:dry
+        run: pnpm recursive run validate --filter [origin/main]
         env:
           CI: true
           PACKAGE_MODE: prod
@@ -53,6 +53,6 @@ jobs:
         with:
           name: Dry Run
           path: |
-            artifacts/firefox-beta.zip
-            artifacts/chrome-beta.zip
-            artifacts/sources.zip
+            packages/web-extension/artifacts/firefox-beta.zip
+            packages/web-extension/artifacts/chrome-beta.zip
+            packages/web-extension/artifacts/sources.zip

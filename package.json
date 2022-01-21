@@ -5,6 +5,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "preinstall": "npx only-allow pnpm",
+    "validate": "pnpm format:check",
     "prepare": "husky install"
   },
   "dependencies": {

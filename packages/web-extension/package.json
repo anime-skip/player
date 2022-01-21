@@ -32,7 +32,8 @@
     "build:staged": "cross-env BUILD_MODE=staged vite build",
     "build:staged:chrome": "cross-env BUILD_FOR=chrome pnpm build:staged",
     "package": "esno scripts/package/index.ts",
-    "package:dry": "cross-env DRY_RUN=true pnpm package"
+    "package:dry": "cross-env DRY_RUN=true pnpm package",
+    "validate": "pnpm package:dry"
   },
   "dependencies": {
     "@anime-skip/api-client": "^2.6.2",
