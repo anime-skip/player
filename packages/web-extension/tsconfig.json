@@ -10,9 +10,10 @@
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
     "types": ["vite/client", "jest", "vue-global-api"],
+    "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"],
-      "~api": ["./src/common/api"]
+      "~/*": ["src/*"],
+      "~api": ["src/common/api"]
     }
   }
 }
