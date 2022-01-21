@@ -18,6 +18,8 @@ jobs:
           scope: '@anime-skip'
 
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # Fetch everything so we can filter since a revision
 
       - name: Cache .pnpm-store
         uses: actions/cache@v1
@@ -56,12 +58,3 @@ jobs:
           CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
           CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
           CHROME_APP_ID: ${{ secrets.CHROME_APP_ID }}
-
-      - name: Upload Zips
-        uses: actions/upload-artifact@v2
-        with:
-          name: Dry Run
-          path: |
-            packages/web-extension/artifacts/firefox-beta.zip
-            packages/web-extension/artifacts/chrome-beta.zip
-            packages/web-extension/artifacts/sources.zip
