@@ -1,6 +1,14 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "module": "ESNext",
+    "target": "ESNext",
+    "lib": ["DOM", "ESNext"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
     "types": ["vite/client", "jest", "vue-global-api"],
     "paths": {
       "~/*": ["./src/*"],

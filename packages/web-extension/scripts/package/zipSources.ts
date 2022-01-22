@@ -20,9 +20,10 @@ export async function zipSources(OUTPUT_DIR: string) {
   const sources = [
     'scripts/',
     'src/',
-    '.nvmrc',
+    '../../.npmrc',
+    '../../.nvmrc',
     'package.json',
-    'pnpm-lock.yaml',
+    '../../pnpm-lock.yaml',
     'postcss.config.js',
     'SOURCE_CODE_REVIEW.md',
     'tailwind.config.js',
