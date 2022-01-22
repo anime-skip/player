@@ -1,10 +1,3 @@
-# Vite
-#
-.vite-ssg-dist
-.vite-ssg-temp
-dist
-dist-ssr
-
 # PNPM
 #
 node_modules
@@ -13,20 +6,8 @@ node_modules
 #
 .idea/
 
-# Build
-#
-artifacts
-
-# Environment
-#
-.env*
-*.env
-.chrome.pem
-.web-ext.config.json
-
 # Other
 #
 .DS_Store
-components.d.ts
 *.log
 TODO.md

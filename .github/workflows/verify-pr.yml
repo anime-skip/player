@@ -18,6 +18,8 @@ jobs:
           scope: '@anime-skip'
 
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # Fetch everything so we can filter since a revision
 
       - name: Cache .pnpm-store
         uses: actions/cache@v1
@@ -29,13 +31,22 @@ jobs:
         run: curl -f https://get.pnpm.io/v6.14.js | node - add --global pnpm@6
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
         env:
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.ANIME_SKIP_PACKAGES_TOKEN }}
 
-      - name: Publish Dry Run
-        run: pnpm package:dry
+      - name: Echo
+        run: |
+          echo "GITHUB_SHA $GITHUB_SHA"
+          echo "GITHUB_REF $GITHUB_REF"
+          echo "GITHUB_REF_NAME $GITHUB_REF_NAME"
+          echo "GITHUB_REF_PROTECTED $GITHUB_REF_PROTECTED"
+          echo "GITHUB_HEAD_REF $GITHUB_HEAD_REF"
+          echo "GITHUB_BASE_REF $GITHUB_BASE_REF"
+
+      - name: Validate Packages
+        run: pnpm recursive run validate --filter [origin/main]
         env:
           CI: true
           PACKAGE_MODE: prod
@@ -47,12 +58,3 @@ jobs:
           CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
           CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
           CHROME_APP_ID: ${{ secrets.CHROME_APP_ID }}
-
-      - name: Upload Zips
-        uses: actions/upload-artifact@v2
-        with:
-          name: Dry Run
-          path: |
-            artifacts/firefox-beta.zip
-            artifacts/chrome-beta.zip
-            artifacts/sources.zip
