@@ -53,6 +53,9 @@ export default function setupGlobals(
     );
   };
 
+  // When the page fails to load, body is null
+  if (document.body == null) return;
+
   // Prepare the body so the old player can be hidden
   document.body.classList.add('hide-for-anime-skip', service);
 
