@@ -1,8 +1,10 @@
+import { backOff } from 'exponential-backoff';
 import browser from 'webextension-polyfill';
 import GeneralUtils from '~/common/utils/GeneralUtils';
 import { centerFitVideoBounds, fallbackBound } from './drawing';
 import { debug, log, warn } from './log';
 import Messenger from './Messenger';
+import { SECOND } from './time';
 
 export default function setupGlobals(
   service: Service,
@@ -39,9 +41,16 @@ export default function setupGlobals(
 
   window.inferEpisodeInfo = async (): Promise<InferredEpisodeInfo> => {
     debug(`${service}.inferEpisodeInfo`);
-    return await browser.runtime.sendMessage({
-      type: '@anime-skip/inferEpisodeInfo',
-    });
+    return await backOff(
+      async () => {
+        const res = await browser.runtime.sendMessage({
+          type: '@anime-skip/inferEpisodeInfo',
+        });
+        if (res == null) throw Error('Undefined response');
+        return res;
+      },
+      { timeMultiple: 1, startingDelay: SECOND, numOfAttempts: 20 }
+    );
   };
 
   // Prepare the body so the old player can be hidden
