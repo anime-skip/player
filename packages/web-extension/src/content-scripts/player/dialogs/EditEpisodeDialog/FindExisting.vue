@@ -39,7 +39,7 @@
         ref="episodeInputRef"
         class="as-mx-4"
         placeholder="Enter the episode name..."
-        v-model:value="episode"
+        v-model:value="episodeItem"
         :options="episodeOptions"
         @search="searchEpisodes"
       />
@@ -94,27 +94,13 @@ const api = useApiClient();
 // Autocomplete
 
 const episodeInputRef = ref<TextInputRef>();
-const {
-  show: selectedShow,
-  showItem,
-  isExistingShow,
-  showOptions,
-  searchShows,
-  onSelectShow,
-} = useShowAutocomplete(props.prefill.show, episodeInputRef, api);
-const { episodeOptions, searchEpisodes } = useEpisodeAutocomplete(selectedShow, api);
+const { show, showItem, isExistingShow, showOptions, searchShows, onSelectShow } =
+  useShowAutocomplete(props.prefill.show, episodeInputRef);
+const { episodeOptions, searchEpisodes, episodeItem } = useEpisodeAutocomplete(
+  props.prefill.episode,
+  show
+);
 const hideDialog = useHideDialog();
-
-const episode = ref<AutocompleteItem<Api.EpisodeSearchResult>>(
-  props.prefill.episode ?? {
-    title: '',
-  }
-);
-const show = ref<AutocompleteItem<Api.ShowSearchResult>>(
-  props.prefill.show ?? {
-    title: '',
-  }
-);
 
 // Suggestions
 
@@ -168,14 +154,14 @@ const suggestionsHeader = computed<string>(() => {
 
 const shouldCreateNew = computed<boolean>(() => {
   if (!isExistingShow.value) {
-    return show.value.title !== '' && show.value.data == null;
+    return showItem.value.title !== '' && showItem.value.data == null;
   }
 
-  return episode.value.title !== '' && episode.value.data == null;
+  return episodeItem.value.title !== '' && episodeItem.value.data == null;
 });
 
 const isSaveDisabled = computed<boolean>(() => {
-  return show.value.data == null || episode.value.data == null;
+  return showItem.value.data == null || episodeItem.value.data == null;
 });
 
 const hasSuggestions = computed<boolean>(() => {
@@ -192,8 +178,8 @@ function onClickSuggestion(suggestion: Api.ThirdPartyEpisode): void {
 
 function onClickCreateNew(): void {
   const prefill: CreateEpisodePrefill = {
-    show: show.value,
-    episode: episode.value,
+    show: showItem.value,
+    episode: episodeItem.value,
     season: props.prefill.season,
     number: props.prefill.number,
     absoluteNumber: props.prefill.absoluteNumber,
@@ -202,8 +188,8 @@ function onClickCreateNew(): void {
 }
 
 function onClickSave(): void {
-  const s = show.value.data;
-  const e = episode.value.data;
+  const s = showItem.value.data;
+  const e = episodeItem.value.data;
   if (s == null || e == null) {
     error('Failed to save, show or episode were not selected', {
       show: s,

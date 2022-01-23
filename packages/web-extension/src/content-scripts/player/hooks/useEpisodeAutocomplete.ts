@@ -4,10 +4,12 @@ import Mappers from '~/common/utils/mappers';
 import * as Api from '~api';
 import { EPISODE_SEARCH_RESULT_DATA } from '~api';
 
-export function useEpisodeAutocomplete(show: Ref<Api.Show | undefined>, api = useApiClient()) {
-  const episodeItem = ref<AutocompleteItem<Api.EpisodeSearchResult>>({
-    title: '',
-  });
+export function useEpisodeAutocomplete(
+  defaultEpisodeItem: AutocompleteItem<Api.EpisodeSearchResult>,
+  show: Ref<Api.Show | undefined>
+) {
+  const api = useApiClient();
+  const episodeItem = ref<AutocompleteItem<Api.EpisodeSearchResult>>(defaultEpisodeItem);
   const episode = computed(() => episodeItem.value.data);
   const isExistingEpisode = computed(() => episode.value != null);
 
