@@ -6,10 +6,10 @@ import * as Api from '~api';
 
 export function useShowAutocomplete(
   defaultShowItem: AutocompleteItem<Api.ShowSearchResult>,
-  episodeInputRef: Ref<TextInputRef | undefined>,
-  api = useApiClient()
+  episodeInputRef: Ref<TextInputRef | undefined>
 ) {
-  const showItem = ref<AutocompleteItem<Api.ShowSearchResult>>(defaultShowItem);
+  const api = useApiClient();
+  const showItem = ref(defaultShowItem);
   const show = computed(() => showItem.value.data);
   const isExistingShow = computed(() => show.value != null);
 
