@@ -7,7 +7,6 @@ import { debug, loadedLog, log, warn } from '~/common/utils/log';
 import Container from './Container.vue';
 import './themes.scss';
 
-// TODO git mv to player-ui
 export function loadPlayerUi() {
   loadedLog('content-scripts/player-ui/index.ts');
 
