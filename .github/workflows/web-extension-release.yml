@@ -52,21 +52,9 @@ jobs:
         uses: TriPSs/conventional-changelog-action@v3
         with:
           github-token: ${{ secrets.github_token }}
-          git-message: 'chore(release): Web Extension {version}'
           output-file: 'false'
           tag-prefix: 'web-extension-v'
           version-file: './packages/web-extension/package.json'
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        if: ${{ github.event.inputs.dryRun != 'true' && steps.changelog.outputs.skipped == 'false' }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.github_token }}
-        with:
-          tag_name: ${{ steps.changelog.outputs.tag }}
-          release_name: Web Extension ${{ steps.changelog.outputs.tag }}
-          body: ${{ steps.changelog.outputs.clean_changelog }}
 
       - name: Reset version bump after no release
         if: ${{ github.event.inputs.dryRun != 'true' && steps.changelog.outputs.skipped == 'true' }}
@@ -92,6 +80,17 @@ jobs:
           SKIP_SOURCES: ${{ github.event.inputs.skipSources }}
           SKIP_CHECKS: ${{ github.event.inputs.skipChecks }}
           DRY_RUN: ${{ github.event.inputs.dryRun }}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        if: ${{ github.event.inputs.dryRun != 'true' && steps.changelog.outputs.skipped == 'false' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.github_token }}
+        with:
+          tag_name: ${{ steps.changelog.outputs.tag }}
+          release_name: ${{ steps.changelog.outputs.tag }}
+          body: ${{ steps.changelog.outputs.clean_changelog }}
 
       - name: Upload sources.zip
         if: ${{ steps.changelog.outputs.skipped == 'false' }}
