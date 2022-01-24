@@ -52,7 +52,10 @@ jobs:
         uses: TriPSs/conventional-changelog-action@v3
         with:
           github-token: ${{ secrets.github_token }}
+          git-message: 'chore(release): Web Extension {version}'
           output-file: 'false'
+          tag-prefix: 'web-extension-v'
+          version-file: './packages/web-extension/package.json'
 
       - name: Create Release
         id: create_release
