@@ -23,6 +23,9 @@ const client = createUsageStatsClient({
   },
   send: reportModes.includes(EXTENSION_MODE),
   source: 'browser',
+  canSendMetrics() {
+    return TARGET_BROWSER !== 'firefox';
+  },
 });
 
 export default {
