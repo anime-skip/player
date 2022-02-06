@@ -1,7 +1,9 @@
+/// <reference path="../../../../@types/utils.d.ts" />
+
 import { GqlPreferences } from '@anime-skip/api-client';
-import * as Api from '~api';
-import { ColorTheme } from '~api';
-import { useApiClient } from '../hooks/useApiClient';
+import { computed } from 'vue';
+import * as Api from '../api';
+import { useApiClient } from '../composition/useApiClient';
 import { createWebExtProvideInject } from '../utils/createWebExtProvideInject';
 import { warn } from '../utils/log';
 
@@ -10,7 +12,7 @@ type RemotePreferences = Omit<
   'id' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'userId' | 'user'
 >;
 
-interface LocalPreferences {
+export interface LocalPreferences {
   playbackRate: number;
   createTimestampSnapBack: boolean;
 }
@@ -30,7 +32,7 @@ const DEFAULT_GENERAL_PREFERENCES: GeneralPreferences = {
   enableAutoSkip: false,
   hideTimelineWhenMinimized: false,
   minimizeToolbarWhenEditing: false,
-  colorTheme: ColorTheme.ANIME_SKIP_BLUE,
+  colorTheme: Api.ColorTheme.ANIME_SKIP_BLUE,
   playbackRate: 1,
   createTimestampSnapBack: true,
   skipBranding: false,

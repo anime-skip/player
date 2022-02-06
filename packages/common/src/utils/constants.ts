@@ -1,8 +1,8 @@
-import type * as Api from '~api';
-import { TimestampSource } from '~api';
+import type * as Api from '../api';
 import { KeyboardShortcutActionToKeyBindingMap } from '../state/useKeyboardShortcutPrefs';
 import { DAY, HOUR } from './time';
 
+// TODO: Move to extension
 export const persistedKeys = [
   'token' as const,
   'tokenExpiresAt' as const,
@@ -50,6 +50,12 @@ export const ACCEPTED_KEYS: { [keyCode: number]: string } = {
   219: '[',
   221: ']',
 };
+
+export interface PlaybackRate {
+  value: number;
+  display: string;
+  hideWhenSmall?: boolean;
+}
 
 export const PLAYBACK_SPEEDS: PlaybackRate[] = [
   {
@@ -188,7 +194,7 @@ export const TIMESTAMP_TYPE_NOT_SELECTED = '';
  * `null` return type means nothing should be displayed
  * `undefined` return type means the source was unknown, and "Unknown Source" should be displayed
  */
-export const TIMESTAMP_SOURCES: { [source in TimestampSource]: string | undefined | null } = {
+export const TIMESTAMP_SOURCES: { [source in Api.TimestampSource]: string | undefined | null } = {
   ANIME_SKIP: null,
   BETTER_VRV: 'BetterVRV',
 };
@@ -269,25 +275,6 @@ export const SKIPPABLE_PREFERENCES: SkippablePreference[] = [
     help: 'A short preview of what is to come in the next episode',
   },
 ];
-
-const allTimestampSources = Object.values(TimestampSource);
-
-/**
- * Some services don't mess well with each other, so the integrations have been disabled
- */
-export const SUPPORTED_THIRD_PARTY_SERVICES: Record<Service, Array<TimestampSource>> = {
-  'test-service': allTimestampSources,
-  vrv: allTimestampSources,
-  funimation: allTimestampSources.filter(
-    // Don't support BETTER_VRV because show names and durations are completely different
-    source => source !== 'BETTER_VRV'
-  ),
-  'funimation-2021-09-26': allTimestampSources.filter(
-    // Don't support BETTER_VRV because show names and durations are completely different
-    source => source !== 'BETTER_VRV'
-  ),
-  crunchyroll: allTimestampSources,
-};
 
 export const PLAYER_ACTIVITY_TIMEOUT = 3000;
 

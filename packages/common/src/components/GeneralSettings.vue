@@ -1,7 +1,7 @@
 <template>
   <div class="as-space-y-4">
     <h6>General Settings</h6>
-    <login-warning v-if="!isLoggedIn && !hideLoginButton" before="all settings are available" />
+    <log-in-warning v-if="!isLoggedIn && !hideLoginButton" before="all settings are available" />
     <div
       class="as-grid as-gap-3 as-items-start"
       :class="{
@@ -24,6 +24,9 @@
 <script lang="ts" setup>
 import { useIsLoggedIn } from '../state/useAuth';
 import { useGeneralPreferences, useToggleBooleanPref } from '../state/useGeneralPreferences';
+import { RaisedCheckbox } from '@anime-skip/ui';
+import LogInWarning from './LogInWarning.vue';
+import PlaybackRatePicker from './PlaybackRatePicker.vue';
 
 defineProps<{
   small?: boolean;

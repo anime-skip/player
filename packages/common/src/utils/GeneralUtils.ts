@@ -1,4 +1,4 @@
-import * as Api from '~api';
+import * as Api from '../api';
 import { warn } from './log';
 
 // TODO: Refactor all the functions out of "GeneralUtils" and into targeted files
@@ -82,29 +82,28 @@ export default class GeneralUtils {
     }
   }
 
-  public static enterFullscreen(): void {
-    const elem = document.querySelector(window.getRootQuery());
-    if (!elem) {
+  public static enterFullscreen(rootElement?: HTMLElement): void {
+    if (!rootElement) {
       warn('Could not find player to enter fullscreen');
       return;
     }
-    if (elem.requestFullscreen) {
-      elem.requestFullscreen();
-      // @ts-expect-error: difficult typing
-    } else if (elem.mozRequestFullScreen) {
+    if (rootElement.requestFullscreen) {
+      rootElement.requestFullscreen();
+      // @ts-expect-error: browser specific
+    } else if (rootElement.mozRequestFullScreen) {
       /* Firefox */
-      // @ts-expect-error: difficult typing
-      elem.mozRequestFullScreen();
-      // @ts-expect-error: difficult typing
-    } else if (elem.webkitRequestFullscreen) {
+      // @ts-expect-error: browser specific
+      rootElement.mozRequestFullScreen();
+      // @ts-expect-error: browser specific
+    } else if (rootElement.webkitRequestFullscreen) {
       /* Chrome, Safari and Opera */
-      // @ts-expect-error: difficult typing
-      elem.webkitRequestFullscreen();
-      // @ts-expect-error: difficult typing
-    } else if (elem.msRequestFullscreen) {
+      // @ts-expect-error: browser specific
+      rootElement.webkitRequestFullscreen();
+      // @ts-expect-error: browser specific
+    } else if (rootElement.msRequestFullscreen) {
       /* IE/Edge */
-      // @ts-expect-error: difficult typing
-      elem.msRequestFullscreen();
+      // @ts-expect-error: browser specific
+      rootElement.msRequestFullscreen();
     }
   }
 
@@ -138,11 +137,11 @@ export default class GeneralUtils {
   /**
    * Returns a promise containing the video's duration
    */
-  public static async waitForVideoLoad(): Promise<number> {
+  public static async waitForVideoLoad(getVideo?: () => HTMLVideoElement): Promise<number> {
     if (!this._videoLoadPromise) {
       this._videoLoadPromise = new Promise(res => {
         const timeout = window.setInterval(function () {
-          const video = window.getVideo?.();
+          const video = getVideo?.();
           if (video && video.readyState > 0) {
             res(video.duration);
             clearInterval(timeout);

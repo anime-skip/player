@@ -7,22 +7,23 @@
 </template>
 
 <script lang="ts" setup>
-import Messenger from '~/common/utils/Messenger';
-import { useShowLoginOverlay } from '~/content-scripts/player/state/useDialogState';
+// TODO: Uncomment everything
+// import Messenger from '../utils/Messenger';
+// import { useShowLoginOverlay } from '../composition/useDialogState';
 
 defineProps<{ before?: string }>();
 
-const showLoginOverlay = useShowLoginOverlay();
+const showLoginOverlay = () => {}; // useShowLoginOverlay();
 
 const onClickLogin = () => {
   const isInInjectedPlayer = !window.location.protocol.includes('extension');
   if (isInInjectedPlayer) {
     showLoginOverlay();
   } else {
-    new Messenger<RuntimeMessageTypes>('General Settings').send(
-      '@anime-skip/open-login',
-      undefined
-    );
+    // new Messenger<RuntimeMessageTypes>('General Settings').send(
+    //   '@anime-skip/open-login',
+    //   undefined
+    // );
   }
 };
 </script>

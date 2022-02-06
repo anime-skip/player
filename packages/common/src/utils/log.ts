@@ -1,3 +1,5 @@
+/// <reference path="../../../../@types/types.d.ts" />
+
 /**
  * Custom logger so that extension logs are easier to identify and differentiate from regular
  * webpage logs
@@ -8,8 +10,8 @@
 
 type LogFn = typeof console.log;
 
-const SHOULD_LOG =
-  EXTENSION_MODE === 'dev' || EXTENSION_MODE === 'test' || EXTENSION_MODE === 'staged';
+export const SHOULD_LOG =
+  __BUILD_STAGE__ === 'dev' || __BUILD_STAGE__ === 'local' || __BUILD_STAGE__ === 'staged';
 const LABEL = '⌜Anime Skip⌟';
 const GREY_LABEL_STYLE =
   'color: black; background-color: #d8d8d8; padding: 2px 4px; border-radius: 2px; font-weight: bold';

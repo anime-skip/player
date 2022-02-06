@@ -23,8 +23,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
-import { SKIPPABLE_PREFERENCES } from '~/common/utils/constants';
+import { SKIPPABLE_PREFERENCES } from '../utils';
 import { useIsLoggedIn } from '../state/useAuth';
 import { useGeneralPreferences, useToggleBooleanPref } from '../state/useGeneralPreferences';
 

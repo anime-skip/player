@@ -4,10 +4,10 @@
       class="as-flex as-items-stretch as-justify-items-stretch as-h-10 as-w-full as-divide-x-2 as-divide-background as-rounded-sm as-bg-control"
     >
       <div class="as-p-2 as-flex-shrink-0">
-        <Icon path="M4 18L12.5 12L4 6V18ZM13 6V18L21.5 12L13 6Z" />
+        <icon path="M4 18L12.5 12L4 6V18ZM13 6V18L21.5 12L13 6Z" />
       </div>
       <div v-for="speed in playbackSpeeds" :key="speed.value" class="as-flex-1 as-min-w-10">
-        <RaisedContainer
+        <raised-container
           class="as-cursor-pointer as-text-on-surface as-box-border as-w-full as-h-full"
           :down="!isRateSelected(speed.value)"
           :dark="!isRateSelected(speed.value)"
@@ -18,10 +18,10 @@
             :class="{ 'as-text-on-primary': isRateSelected(speed.value) }"
             >{{ speed.display }}</span
           >
-        </RaisedContainer>
+        </raised-container>
       </div>
       <div class="as-flex-grow as-flex-shrink-0 as-w-10 as-box-border">
-        <RaisedContainer
+        <raised-container
           :down="!customRate"
           :dark="!customRate"
           :error="isCustomError"
@@ -43,7 +43,7 @@
             @input="onChangeCustom"
             @blur="onBlurCustom()"
           />
-        </RaisedContainer>
+        </raised-container>
       </div>
     </div>
     <div v-if="isCustomError" class="as-body-2 as-text-error as-mt-2">Custom speeds: 0.5 - 4</div>
@@ -51,11 +51,12 @@
 </template>
 
 <script lang="ts" setup>
-import { PLAYBACK_SPEEDS } from '~/common/utils/constants';
+import { PlaybackRate, PLAYBACK_SPEEDS } from '../utils';
 import { useGeneralPreferences, useUpdateLocalPref } from '../state/useGeneralPreferences';
+import { RaisedContainer, Icon } from '@anime-skip/ui';
 
 const props = defineProps<{
-  showLess: boolean;
+  showLess?: boolean;
 }>();
 
 onMounted(() => {

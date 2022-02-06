@@ -1,4 +1,5 @@
-import { useWebExtensionStorage } from '../hooks/useWebExtensionStorage';
+import { computed } from 'vue';
+import { useWebExtensionStorage } from '../composition';
 import {
   DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS,
   DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS,

@@ -6,6 +6,13 @@ node_modules
 #
 .idea/
 
+# Vite
+#
+.vite-ssg-dist
+.vite-ssg-temp
+dist
+dist-ssr
+
 # Other
 #
 .DS_Store

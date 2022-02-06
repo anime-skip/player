@@ -1,27 +1,28 @@
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { createCustomAnimeSkipClient } from '~/common/utils/CustomApiClient';
+/// <reference path="../../../../@types/types.d.ts" />
+
+import { useTokenRefresher } from '.';
 import { useClearTokens } from '../state/useAuth';
 import { useResetPreferences } from '../state/useGeneralPreferences';
+import { createCustomAnimeSkipClient, CustomApiClient } from '../utils/CustomApiClient';
 import GeneralUtils from '../utils/GeneralUtils';
-import { groupCollapsed, warn } from '../utils/log';
+import { groupCollapsed, SHOULD_LOG, warn } from '../utils/log';
 import { LogoutError } from '../utils/LogoutError';
 import UsageStats from '../utils/UsageStats';
-import useTokenRefresher from './useTokenRefresher';
 
-const baseUrls: Record<ExtensionMode, string> = {
+const baseUrls: Record<BuildStage, string> = {
   prod: 'https://api.anime-skip.com/',
   beta: 'https://api.anime-skip.com/',
-  test: 'http://test.api.anime-skip.com/',
   staged: 'https://staged.api.anime-skip.com/',
-  dev: 'http://localhost:8081/',
+  dev: 'http://test.api.anime-skip.com/',
+  local: 'http://localhost:8081/',
 };
 const clientId = 'OB3AfF3fZg9XlZhxtLvhwLhDcevslhnr';
-const modesToLog: ExtensionMode[] = ['dev', 'staged'];
 
-const client = createCustomAnimeSkipClient(baseUrls[EXTENSION_MODE], clientId);
-if (modesToLog.includes(EXTENSION_MODE)) {
+const client = createCustomAnimeSkipClient(baseUrls[__BUILD_STAGE__], clientId);
+if (SHOULD_LOG) {
   client.axios.interceptors.response.use(response => {
     // disabled since axios@0.24
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -67,7 +68,7 @@ if (modesToLog.includes(EXTENSION_MODE)) {
   });
 }
 
-export function useApiClient() {
+export function useApiClient(): CustomApiClient {
   const clearTokens = useClearTokens();
   const resetPreferences = useResetPreferences();
 

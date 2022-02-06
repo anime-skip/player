@@ -1,5 +1,5 @@
 import md5 from 'md5';
-import * as Api from '~api';
+import * as Api from '../api';
 import { useUpdateAuth } from '../state/useAuth';
 import { useUpdateGeneralPreferences } from '../state/useGeneralPreferences';
 import UsageStats from '../utils/UsageStats';

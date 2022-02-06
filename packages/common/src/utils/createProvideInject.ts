@@ -1,3 +1,5 @@
+import { inject, provide, reactive, readonly } from 'vue';
+
 // eslint-disable-next-line @typescript-eslint/ban-types
 export function createProvideInject<T extends object>(label: string, defaultValue: T) {
   const valueKey = label + '-value';

@@ -1,6 +1,6 @@
 <template>
   <div class="as-relative as-flex as-flex-col">
-    <TextInput
+    <text-input
       ref="input"
       class="as-relative"
       :label="label"
@@ -19,7 +19,7 @@
     />
     <div v-if="shouldShowSuggestions" class="as-h-0 as-overflow-y-visible as-z-10">
       <!-- @mousedown.prevent: prevent input from losing focus when clicking on an item -->
-      <Card
+      <card
         class="as-max-h-72 as-mt-1 as-rounded as-divide-y as-divide-on-surface as-divide-opacity-divider as-overflow-auto"
         :elevation="4"
         @mousedown.prevent
@@ -57,15 +57,20 @@
         >
           {{ noOptionsMessage }}
         </p>
-      </Card>
+      </card>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import { Card, TextInput } from '@anime-skip/ui';
 import { computed, defineComponent, PropType, ref, watch } from 'vue';
 
 export default defineComponent({
+  components: {
+    Card,
+    TextInput,
+  },
   props: {
     value: { type: Object as PropType<AutocompleteItem>, required: true },
     label: { type: String, default: undefined },

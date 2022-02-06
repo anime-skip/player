@@ -1,6 +1,6 @@
 import browser from 'webextension-polyfill';
-import { DAYS, SECONDS, today } from '~/common/utils/time';
-import { useWebExtensionStorageValue } from '../hooks/useWebExtensionStorage';
+import { useWebExtensionStorageValue } from '../composition';
+import { DAYS, SECONDS, today } from '../utils';
 import { debug } from '../utils/log';
 import { sleep } from '../utils/time';
 

@@ -1,4 +1,4 @@
-export default function useRadioIcon() {
+export function useRadioIcon() {
   return {
     getRadioIcon(isSelected: boolean): string {
       return isSelected

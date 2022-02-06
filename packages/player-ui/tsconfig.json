@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "types": ["vite/client", "jest", "vue-global-api"],
+    "paths": {
+      "~/*": ["./src/*"],
+      "~api": ["./src/common/api"]
+    }
+  }
+}

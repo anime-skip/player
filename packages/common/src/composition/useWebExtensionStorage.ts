@@ -1,5 +1,5 @@
 import isEqual from 'lodash.isequal';
-import { Ref } from 'vue';
+import { onMounted, onUnmounted, reactive, Ref, ref } from 'vue';
 import browser, { Storage } from 'webextension-polyfill';
 
 type PartialNulls<T> = {

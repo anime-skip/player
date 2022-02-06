@@ -1,4 +1,5 @@
 import isEqual from 'lodash.isequal';
+import { onMounted, onUnmounted } from 'vue';
 import browser, { Storage } from 'webextension-polyfill';
 import { createProvideInject } from './createProvideInject';
 

@@ -1,0 +1,26 @@
+{
+  "name": "common",
+  "private": true,
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.umd.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "vite build",
+    "prepare": "pnpm build"
+  },
+  "dependencies": {
+    "@anime-skip/ui": "^3.1.1",
+    "vue": "^3.2.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^1.4.0",
+    "rollup-plugin-typescript2": "^0.31.2",
+    "typescript": "^4.3.5",
+    "vite": "^2.6.14",
+    "vue-global-api": "^0.2.4",
+    "vite-plugin-dts": "^0.9.9"
+  }
+}

@@ -3,7 +3,7 @@
 import type createAnimeSkipClient from '@anime-skip/api-client';
 import { Mutex } from 'async-mutex';
 import { AxiosResponse } from 'axios';
-import * as Api from '~api';
+import * as Api from '../api';
 import { getAuthAsync, updateAuthAsync } from '../state/useAuth';
 import { log, warn } from '../utils/log';
 import { LogoutError } from '../utils/LogoutError';
@@ -16,7 +16,7 @@ function isResponseExpiredToken(res: AxiosResponse<any>): boolean {
   return data?.errors?.find(({ message }: any) => message === 'Invalid Token');
 }
 
-export default function useTokenRefresher(client: ReturnType<typeof createAnimeSkipClient>): void {
+export function useTokenRefresher(client: ReturnType<typeof createAnimeSkipClient>): void {
   client.axios.interceptors.request.use(async config => {
     if (!config.headers) config.headers = {};
     if (config.headers['Authorization'] == null) {
@@ -29,7 +29,7 @@ export default function useTokenRefresher(client: ReturnType<typeof createAnimeS
   });
 
   client.axios.interceptors.response.use(async res => {
-    // @ts-expect-error: Different versions of axios installed
+    // @ts-ignore: Different versions of axios installed
     if (!isResponseExpiredToken(res)) return res;
 
     log('Found invalid token, refreshing...');
@@ -52,7 +52,11 @@ export default function useTokenRefresher(client: ReturnType<typeof createAnimeS
       log('Refreshed token!');
     } catch (err) {
       warn('Could not refresh token:', err);
-      throw new LogoutError(auth.token, auth.refreshToken, err.message ?? JSON.stringify(err));
+      throw new LogoutError(
+        auth.token,
+        auth.refreshToken,
+        (err as any).message ?? JSON.stringify(err)
+      );
     } finally {
       release();
     }
