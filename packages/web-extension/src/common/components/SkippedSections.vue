@@ -14,7 +14,7 @@
         v-for="preference in SKIPPABLE_PREFERENCES"
         :key="preference.key"
         :checked="!preferences[preference.key]"
-        :disabled="autoSkipDisabled"
+        :disabled="!isLoggedIn"
         :label="preference.title"
         @click="toggleBooleanPref(preference.key)"
       />

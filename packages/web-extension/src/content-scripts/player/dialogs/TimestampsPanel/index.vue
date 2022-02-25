@@ -5,6 +5,7 @@
     gravity-x="flex-end"
     gravity-y="center"
     @show="onShow"
+    @hide="emit('update:isOpen', false)"
   >
     <EditTimestamp v-if="isShowingEditTimestamp" :initial-tab="initialTab" />
     <EditTemplate v-else-if="isShowingTemplate" />
@@ -16,6 +17,10 @@
 import { useEditingState } from '../../state/useEditingState';
 import { useIsEditingTemplate } from './useTimestampPanelState';
 
+const emit = defineEmits<{
+  (event: 'update:isOpen', isOpen: boolean): void;
+}>();
+
 const editingState = useEditingState();
 const activeTimestamp = computed(() => editingState.activeTimestamp);
 const isShowingEditTimestamp = computed(() => activeTimestamp.value != null);
@@ -24,6 +29,7 @@ const isShowingTemplate = useIsEditingTemplate();
 const initialTab = ref<'details' | 'edit'>('details');
 function onShow(): void {
   initialTab.value = activeTimestamp.value == null ? 'details' : 'edit';
+  emit('update:isOpen', true);
 }
 </script>
 

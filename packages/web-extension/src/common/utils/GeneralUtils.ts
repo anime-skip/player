@@ -19,37 +19,43 @@ export default class GeneralUtils {
   public static nextTimestamp<T extends Api.AmbiguousTimestamp>(
     currentTime: number,
     timestamps: T[],
-    preferences: Api.Preferences | undefined
+    preferences: Api.Preferences | undefined,
+    ignoreAutoSkipPreference?: boolean | undefined
   ): T | undefined {
     if (!preferences) {
       return timestamps.find(timestamp => timestamp.at > currentTime);
     }
     return timestamps.find(
-      timestamp => timestamp.at > currentTime && !GeneralUtils.isSkipped(timestamp, preferences)
+      timestamp =>
+        timestamp.at > currentTime &&
+        !GeneralUtils.isSkipped(timestamp, preferences, ignoreAutoSkipPreference)
     );
   }
 
   public static previousTimestamp<T extends Api.AmbiguousTimestamp>(
     time: number,
     timestamps: T[],
-    preferences: Api.Preferences | undefined
+    preferences: Api.Preferences | undefined,
+    offset = 0.1
   ): T | undefined {
     if (!preferences) {
-      return timestamps.filter(timestamp => timestamp.at < time - 0.1).pop();
+      return timestamps.filter(timestamp => timestamp.at < time - offset).pop();
     }
     return timestamps
       .filter(
-        timestamp => !GeneralUtils.isSkipped(timestamp, preferences) && timestamp.at < time - 0.1
+        timestamp => !GeneralUtils.isSkipped(timestamp, preferences) && timestamp.at < time - offset
       )
       .pop();
   }
 
   public static isSkipped(
     { typeId: _typeId }: Api.AmbiguousTimestamp,
-    preferences: Api.Preferences | undefined
+    preferences: Api.Preferences | undefined,
+    ignoreAutoSkipPreference = false
   ): boolean {
     if (!preferences) return false;
-    if (!preferences.enableAutoSkip) return false;
+    if (!ignoreAutoSkipPreference && !preferences.enableAutoSkip) return false;
+
     switch (_typeId) {
       case '9edc0037-fa4e-47a7-a29a-d9c43368daa8':
         return preferences.skipCanon;

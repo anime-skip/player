@@ -29,10 +29,21 @@
       <notification-center class="as-right-content" />
       <controls-toolbar class="as-bottom-content" />
 
+      <div
+        :class="{
+          'as-absolute as-bottom-20 as-z-3': true,
+          'as-right-80': isTimestampsPanelOpen,
+          'as-right-108': isPreferencesDialogOpen,
+          'as-right-12': !(isTimestampsPanelOpen || isPreferencesDialogOpen),
+        }"
+      >
+        <SkipButton />
+      </div>
+
       <!-- Dialogs -->
       <ScreenshotOverlay />
-      <TimestampsPanel />
-      <PreferencesDialog />
+      <TimestampsPanel v-model:isOpen="isTimestampsPanelOpen" />
+      <PreferencesDialog v-model:isOpen="isPreferencesDialogOpen" />
       <EditEpisodeDialog />
       <LoginDialog />
     </div>
@@ -68,6 +79,9 @@ import { useVideoState } from '../state/useVideoState';
 onMounted(() => {
   void UsageStats.saveEvent('player_injected');
 });
+
+const isTimestampsPanelOpen = ref(false);
+const isPreferencesDialogOpen = ref(false);
 
 const resetHasSkippedFromZero = useResetSkippedFromZero();
 const resetInitialBuffer = useResetInitialBuffer();
@@ -185,6 +199,15 @@ const { themeClass } = useTheme();
   .as-bottom-content {
     z-index: 1;
     grid-area: toolbar;
+  }
+
+  .as-right-108 {
+    right: 27em;
+  }
+
+  .as-z-3 {
+    // Over the preferences dialog (z = 2)
+    z-index: 3;
   }
 }
 </style>
