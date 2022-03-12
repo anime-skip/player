@@ -121,7 +121,7 @@ watch(currentTime, (newTime, oldTime) => {
   if (!duration.value) return;
 
   // Do nothing
-  const currentTimestamp = Utils.previousTimestamp(oldTime, activeTimestamps.value, undefined);
+  const currentTimestamp = Utils.previousTimestampInVideo(oldTime, activeTimestamps.value);
   const insideSkippedSection =
     currentTimestamp != null && Utils.isSkipped(currentTimestamp, preferences.value);
   if (insideSkippedSection) {
@@ -129,14 +129,14 @@ watch(currentTime, (newTime, oldTime) => {
   }
 
   // Get the next timestamp AFTER the oldTime, regardless of if it's skipped
-  let oldNext = Utils.nextTimestamp(oldTime, activeTimestamps.value, undefined);
+  let oldNext = Utils.nextTimestampInVideo(oldTime, activeTimestamps.value);
 
   // Do nothing
   const timeDiff = Math.abs(oldTime - newTime);
-  const hasNoMoreTimestamsps = oldNext == null;
+  const hasNoMoreTimestamps = oldNext == null;
   const isSeeking = timeDiff > 1 * videoState.playbackRate; // Multiple the base number, 1s, by the speed so that high playback rates don't "skip" over timestamps
   const isAtEnd = newTime >= duration.value;
-  if (hasNoMoreTimestamsps || isSeeking || isAtEnd || isEditing.value) {
+  if (hasNoMoreTimestamps || isSeeking || isAtEnd || isEditing.value) {
     return;
   }
   oldNext = oldNext as Api.AmbiguousTimestamp;

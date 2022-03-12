@@ -159,7 +159,7 @@ function editTimestampOnJump(timestamp: Api.AmbiguousTimestamp): void {
 }
 
 function gotoNextTimestamp(): void {
-  const nextTimestamp = Utils.nextTimestamp(currentTime.value + 0.1, timestamps.value, undefined);
+  const nextTimestamp = Utils.nextTimestampInVideo(currentTime.value + 0.1, timestamps.value);
   if (nextTimestamp) {
     setCurrentTime(nextTimestamp.at);
     if (isEditing.value) editTimestampOnJump(nextTimestamp);
@@ -178,10 +178,9 @@ function gotoNextTimestamp(): void {
 }
 
 function gotoPreviousTimestamp(): void {
-  const previousTimestamp = Utils.previousTimestamp(
+  const previousTimestamp = Utils.previousTimestampInVideo(
     currentTime.value - LOOKUP_PREV_TIMESTAMP_OFFSET,
-    timestamps.value,
-    undefined
+    timestamps.value
   );
   if (previousTimestamp) {
     setCurrentTime(previousTimestamp.at);

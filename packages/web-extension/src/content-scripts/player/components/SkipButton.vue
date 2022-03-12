@@ -1,6 +1,6 @@
 <template>
   <RaisedButton v-if="showSkipButton" dark @click.stop="skip"
-    >Skip {{ beforeNextTimeStampTitle }}</RaisedButton
+    >Skip {{ currentTimestampTitle }}</RaisedButton
   >
 </template>
 
@@ -11,6 +11,8 @@ import { PLAYER_ACTIVITY_TIMEOUT, TIMESTAMP_TYPES } from '~/common/utils/constan
 import Utils from '~/common/utils/GeneralUtils';
 import { useDisplayedTimestamps } from '../hooks/useDisplayedTimestamps';
 import { useDuration, useVideoController, useVideoState } from '../state/useVideoState';
+
+const SKIP_BUTTON_OFFSET = 0.1;
 
 const { setCurrentTime, setActive, setInactive } = useVideoController();
 const videoState = useVideoState();
@@ -24,24 +26,20 @@ const isVideoOver = computed(() => Math.abs(duration.value - currentTime.value) 
 
 // Timestamps
 
-const currentTimestamp = computed(() =>
-  Utils.previousTimestamp(currentTime.value, activeTimestamps.value, undefined, -0.1)
-);
-const nextTimestamp = computed(() =>
-  Utils.nextTimestamp(currentTime.value, activeTimestamps.value, preferences.value, true)
-);
-const beforeNextTimeStampTitle = computed(() => {
-  if (!nextTimestamp.value) return;
-  const beforeNextTimeStamp = Utils.previousTimestamp(
-    nextTimestamp.value?.at,
-    activeTimestamps.value,
-    undefined
-  );
-
-  return TIMESTAMP_TYPES.find(ttype => ttype.id === beforeNextTimeStamp?.typeId)?.name;
+const currentTimestamp = computed(() => {
+  const time = currentTime.value + SKIP_BUTTON_OFFSET;
+  return Utils.previousTimestampInVideo(time, activeTimestamps.value);
 });
-const currentTimeStampIsSkipped = computed(() =>
-  !currentTimestamp.value ? false : Utils.isSkipped(currentTimestamp.value, preferences.value, true)
+const nextTimestamp = computed(() =>
+  Utils.nextTimestamp(currentTime.value, activeTimestamps.value, preferences.value)
+);
+const currentTimestampTitle = computed<string | undefined>(() => {
+  const currentTimestampTypeId = currentTimestamp.value?.typeId;
+  if (!currentTimestampTypeId) return;
+  return TIMESTAMP_TYPES.find(ttype => ttype.id === currentTimestampTypeId)?.name;
+});
+const currentTimeStampIsSkipped = computed(
+  () => currentTimestamp.value && Utils.isSkipped(currentTimestamp.value, preferences.value)
 );
 
 // Show / Skip
@@ -52,7 +50,7 @@ const showSkipButton = computed(
     currentTimeStampIsSkipped.value &&
     !preferences.value.enableAutoSkip &&
     !isVideoOver.value &&
-    beforeNextTimeStampTitle.value
+    currentTimestampTitle.value
 );
 const [setActiveTimeout, clearActiveTimeout] = useTimeout();
 watch(currentTimestamp, _ => {
