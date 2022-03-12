@@ -52,8 +52,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useTimeout } from '@anime-skip/ui';
-import { PLAYER_ACTIVITY_TIMEOUT } from '~/common/utils/constants';
 import { nextFrame } from '~/common/utils/event-loop';
 import Utils from '~/common/utils/GeneralUtils';
 import Messenger from '~/common/utils/Messenger';
@@ -116,21 +114,17 @@ onMounted(() => {
 
 const videoState = useVideoState();
 
-const [setActiveTimeout, clearActiveTimeout] = useTimeout();
 const isActive = computed(() => videoState.isActive);
 function onMouseEnter() {
   setupContextMenu();
-  onMouseMove();
+  setActive();
 }
 function onMouseLeave() {
   removeContextMenu();
-  clearActiveTimeout();
   setInactive();
 }
 function onMouseMove() {
   setActive();
-  clearActiveTimeout();
-  setActiveTimeout(setInactive, PLAYER_ACTIVITY_TIMEOUT);
 }
 function setupContextMenu() {
   messenger.send('@anime-skip/setup-context-menu', undefined);
