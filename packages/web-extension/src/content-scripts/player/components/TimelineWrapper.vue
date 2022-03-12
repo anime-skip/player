@@ -90,7 +90,11 @@ const timelineData = computed(() => {
     key: timestamp.id,
     title: TIMESTAMP_TYPES.find(ttype => ttype.id === timestamp.typeId)?.name ?? 'Unknown',
     normalizedAt: (timestamp.at / duration.value) * 100,
-    skipped: isLoggedIn.value && !isEditing.value && Utils.isSkipped(timestamp, preferences.value),
+    skipped:
+      isLoggedIn.value &&
+      !isEditing.value &&
+      preferences.value.enableAutoSkip &&
+      Utils.isSkipped(timestamp, preferences.value),
     fillClass: getTimestampColor(timestamp),
     active:
       hoveredTimestampId.value === timestamp.id || timestamp.id === timestampBeingEdited.value?.id,
@@ -154,7 +158,12 @@ watch(currentTime, (newTime, oldTime) => {
       shouldSkipFirstTimestamp = true;
     }
   }
-  if (wasAtBeginning && haveNotSkippedFromBeginning && shouldSkipFirstTimestamp) {
+  if (
+    preferences.value.enableAutoSkip &&
+    wasAtBeginning &&
+    haveNotSkippedFromBeginning &&
+    shouldSkipFirstTimestamp
+  ) {
     updatePlayHistory({ hasSkippedFromZero: true });
     goToNextTimestampOnTimeChange(newTime);
     void UsageStats.saveEvent('skipped_timestamp', {
@@ -167,7 +176,9 @@ watch(currentTime, (newTime, oldTime) => {
   }
 
   // Do nothing
-  // const oldNext as Api.AmbiguousTimestamp;
+  if (!preferences.value.enableAutoSkip) {
+    return;
+  }
   const willNotPastATimestamp = oldNext.at > newTime + timeDiff; // look forward a time update so we don't show the user a frame of the skipped section
   const notSkippingThePassedTimestamp = !Utils.isSkipped(oldNext, preferences.value);
   if (willNotPastATimestamp || notSkippingThePassedTimestamp) {
