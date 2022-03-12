@@ -200,7 +200,7 @@ const { themeClass } = useTheme();
   }
 
   .as-z-3 {
-    // Over the preferences dialog (z = 2)
+    // Over the preferences dialog (z = 2) so you can click it while that dialog is open
     z-index: 3;
   }
 }
