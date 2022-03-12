@@ -1,7 +1,7 @@
 <template>
-  <FlatButton v-if="showSkipButton" dark @click.stop="skip">
+  <flat-button v-if="showSkipButton" @click.stop="skip">
     Skip {{ currentTimestampTitle }}
-  </FlatButton>
+  </flat-button>
 </template>
 
 <script lang="ts" setup>
