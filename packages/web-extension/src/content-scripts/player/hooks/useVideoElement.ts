@@ -34,6 +34,7 @@ export function useVideoElement() {
   const playHistory = usePlayHistory();
   const video = ref(window.getVideo?.());
   const url = useTabUrl();
+  const canPlayCalled = ref(false);
 
   // Reactive - the video can change this state, and we can change the video
 
@@ -103,6 +104,12 @@ export function useVideoElement() {
 
     onPlayingDelayed.stop();
     onPlayingDelayed.start();
+
+    // When the `canplay` event fires before we've added our event listener, we need to call it
+    // manually
+    if (!canPlayCalled.value) {
+      onCanPlay();
+    }
   };
   const onTimeUpdate = () => {
     updateCurrentTime();
@@ -115,6 +122,7 @@ export function useVideoElement() {
     syncStartupState();
     controls.clearBuffering();
     updatePlayHistory({ isInitialBuffer: false });
+    canPlayCalled.value = true;
   };
 
   watch(
