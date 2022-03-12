@@ -65,5 +65,3 @@ const skip = () => {
   }
 };
 </script>
-
-<style lang="scss" scoped></style>
