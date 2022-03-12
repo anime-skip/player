@@ -30,8 +30,8 @@
       <controls-toolbar class="as-bottom-content" />
 
       <div
+        class="as-absolute as-bottom-20 as-z-3"
         :class="{
-          'as-absolute as-bottom-20 as-z-3': true,
           'as-right-80': isTimestampsPanelOpen,
           'as-right-108': isPreferencesDialogOpen,
           'as-right-12': !(isTimestampsPanelOpen || isPreferencesDialogOpen),
