@@ -1,6 +1,9 @@
 <template>
   <flat-button v-if="showSkipButton" @click.stop="skip">
     Skip {{ currentTimestampTitle }}
+    <svg viewBox="5 5 16 16" class="as-inline-block as-w-4">
+      <path d="M4 18L12.5 12L4 6V18ZM13 6V18L21.5 12L13 6Z" />
+    </svg>
   </flat-button>
 </template>
 
@@ -9,6 +12,7 @@ import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
 import { TIMESTAMP_TYPES } from '~/common/utils/constants';
 import Utils from '~/common/utils/GeneralUtils';
 import { useDisplayedTimestamps } from '../hooks/useDisplayedTimestamps';
+import { useIsToolbarVisible } from '../hooks/useIsToolbarVisible';
 import { useDuration, useVideoController, useVideoState } from '../state/useVideoState';
 
 const SKIP_BUTTON_OFFSET = 0.1;
@@ -16,8 +20,7 @@ const IS_VIDEO_OVER_ALLOWED_DIFF = 0.1;
 
 const { setCurrentTime, setActive } = useVideoController();
 const videoState = useVideoState();
-const isActive = computed(() => videoState.isActive);
-const isPaused = computed(() => videoState.isPaused);
+const isToolbarVisible = useIsToolbarVisible();
 const currentTime = computed(() => videoState.currentTime);
 const preferences = useGeneralPreferences();
 const activeTimestamps = useDisplayedTimestamps();
@@ -48,7 +51,7 @@ const currentTimeStampIsSkipped = computed(
 
 const showSkipButton = computed(
   () =>
-    (isPaused.value || isActive.value) &&
+    isToolbarVisible.value &&
     currentTimeStampIsSkipped.value &&
     !preferences.value.enableAutoSkip &&
     !isVideoOver.value &&

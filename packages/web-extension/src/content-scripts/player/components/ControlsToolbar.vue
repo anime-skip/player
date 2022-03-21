@@ -2,7 +2,7 @@
   <div
     class="ToolBar as-relative as-cursor-default"
     :class="{
-      'as-active': showToolbar,
+      'as-active': isToolbarVisible,
       'as-paused': videoState.isPaused,
       'as-hide-timeline-when-minimized': fullyHideToolbar,
     }"
@@ -11,7 +11,7 @@
     <TimelineWrapper
       class="as-timeline-alignment"
       :class="{ 'as-opacity-0 as-pointer-events-none': !hasDuration }"
-      :is-flipped="!showToolbar && !videoState.isPaused"
+      :is-flipped="!isToolbarVisible && !videoState.isPaused"
     />
     <div class="as-h-toolbar as-flex as-flex-row as-items-center as-space-x-1 as-px-2 as-pt-0.5">
       <ToolbarButton @click="togglePlayPause()">
@@ -58,6 +58,7 @@ import { warn } from '~/common/utils/log';
 import * as Api from '~api';
 import { useCreateNewTimestamp } from '../hooks/useCreateNewTimestamp';
 import { useDisplayedTimestamps } from '../hooks/useDisplayedTimestamps';
+import { useIsToolbarVisible } from '../hooks/useIsToolbarVisible';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 import { useStopEditing } from '../hooks/useStopEditing';
 import { useHideDialog, useShowDialog, useToggleDialog } from '../state/useDialogState';
@@ -68,7 +69,6 @@ import {
   useUpdateActiveTimestamp,
   useUpdateEditTimestampMode,
 } from '../state/useEditingState';
-import { usePlayHistory } from '../state/usePlayHistory';
 import { useDuration, useVideoController, useVideoState } from '../state/useVideoState';
 
 // Video State
@@ -102,15 +102,9 @@ const minimizeToolbarWhenEditing = computed(() => preferences.value.minimizeTool
 // Editing
 
 const editingState = useEditingState();
-const playHistory = usePlayHistory();
 const isEditing = useIsEditing(editingState);
 const canSaveEdits = computed(() => editingState.isEditing && !editingState.isSaving);
-const showToolbar = computed(
-  () =>
-    playHistory.isInitialBuffer ||
-    videoState.isActive ||
-    (isEditing.value && !minimizeToolbarWhenEditing.value)
-);
+const isToolbarVisible = useIsToolbarVisible();
 const fullyHideToolbar = computed(
   () => !videoState.isActive && !videoState.isPaused && hideTimelineWhenMinimized.value
 );

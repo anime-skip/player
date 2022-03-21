@@ -32,7 +32,7 @@
       <div
         class="as-absolute as-bottom-20 as-z-3"
         :class="{
-          'as-right-80': isTimestampsPanelOpen,
+          'as-right-79': isTimestampsPanelOpen,
           'as-right-108': isPreferencesDialogOpen,
           'as-right-12': !(isTimestampsPanelOpen || isPreferencesDialogOpen),
         }"
@@ -42,8 +42,8 @@
 
       <!-- Dialogs -->
       <ScreenshotOverlay />
-      <TimestampsPanel v-model:isOpen="isTimestampsPanelOpen" />
-      <PreferencesDialog v-model:isOpen="isPreferencesDialogOpen" />
+      <TimestampsPanel />
+      <PreferencesDialog />
       <EditEpisodeDialog />
       <LoginDialog />
     </div>
@@ -61,6 +61,7 @@ import { usePlaybackRateConnector } from '../hooks/usePlaybackRateConnector';
 import { useTabUrl } from '../hooks/useTabUrl';
 import { useTheme } from '../hooks/useTheme';
 import { useVideoElement } from '../hooks/useVideoElement';
+import { useDialogState } from '../state/useDialogState';
 import {
   useHideAnimeSkipPlayer,
   useIsAnimeSkipPlayerVisible,
@@ -78,8 +79,9 @@ onMounted(() => {
   void UsageStats.saveEvent('player_injected');
 });
 
-const isTimestampsPanelOpen = ref(false);
-const isPreferencesDialogOpen = ref(false);
+const dialogState = useDialogState();
+const isTimestampsPanelOpen = computed(() => dialogState.activeDialog === 'TimestampsPanel');
+const isPreferencesDialogOpen = computed(() => dialogState.activeDialog === 'PreferencesDialog');
 
 const resetHasSkippedFromZero = useResetSkippedFromZero();
 const resetInitialBuffer = useResetInitialBuffer();
@@ -193,6 +195,10 @@ const { themeClass } = useTheme();
   .as-bottom-content {
     z-index: 1;
     grid-area: toolbar;
+  }
+
+  .as-right-79 {
+    right: 19.75em;
   }
 
   .as-right-108 {

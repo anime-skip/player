@@ -4,7 +4,6 @@
     gravity-x="flex-end"
     gravity-y="flex-end"
     @show="loadPlayerOptions"
-    @hide="emit('update:isOpen', false)"
   >
     <template v-if="!hasActivePlayerGroup">
       <div class="as-p-4 as-space-y-8">
@@ -85,10 +84,6 @@ import Messenger from '~/common/utils/Messenger';
 import { useHideDialog } from '../state/useDialogState';
 import { useShowOriginalPlayer } from '../state/usePlayerVisibility';
 
-const emit = defineEmits<{
-  (event: 'update:isOpen', isOpen: boolean): void;
-}>();
-
 const openExtensionOptions = () => {
   new Messenger<RuntimeMessageTypes>('General Settings').send(
     '@anime-skip/open-all-settings',
@@ -111,7 +106,6 @@ const loadPlayerOptions = async () => {
   playerOptions.value = (await window.getPlayerOptions())?.filter(
     group => group.options.length > 0
   );
-  emit('update:isOpen', true);
 };
 
 const activeOptions = computed(() => activePlayerGroup.value?.options ?? []);
