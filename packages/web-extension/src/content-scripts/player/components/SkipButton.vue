@@ -2,7 +2,7 @@
   <Transition>
     <flat-button v-if="showSkipButton" @click.stop="skip">
       Skip {{ currentTimestampTitle }}
-      <svg viewBox="5 5 16 16" class="as-inline-block as-w-4">
+      <svg viewBox="5 5 16 16" class="as-inline-block as-w-4 as-fill-black">
         <path d="M4 18L12.5 12L4 6V18ZM13 6V18L21.5 12L13 6Z" />
       </svg>
     </flat-button>
@@ -80,5 +80,9 @@ const skip = () => {
 .v-enter-from,
 .v-leave-to {
   opacity: 0;
+}
+
+.as-fill-black {
+  fill: black;
 }
 </style>
