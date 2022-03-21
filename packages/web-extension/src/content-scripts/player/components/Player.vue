@@ -30,7 +30,7 @@
       <controls-toolbar class="as-bottom-content" />
 
       <div
-        class="as-absolute as-bottom-20 as-z-3"
+        class="as-absolute as-bottom-20 as-z-3 as-transition-all"
         :class="{
           'as-right-79': isTimestampsPanelOpen,
           'as-right-108': isPreferencesDialogOpen,

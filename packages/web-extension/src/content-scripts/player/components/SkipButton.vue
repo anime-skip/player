@@ -1,10 +1,12 @@
 <template>
-  <flat-button v-if="showSkipButton" @click.stop="skip">
-    Skip {{ currentTimestampTitle }}
-    <svg viewBox="5 5 16 16" class="as-inline-block as-w-4">
-      <path d="M4 18L12.5 12L4 6V18ZM13 6V18L21.5 12L13 6Z" />
-    </svg>
-  </flat-button>
+  <Transition>
+    <flat-button v-if="showSkipButton" @click.stop="skip">
+      Skip {{ currentTimestampTitle }}
+      <svg viewBox="5 5 16 16" class="as-inline-block as-w-4">
+        <path d="M4 18L12.5 12L4 6V18ZM13 6V18L21.5 12L13 6Z" />
+      </svg>
+    </flat-button>
+  </Transition>
 </template>
 
 <script lang="ts" setup>
@@ -68,3 +70,15 @@ const skip = () => {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+</style>
