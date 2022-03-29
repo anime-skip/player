@@ -5,51 +5,42 @@ import { warn } from './log';
 
 export default class GeneralUtils {
   /**
-   * @param currentTime The time to begin looking for timestamps after
-   * @param timestamps The list of timestamps, sorted by `timestamp.at`
-   * @param preferences The user's preferences to decide what sections are skipped. NOTE - this
-   *                    argument is not optional, but `undefined` can be passed. This is done to
-   *                    make sure you don't forget to pass this, and to make what is passed here an
-   *                    explicit decision
-   * @returns The next EXCLUSIVE timestamp that comes after the `currentTime` and is not skipped. If
-   *          no preferences are passed, no sections are considered skipped so this just returns the
-   *          next timestamp. Timestamps at a time equal to the `currentTime` will not be
-   *          returned (thus exclusive).
+   * Get the next timestamp after a certain time, ignoring what is skipped by the `preferences`
+   */
+  public static nextTimestampInVideo<T extends Api.AmbiguousTimestamp>(
+    currentTime: number,
+    timestamps: T[]
+  ): T | undefined {
+    return timestamps.find(timestamp => timestamp.at > currentTime);
+  }
+
+  /**
+   * Get the next timestamp after a certain time, based on what is skipped by the `preferences`
    */
   public static nextTimestamp<T extends Api.AmbiguousTimestamp>(
     currentTime: number,
     timestamps: T[],
-    preferences: Api.Preferences | undefined
+    preferences: Api.Preferences
   ): T | undefined {
-    if (!preferences) {
-      return timestamps.find(timestamp => timestamp.at > currentTime);
-    }
     return timestamps.find(
       timestamp => timestamp.at > currentTime && !GeneralUtils.isSkipped(timestamp, preferences)
     );
   }
 
-  public static previousTimestamp<T extends Api.AmbiguousTimestamp>(
+  /**
+   * Get the first timestamp before a certain time, ignoring what is skipped by the `preferences`
+   */
+  public static previousTimestampInVideo<T extends Api.AmbiguousTimestamp>(
     time: number,
-    timestamps: T[],
-    preferences: Api.Preferences | undefined
+    timestamps: T[]
   ): T | undefined {
-    if (!preferences) {
-      return timestamps.filter(timestamp => timestamp.at < time - 0.1).pop();
-    }
-    return timestamps
-      .filter(
-        timestamp => !GeneralUtils.isSkipped(timestamp, preferences) && timestamp.at < time - 0.1
-      )
-      .pop();
+    return timestamps.filter(timestamp => timestamp.at < time).pop();
   }
 
   public static isSkipped(
     { typeId: _typeId }: Api.AmbiguousTimestamp,
-    preferences: Api.Preferences | undefined
+    preferences: Api.Preferences
   ): boolean {
-    if (!preferences) return false;
-    if (!preferences.enableAutoSkip) return false;
     switch (_typeId) {
       case '9edc0037-fa4e-47a7-a29a-d9c43368daa8':
         return preferences.skipCanon;

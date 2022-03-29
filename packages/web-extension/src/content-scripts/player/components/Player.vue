@@ -29,6 +29,17 @@
       <notification-center class="as-right-content" />
       <controls-toolbar class="as-bottom-content" />
 
+      <div
+        class="as-absolute as-bottom-20 as-z-3 as-transition-all"
+        :class="{
+          'as-right-79': isTimestampsPanelOpen,
+          'as-right-108': isPreferencesDialogOpen,
+          'as-right-12': !(isTimestampsPanelOpen || isPreferencesDialogOpen),
+        }"
+      >
+        <SkipButton />
+      </div>
+
       <!-- Dialogs -->
       <ScreenshotOverlay />
       <TimestampsPanel />
@@ -41,8 +52,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useTimeout } from '@anime-skip/ui';
-import { PLAYER_ACTIVITY_TIMEOUT } from '~/common/utils/constants';
 import { nextFrame } from '~/common/utils/event-loop';
 import Utils from '~/common/utils/GeneralUtils';
 import Messenger from '~/common/utils/Messenger';
@@ -52,6 +61,7 @@ import { usePlaybackRateConnector } from '../hooks/usePlaybackRateConnector';
 import { useTabUrl } from '../hooks/useTabUrl';
 import { useTheme } from '../hooks/useTheme';
 import { useVideoElement } from '../hooks/useVideoElement';
+import { useDialogState } from '../state/useDialogState';
 import {
   useHideAnimeSkipPlayer,
   useIsAnimeSkipPlayerVisible,
@@ -68,6 +78,10 @@ import { useVideoState } from '../state/useVideoState';
 onMounted(() => {
   void UsageStats.saveEvent('player_injected');
 });
+
+const dialogState = useDialogState();
+const isTimestampsPanelOpen = computed(() => dialogState.activeDialog === 'TimestampsPanel');
+const isPreferencesDialogOpen = computed(() => dialogState.activeDialog === 'PreferencesDialog');
 
 const resetHasSkippedFromZero = useResetSkippedFromZero();
 const resetInitialBuffer = useResetInitialBuffer();
@@ -102,21 +116,17 @@ onMounted(() => {
 
 const videoState = useVideoState();
 
-const [setActiveTimeout, clearActiveTimeout] = useTimeout();
 const isActive = computed(() => videoState.isActive);
 function onMouseEnter() {
   setupContextMenu();
-  onMouseMove();
+  setActive();
 }
 function onMouseLeave() {
   removeContextMenu();
-  clearActiveTimeout();
   setInactive();
 }
 function onMouseMove() {
   setActive();
-  clearActiveTimeout();
-  setActiveTimeout(setInactive, PLAYER_ACTIVITY_TIMEOUT);
 }
 function setupContextMenu() {
   messenger.send('@anime-skip/setup-context-menu', undefined);
@@ -185,6 +195,19 @@ const { themeClass } = useTheme();
   .as-bottom-content {
     z-index: 1;
     grid-area: toolbar;
+  }
+
+  .as-right-79 {
+    right: 19.75em;
+  }
+
+  .as-right-108 {
+    right: 27em;
+  }
+
+  .as-z-3 {
+    // Over the preferences dialog (z = 2) so you can click it while that dialog is open
+    z-index: 3;
   }
 }
 </style>

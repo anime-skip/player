@@ -1,4 +1,5 @@
 import { Utils as UiUtils } from '@anime-skip/ui';
+import { PLAYER_ACTIVITY_TIMEOUT } from '~/common/utils/constants';
 import { createProvideInject } from '~/common/utils/createProvideInject';
 import UsageStats from '~/common/utils/UsageStats';
 
@@ -8,6 +9,7 @@ export interface VideoState {
    * controls
    */
   isActive: boolean;
+  isActiveTimeout?: any;
 
   /**
    * If the video is loading the next frame of the video
@@ -94,10 +96,21 @@ export function useVideoController() {
 
     // Activity
     setActive(): void {
-      update({ isActive: true });
+      clearTimeout(state.isActiveTimeout);
+      update({
+        isActive: true,
+        isActiveTimeout: setTimeout(() => {
+          console.log('showToolbar timeout');
+          update({ isActive: false, isActiveTimeout: undefined });
+        }, PLAYER_ACTIVITY_TIMEOUT),
+      });
     },
     setInactive(): void {
-      update({ isActive: false });
+      clearTimeout(state.isActiveTimeout);
+      update({
+        isActive: false,
+        isActiveTimeout: undefined,
+      });
     },
     buffering(): void {
       update({ isBuffering: true });
