@@ -9,6 +9,7 @@ export interface VideoState {
    * controls
    */
   isActive: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   isActiveTimeout?: any;
 
   /**
@@ -100,7 +101,6 @@ export function useVideoController() {
       update({
         isActive: true,
         isActiveTimeout: setTimeout(() => {
-          console.log('showToolbar timeout');
           update({ isActive: false, isActiveTimeout: undefined });
         }, PLAYER_ACTIVITY_TIMEOUT),
       });
