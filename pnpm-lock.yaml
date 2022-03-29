@@ -16,7 +16,7 @@ importers:
     specifiers:
       '@anime-skip/api-client': ^2.6.2
       '@anime-skip/ui': ^3.1.2
-      '@anime-skip/usage-stats-client': ^1.4.0
+      '@anime-skip/usage-stats-client': ^1.4.1
       '@iconify/json': ^1.1.386
       '@tailwindcss/line-clamp': ^0.2.1
       '@types/fs-extra': ^9.0.12
@@ -75,7 +75,7 @@ importers:
     dependencies:
       '@anime-skip/api-client': 2.6.2
       '@anime-skip/ui': 3.1.2_2f04258c66cb86202acd13e91bd86310
-      '@anime-skip/usage-stats-client': 1.4.0_axios@0.24.0
+      '@anime-skip/usage-stats-client': 1.4.1_axios@0.24.0
       '@vueuse/core': 5.3.0_vue@3.2.2
       async-mutex: 0.3.2
       axios: 0.24.0
@@ -163,8 +163,8 @@ packages:
       - '@vue/composition-api'
     dev: false
 
-  /@anime-skip/usage-stats-client/1.4.0_axios@0.24.0:
-    resolution: {integrity: sha512-0Ww/GQzYbpt67QR66psWpFqWAiWQrBdG182/76s3wIUOWYw0RqefuFfgHuQR/XYQrTPPMhF9/dHIkI8MapWS6g==, tarball: download/@anime-skip/usage-stats-client/1.4.0/b6b7b272a2022b9d22737e9743c3689bdddb6dc195c9f52f4af201bc6c82109d}
+  /@anime-skip/usage-stats-client/1.4.1_axios@0.24.0:
+    resolution: {integrity: sha512-TmR69H2rngb85HIr6OWV3YzANJnaMK0w+NOXWduRTwvW2BdGoQsLmFquH6agUxoS059hQvloQwMMHcsB/CZRYQ==, tarball: download/@anime-skip/usage-stats-client/1.4.1/ceb9e98e87a193540f904e7e784ca2431d1814c99574b2de995108e3110a7801}
     peerDependencies:
       axios: '>=0.23'
     dependencies:
@@ -852,7 +852,7 @@ packages:
       vue: ^2 || ^3
     dependencies:
       vue: 3.2.2
-      vue-demi: 0.12.1_vue@3.2.2
+      vue-demi: 0.12.4_vue@3.2.2
     transitivePeerDependencies:
       - '@vue/composition-api'
     dev: false
@@ -1291,7 +1291,7 @@ packages:
   /@vueuse/shared/5.3.0_vue@3.2.2:
     resolution: {integrity: sha512-qZfkPFH0qTScFpYiPOFpTcxWriRhlM3bgSzl3DFTgr/U0eZg3w2EFWaRZHdWeSvAUdNQyjOC4Toa8S0zJyEjHw==}
     dependencies:
-      vue-demi: 0.12.1_vue@3.2.2
+      vue-demi: 0.12.4_vue@3.2.2
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
@@ -7236,6 +7236,21 @@ packages:
         optional: true
     dependencies:
       vue: 3.2.2
+    dev: false
+
+  /vue-demi/0.12.4_vue@3.2.2:
+    resolution: {integrity: sha512-ztPDkFt0TSUdoq1ZI6oD730vgztBkiByhUW7L1cOTebiSBqSYfSQgnhYakYigBkyAybqCTH7h44yZuDJf2xILQ==}
+    engines: {node: '>=12'}
+    hasBin: true
+    requiresBuild: true
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^3.0.0-0 || ^2.6.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+    dependencies:
+      vue: 3.2.2
 
   /vue-eslint-parser/7.10.0_eslint@7.32.0:
     resolution: {integrity: sha512-7tc/ewS9Vq9Bn741pvpg8op2fWJPH3k32aL+jcIcWGCTzh/zXSdh7pZ5FV3W2aJancP9+ftPAv292zY5T5IPCg==}
@@ -7258,7 +7273,7 @@ packages:
   /vue-global-api/0.2.4_vue@3.2.2:
     resolution: {integrity: sha512-Cm84AZiALt8f4CJZzPvbForTzAUYe41msnzUnRK6B7YkaDaN8g87ap8CpHWvTU0+XtyDeLLAeQoRr+uwamxfpQ==}
     dependencies:
-      vue-demi: 0.12.1_vue@3.2.2
+      vue-demi: 0.12.4_vue@3.2.2
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
