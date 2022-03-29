@@ -15,6 +15,7 @@ import { TIMESTAMP_TYPES } from '~/common/utils/constants';
 import Utils from '~/common/utils/GeneralUtils';
 import { useDisplayedTimestamps } from '../hooks/useDisplayedTimestamps';
 import { useIsToolbarVisible } from '../hooks/useIsToolbarVisible';
+import { useIsEditing } from '../state/useEditingState';
 import { useDuration, useVideoController, useVideoState } from '../state/useVideoState';
 
 const SKIP_BUTTON_OFFSET = 0.1;
@@ -51,12 +52,14 @@ const currentTimeStampIsSkipped = computed(
 
 // Show / Skip
 
+const isEditing = useIsEditing();
 const showSkipButton = computed(
   () =>
     isToolbarVisible.value &&
     currentTimeStampIsSkipped.value &&
     !preferences.value.enableAutoSkip &&
     !isVideoOver.value &&
+    !isEditing.value &&
     currentTimestampTitle.value
 );
 watch(currentTimeStampIsSkipped, newIsSkipped => {
