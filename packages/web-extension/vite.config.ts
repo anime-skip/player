@@ -62,9 +62,10 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '~/': `${rootPath('src')}/`,
-      '~api': rootPath('src/common/api'),
-      '~env': rootPath('src/common/utils/env'),
+      '~/': rootPath('src') + '/',
+      '~api': rootPath('../common/src/api'),
+      '~utils': rootPath('../common/src/utils') + '/',
+      '~types': rootPath('../common/src/types'),
     },
   },
   optimizeDeps: {
