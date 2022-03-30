@@ -51,8 +51,7 @@
     "vue": "^3.2.2",
     "vue-router": "^4.0.11",
     "vue-use-request-state": "^0.2.2",
-    "webextension-polyfill": "^0.8.0",
-    "yup": "^0.32.11"
+    "webextension-polyfill": "^0.8.0"
   },
   "devDependencies": {
     "@iconify/json": "^1.1.386",
