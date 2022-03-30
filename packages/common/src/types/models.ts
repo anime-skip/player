@@ -20,16 +20,6 @@ export interface PlaybackRate {
   hideWhenSmall?: boolean;
 }
 
-export type BrowserType =
-  | 'chrome'
-  | 'firefox'
-  | 'safari'
-  | 'opera'
-  | 'ie'
-  | 'edge'
-  | 'edgechromium'
-  | 'unsupported';
-
 export interface AutocompleteItem<T = any> {
   key?: string;
   title: string;

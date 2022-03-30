@@ -6,7 +6,7 @@ import { detectBrowser } from '~utils/browser';
 function getUninstallUrl(userId: string | undefined): string | undefined {
   if (userId == null) return undefined;
   const encodedUserId = encodeURIComponent(userId);
-  const browserName = encodeURIComponent(detectBrowser());
+  const browserName = encodeURIComponent(detectBrowser() ?? TARGET_BROWSER);
   const appVersion = encodeURIComponent(EXTENSION_VERSION);
   return `https://usage-stats.anime-skip.com/redirects/extension-uninstalled?user_id=${encodedUserId}&app_version=${appVersion}&browser=${browserName}`;
 }
