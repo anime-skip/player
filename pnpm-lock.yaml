@@ -16,17 +16,21 @@ importers:
     specifiers:
       '@anime-skip/api-client': ^2.6.2
       '@types/jest': ^27.0.1
+      '@types/ua-parser-js': ^0.7.36
       jest: ^27.2.2
       jest-mock-extended: ^2.0.4
       joi: ^17.6.0
       ts-jest: ^27.0.5
       typescript: ^4.3.5
+      ua-parser-js: ^1.0.2
       vue-global-api: ^0.2.4
     dependencies:
       '@anime-skip/api-client': 2.6.2
       joi: 17.6.0
+      ua-parser-js: 1.0.2
     devDependencies:
       '@types/jest': 27.0.1
+      '@types/ua-parser-js': 0.7.36
       jest: 27.2.2
       jest-mock-extended: 2.0.4_jest@27.2.2+typescript@4.3.5
       ts-jest: 27.0.5_be90d98173f61dbf09998b9442f2a163
@@ -1082,6 +1086,10 @@ packages:
 
   /@types/throttle-debounce/2.1.0:
     resolution: {integrity: sha512-5eQEtSCoESnh2FsiLTxE121IiE60hnMqcb435fShf4bpLRjEu1Eoekht23y6zXS9Ts3l+Szu3TARnTsA0GkOkQ==}
+    dev: true
+
+  /@types/ua-parser-js/0.7.36:
+    resolution: {integrity: sha512-N1rW+njavs70y2cApeIw1vLMYXRwfBy+7trgavGuuTfOd7j1Yh7QTRc/yqsPl6ncokt72ZXuxEU0PiCp9bSwNQ==}
     dev: true
 
   /@types/webextension-polyfill/0.8.2:
@@ -6940,6 +6948,10 @@ packages:
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: true
+
+  /ua-parser-js/1.0.2:
+    resolution: {integrity: sha512-00y/AXhx0/SsnI51fTc0rLRmafiGOM4/O+ny10Ps7f+j/b8p/ZY11ytMgznXkOVo4GQ+KwQG5UQLkLGirsACRg==}
+    dev: false
 
   /unbox-primitive/1.0.1:
     resolution: {integrity: sha512-tZU/3NqK3dA5gpE1KtyiJUrEB0lxnGkMFHptJ7q6ewdZ8s12QrODwNbhIJStmJkd1QDXa1NRA8aF2A1zk/Ypyw==}
