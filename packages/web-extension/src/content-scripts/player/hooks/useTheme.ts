@@ -1,17 +1,20 @@
 import { ColorTheme } from '~/common/api';
 import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
+import { usePlayerConfig } from '../composition/player-config';
 
-const staticThemeToServiceMap: Record<ColorTheme, Service | null> = {
-  ANIME_SKIP_BLUE: null,
-  PER_SERVICE: null,
+const colorThemeToCssClassNameMap: Record<ColorTheme, Service | undefined> = {
+  ANIME_SKIP_BLUE: undefined,
+  PER_SERVICE: undefined,
   CRUNCHYROLL_ORANGE: 'crunchyroll',
   FUNIMATION_PURPLE: 'funimation',
   VRV_YELLOW: 'vrv',
 };
 
-const serviceToPerServiceTheme: Record<Service, Service | null> = {
+/**
+ * A map between services and their associated color themes
+ */
+const serviceToTheme: Record<string, Service | undefined> = {
   'funimation-2021-09-26': 'funimation',
-  'test-service': null,
   crunchyroll: 'crunchyroll',
   funimation: 'funimation',
   vrv: 'vrv',
@@ -19,15 +22,15 @@ const serviceToPerServiceTheme: Record<Service, Service | null> = {
 
 export function useTheme() {
   const prefs = useGeneralPreferences();
-  const colorTheme = computed(() => prefs.value.colorTheme);
+  const { service } = usePlayerConfig();
 
-  const themeService = computed<Service | null>(() => {
-    if (colorTheme.value === ColorTheme.PER_SERVICE) {
-      return serviceToPerServiceTheme[window.service];
-    }
-
-    return staticThemeToServiceMap[colorTheme.value];
+  const themeService = computed(() => {
+    const themePref = prefs.value.colorTheme;
+    return themePref === ColorTheme.PER_SERVICE
+      ? serviceToTheme[service]
+      : colorThemeToCssClassNameMap[themePref];
   });
+
   const themeClass = computed(() => `as-theme as-${themeService.value}-theme`);
 
   const showThemeLogo = computed(

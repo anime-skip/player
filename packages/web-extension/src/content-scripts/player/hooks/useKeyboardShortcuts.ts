@@ -7,6 +7,7 @@ import {
 import GeneralUtils from '~/common/utils/GeneralUtils';
 import { debug } from '~/common/utils/log';
 import UsageStats from '~/common/utils/UsageStats';
+import { usePlayerConfig } from '../composition/player-config';
 
 // The first instance of this helper should only report usage stats
 let instanceCount = 0;
@@ -19,6 +20,7 @@ export function useKeyboardShortcuts(
   instanceCount++;
   debug(`[${componentName}] useKeyboardShortcuts()`);
 
+  const { addKeyDownListener, removeKeyDownListener } = usePlayerConfig();
   const { primaryShortcutsKeyToActionsMap } = usePrimaryKeyboardShortcutPrefs();
   const { secondaryShortcutsKeyToActionsMap } = useSecondaryKeyboardShortcutPrefs();
 
@@ -44,8 +46,8 @@ export function useKeyboardShortcuts(
     }, 0);
   };
 
-  window.addKeyDownListener(onKeyDownInstance);
-  onUnmounted(() => window.removeKeyDownListener(onKeyDownInstance));
+  addKeyDownListener?.(onKeyDownInstance);
+  onUnmounted(() => removeKeyDownListener?.(onKeyDownInstance));
 
   return shortcuts;
 }

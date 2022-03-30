@@ -5,6 +5,7 @@ import GeneralUtils from '~/common/utils/GeneralUtils';
 import { warn } from '~/common/utils/log';
 import UsageStats from '~/common/utils/UsageStats';
 import { TimestampSource } from '~api';
+import { usePlayerConfig } from '../composition/player-config';
 import { useShowDialog, useShowLoginOverlay } from '../state/useDialogState';
 import {
   EditTimestampMode,
@@ -23,13 +24,14 @@ export function useCreateNewTimestamp() {
   const showLoginOverlay = useShowLoginOverlay();
   const isLoggedIn = useIsLoggedIn();
   const preferences = useGeneralPreferences();
+  const playerConfig = usePlayerConfig();
 
   function showTimestampsPanel() {
     showDialog('TimestampsPanel');
   }
 
   return (): void => {
-    const video = window.getVideo?.();
+    const video = playerConfig.getVideo?.();
     if (video == null) {
       warn('Tried adding timestamp in a context without a video');
       return;

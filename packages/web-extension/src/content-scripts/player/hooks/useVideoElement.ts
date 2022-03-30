@@ -1,6 +1,7 @@
 import { useTimeoutFn } from '@vueuse/core';
 import { log } from '~/common/utils/log';
 import UsageStats from '~/common/utils/UsageStats';
+import { usePlayerConfig } from '../composition/player-config';
 import {
   useIncrementPlayTicks,
   usePlayHistory,
@@ -9,30 +10,14 @@ import {
 import { useVideoController, useVideoState } from '../state/useVideoState';
 import { useTabUrl } from './useTabUrl';
 
-/**
- * Some player's don't actually start playing right after the "playing" event fires. instead, they
- * hang for a little bit, fire the "playing" event again, and then start playing. This value should
- * be set to a safe number of milliseconds above how long it usually takes between the two "playing"
- * events.
- *
- * With this extra timeout, the buffering spinner will not flash in and out multiple times, instead
- * being nice and smooth showing while not playing, and hiding once actual playback has started
- */
-const onPlayingDelayMs: Record<Service, number> = {
-  vrv: 50,
-  funimation: 0,
-  'funimation-2021-09-26': 0,
-  'test-service': 0,
-  crunchyroll: 100,
-};
-
 export function useVideoElement() {
   const videoState = useVideoState();
   const controls = useVideoController();
   const updatePlayHistory = useUpdatePlayHistory();
   const incrementPlayTicks = useIncrementPlayTicks();
   const playHistory = usePlayHistory();
-  const video = ref(window.getVideo?.());
+  const { service, getVideo, onVideoChanged, onPlayDebounceMs } = usePlayerConfig();
+  const video = ref(getVideo?.());
   const url = useTabUrl();
   const canPlayCalled = ref(false);
 
@@ -85,20 +70,20 @@ export function useVideoElement() {
     updateCurrentTime();
   };
 
-  const onPlayingDelayed = useTimeoutFn(controls.play, onPlayingDelayMs[window.service]);
+  const onPlayingDelayed = useTimeoutFn(controls.play, onPlayDebounceMs);
   const onPlaying = () => {
     if (playHistory.isInitialBuffer && videoState.duration) {
-      let service: ReportableService = window.service;
+      let reportedService = service;
       if (
         service === 'crunchyroll' &&
         url.value &&
         new URL(url.value).hostname.startsWith('beta')
       ) {
-        service = 'crunchyroll-beta';
+        reportedService = 'crunchyroll-beta';
       }
       void UsageStats.saveEvent('episode_started', {
         episodeDuration: videoState.duration,
-        service: service,
+        service: reportedService,
       });
     }
 
@@ -187,7 +172,7 @@ export function useVideoElement() {
     video.removeEventListener('waiting', onWaiting);
     video.removeEventListener('ended', onEnded);
   };
-  window.onVideoChanged(newVideo => {
+  onVideoChanged(newVideo => {
     if (video.value) clearListeners(video.value);
     setListeners(newVideo);
     video.value = newVideo;

@@ -56,6 +56,7 @@ import { FRAME, LOOKUP_PREV_TIMESTAMP_OFFSET } from '~/common/utils/constants';
 import Utils from '~/common/utils/GeneralUtils';
 import { warn } from '~/common/utils/log';
 import * as Api from '~api';
+import { usePlayerConfig } from '../composition/player-config';
 import { useCreateNewTimestamp } from '../hooks/useCreateNewTimestamp';
 import { useDisplayedTimestamps } from '../hooks/useDisplayedTimestamps';
 import { useIsToolbarVisible } from '../hooks/useIsToolbarVisible';
@@ -114,9 +115,10 @@ const setEditTimestampMode = useUpdateEditTimestampMode();
 
 const playAnimationState = computed<1 | 0>(() => (isPaused.value ? 1 : 0));
 
+const playerConfig = usePlayerConfig();
 const isFullscreenEnabled = ref(document.fullscreenEnabled);
 const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(
-  document.querySelector(window.getRootQuery())
+  document.querySelector(playerConfig.getRootQuery())
 );
 const fullscreenAnimationState = computed<1 | 0>(() => (isFullscreen.value ? 0 : 1));
 

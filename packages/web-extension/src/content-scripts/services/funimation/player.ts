@@ -1,6 +1,6 @@
 import GeneralUtils from '~/common/utils/GeneralUtils';
 import { loadedLog } from '~/common/utils/log';
-import setupGlobals from '~/common/utils/setupGlobals';
+import { setupPlayerConfig } from '~/common/utils/setup-player-config';
 import './player-overrides.scss';
 
 function getPlayerOptions(): PlayerOptionGroup[] {
@@ -37,7 +37,7 @@ function getPlayerOptions(): PlayerOptionGroup[] {
 export function initFunimationPlayer() {
   loadedLog('content-scripts/services/funimation/player.ts');
 
-  setupGlobals('funimation', {
+  return setupPlayerConfig('funimation', {
     serviceDisplayName: 'Funimation',
     getPlayerOptions,
     getRootQuery: () => 'body #funimation-player',
