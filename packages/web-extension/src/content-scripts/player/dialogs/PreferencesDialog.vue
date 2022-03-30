@@ -107,7 +107,7 @@ const getSelectedOption = (optionGroup: PlayerOptionGroup) => {
 };
 const playerOptions = ref<PlayerOptionGroup[]>();
 const loadPlayerOptions = async () => {
-  playerOptions.value = (await playerConfig.getPlayerOptions?.())?.filter(
+  playerOptions.value = (await playerConfig.getPlaybackOptions?.())?.filter(
     group => group.options.length > 0
   );
 };

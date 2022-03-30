@@ -16,7 +16,7 @@ export function setupPlayerConfig(
     | 'getRootQuery'
     | 'getVideoQuery'
     | 'transformServiceUrl'
-    | 'getPlayerOptions'
+    | 'getPlaybackOptions'
     | 'doNotReplacePlayer'
   >
 ): IPlayerConfig {
@@ -26,7 +26,7 @@ export function setupPlayerConfig(
     getRootQuery,
     getVideoQuery,
     transformServiceUrl,
-    getPlayerOptions,
+    getPlaybackOptions,
   } = customConfig;
   return {
     service,
@@ -35,10 +35,10 @@ export function setupPlayerConfig(
     getRootQuery,
     getVideoQuery,
     transformServiceUrl,
-    async getPlayerOptions() {
+    async getPlaybackOptions() {
       try {
-        const optionGroups = await getPlayerOptions?.();
-        log(`${service}.getPlayerOptions`, optionGroups);
+        const optionGroups = await getPlaybackOptions?.();
+        log(`${service}.getPlaybackOptions`, optionGroups);
         if (optionGroups && optionGroups.length > 0) return optionGroups;
         return undefined;
       } catch (err) {

@@ -74,11 +74,9 @@ export interface IPlayerConfig {
    * when clicked! You're responsible for loading the correct subtitles/video quality, the player
    * only provides the UI for you.
    *
-   * TODO: Rename to getPlaybackOptions
-   *
-   * Set to undefined or return undefined if player options are not available for the service
+   * Set to `undefined` or return `undefined` if player options are not available for the service.
    */
-  getPlayerOptions?(): Promise<PlayerOptionGroup[] | undefined> | PlayerOptionGroup[] | undefined;
+  getPlaybackOptions?(): Promise<PlayerOptionGroup[] | undefined> | PlayerOptionGroup[] | undefined;
 
   /**
    * Add a callback that gets called when a video changes (duration is different than before)   */
@@ -98,7 +96,7 @@ export const PlayerConfig = joi.object<IPlayerConfig, true>({
   doNotReplacePlayer: joi.func().optional(),
   inferEpisodeInfo: joi.func().required(),
   transformServiceUrl: joi.func().optional(),
-  getPlayerOptions: joi.func().optional(),
+  getPlaybackOptions: joi.func().optional(),
   onVideoChanged: joi.func().required(),
   addKeyDownListener: joi.func().required(),
   removeKeyDownListener: joi.func().required(),
