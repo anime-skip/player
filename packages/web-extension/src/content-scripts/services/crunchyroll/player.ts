@@ -8,6 +8,7 @@ export function initCrunchyrollPlayer() {
 
   return setupPlayerConfig('crunchyroll', {
     serviceDisplayName: 'Crunchyroll',
+    onPlayDebounceMs: 100,
     getRootQuery: () => 'body',
     getVideoQuery: () => 'video',
     transformServiceUrl(inputUrl) {

@@ -20,11 +20,18 @@ export function setupPlayerConfig(
     | 'doNotReplacePlayer'
   >
 ): IPlayerConfig {
-  const { serviceDisplayName, getRootQuery, getVideoQuery, transformServiceUrl, getPlayerOptions } =
-    customConfig;
+  const {
+    serviceDisplayName,
+    onPlayDebounceMs,
+    getRootQuery,
+    getVideoQuery,
+    transformServiceUrl,
+    getPlayerOptions,
+  } = customConfig;
   return {
     service,
     serviceDisplayName,
+    onPlayDebounceMs,
     getRootQuery,
     getVideoQuery,
     transformServiceUrl,

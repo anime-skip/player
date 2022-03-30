@@ -49,6 +49,7 @@ export function initVrvPlayer() {
 
   return setupPlayerConfig('vrv', {
     serviceDisplayName: 'VRV',
+    onPlayDebounceMs: 50,
     getPlayerOptions,
     getRootQuery: () => 'body>div',
     getVideoQuery: () => 'video',
