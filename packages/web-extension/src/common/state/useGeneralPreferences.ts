@@ -1,7 +1,7 @@
 import { GqlPreferences } from '@anime-skip/api-client';
 import * as Api from '~api';
 import { ColorTheme } from '~api';
-import { StripOtherTypes } from '~types';
+import { PickTypes } from '~types';
 import { useApiClient } from '../hooks/useApiClient';
 import { createWebExtProvideInject } from '../utils/createWebExtProvideInject';
 import { warn } from '../utils/log';
@@ -76,11 +76,7 @@ export function useUpdateBooleanPref() {
   const updatePreferences = useUpdateGeneralPreferences();
   const api = useApiClient();
 
-  return (
-    pref: StripOtherTypes<GeneralPreferences, boolean>,
-    newValue: boolean,
-    isLocal = false
-  ) => {
+  return (pref: PickTypes<GeneralPreferences, boolean>, newValue: boolean, isLocal = false) => {
     const oldValue = preferences.value[pref];
     updatePreferences({ [pref]: newValue });
 
@@ -101,7 +97,7 @@ export function useToggleBooleanPref() {
 
   const preferences = useGeneralPreferences();
 
-  return (pref: StripOtherTypes<GeneralPreferences, boolean>, isLocal = false) => {
+  return (pref: PickTypes<GeneralPreferences, boolean>, isLocal = false) => {
     const newValue = !preferences.value[pref];
     if (isLocal) updateLocal(pref, newValue);
     else updateRemote(pref, newValue);
@@ -110,7 +106,7 @@ export function useToggleBooleanPref() {
 
 export function useUpdateLocalPref<T>() {
   const updatePreferences = useUpdateGeneralPreferences();
-  return (pref: StripOtherTypes<GeneralPreferences, T>, newValue: T) => {
+  return (pref: PickTypes<GeneralPreferences, T>, newValue: T) => {
     updatePreferences({ [pref]: newValue });
   };
 }
@@ -120,7 +116,7 @@ export function useUpdateRemotePref<T>() {
   const updatePreferences = useUpdateGeneralPreferences();
   const api = useApiClient();
 
-  return (pref: StripOtherTypes<GeneralPreferences, T>, newValue: T) => {
+  return (pref: PickTypes<GeneralPreferences, T>, newValue: T) => {
     const oldValue = preferences.value[pref];
     updatePreferences({ [pref]: newValue });
 
