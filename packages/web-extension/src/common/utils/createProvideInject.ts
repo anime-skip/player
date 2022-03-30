@@ -1,19 +1,21 @@
-// eslint-disable-next-line @typescript-eslint/ban-types
 interface ProvideInject<T> {
   provideValue(): void;
   useValue(): Readonly<T>;
   useUpdate(): (newValue: Partial<T>) => void;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function createProvideInject<T extends object>(
   label: string,
   defaultValue: T
 ): ProvideInject<T>;
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function createProvideInject<T extends object>(
   label: string,
   defaultValueFactory: () => T,
   defaultAsFactory: true
 ): ProvideInject<T>;
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function createProvideInject<T extends object>(
   label: string,
   defaultValueFactory: T | (() => T),
@@ -24,8 +26,8 @@ export function createProvideInject<T extends object>(
 
   function provideValue() {
     const defaultValue: T = defaultAsFactory
-      ? (defaultValueFactory as Function)()
-      : defaultValueFactory;
+      ? (defaultValueFactory as () => T)()
+      : (defaultValueFactory as T);
     const value = reactive(defaultValue);
     provide(valueKey, readonly(value));
 

@@ -10,23 +10,6 @@ import {
 import { useVideoController, useVideoState } from '../state/useVideoState';
 import { useTabUrl } from './useTabUrl';
 
-/**
- * Some player's don't actually start playing right after the "playing" event fires. instead, they
- * hang for a little bit, fire the "playing" event again, and then start playing. This value should
- * be set to a safe number of milliseconds above how long it usually takes between the two "playing"
- * events.
- *
- * With this extra timeout, the buffering spinner will not flash in and out multiple times, instead
- * being nice and smooth showing while not playing, and hiding once actual playback has started
- */
-const onPlayingDelayMs: Record<Service, number> = {
-  vrv: 50,
-  funimation: 0,
-  'funimation-2021-09-26': 0,
-  'test-service': 0,
-  crunchyroll: 100,
-};
-
 export function useVideoElement() {
   const videoState = useVideoState();
   const controls = useVideoController();
@@ -132,7 +115,6 @@ export function useVideoElement() {
     newIsPaused => {
       if (!video.value) return;
 
-      console.log({ video: video.value });
       if (newIsPaused && !video.value.paused) video.value.pause();
       else if (!newIsPaused && video.value.paused) video.value.play();
     }
