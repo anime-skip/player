@@ -3,7 +3,7 @@ import { useApiClient } from '~/common/hooks/useApiClient';
 import * as Api from '~api';
 import { EPISODE_SEARCH_RESULT_DATA } from '~api';
 import { AutocompleteItem } from '~types';
-import Mappers from '~utils/mappers';
+import * as Mappers from '~utils/mappers';
 
 export function useEpisodeAutocomplete(
   defaultEpisodeItem: AutocompleteItem<Api.EpisodeSearchResult>,
