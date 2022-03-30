@@ -4,7 +4,7 @@ import { PlayerOption, PlayerOptionGroup } from '~types';
 import GeneralUtils from '~utils/GeneralUtils';
 import './player-overrides.scss';
 
-function getPlayerOptions(): PlayerOptionGroup[] {
+function getPlaybackOptions(): PlayerOptionGroup[] {
   const optionGroups: PlayerOptionGroup[] = [];
 
   function addRadioOptionGroup(id: string, title: string, icon?: string): void {
@@ -40,7 +40,7 @@ export function initFunimationPlayer() {
 
   return setupPlayerConfig('funimation', {
     serviceDisplayName: 'Funimation',
-    getPlayerOptions,
+    getPlaybackOptions,
     getRootQuery: () => 'body #funimation-player',
     getVideoQuery: () => '#brightcove-player > video',
     doNotReplacePlayer() {

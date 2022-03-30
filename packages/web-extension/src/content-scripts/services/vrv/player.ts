@@ -3,7 +3,7 @@ import { setupPlayerConfig } from '~/common/utils/setup-player-config';
 import { PlayerOption, PlayerOptionGroup } from '~types';
 import './player-overrides.scss';
 
-function getPlayerOptions(): PlayerOptionGroup[] {
+function getPlaybackOptions(): PlayerOptionGroup[] {
   const optionGroups: PlayerOptionGroup[] = [];
 
   const qualityTitleNode = document.querySelector('.qualityMenuButton.baseSettingsMenuItem');
@@ -51,7 +51,7 @@ export function initVrvPlayer() {
   return setupPlayerConfig('vrv', {
     serviceDisplayName: 'VRV',
     onPlayDebounceMs: 50,
-    getPlayerOptions,
+    getPlaybackOptions,
     getRootQuery: () => 'body>div',
     getVideoQuery: () => 'video',
   });
