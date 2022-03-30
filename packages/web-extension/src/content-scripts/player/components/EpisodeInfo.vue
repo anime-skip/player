@@ -33,6 +33,7 @@
 import { RequestState } from 'vue-use-request-state';
 import ThemedLogo from '~/common/components/ThemedLogo.vue';
 import EpisodeUtils from '~/common/utils/episode-utils';
+import { usePlayerConfig } from '../composition/player-config';
 import { useEpisodeDisplayInfo } from '../hooks/useEpisodeDisplayInfo';
 import { useTheme } from '../hooks/useTheme';
 import { useDialogState, useShowConnectEpisodeDialog } from '../state/useDialogState';
@@ -41,7 +42,7 @@ import { useInferRequestState } from '../state/useInferredEpisodeState';
 import { usePlayHistory } from '../state/usePlayHistory';
 import { useDuration, useVideoState } from '../state/useVideoState';
 
-const serviceDisplayName = window.serviceDisplayName ?? 'Unknown';
+const { serviceDisplayName } = usePlayerConfig();
 
 const episodeDisplayInfo = useEpisodeDisplayInfo();
 const episodeDetails = computed(() =>

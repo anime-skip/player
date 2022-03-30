@@ -1,6 +1,7 @@
 import { useTimeoutFn } from '@vueuse/core';
 import { log } from '~/common/utils/log';
 import UsageStats from '~/common/utils/UsageStats';
+import { usePlayerConfig } from '../composition/player-config';
 import {
   useIncrementPlayTicks,
   usePlayHistory,
@@ -32,7 +33,8 @@ export function useVideoElement() {
   const updatePlayHistory = useUpdatePlayHistory();
   const incrementPlayTicks = useIncrementPlayTicks();
   const playHistory = usePlayHistory();
-  const video = ref(window.getVideo?.());
+  const { service, getVideo, onVideoChanged, onPlayDebounceMs } = usePlayerConfig();
+  const video = ref(getVideo?.());
   const url = useTabUrl();
   const canPlayCalled = ref(false);
 
@@ -85,20 +87,20 @@ export function useVideoElement() {
     updateCurrentTime();
   };
 
-  const onPlayingDelayed = useTimeoutFn(controls.play, onPlayingDelayMs[window.service]);
+  const onPlayingDelayed = useTimeoutFn(controls.play, onPlayDebounceMs);
   const onPlaying = () => {
     if (playHistory.isInitialBuffer && videoState.duration) {
-      let service: ReportableService = window.service;
+      let reportedService = service;
       if (
         service === 'crunchyroll' &&
         url.value &&
         new URL(url.value).hostname.startsWith('beta')
       ) {
-        service = 'crunchyroll-beta';
+        reportedService = 'crunchyroll-beta';
       }
       void UsageStats.saveEvent('episode_started', {
         episodeDuration: videoState.duration,
-        service: service,
+        service: reportedService,
       });
     }
 
@@ -130,6 +132,7 @@ export function useVideoElement() {
     newIsPaused => {
       if (!video.value) return;
 
+      console.log({ video: video.value });
       if (newIsPaused && !video.value.paused) video.value.pause();
       else if (!newIsPaused && video.value.paused) video.value.play();
     }
@@ -187,7 +190,7 @@ export function useVideoElement() {
     video.removeEventListener('waiting', onWaiting);
     video.removeEventListener('ended', onEnded);
   };
-  window.onVideoChanged(newVideo => {
+  onVideoChanged(newVideo => {
     if (video.value) clearListeners(video.value);
     setListeners(newVideo);
     video.value = newVideo;

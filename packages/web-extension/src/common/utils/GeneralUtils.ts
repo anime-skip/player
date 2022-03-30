@@ -1,5 +1,5 @@
+import { IPlayerConfig } from '~/content-scripts/player/composition/player-config';
 import * as Api from '~api';
-import { warn } from './log';
 
 // TODO: Refactor all the functions out of "GeneralUtils" and into targeted files
 
@@ -73,67 +73,16 @@ export default class GeneralUtils {
     }
   }
 
-  public static enterFullscreen(): void {
-    const elem = document.querySelector(window.getRootQuery());
-    if (!elem) {
-      warn('Could not find player to enter fullscreen');
-      return;
-    }
-    if (elem.requestFullscreen) {
-      elem.requestFullscreen();
-      // @ts-expect-error: difficult typing
-    } else if (elem.mozRequestFullScreen) {
-      /* Firefox */
-      // @ts-expect-error: difficult typing
-      elem.mozRequestFullScreen();
-      // @ts-expect-error: difficult typing
-    } else if (elem.webkitRequestFullscreen) {
-      /* Chrome, Safari and Opera */
-      // @ts-expect-error: difficult typing
-      elem.webkitRequestFullscreen();
-      // @ts-expect-error: difficult typing
-    } else if (elem.msRequestFullscreen) {
-      /* IE/Edge */
-      // @ts-expect-error: difficult typing
-      elem.msRequestFullscreen();
-    }
-  }
-
-  public static isFullscreen(): boolean {
-    return document.fullscreenElement != null;
-  }
-
-  public static exitFullscreen(): void {
-    if (!this.isFullscreen()) {
-      warn('Not in full screen mode, tried to exit');
-      return;
-    }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const d = document as any;
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (d.mozCancelFullScreen) {
-      /* Firefox */
-      d.mozCancelFullScreen();
-    } else if (d.webkitExitFullscreen) {
-      /* Chrome, Safari and Opera */
-      d.webkitExitFullscreen();
-    } else if (d.msExitFullscreen) {
-      /* IE/Edge */
-      d.msExitFullscreen();
-    }
-  }
-
   private static _videoLoadPromise?: Promise<number>;
 
   /**
    * Returns a promise containing the video's duration
    */
-  public static async waitForVideoLoad(): Promise<number> {
+  public static async waitForVideoLoad(playerConfig: IPlayerConfig): Promise<number> {
     if (!this._videoLoadPromise) {
       this._videoLoadPromise = new Promise(res => {
         const timeout = window.setInterval(function () {
-          const video = window.getVideo?.();
+          const video = playerConfig.getVideo?.();
           if (video && video.readyState > 0) {
             res(video.duration);
             clearInterval(timeout);
@@ -147,6 +96,8 @@ export default class GeneralUtils {
   /**
    * Strip out hashes and query params from a url
    * @param url The input url
+   *
+   * TODO: Export this so it can be used by things outside the player, or export a transformUrl(() => ..., () => ..., ...) instead?
    */
   public static stripUrl(url: string): string {
     const urlDetails = new URL(url);

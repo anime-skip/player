@@ -81,8 +81,11 @@
 import { computed, onMounted, ref } from 'vue';
 import useRadioIcon from '~/common/composition/useRadioIcon';
 import Messenger from '~/common/utils/Messenger';
+import { usePlayerConfig } from '../composition/player-config';
 import { useHideDialog } from '../state/useDialogState';
 import { useShowOriginalPlayer } from '../state/usePlayerVisibility';
+
+const playerConfig = usePlayerConfig();
 
 const openExtensionOptions = () => {
   new Messenger<RuntimeMessageTypes>('General Settings').send(
@@ -103,7 +106,7 @@ const getSelectedOption = (optionGroup: PlayerOptionGroup) => {
 };
 const playerOptions = ref<PlayerOptionGroup[]>();
 const loadPlayerOptions = async () => {
-  playerOptions.value = (await window.getPlayerOptions())?.filter(
+  playerOptions.value = (await playerConfig.getPlayerOptions?.())?.filter(
     group => group.options.length > 0
   );
 };
@@ -117,7 +120,7 @@ const onClickOption = (option: PlayerOption) => {
   setActiveOptionGroup(undefined);
 };
 
-const serviceName = window.serviceDisplayName;
+const serviceName = playerConfig.serviceDisplayName;
 const _showOriginalPlayer = useShowOriginalPlayer();
 function showOriginalPlayer() {
   hideDialog();

@@ -2,6 +2,7 @@ import { Utils as UiUtils } from '@anime-skip/ui';
 import { PLAYER_ACTIVITY_TIMEOUT } from '~/common/utils/constants';
 import { createProvideInject } from '~/common/utils/createProvideInject';
 import UsageStats from '~/common/utils/UsageStats';
+import { usePlayerConfig } from '../composition/player-config';
 
 export interface VideoState {
   /**
@@ -54,29 +55,35 @@ export interface VideoState {
   playbackRate: number;
 }
 
-const initialVideo = window.getVideo?.();
-
 const {
   provideValue: provideVideoState,
   useValue: useVideoState,
   useUpdate: useUpdateVideoState,
-} = createProvideInject<VideoState>('video-state', {
-  isActive: false,
-  isBuffering: true,
-  isPaused: initialVideo?.paused ?? false,
-  isMuted: initialVideo?.muted ?? false,
-  volumePercent: 100,
-  allowVolumeChangeTo: undefined,
-  currentTime: initialVideo?.currentTime ?? 0,
-  duration: initialVideo?.duration || (undefined as number | undefined),
-  playbackRate: initialVideo?.playbackRate ?? 1,
-});
+} = createProvideInject<VideoState>(
+  'video-state',
+  () => {
+    const initialVideo = usePlayerConfig().getVideo?.();
+    return {
+      isActive: false,
+      isBuffering: true,
+      isPaused: initialVideo?.paused ?? false,
+      isMuted: initialVideo?.muted ?? false,
+      volumePercent: 100,
+      allowVolumeChangeTo: undefined,
+      currentTime: initialVideo?.currentTime ?? 0,
+      duration: initialVideo?.duration || (undefined as number | undefined),
+      playbackRate: initialVideo?.playbackRate ?? 1,
+    };
+  },
+  true
+);
 
 export { provideVideoState, useVideoState, useUpdateVideoState };
 
 export function useVideoController() {
   const state = useVideoState();
   const update = useUpdateVideoState();
+  const { getVideo } = usePlayerConfig();
 
   return {
     // Play/Pause
@@ -148,13 +155,13 @@ export function useVideoController() {
       if (!updateVideo) return;
 
       // always update the video unless the update is coming from the video element itself
-      const video = window.getVideo?.();
+      const video = getVideo?.();
       if (video) {
         video.currentTime = newBoundedTime;
       }
     },
     rewindToNearest(second: number) {
-      const video = window.getVideo?.();
+      const video = getVideo?.();
       if (!video) return;
 
       const currentTime = video.currentTime;

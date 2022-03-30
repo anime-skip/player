@@ -1,9 +1,31 @@
 // eslint-disable-next-line @typescript-eslint/ban-types
-export function createProvideInject<T extends object>(label: string, defaultValue: T) {
+interface ProvideInject<T> {
+  provideValue(): void;
+  useValue(): Readonly<T>;
+  useUpdate(): (newValue: Partial<T>) => void;
+}
+
+export function createProvideInject<T extends object>(
+  label: string,
+  defaultValue: T
+): ProvideInject<T>;
+export function createProvideInject<T extends object>(
+  label: string,
+  defaultValueFactory: () => T,
+  defaultAsFactory: true
+): ProvideInject<T>;
+export function createProvideInject<T extends object>(
+  label: string,
+  defaultValueFactory: T | (() => T),
+  defaultAsFactory?: boolean
+): ProvideInject<T> {
   const valueKey = label + '-value';
   const updateKey = label + '-update';
 
   function provideValue() {
+    const defaultValue: T = defaultAsFactory
+      ? (defaultValueFactory as Function)()
+      : defaultValueFactory;
     const value = reactive(defaultValue);
     provide(valueKey, readonly(value));
 

@@ -1,5 +1,5 @@
 import { loadedLog } from '~/common/utils/log';
-import setupGlobals from '~/common/utils/setupGlobals';
+import { setupPlayerConfig } from '~/common/utils/setup-player-config';
 import './player-overrides.scss';
 
 function getPlayerOptions(): PlayerOptionGroup[] {
@@ -47,7 +47,7 @@ function getPlayerOptions(): PlayerOptionGroup[] {
 export function initVrvPlayer() {
   loadedLog('content-scripts/services/vrv/player.ts');
 
-  setupGlobals('vrv', {
+  return setupPlayerConfig('vrv', {
     serviceDisplayName: 'VRV',
     getPlayerOptions,
     getRootQuery: () => 'body>div',

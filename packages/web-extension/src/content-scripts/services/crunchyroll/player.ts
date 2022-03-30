@@ -1,12 +1,12 @@
 import GeneralUtils from '~/common/utils/GeneralUtils';
 import { loadedLog } from '~/common/utils/log';
-import setupGlobals from '~/common/utils/setupGlobals';
+import { setupPlayerConfig } from '~/common/utils/setup-player-config';
 import './player-overrides.scss';
 
 export function initCrunchyrollPlayer() {
   loadedLog('content-scripts/services/crunchyroll/player.ts');
 
-  setupGlobals('crunchyroll', {
+  return setupPlayerConfig('crunchyroll', {
     serviceDisplayName: 'Crunchyroll',
     getRootQuery: () => 'body',
     getVideoQuery: () => 'video',
@@ -15,7 +15,8 @@ export function initCrunchyrollPlayer() {
       return GeneralUtils.stripUrl(inputUrl).replace(/-[0-9]+$/, '');
     },
     doNotReplacePlayer() {
-      // Crunchyroll has two iframes, one for preloading and one for the actual video. This skips the preloading one
+      // Crunchyroll has two iframes, one for preloading and one for the actual video. This skips
+      // the preloading one
       return document.body.getBoundingClientRect().width === 0;
     },
   });

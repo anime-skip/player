@@ -56,6 +56,7 @@ import { nextFrame } from '~/common/utils/event-loop';
 import Utils from '~/common/utils/GeneralUtils';
 import Messenger from '~/common/utils/Messenger';
 import UsageStats from '~/common/utils/UsageStats';
+import { usePlayerConfig } from '../composition/player-config';
 import { useLoadAllEpisodeData } from '../hooks/useLoadAllEpisodeData';
 import { usePlaybackRateConnector } from '../hooks/usePlaybackRateConnector';
 import { useTabUrl } from '../hooks/useTabUrl';
@@ -108,8 +109,9 @@ watch(video, newVideo => {
 // Sync the playback rate between prefs and videoState
 usePlaybackRateConnector();
 
+const playerConfig = usePlayerConfig();
 onMounted(() => {
-  Utils.waitForVideoLoad().then(setDuration);
+  Utils.waitForVideoLoad(playerConfig).then(setDuration);
 });
 
 // Hover Activity
