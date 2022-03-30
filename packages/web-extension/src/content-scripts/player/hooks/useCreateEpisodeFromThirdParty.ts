@@ -3,7 +3,7 @@ import { useApiClient } from '~/common/hooks/useApiClient';
 import { warn } from '~/common/utils/log';
 import * as Api from '~api';
 import GeneralUtils from '~utils/GeneralUtils';
-import Mappers from '~utils/mappers';
+import * as Mappers from '~utils/mappers';
 import { useUpdateEpisodeRequestState } from '../state/useEpisodeState';
 import { useDuration } from '../state/useVideoState';
 import { useCreateEpisodeData } from './useCreateEpisodeData';

@@ -43,7 +43,7 @@ import { useApiClient } from '~/common/hooks/useApiClient';
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import { debug, log, warn } from '~/common/utils/log';
 import * as Api from '~api';
-import Mappers from '~utils/mappers';
+import * as Mappers from '~utils/mappers';
 import { useEpisodeRequestState } from '../../state/useEpisodeState';
 import { useInferredEpisode } from '../../state/useInferredEpisodeState';
 import { deref } from '../../utils/deref';
