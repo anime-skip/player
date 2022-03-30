@@ -52,6 +52,7 @@
 
 <script lang="ts" setup>
 import { PLAYBACK_SPEEDS } from '~/common/utils/constants';
+import { PlaybackRate } from '~types';
 import { useGeneralPreferences, useUpdateLocalPref } from '../state/useGeneralPreferences';
 
 const props = defineProps<{

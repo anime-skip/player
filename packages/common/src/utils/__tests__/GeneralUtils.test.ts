@@ -1,4 +1,4 @@
-import * as Api from '~api';
+import * as Api from '../../api';
 import GeneralUtils from '../GeneralUtils';
 
 describe('Utils', () => {

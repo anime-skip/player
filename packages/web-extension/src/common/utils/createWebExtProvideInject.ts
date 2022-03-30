@@ -1,6 +1,6 @@
 import isEqual from 'lodash.isequal';
 import browser, { Storage } from 'webextension-polyfill';
-import { createProvideInject } from './createProvideInject';
+import { createProvideInject } from '~utils/createProvideInject';
 
 type AreaName = 'sync' | 'local' | 'managed';
 

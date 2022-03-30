@@ -12,6 +12,27 @@ importers:
       prettier: 2.5.1
       pretty-quick: 3.1.3_prettier@2.5.1
 
+  packages/common:
+    specifiers:
+      '@anime-skip/api-client': ^2.6.2
+      '@types/jest': ^27.0.1
+      jest: ^27.2.2
+      jest-mock-extended: ^2.0.4
+      joi: ^17.6.0
+      ts-jest: ^27.0.5
+      typescript: ^4.3.5
+      vue-global-api: ^0.2.4
+    dependencies:
+      '@anime-skip/api-client': 2.6.2
+      joi: 17.6.0
+    devDependencies:
+      '@types/jest': 27.0.1
+      jest: 27.2.2
+      jest-mock-extended: 2.0.4_jest@27.2.2+typescript@4.3.5
+      ts-jest: 27.0.5_be90d98173f61dbf09998b9442f2a163
+      typescript: 4.3.5
+      vue-global-api: 0.2.4
+
   packages/web-extension:
     specifiers:
       '@anime-skip/api-client': ^2.6.2
@@ -37,6 +58,7 @@ importers:
       autoprefixer: ^10.4.1
       axios: ^0.24.0
       axios-auth-refresh: ^3.1.0
+      common: workspace:*
       concurrently: ^6.2.1
       cross-env: ^7.0.3
       dotenv: ^10.0.0
@@ -52,7 +74,6 @@ importers:
       fuzzysort: ^1.1.4
       jest: ^27.2.2
       jest-mock-extended: ^2.0.4
-      joi: ^17.6.0
       lodash.isequal: ^4.5.0
       lodash.merge: ^4.6.2
       md5: ^2.3.0
@@ -81,9 +102,9 @@ importers:
       async-mutex: 0.3.2
       axios: 0.24.0
       axios-auth-refresh: 3.1.0_axios@0.24.0
+      common: link:../common
       exponential-backoff: 3.1.0
       fuzzysort: 1.1.4
-      joi: 17.6.0
       lodash.isequal: 4.5.0
       md5: 2.3.0
       vue: 3.2.2
@@ -7274,6 +7295,19 @@ packages:
       vue: 3.2.2
     dev: false
 
+  /vue-demi/0.12.5:
+    resolution: {integrity: sha512-BREuTgTYlUr0zw0EZn3hnhC3I6gPWv+Kwh4MCih6QcAeaTlaIX0DwOVN0wHej7hSvDPecz4jygy/idsgKfW58Q==}
+    engines: {node: '>=12'}
+    hasBin: true
+    requiresBuild: true
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^3.0.0-0 || ^2.6.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+    dev: true
+
   /vue-demi/0.12.5_vue@3.2.2:
     resolution: {integrity: sha512-BREuTgTYlUr0zw0EZn3hnhC3I6gPWv+Kwh4MCih6QcAeaTlaIX0DwOVN0wHej7hSvDPecz4jygy/idsgKfW58Q==}
     engines: {node: '>=12'}
@@ -7304,6 +7338,15 @@ packages:
       semver: 6.3.0
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /vue-global-api/0.2.4:
+    resolution: {integrity: sha512-Cm84AZiALt8f4CJZzPvbForTzAUYe41msnzUnRK6B7YkaDaN8g87ap8CpHWvTU0+XtyDeLLAeQoRr+uwamxfpQ==}
+    dependencies:
+      vue-demi: 0.12.5
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
     dev: true
 
   /vue-global-api/0.2.4_vue@3.2.2:

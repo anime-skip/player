@@ -1,4 +1,5 @@
-import * as Api from '~api';
+import * as Api from '../api';
+import { DisplayEpisodeInfo } from '../types';
 
 export default {
   seasonAndNumberFromEpisodeUrl(episodeUrl?: Api.EpisodeUrl): string {

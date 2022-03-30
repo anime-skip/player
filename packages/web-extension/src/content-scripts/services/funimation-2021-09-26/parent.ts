@@ -1,6 +1,6 @@
 import { loadedLog, log } from '~/common/utils/log';
 import setupParent from '~/common/utils/setupParent';
-import { waitUntil } from '~/common/utils/time';
+import { waitUntil } from '~utils/time';
 
 async function getEpisodeInfo() {
   const pageHasLoaded = () => Promise.resolve(document.querySelector('.meta-overlay') != null);

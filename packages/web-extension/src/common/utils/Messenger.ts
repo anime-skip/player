@@ -1,6 +1,6 @@
 import browser, { Runtime } from 'webextension-polyfill';
+import { sleep } from '~utils/time';
 import { debug } from './log';
-import { sleep } from './time';
 
 export default class Messenger<
   K extends MessageTypes = MessageTypes,

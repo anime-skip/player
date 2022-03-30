@@ -52,10 +52,10 @@
 </template>
 
 <script lang="ts" setup>
-import { nextFrame } from '~/common/utils/event-loop';
-import Utils from '~/common/utils/GeneralUtils';
 import Messenger from '~/common/utils/Messenger';
 import UsageStats from '~/common/utils/UsageStats';
+import { nextFrame } from '~utils/event-loop';
+import Utils from '~utils/GeneralUtils';
 import { usePlayerConfig } from '../composition/player-config';
 import { useLoadAllEpisodeData } from '../hooks/useLoadAllEpisodeData';
 import { usePlaybackRateConnector } from '../hooks/usePlaybackRateConnector';

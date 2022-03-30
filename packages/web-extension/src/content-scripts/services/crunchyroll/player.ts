@@ -1,6 +1,6 @@
-import GeneralUtils from '~/common/utils/GeneralUtils';
 import { loadedLog } from '~/common/utils/log';
 import { setupPlayerConfig } from '~/common/utils/setup-player-config';
+import GeneralUtils from '~utils/GeneralUtils';
 import './player-overrides.scss';
 
 export function initCrunchyrollPlayer() {

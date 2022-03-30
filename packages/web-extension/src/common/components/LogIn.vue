@@ -54,6 +54,7 @@
 
 <script lang="ts" setup>
 import useRequestState from 'vue-use-request-state';
+import { TextInputRef } from '~types';
 import { useLogin } from '../hooks/useLogin';
 
 defineProps<{

@@ -12,7 +12,7 @@
 <script lang="ts" setup>
 import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
 import { TIMESTAMP_TYPES } from '~/common/utils/constants';
-import Utils from '~/common/utils/GeneralUtils';
+import Utils from '~utils/GeneralUtils';
 import { useDisplayedTimestamps } from '../hooks/useDisplayedTimestamps';
 import { useIsToolbarVisible } from '../hooks/useIsToolbarVisible';
 import { useIsEditing } from '../state/useEditingState';

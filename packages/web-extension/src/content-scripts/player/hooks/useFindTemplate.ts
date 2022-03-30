@@ -1,8 +1,8 @@
 import { useApiClient } from '~/common/hooks/useApiClient';
-import GeneralUtils from '~/common/utils/GeneralUtils';
 import { debug, log } from '~/common/utils/log';
-import { sleep } from '~/common/utils/time';
 import * as Api from '~api';
+import GeneralUtils from '~utils/GeneralUtils';
+import { sleep } from '~utils/time';
 import { useEpisodeTemplate, useUpdateTemplateState } from '../state/useTemplateState';
 import { useDuration } from '../state/useVideoState';
 

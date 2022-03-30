@@ -1,8 +1,8 @@
 import { backOff } from 'exponential-backoff';
 import browser from 'webextension-polyfill';
-import { IPlayerConfig } from '~/content-scripts/player/composition/player-config';
+import { IPlayerConfig } from '~types';
+import { SECOND } from '~utils/time';
 import { debug, log, warn } from './log';
-import { SECOND } from './time';
 
 /**
  * Configures the default player config for a player injected by the web extension

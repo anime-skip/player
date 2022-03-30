@@ -4,11 +4,12 @@ import 'vue-global-api';
 import FakeRouterLink from '~/common/components/FakeRouterLink.vue';
 import { Provider } from '~/common/components/Provider';
 import '~/common/styles';
-import { centerFitVideoBounds, fallbackBound } from '~/common/utils/drawing';
 import { debug, loadedLog, log, warn } from '~/common/utils/log';
 import Messenger from '~/common/utils/Messenger';
-import { sleep } from '~/common/utils/time';
-import { IPlayerConfig, providePlayerConfig } from './composition/player-config';
+import { IPlayerConfig } from '~types';
+import { centerFitVideoBounds, fallbackBound } from '~utils/drawing';
+import { sleep } from '~utils/time';
+import { providePlayerConfig } from './composition/player-config';
 import { Container } from './Container';
 import './themes.scss';
 

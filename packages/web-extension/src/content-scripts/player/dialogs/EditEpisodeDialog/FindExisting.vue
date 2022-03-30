@@ -71,11 +71,11 @@
 
 <script lang="ts" setup>
 import { CreateEpisodePrefill } from '~/@types';
-import { useApiClient } from '~/common/hooks/useApiClient';
 import { TIMESTAMP_SOURCES } from '~/common/utils/constants';
-import EpisodeUtils from '~/common/utils/episode-utils';
 import { error, warn } from '~/common/utils/log';
 import * as Api from '~api';
+import { TextInputRef } from '~types';
+import EpisodeUtils from '~utils/episode-utils';
 import { useCreateEpisodeFromThirdParty } from '../../hooks/useCreateEpisodeFromThirdParty';
 import { useEpisodeAutocomplete } from '../../hooks/useEpisodeAutocomplete';
 import { useLinkEpisodeUrl } from '../../hooks/useLinkEpisodeUrl';
@@ -89,7 +89,6 @@ const props = defineProps<{
 const emit = defineEmits({
   createNew: (_arg: CreateEpisodePrefill) => true,
 });
-const api = useApiClient();
 
 // Autocomplete
 

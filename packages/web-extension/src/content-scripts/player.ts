@@ -1,7 +1,7 @@
 import { PlayerHosts } from '~/common/utils/compile-time-constants';
 import { error, loadedLog } from '~/common/utils/log';
 import { urlPatternMatch } from '~/common/utils/strings';
-import { IPlayerConfig } from './player/composition/player-config';
+import { IPlayerConfig } from '~types';
 import { loadPlayerUi } from './player/index';
 import { initCrunchyrollPlayer } from './services/crunchyroll/player';
 import { initFunimation20210926Player } from './services/funimation-2021-09-26/player';

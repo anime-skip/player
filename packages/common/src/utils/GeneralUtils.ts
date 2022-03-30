@@ -1,5 +1,5 @@
-import { IPlayerConfig } from '~/content-scripts/player/composition/player-config';
-import * as Api from '~api';
+import * as Api from '../api';
+import { IPlayerConfig } from '../types';
 
 // TODO: Refactor all the functions out of "GeneralUtils" and into targeted files
 
