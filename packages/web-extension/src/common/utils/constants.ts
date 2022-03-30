@@ -1,6 +1,6 @@
 import type * as Api from '~api';
 import { TimestampSource } from '~api';
-import { PlaybackRate, StripOtherTypes } from '~types';
+import { PickTypes, PlaybackRate } from '~types';
 import { DAY, HOUR } from '~utils/time';
 import { KeyboardShortcutActionToKeyBindingMap } from '../state/useKeyboardShortcutPrefs';
 
@@ -195,7 +195,7 @@ export const TIMESTAMP_SOURCES: { [source in TimestampSource]: string | undefine
 };
 
 interface SkippablePreference {
-  key: StripOtherTypes<Api.Preferences, boolean>;
+  key: PickTypes<Api.Preferences, boolean>;
   title: string;
   help: string;
 }
