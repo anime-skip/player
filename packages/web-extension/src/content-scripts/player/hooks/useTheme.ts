@@ -1,5 +1,5 @@
-import { ColorTheme } from '~/common/api';
 import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
+import { ColorTheme } from '~api';
 import { usePlayerConfig } from '../composition/player-config';
 
 const colorThemeToCssClassNameMap: Record<ColorTheme, Service | undefined> = {

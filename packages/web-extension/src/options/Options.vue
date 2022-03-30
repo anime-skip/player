@@ -41,7 +41,6 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { ColorTheme } from '~/common/api';
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import {
   useGeneralPreferences,
@@ -49,6 +48,7 @@ import {
   useUpdateRemotePref,
 } from '~/common/state/useGeneralPreferences';
 import UsageStats from '~/common/utils/UsageStats';
+import { ColorTheme } from '~api';
 
 onMounted(() => {
   void UsageStats.saveEvent('opened_all_settings');
