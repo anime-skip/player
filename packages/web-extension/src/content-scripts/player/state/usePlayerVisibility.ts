@@ -1,4 +1,4 @@
-import { createProvideInject } from '~/common/utils/createProvideInject';
+import { createProvideInject } from '~utils/createProvideInject';
 
 export interface PlayerVisibility {
   isAnimeSkipPlayerVisible: boolean;

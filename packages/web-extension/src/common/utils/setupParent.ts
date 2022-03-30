@@ -1,7 +1,8 @@
 import Messenger from '~/common/utils/Messenger';
-import { fallbackBound } from './drawing';
+import { InferredEpisodeInfo, ScreenshotDetails } from '~types';
+import { fallbackBound } from '~utils/drawing';
+import { sleep } from '~utils/time';
 import { error } from './log';
-import { sleep } from './time';
 
 function defaultGetScreenshotDetails() {
   const iframe = document.querySelector('iframe');

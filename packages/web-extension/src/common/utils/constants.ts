@@ -1,7 +1,8 @@
 import type * as Api from '~api';
 import { TimestampSource } from '~api';
+import { PlaybackRate, StripOtherTypes } from '~types';
+import { DAY, HOUR } from '~utils/time';
 import { KeyboardShortcutActionToKeyBindingMap } from '../state/useKeyboardShortcutPrefs';
-import { DAY, HOUR } from './time';
 
 export const persistedKeys = [
   'token' as const,

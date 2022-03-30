@@ -5,7 +5,9 @@
     "types": ["vite/client", "jest", "vue-global-api"],
     "paths": {
       "~/*": ["./src/*"],
-      "~api": ["../common/src/api"]
+      "~api": ["../common/src/api"],
+      "~utils/*": ["../common/src/utils/*"],
+      "~types": ["../common/src/types"]
     }
   }
 }

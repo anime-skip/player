@@ -19,9 +19,9 @@ import {
   useDontShowStoreReviewPromptAgain,
   useStoreReviewPromptDate,
 } from '~/common/state/store-review-prompt';
-import Utils from '~/common/utils/GeneralUtils';
-import { DAYS, MINUTES, SECOND, SECONDS, today } from '~/common/utils/time';
 import UsageStats from '~/common/utils/UsageStats';
+import Utils from '~utils/GeneralUtils';
+import { DAYS, MINUTES, SECOND, SECONDS, today } from '~utils/time';
 import { NotificationButton } from './Notification.vue';
 
 interface Notification {

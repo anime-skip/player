@@ -1,5 +1,6 @@
 import { loadedLog } from '~/common/utils/log';
 import { setupPlayerConfig } from '~/common/utils/setup-player-config';
+import { PlayerOption, PlayerOptionGroup } from '~types';
 import './player-overrides.scss';
 
 function getPlayerOptions(): PlayerOptionGroup[] {

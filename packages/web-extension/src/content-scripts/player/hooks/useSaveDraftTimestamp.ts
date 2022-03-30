@@ -1,5 +1,5 @@
-import GeneralUtils from '~/common/utils/GeneralUtils';
 import * as Api from '~api';
+import GeneralUtils from '~utils/GeneralUtils';
 import { useDraftTimestamps, useUpdateDraftTimestamps } from '../state/useEditingState';
 
 export function useSaveDraftTimestamp() {

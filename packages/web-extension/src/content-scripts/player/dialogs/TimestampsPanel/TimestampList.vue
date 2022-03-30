@@ -110,8 +110,8 @@
 import { useTimeout, Utils } from '@anime-skip/ui';
 import { useIsLoggedIn } from '~/common/state/useAuth';
 import { TIMESTAMP_SOURCES, TIMESTAMP_TYPES } from '~/common/utils/constants';
-import { SECONDS } from '~/common/utils/time';
 import * as Api from '~api';
+import { SECONDS } from '~utils/time';
 import { useCanEditTimestamps } from '../../hooks/useCanEditTimestamps';
 import { useCreateNewTimestamp } from '../../hooks/useCreateNewTimestamp';
 import { useDeleteDraftTimestamp } from '../../hooks/useDeleteDraftTimestamp';

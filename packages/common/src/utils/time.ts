@@ -35,7 +35,7 @@ export function waitUntil(
   callback: () => Promise<boolean>,
   timeoutMs: number,
   backoffRate = 2,
-  initilSleepMs = 10
+  initialSleepMs = 10
 ): Promise<void> {
   let done = false;
   let resolve: () => void;
@@ -48,7 +48,7 @@ export function waitUntil(
     resolve();
   }, timeoutMs);
 
-  let sleepMs = initilSleepMs;
+  let sleepMs = initialSleepMs;
   callback().then(async res => {
     done = res;
     if (!done) {

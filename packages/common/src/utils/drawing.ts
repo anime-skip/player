@@ -1,3 +1,5 @@
+import { ScreenshotDetails } from '../types';
+
 export function fallbackBound(...values: (number | undefined)[]): number {
   return values.find(value => value != null && !isNaN(value)) ?? 0;
 }

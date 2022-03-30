@@ -1,12 +1,12 @@
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { createCustomAnimeSkipClient } from '~/common/utils/CustomApiClient';
+import { createCustomAnimeSkipClient } from '~utils/CustomApiClient';
+import GeneralUtils from '~utils/GeneralUtils';
+import { LogoutError } from '~utils/LogoutError';
 import { useClearTokens } from '../state/useAuth';
 import { useResetPreferences } from '../state/useGeneralPreferences';
-import GeneralUtils from '../utils/GeneralUtils';
-import { groupCollapsed, warn } from '../utils/log';
-import { LogoutError } from '../utils/LogoutError';
+import { groupCollapsed, log, warn } from '../utils/log';
 import UsageStats from '../utils/UsageStats';
 import useTokenRefresher from './useTokenRefresher';
 
@@ -20,7 +20,7 @@ const baseUrls: Record<ExtensionMode, string> = {
 const clientId = 'OB3AfF3fZg9XlZhxtLvhwLhDcevslhnr';
 const modesToLog: ExtensionMode[] = ['dev', 'staged'];
 
-const client = createCustomAnimeSkipClient(baseUrls[EXTENSION_MODE], clientId);
+const client = createCustomAnimeSkipClient(baseUrls[EXTENSION_MODE], clientId, log);
 if (modesToLog.includes(EXTENSION_MODE)) {
   client.axios.interceptors.response.use(response => {
     // disabled since axios@0.24

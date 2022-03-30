@@ -1,8 +1,9 @@
 import { Ref } from 'vue';
 import { useApiClient } from '~/common/hooks/useApiClient';
-import GeneralUtils from '~/common/utils/GeneralUtils';
-import Mappers from '~/common/utils/mappers';
 import * as Api from '~api';
+import { AutocompleteItem, TextInputRef } from '~types';
+import GeneralUtils from '~utils/GeneralUtils';
+import Mappers from '~utils/mappers';
 
 export function useShowAutocomplete(
   defaultShowItem: AutocompleteItem<Api.ShowSearchResult>,

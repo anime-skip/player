@@ -1,7 +1,7 @@
-import * as Api from '~api';
+import * as Api from '../../api';
 import EpisodeUtils from '../episode-utils';
 
-describe('EpisodeUtils', () => {
+describe('Episode Utils', () => {
   describe('seasonAndNumberDisplay', () => {
     it('should return all the values when they are passed', () => {
       const input = {

@@ -1,6 +1,6 @@
 import { useApiClient } from '~/common/hooks/useApiClient';
-import GeneralUtils from '~/common/utils/GeneralUtils';
 import * as Api from '~api';
+import GeneralUtils from '~utils/GeneralUtils';
 
 export function useSaveTemplateTimestamps() {
   const api = useApiClient();

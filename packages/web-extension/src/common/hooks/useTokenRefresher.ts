@@ -4,9 +4,9 @@ import type createAnimeSkipClient from '@anime-skip/api-client';
 import { Mutex } from 'async-mutex';
 import { AxiosResponse } from 'axios';
 import * as Api from '~api';
+import { LogoutError } from '~utils/LogoutError';
 import { getAuthAsync, updateAuthAsync } from '../state/useAuth';
 import { log, warn } from '../utils/log';
-import { LogoutError } from '../utils/LogoutError';
 import UsageStats from '../utils/UsageStats';
 
 const lock = new Mutex();
@@ -52,7 +52,11 @@ export default function useTokenRefresher(client: ReturnType<typeof createAnimeS
       log('Refreshed token!');
     } catch (err) {
       warn('Could not refresh token:', err);
-      throw new LogoutError(auth.token, auth.refreshToken, err.message ?? JSON.stringify(err));
+      throw new LogoutError(
+        auth.token,
+        auth.refreshToken,
+        (err as any).message ?? JSON.stringify(err)
+      );
     } finally {
       release();
     }

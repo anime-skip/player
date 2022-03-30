@@ -1,5 +1,6 @@
 import { mocked } from 'ts-jest/utils';
 import setupParent from '~/common/utils/setupParent';
+import { InferredEpisodeInfo } from '~types';
 import { initFunimation20210926Parent } from '../parent';
 
 jest.mock('~/common/utils/setupParent');

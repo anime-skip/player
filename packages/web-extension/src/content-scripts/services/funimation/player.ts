@@ -1,6 +1,7 @@
-import GeneralUtils from '~/common/utils/GeneralUtils';
 import { loadedLog } from '~/common/utils/log';
 import { setupPlayerConfig } from '~/common/utils/setup-player-config';
+import { PlayerOption, PlayerOptionGroup } from '~types';
+import GeneralUtils from '~utils/GeneralUtils';
 import './player-overrides.scss';
 
 function getPlayerOptions(): PlayerOptionGroup[] {

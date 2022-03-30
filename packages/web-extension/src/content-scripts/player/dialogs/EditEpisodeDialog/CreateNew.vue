@@ -42,6 +42,7 @@
 <script lang="ts" setup>
 import { CreateEpisodePrefill } from '~/@types';
 import * as Api from '~api';
+import { TextInputRef } from '~types';
 import { useCreateEpisodeData } from '../../hooks/useCreateEpisodeData';
 import { useShowAutocomplete } from '../../hooks/useShowAutocomplete';
 import { useTabUrl } from '../../hooks/useTabUrl';

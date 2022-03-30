@@ -35,9 +35,9 @@
 import { useWebExtensionStorageValue } from '~/common/hooks/useWebExtensionStorage';
 import { isUrlSupported } from '~/common/state/url-supported';
 import { useIsLoggedIn } from '~/common/state/useAuth';
-import { detectBrowser } from '~/common/utils/browser';
 import { log } from '~/common/utils/log';
 import UsageStats from '~/common/utils/UsageStats';
+import { detectBrowser } from '~utils/browser';
 
 defineProps<{
   small?: boolean;

@@ -1,6 +1,7 @@
 import { GqlPreferences } from '@anime-skip/api-client';
 import * as Api from '~api';
 import { ColorTheme } from '~api';
+import { StripOtherTypes } from '~types';
 import { useApiClient } from '../hooks/useApiClient';
 import { createWebExtProvideInject } from '../utils/createWebExtProvideInject';
 import { warn } from '../utils/log';
