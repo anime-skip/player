@@ -3,7 +3,7 @@ import { createProvideInject } from '~utils/createProvideInject';
 import { sleep } from '~utils/time';
 import { useVideoController } from './useVideoState';
 
-type DialogId = 'PreferencesDialog' | 'TimestampsPanel' | 'EditEpisodeDialog';
+type DialogId = 'PreferencesDialog' | 'TimestampsPanel' | 'ConnectEpisodeDialog';
 
 export interface DialogState {
   /**
@@ -91,6 +91,6 @@ export function useShowConnectEpisodeDialog() {
     if (!isLoggedIn.value) {
       showLoginOverlay();
     }
-    showDialog('EditEpisodeDialog'); // TODO: rename to ConnectEpisodeDialog
+    showDialog('ConnectEpisodeDialog');
   };
 }

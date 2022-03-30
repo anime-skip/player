@@ -44,7 +44,7 @@
       <ScreenshotOverlay />
       <TimestampsPanel />
       <PreferencesDialog />
-      <EditEpisodeDialog />
+      <ConnectEpisodeDialog />
       <LoginDialog />
     </div>
     <return-button />

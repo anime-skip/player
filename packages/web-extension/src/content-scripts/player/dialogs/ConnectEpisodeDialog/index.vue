@@ -1,6 +1,6 @@
 <template>
   <BasicDialog
-    name="EditEpisodeDialog"
+    name="ConnectEpisodeDialog"
     gravity-x="center"
     gravity-y="center"
     @show="onShow"
@@ -242,7 +242,7 @@ function onHide() {
   margin: 0;
 }
 
-#EditEpisodeDialog .as-dialog-root-container {
+#ConnectEpisodeDialog .as-dialog-root-container {
   width: 480px;
   overflow: visible;
 }

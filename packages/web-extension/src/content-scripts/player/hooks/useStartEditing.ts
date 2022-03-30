@@ -18,7 +18,7 @@ export function useStartEditing() {
       showLoginOverlay();
     }
     if (episodeUrl.value == null) {
-      await showDialog('EditEpisodeDialog');
+      await showDialog('ConnectEpisodeDialog');
       return;
     }
 
