@@ -10,7 +10,7 @@ const getUserId: UsageStatsClientConfig['getUserId'] = async () => {
   return results[USAGE_STATS_USER_ID_STORAGE_KEY];
 };
 
-const reportModes: ExtensionMode[] = ['prod', 'beta', EXTENSION_MODE];
+const reportModes: ExtensionMode[] = ['prod', 'beta'];
 
 const client = createUsageStatsClient({
   app: 'Anime Skip Player',
