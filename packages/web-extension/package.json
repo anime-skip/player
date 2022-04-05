@@ -31,6 +31,7 @@
     "build:beta:chrome": "cross-env BUILD_FOR=chrome pnpm build:beta",
     "build:staged": "cross-env BUILD_MODE=staged vite build",
     "build:staged:chrome": "cross-env BUILD_FOR=chrome pnpm build:staged",
+    "zip-sources": "esno scripts/zip-sources.ts",
     "package": "esno scripts/package/index.ts",
     "package:dry": "cross-env DRY_RUN=true pnpm package",
     "validate": "pnpm package:dry"
