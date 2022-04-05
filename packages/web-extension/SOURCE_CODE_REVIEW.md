@@ -10,7 +10,7 @@ This is the document that contains all the necessary steps to building the submi
 
 ## Build Process
 
-`dist/` is what gets zipped and submitted.
+`packages/web-extension/dist/` is what gets zipped and submitted.
 
 ```bash
 # Prevent crash from husky
@@ -20,5 +20,6 @@ git init
 pnpm i
 
 # build dist/ directory
+cd packages/web-extension
 pnpm build
 ```
