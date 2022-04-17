@@ -23,7 +23,9 @@
       >
         <Loading />
       </div>
-      <div class="as-left-content as-pointer-events-none as-pl-8 as-pt-8 as-box-border">
+      <div
+        class="as-left-content as-pointer-events-none as-pl-8 as-pt-8 as-box-border as-overflow-clip"
+      >
         <episode-info />
       </div>
       <notification-center class="as-right-content" />
