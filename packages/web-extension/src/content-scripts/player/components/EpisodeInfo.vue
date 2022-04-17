@@ -10,14 +10,14 @@
       >
         <ThemedLogo class="as-w-8 as-h-8 as-object-contain" />
       </a>
-      <h5 class="as-text-primary as-pt-1 as-line-clamp-2">
+      <h5 class="as-text-primary as-pt-1 as-line-clamp-2" :title="episodeDisplayInfo.show">
         {{ episodeDisplayInfo.show }}
         <span class="as-font-normal as-text-opacity-low"
           >&ensp;&bull;&ensp;{{ serviceDisplayName }}</span
         >
       </h5>
     </div>
-    <h3 class="as-line-clamp-2" title="episodeDisplayInfo.name">{{ episodeDisplayInfo.name }}</h3>
+    <h3 class="as-line-clamp-2" :title="episodeDisplayInfo.name">{{ episodeDisplayInfo.name }}</h3>
     <h6 class="as-text-on-surface as-text-opacity-high">{{ episodeDetails }}</h6>
     <FlatButton v-if="isConnectButtonShowing" transparent @click.stop="showConnectEpisodeDialog">
       <Icon
