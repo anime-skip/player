@@ -205,7 +205,7 @@ function toggleHovering(newIsHovering: boolean) {
 const hoverNormalizedAt = ref<number>();
 function updateHoverPosition(event: MouseEvent) {
   const wrapper = wrapperRef.value as HTMLDivElement;
-  const bar = wrapper.querySelector('.bar-container') as HTMLDivElement | null;
+  const bar = wrapper.querySelector('.as-slider') as HTMLDivElement | null;
   const screenWidth = document.body.clientWidth;
   const barWidth = bar?.clientWidth ?? screenWidth;
   const offsetX = (screenWidth - barWidth) / 2;
