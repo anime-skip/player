@@ -1,7 +1,6 @@
 import { JSDOM } from 'jsdom';
 import { join } from 'path';
 import { setupZoroPlayer } from '../player';
-import { InferredEpisodeInfo } from '~types';
 
 async function createDomFromFile(...path: string[]): Promise<typeof document> {
   const dom = await JSDOM.fromFile(join(...path));
