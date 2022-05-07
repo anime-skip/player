@@ -6,7 +6,7 @@ This is the document that contains all the necessary steps to building the submi
 
 - Linux: `ubuntu-20`
 - pnpm: `npm i -g pnpm@6`
-- Node: `v14.17.4`
+- Node: `v16.15.0`
 
 ## Build Process
 
