@@ -14,16 +14,9 @@ export function getEpisodeInfo(dom = document): InferredEpisodeInfo {
     ) != null;
 
   if (isMovie) {
-    return {
-      name: show,
-      show,
-    };
+    return { name: show, show };
   } else {
-    return {
-      name,
-      number,
-      show,
-    };
+    return { name, number, show };
   }
 }
 
