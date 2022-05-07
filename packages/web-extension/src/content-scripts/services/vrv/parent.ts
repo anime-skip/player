@@ -3,7 +3,7 @@ import setupParent from '~/common/utils/setupParent';
 import { InferredEpisodeInfo } from '~types';
 
 export function getEpisodeInfo(dom = document): InferredEpisodeInfo {
-  const show = dom.querySelector('.episode-info span.series')?.textContent || undefined;
+  const show = dom.querySelector('.episode-info span.series')?.textContent?.trim() || undefined;
   const fullSeason = dom.querySelector('.episode-info span.season');
   const season = fullSeason?.textContent?.replace('SEASON', '')?.trim();
 
