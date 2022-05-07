@@ -22,7 +22,7 @@ export enum PlayerHosts {
   FUNIMATION = 'https://www.funimation.com/player/*',
   FUNIMATION_20210926 = 'https://www.funimation.com/v/*',
   VRV = 'https://static.vrv.co/*',
-  ZORO = 'https://rapid-cloud.ru/*', // SKETCHY
+  ZORO = 'https://rapid-cloud.ru/*',
 }
 
 /**
