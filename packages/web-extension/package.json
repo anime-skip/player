@@ -94,10 +94,10 @@
     "sass": "^1.51.0",
     "tailwindcss": "^3.0.8",
     "ts-jest": "^27.0.5",
-    "typescript": "^4.6.4",
+    "typescript": "*",
     "unplugin-vue-components": "^0.19.3",
-    "vite": "^2.9.8",
-    "vite-plugin-web-extension": "^1.3.2",
+    "vite": "*",
+    "vite-plugin-web-extension": "*",
     "vue-global-api": "^0.4.1",
     "vue-tsc": "^0.34.11",
     "zip-a-folder": "^1.1.0"
