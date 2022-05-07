@@ -1,14 +1,7 @@
 {
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "volar.tsPlugin": true,
-  "volar.tsPluginStatus": false,
-  "vite.autoStart": false,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true,
     "source.organizeImports": true
-  },
-  "files.associations": {
-    ".env.package": "dotenv"
   },
   "[vue]": {
     "editor.tabSize": 2,
@@ -77,8 +70,5 @@
     "**/.hg": true,
     "**/CVS": true,
     "**/.DS_Store": true
-  },
-  "workbench.editorAssociations": {
-    ".env.package": "dotenv"
   }
 }

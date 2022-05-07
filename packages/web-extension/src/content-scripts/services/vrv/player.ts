@@ -1,6 +1,7 @@
 import { loadedLog } from '~/common/utils/log';
 import { setupPlayerConfig } from '~/common/utils/setup-player-config';
 import { PlayerOption, PlayerOptionGroup } from '~types';
+import { cleanupUrl } from '~utils/urls';
 import './player-overrides.scss';
 
 function getPlaybackOptions(): PlayerOptionGroup[] {
@@ -54,5 +55,6 @@ export function initVrvPlayer() {
     getPlaybackOptions,
     getRootQuery: () => 'body>div',
     getVideoQuery: () => 'video',
+    transformServiceUrl: url => cleanupUrl(url),
   });
 }

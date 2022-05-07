@@ -1,14 +1,14 @@
-import { setupZoroPlayer } from '../player';
+import { initVrvPlayer } from '../player';
 import { createDomFromFile } from '~/common/utils/testing/jsdom';
 
-const playerConfig = setupZoroPlayer();
+const playerConfig = initVrvPlayer();
 
-const playerHtmlFiles = ['player-show-2022-05-06.gen.html', 'player-movie-2022-05-06.gen.html'];
+const playerHtmlFiles = ['player-show-2022-05-07.gen.html', 'player-movie-2022-05-07.gen.html'];
 
-describe('Zoro.to Player Config', () => {
+describe('VRV Player Config', () => {
   describe('getRootQuery', () => {
     it.each(playerHtmlFiles)('should find an element in %s', async () => {
-      const dom = await createDomFromFile(__dirname, 'player-show-2022-05-06.gen.html');
+      const dom = await createDomFromFile(__dirname, 'player-show-2022-05-07.gen.html');
 
       const root = dom.querySelector(playerConfig.getRootQuery());
 
@@ -18,7 +18,7 @@ describe('Zoro.to Player Config', () => {
 
   describe('getRootQuery', () => {
     it.each(playerHtmlFiles)('should find a video element in %s', async () => {
-      const dom = await createDomFromFile(__dirname, 'player-show-2022-05-06.gen.html');
+      const dom = await createDomFromFile(__dirname, 'player-show-2022-05-07.gen.html');
 
       const video = dom.querySelector(playerConfig.getVideoQuery());
 
@@ -30,14 +30,17 @@ describe('Zoro.to Player Config', () => {
   describe('transformServiceUrl', () => {
     it.each([
       [
-        'https://zoro.to/watch/spy-x-family-17977?ep=89506',
-        'https://zoro.to/watch/spy-x-family-17977?ep=89506',
+        'https://vrv.co/watch/G31UX3P3J/World-Trigger:Resolution',
+        'https://vrv.co/watch/G31UX3P3J/World-Trigger:Resolution',
       ],
       [
-        'https://zoro.to/watch/spy-x-family-17977?ep=89506&test',
-        'https://zoro.to/watch/spy-x-family-17977?ep=89506',
+        'https://vrv.co/watch/G31UX3P3J/World-Trigger:Resolution?test',
+        'https://vrv.co/watch/G31UX3P3J/World-Trigger:Resolution',
       ],
-      ['https://zoro.to/watch/spy-x-family-17977', 'https://zoro.to/watch/spy-x-family-17977'],
+      [
+        'https://vrv.co/watch/G31UX3P3J/World-Trigger:Resolution#test',
+        'https://vrv.co/watch/G31UX3P3J/World-Trigger:Resolution',
+      ],
     ])('should remove all query params other than ep from %s', async (input, expected) => {
       const actual = playerConfig.transformServiceUrl?.(input);
 

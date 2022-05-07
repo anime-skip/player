@@ -2,14 +2,15 @@ import { getEpisodeInfo } from '../parent';
 import { InferredEpisodeInfo } from '~types';
 import { createDomFromFile } from '~/common/utils/testing/jsdom';
 
-describe('Zoro.to Parent Content Script', () => {
+describe('VRV Parent Content Script', () => {
   describe('getEpisodeInfo', () => {
     it('should find the correct episode details for a show', async () => {
-      const dom = await createDomFromFile(__dirname, 'parent-show-2022-05-06.gen.html');
+      const dom = await createDomFromFile(__dirname, 'parent-show-2022-05-07.gen.html');
       const expected: InferredEpisodeInfo = {
-        name: 'Operationã€ˆStrixã€‰',
-        show: 'Spy x Family',
-        number: '1',
+        name: 'Resolution',
+        number: '14',
+        season: '3',
+        show: 'World Trigger',
       };
 
       const actual = getEpisodeInfo(dom);
@@ -18,10 +19,10 @@ describe('Zoro.to Parent Content Script', () => {
     });
 
     it('should find the correct episode details for a movie', async () => {
-      const dom = await createDomFromFile(__dirname, 'parent-movie-2022-05-06.gen.html');
+      const dom = await createDomFromFile(__dirname, 'parent-movie-2022-05-07.gen.html');
       const expected: InferredEpisodeInfo = {
-        name: 'A Silent Voice',
-        show: 'A Silent Voice',
+        name: 'Fullmetal Alchemist: The Conqueror of Shamballa',
+        show: 'Fullmetal Alchemist: The Conqueror of Shamballa',
       };
 
       const actual = getEpisodeInfo(dom);
