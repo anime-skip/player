@@ -89,7 +89,7 @@ importers:
       async-mutex: ^0.3.2
       autoprefixer: ^10.4.1
       axios: ^0.24.0
-      axios-auth-refresh: ^3.1.0
+      axios-auth-refresh: ^3.2.2
       common: workspace:*
       concurrently: ^6.2.1
       cross-env: ^7.0.3
@@ -119,7 +119,7 @@ importers:
       typescript: ^4.3.5
       unplugin-vue-components: ^0.17.2
       vite: ^2.6.14
-      vite-plugin-web-extension: ^1.0.5
+      vite-plugin-web-extension: ^1.3.2
       vue: ^3.2.2
       vue-global-api: ^0.2.4
       vue-router: ^4.0.11
@@ -134,7 +134,7 @@ importers:
       '@vueuse/core': 5.3.0_vue@3.2.2
       async-mutex: 0.3.2
       axios: 0.24.0
-      axios-auth-refresh: 3.1.0_axios@0.24.0
+      axios-auth-refresh: 3.2.2_axios@0.24.0
       common: link:../common
       exponential-backoff: 3.1.0
       fuzzysort: 1.1.4
@@ -186,7 +186,7 @@ importers:
       typescript: 4.3.5
       unplugin-vue-components: 0.17.2_vite@2.6.14+vue@3.2.2
       vite: 2.6.14_sass@1.38.0
-      vite-plugin-web-extension: 1.0.5_vite@2.6.14
+      vite-plugin-web-extension: 1.3.2_vite@2.6.14
       vue-global-api: 0.2.4_vue@3.2.2
       vue-tsc: 0.2.2_typescript@4.3.5
       zip-a-folder: 1.1.0
@@ -1601,6 +1601,17 @@ packages:
       download: 8.0.0
       express: 4.17.1
       safe-compare: 1.1.4
+    peerDependenciesMeta:
+      '@types/download':
+        optional: true
+      body-parser:
+        optional: true
+      download:
+        optional: true
+      express:
+        optional: true
+      safe-compare:
+        optional: true
     dependencies:
       '@types/yauzl': 2.9.2
       common-tags: 1.8.0
@@ -1907,10 +1918,10 @@ packages:
     resolution: {integrity: sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==}
     dev: true
 
-  /axios-auth-refresh/3.1.0_axios@0.24.0:
-    resolution: {integrity: sha512-PLNrXDU8qYo+R4+7nUSkwtPGosTajq4EViBswr+ymJiyBzxKhPCfX2vDFuf6KfyNhsC1wub6RhB62st4wgXKOA==}
+  /axios-auth-refresh/3.2.2_axios@0.24.0:
+    resolution: {integrity: sha512-Ocu8leYhuhNejH/RBC0tWpUuv0cOplvdwltIQuYmkhihbZ8AqR0qPIZs+fV5V3JL6L5IM4Y5rjHgXyQWozjM7g==}
     peerDependencies:
-      axios: ~0.18.0 || ~0.19.1 || ~0.20.0 || ~0.21.1
+      axios: '>= 0.18 < 0.19.0 || >= 0.19.1'
     dependencies:
       axios: 0.24.0
     dev: false
@@ -3893,7 +3904,7 @@ packages:
     dependencies:
       asynckit: 0.4.0
       combined-stream: 1.0.8
-      mime-types: 2.1.32
+      mime-types: 2.1.35
     dev: true
 
   /form-data/4.0.0:
@@ -8146,14 +8157,15 @@ packages:
       extsprintf: 1.3.0
     dev: true
 
-  /vite-plugin-web-extension/1.0.5_vite@2.6.14:
-    resolution: {integrity: sha512-0C/iyYLDo/QxBlW2CwPjLEqkpOA/KJfz9Eb2ndcak7nvv7mYX9KrUfGD5MvVmIShwuffSJL5U5zCPOa8RDoRJA==}
+  /vite-plugin-web-extension/1.3.1_7bf52335cb82c8d65e0f649c6cd13dee:
+    resolution: {integrity: sha512-anosKUzmLFH+62uBwfxRErStdqEsHJlbRj+EXFBHo76nAtVfCuiONkPrNSaLb76GwZTteNG0grG/Y4MZLp96Yg==}
     peerDependencies:
       vite: ^2.6
     dependencies:
       ajv: 8.8.1
-      vite: 2.6.14_sass@1.38.0
-      web-ext: 6.5.0
+      md5: 2.3.0
+      vite: 2.6.14
+      web-ext: 6.5.0_5759b7e109f16724996aaec5078cdf0a
     transitivePeerDependencies:
       - '@types/download'
       - body-parser
@@ -8165,15 +8177,15 @@ packages:
       - utf-8-validate
     dev: true
 
-  /vite-plugin-web-extension/1.3.1_7bf52335cb82c8d65e0f649c6cd13dee:
-    resolution: {integrity: sha512-anosKUzmLFH+62uBwfxRErStdqEsHJlbRj+EXFBHo76nAtVfCuiONkPrNSaLb76GwZTteNG0grG/Y4MZLp96Yg==}
+  /vite-plugin-web-extension/1.3.2_vite@2.6.14:
+    resolution: {integrity: sha512-mtqiWCGMUNw/FZ5GtNQMgbD526cplD7XH0WlgElr/ztkJ5gRb49e0YFd0UM14DjhT1U/kOC20pL10xbKK0UKvQ==}
     peerDependencies:
       vite: ^2.6
     dependencies:
       ajv: 8.8.1
       md5: 2.3.0
-      vite: 2.6.14
-      web-ext: 6.5.0_5759b7e109f16724996aaec5078cdf0a
+      vite: 2.6.14_sass@1.38.0
+      web-ext: 6.5.0
     transitivePeerDependencies:
       - '@types/download'
       - body-parser
