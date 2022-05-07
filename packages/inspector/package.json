@@ -1,0 +1,25 @@
+{
+  "name": "@anime-skip/inspector",
+  "private": true,
+  "scripts": {
+    "start": "TARGET=firefox vite build --watch",
+    "build": "TARGET=firefox vite build",
+    "start:chrome": "TARGET=chrome vite build --watch",
+    "build:chrome": "TARGET=chrome vite build"
+  },
+  "devDependencies": {
+    "@types/download": "8.0.1",
+    "@types/lodash.debounce": "^4.0.7",
+    "body-parser": "1.19.0",
+    "download": "8.0.0",
+    "express": "4.17.1",
+    "safe-compare": "1.1.4",
+    "typescript": "^4.3.5",
+    "vite": "^2.6.14",
+    "vite-plugin-web-extension": "^1.3.1"
+  },
+  "dependencies": {
+    "lodash.debounce": "^4.0.8",
+    "webextension-polyfill": "^0.8.0"
+  }
+}
