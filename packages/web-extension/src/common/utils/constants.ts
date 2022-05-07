@@ -274,7 +274,7 @@ export const SKIPPABLE_PREFERENCES: SkippablePreference[] = [
 const allTimestampSources = Object.values(TimestampSource);
 
 /**
- * Some services don't mess well with each other, so the integrations have been disabled
+ * Some services don't work well with each other, so the integrations have been disabled
  */
 export const SUPPORTED_THIRD_PARTY_SERVICES: Record<Service, Array<TimestampSource>> = {
   'test-service': allTimestampSources,

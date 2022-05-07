@@ -24,7 +24,11 @@ export interface IPlayerConfig {
 
   /**
    * Returns the root element's query. The player is injected into the root element as a child, so
-   * this method dictates where the player will be injected at
+   * this method dictates where the player will be injected at.
+   *
+   * The extension will also wait for this element to exist before injecting the player, so if the
+   * player disappears after showing initially, try a different root, either higher or lower in the
+   * tree.
    *
    * TODO: Move this out of player config and into when we load the UI
    */

@@ -15,5 +15,7 @@ module.exports = {
   moduleNameMapper: {
     ...tsconfigPathsModuleNameMapper,
     'webextension-polyfill': '<rootDir>/src/__mocks__/webextension-polyfill.mock.ts',
+    '.*.scss': '<rootDir>/src/__mocks__/scss.mock.ts',
   },
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 };

@@ -27,4 +27,10 @@ export enum PlayerHosts {
  * All the URL matches to show the action for. This is a superset fo the `ParentHosts` since some of
  * those have a path specified and the action should be shown for the entire website
  */
-export const PAGE_ACTION_MATCHES = ['https://www.funimation.com/*', ...Object.values(ParentHosts)];
+export const PAGE_ACTION_MATCHES = Object.values(ParentHosts).map(urlPattern => {
+  const hostPatternRegex = /^(.*:\/\/[\w.]+)\/.*$/;
+  const match = urlPattern.match(hostPatternRegex);
+
+  if (match?.[1]) return match[1] + '/*';
+  return urlPattern;
+});
