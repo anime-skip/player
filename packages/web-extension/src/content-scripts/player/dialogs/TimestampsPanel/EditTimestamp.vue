@@ -95,7 +95,7 @@
         </div>
       </div>
     </template>
-    <template #footer class="as-flex-row-reverse as-space-x-reverse">
+    <template #footer>
       <RaisedButton @click="onClickDone" :disabled="isSaveDisabled" class="as-flex-grow">
         Save
       </RaisedButton>
