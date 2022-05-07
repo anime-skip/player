@@ -25,7 +25,7 @@
         <template v-if="prefill">
           <FindExisting
             v-if="shouldShowFindExisting"
-            @createNew="enableCreateNew"
+            @create-new="enableCreateNew"
             :prefill="prefill"
             :suggestions="suggestions"
           />

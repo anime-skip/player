@@ -35,7 +35,7 @@
               name="option"
               :option="option"
               :index="index"
-              :highlightedIndex="highlightedIndex"
+              :highlighted-index="highlightedIndex"
               :value="value"
               :click="onClickOption"
             >

@@ -3,5 +3,5 @@ trailingComma: es5
 endOfLine: lf
 printWidth: 100
 tabWidth: 2
-vueIndentScriptAndStyle: false
 arrowParens: avoid
+singleAttributePerLine: false
