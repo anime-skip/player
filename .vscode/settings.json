@@ -47,7 +47,8 @@
     "skippable",
     "unitless",
     "unmount",
-    "vrv"
+    "vrv",
+    "zoro"
   ],
   "cSpell.ignoreWords": [
     "asynciterable",
@@ -76,8 +77,5 @@
     "**/.hg": true,
     "**/CVS": true,
     "**/.DS_Store": true
-  },
-  "workbench.editorAssociations": {
-    ".env.package": "dotenv"
   }
 }
