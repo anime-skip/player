@@ -36,15 +36,6 @@ jobs:
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.ANIME_SKIP_PACKAGES_TOKEN }}
 
-      - name: Echo
-        run: |
-          echo "GITHUB_SHA $GITHUB_SHA"
-          echo "GITHUB_REF $GITHUB_REF"
-          echo "GITHUB_REF_NAME $GITHUB_REF_NAME"
-          echo "GITHUB_REF_PROTECTED $GITHUB_REF_PROTECTED"
-          echo "GITHUB_HEAD_REF $GITHUB_HEAD_REF"
-          echo "GITHUB_BASE_REF $GITHUB_BASE_REF"
-
       - name: Validate Packages
         run: pnpm recursive run validate --filter [origin/main]
         env:
