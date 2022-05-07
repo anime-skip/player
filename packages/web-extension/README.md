@@ -11,10 +11,10 @@
 
 You will need to install:
 
-- `node` v14 or higher
+- `node` (any version >= 16)
   - [Manual install](https://nodejs.org)
   - Via [`nvm`](https://github.com/nvm-sh/nvm): `nvm install 14`
-- `pnpm` v6
+- `pnpm` v7
   - [Manual install](https://pnpm.io/)
   - Via `npm`: `npm i -g pnpm`
 
