@@ -2,14 +2,24 @@
 
 Lots of Anime Sites don't allow opening dev tools, which can make it impossible to add support for them to the web extension.
 
-This is a web extension that injects itself onto every tab, and lets you view the current state of the DOM for every frame on the tab.
+This is a web extension that injects itself onto every tab, and lets you copy the DOM for every frame in those tabs.
 
 ## Get Started
 
-Build the extension and load the `dist/` directory into your browser.
+Run the extension in your browser of choice
 
 ```bash
-pnpm build
+# Firefox
+pnpm start
+
+# Chrome
+pnpm start:chrome
 ```
 
-Go to the page you'd like to look at the DOM for, and right click. There should be an option "Anime Skip: Grab Dom"
+1. Navigate to your page
+2. Right click and choose "Anime Skip: Grab DOM"
+3. Click the clear button
+4. Wait a second, and the buttons for the page you're trying to debug will show up
+5. Click a button to copy it's HTML content to your clipboard
+
+> Open tabs report their HTML contents every second, so you can clear the list if it gets too big
