@@ -9,5 +9,14 @@ export function setupZoroPlayer() {
     serviceDisplayName: 'Zoro.to',
     getRootQuery: () => 'body',
     getVideoQuery: () => 'video',
+    transformServiceUrl: inputUrl => {
+      const cleanUrl = new URL(inputUrl);
+      const ep = cleanUrl.searchParams.get('ep');
+      if (ep) {
+        return `${cleanUrl.origin}${cleanUrl.pathname}?ep=${ep}`;
+      } else {
+        return cleanUrl.origin + cleanUrl.pathname;
+      }
+    },
   });
 }
