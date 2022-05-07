@@ -7,7 +7,7 @@ export function setupZoroPlayer() {
 
   return setupPlayerConfig('zoro', {
     serviceDisplayName: 'Zoro.to',
-    getRootQuery: () => '#vidcloud-player',
+    getRootQuery: () => 'body',
     getVideoQuery: () => 'video',
   });
 }
