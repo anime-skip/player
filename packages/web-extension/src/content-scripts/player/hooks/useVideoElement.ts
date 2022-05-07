@@ -1,4 +1,5 @@
 import { useTimeoutFn } from '@vueuse/core';
+import { Ref } from 'vue';
 import { log } from '~/common/utils/log';
 import UsageStats from '~/common/utils/UsageStats';
 import { usePlayerConfig } from '../composition/player-config';
@@ -17,7 +18,7 @@ export function useVideoElement() {
   const incrementPlayTicks = useIncrementPlayTicks();
   const playHistory = usePlayHistory();
   const { service, getVideo, onVideoChanged, onPlayDebounceMs } = usePlayerConfig();
-  const video = ref(getVideo?.());
+  const video = ref(getVideo?.()) as Ref<HTMLVideoElement | undefined>;
   const url = useTabUrl();
   const canPlayCalled = ref(false);
 

@@ -1,6 +1,7 @@
 import browser, { Runtime } from 'webextension-polyfill';
 import { sleep } from '~utils/time';
 import { debug } from './log';
+import { getErrorMessage } from '~utils/errors';
 
 export default class Messenger<
   K extends MessageTypes = MessageTypes,
@@ -61,7 +62,7 @@ export default class Messenger<
       try {
         response = await callback(payload, sender);
       } catch (error) {
-        response = { errorMessage: error.message };
+        response = { errorMessage: getErrorMessage(error) };
       }
       debug('Sending response', { response });
       return response;

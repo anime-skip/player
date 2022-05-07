@@ -5,6 +5,10 @@ import { ScreenshotDetails } from '~types';
 
 const MENU_ITEM_SCREENSHOT = 'screenshot';
 
+// @ts-expect-error: Untyped API?
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const OC = OffscreenCanvas as any;
+
 const dataUrlToBlob = (dataUrl: string) => fetch(dataUrl).then(res => res.blob());
 function blobToDataURL(blob: Blob): Promise<string> {
   return new Promise<string>((resolve, reject) => {
@@ -85,11 +89,11 @@ export function initContextMenu() {
     newHeight: number
   ): Promise<string> {
     return new Promise(function (res, rej) {
-      if (typeof createImageBitmap !== 'undefined' && typeof OffscreenCanvas !== 'undefined') {
+      if (typeof createImageBitmap !== 'undefined' && typeof OC !== 'undefined') {
         dataUrlToBlob(data)
           .then(async blob => {
             const img = await createImageBitmap(blob);
-            const canvas = new OffscreenCanvas(newWidth, newHeight);
+            const canvas = new OC(newWidth, newHeight);
             const ctx = canvas.getContext('2d');
             ctx?.drawImage(img, -x, -y);
             const outputBlob = await canvas.convertToBlob({ type: 'image/png' });
