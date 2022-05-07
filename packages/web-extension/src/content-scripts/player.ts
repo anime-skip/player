@@ -8,12 +8,14 @@ import { initFunimation20210926Player } from './services/funimation-2021-09-26/p
 import { initFunimationPlayer } from './services/funimation/player';
 import { initTestServicePlayer } from './services/test-service/player';
 import { initVrvPlayer } from './services/vrv/player';
+import { setupZoroPlayer } from './services/zoro/player';
 
 const services: Record<PlayerHosts, () => IPlayerConfig> = {
   [PlayerHosts.CRUNCHYROLL]: initCrunchyrollPlayer,
   [PlayerHosts.FUNIMATION_20210926]: initFunimation20210926Player,
   [PlayerHosts.FUNIMATION]: initFunimationPlayer,
   [PlayerHosts.VRV]: initVrvPlayer,
+  [PlayerHosts.ZORO]: setupZoroPlayer,
   [PlayerHosts.TEST_SERVICE]: initTestServicePlayer,
 };
 

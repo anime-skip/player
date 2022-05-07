@@ -10,6 +10,7 @@ export enum ParentHosts {
   FUNIMATION = 'https://www.funimation.com/*/shows/*',
   FUNIMATION_20210926 = 'https://www.funimation.com/v/*',
   VRV = 'https://vrv.co/*',
+  ZORO = 'https://zoro.to/*',
 }
 
 /**
@@ -21,6 +22,7 @@ export enum PlayerHosts {
   FUNIMATION = 'https://www.funimation.com/player/*',
   FUNIMATION_20210926 = 'https://www.funimation.com/v/*',
   VRV = 'https://static.vrv.co/*',
+  ZORO = 'https://rapid-cloud.ru/*',
 }
 
 /**

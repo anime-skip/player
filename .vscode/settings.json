@@ -47,7 +47,8 @@
     "skippable",
     "unitless",
     "unmount",
-    "vrv"
+    "vrv",
+    "zoro"
   ],
   "cSpell.ignoreWords": [
     "asynciterable",
