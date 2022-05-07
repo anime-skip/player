@@ -118,7 +118,7 @@ const playAnimationState = computed<1 | 0>(() => (isPaused.value ? 1 : 0));
 const playerConfig = usePlayerConfig();
 const isFullscreenEnabled = ref(document.fullscreenEnabled);
 const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(
-  document.querySelector(playerConfig.getRootQuery())
+  document.querySelector<HTMLElement>(playerConfig.getRootQuery())
 );
 const fullscreenAnimationState = computed<1 | 0>(() => (isFullscreen.value ? 0 : 1));
 

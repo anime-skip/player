@@ -1,6 +1,10 @@
 {
   "name": "anime-skip-player-monorepo",
   "private": true,
+  "engines": {
+    "node": ">=16",
+    "pnpm": ">=7"
+  },
   "scripts": {
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -9,6 +13,11 @@
     "prepare": "husky install"
   },
   "pnpm": {
+    "overrides": {
+      "typescript": "^4.6.4",
+      "vite": "^2.9.8",
+      "vite-plugin-web-extension": "^1.3.2"
+    },
     "peerDependencyRules": {
       "ignoreMissing": [
         "@types/download",
