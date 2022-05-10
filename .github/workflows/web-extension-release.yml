@@ -42,7 +42,6 @@ jobs:
         run: pnpm install --frozen-lockfile
         env:
           CI: true
-          NODE_AUTH_TOKEN: ${{ secrets.ANIME_SKIP_PACKAGES_TOKEN }}
 
       - name: Create Changelog
         id: changelog
@@ -65,7 +64,6 @@ jobs:
         env:
           CI: true
           PACKAGE_MODE: prod
-          NODE_AUTH_TOKEN: ${{ secrets.ANIME_SKIP_PACKAGES_TOKEN }}
           FIREFOX_SIGNING_ISSUER: ${{ secrets.FIREFOX_SIGNING_ISSUER }}
           FIREFOX_SIGNING_SECRET: ${{ secrets.FIREFOX_SIGNING_SECRET }}
           FIREFOX_SIGNING_ID: ${{ secrets.FIREFOX_SIGNING_ID }}
