@@ -25,13 +25,6 @@ const SOURCES = [
   { in: 'packages/web-extension/SOURCE_CODE_REVIEW.md', out: 'SOURCE_CODE_REVIEW.md' },
 ];
 
-function isPrivateDependency(dependency: string) {
-  return dependency.startsWith('@anime-skip/');
-}
-function dependencyFilename(dependency: string) {
-  return dependency.replace(/@/g, '').replace(/\//, '-') + '.tgz';
-}
-
 export async function zipSources(OUTPUT_DIR: string) {
   title(`Creating ${CODE}sources.zip`);
   const tempFolder = path.join(OUTPUT_DIR, '.temp-sources');
