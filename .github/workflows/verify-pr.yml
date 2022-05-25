@@ -11,22 +11,21 @@ jobs:
     name: Verify Code
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '16.x'
-
-      - uses: actions/checkout@v2
+      - name: Checkout Repo
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0 # Fetch everything so we can filter since a revision
 
-      - name: Cache .pnpm-store
-        uses: actions/cache@v1
+      - uses: pnpm/action-setup@v2.0.1
+        name: Install PNPM
         with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          version: 7.0.0
 
-      - name: Install pnpm
-        run: npm i -g pnpm@7
+      - name: Install Node 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
