@@ -32,6 +32,7 @@
 </template>
 
 <script lang="ts" setup>
+import Browser from 'webextension-polyfill';
 import { useWebExtensionStorageValue } from '~/common/hooks/useWebExtensionStorage';
 import { isUrlSupported } from '~/common/state/url-supported';
 import { useIsLoggedIn } from '~/common/state/useAuth';
@@ -77,7 +78,8 @@ const { value: currentUrl } = useWebExtensionStorageValue<string | null>(
 );
 const isSupported = computed<boolean>(() => !!currentUrl.value && isUrlSupported(currentUrl.value));
 const notSupportedMessage = computed(() => {
-  if (isSupported.value) return undefined;
+  if (isSupported.value || currentUrl.value?.startsWith(Browser.runtime.getURL('/')))
+    return undefined;
   if (!currentUrl.value) return 'Anime Skip does not support this website';
   if (currentUrl.value.includes('extension://'))
     return 'Anime Skip does not support other extensions';
