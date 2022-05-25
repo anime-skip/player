@@ -39,7 +39,7 @@
   "dependencies": {
     "@anime-skip/api-client": "^2.6.2",
     "@anime-skip/ui": "^3.1.5",
-    "@anime-skip/usage-stats-client": "^1.4.2",
+    "@anime-skip/usage-stats-client": "^1.4.4",
     "@vueuse/core": "^8.4.2",
     "async-mutex": "^0.3.2",
     "axios": "^0.24.0",
