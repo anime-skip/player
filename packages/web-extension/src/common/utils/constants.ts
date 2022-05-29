@@ -271,26 +271,6 @@ export const SKIPPABLE_PREFERENCES: SkippablePreference[] = [
   },
 ];
 
-const allTimestampSources = Object.values(TimestampSource);
-
-/**
- * Some services don't work well with each other, so the integrations have been disabled
- */
-export const SUPPORTED_THIRD_PARTY_SERVICES: Record<Service, Array<TimestampSource>> = {
-  'test-service': allTimestampSources,
-  vrv: allTimestampSources,
-  funimation: allTimestampSources.filter(
-    // Don't support BETTER_VRV because show names and durations are completely different
-    source => source !== 'BETTER_VRV'
-  ),
-  'funimation-2021-09-26': allTimestampSources.filter(
-    // Don't support BETTER_VRV because show names and durations are completely different
-    source => source !== 'BETTER_VRV'
-  ),
-  crunchyroll: allTimestampSources,
-  zoro: allTimestampSources,
-};
-
 export const PLAYER_ACTIVITY_TIMEOUT = 3000;
 
 /**

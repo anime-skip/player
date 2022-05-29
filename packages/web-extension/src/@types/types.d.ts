@@ -4,9 +4,8 @@ type Service =
   | 'funimation'
   | 'funimation-2021-09-26'
   | 'crunchyroll'
+  | 'crunchyroll-beta'
   | 'zoro';
-
-type ReportableService = Service | 'crunchyroll-beta';
 
 type ServiceDisplayName =
   | 'Anime Skip Test'

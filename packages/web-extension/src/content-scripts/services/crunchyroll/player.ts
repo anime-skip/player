@@ -1,12 +1,13 @@
 import { loadedLog } from '~/common/utils/log';
 import { setupPlayerConfig } from '~/common/utils/setup-player-config';
 import GeneralUtils from '~utils/GeneralUtils';
+import { getService } from './get-service';
 import './player-overrides.scss';
 
 export function initCrunchyrollPlayer() {
   loadedLog('content-scripts/services/crunchyroll/player.ts');
 
-  return setupPlayerConfig('crunchyroll', {
+  return setupPlayerConfig(getService(), {
     serviceDisplayName: 'Crunchyroll',
     onPlayDebounceMs: 100,
     getRootQuery: () => 'body',
