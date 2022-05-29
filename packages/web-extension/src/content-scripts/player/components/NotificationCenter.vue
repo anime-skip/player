@@ -101,8 +101,11 @@ function addPromptReviewNotifications() {
         onClick() {
           void UsageStats.saveEvent('prompt_store_review_rate');
           setDontShowReviewPromptAgain(true);
-          // Links shorted by https://apk.rip
-          window.open(TARGET_BROWSER === 'firefox' ? 'https://apk.rip/17' : 'https://apk.rip/1s');
+          window.open(
+            TARGET_BROWSER === 'firefox'
+              ? 'https://addons.mozilla.org/en-US/firefox/addon/anime-skip/?utm_source=extension&utm_medium=review-prompt'
+              : 'https://chrome.google.com/webstore/detail/mgmdkjcljneegjfajchedjpdhbadklcf/reviews'
+          );
         },
       },
       {
