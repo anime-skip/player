@@ -18,22 +18,6 @@ See the [contributing guidelines](https://github.com/anime-skip/docs/wiki) for g
 
 :tada: Special thanks to all the people who have contributed code to the Anime Skip Player :tada:
 
-<!-- readme: contributors -start -->
-<table>
-<tr>
-    <td align="center">
-        <a href="https://github.com/aklinker1">
-            <img src="https://avatars.githubusercontent.com/u/10101283?v=4" width="100;" alt="aklinker1"/>
-            <br />
-            <sub><b>aklinker1</b></sub>
-        </a>
-    </td>
-    <td align="center">
-        <a href="https://github.com/logiczsniper">
-            <img src="https://avatars.githubusercontent.com/u/31292294?v=4" width="100;" alt="logiczsniper"/>
-            <br />
-            <sub><b>logiczsniper</b></sub>
-        </a>
-    </td></tr>
-</table>
-<!-- readme: contributors -end -->
+<a href="https://github.com/anime-skip/player/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=anime-skip/player" />
+</a>
