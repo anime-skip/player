@@ -12,7 +12,7 @@ import useTokenRefresher from './useTokenRefresher';
 
 const baseUrls: Record<ExtensionMode, string> = {
   prod: 'https://api.anime-skip.com/',
-  beta: 'https://api.anime-skip.com/',
+  beta: 'https://api-v2.anime-skip.com/',
   test: 'http://test.api.anime-skip.com/',
   staged: 'https://staged.api.anime-skip.com/',
   dev: 'http://localhost:8081/',
