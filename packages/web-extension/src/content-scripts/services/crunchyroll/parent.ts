@@ -30,18 +30,34 @@ async function getEpisodeInfo() {
   }
 
   // 06/2021 - Current
-  if (document.querySelector('.erc-current-media-info .show-title-link') != null) {
-    const show = document.querySelector('.erc-current-media-info .show-title-link')?.textContent;
+  const showElement = document.querySelector('.erc-current-media-info .show-title-link');
+  if (showElement != null) {
+    const show = showElement?.textContent;
     const episodeAndNumber =
       document.querySelector('.erc-current-media-info .title')?.textContent ?? '';
     const groups = /([0-9]+)\s*-\s*(.+)$/.exec(episodeAndNumber);
     const episode = groups?.[2];
     const number = groups?.[1];
 
+    let season: string | undefined;
+    try {
+      const int = Array.from(document.querySelectorAll("script[type='application/ld+json']"))
+        .map(node => {
+          try {
+            return JSON.parse(node.textContent ?? '');
+          } catch (_) {
+            return undefined;
+          }
+        })
+        .find(json => json?.['@type'] === 'TVEpisode')?.partOfSeason?.seasonNumber;
+      if (int != null) season = String(int);
+    } catch (err) {}
+
     return {
       show: show || undefined,
       name: episode || undefined,
       number: number || undefined,
+      season: season || undefined,
     };
   }
 
