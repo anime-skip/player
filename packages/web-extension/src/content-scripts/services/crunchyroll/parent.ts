@@ -51,7 +51,9 @@ async function getEpisodeInfo() {
         })
         .find(json => json?.['@type'] === 'TVEpisode')?.partOfSeason?.seasonNumber;
       if (int != null) season = String(int);
-    } catch (err) {}
+    } catch (err) {
+      // noop
+    }
 
     return {
       show: show || undefined,
