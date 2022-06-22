@@ -2,7 +2,7 @@
   "name": "web-extension",
   "displayName": "Anime Skip Player",
   "description": "Skip intros, credits, filler and more on supported services",
-  "version": "1.12.3",
+  "version": "1.12.4",
   "license": "GPL-3.0",
   "private": true,
   "author": "Aaron Klinker <aaronklinker1@gmail.com>",
