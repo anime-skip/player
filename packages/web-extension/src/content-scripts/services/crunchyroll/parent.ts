@@ -56,10 +56,10 @@ async function getEpisodeInfo() {
     }
 
     return {
-      show: show || undefined,
-      name: episode || undefined,
-      number: number || undefined,
-      season: season || undefined,
+      show: show?.trim() || undefined,
+      name: episode?.trim() || undefined,
+      number: number?.trim() || undefined,
+      season: season?.trim() || undefined,
     };
   }
 
