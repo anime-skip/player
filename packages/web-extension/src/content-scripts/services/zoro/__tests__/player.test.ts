@@ -3,7 +3,11 @@ import { createDomFromFile } from '~/common/utils/testing/jsdom';
 
 const playerConfig = setupZoroPlayer();
 
-const playerHtmlFiles = ['player-show-2022-05-06.gen.html', 'player-movie-2022-05-06.gen.html'];
+const playerHtmlFiles = [
+  'player-show-2022-05-06.gen.html',
+  'player-movie-2022-05-06.gen.html',
+  'player-show-2022-07-08.gen.html',
+];
 
 describe('Zoro.to Player Config', () => {
   describe('getRootQuery', () => {

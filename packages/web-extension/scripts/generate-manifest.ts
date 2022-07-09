@@ -54,6 +54,9 @@ export function generateManifest(config: GenerateManifestConfig): Manifest.WebEx
         matches: contentScriptMatches,
       },
       {
+        matches: contentScriptMatches,
+      },
+      {
         matches: removeLocalhostForProd(config, Object.values(PlayerHosts)),
       },
     ],

@@ -37,9 +37,13 @@
   "{{chrome}}.options_page": "options/index.html",
   "content_scripts": [
     {
-      "js": ["content-scripts/parent.ts", "content-scripts/player.ts"],
+      "js": ["content-scripts/player.ts"],
       "css": ["generated:content-scripts/style.css"],
       "all_frames": true
+    },
+    {
+      "js": ["content-scripts/parent.ts"],
+      "all_frames": false
     },
     {
       "js": ["content-scripts/keyboard-shortcut-blocker.ts"],
