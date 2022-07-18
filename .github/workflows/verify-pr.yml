@@ -1,8 +1,8 @@
 name: Verify PR
 on:
   push:
-  pull_request_target:
-    types: [assigned, opened, synchronize, reopened]
+    branches: [main]
+  pull_request:
 
 jobs:
   verify-root:
