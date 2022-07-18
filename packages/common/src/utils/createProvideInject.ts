@@ -1,3 +1,5 @@
+import { inject, provide, reactive, readonly } from 'vue';
+
 interface ProvideInject<T> {
   provideValue(): void;
   useValue(): Readonly<T>;
