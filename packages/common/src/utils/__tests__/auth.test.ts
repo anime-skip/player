@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { parseJwt } from '../auth';
 
 describe('Auth Utils', () => {

@@ -8,7 +8,6 @@
     "skipLibCheck": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "forceConsistentCasingInFileNames": true,
-    "types": ["jest"]
+    "forceConsistentCasingInFileNames": true
   }
 }

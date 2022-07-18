@@ -1,7 +1,6 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "lib": ["DOM", "ESNext"],
-    "types": ["jest", "vue-global-api"]
+    "lib": ["DOM", "ESNext"]
   }
 }

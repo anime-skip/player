@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "lib": ["dom", "esnext"],
-    "types": ["vite/client", "jest", "vue-global-api"],
+    "types": ["vite/client", "vue-global-api"],
     "paths": {
       "~/*": ["./src/*"],
       "~api": ["../common/src/api"],

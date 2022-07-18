@@ -1,6 +1,10 @@
-import { getEpisodeInfo } from '../parent';
-import { InferredEpisodeInfo } from '~types';
+/**
+ * @vitest-environment jsdom
+ */
+import { describe, expect, it } from 'vitest';
 import { createDomFromFile } from '~/common/utils/testing/jsdom';
+import { InferredEpisodeInfo } from '~types';
+import { getEpisodeInfo } from '../parent';
 
 describe('Zoro.to Parent Content Script', () => {
   describe('getEpisodeInfo', () => {

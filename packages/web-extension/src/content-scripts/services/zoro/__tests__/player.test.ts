@@ -1,5 +1,9 @@
-import { setupZoroPlayer } from '../player';
+/**
+ * @vitest-environment jsdom
+ */
+import { describe, expect, it } from 'vitest';
 import { createDomFromFile } from '~/common/utils/testing/jsdom';
+import { setupZoroPlayer } from '../player';
 
 const playerConfig = setupZoroPlayer();
 
