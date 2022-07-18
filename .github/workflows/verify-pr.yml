@@ -6,7 +6,7 @@ on:
 
 jobs:
   root:
-    name: Root
+    name: root
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -26,7 +26,7 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Formatting
+      - name: Check Formatting
         run: pnpm format:check
 
   web-extension:
@@ -50,11 +50,11 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Lint
+      - name: Check Lint
         run: pnpm lint:check
         working-directory: packages/web-extension
 
-      - name: Compile
+      - name: Type Check
         run: pnpm compile
         working-directory: packages/web-extension
 
@@ -66,7 +66,7 @@ jobs:
         run: pnpm build:chrome
         working-directory: packages/web-extension
 
-      - name: Test
+      - name: Run Tests
         run: pnpm test
         working-directory: packages/web-extension
 
@@ -91,10 +91,10 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Compile
+      - name: Type Check
         run: pnpm compile
         working-directory: packages/common
 
-      - name: Test
+      - name: Run Tests
         run: pnpm test
         working-directory: packages/common
