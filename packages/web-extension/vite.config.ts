@@ -2,7 +2,6 @@ import vue from '@vitejs/plugin-vue';
 import components from 'unplugin-vue-components/vite';
 import { defineConfig } from 'vite';
 import webExtension from 'vite-plugin-web-extension';
-import tsconfigPaths from 'vite-tsconfig-paths';
 import pkg from './package.json';
 import { generateManifest } from './scripts/generate-manifest';
 import { rootPath } from './scripts/utils';
@@ -37,7 +36,6 @@ export default defineConfig({
   root: rootPath('src'),
   mode: viteModes[mode],
   plugins: [
-    tsconfigPaths({ root: rootPath() }),
     components({
       dts: true,
       allowOverrides: true,
