@@ -1,12 +1,12 @@
-name: Verify PR
+name: Verify Code
 on:
   push:
     branches: [main]
   pull_request:
 
 jobs:
-  verify-root:
-    name: Verify Monorepo Root
+  root:
+    name: Root
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -29,8 +29,8 @@ jobs:
       - name: Formatting
         run: pnpm format:check
 
-  verify-web-extension:
-    name: Verify packages/web-extension
+  web-extension:
+    name: packages/web-extension
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -70,8 +70,8 @@ jobs:
         run: pnpm test
         working-directory: packages/web-extension
 
-  verify-common:
-    name: Verify packages/common
+  common:
+    name: packages/common
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
