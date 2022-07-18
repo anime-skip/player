@@ -93,7 +93,6 @@
     "unplugin-vue-components": "^0.19.3",
     "vite": "*",
     "vite-plugin-web-extension": "*",
-    "vite-tsconfig-paths": "^3.5.0",
     "vitest": "*",
     "vitest-mock-extended": "*",
     "vue-global-api": "*",
