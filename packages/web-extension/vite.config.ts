@@ -1,7 +1,8 @@
-import Vue from '@vitejs/plugin-vue';
-import Components from 'unplugin-vue-components/vite';
+import vue from '@vitejs/plugin-vue';
+import components from 'unplugin-vue-components/vite';
 import { defineConfig } from 'vite';
-import WebExtension from 'vite-plugin-web-extension';
+import webExtension from 'vite-plugin-web-extension';
+import tsconfigPaths from 'vite-tsconfig-paths';
 import pkg from './package.json';
 import { generateManifest } from './scripts/generate-manifest';
 import { rootPath } from './scripts/utils';
@@ -25,11 +26,19 @@ const viteModes: Record<ExtensionMode, 'development' | 'production'> = {
   test: 'development',
 };
 
+export const alias = {
+  '~/': rootPath('src') + '/',
+  '~api': rootPath('../common/src/api'),
+  '~utils': rootPath('../common/src/utils') + '/',
+  '~types': rootPath('../common/src/types'),
+};
+
 export default defineConfig({
   root: rootPath('src'),
   mode: viteModes[mode],
   plugins: [
-    Components({
+    tsconfigPaths({ root: rootPath() }),
+    components({
       dts: true,
       allowOverrides: true,
       dirs: [rootPath('src')],
@@ -42,13 +51,13 @@ export default defineConfig({
         return path.startsWith('C:') ? path.replaceAll('\\', '\\\\') : path;
       },
     }),
-    WebExtension({
+    webExtension({
       assets: 'assets',
       manifest: () => generateManifest({ browser, mode }),
       browser,
       webExtConfig,
     }),
-    Vue(),
+    vue(),
   ],
   build: {
     outDir: rootPath('dist'),
@@ -61,12 +70,7 @@ export default defineConfig({
     TARGET_BROWSER: `'${browser}'`,
   },
   resolve: {
-    alias: {
-      '~/': rootPath('src') + '/',
-      '~api': rootPath('../common/src/api'),
-      '~utils': rootPath('../common/src/utils') + '/',
-      '~types': rootPath('../common/src/types'),
-    },
+    alias,
   },
   optimizeDeps: {
     include: ['vue', '@vueuse/core'],

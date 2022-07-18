@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { urlPatternMatch } from '../strings';
 
 describe('String Utils', () => {

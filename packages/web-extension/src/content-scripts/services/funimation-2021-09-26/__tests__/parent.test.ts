@@ -1,10 +1,15 @@
-import { mocked } from 'ts-jest/utils';
+/**
+ * @vitest-environment jsdom
+ */
+import { describe, expect, it, vi } from 'vitest';
 import setupParent from '~/common/utils/setupParent';
 import { InferredEpisodeInfo } from '~types';
 import { initFunimation20210926Parent } from '../parent';
 
-jest.mock('~/common/utils/setupParent');
-const setupParentMock = mocked(setupParent);
+vi.mock('~/common/utils/setupParent', () => ({
+  default: vi.fn(),
+}));
+const setupParentMock = vi.mocked(setupParent);
 
 function setupDom(show: string, episode: string, details: string) {
   document.body.innerHTML = `
@@ -18,20 +23,14 @@ function setupDom(show: string, episode: string, details: string) {
 }
 
 describe('Parent functionalities', () => {
-  beforeAll(() => {
-    jest.resetModules();
-    initFunimation20210926Parent();
-  });
-
-  it('should mock the setupParent function so these tests can be ran', () => {
-    expect(setupParentMock).toBeCalledTimes(1);
-    expect(setupParentMock).toBeCalledWith('funimation', expect.any(Object));
-  });
-
   let getEpisodeInfo: () => InferredEpisodeInfo | Promise<InferredEpisodeInfo>;
 
-  beforeEach(() => {
+  it('should mock the setupParent function so these tests can be ran', () => {
+    initFunimation20210926Parent();
     getEpisodeInfo = setupParentMock.mock.calls[0][1].getEpisodeInfo;
+
+    expect(setupParentMock).toBeCalledTimes(1);
+    expect(setupParentMock).toBeCalledWith('funimation', expect.any(Object));
   });
 
   describe('getEpisodeInfo', () => {
