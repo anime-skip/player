@@ -54,6 +54,7 @@
 </template>
 
 <script lang="ts" setup>
+import { usePlayerConfig } from '~/composables/player-config';
 import { useLoadAllEpisodeData } from '~/composables/useLoadAllEpisodeData';
 import { usePlaybackRateConnector } from '~/composables/usePlaybackRateConnector';
 import { useTabUrl } from '~/composables/useTabUrl';
@@ -76,7 +77,6 @@ import Messenger from '~/utils/Messenger';
 import UsageStats from '~/utils/UsageStats';
 import { nextFrame } from '~utils/event-loop';
 import Utils from '~utils/GeneralUtils';
-import { usePlayerConfig } from '../composition/player-config';
 
 onMounted(() => {
   void UsageStats.saveEvent('player_injected');

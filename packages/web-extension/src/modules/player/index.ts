@@ -1,17 +1,17 @@
 import ui from '@anime-skip/ui';
 import { createApp } from 'vue';
 import 'vue-global-api';
+import '~/assets/themes.scss';
 import FakeRouterLink from '~/components/FakeRouterLink.vue';
+import { Container } from '~/components/PlayerContainer';
 import { Provider } from '~/components/Provider';
+import { providePlayerConfig } from '~/composables/player-config';
 import '~/styles';
 import { debug, loadedLog, log, warn } from '~/utils/log';
 import Messenger from '~/utils/Messenger';
 import { IPlayerConfig } from '~types';
 import { centerFitVideoBounds, fallbackBound } from '~utils/drawing';
 import { sleep } from '~utils/time';
-import { providePlayerConfig } from './composition/player-config';
-import { Container } from './Container';
-import './themes.scss';
 
 // TODO git mv to player-ui
 export function loadPlayerUi(config: IPlayerConfig) {

@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useShowLoginOverlay } from '~/modules/player/state/useDialogState';
+import { useShowLoginOverlay } from '~/stores/useDialogState';
 import Messenger from '~/utils/Messenger';
 
 defineProps<{ before?: string }>();

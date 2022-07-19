@@ -1,9 +1,9 @@
 import { RequestState } from 'vue-use-request-state';
+import { usePlayerConfig } from '~/composables/player-config';
 import { useEpisode } from '~/stores/useEpisodeState';
 import { useUpdateInferredEpisodeState } from '~/stores/useInferredEpisodeState';
 import { useEpisodeTemplate } from '~/stores/useTemplateState';
 import { warn } from '~/utils/log';
-import { usePlayerConfig } from '../composition/player-config';
 import { useFindTemplate } from './useFindTemplate';
 
 export function useInferEpisodeDetails() {

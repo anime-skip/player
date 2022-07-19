@@ -32,6 +32,7 @@
 <script lang="ts" setup>
 import { RequestState } from 'vue-use-request-state';
 import ThemedLogo from '~/components/ThemedLogo.vue';
+import { usePlayerConfig } from '~/composables/player-config';
 import { useEpisodeDisplayInfo } from '~/composables/useEpisodeDisplayInfo';
 import { useTheme } from '~/composables/useTheme';
 import { useDialogState, useShowConnectEpisodeDialog } from '~/stores/useDialogState';
@@ -40,7 +41,6 @@ import { useInferRequestState } from '~/stores/useInferredEpisodeState';
 import { usePlayHistory } from '~/stores/usePlayHistory';
 import { useDuration, useVideoState } from '~/stores/useVideoState';
 import EpisodeUtils from '~utils/episode-utils';
-import { usePlayerConfig } from '../composition/player-config';
 
 const { serviceDisplayName } = usePlayerConfig();
 

@@ -1,5 +1,6 @@
 import { useTimeoutFn } from '@vueuse/core';
 import { Ref } from 'vue';
+import { usePlayerConfig } from '~/composables/player-config';
 import {
   useIncrementPlayTicks,
   usePlayHistory,
@@ -8,7 +9,6 @@ import {
 import { useVideoController, useVideoState } from '~/stores/useVideoState';
 import { log } from '~/utils/log';
 import UsageStats from '~/utils/UsageStats';
-import { usePlayerConfig } from '../composition/player-config';
 import { useTabUrl } from './useTabUrl';
 
 export function useVideoElement() {

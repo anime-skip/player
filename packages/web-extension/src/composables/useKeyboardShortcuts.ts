@@ -1,4 +1,5 @@
 import { onUnmounted } from 'vue';
+import { usePlayerConfig } from '~/composables/player-config';
 import {
   KeyboardShortcutActionToExecuteMap,
   usePrimaryKeyboardShortcutPrefs,
@@ -7,7 +8,6 @@ import {
 import { debug } from '~/utils/log';
 import UsageStats from '~/utils/UsageStats';
 import GeneralUtils from '~utils/GeneralUtils';
-import { usePlayerConfig } from '../composition/player-config';
 
 // The first instance of this helper should only report usage stats
 let instanceCount = 0;

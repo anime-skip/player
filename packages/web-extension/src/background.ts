@@ -1,10 +1,10 @@
+import { initContextMenu } from '~/scripts/context-menu';
+import { initMessenger } from '~/scripts/messenger';
+import { initMetrics } from '~/scripts/metrics';
+import { initPageAction } from '~/scripts/page-action';
+import { initTabChange } from '~/scripts/tab-change';
 import { initStoreReviewPrompt } from '~/stores/store-review-prompt';
 import { error, loadedLog } from '~/utils/log';
-import { initContextMenu } from './context-menu';
-import { initMessenger } from './messenger';
-import { initMetrics } from './metrics';
-import { initPageAction } from './page-action';
-import { initTabChange } from './tab-change';
 
 function init() {
   initMessenger();

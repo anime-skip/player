@@ -1,16 +1,16 @@
 import { Provider } from '~/components/Provider';
+import { provideTimestampsPanelState } from '~/components/TimestampsPanel/useTimestampPanelState';
 import { provideAuth } from '~/stores/useAuth';
+import { provideDialogState } from '~/stores/useDialogState';
+import { provideEditingState } from '~/stores/useEditingState';
+import { provideEpisodeState } from '~/stores/useEpisodeState';
 import { provideGeneralPreferences } from '~/stores/useGeneralPreferences';
-import { provideTimestampsPanelState } from './dialogs/TimestampsPanel/useTimestampPanelState';
-import { provideDialogState } from './state/useDialogState';
-import { provideEditingState } from './state/useEditingState';
-import { provideEpisodeState } from './state/useEpisodeState';
-import { provideHoveredTimestamp } from './state/useHoveredTimestamp';
-import { provideInferEpisodeState } from './state/useInferredEpisodeState';
-import { providePlayerVisibility } from './state/usePlayerVisibility';
-import { providePlayHistory } from './state/usePlayHistory';
-import { provideTemplateState } from './state/useTemplateState';
-import { provideVideoState } from './state/useVideoState';
+import { provideHoveredTimestamp } from '~/stores/useHoveredTimestamp';
+import { provideInferEpisodeState } from '~/stores/useInferredEpisodeState';
+import { providePlayerVisibility } from '~/stores/usePlayerVisibility';
+import { providePlayHistory } from '~/stores/usePlayHistory';
+import { provideTemplateState } from '~/stores/useTemplateState';
+import { provideVideoState } from '~/stores/useVideoState';
 import WebExtListeners from './WebExtListeners.vue';
 
 export const Container = Provider(

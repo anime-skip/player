@@ -1,8 +1,8 @@
 import { onScopeDispose } from 'vue';
 import browser from 'webextension-polyfill';
 import { createSharedComposable } from '~/composables/createSharedComposable';
+import { usePlayerConfig } from '~/composables/player-config';
 import { log } from '~/utils/log';
-import { usePlayerConfig } from '../composition/player-config';
 
 interface ChangeUrlMessage {
   type: '@anime-skip/changeUrl';

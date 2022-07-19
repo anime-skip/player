@@ -1,3 +1,4 @@
+import { usePlayerConfig } from '~/composables/player-config';
 import { useIsLoggedIn } from '~/stores/useAuth';
 import { useShowDialog, useShowLoginOverlay } from '~/stores/useDialogState';
 import {
@@ -12,7 +13,6 @@ import { warn } from '~/utils/log';
 import UsageStats from '~/utils/UsageStats';
 import { TimestampSource } from '~api';
 import GeneralUtils from '~utils/GeneralUtils';
-import { usePlayerConfig } from '../composition/player-config';
 import { useStartEditing } from './useStartEditing';
 
 export function useCreateNewTimestamp() {

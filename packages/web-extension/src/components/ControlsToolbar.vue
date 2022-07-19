@@ -51,6 +51,7 @@
 <script lang="ts" setup>
 import { Utils as UiUtils } from '@anime-skip/ui';
 import { useFullscreen } from '@vueuse/core';
+import { usePlayerConfig } from '~/composables/player-config';
 import { useCreateNewTimestamp } from '~/composables/useCreateNewTimestamp';
 import { useDisplayedTimestamps } from '~/composables/useDisplayedTimestamps';
 import { useIsToolbarVisible } from '~/composables/useIsToolbarVisible';
@@ -70,7 +71,6 @@ import { FRAME, LOOKUP_PREV_TIMESTAMP_OFFSET } from '~/utils/constants';
 import { warn } from '~/utils/log';
 import * as Api from '~api';
 import Utils from '~utils/GeneralUtils';
-import { usePlayerConfig } from '../composition/player-config';
 
 // Video State
 

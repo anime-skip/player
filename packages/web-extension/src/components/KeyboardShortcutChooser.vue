@@ -59,7 +59,7 @@ unset</pre
 </template>
 
 <script lang="ts" setup>
-import { useDuplicateBindingChecker } from '~/modules/player/hooks/useDubplicateBindingChecker';
+import { useDuplicateBindingChecker } from '~/composables/useDubplicateBindingChecker';
 import { debug } from '~/utils/log';
 import Utils from '~utils/GeneralUtils';
 
