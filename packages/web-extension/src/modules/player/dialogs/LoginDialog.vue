@@ -12,8 +12,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useIsLoggedIn } from '~/common/state/useAuth';
-import { useDialogState, useHideLoginOverlay } from '../state/useDialogState';
+import { useIsLoggedIn } from '~/stores/useAuth';
+import { useDialogState, useHideLoginOverlay } from '~/stores/useDialogState';
 
 const dialogState = useDialogState();
 const isShowing = () => dialogState.isShowingLoginOverlay;

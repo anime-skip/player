@@ -1,11 +1,11 @@
 import ui from '@anime-skip/ui';
 import { createApp } from 'vue';
 import 'vue-global-api';
-import FakeRouterLink from '~/common/components/FakeRouterLink.vue';
-import { Provider } from '~/common/components/Provider';
-import '~/common/styles';
-import { debug, loadedLog, log, warn } from '~/common/utils/log';
-import Messenger from '~/common/utils/Messenger';
+import FakeRouterLink from '~/components/FakeRouterLink.vue';
+import { Provider } from '~/components/Provider';
+import '~/styles';
+import { debug, loadedLog, log, warn } from '~/utils/log';
+import Messenger from '~/utils/Messenger';
 import { IPlayerConfig } from '~types';
 import { centerFitVideoBounds, fallbackBound } from '~utils/drawing';
 import { sleep } from '~utils/time';

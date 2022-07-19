@@ -1,5 +1,5 @@
-import { useEpisodeState } from '../state/useEpisodeState';
-import { useTemplateState } from '../state/useTemplateState';
+import { useEpisodeState } from '~/stores/useEpisodeState';
+import { useTemplateState } from '~/stores/useTemplateState';
 
 /**
  * Returns the template that matches the current episode if it exists

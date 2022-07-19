@@ -1,7 +1,7 @@
 import ui from '@anime-skip/ui';
 import { createApp } from 'vue';
 import 'vue-global-api';
-import '~/common/styles';
-import Container from './Container.vue';
+import OptionsContainer from '~/components/OptionsContainer.vue';
+import '~/styles';
 
-createApp(Container).use(ui).mount('#app');
+createApp(OptionsContainer).use(ui).mount('#app');

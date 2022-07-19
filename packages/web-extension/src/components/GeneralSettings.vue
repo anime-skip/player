@@ -22,8 +22,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useIsLoggedIn } from '../state/useAuth';
-import { useGeneralPreferences, useToggleBooleanPref } from '../state/useGeneralPreferences';
+import { useIsLoggedIn } from '~/stores/useAuth';
+import { useGeneralPreferences, useToggleBooleanPref } from '~/stores/useGeneralPreferences';
 
 defineProps<{
   small?: boolean;

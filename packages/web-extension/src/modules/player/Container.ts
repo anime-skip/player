@@ -1,6 +1,6 @@
-import { Provider } from '~/common/components/Provider';
-import { provideAuth } from '~/common/state/useAuth';
-import { provideGeneralPreferences } from '~/common/state/useGeneralPreferences';
+import { Provider } from '~/components/Provider';
+import { provideAuth } from '~/stores/useAuth';
+import { provideGeneralPreferences } from '~/stores/useGeneralPreferences';
 import { provideTimestampsPanelState } from './dialogs/TimestampsPanel/useTimestampPanelState';
 import { provideDialogState } from './state/useDialogState';
 import { provideEditingState } from './state/useEditingState';

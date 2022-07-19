@@ -33,11 +33,11 @@
 
 <script lang="ts" setup>
 import Browser from 'webextension-polyfill';
-import { useWebExtensionStorageValue } from '~/common/hooks/useWebExtensionStorage';
-import { isUrlSupported } from '~/common/state/url-supported';
-import { useIsLoggedIn } from '~/common/state/useAuth';
-import { log } from '~/common/utils/log';
-import UsageStats from '~/common/utils/UsageStats';
+import { useWebExtensionStorageValue } from '~/composables/useWebExtensionStorage';
+import { isUrlSupported } from '~/stores/url-supported';
+import { useIsLoggedIn } from '~/stores/useAuth';
+import { log } from '~/utils/log';
+import UsageStats from '~/utils/UsageStats';
 import { detectBrowser } from '~utils/browser';
 
 defineProps<{

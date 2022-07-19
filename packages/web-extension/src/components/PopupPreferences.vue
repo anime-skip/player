@@ -26,7 +26,7 @@
 
 <script lang="ts" setup>
 import useRequestState from 'vue-use-request-state';
-import Messenger from '~/common/utils/Messenger';
+import Messenger from '~/utils/Messenger';
 import { useLogout } from '../composition/useLogout';
 
 const { wrapRequest, isLoading: isLoggingOut } = useRequestState();

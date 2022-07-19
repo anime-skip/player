@@ -1,6 +1,6 @@
 import browser from 'webextension-polyfill';
-import { isUrlSupported } from '~/common/state/url-supported';
-import { loadedLog, log } from '~/common/utils/log';
+import { isUrlSupported } from '~/stores/url-supported';
+import { loadedLog, log } from '~/utils/log';
 
 const iconBase = browser.runtime.getURL('assets/');
 const enabledIcon = {

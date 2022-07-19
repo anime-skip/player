@@ -1,5 +1,5 @@
-import { loadedLog } from '~/common/utils/log';
-import setupParent from '~/common/utils/setupParent';
+import { loadedLog } from '~/utils/log';
+import setupParent from '~/utils/setupParent';
 import { InferredEpisodeInfo } from '~types';
 
 export function getEpisodeInfo(dom = document): InferredEpisodeInfo {

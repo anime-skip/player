@@ -10,13 +10,13 @@
 </template>
 
 <script lang="ts" setup>
-import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
-import { TIMESTAMP_TYPES } from '~/common/utils/constants';
+import { useDisplayedTimestamps } from '~/composables/useDisplayedTimestamps';
+import { useIsToolbarVisible } from '~/composables/useIsToolbarVisible';
+import { useIsEditing } from '~/stores/useEditingState';
+import { useGeneralPreferences } from '~/stores/useGeneralPreferences';
+import { useDuration, useVideoController, useVideoState } from '~/stores/useVideoState';
+import { TIMESTAMP_TYPES } from '~/utils/constants';
 import Utils from '~utils/GeneralUtils';
-import { useDisplayedTimestamps } from '../hooks/useDisplayedTimestamps';
-import { useIsToolbarVisible } from '../hooks/useIsToolbarVisible';
-import { useIsEditing } from '../state/useEditingState';
-import { useDuration, useVideoController, useVideoState } from '../state/useVideoState';
 
 const SKIP_BUTTON_OFFSET = 0.1;
 const IS_VIDEO_OVER_ALLOWED_DIFF = 0.1;

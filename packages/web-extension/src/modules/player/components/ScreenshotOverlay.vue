@@ -28,8 +28,8 @@
 <script lang="ts" setup>
 import { useTimeout } from '@anime-skip/ui';
 import { ref } from 'vue';
-import { useWebExtensionStorageValue } from '~/common/hooks/useWebExtensionStorage';
-import { log } from '~/common/utils/log';
+import { useWebExtensionStorageValue } from '~/composables/useWebExtensionStorage';
+import { log } from '~/utils/log';
 
 interface ImageDetails {
   url: string;

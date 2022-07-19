@@ -1,4 +1,4 @@
-import Messenger from '~/common/utils/Messenger';
+import Messenger from '~/utils/Messenger';
 import { InferredEpisodeInfo, ScreenshotDetails } from '~types';
 import { fallbackBound } from '~utils/drawing';
 import { sleep } from '~utils/time';

@@ -41,13 +41,13 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { useIsLoggedIn } from '~/common/state/useAuth';
+import { useIsLoggedIn } from '~/stores/useAuth';
 import {
   useGeneralPreferences,
   useToggleBooleanPref,
   useUpdateRemotePref,
-} from '~/common/state/useGeneralPreferences';
-import UsageStats from '~/common/utils/UsageStats';
+} from '~/stores/useGeneralPreferences';
+import UsageStats from '~/utils/UsageStats';
 import { ColorTheme } from '~api';
 
 onMounted(() => {

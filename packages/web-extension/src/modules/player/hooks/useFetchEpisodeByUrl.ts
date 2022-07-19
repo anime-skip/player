@@ -1,9 +1,9 @@
 import { RequestState } from 'vue-use-request-state';
-import { useApiClient } from '~/common/hooks/useApiClient';
-import { warn } from '~/common/utils/log';
+import { useApiClient } from '~/composables/useApiClient';
+import { useUpdateEpisodeRequestState, useUpdateEpisodeState } from '~/stores/useEpisodeState';
+import { useUpdateEpisodeTemplate, useUpdateTemplateTimestamps } from '~/stores/useTemplateState';
+import { warn } from '~/utils/log';
 import * as Api from '~api';
-import { useUpdateEpisodeRequestState, useUpdateEpisodeState } from '../state/useEpisodeState';
-import { useUpdateEpisodeTemplate, useUpdateTemplateTimestamps } from '../state/useTemplateState';
 import { useClearAllEpisodeState } from './useClearAllEpisodeState';
 
 export function useFetchEpisodeByUrl() {

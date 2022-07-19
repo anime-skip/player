@@ -2,11 +2,11 @@
  * @vitest-environment jsdom
  */
 import { describe, expect, it, vi } from 'vitest';
-import setupParent from '~/common/utils/setupParent';
+import setupParent from '~/utils/setupParent';
 import { InferredEpisodeInfo } from '~types';
 import { initFunimation20210926Parent } from '../parent';
 
-vi.mock('~/common/utils/setupParent', () => ({
+vi.mock('~/utils/setupParent', () => ({
   default: vi.fn(),
 }));
 const setupParentMock = vi.mocked(setupParent);

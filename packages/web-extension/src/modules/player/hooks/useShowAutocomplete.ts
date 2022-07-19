@@ -1,5 +1,5 @@
 import { Ref } from 'vue';
-import { useApiClient } from '~/common/hooks/useApiClient';
+import { useApiClient } from '~/composables/useApiClient';
 import * as Api from '~api';
 import { AutocompleteItem, TextInputRef } from '~types';
 import GeneralUtils from '~utils/GeneralUtils';

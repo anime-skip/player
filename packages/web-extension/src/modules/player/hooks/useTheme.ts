@@ -1,4 +1,4 @@
-import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
+import { useGeneralPreferences } from '~/stores/useGeneralPreferences';
 import { ColorTheme } from '~api';
 import { usePlayerConfig } from '../composition/player-config';
 

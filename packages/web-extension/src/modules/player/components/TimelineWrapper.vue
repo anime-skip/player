@@ -42,18 +42,18 @@
 <script lang="ts" setup>
 import { Utils as UiUtils } from '@anime-skip/ui';
 import { computed, ref, watch } from 'vue';
-import { useIsLoggedIn } from '~/common/state/useAuth';
-import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
-import { TIMESTAMP_TYPES } from '~/common/utils/constants';
-import UsageStats from '~/common/utils/UsageStats';
+import { useDisplayedTimestamps } from '~/composables/useDisplayedTimestamps';
+import { useGetTimestampColor } from '~/composables/useTimelineColors';
+import { useIsLoggedIn } from '~/stores/useAuth';
+import { useEditingState, useIsEditing } from '~/stores/useEditingState';
+import { useGeneralPreferences } from '~/stores/useGeneralPreferences';
+import { useHoveredTimestampId } from '~/stores/useHoveredTimestamp';
+import { usePlayHistory, useUpdatePlayHistory } from '~/stores/usePlayHistory';
+import { useDuration, useVideoController, useVideoState } from '~/stores/useVideoState';
+import { TIMESTAMP_TYPES } from '~/utils/constants';
+import UsageStats from '~/utils/UsageStats';
 import * as Api from '~api';
 import Utils from '~utils/GeneralUtils';
-import { useDisplayedTimestamps } from '../hooks/useDisplayedTimestamps';
-import { useGetTimestampColor } from '../hooks/useTimelineColors';
-import { useEditingState, useIsEditing } from '../state/useEditingState';
-import { useHoveredTimestampId } from '../state/useHoveredTimestamp';
-import { usePlayHistory, useUpdatePlayHistory } from '../state/usePlayHistory';
-import { useDuration, useVideoController, useVideoState } from '../state/useVideoState';
 
 const props = defineProps<{
   isFlipped?: boolean;

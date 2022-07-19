@@ -39,13 +39,13 @@
 <script lang="ts" setup>
 import useRequestState, { RequestState } from 'vue-use-request-state';
 import { CreateEpisodePrefill } from '~/@types';
-import { useApiClient } from '~/common/hooks/useApiClient';
-import { useIsLoggedIn } from '~/common/state/useAuth';
-import { debug, log, warn } from '~/common/utils/log';
+import { useApiClient } from '~/composables/useApiClient';
+import { useIsLoggedIn } from '~/stores/useAuth';
+import { useEpisodeRequestState } from '~/stores/useEpisodeState';
+import { useInferredEpisode } from '~/stores/useInferredEpisodeState';
+import { debug, log, warn } from '~/utils/log';
 import * as Api from '~api';
 import * as Mappers from '~utils/mappers';
-import { useEpisodeRequestState } from '../../state/useEpisodeState';
-import { useInferredEpisode } from '../../state/useInferredEpisodeState';
 import { deref } from '../../utils/deref';
 
 const prefill = ref<CreateEpisodePrefill>({

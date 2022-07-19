@@ -1,5 +1,5 @@
-import { loadedLog, log } from '~/common/utils/log';
-import setupParent from '~/common/utils/setupParent';
+import { loadedLog, log } from '~/utils/log';
+import setupParent from '~/utils/setupParent';
 import { waitUntil } from '~utils/time';
 
 async function getEpisodeInfo() {

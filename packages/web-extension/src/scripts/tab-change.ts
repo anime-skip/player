@@ -1,6 +1,6 @@
 import browser from 'webextension-polyfill';
-import { loadedLog, warn } from '~/common/utils/log';
-import Messenger from '~/common/utils/Messenger';
+import { loadedLog, warn } from '~/utils/log';
+import Messenger from '~/utils/Messenger';
 
 export function initTabChange() {
   loadedLog('background/tab-change.ts');

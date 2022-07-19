@@ -1,5 +1,5 @@
-import { useEpisode } from '../state/useEpisodeState';
-import { useInferredEpisode } from '../state/useInferredEpisodeState';
+import { useEpisode } from '~/stores/useEpisodeState';
+import { useInferredEpisode } from '~/stores/useInferredEpisodeState';
 
 export interface EpisodeDisplayInfo {
   name: string;

@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useEditingState } from '../../state/useEditingState';
+import { useEditingState } from '~/stores/useEditingState';
 import { useIsEditingTemplate } from './useTimestampPanelState';
 
 const editingState = useEditingState();

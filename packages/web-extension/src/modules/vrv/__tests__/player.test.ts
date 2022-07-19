@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { describe, expect, it } from 'vitest';
-import { createDomFromFile } from '~/common/utils/testing/jsdom';
+import { createDomFromFile } from '~/utils/testing/jsdom';
 import { initVrvPlayer } from '../player';
 
 const playerConfig = initVrvPlayer();

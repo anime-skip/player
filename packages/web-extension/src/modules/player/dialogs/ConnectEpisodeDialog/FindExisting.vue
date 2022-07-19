@@ -71,16 +71,16 @@
 
 <script lang="ts" setup>
 import { CreateEpisodePrefill } from '~/@types';
-import { TIMESTAMP_SOURCES } from '~/common/utils/constants';
-import { error, warn } from '~/common/utils/log';
+import { useCreateEpisodeFromThirdParty } from '~/composables/useCreateEpisodeFromThirdParty';
+import { useEpisodeAutocomplete } from '~/composables/useEpisodeAutocomplete';
+import { useLinkEpisodeUrl } from '~/composables/useLinkEpisodeUrl';
+import { useShowAutocomplete } from '~/composables/useShowAutocomplete';
+import { useHideDialog } from '~/stores/useDialogState';
+import { TIMESTAMP_SOURCES } from '~/utils/constants';
+import { error, warn } from '~/utils/log';
 import * as Api from '~api';
 import { TextInputRef } from '~types';
 import EpisodeUtils from '~utils/episode-utils';
-import { useCreateEpisodeFromThirdParty } from '../../hooks/useCreateEpisodeFromThirdParty';
-import { useEpisodeAutocomplete } from '../../hooks/useEpisodeAutocomplete';
-import { useLinkEpisodeUrl } from '../../hooks/useLinkEpisodeUrl';
-import { useShowAutocomplete } from '../../hooks/useShowAutocomplete';
-import { useHideDialog } from '../../state/useDialogState';
 
 const props = defineProps<{
   suggestions: Api.ThirdPartyEpisode[];

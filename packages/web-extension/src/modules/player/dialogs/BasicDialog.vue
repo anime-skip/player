@@ -20,7 +20,7 @@
 
 <script lang="ts" setup>
 import { PropType } from 'vue';
-import { useDialogState, useHideDialog } from '../state/useDialogState';
+import { useDialogState, useHideDialog } from '~/stores/useDialogState';
 
 const props = defineProps({
   name: { type: String, required: true },

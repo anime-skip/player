@@ -1,5 +1,5 @@
-import { loadedLog } from '~/common/utils/log';
-import setupParent from '~/common/utils/setupParent';
+import { loadedLog } from '~/utils/log';
+import setupParent from '~/utils/setupParent';
 
 function getEpisodeInfo() {
   // X - 2021/05/28

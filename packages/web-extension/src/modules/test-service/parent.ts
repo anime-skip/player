@@ -1,5 +1,5 @@
-import { loadedLog } from '~/common/utils/log';
-import setupParent from '~/common/utils/setupParent';
+import { loadedLog } from '~/utils/log';
+import setupParent from '~/utils/setupParent';
 
 export function initTestServiceParent() {
   loadedLog('content-scripts/services/test-service/parent.ts');

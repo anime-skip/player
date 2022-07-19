@@ -51,26 +51,26 @@
 <script lang="ts" setup>
 import { Utils as UiUtils } from '@anime-skip/ui';
 import { useFullscreen } from '@vueuse/core';
-import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
-import { FRAME, LOOKUP_PREV_TIMESTAMP_OFFSET } from '~/common/utils/constants';
-import { warn } from '~/common/utils/log';
-import * as Api from '~api';
-import Utils from '~utils/GeneralUtils';
-import { usePlayerConfig } from '../composition/player-config';
-import { useCreateNewTimestamp } from '../hooks/useCreateNewTimestamp';
-import { useDisplayedTimestamps } from '../hooks/useDisplayedTimestamps';
-import { useIsToolbarVisible } from '../hooks/useIsToolbarVisible';
-import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
-import { useStopEditing } from '../hooks/useStopEditing';
-import { useHideDialog, useShowDialog, useToggleDialog } from '../state/useDialogState';
+import { useCreateNewTimestamp } from '~/composables/useCreateNewTimestamp';
+import { useDisplayedTimestamps } from '~/composables/useDisplayedTimestamps';
+import { useIsToolbarVisible } from '~/composables/useIsToolbarVisible';
+import { useKeyboardShortcuts } from '~/composables/useKeyboardShortcuts';
+import { useStopEditing } from '~/composables/useStopEditing';
+import { useHideDialog, useShowDialog, useToggleDialog } from '~/stores/useDialogState';
 import {
   EditTimestampMode,
   useEditingState,
   useIsEditing,
   useUpdateActiveTimestamp,
   useUpdateEditTimestampMode,
-} from '../state/useEditingState';
-import { useDuration, useVideoController, useVideoState } from '../state/useVideoState';
+} from '~/stores/useEditingState';
+import { useGeneralPreferences } from '~/stores/useGeneralPreferences';
+import { useDuration, useVideoController, useVideoState } from '~/stores/useVideoState';
+import { FRAME, LOOKUP_PREV_TIMESTAMP_OFFSET } from '~/utils/constants';
+import { warn } from '~/utils/log';
+import * as Api from '~api';
+import Utils from '~utils/GeneralUtils';
+import { usePlayerConfig } from '../composition/player-config';
 
 // Video State
 

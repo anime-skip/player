@@ -1,5 +1,5 @@
-import { loadedLog } from '~/common/utils/log';
-import { setupPlayerConfig } from '~/common/utils/setup-player-config';
+import { loadedLog } from '~/utils/log';
+import { setupPlayerConfig } from '~/utils/setup-player-config';
 import './player-overrides.css';
 
 export function initTestServicePlayer() {

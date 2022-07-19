@@ -1,5 +1,5 @@
-import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
-import { useVideoController, useVideoState } from '../state/useVideoState';
+import { useGeneralPreferences } from '~/stores/useGeneralPreferences';
+import { useVideoController, useVideoState } from '~/stores/useVideoState';
 
 /**
  * Connect the playback rate in the video state and the general preferences so they stay in sync.

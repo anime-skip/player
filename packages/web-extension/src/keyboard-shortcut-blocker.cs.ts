@@ -1,6 +1,6 @@
-import { PlayerHosts } from '~/common/utils/compile-time-constants';
-import { debug, error, loadedLog } from '~/common/utils/log';
-import { urlPatternMatch } from '~/common/utils/strings';
+import { PlayerHosts } from '~/utils/compile-time-constants';
+import { debug, error, loadedLog } from '~/utils/log';
+import { urlPatternMatch } from '~/utils/strings';
 
 const services: PlayerHosts[] = Object.values(PlayerHosts);
 

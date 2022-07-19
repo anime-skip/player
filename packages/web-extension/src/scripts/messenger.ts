@@ -1,6 +1,6 @@
 import browser from 'webextension-polyfill';
-import { loadedLog } from '~/common/utils/log';
-import Messenger from '~/common/utils/Messenger';
+import { loadedLog } from '~/utils/log';
+import Messenger from '~/utils/Messenger';
 
 export function initMessenger() {
   loadedLog('background/messenger.ts');

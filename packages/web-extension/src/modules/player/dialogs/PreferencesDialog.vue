@@ -79,12 +79,12 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue';
-import useRadioIcon from '~/common/composition/useRadioIcon';
-import Messenger from '~/common/utils/Messenger';
+import useRadioIcon from '~/composables/useRadioIcon';
+import { useHideDialog } from '~/stores/useDialogState';
+import { useShowOriginalPlayer } from '~/stores/usePlayerVisibility';
+import Messenger from '~/utils/Messenger';
 import { PlayerOption, PlayerOptionGroup } from '~types';
 import { usePlayerConfig } from '../composition/player-config';
-import { useHideDialog } from '../state/useDialogState';
-import { useShowOriginalPlayer } from '../state/usePlayerVisibility';
 
 const playerConfig = usePlayerConfig();
 

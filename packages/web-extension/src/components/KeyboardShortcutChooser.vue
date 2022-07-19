@@ -59,8 +59,8 @@ unset</pre
 </template>
 
 <script lang="ts" setup>
-import { debug } from '~/common/utils/log';
-import { useDuplicateBindingChecker } from '~/content-scripts/player/hooks/useDubplicateBindingChecker';
+import { useDuplicateBindingChecker } from '~/modules/player/hooks/useDubplicateBindingChecker';
+import { debug } from '~/utils/log';
 import Utils from '~utils/GeneralUtils';
 
 const props = defineProps<{

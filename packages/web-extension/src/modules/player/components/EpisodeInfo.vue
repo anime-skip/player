@@ -31,16 +31,16 @@
 
 <script lang="ts" setup>
 import { RequestState } from 'vue-use-request-state';
-import ThemedLogo from '~/common/components/ThemedLogo.vue';
+import ThemedLogo from '~/components/ThemedLogo.vue';
+import { useEpisodeDisplayInfo } from '~/composables/useEpisodeDisplayInfo';
+import { useTheme } from '~/composables/useTheme';
+import { useDialogState, useShowConnectEpisodeDialog } from '~/stores/useDialogState';
+import { useEpisodeUrl } from '~/stores/useEpisodeState';
+import { useInferRequestState } from '~/stores/useInferredEpisodeState';
+import { usePlayHistory } from '~/stores/usePlayHistory';
+import { useDuration, useVideoState } from '~/stores/useVideoState';
 import EpisodeUtils from '~utils/episode-utils';
 import { usePlayerConfig } from '../composition/player-config';
-import { useEpisodeDisplayInfo } from '../hooks/useEpisodeDisplayInfo';
-import { useTheme } from '../hooks/useTheme';
-import { useDialogState, useShowConnectEpisodeDialog } from '../state/useDialogState';
-import { useEpisodeUrl } from '../state/useEpisodeState';
-import { useInferRequestState } from '../state/useInferredEpisodeState';
-import { usePlayHistory } from '../state/usePlayHistory';
-import { useDuration, useVideoState } from '../state/useVideoState';
 
 const { serviceDisplayName } = usePlayerConfig();
 

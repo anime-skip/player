@@ -3,9 +3,9 @@
 import type createAnimeSkipClient from '@anime-skip/api-client';
 import { Mutex } from 'async-mutex';
 import { AxiosResponse } from 'axios';
+import { getAuthAsync, updateAuthAsync } from '~/stores/useAuth';
 import * as Api from '~api';
 import { LogoutError } from '~utils/LogoutError';
-import { getAuthAsync, updateAuthAsync } from '../state/useAuth';
 import { log, warn } from '../utils/log';
 import UsageStats from '../utils/UsageStats';
 

@@ -1,9 +1,9 @@
 import { RequestState } from 'vue-use-request-state';
-import { warn } from '~/common/utils/log';
+import { useEpisode } from '~/stores/useEpisodeState';
+import { useUpdateInferredEpisodeState } from '~/stores/useInferredEpisodeState';
+import { useEpisodeTemplate } from '~/stores/useTemplateState';
+import { warn } from '~/utils/log';
 import { usePlayerConfig } from '../composition/player-config';
-import { useEpisode } from '../state/useEpisodeState';
-import { useUpdateInferredEpisodeState } from '../state/useInferredEpisodeState';
-import { useEpisodeTemplate } from '../state/useTemplateState';
 import { useFindTemplate } from './useFindTemplate';
 
 export function useInferEpisodeDetails() {

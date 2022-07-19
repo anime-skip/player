@@ -1,5 +1,5 @@
-import { useDraftTimestamps, useUpdateEditingState } from '../state/useEditingState';
-import { useEpisodeState } from '../state/useEpisodeState';
+import { useDraftTimestamps, useUpdateEditingState } from '~/stores/useEditingState';
+import { useEpisodeState } from '~/stores/useEpisodeState';
 import { useSyncTimestamps } from './useSyncTimestamps';
 
 export function useStopEditing() {

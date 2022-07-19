@@ -1,11 +1,11 @@
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { useClearTokens } from '~/stores/useAuth';
+import { useResetPreferences } from '~/stores/useGeneralPreferences';
 import { createCustomAnimeSkipClient } from '~utils/CustomApiClient';
 import GeneralUtils from '~utils/GeneralUtils';
 import { LogoutError } from '~utils/LogoutError';
-import { useClearTokens } from '../state/useAuth';
-import { useResetPreferences } from '../state/useGeneralPreferences';
 import { groupCollapsed, log, warn } from '../utils/log';
 import UsageStats from '../utils/UsageStats';
 import useTokenRefresher from './useTokenRefresher';

@@ -1,10 +1,10 @@
-import { useApiClient } from '~/common/hooks/useApiClient';
-import { debug, log } from '~/common/utils/log';
+import { useApiClient } from '~/composables/useApiClient';
+import { useEpisodeTemplate, useUpdateTemplateState } from '~/stores/useTemplateState';
+import { useDuration } from '~/stores/useVideoState';
+import { debug, log } from '~/utils/log';
 import * as Api from '~api';
 import GeneralUtils from '~utils/GeneralUtils';
 import { sleep } from '~utils/time';
-import { useEpisodeTemplate, useUpdateTemplateState } from '../state/useTemplateState';
-import { useDuration } from '../state/useVideoState';
 
 export function useFindTemplate() {
   const api = useApiClient();

@@ -1,8 +1,8 @@
+import { KeyboardShortcutActionToKeyBindingMap } from '~/stores/useKeyboardShortcutPrefs';
 import type * as Api from '~api';
 import { TimestampSource } from '~api';
 import { PickTypes, PlaybackRate } from '~types';
 import { DAY, HOUR } from '~utils/time';
-import { KeyboardShortcutActionToKeyBindingMap } from '../state/useKeyboardShortcutPrefs';
 
 export const persistedKeys = [
   'token' as const,

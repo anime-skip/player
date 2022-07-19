@@ -1,6 +1,6 @@
 import browser from 'webextension-polyfill';
-import { loadedLog, log } from '~/common/utils/log';
-import UsageStats from '~/common/utils/UsageStats';
+import { loadedLog, log } from '~/utils/log';
+import UsageStats from '~/utils/UsageStats';
 import { detectBrowser } from '~utils/browser';
 
 function getUninstallUrl(userId: string | undefined): string | undefined {

@@ -1,9 +1,9 @@
 import { Ref } from 'vue';
-import { createSharedComposable } from '~/common/hooks/createSharedComposable';
+import { createSharedComposable } from '~/composables/createSharedComposable';
 import {
   usePrimaryKeyboardShortcutPrefs,
   useSecondaryKeyboardShortcutPrefs,
-} from '~/common/state/useKeyboardShortcutPrefs';
+} from '~/stores/useKeyboardShortcutPrefs';
 
 export const useDuplicateBindingChecker = createSharedComposable(() => {
   const { primaryShortcutsKeyToActionsMap } = usePrimaryKeyboardShortcutPrefs();

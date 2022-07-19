@@ -19,22 +19,22 @@
     "{{firefox}}.*://staged.api.anime-skip.com/*"
   ],
   "background": {
-    "{{chrome}}.service_worker": "background/index.ts",
-    "{{firefox}}.scripts": ["background/index.ts"]
+    "{{chrome}}.service_worker": "background.ts",
+    "{{firefox}}.scripts": ["background.ts"]
   },
   "{{chrome}}.action": {
-    "default_popup": "popup/index.html"
+    "default_popup": "popup.html"
   },
   "{{firefox}}.page_action": {
     "browser_style": false,
-    "default_popup": "popup/index.html"
+    "default_popup": "popup.html"
   },
   "{{firefox}}.options_ui": {
-    "page": "options/index.html",
+    "page": "options.html",
     "open_in_tab": true,
     "browser_style": false
   },
-  "{{chrome}}.options_page": "options/index.html",
+  "{{chrome}}.options_page": "options.html",
   "content_scripts": [
     {
       "js": ["content-scripts/player.ts"],

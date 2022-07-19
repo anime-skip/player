@@ -115,24 +115,24 @@
 <script lang="ts" setup>
 import { Utils } from '@anime-skip/ui';
 import fuzzysort from 'fuzzysort';
-import { TIMESTAMP_TYPES, TIMESTAMP_TYPE_NOT_SELECTED } from '~/common/utils/constants';
-import { warn } from '~/common/utils/log';
-import * as Api from '~api';
-import { useApplyTimestampDiff } from '../../hooks/useApplyTimestampDiff';
-import { useDeleteDraftTimestamp } from '../../hooks/useDeleteDraftTimestamp';
-import useKeyboardShortcutBindingDisplay from '../../hooks/useKeyboardShortcutBindingDisplay';
-import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
-import { useSaveDraftTimestamp } from '../../hooks/useSaveDraftTimestamp';
-import { useHideDialog } from '../../state/useDialogState';
+import { useApplyTimestampDiff } from '~/composables/useApplyTimestampDiff';
+import { useDeleteDraftTimestamp } from '~/composables/useDeleteDraftTimestamp';
+import useKeyboardShortcutBindingDisplay from '~/composables/useKeyboardShortcutBindingDisplay';
+import { useKeyboardShortcuts } from '~/composables/useKeyboardShortcuts';
+import { useSaveDraftTimestamp } from '~/composables/useSaveDraftTimestamp';
+import { useHideDialog } from '~/stores/useDialogState';
 import {
   EditTimestampMode,
   useActiveTimestamp,
   useClearActiveTimestamp,
   useEditTimestampMode,
   useUpdateActiveTimestamp,
-} from '../../state/useEditingState';
-import { useEpisodeUrl } from '../../state/useEpisodeState';
-import { useVideoController, useVideoState } from '../../state/useVideoState';
+} from '~/stores/useEditingState';
+import { useEpisodeUrl } from '~/stores/useEpisodeState';
+import { useVideoController, useVideoState } from '~/stores/useVideoState';
+import { TIMESTAMP_TYPES, TIMESTAMP_TYPE_NOT_SELECTED } from '~/utils/constants';
+import { warn } from '~/utils/log';
+import * as Api from '~api';
 import { isTimestampLocal } from '../../utils/isTimestampLocal';
 
 const props = defineProps<{

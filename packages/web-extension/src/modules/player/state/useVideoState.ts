@@ -1,6 +1,6 @@
 import { Utils as UiUtils } from '@anime-skip/ui';
-import { PLAYER_ACTIVITY_TIMEOUT } from '~/common/utils/constants';
-import UsageStats from '~/common/utils/UsageStats';
+import { PLAYER_ACTIVITY_TIMEOUT } from '~/utils/constants';
+import UsageStats from '~/utils/UsageStats';
 import { createProvideInject } from '~utils/createProvideInject';
 import { usePlayerConfig } from '../composition/player-config';
 

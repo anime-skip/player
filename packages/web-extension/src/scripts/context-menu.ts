@@ -1,6 +1,6 @@
 import browser, { Menus, Tabs } from 'webextension-polyfill';
-import { error, loadedLog, log } from '~/common/utils/log';
-import Messenger from '~/common/utils/Messenger';
+import { error, loadedLog, log } from '~/utils/log';
+import Messenger from '~/utils/Messenger';
 import { ScreenshotDetails } from '~types';
 
 const MENU_ITEM_SCREENSHOT = 'screenshot';

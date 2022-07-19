@@ -1,6 +1,6 @@
-import { useClearTokens } from '~/common/state/useAuth';
-import { useResetPreferences } from '~/common/state/useGeneralPreferences';
-import UsageStats from '~/common/utils/UsageStats';
+import { useClearTokens } from '~/stores/useAuth';
+import { useResetPreferences } from '~/stores/useGeneralPreferences';
+import UsageStats from '~/utils/UsageStats';
 import { sleep } from '~utils/time';
 
 export function useLogout() {

@@ -2,7 +2,7 @@ import {
   KeyboardShortcutAction,
   usePrimaryKeyboardShortcutPrefs,
   useSecondaryKeyboardShortcutPrefs,
-} from '~/common/state/useKeyboardShortcutPrefs';
+} from '~/stores/useKeyboardShortcutPrefs';
 
 export default function useKeyboardShortcutBindingDisplay(action: KeyboardShortcutAction) {
   const { primaryShortcutsActionToKeyMap } = usePrimaryKeyboardShortcutPrefs();

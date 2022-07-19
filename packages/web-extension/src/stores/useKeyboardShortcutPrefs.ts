@@ -1,4 +1,4 @@
-import { useWebExtensionStorage } from '../hooks/useWebExtensionStorage';
+import { useWebExtensionStorage } from '~/composables/useWebExtensionStorage';
 import {
   DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS,
   DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS,

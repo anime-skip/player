@@ -1,18 +1,18 @@
-import { useIsLoggedIn } from '~/common/state/useAuth';
-import { useGeneralPreferences } from '~/common/state/useGeneralPreferences';
-import { TIMESTAMP_TYPE_NOT_SELECTED } from '~/common/utils/constants';
-import { warn } from '~/common/utils/log';
-import UsageStats from '~/common/utils/UsageStats';
-import { TimestampSource } from '~api';
-import GeneralUtils from '~utils/GeneralUtils';
-import { usePlayerConfig } from '../composition/player-config';
-import { useShowDialog, useShowLoginOverlay } from '../state/useDialogState';
+import { useIsLoggedIn } from '~/stores/useAuth';
+import { useShowDialog, useShowLoginOverlay } from '~/stores/useDialogState';
 import {
   EditTimestampMode,
   useUpdateActiveTimestamp,
   useUpdateEditTimestampMode,
-} from '../state/useEditingState';
-import { useVideoController } from '../state/useVideoState';
+} from '~/stores/useEditingState';
+import { useGeneralPreferences } from '~/stores/useGeneralPreferences';
+import { useVideoController } from '~/stores/useVideoState';
+import { TIMESTAMP_TYPE_NOT_SELECTED } from '~/utils/constants';
+import { warn } from '~/utils/log';
+import UsageStats from '~/utils/UsageStats';
+import { TimestampSource } from '~api';
+import GeneralUtils from '~utils/GeneralUtils';
+import { usePlayerConfig } from '../composition/player-config';
 import { useStartEditing } from './useStartEditing';
 
 export function useCreateNewTimestamp() {

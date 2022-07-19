@@ -1,4 +1,4 @@
-import { useIsLoggedIn } from '~/common/state/useAuth';
+import { useIsLoggedIn } from '~/stores/useAuth';
 import { createProvideInject } from '~utils/createProvideInject';
 import { sleep } from '~utils/time';
 import { useVideoController } from './useVideoState';

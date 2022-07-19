@@ -24,9 +24,9 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { SKIPPABLE_PREFERENCES } from '~/common/utils/constants';
-import { useIsLoggedIn } from '../state/useAuth';
-import { useGeneralPreferences, useToggleBooleanPref } from '../state/useGeneralPreferences';
+import { useIsLoggedIn } from '~/stores/useAuth';
+import { useGeneralPreferences, useToggleBooleanPref } from '~/stores/useGeneralPreferences';
+import { SKIPPABLE_PREFERENCES } from '~/utils/constants';
 
 defineProps({
   twoColumns: Boolean,

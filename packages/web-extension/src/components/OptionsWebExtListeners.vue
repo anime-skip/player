@@ -3,8 +3,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useInitAuthListener } from '~/common/state/useAuth';
-import { useInitGeneralPreferencesListener } from '~/common/state/useGeneralPreferences';
+import { useInitAuthListener } from '~/stores/useAuth';
+import { useInitGeneralPreferencesListener } from '~/stores/useGeneralPreferences';
 
 useInitAuthListener();
 useInitGeneralPreferencesListener();

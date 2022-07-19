@@ -41,13 +41,13 @@
 
 <script lang="ts" setup>
 import { CreateEpisodePrefill } from '~/@types';
+import { useCreateEpisodeData } from '~/composables/useCreateEpisodeData';
+import { useShowAutocomplete } from '~/composables/useShowAutocomplete';
+import { useTabUrl } from '~/composables/useTabUrl';
+import { useHideDialog } from '~/stores/useDialogState';
+import { useDuration } from '~/stores/useVideoState';
 import * as Api from '~api';
 import { TextInputRef } from '~types';
-import { useCreateEpisodeData } from '../../hooks/useCreateEpisodeData';
-import { useShowAutocomplete } from '../../hooks/useShowAutocomplete';
-import { useTabUrl } from '../../hooks/useTabUrl';
-import { useHideDialog } from '../../state/useDialogState';
-import { useDuration } from '../../state/useVideoState';
 
 const props = defineProps<{
   prefill: CreateEpisodePrefill;

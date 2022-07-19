@@ -18,8 +18,8 @@ import { useNow } from '@vueuse/core';
 import {
   useDontShowStoreReviewPromptAgain,
   useStoreReviewPromptDate,
-} from '~/common/state/store-review-prompt';
-import UsageStats from '~/common/utils/UsageStats';
+} from '~/stores/store-review-prompt';
+import UsageStats from '~/utils/UsageStats';
 import Utils from '~utils/GeneralUtils';
 import { DAYS, MINUTES, SECOND, SECONDS, today } from '~utils/time';
 import { NotificationButton } from './Notification.vue';

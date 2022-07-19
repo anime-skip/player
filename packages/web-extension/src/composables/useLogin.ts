@@ -1,7 +1,7 @@
 import md5 from 'md5';
+import { useUpdateAuth } from '~/stores/useAuth';
+import { useUpdateGeneralPreferences } from '~/stores/useGeneralPreferences';
 import * as Api from '~api';
-import { useUpdateAuth } from '../state/useAuth';
-import { useUpdateGeneralPreferences } from '../state/useGeneralPreferences';
 import UsageStats from '../utils/UsageStats';
 import { useApiClient } from './useApiClient';
 

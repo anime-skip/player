@@ -1,14 +1,14 @@
-import { ParentHosts } from '~/common/utils/compile-time-constants';
-import { error, loadedLog } from '~/common/utils/log';
-import { urlPatternMatch } from '~/common/utils/strings';
-import { initAnimeSkipParent } from './anime-skip';
-import { init9animeParent } from './services/9anime/parent';
-import { initCrunchyrollParent } from './services/crunchyroll/parent';
-import { initFunimation20210926Parent } from './services/funimation-2021-09-26/parent';
-import { initFunimationParent } from './services/funimation/parent';
-import { initTestServiceParent } from './services/test-service/parent';
-import { initVrvParent } from './services/vrv/parent';
-import { initZoroParent } from './services/zoro/parent';
+import { init9animeParent } from '~/modules/9anime/parent';
+import { initAnimeSkipParent } from '~/modules/anime-skip';
+import { initCrunchyrollParent } from '~/modules/crunchyroll/parent';
+import { initFunimation20210926Parent } from '~/modules/funimation-2021-09-26/parent';
+import { initFunimationParent } from '~/modules/funimation/parent';
+import { initTestServiceParent } from '~/modules/test-service/parent';
+import { initVrvParent } from '~/modules/vrv/parent';
+import { initZoroParent } from '~/modules/zoro/parent';
+import { ParentHosts } from '~/utils/compile-time-constants';
+import { error, loadedLog } from '~/utils/log';
+import { urlPatternMatch } from '~/utils/strings';
 
 const services: Record<ParentHosts, () => void> = {
   [ParentHosts.ANIME_SKIP]: initAnimeSkipParent,

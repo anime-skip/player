@@ -187,7 +187,7 @@
 import {
   useUpdatePrimaryKeyBinding,
   useUpdateSecondaryKeyBinding,
-} from '~/common/state/useKeyboardShortcutPrefs';
+} from '~/stores/useKeyboardShortcutPrefs';
 
 // Updates
 

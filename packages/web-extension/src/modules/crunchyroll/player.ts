@@ -1,5 +1,5 @@
-import { loadedLog } from '~/common/utils/log';
-import { setupPlayerConfig } from '~/common/utils/setup-player-config';
+import { loadedLog } from '~/utils/log';
+import { setupPlayerConfig } from '~/utils/setup-player-config';
 import GeneralUtils from '~utils/GeneralUtils';
 import { getService } from './get-service';
 import './player-overrides.scss';

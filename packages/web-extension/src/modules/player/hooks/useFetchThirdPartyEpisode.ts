@@ -1,10 +1,10 @@
 import { RequestState } from 'vue-use-request-state';
-import { useApiClient } from '~/common/hooks/useApiClient';
-import { warn } from '~/common/utils/log';
+import { useApiClient } from '~/composables/useApiClient';
+import { useUpdateEpisodeRequestState, useUpdateEpisodeState } from '~/stores/useEpisodeState';
+import { useUpdateInferredTimestamps } from '~/stores/useInferredEpisodeState';
+import { warn } from '~/utils/log';
 import * as Api from '~api';
 import * as Mappers from '~utils/mappers';
-import { useUpdateEpisodeRequestState, useUpdateEpisodeState } from '../state/useEpisodeState';
-import { useUpdateInferredTimestamps } from '../state/useInferredEpisodeState';
 
 export function useFetchThirdPartyEpisode() {
   const updateEpisodeRequestState = useUpdateEpisodeRequestState();

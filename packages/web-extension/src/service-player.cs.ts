@@ -1,15 +1,15 @@
-import { PlayerHosts } from '~/common/utils/compile-time-constants';
-import { error, loadedLog } from '~/common/utils/log';
-import { urlPatternMatch } from '~/common/utils/strings';
+import { setup9animePlayer } from '~/modules/9anime/player';
+import { initCrunchyrollPlayer } from '~/modules/crunchyroll/player';
+import { initFunimation20210926Player } from '~/modules/funimation-2021-09-26/player';
+import { initFunimationPlayer } from '~/modules/funimation/player';
+import { loadPlayerUi } from '~/modules/player';
+import { initTestServicePlayer } from '~/modules/test-service/player';
+import { initVrvPlayer } from '~/modules/vrv/player';
+import { setupZoroPlayer } from '~/modules/zoro/player';
+import { PlayerHosts } from '~/utils/compile-time-constants';
+import { error, loadedLog } from '~/utils/log';
+import { urlPatternMatch } from '~/utils/strings';
 import { IPlayerConfig } from '~types';
-import { loadPlayerUi } from './player/index';
-import { setup9animePlayer } from './services/9anime/player';
-import { initCrunchyrollPlayer } from './services/crunchyroll/player';
-import { initFunimation20210926Player } from './services/funimation-2021-09-26/player';
-import { initFunimationPlayer } from './services/funimation/player';
-import { initTestServicePlayer } from './services/test-service/player';
-import { initVrvPlayer } from './services/vrv/player';
-import { setupZoroPlayer } from './services/zoro/player';
 
 const services: Record<PlayerHosts, () => IPlayerConfig> = {
   [PlayerHosts.CRUNCHYROLL]: initCrunchyrollPlayer,

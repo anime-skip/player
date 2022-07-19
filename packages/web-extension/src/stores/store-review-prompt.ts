@@ -1,6 +1,6 @@
 import browser from 'webextension-polyfill';
+import { useWebExtensionStorageValue } from '~/composables/useWebExtensionStorage';
 import { DAYS, SECONDS, sleep, today } from '~utils/time';
-import { useWebExtensionStorageValue } from '../hooks/useWebExtensionStorage';
 import { debug } from '../utils/log';
 
 const REVIEW_PROMPT_AT_KEY = 'storeReviewPromptAt';

@@ -3,9 +3,9 @@ import {
   KeyboardShortcutActionToExecuteMap,
   usePrimaryKeyboardShortcutPrefs,
   useSecondaryKeyboardShortcutPrefs,
-} from '~/common/state/useKeyboardShortcutPrefs';
-import { debug } from '~/common/utils/log';
-import UsageStats from '~/common/utils/UsageStats';
+} from '~/stores/useKeyboardShortcutPrefs';
+import { debug } from '~/utils/log';
+import UsageStats from '~/utils/UsageStats';
 import GeneralUtils from '~utils/GeneralUtils';
 import { usePlayerConfig } from '../composition/player-config';
 

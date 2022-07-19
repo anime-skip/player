@@ -84,24 +84,21 @@
 import { useTimeout } from '@anime-skip/ui';
 import { computed, ref } from 'vue';
 import { RequestState } from 'vue-use-request-state';
-import useRadioIcon from '~/common/composition/useRadioIcon';
-import { TIMESTAMP_TYPES } from '~/common/utils/constants';
-import { warn } from '~/common/utils/log';
+import { useDeleteTemplate } from '~/composables/useDeleteTemplate';
+import { useDisplayedTimestamps } from '~/composables/useDisplayedTimestamps';
+import { useEpisodeDisplayInfo } from '~/composables/useEpisodeDisplayInfo';
+import { useMatchingTemplate } from '~/composables/useMatchingTemplate';
+import useRadioIcon from '~/composables/useRadioIcon';
+import { useSaveNewTemplate } from '~/composables/useSaveNewTemplate';
+import { useSaveTemplate } from '~/composables/useSaveTemplate';
+import { useClearHoveredTimestamp, useUpdateHoveredTimestamp } from '~/stores/useHoveredTimestamp';
+import { useTemplateRequestState, useTemplateTimestamps } from '~/stores/useTemplateState';
+import { TIMESTAMP_TYPES } from '~/utils/constants';
+import { warn } from '~/utils/log';
 import * as Api from '~api';
 import { TemplateType } from '~api';
 import Utils from '~utils/GeneralUtils';
 import { SECONDS } from '~utils/time';
-import { useDeleteTemplate } from '../../hooks/useDeleteTemplate';
-import { useDisplayedTimestamps } from '../../hooks/useDisplayedTimestamps';
-import { useEpisodeDisplayInfo } from '../../hooks/useEpisodeDisplayInfo';
-import { useMatchingTemplate } from '../../hooks/useMatchingTemplate';
-import { useSaveNewTemplate } from '../../hooks/useSaveNewTemplate';
-import { useSaveTemplate } from '../../hooks/useSaveTemplate';
-import {
-  useClearHoveredTimestamp,
-  useUpdateHoveredTimestamp,
-} from '../../state/useHoveredTimestamp';
-import { useTemplateRequestState, useTemplateTimestamps } from '../../state/useTemplateState';
 import { useUpdateIsEditingTemplate } from './useTimestampPanelState';
 
 const deleteTemplate = useDeleteTemplate();

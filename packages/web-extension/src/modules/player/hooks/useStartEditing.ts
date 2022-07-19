@@ -1,7 +1,7 @@
-import { useIsLoggedIn } from '~/common/state/useAuth';
-import { useShowDialog, useShowLoginOverlay } from '../state/useDialogState';
-import { useIsEditing, useUpdateEditingState } from '../state/useEditingState';
-import { useEpisodeUrl } from '../state/useEpisodeState';
+import { useIsLoggedIn } from '~/stores/useAuth';
+import { useShowDialog, useShowLoginOverlay } from '~/stores/useDialogState';
+import { useIsEditing, useUpdateEditingState } from '~/stores/useEditingState';
+import { useEpisodeUrl } from '~/stores/useEpisodeState';
 import { useDisplayedTimestamps } from './useDisplayedTimestamps';
 
 export function useStartEditing() {

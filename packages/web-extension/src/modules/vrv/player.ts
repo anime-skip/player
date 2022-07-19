@@ -1,5 +1,5 @@
-import { loadedLog } from '~/common/utils/log';
-import { setupPlayerConfig } from '~/common/utils/setup-player-config';
+import { loadedLog } from '~/utils/log';
+import { setupPlayerConfig } from '~/utils/setup-player-config';
 import { PlayerOption, PlayerOptionGroup } from '~types';
 import { cleanupUrl } from '~utils/urls';
 import './player-overrides.scss';
