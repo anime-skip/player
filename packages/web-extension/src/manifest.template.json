@@ -37,16 +37,16 @@
   "{{chrome}}.options_page": "options.html",
   "content_scripts": [
     {
-      "js": ["content-scripts/player.ts"],
-      "css": ["generated:content-scripts/style.css"],
+      "js": ["service-player.cs.ts"],
+      "css": ["generated:unknown-style.css"],
       "all_frames": true
     },
     {
-      "js": ["content-scripts/parent.ts"],
+      "js": ["service-parent.cs.ts"],
       "all_frames": false
     },
     {
-      "js": ["content-scripts/keyboard-shortcut-blocker.ts"],
+      "js": ["keyboard-shortcut-blocker.cs.ts"],
       "all_frames": true,
       "run_at": "document_start"
     }
