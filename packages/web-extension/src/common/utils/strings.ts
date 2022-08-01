@@ -30,3 +30,7 @@ export function urlPatternMatch(
     return false;
   }
 }
+
+export function newlinesToSpaces(str: string): string {
+  return str.replace(/\s*\n\s*/g, ' ');
+}

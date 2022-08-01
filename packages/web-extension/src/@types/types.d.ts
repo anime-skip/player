@@ -5,7 +5,8 @@ type Service =
   | 'funimation-2021-09-26'
   | 'crunchyroll'
   | 'crunchyroll-beta'
-  | 'zoro';
+  | 'zoro'
+  | '9anime';
 
 type ServiceDisplayName =
   | 'Anime Skip Test'
@@ -13,6 +14,7 @@ type ServiceDisplayName =
   | 'Funimation'
   | 'Crunchyroll'
   | 'Zoro.to'
+  | '9anime'
   | undefined;
 
 type SupportedBrowser = 'firefox' | 'chrome';

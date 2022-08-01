@@ -2,6 +2,7 @@ import { ParentHosts } from '~/common/utils/compile-time-constants';
 import { error, loadedLog } from '~/common/utils/log';
 import { urlPatternMatch } from '~/common/utils/strings';
 import { initAnimeSkipParent } from './anime-skip';
+import { init9animeParent } from './services/9anime/parent';
 import { initCrunchyrollParent } from './services/crunchyroll/parent';
 import { initFunimation20210926Parent } from './services/funimation-2021-09-26/parent';
 import { initFunimationParent } from './services/funimation/parent';
@@ -19,6 +20,7 @@ const services: Record<ParentHosts, () => void> = {
   [ParentHosts.TEST_SERVICE]: initTestServiceParent,
   [ParentHosts.VRV]: initVrvParent,
   [ParentHosts.ZORO]: initZoroParent,
+  [ParentHosts.NINE_ANIME]: init9animeParent,
 };
 
 function initParent() {
