@@ -93,8 +93,12 @@ export async function run(
  * @param runner The function to run when NOT doing a dry run
  */
 export async function skipForDryRuns(runner: () => Promise<void>): Promise<void> {
-  if (process.env.DRY_RUN === 'true') return;
+  if (isDryRun()) return;
   await runner();
+}
+
+export function isDryRun(): boolean {
+  return process.env.DRY_RUN === 'true';
 }
 
 /**
