@@ -1,6 +1,6 @@
-import { loadedLog } from '~/common/utils/log';
-import setupParent from '~/common/utils/setupParent';
-import { newlinesToSpaces } from '~/common/utils/strings';
+import { loadedLog } from '~/utils/log';
+import setupParent from '~/utils/setupParent';
+import { newlinesToSpaces } from '~/utils/strings';
 import { InferredEpisodeInfo } from '~types';
 
 export function getEpisodeInfo(dom = document): InferredEpisodeInfo {
