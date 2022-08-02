@@ -4,7 +4,7 @@ import { cleanupUrl } from '../urls';
 describe('URL Utils', () => {
   describe('cleanupUrl', () => {
     it.each([
-      ['http://google.com', {}, 'http://google.com'],
+      ['http://google.com', undefined, 'http://google.com'],
       ['http://google.com?key=value', {}, 'http://google.com'],
       [
         'http://google.com?key=value',

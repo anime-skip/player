@@ -3,9 +3,9 @@
  */
 import { describe, expect, it } from 'vitest';
 import { createDomFromFile } from '~/common/utils/testing/jsdom';
-import { setupZoroPlayer } from '../player';
+import { setup9animePlayer } from '../player';
 
-const playerConfig = setupZoroPlayer();
+const playerConfig = setup9animePlayer();
 
 const playerHtmlFiles = ['player-show-2022-08-01.gen.html', 'player-movie-2022-08-01.gen.html'];
 
@@ -34,18 +34,20 @@ describe('9anime Player Config', () => {
   describe('transformServiceUrl', () => {
     it.each([
       [
-        'https://zoro.to/watch/spy-x-family-17977?ep=89506',
-        'https://zoro.to/watch/spy-x-family-17977?ep=89506',
+        'https://9anime.id/watch/my-isekai-life-i-gained-a-second-character-class-and-became-the-strongest-sage-in-the-world.nzk8/ep-6',
+        'https://9anime.to/watch/my-isekai-life-i-gained-a-second-character-class-and-became-the-strongest-sage-in-the-world.nzk8/ep-6',
       ],
       [
-        'https://zoro.to/watch/spy-x-family-17977?ep=89506&test',
-        'https://zoro.to/watch/spy-x-family-17977?ep=89506',
+        'https://9anime.xyz/watch/your-name.nzk8/ep-6?test',
+        'https://9anime.to/watch/your-name.nzk8/ep-6',
       ],
-      ['https://zoro.to/watch/spy-x-family-17977', 'https://zoro.to/watch/spy-x-family-17977'],
-    ])('should remove all query params other than ep from %s', async (input, expected) => {
-      const actual = playerConfig.transformServiceUrl?.(input);
+    ])(
+      'should change the domain to 9anime.to and remove all query params from %s',
+      async (input, expected) => {
+        const actual = playerConfig.transformServiceUrl?.(input);
 
-      expect(actual).toBe(expected);
-    });
+        expect(actual).toBe(expected);
+      }
+    );
   });
 });
