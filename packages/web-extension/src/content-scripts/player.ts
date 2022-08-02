@@ -3,6 +3,7 @@ import { error, loadedLog } from '~/common/utils/log';
 import { urlPatternMatch } from '~/common/utils/strings';
 import { IPlayerConfig } from '~types';
 import { loadPlayerUi } from './player/index';
+import { setup9animePlayer } from './services/9anime/player';
 import { initCrunchyrollPlayer } from './services/crunchyroll/player';
 import { initFunimation20210926Player } from './services/funimation-2021-09-26/player';
 import { initFunimationPlayer } from './services/funimation/player';
@@ -17,6 +18,7 @@ const services: Record<PlayerHosts, () => IPlayerConfig> = {
   [PlayerHosts.VRV]: initVrvPlayer,
   [PlayerHosts.ZORO]: setupZoroPlayer,
   [PlayerHosts.TEST_SERVICE]: initTestServicePlayer,
+  [PlayerHosts.NINE_ANIME]: setup9animePlayer,
 };
 
 function init() {
