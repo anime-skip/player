@@ -8,11 +8,14 @@ export async function deploy(config: PackageConfig) {
     dryRun: isDryRun(),
   };
   const isBeta = config.PACKAGE_MODE === 'beta';
+  const chromeZip = path.resolve(config.OUTPUT_DIR, `chrome-${config.PACKAGE_MODE}.zip`);
+  const firefoxZip = path.resolve(config.OUTPUT_DIR, `firefox-${config.PACKAGE_MODE}.zip`);
+  const sourcesZip = path.resolve(config.OUTPUT_DIR, `sources.zip`);
 
   if (!config.SKIP_FIREFOX) {
     options.firefox = {
-      zip: path.resolve(config.OUTPUT_DIR, `firefox-${config.PACKAGE_MODE}.zip`),
-      sourcesZip: path.resolve(config.OUTPUT_DIR, `sources.zip`),
+      zip: firefoxZip,
+      ...(!config.SKIP_SOURCES && { sourcesZip }),
       extensionId: isBeta ? config.FIREFOX_BETA_SIGNING_ID ?? '' : config.FIREFOX_SIGNING_ID,
       jwtIssuer: isBeta ? config.FIREFOX_BETA_SIGNING_ISSUER ?? '' : config.FIREFOX_SIGNING_ISSUER,
       jwtSecret: isBeta ? config.FIREFOX_BETA_SIGNING_SECRET ?? '' : config.FIREFOX_SIGNING_SECRET,
@@ -21,7 +24,7 @@ export async function deploy(config: PackageConfig) {
   }
   if (!config.SKIP_CHROME) {
     options.chrome = {
-      zip: path.resolve(config.OUTPUT_DIR, `chrome-${config.PACKAGE_MODE}.zip`),
+      zip: chromeZip,
       clientId: config.CHROME_CLIENT_ID,
       clientSecret: config.CHROME_CLIENT_SECRET,
       extensionId: isBeta ? config.CHROME_BETA_APP_ID : config.CHROME_APP_ID,
