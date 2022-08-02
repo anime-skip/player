@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { describe, expect, it } from 'vitest';
-import { createDomFromFile } from '~/common/utils/testing/jsdom';
+import { createDomFromFile } from '~/utils/testing/jsdom';
 import { setup9animePlayer } from '../player';
 
 const playerConfig = setup9animePlayer();
