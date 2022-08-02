@@ -10,6 +10,6 @@ export function setup9animePlayer() {
     serviceDisplayName: '9anime',
     getRootQuery: () => 'body',
     getVideoQuery: () => 'video',
-    transformServiceUrl: url => cleanupUrl(url, { allowedQueryParams: ['ep'] }),
+    transformServiceUrl: url => cleanupUrl(url).replace(/9anime\.\w+/, '9anime.to'),
   });
 }
