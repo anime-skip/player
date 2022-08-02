@@ -11,7 +11,6 @@ export async function buildFirefox(config: PackageConfig) {
   title('Firefox');
   const dist = rootPath('dist');
   const firefoxZip = path.join(config.OUTPUT_DIR, `firefox-${config.PACKAGE_MODE}.zip`);
-  const firefoxDistTemp = path.join(config.OUTPUT_DIR, '.firefox-dist');
 
   await run(`Building ${CODE}dist/${RESET} for Firefox`, () =>
     bash(`pnpm vite build`, {
@@ -22,9 +21,5 @@ export async function buildFirefox(config: PackageConfig) {
 
   await run(`Checking Firefox ${CODE}manifest.json${RESET}`, () => bash(`pnpm lint:web-ext`));
 
-  await run(`Caching ${CODE}dist/${RESET} for signing`, () =>
-    bash(`cp -r ${dist} "${firefoxDistTemp}"`)
-  );
-
-  await run(`Creating ${CODE}${firefoxZip}`, () => zip(firefoxDistTemp, firefoxZip));
+  await run(`Creating ${CODE}${firefoxZip}`, () => zip(dist, firefoxZip));
 }
