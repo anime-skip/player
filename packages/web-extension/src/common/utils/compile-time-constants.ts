@@ -11,7 +11,7 @@ export enum ParentHosts {
   FUNIMATION_20210926 = 'https://www.funimation.com/v/*',
   VRV = 'https://vrv.co/*',
   ZORO = 'https://zoro.to/*',
-  NINE_ANIME = 'https://9anime.so/*',
+  NINE_ANIME = 'https://9anime.id/*',
 }
 
 /**
