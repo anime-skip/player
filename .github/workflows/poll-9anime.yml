@@ -34,7 +34,7 @@ jobs:
         if: ${{ failure() }}
         uses: Ilshidur/action-discord@master
         with:
-          args: "9anime's domain has changed: https://github.com/${{ github.repository }}/actions/runs/${{ github.github.run_id }}"
+          args: "9anime's domain has changed: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_ALERTS_WEBHOOK }}
           DISCORD_USERNAME: 9anime
