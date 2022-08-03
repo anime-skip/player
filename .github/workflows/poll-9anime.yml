@@ -29,10 +29,9 @@ jobs:
       - name: Check Redirect
         run: pnpm esno scripts/check-9anime-domain.ts
         working-directory: packages/web-extension
-        continue-on-error: true
 
       - name: Discord Notification
-        if: failure()
+        if: ${{ failure() }}
         uses: Ilshidur/action-discord@master
         with:
           args: "9anime's domain has changed: https://github.com/${{ github.repository }}/actions/runs/${{ github.github.run_id }}"
