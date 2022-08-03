@@ -28,3 +28,4 @@ jobs:
 
       - name: Check Redirect
         run: pnpm esno scripts/check-9anime-domain.ts
+        working-directory: packages/web-extension
