@@ -24,6 +24,7 @@ export enum PlayerHosts {
   FUNIMATION_20210926 = 'https://www.funimation.com/v/*',
   VRV = 'https://static.vrv.co/*',
   ZORO = 'https://rapid-cloud.ru/*',
+  ZORO_2 = 'https://rapid-cloud.co/*',
   NINE_ANIME = 'https://vizcloud.site/*',
 }
 

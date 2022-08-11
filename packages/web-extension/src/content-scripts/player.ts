@@ -17,6 +17,7 @@ const services: Record<PlayerHosts, () => IPlayerConfig> = {
   [PlayerHosts.FUNIMATION]: initFunimationPlayer,
   [PlayerHosts.VRV]: initVrvPlayer,
   [PlayerHosts.ZORO]: setupZoroPlayer,
+  [PlayerHosts.ZORO_2]: setupZoroPlayer,
   [PlayerHosts.TEST_SERVICE]: initTestServicePlayer,
   [PlayerHosts.NINE_ANIME]: setup9animePlayer,
 };
