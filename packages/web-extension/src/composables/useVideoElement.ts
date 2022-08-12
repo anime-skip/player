@@ -1,6 +1,6 @@
 import { useTimeoutFn } from '@vueuse/core';
 import { Ref } from 'vue';
-import { usePlayerConfig } from '~/composables/player-config';
+import { usePlayerConfig } from '~/composables/usePlayerConfig';
 import {
   useIncrementPlayTicks,
   usePlayHistory,

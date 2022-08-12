@@ -1,4 +1,4 @@
-import { usePlayerConfig } from '~/composables/player-config';
+import { usePlayerConfig } from '~/composables/usePlayerConfig';
 import { useGeneralPreferences } from '~/stores/useGeneralPreferences';
 import { ColorTheme } from '~api';
 

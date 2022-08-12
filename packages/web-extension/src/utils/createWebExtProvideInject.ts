@@ -1,59 +1,43 @@
-import isEqual from 'lodash.isequal';
-import browser, { Storage } from 'webextension-polyfill';
-import { createProvideInject } from '~utils/createProvideInject';
-
-type AreaName = 'sync' | 'local' | 'managed';
+import { Ref } from 'vue';
+import { usePlayerStorage } from '~/composables/usePlayerStorage';
+import { AreaName } from './web-ext-storage';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export function createWebExtProvideInject<T extends object>(
   label: string,
-  area: AreaName,
+  _: AreaName,
   defaultValue: T
 ) {
-  const {
-    provideValue,
-    useUpdate: rawUseUpdate,
-    useValue,
-  } = createProvideInject(label, defaultValue);
-
-  const useUpdate = () => {
-    const value = useValue();
-    const rawUpdate = rawUseUpdate();
-    return async function update(newValue: Partial<T>) {
-      rawUpdate(newValue);
-      await browser.storage[area].set({
-        [label]: { ...value, ...newValue },
-      });
+  const valueKey = label + '-value';
+  const updateKey = label + '-set-value';
+  const provideValue = () => {
+    const value = usePlayerStorage(label, defaultValue);
+    const update = (newPartialValue: Partial<T>) => {
+      const newValue = { ...value.value };
+      for (const field in newPartialValue) {
+        // @ts-expect-error: Bad key typing
+        newValue[field] = newPartialValue[field];
+      }
+      value.value = newValue;
     };
+    provide(valueKey, value);
+    provide(updateKey, update);
   };
 
-  const useInitStorageListener = () => {
-    // Listen for storage changes, then update
-    const update = useUpdate();
-    const onChangeStorageKey = (
-      changes: { [s: string]: Storage.StorageChange },
-      areaName: string
-    ) => {
-      if (areaName !== area) return;
-      if (changes[label] == null) return;
-      if (isEqual(changes[label]?.oldValue, changes[label]?.newValue)) return;
-      update(changes[label].newValue);
-    };
-    browser.storage.onChanged.addListener(onChangeStorageKey);
-    onUnmounted(() => {
-      browser.storage.onChanged.removeListener(onChangeStorageKey);
-    });
+  function useValue(): Readonly<Ref<T>> {
+    const value = inject<Ref<T>>(valueKey);
+    if (value == null) throw Error(`Injected value has not been provided for ${label}`);
+    return value;
+  }
 
-    // Load initial storage value if present
-    onMounted(() => {
-      browser.storage[area].get(label).then(results => {
-        if (results[label] != null) update(results[label]);
-      });
+  function useUpdate(): (newValue: Partial<T>) => void {
+    const update = inject<(newValue: Partial<T>) => void>(updateKey, () => {
+      throw Error(`Injected update has not been provided for ${label}`);
     });
-  };
+    return newValue => update({ ...newValue });
+  }
 
   return {
-    useInitStorageListener,
     provideValue,
     useValue,
     useUpdate,

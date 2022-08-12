@@ -51,7 +51,7 @@
 <script lang="ts" setup>
 import { Utils as UiUtils } from '@anime-skip/ui';
 import { useFullscreen } from '@vueuse/core';
-import { usePlayerConfig } from '~/composables/player-config';
+import { usePlayerConfig } from '~/composables/usePlayerConfig';
 import { useCreateNewTimestamp } from '~/composables/useCreateNewTimestamp';
 import { useDisplayedTimestamps } from '~/composables/useDisplayedTimestamps';
 import { useIsToolbarVisible } from '~/composables/useIsToolbarVisible';

@@ -1,5 +1,5 @@
 import { RequestState } from 'vue-use-request-state';
-import { usePlayerConfig } from '~/composables/player-config';
+import { usePlayerConfig } from '~/composables/usePlayerConfig';
 import { useEpisode } from '~/stores/useEpisodeState';
 import { useUpdateInferredEpisodeState } from '~/stores/useInferredEpisodeState';
 import { useEpisodeTemplate } from '~/stores/useTemplateState';

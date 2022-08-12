@@ -1,6 +1,7 @@
 import browser, { Menus, Tabs } from 'webextension-polyfill';
 import { error, loadedLog, log } from '~/utils/log';
 import Messenger from '~/utils/Messenger';
+import { webExtStorage } from '~/utils/web-ext-storage';
 import { ScreenshotDetails } from '~types';
 
 const MENU_ITEM_SCREENSHOT = 'screenshot';
@@ -68,7 +69,7 @@ export function initContextMenu() {
       log('saved screenshot');
       log('cropped:', cropped.length);
       log('full:', data.length);
-      await browser.storage.local.set({ screenshot: cropped });
+      await webExtStorage.setItem('screenshot', cropped);
     } catch (err) {
       error(err);
       throw err;

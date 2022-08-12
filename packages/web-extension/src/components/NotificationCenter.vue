@@ -79,16 +79,15 @@ if (isDev) addDevNotification();
 
 // Prompting for review
 
-const { value: promptReviewAt, setValue: setPromptReviewAt } = useStoreReviewPromptDate();
-const { value: dontshowReviewPromptAgain, setValue: setDontShowReviewPromptAgain } =
-  useDontShowStoreReviewPromptAgain();
+const promptReviewAt = useStoreReviewPromptDate();
+const dontShowReviewPromptAgain = useDontShowStoreReviewPromptAgain();
 
 function addPromptReviewNotifications() {
-  if (dontshowReviewPromptAgain.value) return;
+  if (dontShowReviewPromptAgain.value) return;
 
   void UsageStats.saveEvent('prompt_store_review');
   // Setup the next notification if ignored
-  setPromptReviewAt(today() + DAYS(3));
+  promptReviewAt.value = today() + DAYS(3);
   addNotification({
     id: randomStringId(),
     title: 'Enjoying Anime Skip?',
@@ -100,7 +99,7 @@ function addPromptReviewNotifications() {
         primary: true,
         onClick() {
           void UsageStats.saveEvent('prompt_store_review_rate');
-          setDontShowReviewPromptAgain(true);
+          dontShowReviewPromptAgain.value = true;
           window.open(
             TARGET_BROWSER === 'firefox'
               ? 'https://addons.mozilla.org/en-US/firefox/addon/anime-skip/?utm_source=extension&utm_medium=review-prompt'
@@ -112,7 +111,7 @@ function addPromptReviewNotifications() {
         text: "Don't ask again",
         onClick() {
           void UsageStats.saveEvent('prompt_store_review_dont_ask_again');
-          setDontShowReviewPromptAgain(true);
+          dontShowReviewPromptAgain.value = true;
         },
       },
     ],

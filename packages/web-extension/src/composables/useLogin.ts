@@ -15,11 +15,11 @@ export function useLogin(api = useApiClient()) {
       passwordHash: md5(password),
     });
 
-    updateAuth({
+    await updateAuth({
       token: res.authToken,
       refreshToken: res.refreshToken,
     });
-    updatePreferences({
+    await updatePreferences({
       ...res.account.preferences,
     });
     void UsageStats.saveEvent('login');

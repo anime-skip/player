@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts" setup>
-import { usePlayerConfig } from '~/composables/player-config';
+import { usePlayerConfig } from '~/composables/usePlayerConfig';
 import { useLoadAllEpisodeData } from '~/composables/useLoadAllEpisodeData';
 import { usePlaybackRateConnector } from '~/composables/usePlaybackRateConnector';
 import { useTabUrl } from '~/composables/useTabUrl';

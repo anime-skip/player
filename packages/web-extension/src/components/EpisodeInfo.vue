@@ -32,7 +32,7 @@
 <script lang="ts" setup>
 import { RequestState } from 'vue-use-request-state';
 import ThemedLogo from '~/components/ThemedLogo.vue';
-import { usePlayerConfig } from '~/composables/player-config';
+import { usePlayerConfig } from '~/composables/usePlayerConfig';
 import { useEpisodeDisplayInfo } from '~/composables/useEpisodeDisplayInfo';
 import { useTheme } from '~/composables/useTheme';
 import { useDialogState, useShowConnectEpisodeDialog } from '~/stores/useDialogState';

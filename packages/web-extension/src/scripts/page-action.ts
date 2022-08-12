@@ -1,6 +1,7 @@
 import browser from 'webextension-polyfill';
 import { isUrlSupported } from '~/stores/url-supported';
 import { loadedLog, log } from '~/utils/log';
+import { webExtStorage } from '~/utils/web-ext-storage';
 
 const iconBase = browser.runtime.getURL('assets/');
 const enabledIcon = {
@@ -47,8 +48,9 @@ export function initPageAction() {
   }
 
   async function updateActiveTabUrl(tab: browser.Tabs.Tab) {
-    browser.storage.local.set({ 'supported-website-check-url': tab.url || null });
-    log('Updated current tab in storage to:', tab.url || null);
+    const url = tab.url || null;
+    webExtStorage.setItem('supported-website-check-url', url);
+    log(`Updated current tab in storage to: ${url}`);
   }
 
   browser.tabs.onActivated.addListener(async activeInfo => {

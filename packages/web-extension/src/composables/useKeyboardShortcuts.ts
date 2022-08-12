@@ -1,5 +1,5 @@
 import { onUnmounted } from 'vue';
-import { usePlayerConfig } from '~/composables/player-config';
+import { usePlayerConfig } from '~/composables/usePlayerConfig';
 import {
   KeyboardShortcutActionToExecuteMap,
   usePrimaryKeyboardShortcutPrefs,

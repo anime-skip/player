@@ -20,11 +20,7 @@ interface LocalPreferences {
 
 type GeneralPreferences = RemotePreferences & LocalPreferences;
 
-export {
-  provideGeneralPreferences,
-  useUpdateGeneralPreferences,
-  useInitGeneralPreferencesListener,
-};
+export { provideGeneralPreferences, useUpdateGeneralPreferences };
 
 const DEFAULT_GENERAL_PREFERENCES: GeneralPreferences = {
   enableAutoPlay: true,
@@ -53,7 +49,6 @@ const {
   provideValue: provideGeneralPreferences,
   useUpdate: useUpdateGeneralPreferences,
   useValue: _useGeneralPreferences,
-  useInitStorageListener: useInitGeneralPreferencesListener,
 } = createWebExtProvideInject<GeneralPreferences>(
   'general-preferences',
   'local',
@@ -67,7 +62,7 @@ export function useGeneralPreferences() {
   const preferences = _useGeneralPreferences();
   return computed<GeneralPreferences>(() => ({
     ...DEFAULT_GENERAL_PREFERENCES,
-    ...preferences,
+    ...preferences.value,
   }));
 }
 

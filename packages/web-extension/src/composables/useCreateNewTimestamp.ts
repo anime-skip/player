@@ -1,4 +1,4 @@
-import { usePlayerConfig } from '~/composables/player-config';
+import { usePlayerConfig } from '~/composables/usePlayerConfig';
 import { useIsLoggedIn } from '~/stores/useAuth';
 import { useShowDialog, useShowLoginOverlay } from '~/stores/useDialogState';
 import {

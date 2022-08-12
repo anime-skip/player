@@ -1,7 +1,7 @@
 import { onScopeDispose } from 'vue';
 import browser from 'webextension-polyfill';
 import { createSharedComposable } from '~/composables/createSharedComposable';
-import { usePlayerConfig } from '~/composables/player-config';
+import { usePlayerConfig } from '~/composables/usePlayerConfig';
 import { log } from '~/utils/log';
 
 interface ChangeUrlMessage {

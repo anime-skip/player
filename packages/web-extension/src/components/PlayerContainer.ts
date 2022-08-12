@@ -1,4 +1,3 @@
-import PlayerWebExtListeners from '~/components/PlayerWebExtListeners.vue';
 import { Provider } from '~/components/Provider';
 import { provideTimestampsPanelState } from '~/components/TimestampsPanel/useTimestampPanelState';
 import { provideAuth } from '~/stores/useAuth';
@@ -12,8 +11,9 @@ import { providePlayerVisibility } from '~/stores/usePlayerVisibility';
 import { providePlayHistory } from '~/stores/usePlayHistory';
 import { provideTemplateState } from '~/stores/useTemplateState';
 import { provideVideoState } from '~/stores/useVideoState';
+import Player from './Player.vue';
 
-export const Container = Provider(
+export const PlayerContainer = Provider(
   [
     provideAuth,
     provideGeneralPreferences,
@@ -28,5 +28,5 @@ export const Container = Provider(
     provideTemplateState,
     provideVideoState,
   ],
-  PlayerWebExtListeners
+  Player
 );

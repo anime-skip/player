@@ -185,14 +185,31 @@
 
 <script lang="ts" setup>
 import {
-  useUpdatePrimaryKeyBinding,
-  useUpdateSecondaryKeyBinding,
+  usePrimaryKeyboardShortcutPrefs,
+  useSecondaryKeyboardShortcutPrefs,
 } from '~/stores/useKeyboardShortcutPrefs';
 
 // Updates
 
-const updatePrimaryKeyBinding = useUpdatePrimaryKeyBinding();
-const updateSecondaryKeyBinding = useUpdateSecondaryKeyBinding();
+const { primaryShortcutsActionToKeyMap } = usePrimaryKeyboardShortcutPrefs();
+const { secondaryShortcutsActionToKeyMap } = useSecondaryKeyboardShortcutPrefs();
+
+function updatePrimaryKeyBinding(action: string) {
+  return (newKeyBinding: string | undefined) => {
+    primaryShortcutsActionToKeyMap.value = {
+      ...primaryShortcutsActionToKeyMap.value,
+      [action]: newKeyBinding,
+    };
+  };
+}
+function updateSecondaryKeyBinding(action: string) {
+  return (newKeyBinding: string | undefined) => {
+    secondaryShortcutsActionToKeyMap.value = {
+      ...secondaryShortcutsActionToKeyMap.value,
+      [action]: newKeyBinding,
+    };
+  };
+}
 </script>
 
 <style scoped>
