@@ -1,7 +1,5 @@
 import { Ref } from 'vue';
-import { injectPlayerStorage } from '~/composables/usePlayerConfig';
 import { usePlayerStorage } from '~/composables/usePlayerStorage';
-import { createProvideInject } from '~utils/createProvideInject';
 import { AreaName } from './web-ext-storage';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
