@@ -3,10 +3,10 @@ import { PlayerStorage, PlayerStorageOnChanged } from '~types';
 import { webExtStorage } from './web-ext-storage';
 
 export const createPlayerWebExtStorage: () => PlayerStorage = () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const listeners: Record<string, PlayerStorageOnChanged<any>[] | undefined> = {};
   Browser.storage.onChanged.addListener((changes, area) => {
     if (area !== 'local') return;
-    console.warn('WEB EXT ROOT LISTENER CHANGE', { changes, listeners });
     Object.entries(listeners).forEach(([key, keyListeners]) => {
       if (changes[key] == null) return;
       const newValue = changes[key].newValue ?? null;

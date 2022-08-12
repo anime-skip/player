@@ -27,7 +27,7 @@ export function usePlayerStorage<T>(key: string, defaultValue: T): Ref<T> {
   });
 
   // Add a storage listener and update the value when the storage changes
-  const onChange = (raw: any) => {
+  const onChange = (raw: T | null) => {
     const newValue = toRaw(raw ?? defaultValue);
     if (isEqual(v.value, newValue)) return;
     v.value = newValue;

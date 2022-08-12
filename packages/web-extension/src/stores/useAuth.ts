@@ -1,10 +1,6 @@
 import { webExtStorage } from '~/utils/web-ext-storage';
+import { Auth } from '~types';
 import { createWebExtProvideInject } from '../utils/createWebExtProvideInject';
-
-interface Auth {
-  token?: string;
-  refreshToken?: string;
-}
 
 export const AUTH_STORAGE_KEY = 'auth';
 export const AUTH_STORAGE_LOCATION = 'local';

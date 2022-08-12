@@ -1,5 +1,4 @@
 import { createUsageStatsClient, UsageStatsClientConfig } from '@anime-skip/usage-stats-client';
-import browser from 'webextension-polyfill';
 import { detectBrowser } from '~utils/browser';
 import { debug } from './log';
 import { webExtStorage } from './web-ext-storage';

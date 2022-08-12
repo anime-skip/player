@@ -1,4 +1,4 @@
-import browser from 'webextension-polyfill';
+import { Auth } from '~types';
 import { loadedLog } from '~/utils/log';
 import Messenger from '~/utils/Messenger';
 import { webExtStorage } from '~/utils/web-ext-storage';
@@ -17,8 +17,8 @@ export function initAnimeSkipParent() {
     window.postMessage('@anime-skip/install-check', '*');
 
     // Login check
-    webExtStorage.getItem<any>('auth').then(auth => {
-      if (auth.token) window.postMessage('@anime-skip/login-check', '*');
+    webExtStorage.getItem<Auth>('auth').then(auth => {
+      if (auth?.token) window.postMessage('@anime-skip/login-check', '*');
     });
   }, 1000);
 
@@ -29,8 +29,8 @@ export function initAnimeSkipParent() {
 
   // TODO: (1) Support event listener in web after this version is published
   document.addEventListener('@anime-skip/login-check', () => {
-    webExtStorage.getItem<any>('auth', 'sync').then(auth => {
-      if (auth.token) window.postMessage('@anime-skip/login-check', '*');
+    webExtStorage.getItem<Auth>('auth', 'sync').then(auth => {
+      if (auth?.token) window.postMessage('@anime-skip/login-check', '*');
     });
   });
 
