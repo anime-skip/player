@@ -194,7 +194,6 @@ import {
 const { primaryShortcutsActionToKeyMap } = usePrimaryKeyboardShortcutPrefs();
 const { secondaryShortcutsActionToKeyMap } = useSecondaryKeyboardShortcutPrefs();
 
-// TODO: Test
 function updatePrimaryKeyBinding(action: string) {
   return (newKeyBinding: string | undefined) => {
     primaryShortcutsActionToKeyMap.value = {

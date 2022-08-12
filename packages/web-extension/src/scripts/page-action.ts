@@ -48,9 +48,8 @@ export function initPageAction() {
   }
 
   async function updateActiveTabUrl(tab: browser.Tabs.Tab) {
-    const key = 'supported-website-check-url';
     const url = tab.url || null;
-    webExtStorage.setItem(key, url);
+    webExtStorage.setItem('supported-website-check-url', url);
     log(`Updated current tab in storage to: ${url}`);
   }
 
