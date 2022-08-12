@@ -33,7 +33,7 @@
 
 <script lang="ts" setup>
 import Browser from 'webextension-polyfill';
-import { useWebExtensionStorageValue } from '~/composables/useWebExtensionStorage';
+import { usePlayerStorage } from '~/composables/usePlayerStorage';
 import { isUrlSupported } from '~/stores/url-supported';
 import { useIsLoggedIn } from '~/stores/useAuth';
 import { log } from '~/utils/log';
@@ -71,11 +71,7 @@ function closePopup() {
   window.close();
 }
 
-const { value: currentUrl } = useWebExtensionStorageValue<string | null>(
-  'supported-website-check-url',
-  null,
-  'local'
-);
+const currentUrl = usePlayerStorage<string | null>('supported-website-check-url', null);
 const isSupported = computed<boolean>(() => !!currentUrl.value && isUrlSupported(currentUrl.value));
 const notSupportedMessage = computed(() => {
   if (isSupported.value || currentUrl.value?.startsWith(Browser.runtime.getURL('/')))

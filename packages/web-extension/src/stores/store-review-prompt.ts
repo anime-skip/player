@@ -1,5 +1,5 @@
 import browser from 'webextension-polyfill';
-import { useWebExtensionStorageValue } from '~/composables/useWebExtensionStorage';
+import { usePlayerStorage } from '~/composables/usePlayerStorage';
 import { DAYS, SECONDS, sleep, today } from '~utils/time';
 import { debug } from '../utils/log';
 
@@ -42,6 +42,6 @@ export function initStoreReviewPrompt() {
 }
 
 export const useStoreReviewPromptDate = () =>
-  useWebExtensionStorageValue<number | null>(REVIEW_PROMPT_AT_KEY, null, 'local');
+  usePlayerStorage<number | null>(REVIEW_PROMPT_AT_KEY, null);
 export const useDontShowStoreReviewPromptAgain = () =>
-  useWebExtensionStorageValue<boolean | null>(DONT_SHOW_AGAIN_KEY, null, 'local');
+  usePlayerStorage<boolean | null>(DONT_SHOW_AGAIN_KEY, null);

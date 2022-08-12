@@ -1,5 +1,5 @@
 import * as Api from '../api';
-import { IPlayerConfig } from '../types';
+import { ExternalPlayerConfig } from '../types';
 
 // TODO: Refactor all the functions out of "GeneralUtils" and into targeted files
 
@@ -78,7 +78,7 @@ export default class GeneralUtils {
   /**
    * Returns a promise containing the video's duration
    */
-  public static async waitForVideoLoad(playerConfig: IPlayerConfig): Promise<number> {
+  public static async waitForVideoLoad(playerConfig: ExternalPlayerConfig): Promise<number> {
     if (!this._videoLoadPromise) {
       this._videoLoadPromise = new Promise(res => {
         const timeout = window.setInterval(function () {

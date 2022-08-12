@@ -79,7 +79,7 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue';
-import { usePlayerConfig } from '~/composables/player-config';
+import { usePlayerConfig } from '~/composables/usePlayerConfig';
 import useRadioIcon from '~/composables/useRadioIcon';
 import { useHideDialog } from '~/stores/useDialogState';
 import { useShowOriginalPlayer } from '~/stores/usePlayerVisibility';

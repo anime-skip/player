@@ -3,19 +3,28 @@ import { createApp } from 'vue';
 import 'vue-global-api';
 import '~/assets/themes.scss';
 import FakeRouterLink from '~/components/FakeRouterLink.vue';
-import { Container } from '~/components/PlayerContainer';
+import { PlayerContainer } from '~/components/PlayerContainer';
 import { Provider } from '~/components/Provider';
-import { providePlayerConfig } from '~/composables/player-config';
+import { providePlayerConfig } from '~/composables/usePlayerConfig';
 import '~/styles';
-import { debug, loadedLog, log, warn } from '~/utils/log';
+import { debug, log, warn } from '~/utils/log';
 import Messenger from '~/utils/Messenger';
-import { IPlayerConfig } from '~types';
+import { playerWebExtStorage } from '~/utils/player-web-ext-storage';
+import { ExternalPlayerConfig, InternalPlayerConfig } from '~types';
 import { centerFitVideoBounds, fallbackBound } from '~utils/drawing';
+import GeneralUtils from '~utils/GeneralUtils';
 import { sleep } from '~utils/time';
 
 // TODO git mv to player-ui
-export function loadPlayerUi(config: IPlayerConfig) {
-  loadedLog('content-scripts/player-ui/index.ts');
+export function loadPlayerUi(externalConfig: ExternalPlayerConfig) {
+  // Apply config defaults
+  const config: InternalPlayerConfig = {
+    ...externalConfig,
+    onPlayDebounceMs: externalConfig.onPlayDebounceMs ?? 0,
+    transformServiceUrl: externalConfig.transformServiceUrl ?? GeneralUtils.stripUrl,
+    storage: playerWebExtStorage,
+  };
+  // log('Loading Player UI', { config });
 
   // Initial Setup
 
@@ -68,7 +77,7 @@ export function loadPlayerUi(config: IPlayerConfig) {
     try {
       const container = document.createElement('div');
 
-      const RootComponent = Provider(() => providePlayerConfig(config), Container);
+      const RootComponent = Provider(() => providePlayerConfig(config), PlayerContainer);
       const app = createApp(RootComponent).use(ui).component('RouterLink', FakeRouterLink);
       const mountedApp = app.mount(container);
 

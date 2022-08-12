@@ -8,6 +8,7 @@ export default function useKeyboardShortcutBindingDisplay(action: KeyboardShortc
   const { primaryShortcutsActionToKeyMap } = usePrimaryKeyboardShortcutPrefs();
   const { secondaryShortcutsActionToKeyMap } = useSecondaryKeyboardShortcutPrefs();
   return computed<string | undefined>(
-    () => primaryShortcutsActionToKeyMap[action] || secondaryShortcutsActionToKeyMap[action]
+    () =>
+      primaryShortcutsActionToKeyMap.value[action] || secondaryShortcutsActionToKeyMap.value[action]
   );
 }

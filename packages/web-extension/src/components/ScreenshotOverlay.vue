@@ -28,7 +28,7 @@
 <script lang="ts" setup>
 import { useTimeout } from '@anime-skip/ui';
 import { ref } from 'vue';
-import { useWebExtensionStorageValue } from '~/composables/useWebExtensionStorage';
+import { usePlayerStorage } from '~/composables/usePlayerStorage';
 import { log } from '~/utils/log';
 
 interface ImageDetails {
@@ -42,9 +42,10 @@ const dismissAfter = 10000;
 const image = ref<ImageDetails | undefined>();
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
+// TODO: Test screenshots
 function clearImage() {
   image.value = undefined;
-  setBase64Screenshot(undefined);
+  base64Screenshot.value = undefined;
   clearPreviewTimeout();
   clearMakeSmallTimeout();
 }
@@ -74,15 +75,13 @@ function addImage(imageData: string) {
   // Remove it
   setPreviewTimeout(() => {
     image.value = undefined;
-    setBase64Screenshot(undefined);
+    base64Screenshot.value = undefined;
   }, dismissAfter);
 }
 
 // capturing
 
-const { value: base64Screenshot, setValue: setBase64Screenshot } = useWebExtensionStorageValue<
-  string | undefined
->('screenshot', undefined, 'local');
+const base64Screenshot = usePlayerStorage<string | undefined>('screenshot', undefined);
 
 watch(base64Screenshot, data => {
   if (data != null) {

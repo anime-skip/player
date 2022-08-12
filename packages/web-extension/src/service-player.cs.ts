@@ -9,9 +9,9 @@ import { setupZoroPlayer } from '~/modules/zoro/player';
 import { PlayerHosts } from '~/utils/compile-time-constants';
 import { error, loadedLog } from '~/utils/log';
 import { urlPatternMatch } from '~/utils/strings';
-import { IPlayerConfig } from '~types';
+import { ExternalPlayerConfig } from '~types';
 
-const services: Record<PlayerHosts, () => IPlayerConfig> = {
+const services: Record<PlayerHosts, () => ExternalPlayerConfig> = {
   [PlayerHosts.CRUNCHYROLL]: initCrunchyrollPlayer,
   [PlayerHosts.FUNIMATION_20210926]: initFunimation20210926Player,
   [PlayerHosts.FUNIMATION]: initFunimationPlayer,

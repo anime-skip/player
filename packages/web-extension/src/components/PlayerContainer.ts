@@ -13,7 +13,7 @@ import { providePlayHistory } from '~/stores/usePlayHistory';
 import { provideTemplateState } from '~/stores/useTemplateState';
 import { provideVideoState } from '~/stores/useVideoState';
 
-export const Container = Provider(
+export const PlayerContainer = Provider(
   [
     provideAuth,
     provideGeneralPreferences,

@@ -1,8 +1,9 @@
 import joi from 'joi';
 import { InferredEpisodeInfo, PlayerOptionGroup } from './models';
 import { WithRequired } from './modifiers';
+import { PlayerStorage } from './player-storage';
 
-export interface IPlayerConfig {
+export interface ExternalPlayerConfig {
   service: string;
   serviceDisplayName: string;
 
@@ -88,9 +89,15 @@ export interface IPlayerConfig {
 
   addKeyDownListener?(callback: (event: KeyboardEvent) => void): void;
   removeKeyDownListener?(callback: (event: KeyboardEvent) => void): void;
+
+  /**
+   * Storage interface use to persist data to the browser's storage between player visits. Things
+   * like your preferences and player settings are stored in this storage.
+   */
+  storage?: PlayerStorage;
 }
 
-export const PlayerConfig = joi.object<IPlayerConfig, true>({
+export const PlayerConfig = joi.object<ExternalPlayerConfig, true>({
   service: joi.string().required(),
   serviceDisplayName: joi.string().required(),
   onPlayDebounceMs: joi.number().optional(),
@@ -104,12 +111,13 @@ export const PlayerConfig = joi.object<IPlayerConfig, true>({
   onVideoChanged: joi.func().required(),
   addKeyDownListener: joi.func().required(),
   removeKeyDownListener: joi.func().required(),
+  storage: joi.object().required(),
 });
 
 /**
  * Same as `IPlayerConfig`, but with defaults applied
  */
 export type InternalPlayerConfig = WithRequired<
-  IPlayerConfig,
-  'transformServiceUrl' | 'onPlayDebounceMs'
+  ExternalPlayerConfig,
+  'transformServiceUrl' | 'onPlayDebounceMs' | 'storage'
 >;

@@ -1,6 +1,6 @@
 import { backOff } from 'exponential-backoff';
 import browser from 'webextension-polyfill';
-import { IPlayerConfig } from '~types';
+import { ExternalPlayerConfig } from '~types';
 import { SECOND } from '~utils/time';
 import { debug, log, warn } from './log';
 
@@ -10,7 +10,7 @@ import { debug, log, warn } from './log';
 export function setupPlayerConfig(
   service: Service,
   customConfig: Pick<
-    IPlayerConfig,
+    ExternalPlayerConfig,
     | 'serviceDisplayName'
     | 'onPlayDebounceMs'
     | 'getRootQuery'
@@ -19,7 +19,7 @@ export function setupPlayerConfig(
     | 'getPlaybackOptions'
     | 'doNotReplacePlayer'
   >
-): IPlayerConfig {
+): ExternalPlayerConfig {
   const {
     serviceDisplayName,
     onPlayDebounceMs,
@@ -67,8 +67,8 @@ export function setupPlayerConfig(
 }
 
 function initVideoChangeWatcher(
-  getVideoQuery: IPlayerConfig['getVideoQuery']
-): Pick<IPlayerConfig, 'getVideo' | 'onVideoChanged'> {
+  getVideoQuery: ExternalPlayerConfig['getVideoQuery']
+): Pick<ExternalPlayerConfig, 'getVideo' | 'onVideoChanged'> {
   const videoCallbacks: ((video: HTMLVideoElement) => void)[] = [];
 
   function onVideoChanged(callback: (video: HTMLVideoElement) => void): void {

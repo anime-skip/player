@@ -1,4 +1,4 @@
-import { useWebExtensionStorage } from '~/composables/useWebExtensionStorage';
+import { usePlayerStorage } from '~/composables/usePlayerStorage';
 import {
   DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS,
   DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS,
@@ -39,31 +39,31 @@ export function createUseKeyboardShortcutPrefs(
   initialValue: KeyboardShortcutActionToKeyBindingMap
 ) {
   return () => {
-    const { value: shortcutsActionToKeyMap, updateValue: updateShortcutsActionToKeyMap } =
-      useWebExtensionStorage(`keyboard-shortcut-${type}-action-mapping`, initialValue, 'local'); // TODO: Use sync here, or put them in the API
+    const shortcutsActionToKeyMap = usePlayerStorage(
+      `keyboard-shortcut-${type}-action-mapping`,
+      initialValue
+    );
 
     const shortcutsKeyToActionsMap = computed(() => {
-      return Object.keys(shortcutsActionToKeyMap).reduce<KeyboardShortcutKeyBindingToActionsMap>(
-        (map, str) => {
-          const action = str as KeyboardShortcutAction;
-          const keyBinding = shortcutsActionToKeyMap[action];
-          if (keyBinding) {
-            if (map[keyBinding] != null) {
-              map[keyBinding]?.push(action);
-            } else {
-              map[keyBinding] = [action];
-            }
+      return Object.keys(
+        shortcutsActionToKeyMap.value
+      ).reduce<KeyboardShortcutKeyBindingToActionsMap>((map, str) => {
+        const action = str as KeyboardShortcutAction;
+        const keyBinding = shortcutsActionToKeyMap.value[action];
+        if (keyBinding) {
+          if (map[keyBinding] != null) {
+            map[keyBinding]?.push(action);
+          } else {
+            map[keyBinding] = [action];
           }
-          return map;
-        },
-        {}
-      );
+        }
+        return map;
+      }, {});
     });
 
     return {
       shortcutsActionToKeyMap,
       shortcutsKeyToActionsMap,
-      updateShortcutsActionToKeyMap,
     };
   };
 }
@@ -83,7 +83,6 @@ export function usePrimaryKeyboardShortcutPrefs() {
   return {
     primaryShortcutsActionToKeyMap: hook.shortcutsActionToKeyMap,
     primaryShortcutsKeyToActionsMap: hook.shortcutsKeyToActionsMap,
-    updatePrimaryShortcutsActionToKeyMap: hook.updateShortcutsActionToKeyMap,
   };
 }
 
@@ -92,20 +91,5 @@ export function useSecondaryKeyboardShortcutPrefs() {
   return {
     secondaryShortcutsActionToKeyMap: hook.shortcutsActionToKeyMap,
     secondaryShortcutsKeyToActionsMap: hook.shortcutsKeyToActionsMap,
-    updateSecondaryShortcutsActionToKeyMap: hook.updateShortcutsActionToKeyMap,
-  };
-}
-
-export function useUpdatePrimaryKeyBinding() {
-  const { updatePrimaryShortcutsActionToKeyMap } = usePrimaryKeyboardShortcutPrefs();
-  return (action: KeyboardShortcutAction) => (keyBinding: string | null) => {
-    updatePrimaryShortcutsActionToKeyMap({ [action]: keyBinding });
-  };
-}
-
-export function useUpdateSecondaryKeyBinding() {
-  const { updateSecondaryShortcutsActionToKeyMap } = useSecondaryKeyboardShortcutPrefs();
-  return (action: KeyboardShortcutAction) => (keyBinding: string | null) => {
-    updateSecondaryShortcutsActionToKeyMap({ [action]: keyBinding });
   };
 }
