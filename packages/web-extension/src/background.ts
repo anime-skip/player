@@ -17,7 +17,7 @@ function init() {
 }
 
 try {
-  loadedLog('background/index.ts');
+  loadedLog('background.ts');
   init();
 } catch (err) {
   error(err);

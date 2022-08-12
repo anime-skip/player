@@ -38,7 +38,7 @@
   "content_scripts": [
     {
       "js": ["service-player.cs.ts"],
-      "css": ["generated:unknown-style.css"],
+      "css": ["generated:style.css"],
       "all_frames": true
     },
     {

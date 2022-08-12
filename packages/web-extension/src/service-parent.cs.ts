@@ -34,7 +34,7 @@ function initParent() {
 }
 
 try {
-  loadedLog('content-scripts/parent.ts');
+  loadedLog('service-parent.cs.ts');
   initParent();
 } catch (err) {
   error(err);
