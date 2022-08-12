@@ -5,19 +5,6 @@
     @click="onClick"
   >
     <slot v-if="icon == null" />
-    <template v-else>
-      <WebExtImg
-        v-if="icon.endsWith('svg')"
-        class="as-inline as-fill-on-surface as-opacity-100"
-        :src="icon"
-      />
-      <Icon
-        v-else
-        class="as-inline as-fill-on-surface as-opacity-100"
-        :path="icon"
-        :draggable="false"
-      />
-    </template>
     <span v-if="title" class="as-pl-2 as-normal-case">{{ title }}</span>
   </FlatButton>
 </template>

@@ -4,9 +4,7 @@
     <div
       class="as-flex as-flex-row as-surface as-surface-4 as-p-4 as-space-x-4 as-rounded-md as-items-center"
     >
-      <Icon
-        path="M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"
-      />
+      <i-mdi-information class="as-w-6 as-h-6 as-opacity-medium" />
       <p class="as-flex-1 as-body-1">
         Keyboard shortcuts only work inside the Anime Skip video player. If you click outside the
         player then try and use one, it will not work

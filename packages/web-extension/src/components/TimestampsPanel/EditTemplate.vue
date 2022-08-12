@@ -11,8 +11,14 @@
               class="as-flex as-flex-row as-items-center as-space-x-4 as-py-2"
               @click="changeType(TemplateType.SHOW)"
             >
-              <Icon
-                :path="getShowRadioIcon(isShowSelected)"
+              <i-mdi-radiobox-marked
+                v-if="isShowSelected"
+                class="as-w-6 as-h-6"
+                :class="getShowRadioIconClass(isShowSelected)"
+              />
+              <i-mdi-radiobox-blank
+                v-else
+                class="as-w-6 as-h-6"
                 :class="getShowRadioIconClass(isShowSelected)"
               />
               <p class="as-text-on-surface" :class="getShowLabelClass(isShowSelected)">
@@ -23,8 +29,14 @@
               class="as-flex as-flex-row as-items-center as-space-x-4 as-py-2"
               @click="changeType(TemplateType.SEASONS)"
             >
-              <Icon
-                :path="getShowRadioIcon(isSeasonSelected)"
+              <i-mdi-radiobox-marked
+                v-if="isSeasonSelected"
+                class="as-w-6 as-h-6"
+                :class="getShowRadioIconClass(isSeasonSelected)"
+              />
+              <i-mdi-radiobox-blank
+                v-else
+                class="as-w-6 as-h-6"
                 :class="getShowRadioIconClass(isSeasonSelected)"
               />
               <p class="as-text-on-surface" :class="getShowLabelClass(isSeasonSelected)">
@@ -127,11 +139,8 @@ const changeType = (newType: Api.TemplateType) => {
   type.value = newType;
 };
 const isShowSelected = computed(() => type.value === TemplateType.SHOW);
-const {
-  getRadioIcon: getShowRadioIcon,
-  getRadioIconClass: getShowRadioIconClass,
-  getLabelClass: getShowLabelClass,
-} = useRadioIcon();
+const { getRadioIconClass: getShowRadioIconClass, getLabelClass: getShowLabelClass } =
+  useRadioIcon();
 const isSeasonSelected = computed(() => type.value === TemplateType.SEASONS);
 const episodeDisplayInfo = useEpisodeDisplayInfo();
 const season = ref<string>(template.value?.seasons?.[0] ?? episodeDisplayInfo.value.season ?? '');

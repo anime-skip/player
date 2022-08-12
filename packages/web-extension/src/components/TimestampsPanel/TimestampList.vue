@@ -9,9 +9,10 @@
                 v-if="isEditing"
                 class="as-w-full"
                 title="New timestamp"
-                icon="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
                 @click="onClickAddNew"
-              />
+              >
+                <i-mdi-plus class="as-w-6 as-h-6 as-inline" />
+              </ToolbarButton>
               <p v-if="!canEditTimestamps" class="as-text-error as-my-2">
                 <LoginWarning v-if="!isLoggedIn" before="editing timestamps" />
                 <template v-else-if="episodeUrl == null">
@@ -67,15 +68,17 @@
                 <td class="as-w-10 as-py-1">
                   <div
                     class="as-w-6 as-p-2 as-rounded-full as-box-content as-opacity-0 group-hover:as-opacity-medium hover:as-bg-on-surface hover:as-bg-opacity-active as-transition-all"
+                    @click.stop="deleteTimestamp(timestamp)"
                   >
-                    <WebExtImg src="ic_delete.svg" @click.stop="deleteTimestamp(timestamp)" />
+                    <i-mdi-delete class="as-w-6 as-h-6" />
                   </div>
                 </td>
                 <td class="as-w-10 as-py-1">
                   <div
                     class="as-w-6 as-p-2 as-mr-2 as-rounded-full as-box-content as-opacity-low group-hover:as-opacity-medium hover:as-bg-on-surface hover:as-bg-opacity-active"
+                    @click.stop="editTimestamp(timestamp)"
                   >
-                    <WebExtImg src="ic_edit.svg" @click.stop="editTimestamp(timestamp)" />
+                    <i-mdi-edit class="as-w-6 as-h-6" />
                   </div>
                 </td>
               </template>

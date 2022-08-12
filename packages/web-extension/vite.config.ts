@@ -5,6 +5,9 @@ import webExtension from 'vite-plugin-web-extension';
 import pkg from './package.json';
 import { generateManifest } from './scripts/generate-manifest';
 import { rootPath } from './scripts/utils';
+import icons from 'unplugin-icons/vite';
+import { FileSystemIconLoader } from 'unplugin-icons/loaders';
+import IconResolver from 'unplugin-icons/resolver';
 
 let webExtConfig = {};
 try {
@@ -36,6 +39,11 @@ export default defineConfig({
   root: rootPath('src'),
   mode: viteModes[mode],
   plugins: [
+    icons({
+      customCollections: {
+        my: FileSystemIconLoader(rootPath('src', 'assets')),
+      },
+    }),
     components({
       dts: true,
       allowOverrides: true,
@@ -48,6 +56,11 @@ export default defineConfig({
       importPathTransform: path => {
         return path.startsWith('C:') ? path.replaceAll('\\', '\\\\') : path;
       },
+      resolvers: [
+        IconResolver({
+          customCollections: ['my'],
+        }),
+      ],
     }),
     webExtension({
       assets: 'assets',

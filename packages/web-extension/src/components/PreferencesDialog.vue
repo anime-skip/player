@@ -18,16 +18,12 @@
               <div
                 class="as-h-10 as-px-4 as-flex as-flex-row as-items-center as-text-left as-w-full as-space-x-4"
               >
-                <WebExtImg
-                  v-if="optionGroup.icon != null"
-                  :src="optionGroup.icon"
-                  class="as-left"
-                />
+                <i-mdi-cog v-if="optionGroup.icon != null" class="as-left as-w-6 as-h-6" />
                 <p class="as-flex-1">{{ optionGroup.title }}</p>
                 <p class="as-text-on-surface as-text-opacity-medium">
                   {{ getSelectedOption(optionGroup) }}
                 </p>
-                <WebExtImg src="ic_chevron_right.svg" class="as-opacity-medium" />
+                <i-mdi-chevron-right class="as-w-6 as-h-6 as-opacity-medium" />
               </div>
             </RaisedContainer>
           </template>
@@ -51,9 +47,8 @@
         <div
           class="as-flex as-flex-row as-items-center as-space-x-4 as-border-b as-border-on-surface as-border-opacity-divider as-flex-shrink-0 as-p-3"
         >
-          <WebExtImg
+          <i-mdi-chevron-left
             class="as-box-content as-w-6 as-h-6 as-p-1 as--m-1 as-bg-on-surface as-bg-opacity-0 hover:as-bg-opacity-hover as-cursor-pointer as-rounded-full"
-            src="ic_chevron_left.svg"
             :draggable="false"
             @click="setActiveOptionGroup(undefined)"
           />
@@ -62,10 +57,11 @@
         <div class="as-flex-1 as-overflow-y-auto as-p-2">
           <ul v-for="option of activeOptions" :key="option.title" @click="onClickOption(option)">
             <li class="as-flex as-flex-row as-items-center as-space-x-4 as-py-2 as-cursor-pointer">
-              <Icon
-                :path="getRadioIcon(option.isSelected)"
+              <i-mdi-radiobox-marked
+                v-if="option.isSelected"
                 :class="getRadioIconClass(option.isSelected)"
               />
+              <i-mdi-radiobox-blank v-else :class="getRadioIconClass(option.isSelected)" />
               <p class="as-text-on-surface" :class="getLabelClass(option.isSelected)">
                 {{ option.title }}
               </p>
@@ -113,7 +109,7 @@ const loadPlayerOptions = async () => {
 };
 
 const activeOptions = computed(() => activePlayerGroup.value?.options ?? []);
-const { getRadioIcon, getRadioIconClass, getLabelClass } = useRadioIcon();
+const { getRadioIconClass, getLabelClass } = useRadioIcon();
 const hideDialog = useHideDialog();
 const onClickOption = (option: PlayerOption) => {
   option.node.click();

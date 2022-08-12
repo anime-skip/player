@@ -1,10 +1,10 @@
 <template>
   <div class="VolumeButton" :class="{ 'as-dragging': isDragging }">
     <ToolbarButton class="as-inner-button as-w-12" @click="toggleMute">
-      <WebExtImg src="ic_volume_muted.svg" class="as-ic-muted" :class="volumeClass" />
-      <WebExtImg src="ic_volume_speaker.svg" class="as-ic-speaker" :class="volumeClass" />
-      <WebExtImg src="ic_volume_low.svg" class="as-ic-low" :class="volumeClass" />
-      <WebExtImg src="ic_volume_high.svg" class="as-ic-high" :class="volumeClass" />
+      <i-my-volume-muted class="as-w-6 as-h-6 as-ic-muted" :class="volumeClass" />
+      <i-my-volume-speaker class="as-w-6 as-h-6 as-ic-speaker" :class="volumeClass" />
+      <i-my-volume-low class="as-w-6 as-h-6 as-ic-low" :class="volumeClass" />
+      <i-my-volume-high class="as-w-6 as-h-6 as-ic-high" :class="volumeClass" />
     </ToolbarButton>
     <Slider
       class="as-slider"
@@ -63,7 +63,7 @@ useKeyboardShortcuts('VolumeButton', {
   .as-inner-button {
     margin-right: 8px;
     position: relative;
-    img {
+    svg {
       position: absolute;
       left: 12px;
       right: 12px;

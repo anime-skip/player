@@ -4,7 +4,7 @@
       class="as-flex as-items-stretch as-justify-items-stretch as-h-10 as-w-full as-divide-x-2 as-divide-background as-rounded-sm as-bg-control"
     >
       <div class="as-p-2 as-flex-shrink-0">
-        <Icon path="M4 18L12.5 12L4 6V18ZM13 6V18L21.5 12L13 6Z" />
+        <i-mdi-fast-forward class="as-w-6 as-h-6" />
       </div>
       <div v-for="speed in playbackSpeeds" :key="speed.value" class="as-flex-1 as-min-w-10">
         <RaisedContainer

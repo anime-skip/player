@@ -10,11 +10,7 @@
           title="Discard changes"
           @click="$emit('back')"
         >
-          <WebExtImg
-            class="as-w-6 as-h-6 as-select-none"
-            src="ic_chevron_left.svg"
-            :draggable="false"
-          />
+          <i-mdi-chevron-left class="as-w-6 as-h-6 as-select-none" :draggable="false" />
         </div>
         <span class="as-flex-1 as-pt-0.5 as-px-2">{{ title }}</span>
         <div
@@ -23,7 +19,7 @@
           title="Discard changes"
           @click="$emit('close')"
         >
-          <WebExtImg class="as-w-6 as-h-6 as-select-none" src="ic_close.svg" :draggable="false" />
+          <i-mdi-close class="as-w-6 as-h-6 as-select-none" :draggable="false" />
         </div>
       </h6>
     </header>
