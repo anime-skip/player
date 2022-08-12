@@ -1,0 +1,41 @@
+name: Poll 9anime Domain
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */1 * * *'
+
+jobs:
+  redirect:
+    name: 9anime.to Redirect
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - uses: pnpm/action-setup@v2.0.1
+        name: Install PNPM
+        with:
+          version: 7.x.x
+
+      - name: Install Node 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check Redirect
+        run: pnpm esno scripts/check-9anime-domain.ts
+        working-directory: packages/web-extension
+
+      - name: Discord Notification
+        if: ${{ failure() }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: "9anime's domain has changed: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_ALERTS_WEBHOOK }}
+          DISCORD_USERNAME: 9anime
+          DISCORD_AVATAR: https://is5-ssl.mzstatic.com/image/thumb/Purple114/v4/05/fe/b0/05feb082-86bf-f2fe-112c-34ec0d644be5/source/512x512bb.jpg

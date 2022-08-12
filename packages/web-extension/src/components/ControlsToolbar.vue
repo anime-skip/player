@@ -240,7 +240,7 @@ useKeyboardShortcuts('toolbar', {
   user-select: none;
 
   &.as-hide-timeline-when-minimized {
-    transform: translateY($toolbarHeight + 6px);
+    transform: translateY($toolbarHeight + 8px);
   }
 
   &.as-active,
