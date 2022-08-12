@@ -43,7 +43,7 @@ function onShow(): void {
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
 
-    @media screen and(max-height: 600px) {
+    @media screen and (max-height: 600px) {
       min-height: unset;
       height: 100%;
       max-height: unset;
