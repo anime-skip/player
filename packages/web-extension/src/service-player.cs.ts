@@ -11,8 +11,6 @@ import { error, loadedLog } from '~/utils/log';
 import { urlPatternMatch } from '~/utils/strings';
 import { IPlayerConfig } from '~types';
 
-console.log('PLAYER LOADED');
-
 const services: Record<PlayerHosts, () => IPlayerConfig> = {
   [PlayerHosts.CRUNCHYROLL]: initCrunchyrollPlayer,
   [PlayerHosts.FUNIMATION_20210926]: initFunimation20210926Player,
