@@ -16,7 +16,7 @@
             title="Hide notification"
             @click="emit('dismiss-self')"
           >
-            <WebExtImg class="as-w-6 as-h-6" src="ic_close.svg" :draggable="false" />
+            <i-mdi-close class="as-w-6 as-h-6" :draggable="false" />
           </div>
         </div>
         <div v-if="buttons.length > 0" class="as-flex as-flex-row as-space-x-2 as-flex-wrap">

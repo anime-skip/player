@@ -26,7 +26,7 @@
             <div
               class="as-w-full as-h-10 as-pl-3 as-pr-4 as-flex as-items-center as-space-x-3 as-no-firefox-dots"
             >
-              <WebExtImg class="as-icon" src="ic_clock.svg" :draggable="false" />
+              <i-mdi-clock-outline class="as-w-6 as-h-6 as-opacity-medium" :draggable="false" />
               <p class="as-time">
                 {{ timestampAtFormatted }}
               </p>
@@ -51,12 +51,8 @@
           @keydown.up.stop.prevent="onPressUp"
           @keydown.down.stop.prevent="onPressDown"
         >
-          <template #left-icon="slotProps">
-            <Icon
-              :disabled="slotProps.disabled"
-              :active="slotProps.focused"
-              path="M6,13H18V11H6M3,6V8H21V6M10,18H14V16H10V18Z"
-            />
+          <template #left-icon>
+            <i-mdi-filter-variant class="as-w-6 as-h-6 as-opacity-medium" />
           </template>
         </TextInput>
         <div>
@@ -73,15 +69,11 @@
               class="as-flex as-flex-row as-space-x-4 as-px-3 as-py-2 as-bg-on-surface as-bg-opacity-0 hover:as-bg-opacity-hover as-cursor-pointer as-rounded"
               @click="selectType(t)"
             >
-              <Icon
+              <i-mdi-radiobox-marked
                 v-if="isTypeSelected(t)"
-                class="as-fill-secondary as-opacity-100"
-                path="M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7Z"
+                class="as-w-6 as-h-6 as-fill-secondary as-opacity-100"
               />
-              <Icon
-                v-else
-                path="M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"
-              />
+              <i-mdi-radiobox-blank v-else class="as-w-6 as-h-6 as-opacity-medium" />
               <p
                 :class="{
                   'as-text-opacity-100': isTypeSelected(t),

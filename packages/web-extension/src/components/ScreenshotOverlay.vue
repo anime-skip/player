@@ -18,7 +18,7 @@
           :download="image.filename"
           @click="clearImage()"
         >
-          <web-ext-img src="ic_save.svg" />
+          <i-mdi-download class="as-w-6 as-h-6" />
         </a>
       </div>
     </div>

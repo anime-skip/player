@@ -6,7 +6,6 @@
       :label="label"
       :placeholder="placeholder"
       :error-message="errorMessage"
-      :left-icon="leftIcon"
       v-model:value="searchValue"
       :disabled="disabled"
       @focus="onFocusInput"
@@ -16,7 +15,11 @@
       @keydown.up.prevent.stop="selectUp"
       @keydown.down.prevent.stop="selectDown"
       @click.prevent.stop
-    />
+    >
+      <template #left-icon>
+        <slot name="left-icon" />
+      </template>
+    </TextInput>
     <div v-if="shouldShowSuggestions" class="as-h-0 as-overflow-y-visible as-z-10">
       <!-- @mousedown.prevent: prevent input from losing focus when clicking on an item -->
       <Card
