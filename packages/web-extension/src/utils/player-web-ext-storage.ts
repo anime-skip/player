@@ -1,25 +1,36 @@
 import Browser from 'webextension-polyfill';
-import { PlayerStorage } from '~types';
+import { PlayerStorage, PlayerStorageOnChanged } from '~types';
+import { webExtStorage } from './web-ext-storage';
 
-export const playerWebExtStorage: PlayerStorage = {
-  async getItem<T>(key: string, defaultValue: T) {
-    const res = await Browser.storage.local.get(key);
-    return res[key] ?? defaultValue;
-  },
-  async setItem<T>(key: string, newValue: T) {
-    await Browser.storage.local.set({
-      // Undefined values are ignored by `set`, so we use null instead
-      [key]: newValue ?? null,
+export const createPlayerWebExtStorage: () => PlayerStorage = () => {
+  const listeners: Record<string, PlayerStorageOnChanged<any>[] | undefined> = {};
+  Browser.storage.onChanged.addListener((changes, area) => {
+    if (area !== 'local') return;
+    console.warn('WEB EXT ROOT LISTENER CHANGE', { changes, listeners });
+    Object.entries(listeners).forEach(([key, keyListeners]) => {
+      if (changes[key] == null) return;
+      const newValue = changes[key].newValue ?? null;
+      const oldValue = changes[key].oldValue ?? null;
+      keyListeners?.forEach(listener => listener(newValue, oldValue));
     });
-  },
-  async removeItem(key: string) {
-    await Browser.storage.local.remove(key);
-  },
-  addItemListener<T>(key: string, cb: (newValue: T | null, oldValue: T | null) => void) {
-    Browser.storage.onChanged.addListener((changes, area) => {
-      if (area !== 'local' || changes[key] == null) return;
-      const { newValue, oldValue } = changes[key];
-      cb(newValue ?? null, oldValue ?? null);
-    });
-  },
+  });
+
+  return {
+    getItem<T>(key: string, defaultValue: T) {
+      return webExtStorage.getItem<T>(key).then(res => res ?? defaultValue);
+    },
+    setItem<T>(key: string, newValue: T) {
+      return webExtStorage.setItem(key, newValue);
+    },
+    removeItem(key: string) {
+      return webExtStorage.removeItem(key);
+    },
+    addChangeListener<T>(key: string, cb: PlayerStorageOnChanged<T>) {
+      listeners[key] ??= [];
+      listeners[key]?.push(cb);
+    },
+    removeChangeListener<T>(key: string, cb: PlayerStorageOnChanged<T>) {
+      listeners[key] = listeners[key]?.filter(l => l !== cb);
+    },
+  };
 };

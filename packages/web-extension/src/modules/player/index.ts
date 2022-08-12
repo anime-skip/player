@@ -9,21 +9,23 @@ import { providePlayerConfig } from '~/composables/usePlayerConfig';
 import '~/styles';
 import { debug, log, warn } from '~/utils/log';
 import Messenger from '~/utils/Messenger';
-import { playerWebExtStorage } from '~/utils/player-web-ext-storage';
+import { createPlayerWebExtStorage } from '~/utils/player-web-ext-storage';
 import { ExternalPlayerConfig, InternalPlayerConfig } from '~types';
 import { centerFitVideoBounds, fallbackBound } from '~utils/drawing';
 import GeneralUtils from '~utils/GeneralUtils';
 import { sleep } from '~utils/time';
 
-// TODO git mv to player-ui
-export function loadPlayerUi(externalConfig: ExternalPlayerConfig) {
-  // Apply config defaults
-  const config: InternalPlayerConfig = {
-    ...externalConfig,
-    onPlayDebounceMs: externalConfig.onPlayDebounceMs ?? 0,
-    transformServiceUrl: externalConfig.transformServiceUrl ?? GeneralUtils.stripUrl,
-    storage: playerWebExtStorage,
+function mapExternalConfig(config: ExternalPlayerConfig): InternalPlayerConfig {
+  return {
+    ...config,
+    onPlayDebounceMs: config.onPlayDebounceMs ?? 0,
+    transformServiceUrl: config.transformServiceUrl ?? GeneralUtils.stripUrl,
+    storage: createPlayerWebExtStorage(),
   };
+}
+
+// TODO git mv to player-ui
+export function loadPlayerUi(config: ExternalPlayerConfig) {
   // log('Loading Player UI', { config });
 
   // Initial Setup
@@ -76,8 +78,8 @@ export function loadPlayerUi(externalConfig: ExternalPlayerConfig) {
 
     try {
       const container = document.createElement('div');
-
-      const RootComponent = Provider(() => providePlayerConfig(config), PlayerContainer);
+      const internalConfig = mapExternalConfig(config);
+      const RootComponent = Provider(() => providePlayerConfig(internalConfig), PlayerContainer);
       const app = createApp(RootComponent).use(ui).component('RouterLink', FakeRouterLink);
       const mountedApp = app.mount(container);
 

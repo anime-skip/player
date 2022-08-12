@@ -1,4 +1,4 @@
-import browser from 'webextension-polyfill';
+import { webExtStorage } from '~/utils/web-ext-storage';
 import { createWebExtProvideInject } from '../utils/createWebExtProvideInject';
 
 interface Auth {
@@ -11,7 +11,6 @@ export const AUTH_STORAGE_LOCATION = 'local';
 
 const {
   provideValue: provideAuth,
-  useInitStorageListener: useInitAuthListener,
   useUpdate: useUpdateAuth,
   useValue: useAuth,
 } = createWebExtProvideInject<Auth>(AUTH_STORAGE_KEY, AUTH_STORAGE_LOCATION, {
@@ -19,7 +18,7 @@ const {
   refreshToken: undefined,
 });
 
-export { provideAuth, useInitAuthListener, useUpdateAuth, useAuth };
+export { provideAuth, useUpdateAuth, useAuth };
 
 export function useIsLoggedIn() {
   const auth = useAuth();
@@ -36,10 +35,10 @@ export function useClearTokens() {
   };
 }
 
-export async function updateAuthAsync(newAuth: Auth) {
-  await browser.storage.local.set({ [AUTH_STORAGE_KEY]: newAuth });
+export function updateAuthAsync(newAuth: Auth) {
+  return webExtStorage.setItem(AUTH_STORAGE_KEY, newAuth);
 }
 
-export async function getAuthAsync(): Promise<Auth> {
-  return (await browser.storage.local.get(AUTH_STORAGE_KEY))[AUTH_STORAGE_KEY] || {};
+export function getAuthAsync(): Promise<Auth> {
+  return webExtStorage.getItem<Auth>(AUTH_STORAGE_KEY).then(auth => auth || {});
 }

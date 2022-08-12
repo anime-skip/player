@@ -10,20 +10,31 @@ export function usePlayerStorage<T>(key: string, defaultValue: T): Ref<T> {
   async function loadInitialValue() {
     const restoredValue = await storage.getItem<T>(key, defaultValue);
     // Only restore the value if it hasn't been changed yet
-    if (isEqual(v.value, defaultValue)) v.value = restoredValue;
+    if (!isEqual(v.value, defaultValue)) return;
+
+    v.value = restoredValue;
   }
   loadInitialValue();
 
   // Update persisted value when we change the ref's value via `v.value = ...`
-  watch(v, async newValue => {
+  watch(v, async (newValue, oldValue) => {
+    newValue = toRaw(newValue);
+    oldValue = toRaw(oldValue);
+    if (isEqual(newValue, oldValue)) return;
+
     if (newValue == null) await storage.removeItem(key);
     else await storage.setItem<T>(key, newValue);
   });
 
   // Add a storage listener and update the value when the storage changes
-  storage.addItemListener<T>(key, raw => {
-    const newValue = raw ?? defaultValue;
-    if (!isEqual(v.value, newValue)) v.value = newValue;
+  const onChange = (raw: any) => {
+    const newValue = toRaw(raw ?? defaultValue);
+    if (isEqual(v.value, newValue)) return;
+    v.value = newValue;
+  };
+  storage.addChangeListener(key, onChange);
+  onUnmounted(() => {
+    storage.removeChangeListener(key, onChange);
   });
 
   return v;
