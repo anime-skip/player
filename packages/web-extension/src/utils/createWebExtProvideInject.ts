@@ -1,4 +1,6 @@
+import { Ref } from 'vue';
 import { injectPlayerStorage } from '~/composables/usePlayerConfig';
+import { usePlayerStorage } from '~/composables/usePlayerStorage';
 import { createProvideInject } from '~utils/createProvideInject';
 import { AreaName } from './web-ext-storage';
 
@@ -8,21 +10,34 @@ export function createWebExtProvideInject<T extends object>(
   _: AreaName,
   defaultValue: T
 ) {
-  const {
-    provideValue,
-    useUpdate: rawUseUpdate,
-    useValue,
-  } = createProvideInject(label, defaultValue);
-
-  const useUpdate = () => {
-    const value = useValue();
-    const rawUpdate = rawUseUpdate();
-    const storage = injectPlayerStorage();
-    return async function update(newValue: Partial<T>) {
-      rawUpdate(newValue);
-      await storage.setItem(label, { ...value, ...newValue });
+  const valueKey = label + '-value';
+  const updateKey = label + '-set-value';
+  const provideValue = () => {
+    const value = usePlayerStorage(label, defaultValue);
+    const update = (newPartialValue: Partial<T>) => {
+      const newValue = { ...value.value };
+      for (const field in newPartialValue) {
+        // @ts-expect-error: Bad key typing
+        newValue[field] = newPartialValue[field];
+      }
+      value.value = newValue;
     };
+    provide(valueKey, value);
+    provide(updateKey, update);
   };
+
+  function useValue(): Readonly<Ref<T>> {
+    const value = inject<Ref<T>>(valueKey);
+    if (value == null) throw Error(`Injected value has not been provided for ${label}`);
+    return value;
+  }
+
+  function useUpdate(): (newValue: Partial<T>) => void {
+    const update = inject<(newValue: Partial<T>) => void>(updateKey, () => {
+      throw Error(`Injected update has not been provided for ${label}`);
+    });
+    return newValue => update({ ...newValue });
+  }
 
   return {
     provideValue,

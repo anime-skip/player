@@ -62,7 +62,7 @@ export function useGeneralPreferences() {
   const preferences = _useGeneralPreferences();
   return computed<GeneralPreferences>(() => ({
     ...DEFAULT_GENERAL_PREFERENCES,
-    ...preferences,
+    ...preferences.value,
   }));
 }
 

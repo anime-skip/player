@@ -18,7 +18,7 @@ export { provideAuth, useUpdateAuth, useAuth };
 
 export function useIsLoggedIn() {
   const auth = useAuth();
-  return computed(() => !!auth?.token);
+  return computed(() => !!auth.value?.token);
 }
 
 export function useClearTokens() {

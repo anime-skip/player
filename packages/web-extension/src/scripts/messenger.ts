@@ -17,7 +17,7 @@ export function initMessenger() {
         await browser.runtime.openOptionsPage();
       },
       '@anime-skip/open-login': async () => {
-        await browser.tabs.create({ url: 'popup/index.html?closeAfterLogin=true' });
+        await browser.tabs.create({ url: 'popup.html?closeAfterLogin=true' });
       },
       '@anime-skip/get-url': async (_, sender) => {
         return sender.tab?.url;
