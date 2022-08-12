@@ -54,6 +54,7 @@ export default defineConfig({
       manifest: () => generateManifest({ browser, mode }),
       browser,
       webExtConfig,
+      skipManifestValidation: true,
     }),
     vue(),
   ],

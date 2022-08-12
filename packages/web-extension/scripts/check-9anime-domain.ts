@@ -1,5 +1,5 @@
 import http from 'node:http';
-import { ParentHosts } from '../src/common/utils/compile-time-constants';
+import { ParentHosts } from '../src/utils/compile-time-constants';
 
 function exit(err: any) {
   console.error(err);

@@ -1,11 +1,7 @@
 import merge from 'lodash.merge';
 import { readJsonFile } from 'vite-plugin-web-extension';
 import { Manifest } from 'webextension-polyfill';
-import {
-  PAGE_ACTION_MATCHES,
-  ParentHosts,
-  PlayerHosts,
-} from '../src/common/utils/compile-time-constants';
+import { PAGE_ACTION_MATCHES, ParentHosts, PlayerHosts } from '../src/utils/compile-time-constants';
 import { isDev, rootPath } from './utils';
 
 interface GenerateManifestConfig {
