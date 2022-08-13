@@ -79,16 +79,12 @@ import { usePlayerConfig } from '~/composables/usePlayerConfig';
 import useRadioIcon from '~/composables/useRadioIcon';
 import { useHideDialog } from '~/stores/useDialogState';
 import { useShowOriginalPlayer } from '~/stores/usePlayerVisibility';
-import Messenger from '~/utils/Messenger';
 import { PlayerOption, PlayerOptionGroup } from '~types';
 
 const playerConfig = usePlayerConfig();
 
 const openExtensionOptions = () => {
-  new Messenger<RuntimeMessageTypes>('General Settings').send(
-    '@anime-skip/open-all-settings',
-    undefined
-  );
+  playerConfig.openAllSettings();
 };
 const activePlayerGroup = ref<PlayerOptionGroup | undefined>();
 const hasActivePlayerGroup = computed(() => activePlayerGroup.value != null);

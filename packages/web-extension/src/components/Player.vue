@@ -44,6 +44,11 @@
 
       <!-- Dialogs -->
       <ScreenshotOverlay />
+      <screenshot-controller-implementation
+        :mouse-over="mouseOver"
+        :show-player="showPlayer"
+        :hide-player="hidePlayer"
+      />
       <TimestampsPanel />
       <PreferencesDialog />
       <ConnectEpisodeDialog />
@@ -73,9 +78,7 @@ import {
   useResetSkippedFromZero,
 } from '~/stores/usePlayHistory';
 import { useVideoState } from '~/stores/useVideoState';
-import Messenger from '~/utils/Messenger';
 import UsageStats from '~/utils/UsageStats';
-import { nextFrame } from '~utils/event-loop';
 import Utils from '~utils/GeneralUtils';
 
 onMounted(() => {
@@ -121,22 +124,17 @@ onMounted(() => {
 const videoState = useVideoState();
 
 const isActive = computed(() => videoState.isActive);
+const mouseOver = ref(false);
 function onMouseEnter() {
-  setupContextMenu();
+  mouseOver.value = true;
   setActive();
 }
 function onMouseLeave() {
-  removeContextMenu();
+  mouseOver.value = false;
   setInactive();
 }
 function onMouseMove() {
   setActive();
-}
-function setupContextMenu() {
-  messenger.send('@anime-skip/setup-context-menu', undefined);
-}
-function removeContextMenu() {
-  messenger.send('@anime-skip/remove-context-menu', undefined);
 }
 
 // Display flags
@@ -152,15 +150,6 @@ const showPlayer = useShowAnimeSkipPlayer();
 const hidePlayer = useHideAnimeSkipPlayer();
 const isPlayerVisible = useIsAnimeSkipPlayerVisible();
 const isOriginalPlayerVisible = useIsOriginalPlayerVisible();
-
-const messenger = new Messenger('player', {
-  '@anime-skip/start-screenshot': async () => {
-    hidePlayer();
-    // Wait for player to re-render as hidden before continuing the screenshot process
-    await nextFrame();
-  },
-  '@anime-skip/stop-screenshot': async () => showPlayer(),
-});
 
 const { themeClass } = useTheme();
 </script>

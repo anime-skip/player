@@ -1,4 +1,4 @@
-import browser from 'webextension-polyfill';
+import Browser from 'webextension-polyfill';
 import { loadedLog, log } from '~/utils/log';
 import UsageStats from '~/utils/UsageStats';
 import { detectBrowser } from '~utils/browser';
@@ -14,7 +14,7 @@ function getUninstallUrl(userId: string | undefined): string | undefined {
 export function initMetrics() {
   loadedLog('background/metrics.ts');
 
-  browser.runtime.onInstalled.addListener(event => {
+  Browser.runtime.onInstalled.addListener(event => {
     log('onInstalled', event);
 
     if (event.reason === 'install') {
@@ -35,7 +35,7 @@ export function initMetrics() {
     Promise.resolve(UsageStats.getUserId()).then(userId => {
       const uninstallUrl = userId ? getUninstallUrl(userId) : undefined;
       if (uninstallUrl !== prevUninstallUrl) {
-        browser.runtime.setUninstallURL(uninstallUrl);
+        Browser.runtime.setUninstallURL(uninstallUrl);
         log('Updated uninstall url:', uninstallUrl);
       }
       prevUninstallUrl = uninstallUrl;

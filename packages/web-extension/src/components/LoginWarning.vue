@@ -8,7 +8,6 @@
 
 <script lang="ts" setup>
 import { useShowLoginOverlay } from '~/stores/useDialogState';
-import Messenger from '~/utils/Messenger';
 
 defineProps<{ before?: string }>();
 
@@ -19,10 +18,7 @@ const onClickLogin = () => {
   if (isInInjectedPlayer) {
     showLoginOverlay();
   } else {
-    new Messenger<RuntimeMessageTypes>('General Settings').send(
-      '@anime-skip/open-login',
-      undefined
-    );
+    window.open('popup.html?closeAfterLogin=true', '_blank');
   }
 };
 </script>

@@ -1,4 +1,4 @@
-import browser from 'webextension-polyfill';
+import Browser from 'webextension-polyfill';
 import { usePlayerStorage } from '~/composables/usePlayerStorage';
 import { webExtStorage } from '~/utils/web-ext-storage';
 import { DAYS, SECONDS, sleep, today } from '~utils/time';
@@ -21,7 +21,7 @@ export const setDontShowStoreReviewPromptAgain = (value: boolean | null) =>
 
 export function initStoreReviewPrompt() {
   // Initialize for new users, NEEDS TO BE BEFORE FIRST AWAIT so it adds the listener synchronously
-  browser.runtime.onInstalled.addListener(async () => {
+  Browser.runtime.onInstalled.addListener(async () => {
     await setStoreReviewPromptAt(today() + DAYS(3));
   });
 

@@ -26,7 +26,7 @@ function mapExternalConfig(config: ExternalPlayerConfig): InternalPlayerConfig {
 
 // TODO git mv to player-ui
 export function loadPlayerUi(config: ExternalPlayerConfig) {
-  // log('Loading Player UI', { config });
+  log('Loading Player UI', { config });
 
   // Initial Setup
 
@@ -37,25 +37,6 @@ export function loadPlayerUi(config: ExternalPlayerConfig) {
 
   // Prepare the body so the old player can be hidden
   document.body?.classList.add('hide-for-anime-skip', config.service);
-
-  // TODO: Move this... elsewhere
-  new Messenger(`${config.service} player messenger`, {
-    // Get the bounds, then center fit the video
-    '@anime-skip/player-screenshot-details': async () => {
-      const video = config.getVideo?.();
-
-      const boundingRect = video?.getBoundingClientRect();
-      const elementBounds = {
-        height: fallbackBound(boundingRect?.height),
-        left: fallbackBound(boundingRect?.left),
-        top: fallbackBound(boundingRect?.top),
-        width: fallbackBound(boundingRect?.width),
-      };
-      const videoWidth = fallbackBound(video?.videoWidth, 1);
-      const videoHeight = fallbackBound(video?.videoHeight, 1);
-      return centerFitVideoBounds(elementBounds, videoWidth, videoHeight);
-    },
-  });
 
   // Clean DOM
 
@@ -80,7 +61,10 @@ export function loadPlayerUi(config: ExternalPlayerConfig) {
       const container = document.createElement('div');
       const internalConfig = mapExternalConfig(config);
       const RootComponent = Provider(() => providePlayerConfig(internalConfig), PlayerContainer);
-      const app = createApp(RootComponent).use(ui).component('RouterLink', FakeRouterLink);
+      const app = createApp(RootComponent)
+        .use(ui)
+        .component('RouterLink', FakeRouterLink)
+        .component('ScreenshotControllerImplementation', internalConfig.screenshotController);
       const mountedApp = app.mount(container);
 
       document.querySelector(rootQuery)?.appendChild(mountedApp.$el);
