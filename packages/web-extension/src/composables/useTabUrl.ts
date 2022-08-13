@@ -1,3 +1,4 @@
+import { sendMessage } from '~/utils/web-ext-bridge';
 import { onScopeDispose } from 'vue';
 import Browser from 'webextension-polyfill';
 import { createSharedComposable } from '~/composables/createSharedComposable';
@@ -17,7 +18,7 @@ export const useTabUrl = createSharedComposable(function () {
   const { transformServiceUrl } = usePlayerConfig();
 
   onMounted(async () => {
-    const initialUrl = await Browser.runtime.sendMessage({ type: '@anime-skip/get-url' });
+    const initialUrl = await sendMessage('@anime-skip/get-url', undefined);
 
     const correctedNewUrl = transformServiceUrl(initialUrl);
     log('Initial URL: ' + correctedNewUrl);

@@ -38,5 +38,5 @@ function getEpisodeInfo() {
 
 export function initFunimationParent() {
   loadedLog('content-scripts/services/funimation/parent.ts');
-  setupParent('funimation', { getEpisodeInfo });
+  setupParent({ getEpisodeInfo });
 }

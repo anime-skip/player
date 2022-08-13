@@ -1,7 +1,6 @@
 import { loadedLog, log } from '~/utils/log';
 import setupParent from '~/utils/setupParent';
 import { waitUntil } from '~utils/time';
-import { getService } from './get-service';
 
 async function getEpisodeInfo() {
   const pageHasLoaded = () =>
@@ -68,5 +67,5 @@ async function getEpisodeInfo() {
 
 export function initCrunchyrollParent() {
   loadedLog('content-scripts/services/crunchyroll/parent.ts');
-  setupParent(getService(), { getEpisodeInfo });
+  setupParent({ getEpisodeInfo });
 }

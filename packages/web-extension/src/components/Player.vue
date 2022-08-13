@@ -44,7 +44,7 @@
 
       <!-- Dialogs -->
       <ScreenshotOverlay />
-      <screenshot-controller-implementation
+      <screenshot-controller
         :mouse-over="mouseOver"
         :show-player="showPlayer"
         :hide-player="hidePlayer"

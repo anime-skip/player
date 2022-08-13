@@ -1,6 +1,6 @@
+import { onMessage, sendMessage } from '~/utils/web-ext-bridge';
 import Browser, { Menus, Tabs } from 'webextension-polyfill';
 import { error, loadedLog, log } from '~/utils/log';
-import Messenger from '~/utils/Messenger';
 import { webExtStorage } from '~/utils/web-ext-storage';
 import { ScreenshotDetails } from '~types';
 
@@ -20,35 +20,29 @@ function blobToDataURL(blob: Blob): Promise<string> {
 export function initContextMenu() {
   loadedLog('background/context-menu.ts');
 
-  const messenger = new Messenger<
-    ContextMenuMessageTypes,
-    ContextMenuMessageListenerMap,
-    ContextMenuMessagePayloadMap,
-    ContextMenuMessageResponseMap
-  >('context-menu', {
-    '@anime-skip/setup-context-menu': async () =>
-      menuItems.forEach(item => {
-        Browser.contextMenus.create(item, () => {
-          const err = Browser.runtime.lastError;
-          if (err && err.message !== `Cannot create item with duplicate id ${item.id}`) {
-            error(err);
-          }
-        });
-      }),
-    '@anime-skip/remove-context-menu': async () => Browser.contextMenus.removeAll(),
+  onMessage('@anime-skip/setup-context-menu', () => {
+    for (const item of menuItems) {
+      Browser.contextMenus.create(item, () => {
+        const err = Browser.runtime.lastError;
+        if (err && err.message !== `Cannot create item with duplicate id ${item.id}`) {
+          error(err);
+        }
+      });
+    }
   });
+  onMessage('@anime-skip/remove-context-menu', () => Browser.contextMenus.removeAll());
 
   async function screenshot(_info: Menus.OnClickData, tab?: Tabs.Tab) {
     log('Taking screenshot');
     try {
-      await messenger.send('@anime-skip/start-screenshot', undefined, tab?.id);
+      await sendMessage('@anime-skip/start-screenshot', undefined, tab?.id);
       // Get size & position for cropping
-      const iframeBounds: ScreenshotDetails = await messenger.send(
+      const iframeBounds: ScreenshotDetails = await sendMessage(
         '@anime-skip/parent-screenshot-details',
         undefined,
         tab?.id
       );
-      const videoBounds: ScreenshotDetails = await messenger.send(
+      const videoBounds: ScreenshotDetails = await sendMessage(
         '@anime-skip/player-screenshot-details',
         undefined,
         tab?.id
@@ -74,7 +68,7 @@ export function initContextMenu() {
       error(err);
       throw err;
     } finally {
-      await messenger.send('@anime-skip/stop-screenshot', undefined, tab?.id);
+      await sendMessage('@anime-skip/stop-screenshot', undefined, tab?.id);
     }
   }
 

@@ -4,7 +4,7 @@ import setupParent from '~/utils/setupParent';
 export function initTestServiceParent() {
   loadedLog('content-scripts/services/test-service/parent.ts');
 
-  setupParent('test-service', {
+  setupParent({
     getEpisodeInfo() {
       return {
         name: (document.getElementById('episode') as HTMLSpanElement | undefined)?.innerText,

@@ -62,7 +62,7 @@ export function loadPlayerUi(config: ExternalPlayerConfig) {
       const app = createApp(RootComponent)
         .use(ui)
         .component('RouterLink', FakeRouterLink)
-        .component('ScreenshotControllerImplementation', internalConfig.screenshotController);
+        .component('ScreenshotController', internalConfig.screenshotController);
       const mountedApp = app.mount(container);
 
       document.querySelector(rootQuery)?.appendChild(mountedApp.$el);

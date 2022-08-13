@@ -1,12 +1,10 @@
 import { Auth } from '~types';
 import { loadedLog } from '~/utils/log';
-import Messenger from '~/utils/Messenger';
 import { webExtStorage } from '~/utils/web-ext-storage';
+import { sendMessage } from '~/utils/web-ext-bridge';
 
 export function initAnimeSkipParent() {
   loadedLog('content-scripts/anime-skip/index.ts');
-
-  const messenger = new Messenger('anime-skip.com integration');
 
   /**
    * TODO: (2) Remove after web is deployed with event listener support
@@ -35,10 +33,10 @@ export function initAnimeSkipParent() {
   });
 
   document.addEventListener('@anime-skip/open-login', () => {
-    messenger.send('@anime-skip/open-login', undefined);
+    sendMessage('@anime-skip/open-login', undefined);
   });
 
   document.addEventListener('@anime-skip/open-all-settings', () => {
-    messenger.send('@anime-skip/open-all-settings', undefined);
+    sendMessage('@anime-skip/open-all-settings', undefined);
   });
 }

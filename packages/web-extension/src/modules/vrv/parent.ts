@@ -24,7 +24,7 @@ export function getEpisodeInfo(dom = document): InferredEpisodeInfo {
 export function initVrvParent() {
   loadedLog('content-scripts/services/vrv/parent.ts');
 
-  setupParent('vrv', {
+  setupParent({
     getEpisodeInfo,
   });
 }
