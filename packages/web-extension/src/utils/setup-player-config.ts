@@ -4,7 +4,7 @@ import { ExternalPlayerConfig } from '~types';
 import { SECOND } from '~utils/time';
 import { debug, log, warn } from './log';
 import ScreenshotController from '../components/ScreenshotController.vue';
-import Messenger from './Messenger';
+import { sendMessage } from 'webext-bridge';
 
 /**
  * Configures the default player config for a player injected by the web extension
@@ -66,8 +66,7 @@ export function setupPlayerConfig(
     addKeyDownListener: window.addKeyDownListener,
     removeKeyDownListener: window.removeKeyDownListener,
     openAllSettings() {
-      const messenger = new Messenger<RuntimeMessageTypes>('player');
-      void messenger.send('@anime-skip/open-all-settings', undefined);
+      void sendMessage('@anime-skip/open-all-settings', undefined);
     },
     screenshotController: ScreenshotController,
   };

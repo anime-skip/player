@@ -27,10 +27,10 @@ describe('Parent functionalities', () => {
 
   it('should mock the setupParent function so these tests can be ran', () => {
     initFunimation20210926Parent();
-    getEpisodeInfo = setupParentMock.mock.calls[0][1].getEpisodeInfo;
+    getEpisodeInfo = setupParentMock.mock.calls[0][0].getEpisodeInfo;
 
     expect(setupParentMock).toBeCalledTimes(1);
-    expect(setupParentMock).toBeCalledWith('funimation', expect.any(Object));
+    expect(setupParentMock).toBeCalledWith(expect.any(Object));
   });
 
   describe('getEpisodeInfo', () => {

@@ -23,7 +23,7 @@ export function getEpisodeInfo(dom = document): InferredEpisodeInfo {
 export function init9animeParent() {
   loadedLog('content-scripts/services/9anime/parent.ts');
 
-  setupParent('9anime', {
+  setupParent({
     getEpisodeInfo,
   });
 }

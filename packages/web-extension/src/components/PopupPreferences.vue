@@ -27,15 +27,12 @@
 <script lang="ts" setup>
 import useRequestState from 'vue-use-request-state';
 import { useLogout } from '~/composables/useLogout';
-import Messenger from '~/utils/Messenger';
+import { sendMessage } from 'webext-bridge';
 
 const { wrapRequest, isLoading: isLoggingOut } = useRequestState();
 const logOut = wrapRequest(useLogout());
 
 const openExtensionOptions = () => {
-  new Messenger<RuntimeMessageTypes>('General Settings').send(
-    '@anime-skip/open-all-settings',
-    undefined
-  );
+  void sendMessage('@anime-skip/open-all-settings', undefined);
 };
 </script>

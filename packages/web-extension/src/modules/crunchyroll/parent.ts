@@ -68,5 +68,5 @@ async function getEpisodeInfo() {
 
 export function initCrunchyrollParent() {
   loadedLog('content-scripts/services/crunchyroll/parent.ts');
-  setupParent(getService(), { getEpisodeInfo });
+  setupParent({ getEpisodeInfo });
 }

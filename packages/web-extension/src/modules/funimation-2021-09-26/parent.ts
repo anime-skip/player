@@ -45,5 +45,5 @@ async function getEpisodeInfo() {
 
 export function initFunimation20210926Parent() {
   loadedLog('content-scripts/services/funimation-2021-09-26/parent.ts');
-  setupParent('funimation', { getEpisodeInfo });
+  setupParent({ getEpisodeInfo });
 }

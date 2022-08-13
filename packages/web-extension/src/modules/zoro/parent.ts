@@ -23,7 +23,7 @@ export function getEpisodeInfo(dom = document): InferredEpisodeInfo {
 export function initZoroParent() {
   loadedLog('content-scripts/services/zoro/parent.ts');
 
-  setupParent('zoro', {
+  setupParent({
     getEpisodeInfo,
   });
 }
