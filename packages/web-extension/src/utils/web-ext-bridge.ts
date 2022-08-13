@@ -1,5 +1,6 @@
 import { createWebExtBridge, ProtocolWithReturn } from '@anime-skip/web-ext-bridge';
 import { InferredEpisodeInfo, ScreenshotDetails } from '~types';
+import * as logger from './log';
 
 interface ProtocolMap {
   '@anime-skip/inferEpisodeInfo': ProtocolWithReturn<undefined, InferredEpisodeInfo>;
@@ -15,4 +16,4 @@ interface ProtocolMap {
   '@anime-skip/changeUrl': string;
 }
 
-export const { sendMessage, onMessage } = createWebExtBridge<ProtocolMap>();
+export const { sendMessage, onMessage } = createWebExtBridge<ProtocolMap>({ logger });
