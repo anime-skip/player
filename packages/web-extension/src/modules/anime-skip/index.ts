@@ -1,7 +1,7 @@
 import { Auth } from '~types';
 import { loadedLog } from '~/utils/log';
 import { webExtStorage } from '~/utils/web-ext-storage';
-import { sendMessage } from 'webext-bridge';
+import { sendMessage } from '~/utils/web-ext-bridge';
 
 export function initAnimeSkipParent() {
   loadedLog('content-scripts/anime-skip/index.ts');

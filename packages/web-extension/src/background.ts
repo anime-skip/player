@@ -1,4 +1,3 @@
-import {} from 'webext-bridge';
 import { initContextMenu } from '~/scripts/context-menu';
 import { initMessenger } from '~/scripts/messenger';
 import { initMetrics } from '~/scripts/metrics';

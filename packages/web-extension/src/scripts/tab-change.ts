@@ -1,4 +1,4 @@
-import { sendMessage } from 'webext-bridge';
+import { sendMessage } from '~/utils/web-ext-bridge';
 import Browser from 'webextension-polyfill';
 import { loadedLog, warn } from '~/utils/log';
 
@@ -8,7 +8,7 @@ export function initTabChange() {
   Browser.tabs.onUpdated.addListener(function (tabId, { url }, _tabInfo) {
     if (url == null) return;
 
-    sendMessage('@anime-skip/changeUrl', url, `content-script@${tabId}`).catch(err => {
+    sendMessage('@anime-skip/changeUrl', url, tabId).catch(err => {
       warn('Tab url change update failed', err);
     });
   });

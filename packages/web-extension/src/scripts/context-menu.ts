@@ -1,4 +1,4 @@
-import { onMessage, sendMessage } from 'webext-bridge';
+import { onMessage, sendMessage } from '~/utils/web-ext-bridge';
 import Browser, { Menus, Tabs } from 'webextension-polyfill';
 import { error, loadedLog, log } from '~/utils/log';
 import { webExtStorage } from '~/utils/web-ext-storage';
@@ -35,17 +35,17 @@ export function initContextMenu() {
   async function screenshot(_info: Menus.OnClickData, tab?: Tabs.Tab) {
     log('Taking screenshot');
     try {
-      await sendMessage('@anime-skip/start-screenshot', undefined, `content-script@${tab?.id}`);
+      await sendMessage('@anime-skip/start-screenshot', undefined, tab?.id);
       // Get size & position for cropping
       const iframeBounds: ScreenshotDetails = await sendMessage(
         '@anime-skip/parent-screenshot-details',
         undefined,
-        `content-script@${tab?.id}`
+        tab?.id
       );
       const videoBounds: ScreenshotDetails = await sendMessage(
         '@anime-skip/player-screenshot-details',
         undefined,
-        `content-script@${tab?.id}`
+        tab?.id
       );
       const x = iframeBounds.left + videoBounds.left;
       const y = iframeBounds.top + videoBounds.top;
@@ -68,7 +68,7 @@ export function initContextMenu() {
       error(err);
       throw err;
     } finally {
-      await sendMessage('@anime-skip/stop-screenshot', undefined, `content-script@${tab?.id}`);
+      await sendMessage('@anime-skip/stop-screenshot', undefined, tab?.id);
     }
   }
 

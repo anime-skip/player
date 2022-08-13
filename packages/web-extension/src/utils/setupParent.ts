@@ -1,4 +1,4 @@
-import { onMessage } from 'webext-bridge';
+import { onMessage } from '~/utils/web-ext-bridge';
 import { InferredEpisodeInfo, ScreenshotDetails } from '~types';
 import { fallbackBound } from '~utils/drawing';
 import { sleep } from '~utils/time';

@@ -27,7 +27,7 @@
 <script lang="ts" setup>
 import useRequestState from 'vue-use-request-state';
 import { useLogout } from '~/composables/useLogout';
-import { sendMessage } from 'webext-bridge';
+import { sendMessage } from '~/utils/web-ext-bridge';
 
 const { wrapRequest, isLoading: isLoggingOut } = useRequestState();
 const logOut = wrapRequest(useLogout());

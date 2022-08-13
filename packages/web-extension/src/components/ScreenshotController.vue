@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMessage, sendMessage } from 'webext-bridge';
+import { onMessage, sendMessage } from '~/utils/web-ext-bridge';
 import { usePlayerConfig } from '~/composables/usePlayerConfig';
 import { centerFitVideoBounds, fallbackBound } from '~utils/drawing';
 import { nextFrame } from '~utils/event-loop';

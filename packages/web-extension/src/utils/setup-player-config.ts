@@ -1,10 +1,9 @@
 import { backOff } from 'exponential-backoff';
-import Browser from 'webextension-polyfill';
 import { ExternalPlayerConfig } from '~types';
 import { SECOND } from '~utils/time';
 import { debug, log, warn } from './log';
 import ScreenshotController from '../components/ScreenshotController.vue';
-import { sendMessage } from 'webext-bridge';
+import { sendMessage } from '~/utils/web-ext-bridge';
 
 /**
  * Configures the default player config for a player injected by the web extension
@@ -52,9 +51,7 @@ export function setupPlayerConfig(
       debug(`${service}.inferEpisodeInfo`);
       return await backOff(
         async () => {
-          const res = await Browser.runtime.sendMessage({
-            type: '@anime-skip/inferEpisodeInfo',
-          });
+          const res = await sendMessage('@anime-skip/inferEpisodeInfo', undefined);
           if (res == null) throw Error('Undefined response');
           return res;
         },

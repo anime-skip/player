@@ -1,0 +1,13 @@
+{
+  "name": "@anime-skip/web-ext-bridge",
+  "main": "index.ts",
+  "scripts": {
+    "compile": "tsc --noEmit"
+  },
+  "dependencies": {
+    "webextension-polyfill": "*"
+  },
+  "devDependencies": {
+    "typescript": "*"
+  }
+}
