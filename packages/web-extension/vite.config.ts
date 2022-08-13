@@ -47,7 +47,7 @@ export default defineConfig({
     components({
       dts: true,
       allowOverrides: true,
-      dirs: [rootPath('src')],
+      dirs: [rootPath('src'), rootPath('..', 'player-ui', 'src')],
 
       /**
        * Hack to fix:
@@ -68,6 +68,7 @@ export default defineConfig({
       browser,
       webExtConfig,
       skipManifestValidation: true,
+      watchFilePaths: [rootPath('..', 'player-ui', 'src')],
     }),
     vue(),
   ],
