@@ -16,6 +16,7 @@ type GetData<T> = T extends ProtocolWithReturn<any, any> ? T['BtVgCTPYZu'] : T;
 type GetResponse<T> = T extends ProtocolWithReturn<any, any> ? T['RrhVseLgZW'] : void;
 
 interface Message<TProtocolMap, TKey extends keyof TProtocolMap> {
+  id: number;
   data: GetData<TProtocolMap[TKey]>;
   sender: Runtime.MessageSender;
   timestamp: number;
@@ -32,6 +33,11 @@ export function createWebExtBridge<TProtocolMap>(config?: Config) {
     | undefined
     | ((message: any, sender: Browser.Runtime.MessageSender) => void | Promise<any>);
   let keyListeners: { [key in keyof TProtocolMap]?: Function } = {};
+
+  let idSeq = Math.floor(Math.random() * 10000);
+  function getNextId(): number {
+    return idSeq + 1;
+  }
 
   function onMessage<TKey extends keyof TProtocolMap>(
     key: TKey,
@@ -52,28 +58,31 @@ export function createWebExtBridge<TProtocolMap>(config?: Config) {
           throw err;
         }
 
-        config?.logger?.debug('[web-ext-bridge] Received message', { key, message, sender });
+        config?.logger?.debug('[web-ext-bridge] Received message', message, sender);
         const entires = Object.entries(keyListeners) as Array<[keyof TProtocolMap, Function]>;
         for (const [key, listener] of entires) {
           if (message.key !== key) continue;
+          config?.logger?.debug(`[web-ext-bridge] onMessage {id=${message.id}} ᐊ─`, message);
+
           try {
             const res = await listener({
               data: message.data,
               sender: sender,
               timestamp: message.timestamp,
             });
+            config?.logger?.debug(`[web-ext-bridge] onMessage {id=${message.id}} ─ᐅ`, { res });
             return { res };
           } catch (err) {
-            let message: string;
-            if (err instanceof Error) message = err.message;
-            else message = String(err);
-            return { err: message };
+            let errMessage: string;
+            if (err instanceof Error) errMessage = err.message;
+            else errMessage = String(err);
+            config?.logger?.debug(`[web-ext-bridge] onMessage {id=${message.id}} ─ᐅ`, { err });
+            return { err: errMessage };
           }
         }
 
-        const err = Error(`[web-ext-bridge] No listener setup for ${key as string}`);
-        config?.logger?.warn(err);
-        throw err;
+        // Wait for other listeners on the same tab to process messages before responding
+        await new Promise(res => setTimeout(res, 1000));
       };
       Browser.runtime.onMessage.addListener(rootListener);
     }
@@ -86,6 +95,7 @@ export function createWebExtBridge<TProtocolMap>(config?: Config) {
       throw err;
     }
     keyListeners[key] = onReceived;
+    config?.logger?.log(`[web-ext-bridge] Added listener for ${key as string}`);
   }
 
   async function sendMessage<TKey extends keyof TProtocolMap>(
@@ -93,15 +103,15 @@ export function createWebExtBridge<TProtocolMap>(config?: Config) {
     data: GetData<TProtocolMap[TKey]>,
     tabId?: number
   ): Promise<GetResponse<TProtocolMap[TKey]>> {
-    const message = { key, data, timestamp: Date.now() };
-    config?.logger?.debug('[web-ext-bridge] Sending -->', message);
+    const message = { id: getNextId(), key, data, timestamp: Date.now() };
+    config?.logger?.debug(`[web-ext-bridge] sendMessage {id=${message.id}} ─ᐅ`, message);
 
     let response;
     if (tabId == null) response = await Browser.runtime.sendMessage(message);
     else response = await Browser.tabs.sendMessage(tabId, message);
 
     const { res, err } = response ?? { err: 'No response' };
-    config?.logger?.debug('[web-ext-bridge] Received <--', { res, err });
+    config?.logger?.debug(`[web-ext-bridge] sendMessage {id=${message.id}} ᐊ─`, { res, err });
     if (err != null) throw Error(err);
     return res;
   }

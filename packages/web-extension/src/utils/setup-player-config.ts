@@ -2,7 +2,7 @@ import { backOff } from 'exponential-backoff';
 import { ExternalPlayerConfig } from '~types';
 import { SECOND } from '~utils/time';
 import { debug, log, warn } from './log';
-import ScreenshotController from '../components/ScreenshotController.vue';
+import WebExtScreenshotController from '../components/WebExtScreenshotController.vue';
 import { sendMessage } from '~/utils/web-ext-bridge';
 
 /**
@@ -65,7 +65,7 @@ export function setupPlayerConfig(
     openAllSettings() {
       void sendMessage('@anime-skip/open-all-settings', undefined);
     },
-    screenshotController: ScreenshotController,
+    screenshotController: WebExtScreenshotController,
   };
 }
 
