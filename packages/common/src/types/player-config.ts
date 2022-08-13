@@ -2,6 +2,7 @@ import joi from 'joi';
 import { InferredEpisodeInfo, PlayerOptionGroup } from './models';
 import { WithRequired } from './modifiers';
 import { PlayerStorage } from './player-storage';
+import { ScreenshotController } from './screenshot-controller';
 
 export interface ExternalPlayerConfig {
   service: string;
@@ -95,6 +96,17 @@ export interface ExternalPlayerConfig {
    * like your preferences and player settings are stored in this storage.
    */
   storage?: PlayerStorage;
+
+  /**
+   * Method that opens the "all settings" page
+   */
+  openAllSettings(): void;
+
+  /**
+   * A component that does not render anything, but listens for the screenshot event and actually
+   * captures the screen.
+   */
+  screenshotController: ScreenshotController;
 }
 
 export const PlayerConfig = joi.object<ExternalPlayerConfig, true>({
@@ -112,6 +124,8 @@ export const PlayerConfig = joi.object<ExternalPlayerConfig, true>({
   addKeyDownListener: joi.func().required(),
   removeKeyDownListener: joi.func().required(),
   storage: joi.object().required(),
+  openAllSettings: joi.func().required(),
+  screenshotController: joi.object().required(),
 });
 
 /**

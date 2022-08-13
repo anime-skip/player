@@ -1,4 +1,4 @@
-import browser, { Menus, Tabs } from 'webextension-polyfill';
+import Browser, { Menus, Tabs } from 'webextension-polyfill';
 import { error, loadedLog, log } from '~/utils/log';
 import Messenger from '~/utils/Messenger';
 import { webExtStorage } from '~/utils/web-ext-storage';
@@ -28,14 +28,14 @@ export function initContextMenu() {
   >('context-menu', {
     '@anime-skip/setup-context-menu': async () =>
       menuItems.forEach(item => {
-        browser.contextMenus.create(item, () => {
-          const err = browser.runtime.lastError;
+        Browser.contextMenus.create(item, () => {
+          const err = Browser.runtime.lastError;
           if (err && err.message !== `Cannot create item with duplicate id ${item.id}`) {
             error(err);
           }
         });
       }),
-    '@anime-skip/remove-context-menu': async () => browser.contextMenus.removeAll(),
+    '@anime-skip/remove-context-menu': async () => Browser.contextMenus.removeAll(),
   });
 
   async function screenshot(_info: Menus.OnClickData, tab?: Tabs.Tab) {
@@ -62,7 +62,7 @@ export function initContextMenu() {
       if (width == 0 || height == 0) throw Error(`Video dimension was 0 (w=${width}, h=${height})`);
 
       // Take screenshot
-      const data = await browser.tabs.captureVisibleTab(tab?.windowId, {
+      const data = await Browser.tabs.captureVisibleTab(tab?.windowId, {
         format: 'png',
       });
       const cropped = await cropDataUrl(data, x, y, width, height);
@@ -126,7 +126,7 @@ export function initContextMenu() {
     },
   ];
 
-  browser.contextMenus.onClicked.addListener((info, tab) => {
+  Browser.contextMenus.onClicked.addListener((info, tab) => {
     switch (info.menuItemId) {
       case MENU_ITEM_SCREENSHOT:
         screenshot(info, tab);

@@ -1,4 +1,5 @@
-import browser from 'webextension-polyfill';
+import Browser from 'webextension-polyfill';
+import { getPopupUrl } from '~/utils/extension-pages';
 import { loadedLog } from '~/utils/log';
 import Messenger from '~/utils/Messenger';
 
@@ -14,10 +15,10 @@ export function initMessenger() {
     'background-messenger',
     {
       '@anime-skip/open-all-settings': async () => {
-        await browser.runtime.openOptionsPage();
+        await Browser.runtime.openOptionsPage();
       },
       '@anime-skip/open-login': async () => {
-        await browser.tabs.create({ url: 'popup.html?closeAfterLogin=true' });
+        await Browser.tabs.create({ url: getPopupUrl({ closeAfterLogin: true }) });
       },
       '@anime-skip/get-url': async (_, sender) => {
         return sender.tab?.url;

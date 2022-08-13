@@ -1,5 +1,5 @@
 import { onScopeDispose } from 'vue';
-import browser from 'webextension-polyfill';
+import Browser from 'webextension-polyfill';
 import { createSharedComposable } from '~/composables/createSharedComposable';
 import { usePlayerConfig } from '~/composables/usePlayerConfig';
 import { log } from '~/utils/log';
@@ -17,7 +17,7 @@ export const useTabUrl = createSharedComposable(function () {
   const { transformServiceUrl } = usePlayerConfig();
 
   onMounted(async () => {
-    const initialUrl = await browser.runtime.sendMessage({ type: '@anime-skip/get-url' });
+    const initialUrl = await Browser.runtime.sendMessage({ type: '@anime-skip/get-url' });
 
     const correctedNewUrl = transformServiceUrl(initialUrl);
     log('Initial URL: ' + correctedNewUrl);
@@ -32,9 +32,9 @@ export const useTabUrl = createSharedComposable(function () {
     log('Change URL: ' + correctedNewUrl);
     tabUrl.value = correctedNewUrl;
   };
-  browser.runtime.onMessage.addListener(onReceiveMessage);
+  Browser.runtime.onMessage.addListener(onReceiveMessage);
   onScopeDispose(() => {
-    browser.runtime.onMessage.removeListener(onReceiveMessage);
+    Browser.runtime.onMessage.removeListener(onReceiveMessage);
   });
 
   return tabUrl;

@@ -1,9 +1,9 @@
-import browser from 'webextension-polyfill';
+import Browser from 'webextension-polyfill';
 import { isUrlSupported } from '~/stores/url-supported';
 import { loadedLog, log } from '~/utils/log';
 import { webExtStorage } from '~/utils/web-ext-storage';
 
-const iconBase = browser.runtime.getURL('assets/');
+const iconBase = Browser.runtime.getURL('assets/');
 const enabledIcon = {
   '16': iconBase + 'extension-logo/16.png',
   '32': iconBase + 'extension-logo/32.png',
@@ -21,9 +21,9 @@ const disabledIcon = {
 export function initPageAction() {
   loadedLog('background/chrome-page-action.ts');
 
-  const action = browser.action ?? browser.pageAction;
+  const action = Browser.action ?? Browser.pageAction;
 
-  function enableAction(tab: browser.Tabs.Tab) {
+  function enableAction(tab: Browser.Tabs.Tab) {
     if (tab.id == null) return;
 
     action.setIcon({
@@ -31,7 +31,7 @@ export function initPageAction() {
       path: enabledIcon,
     });
   }
-  function disableAction(tab: browser.Tabs.Tab) {
+  function disableAction(tab: Browser.Tabs.Tab) {
     if (tab.id == null) return;
 
     action.setIcon({
@@ -40,26 +40,26 @@ export function initPageAction() {
     });
   }
 
-  async function onTabChanged(tab: browser.Tabs.Tab) {
+  async function onTabChanged(tab: Browser.Tabs.Tab) {
     if (!tab.active || !tab.url) return;
 
     if (isUrlSupported(tab.url)) enableAction(tab);
     else disableAction(tab);
   }
 
-  async function updateActiveTabUrl(tab: browser.Tabs.Tab) {
+  async function updateActiveTabUrl(tab: Browser.Tabs.Tab) {
     const url = tab.url || null;
     webExtStorage.setItem('supported-website-check-url', url);
     log(`Updated current tab in storage to: ${url}`);
   }
 
-  browser.tabs.onActivated.addListener(async activeInfo => {
-    const tab = await browser.tabs.get(activeInfo.tabId);
+  Browser.tabs.onActivated.addListener(async activeInfo => {
+    const tab = await Browser.tabs.get(activeInfo.tabId);
     await onTabChanged(tab);
     if (tab.active) await updateActiveTabUrl(tab);
   });
-  browser.tabs.onUpdated.addListener(async tabId => {
-    const tab = await browser.tabs.get(tabId);
+  Browser.tabs.onUpdated.addListener(async tabId => {
+    const tab = await Browser.tabs.get(tabId);
     await onTabChanged(tab);
     if (tab.active) await updateActiveTabUrl(tab);
   });

@@ -1,4 +1,4 @@
-import browser, { Runtime } from 'webextension-polyfill';
+import Browser, { Runtime } from 'webextension-polyfill';
 import { sleep } from '~utils/time';
 import { debug } from './log';
 import { getErrorMessage } from '~utils/errors';
@@ -19,7 +19,7 @@ export default class Messenger<
     this.forwardTypes = forwardTypes;
 
     if (listeners != null || forwardTypes != null) {
-      browser.runtime.onMessage.addListener(this.onReceiveMessage);
+      Browser.runtime.onMessage.addListener(this.onReceiveMessage);
       debug(`Started ${source} messenger`);
     }
   }
@@ -32,12 +32,12 @@ export default class Messenger<
     debug(`${this.source} sending message: ${type}`, { payload, tabId });
     let response;
     if (tabId != null) {
-      response = await browser.tabs.sendMessage(tabId, {
+      response = await Browser.tabs.sendMessage(tabId, {
         type,
         payload,
       });
     } else {
-      response = await browser.runtime.sendMessage({
+      response = await Browser.runtime.sendMessage({
         type,
         payload,
       });

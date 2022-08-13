@@ -1,8 +1,10 @@
 import { backOff } from 'exponential-backoff';
-import browser from 'webextension-polyfill';
+import Browser from 'webextension-polyfill';
 import { ExternalPlayerConfig } from '~types';
 import { SECOND } from '~utils/time';
 import { debug, log, warn } from './log';
+import ScreenshotController from '../components/ScreenshotController.vue';
+import Messenger from './Messenger';
 
 /**
  * Configures the default player config for a player injected by the web extension
@@ -50,7 +52,7 @@ export function setupPlayerConfig(
       debug(`${service}.inferEpisodeInfo`);
       return await backOff(
         async () => {
-          const res = await browser.runtime.sendMessage({
+          const res = await Browser.runtime.sendMessage({
             type: '@anime-skip/inferEpisodeInfo',
           });
           if (res == null) throw Error('Undefined response');
@@ -63,6 +65,11 @@ export function setupPlayerConfig(
     // Listeners need setup in a different content script, and accessible via window
     addKeyDownListener: window.addKeyDownListener,
     removeKeyDownListener: window.removeKeyDownListener,
+    openAllSettings() {
+      const messenger = new Messenger<RuntimeMessageTypes>('player');
+      void messenger.send('@anime-skip/open-all-settings', undefined);
+    },
+    screenshotController: ScreenshotController,
   };
 }
 

@@ -1,4 +1,4 @@
-import browser from 'webextension-polyfill';
+import Browser from 'webextension-polyfill';
 import { loadedLog, warn } from '~/utils/log';
 import Messenger from '~/utils/Messenger';
 
@@ -7,7 +7,7 @@ export function initTabChange() {
 
   const messenger = new Messenger('background-tabs');
 
-  browser.tabs.onUpdated.addListener(function (tabId, { url }, _tabInfo) {
+  Browser.tabs.onUpdated.addListener(function (tabId, { url }, _tabInfo) {
     if (url == null) return;
 
     messenger.send('@anime-skip/changeUrl', url, tabId).catch(err => {
