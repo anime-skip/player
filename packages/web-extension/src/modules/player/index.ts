@@ -8,10 +8,8 @@ import { Provider } from '~/components/Provider';
 import { providePlayerConfig } from '~/composables/usePlayerConfig';
 import '~/styles';
 import { debug, log, warn } from '~/utils/log';
-import Messenger from '~/utils/Messenger';
 import { createPlayerWebExtStorage } from '~/utils/player-web-ext-storage';
 import { ExternalPlayerConfig, InternalPlayerConfig } from '~types';
-import { centerFitVideoBounds, fallbackBound } from '~utils/drawing';
 import GeneralUtils from '~utils/GeneralUtils';
 import { sleep } from '~utils/time';
 
