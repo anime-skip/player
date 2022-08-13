@@ -10,7 +10,7 @@ interface ProtocolMap {
   '@anime-skip/stop-screenshot': undefined;
   '@anime-skip/open-all-settings': undefined;
   '@anime-skip/open-login': undefined;
-  '@anime-skip/get-url': ProtocolWithReturn<undefined, string | undefined>;
+  '@anime-skip/get-url': ProtocolWithReturn<undefined, string>;
   '@anime-skip/setup-context-menu': undefined;
   '@anime-skip/remove-context-menu': undefined;
   '@anime-skip/changeUrl': string;

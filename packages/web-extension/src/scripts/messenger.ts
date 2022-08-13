@@ -10,7 +10,10 @@ export function initMessenger() {
   onMessage('@anime-skip/open-login', async () => {
     await Browser.tabs.create({ url: getPopupUrl({ closeAfterLogin: true }) });
   });
-  onMessage('@anime-skip/get-url', ({ sender }) => sender.tab?.url);
+  onMessage('@anime-skip/get-url', ({ sender }) => {
+    if (sender.tab?.url) return sender.tab?.url;
+    throw Error('Tab did not have a URL: ' + JSON.stringify(sender.tab));
+  });
   onMessage('@anime-skip/inferEpisodeInfo', ({ sender, data }) =>
     // Send this message back to the content script, and return the result
     // TODO: instead of sending this iframe->background->top_frame, just send it from iframe->top_frame
