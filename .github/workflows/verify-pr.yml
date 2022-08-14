@@ -123,3 +123,32 @@ jobs:
       - name: Type Check
         run: pnpm compile
         working-directory: packages/web-ext-bridge
+
+  player-ui:
+    name: packages/player-ui
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - uses: pnpm/action-setup@v2.0.1
+        name: Install PNPM
+        with:
+          version: 7.x.x
+
+      - name: Install Node 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type Check
+        run: pnpm compile
+        working-directory: packages/player-ui
+
+      - name: Lint
+        run: pnpm lint:check
+        working-directory: packages/player-ui

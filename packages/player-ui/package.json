@@ -14,7 +14,6 @@
   },
   "scripts": {
     "compile": "vue-tsc --noEmit",
-    "test": "vitest",
     "lint": "eslint . --ext .ts,.vue --max-warnings 0 --fix",
     "lint:check": "eslint . --ext .js,.ts,.vue --max-warnings 0"
   },
@@ -38,11 +37,9 @@
   "devDependencies": {
     "@iconify/json": "^1.1.461",
     "@tailwindcss/line-clamp": "^0.2.2",
-    "@types/jsdom": "^16.2.15",
     "@types/lodash.isequal": "^4.5.6",
     "@types/lodash.merge": "^4.6.7",
     "@types/md5": "^2.3.2",
-    "@types/node": "^16.11.48",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
     "@typescript/lib-dom": "npm:@types/web",
@@ -55,14 +52,11 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-vue": "^8.7.1",
     "form-data": "^4.0.0",
-    "jsdom": "*",
     "lodash.merge": "^4.6.2",
     "postcss": "^8.4.16",
     "tailwindcss": "^3.1.8",
     "typescript": "*",
     "vite": "*",
-    "vitest": "*",
-    "vitest-mock-extended": "*",
     "vue-global-api": "*",
     "vue-tsc": "^0.40.1"
   }
