@@ -46,7 +46,6 @@ import { useInferredEpisode } from '~/stores/useInferredEpisodeState';
 import { debug, log, warn } from '~/utils/log';
 import * as Api from '~api';
 import * as Mappers from '~utils/mappers';
-import { deref } from '../../utils/deref';
 
 const prefill = ref<CreateEpisodePrefill>({
   show: { title: '' },
@@ -197,7 +196,7 @@ async function loadSuggestions() {
   if (inferredEpisode.value?.name == null || inferredEpisode.value.show == null) {
     log(
       'Not fetching suggestions, episode or show name could not be inferred',
-      deref(inferredEpisode)
+      toRaw(inferredEpisode)
     );
     return;
   }

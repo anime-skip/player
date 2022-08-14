@@ -101,8 +101,6 @@ importers:
       postcss: ^8.4.16
       tailwindcss: ^3.1.8
       typescript: ^4.7.4
-      unplugin-icons: ^0.14.8
-      unplugin-vue-components: ^0.22.4
       vite: ^2.9.8
       vitest: ^0.21.1
       vitest-mock-extended: ^0.1.13
@@ -152,8 +150,6 @@ importers:
       postcss: 8.4.16
       tailwindcss: 3.1.8
       typescript: 4.7.4
-      unplugin-icons: 0.14.8_ye7sw5nid2es3e4qmkjro6ozy4
-      unplugin-vue-components: 0.22.4_vite@2.9.14+vue@3.2.37
       vite: 2.9.14
       vitest: 0.21.1_jsdom@19.0.0
       vitest-mock-extended: 0.1.13_qotw5fkvw63lxqb7d7bbackczy
@@ -6537,7 +6533,7 @@ packages:
     dependencies:
       acorn: 8.8.0
       chokidar: 3.5.3
-      vite: 2.9.14
+      vite: 2.9.14_sass@1.54.4
       webpack-sources: 3.2.3
       webpack-virtual-modules: 0.4.4
     dev: true
@@ -6561,7 +6557,7 @@ packages:
     dependencies:
       acorn: 8.8.0
       chokidar: 3.5.3
-      vite: 2.9.14
+      vite: 2.9.14_sass@1.54.4
       webpack-sources: 3.2.3
       webpack-virtual-modules: 0.4.4
     dev: true
