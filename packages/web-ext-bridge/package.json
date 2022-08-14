@@ -1,6 +1,7 @@
 {
   "name": "@anime-skip/web-ext-bridge",
   "main": "index.ts",
+  "type": "module",
   "scripts": {
     "compile": "tsc --noEmit"
   },

@@ -10,6 +10,7 @@
     "node": ">=14.17.4",
     "pnpm": ">=6"
   },
+  "type": "module",
   "scripts": {
     "start": "vite build --watch",
     "start:chrome": "cross-env BUILD_FOR=chrome pnpm start",
@@ -78,7 +79,6 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-only-warn": "^1.0.3",
     "eslint-plugin-promise": "^6.0.0",
-    "eslint-plugin-vue": "^8.7.1",
     "esno": "*",
     "form-data": "^4.0.0",
     "fs-extra": "^10.1.0",
@@ -97,7 +97,6 @@
     "vite-plugin-web-extension": "*",
     "vitest": "*",
     "vitest-mock-extended": "*",
-    "vue-global-api": "*",
     "vue-tsc": "^0.40.1",
     "web-ext": "^7.1.1",
     "zip-a-folder": "^1.1.5"

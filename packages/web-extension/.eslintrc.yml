@@ -1,7 +1,4 @@
-parser: 'vue-eslint-parser'
-parserOptions:
-  parser: '@typescript-eslint/parser'
-  sourceType: module
+parser: '@typescript-eslint/parser'
 plugins:
   - '@typescript-eslint'
   - only-warn
@@ -46,19 +43,6 @@ overrides:
   - files: ['*.d.ts']
     rules:
       no-undef: 'off'
-  - files: ['*.vue', '*.tsx', '*.jsx']
-    extends:
-      - plugin:vue/vue3-strongly-recommended
-    rules:
-      no-undef: 'off'
-      vue/singleline-html-element-content-newline: 'off'
-      vue/script-setup-uses-vars: 'warn'
-      vue/html-closing-bracket-newline: 'off'
-      vue/html-indent: 'off'
-      vue/html-self-closing: 'off'
-      vue/max-attributes-per-line: 'off'
-      vue/multi-word-component-names: 'off'
-      '@typescript-eslint/no-unused-vars': 'off'
   - files: ['scripts/**']
     rules:
       no-console: 'off'

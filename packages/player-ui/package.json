@@ -6,6 +6,12 @@
     "node": ">=14.17.4",
     "pnpm": ">=6"
   },
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./vite": "./vite.config.ts"
+  },
   "scripts": {
     "compile": "vue-tsc --noEmit",
     "test": "vitest",
