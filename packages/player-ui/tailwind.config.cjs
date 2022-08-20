@@ -1,3 +1,5 @@
+// TODO: Make into preset
+
 /** @type {import('tailwindcss/tailwind-config').TailwindConfig} */
 module.exports = {
   presets: [require('@anime-skip/ui/tailwind.preset')],

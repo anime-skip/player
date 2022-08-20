@@ -29,31 +29,31 @@ export function createLogger(prefix: string, disabled?: boolean) {
       logFn(`%c${label}`, style, ...args);
     }
   }
+  function debug(...args: any[]) {
+    if (disabled) return;
+    print(console.debug, GREY_LABEL_STYLE, ...args);
+  }
+  function log(...args: any[]) {
+    if (disabled) return;
+    print(console.log, BLUE_LABEL_STYLE, ...args);
+  }
+  function warn(...args: any[]) {
+    if (disabled) return;
+    print(console.warn, YELLOW_LABEL_STYLE, ...args);
+  }
+  function error(...args: any[]) {
+    if (disabled) return;
+    print(console.error, RED_LABEL_STYLE, ...args);
+  }
 
   return {
     print,
-    debug(...args: any[]) {
-      if (disabled) return;
-      print(console.debug, GREY_LABEL_STYLE, ...args);
-    },
-    log(...args: any[]) {
-      if (disabled) return;
-      print(console.log, BLUE_LABEL_STYLE, ...args);
-    },
-    warn(...args: any[]) {
-      if (disabled) return;
-      print(console.warn, YELLOW_LABEL_STYLE, ...args);
-    },
-    error(...args: any[]) {
-      if (disabled) return;
-      print(console.error, RED_LABEL_STYLE, ...args);
-    },
     groupCollapsed(
       label: string,
       callback: (fns: { log: LogFn; warn: LogFn; error: LogFn; debug: LogFn }) => void
     ) {
       if (!disabled) print(console.groupCollapsed, BLUE_LABEL_STYLE, label);
-      callback.bind(this)(this);
+      callback({ debug, log, warn, error });
       if (!disabled) console.groupEnd();
     },
   };
