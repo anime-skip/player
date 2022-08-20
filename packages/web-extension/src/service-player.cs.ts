@@ -31,26 +31,7 @@ const services: Record<PlayerHosts, () => ExternalPlayerConfig> = {
 
 function initService(service: PlayerHosts) {
   const playerConfig = services[service]();
-  initStoreReviewPrompt(playerConfig.storage);
   return mountPlayerUi(playerConfig);
-}
-
-function initStoreReviewPrompt(storage: PlayerStorage) {
-  // Initialize for new users, NEEDS TO BE BEFORE FIRST AWAIT so it adds the listener synchronously
-  Browser.runtime.onInstalled.addListener(async () => {
-    await setStoreReviewPromptAt(storage, today() + DAYS(3));
-  });
-
-  // Initialize for existing users
-  (async () => {
-    const dontPrompt = await getDontShowStoreReviewPromptAgain(storage);
-    if (dontPrompt) return undefined;
-    const currentDate = await getStoreReviewPromptAt(storage);
-    if (currentDate == null) {
-      await sleep(SECONDS(10));
-      await setStoreReviewPromptAt(storage, today() + DAYS(1));
-    }
-  })();
 }
 
 try {

@@ -3,8 +3,8 @@ import { initMessenger } from '~/scripts/messenger';
 import { initMetrics } from '~/scripts/metrics';
 import { initPageAction } from '~/scripts/page-action';
 import { initTabChange } from '~/scripts/tab-change';
-import { initStoreReviewPrompt } from '@anime-skip/player-ui/src/stores/store-review-prompt';
 import { error, loadedLog } from '~/utils/log';
+import { initStoreReviewPrompt } from './scripts/store-review-prompt';
 
 function init() {
   initMessenger();
@@ -12,7 +12,6 @@ function init() {
   initContextMenu();
   initTabChange();
   initPageAction();
-
   initStoreReviewPrompt();
 }
 
