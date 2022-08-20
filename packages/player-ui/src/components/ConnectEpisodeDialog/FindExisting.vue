@@ -70,17 +70,17 @@
 </template>
 
 <script lang="ts" setup>
-import { CreateEpisodePrefill } from '~/@types';
-import { useCreateEpisodeFromThirdParty } from '~/composables/useCreateEpisodeFromThirdParty';
-import { useEpisodeAutocomplete } from '~/composables/useEpisodeAutocomplete';
-import { useLinkEpisodeUrl } from '~/composables/useLinkEpisodeUrl';
-import { useShowAutocomplete } from '~/composables/useShowAutocomplete';
-import { useHideDialog } from '~/stores/useDialogState';
-import { TIMESTAMP_SOURCES } from '~/utils/constants';
-import { error, warn } from '~/utils/log';
-import * as Api from '~api';
-import { TextInputRef } from '~types';
-import EpisodeUtils from '~utils/episode-utils';
+import { CreateEpisodePrefill } from '../../@types';
+import { useCreateEpisodeFromThirdParty } from '../../composables/useCreateEpisodeFromThirdParty';
+import { useEpisodeAutocomplete } from '../../composables/useEpisodeAutocomplete';
+import { useLinkEpisodeUrl } from '../../composables/useLinkEpisodeUrl';
+import { useShowAutocomplete } from '../../composables/useShowAutocomplete';
+import { useHideDialog } from '../../stores/useDialogState';
+import { TIMESTAMP_SOURCES } from '../../utils/constants';
+import { error, warn } from '../../utils/log';
+import * as Api from 'common/src/api';
+import { TextInputRef } from 'common/src/types';
+import EpisodeUtils from 'common/src/utils/episode-utils';
 
 const props = defineProps<{
   suggestions: Api.ThirdPartyEpisode[];

@@ -51,9 +51,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useGeneralPreferences, useUpdateLocalPref } from '~/stores/useGeneralPreferences';
-import { PLAYBACK_SPEEDS } from '~/utils/constants';
-import { PlaybackRate } from '~types';
+import { useGeneralPreferences, useUpdateLocalPref } from '../stores/useGeneralPreferences';
+import { PLAYBACK_SPEEDS } from '../utils/constants';
+import { PlaybackRate } from 'common/src/types';
 
 const props = defineProps<{
   showLess: boolean;

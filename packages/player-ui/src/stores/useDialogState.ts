@@ -1,6 +1,6 @@
-import { useIsLoggedIn } from '~/stores/useAuth';
-import { createProvideInject } from '~utils/createProvideInject';
-import { sleep } from '~utils/time';
+import { useIsLoggedIn } from '../stores/useAuth';
+import { createProvideInject } from 'common/src/utils/createProvideInject';
+import { sleep } from 'common/src/utils/time';
 import { useVideoController } from './useVideoState';
 
 type DialogId = 'PreferencesDialog' | 'TimestampsPanel' | 'ConnectEpisodeDialog';

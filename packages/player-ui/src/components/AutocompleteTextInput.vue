@@ -67,7 +67,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType, ref, watch } from 'vue';
-import { AutocompleteItem, TextInputRef } from '~types';
+import { AutocompleteItem, TextInputRef } from 'common/src/types';
 
 export default defineComponent({
   props: {

@@ -12,8 +12,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useIsLoggedIn } from '~/stores/useAuth';
-import { useDialogState, useHideLoginOverlay } from '~/stores/useDialogState';
+import { useIsLoggedIn } from '../stores/useAuth';
+import { useDialogState, useHideLoginOverlay } from '../stores/useDialogState';
 
 const dialogState = useDialogState();
 const isShowing = () => dialogState.isShowingLoginOverlay;
@@ -31,7 +31,7 @@ onMounted(autoclose);
 </script>
 
 <style lang="scss">
-@import '../utils/constants.scss';
+@import '../assets/constants.scss';
 
 #LoginDialog {
   padding-right: 16px;

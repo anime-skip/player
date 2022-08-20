@@ -1,8 +1,8 @@
 import { sendMessage } from '~/utils/web-ext-bridge';
 import { onScopeDispose } from 'vue';
 import Browser from 'webextension-polyfill';
-import { createSharedComposable } from '~/composables/createSharedComposable';
-import { usePlayerConfig } from '~/composables/usePlayerConfig';
+import { createSharedComposable } from '../composables/createSharedComposable';
+import { usePlayerConfig } from '../composables/usePlayerConfig';
 import { log } from '~/utils/log';
 
 interface ChangeUrlMessage {

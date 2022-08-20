@@ -8,14 +8,10 @@
   },
   "type": "module",
   "main": "src/index.ts",
-  "exports": {
-    ".": "./src/index.ts",
-    "./vite": "./vite.config.ts"
-  },
   "scripts": {
     "compile": "vue-tsc --noEmit",
-    "lint": "eslint . --ext .ts,.vue --max-warnings 0 --fix",
-    "lint:check": "eslint . --ext .js,.ts,.vue --max-warnings 0"
+    "lint": "pnpm lint:check -- --fix",
+    "lint:check": "pnpm eslint . --ext .ts,.vue --max-warnings 0"
   },
   "dependencies": {
     "@anime-skip/api-client": "^2.6.2",
@@ -35,6 +31,7 @@
     "vue-use-request-state": "^0.2.2"
   },
   "devDependencies": {
+    "@anime-skip/eslint-config": "workspace:*",
     "@iconify/json": "^1.1.461",
     "@tailwindcss/line-clamp": "^0.2.2",
     "@types/lodash.isequal": "^4.5.6",

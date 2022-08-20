@@ -1,4 +1,4 @@
-import * as Api from '~api';
+import * as Api from 'common/src/api';
 import { isTimestampLocal } from '../utils/isTimestampLocal';
 
 function useTimelineColors() {

@@ -1,10 +1,10 @@
 import { RequestState } from 'vue-use-request-state';
-import { useApiClient } from '~/composables/useApiClient';
-import { useUpdateEpisodeRequestState } from '~/stores/useEpisodeState';
-import { useDuration } from '~/stores/useVideoState';
+import { useApiClient } from '../composables/useApiClient';
+import { useUpdateEpisodeRequestState } from '../stores/useEpisodeState';
+import { useDuration } from '../stores/useVideoState';
 import { warn } from '~/utils/log';
-import * as Api from '~api';
-import GeneralUtils from '~utils/GeneralUtils';
+import * as Api from 'common/src/api';
+import GeneralUtils from 'common/src/utils/GeneralUtils';
 import { useLoadAllEpisodeData } from './useLoadAllEpisodeData';
 import { useTabUrl } from './useTabUrl';
 

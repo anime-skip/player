@@ -1,6 +1,6 @@
-import { usePlayerConfig } from '~/composables/usePlayerConfig';
-import { useGeneralPreferences } from '~/stores/useGeneralPreferences';
-import { ColorTheme } from '~api';
+import { usePlayerConfig } from '../composables/usePlayerConfig';
+import { useGeneralPreferences } from '../stores/useGeneralPreferences';
+import { ColorTheme } from 'common/src/api';
 
 const colorThemeToCssClassNameMap: Record<ColorTheme, Service | undefined> = {
   ANIME_SKIP_BLUE: undefined,

@@ -1,12 +1,12 @@
 import { useTimeoutFn } from '@vueuse/core';
 import { Ref } from 'vue';
-import { usePlayerConfig } from '~/composables/usePlayerConfig';
+import { usePlayerConfig } from '../composables/usePlayerConfig';
 import {
   useIncrementPlayTicks,
   usePlayHistory,
   useUpdatePlayHistory,
-} from '~/stores/usePlayHistory';
-import { useVideoController, useVideoState } from '~/stores/useVideoState';
+} from '../stores/usePlayHistory';
+import { useVideoController, useVideoState } from '../stores/useVideoState';
 import { log } from '~/utils/log';
 import UsageStats from '~/utils/UsageStats';
 import { useTabUrl } from './useTabUrl';

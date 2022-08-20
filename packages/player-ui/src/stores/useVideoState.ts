@@ -1,8 +1,7 @@
 import { Utils as UiUtils } from '@anime-skip/ui';
-import { usePlayerConfig } from '~/composables/usePlayerConfig';
-import { PLAYER_ACTIVITY_TIMEOUT } from '~/utils/constants';
-import UsageStats from '~/utils/UsageStats';
-import { createProvideInject } from '~utils/createProvideInject';
+import { usePlayerConfig } from '../composables/usePlayerConfig';
+import { PLAYER_ACTIVITY_TIMEOUT } from '../utils/constants';
+import { createProvideInject } from 'common/src/utils/createProvideInject';
 
 export interface VideoState {
   /**
@@ -83,7 +82,7 @@ export { provideVideoState, useVideoState, useUpdateVideoState };
 export function useVideoController() {
   const state = useVideoState();
   const update = useUpdateVideoState();
-  const { getVideo } = usePlayerConfig();
+  const { getVideo, usageClient } = usePlayerConfig();
 
   return {
     // Play/Pause
@@ -94,8 +93,8 @@ export function useVideoController() {
       update({ isPaused: true });
     },
     togglePlayPause(): void {
-      if (state.isPaused) void UsageStats.saveEvent('play', { atTime: state.currentTime });
-      else void UsageStats.saveEvent('pause', { atTime: state.currentTime });
+      if (state.isPaused) void usageClient.saveEvent('play', { atTime: state.currentTime });
+      else void usageClient.saveEvent('pause', { atTime: state.currentTime });
       update({ isPaused: !state.isPaused });
     },
     setPlaybackRate(newPlaybackRate: number): void {

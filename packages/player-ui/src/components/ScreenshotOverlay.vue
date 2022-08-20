@@ -28,7 +28,7 @@
 <script lang="ts" setup>
 import { useTimeout } from '@anime-skip/ui';
 import { ref } from 'vue';
-import { usePlayerStorage } from '~/composables/usePlayerStorage';
+import { usePlayerStorage } from '../composables/usePlayerStorage';
 import { log } from '~/utils/log';
 
 interface ImageDetails {

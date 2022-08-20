@@ -1,7 +1,7 @@
-import { useUpdateEditingState } from '~/stores/useEditingState';
-import { useUpdateEpisodeState } from '~/stores/useEpisodeState';
-import { useUpdateInferredTimestamps } from '~/stores/useInferredEpisodeState';
-import { useUpdateTemplateState } from '~/stores/useTemplateState';
+import { useUpdateEditingState } from '../stores/useEditingState';
+import { useUpdateEpisodeState } from '../stores/useEpisodeState';
+import { useUpdateInferredTimestamps } from '../stores/useInferredEpisodeState';
+import { useUpdateTemplateState } from '../stores/useTemplateState';
 
 export function useClearAllEpisodeState() {
   const updateEpisodeState = useUpdateEpisodeState();

@@ -96,21 +96,24 @@
 import { useTimeout } from '@anime-skip/ui';
 import { computed, ref } from 'vue';
 import { RequestState } from 'vue-use-request-state';
-import { useDeleteTemplate } from '~/composables/useDeleteTemplate';
-import { useDisplayedTimestamps } from '~/composables/useDisplayedTimestamps';
-import { useEpisodeDisplayInfo } from '~/composables/useEpisodeDisplayInfo';
-import { useMatchingTemplate } from '~/composables/useMatchingTemplate';
-import useRadioIcon from '~/composables/useRadioIcon';
-import { useSaveNewTemplate } from '~/composables/useSaveNewTemplate';
-import { useSaveTemplate } from '~/composables/useSaveTemplate';
-import { useClearHoveredTimestamp, useUpdateHoveredTimestamp } from '~/stores/useHoveredTimestamp';
-import { useTemplateRequestState, useTemplateTimestamps } from '~/stores/useTemplateState';
-import { TIMESTAMP_TYPES } from '~/utils/constants';
-import { warn } from '~/utils/log';
-import * as Api from '~api';
-import { TemplateType } from '~api';
-import Utils from '~utils/GeneralUtils';
-import { SECONDS } from '~utils/time';
+import { useDeleteTemplate } from '../../composables/useDeleteTemplate';
+import { useDisplayedTimestamps } from '../../composables/useDisplayedTimestamps';
+import { useEpisodeDisplayInfo } from '../../composables/useEpisodeDisplayInfo';
+import { useMatchingTemplate } from '../../composables/useMatchingTemplate';
+import useRadioIcon from '../../composables/useRadioIcon';
+import { useSaveNewTemplate } from '../../composables/useSaveNewTemplate';
+import { useSaveTemplate } from '../../composables/useSaveTemplate';
+import {
+  useClearHoveredTimestamp,
+  useUpdateHoveredTimestamp,
+} from '../../stores/useHoveredTimestamp';
+import { useTemplateRequestState, useTemplateTimestamps } from '../../stores/useTemplateState';
+import { TIMESTAMP_TYPES } from '../../utils/constants';
+import { warn } from '../../utils/log';
+import * as Api from 'common/src/api';
+import { TemplateType } from 'common/src/api';
+import Utils from 'common/src/utils/GeneralUtils';
+import { SECONDS } from 'common/src/utils/time';
 import { useUpdateIsEditingTemplate } from './useTimestampPanelState';
 
 const deleteTemplate = useDeleteTemplate();

@@ -1,7 +1,7 @@
-import { useClearTokens } from '~/stores/useAuth';
-import { useResetPreferences } from '~/stores/useGeneralPreferences';
+import { useClearTokens } from '../stores/useAuth';
+import { useResetPreferences } from '../stores/useGeneralPreferences';
 import UsageStats from '~/utils/UsageStats';
-import { sleep } from '~utils/time';
+import { sleep } from 'common/src/utils/time';
 
 export function useLogout() {
   const clearTokens = useClearTokens();

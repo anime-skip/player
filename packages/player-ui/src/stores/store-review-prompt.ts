@@ -1,7 +1,7 @@
 import Browser from 'webextension-polyfill';
-import { usePlayerStorage } from '~/composables/usePlayerStorage';
+import { usePlayerStorage } from '../composables/usePlayerStorage';
 import { webExtStorage } from '~/utils/web-ext-storage';
-import { DAYS, SECONDS, sleep, today } from '~utils/time';
+import { DAYS, SECONDS, sleep, today } from 'common/src/utils/time';
 import { debug } from '../utils/log';
 
 const REVIEW_PROMPT_AT_KEY = 'storeReviewPromptAt';

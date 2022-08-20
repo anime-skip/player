@@ -42,8 +42,8 @@
 
 <script lang="ts" setup>
 import useRequestState from 'vue-use-request-state';
-import { useLogin } from '~/composables/useLogin';
-import { TextInputRef } from '~types';
+import { useLogin } from '../composables/useLogin';
+import { TextInputRef } from 'common/src/types';
 
 defineProps<{
   closeAfterLogin?: boolean;

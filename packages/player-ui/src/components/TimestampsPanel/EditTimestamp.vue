@@ -107,24 +107,24 @@
 <script lang="ts" setup>
 import { Utils } from '@anime-skip/ui';
 import fuzzysort from 'fuzzysort';
-import { useApplyTimestampDiff } from '~/composables/useApplyTimestampDiff';
-import { useDeleteDraftTimestamp } from '~/composables/useDeleteDraftTimestamp';
-import useKeyboardShortcutBindingDisplay from '~/composables/useKeyboardShortcutBindingDisplay';
-import { useKeyboardShortcuts } from '~/composables/useKeyboardShortcuts';
-import { useSaveDraftTimestamp } from '~/composables/useSaveDraftTimestamp';
-import { useHideDialog } from '~/stores/useDialogState';
+import { useApplyTimestampDiff } from '../../composables/useApplyTimestampDiff';
+import { useDeleteDraftTimestamp } from '../../composables/useDeleteDraftTimestamp';
+import useKeyboardShortcutBindingDisplay from '../../composables/useKeyboardShortcutBindingDisplay';
+import { useKeyboardShortcuts } from '../../composables/useKeyboardShortcuts';
+import { useSaveDraftTimestamp } from '../../composables/useSaveDraftTimestamp';
+import { useHideDialog } from '../../stores/useDialogState';
 import {
   EditTimestampMode,
   useActiveTimestamp,
   useClearActiveTimestamp,
   useEditTimestampMode,
   useUpdateActiveTimestamp,
-} from '~/stores/useEditingState';
-import { useEpisodeUrl } from '~/stores/useEpisodeState';
-import { useVideoController, useVideoState } from '~/stores/useVideoState';
-import { TIMESTAMP_TYPES, TIMESTAMP_TYPE_NOT_SELECTED } from '~/utils/constants';
-import { warn } from '~/utils/log';
-import * as Api from '~api';
+} from '../../stores/useEditingState';
+import { useEpisodeUrl } from '../../stores/useEpisodeState';
+import { useVideoController, useVideoState } from '../../stores/useVideoState';
+import { TIMESTAMP_TYPES, TIMESTAMP_TYPE_NOT_SELECTED } from '../../utils/constants';
+import { warn } from '../../utils/log';
+import * as Api from 'common/src/api';
 import { isTimestampLocal } from '../../utils/isTimestampLocal';
 
 const props = defineProps<{

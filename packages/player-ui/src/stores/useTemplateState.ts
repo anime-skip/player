@@ -1,7 +1,7 @@
 import { ComputedRef } from 'vue';
 import { RequestState } from 'vue-use-request-state';
-import * as Api from '~api';
-import { createProvideInject } from '~utils/createProvideInject';
+import * as Api from 'common/src/api';
+import { createProvideInject } from 'common/src/utils/createProvideInject';
 
 interface TemplateState {
   /**

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { onMessage, sendMessage } from '~/utils/web-ext-bridge';
-import { usePlayerConfig } from '~/composables/usePlayerConfig';
+import { usePlayerConfig } from '@anime-skip/player-ui/src/composables/usePlayerConfig';
 import { centerFitVideoBounds, fallbackBound } from '~utils/drawing';
 import { nextFrame } from '~utils/event-loop';
 

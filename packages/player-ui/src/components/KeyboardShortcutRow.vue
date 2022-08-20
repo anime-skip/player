@@ -37,7 +37,7 @@ import {
   KeyboardShortcutAction,
   usePrimaryKeyboardShortcutPrefs,
   useSecondaryKeyboardShortcutPrefs,
-} from '~/stores/useKeyboardShortcutPrefs';
+} from '../stores/useKeyboardShortcutPrefs';
 
 const props = defineProps<{
   name: string;

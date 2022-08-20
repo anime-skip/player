@@ -15,7 +15,7 @@
 
 <script lang="ts" setup>
 import { Teleport } from 'vue';
-import { useHideOriginalPlayer, useIsOriginalPlayerVisible } from '~/stores/usePlayerVisibility';
+import { useHideOriginalPlayer, useIsOriginalPlayerVisible } from '../stores/usePlayerVisibility';
 
 const shouldShowReturnButton = useIsOriginalPlayerVisible();
 

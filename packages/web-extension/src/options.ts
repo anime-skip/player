@@ -1,10 +1,10 @@
 import ui from '@anime-skip/ui';
 import { createApp } from 'vue';
 import 'vue-global-api';
-import OptionsContainer from '~/components/OptionsContainer.vue';
+import OptionsContainer from '@anime-skip/player-ui/src/components/OptionsContainer.vue';
 import '~/styles';
-import { Provider } from './components/Provider';
-import { providePlayerStorage } from './composables/usePlayerConfig';
+import { Provider } from '@anime-skip/player-ui/src/components/Provider';
+import { providePlayerStorage } from '@anime-skip/player-ui/src/composables/usePlayerConfig';
 import { createPlayerWebExtStorage } from './utils/player-web-ext-storage';
 
 const Root = Provider(() => providePlayerStorage(createPlayerWebExtStorage()), OptionsContainer);

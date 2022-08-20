@@ -41,3 +41,5 @@ export function createCustomAnimeSkipClient(
     ...customMethods,
   };
 }
+
+export type CustomAnimeSkipClient = ReturnType<typeof createCustomAnimeSkipClient>;

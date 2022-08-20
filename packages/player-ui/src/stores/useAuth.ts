@@ -1,5 +1,5 @@
 import { webExtStorage } from '~/utils/web-ext-storage';
-import { Auth } from '~types';
+import { Auth } from 'common/src/types';
 import { createWebExtProvideInject } from '../utils/createWebExtProvideInject';
 
 export const AUTH_STORAGE_KEY = 'auth';
@@ -9,7 +9,7 @@ const {
   provideValue: provideAuth,
   useUpdate: useUpdateAuth,
   useValue: useAuth,
-} = createWebExtProvideInject<Auth>(AUTH_STORAGE_KEY, AUTH_STORAGE_LOCATION, {
+} = createWebExtProvideInject<Auth>(AUTH_STORAGE_KEY, {
   token: undefined,
   refreshToken: undefined,
 });

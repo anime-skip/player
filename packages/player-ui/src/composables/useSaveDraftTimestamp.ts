@@ -1,6 +1,6 @@
-import { useDraftTimestamps, useUpdateDraftTimestamps } from '~/stores/useEditingState';
-import * as Api from '~api';
-import GeneralUtils from '~utils/GeneralUtils';
+import { useDraftTimestamps, useUpdateDraftTimestamps } from '../stores/useEditingState';
+import * as Api from 'common/src/api';
+import GeneralUtils from 'common/src/utils/GeneralUtils';
 
 export function useSaveDraftTimestamp() {
   const updateDraftTimestamps = useUpdateDraftTimestamps();

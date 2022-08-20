@@ -1,9 +1,9 @@
 import { Ref } from 'vue';
-import { useApiClient } from '~/composables/useApiClient';
-import * as Api from '~api';
-import { EPISODE_SEARCH_RESULT_DATA } from '~api';
-import { AutocompleteItem } from '~types';
-import * as Mappers from '~utils/mappers';
+import { useApiClient } from '../composables/useApiClient';
+import * as Api from 'common/src/api';
+import { EPISODE_SEARCH_RESULT_DATA } from 'common/src/api';
+import { AutocompleteItem } from 'common/src/types';
+import * as Mappers from 'common/src/utils/mappers';
 
 export function useEpisodeAutocomplete(
   defaultEpisodeItem: AutocompleteItem<Api.EpisodeSearchResult>,

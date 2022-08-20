@@ -41,7 +41,7 @@ export default defineConfig({
   plugins: [
     icons({
       customCollections: {
-        my: FileSystemIconLoader(rootPath('src', 'assets')),
+        my: FileSystemIconLoader(rootPath('..', 'player-ui', 'src', 'assets')),
       },
     }),
     components({

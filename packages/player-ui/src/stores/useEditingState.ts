@@ -1,6 +1,6 @@
-import * as Api from '~api';
-import { createProvideInject } from '~utils/createProvideInject';
-import GeneralUtils from '~utils/GeneralUtils';
+import * as Api from 'common/src/api';
+import { createProvideInject } from 'common/src/utils/createProvideInject';
+import GeneralUtils from 'common/src/utils/GeneralUtils';
 
 export enum EditTimestampMode {
   ADD,

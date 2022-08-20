@@ -91,6 +91,10 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Check Lint
+        run: pnpm lint:check
+        working-directory: packages/web-extension
+
       - name: Type Check
         run: pnpm compile
         working-directory: packages/common
@@ -120,6 +124,10 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Check Lint
+        run: pnpm lint:check
+        working-directory: packages/web-extension
+
       - name: Type Check
         run: pnpm compile
         working-directory: packages/web-ext-bridge
@@ -145,10 +153,10 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Check Lint
+        run: pnpm lint:check
+        working-directory: packages/web-extension
+
       - name: Type Check
         run: pnpm compile
-        working-directory: packages/player-ui
-
-      - name: Lint
-        run: pnpm lint:check
         working-directory: packages/player-ui

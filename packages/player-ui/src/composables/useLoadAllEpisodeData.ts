@@ -1,9 +1,9 @@
 import { RequestState } from 'vue-use-request-state';
-import { useEpisodeUrl } from '~/stores/useEpisodeState';
+import { useEpisodeUrl } from '../stores/useEpisodeState';
 import {
   useInferredEpisode,
   useUpdateInferredEpisodeState,
-} from '~/stores/useInferredEpisodeState';
+} from '../stores/useInferredEpisodeState';
 import { log, warn } from '~/utils/log';
 import { useClearAllEpisodeState } from './useClearAllEpisodeState';
 import { useFetchEpisodeByUrl } from './useFetchEpisodeByUrl';

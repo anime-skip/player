@@ -33,9 +33,9 @@
 
 <script lang="ts" setup>
 import Browser from 'webextension-polyfill';
-import { usePlayerStorage } from '~/composables/usePlayerStorage';
-import { isUrlSupported } from '~/stores/url-supported';
-import { useIsLoggedIn } from '~/stores/useAuth';
+import { usePlayerStorage } from '@anime-skip/player-ui/src/composables/usePlayerStorage';
+import { isUrlSupported } from '../utils/url-supported';
+import { useIsLoggedIn } from '@anime-skip/player-ui/src/stores/useAuth';
 import { log } from '~/utils/log';
 import UsageStats from '~/utils/UsageStats';
 import { detectBrowser } from '~utils/browser';

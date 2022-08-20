@@ -1,5 +1,5 @@
-import { useEpisodeState } from '~/stores/useEpisodeState';
-import * as Api from '~api';
+import { useEpisodeState } from '../stores/useEpisodeState';
+import * as Api from 'common/src/api';
 
 /**
  * Return a utility that will compare the passed in timestamp to the one that is saved remotely,

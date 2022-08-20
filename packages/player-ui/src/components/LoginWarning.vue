@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useShowLoginOverlay } from '~/stores/useDialogState';
+import { useShowLoginOverlay } from '../stores/useDialogState';
 
 defineProps<{ before?: string }>();
 

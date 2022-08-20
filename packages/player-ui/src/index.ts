@@ -2,28 +2,25 @@ import ui from '@anime-skip/ui';
 import { createApp } from 'vue';
 import 'vue-global-api';
 import '~/assets/themes.scss';
-import FakeRouterLink from '~/components/FakeRouterLink.vue';
-import { PlayerContainer } from '~/components/PlayerContainer';
-import { Provider } from '~/components/Provider';
-import { providePlayerConfig } from '~/composables/usePlayerConfig';
+import FakeRouterLink from './components/FakeRouterLink.vue';
+import { PlayerContainer } from './components/PlayerContainer';
+import { Provider } from './components/Provider';
+import { providePlayerConfig } from './composables/usePlayerConfig';
 import '~/styles';
-import { debug, log, warn } from '~/utils/log';
-import { createPlayerWebExtStorage } from '~/utils/player-web-ext-storage';
-import { ExternalPlayerConfig, InternalPlayerConfig } from '~types';
-import GeneralUtils from '~utils/GeneralUtils';
-import { sleep } from '~utils/time';
+import { debug, log, warn } from './utils/log';
+import { ExternalPlayerConfig, InternalPlayerConfig } from 'common/src/types';
+import GeneralUtils from 'common/src/utils/GeneralUtils';
+import { sleep } from 'common/src/utils/time';
 
 function mapExternalConfig(config: ExternalPlayerConfig): InternalPlayerConfig {
   return {
     ...config,
     onPlayDebounceMs: config.onPlayDebounceMs ?? 0,
     transformServiceUrl: config.transformServiceUrl ?? GeneralUtils.stripUrl,
-    storage: createPlayerWebExtStorage(),
   };
 }
 
-// TODO git mv to player-ui
-export function loadPlayerUi(config: ExternalPlayerConfig) {
+export function mountPlayerUi(config: ExternalPlayerConfig) {
   log('Loading Player UI', { config });
 
   // Initial Setup

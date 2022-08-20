@@ -1,4 +1,4 @@
-import { InternalPlayerConfig, PlayerConfig, PlayerStorage } from '~types';
+import { InternalPlayerConfig, PlayerConfig, PlayerStorage } from 'common/src/types';
 
 const CONFIG_INJECTION_KEY = Symbol('player-config');
 const STORAGE_INJECTION_KEY = Symbol('player-storage');

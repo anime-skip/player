@@ -1,4 +1,4 @@
-import { createProvideInject } from '~utils/createProvideInject';
+import { createProvideInject } from 'common/src/utils/createProvideInject';
 
 interface TimestampsPanelState {
   isEditingTemplate: boolean;

@@ -185,7 +185,7 @@
 import {
   usePrimaryKeyboardShortcutPrefs,
   useSecondaryKeyboardShortcutPrefs,
-} from '~/stores/useKeyboardShortcutPrefs';
+} from '../stores/useKeyboardShortcutPrefs';
 
 // Updates
 

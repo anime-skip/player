@@ -1,6 +1,6 @@
-import { useApiClient } from '~/composables/useApiClient';
-import * as Api from '~api';
-import GeneralUtils from '~utils/GeneralUtils';
+import { useApiClient } from '../composables/useApiClient';
+import * as Api from 'common/src/api';
+import GeneralUtils from 'common/src/utils/GeneralUtils';
 
 export function useSaveTemplateTimestamps() {
   const api = useApiClient();

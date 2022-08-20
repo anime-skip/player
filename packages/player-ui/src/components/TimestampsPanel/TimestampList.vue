@@ -111,29 +111,32 @@
 
 <script lang="ts" setup>
 import { useTimeout, Utils } from '@anime-skip/ui';
-import { useCanEditTimestamps } from '~/composables/useCanEditTimestamps';
-import { useCreateNewTimestamp } from '~/composables/useCreateNewTimestamp';
-import { useDeleteDraftTimestamp } from '~/composables/useDeleteDraftTimestamp';
-import { useDisplayedTimestamps } from '~/composables/useDisplayedTimestamps';
-import { useMatchingTemplate } from '~/composables/useMatchingTemplate';
-import { useStartEditing } from '~/composables/useStartEditing';
-import { useStopEditing } from '~/composables/useStopEditing';
-import { useGetTimestampColor } from '~/composables/useTimelineColors';
-import { useIsLoggedIn } from '~/stores/useAuth';
-import { useHideDialog } from '~/stores/useDialogState';
+import { useCanEditTimestamps } from '../../composables/useCanEditTimestamps';
+import { useCreateNewTimestamp } from '../../composables/useCreateNewTimestamp';
+import { useDeleteDraftTimestamp } from '../../composables/useDeleteDraftTimestamp';
+import { useDisplayedTimestamps } from '../../composables/useDisplayedTimestamps';
+import { useMatchingTemplate } from '../../composables/useMatchingTemplate';
+import { useStartEditing } from '../../composables/useStartEditing';
+import { useStopEditing } from '../../composables/useStopEditing';
+import { useGetTimestampColor } from '../../composables/useTimelineColors';
+import { useIsLoggedIn } from '../../stores/useAuth';
+import { useHideDialog } from '../../stores/useDialogState';
 import {
   EditTimestampMode,
   useIsEditing,
   useIsSavingChanges,
   useUpdateActiveTimestamp,
   useUpdateEditTimestampMode,
-} from '~/stores/useEditingState';
-import { useEpisodeUrl } from '~/stores/useEpisodeState';
-import { useClearHoveredTimestamp, useUpdateHoveredTimestamp } from '~/stores/useHoveredTimestamp';
-import { useVideoController } from '~/stores/useVideoState';
-import { TIMESTAMP_SOURCES, TIMESTAMP_TYPES } from '~/utils/constants';
-import * as Api from '~api';
-import { SECONDS } from '~utils/time';
+} from '../../stores/useEditingState';
+import { useEpisodeUrl } from '../../stores/useEpisodeState';
+import {
+  useClearHoveredTimestamp,
+  useUpdateHoveredTimestamp,
+} from '../../stores/useHoveredTimestamp';
+import { useVideoController } from '../../stores/useVideoState';
+import { TIMESTAMP_SOURCES, TIMESTAMP_TYPES } from '../../utils/constants';
+import * as Api from 'common/src/api';
+import { SECONDS } from 'common/src/utils/time';
 import { useUpdateIsEditingTemplate } from './useTimestampPanelState';
 
 const timestampTypeMap = TIMESTAMP_TYPES.reduce<{ [typeId: string]: Api.TimestampType }>(

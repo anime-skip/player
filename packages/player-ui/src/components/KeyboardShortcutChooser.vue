@@ -59,9 +59,9 @@ unset</pre
 </template>
 
 <script lang="ts" setup>
-import { useDuplicateBindingChecker } from '~/composables/useDubplicateBindingChecker';
+import { useDuplicateBindingChecker } from '../composables/useDubplicateBindingChecker';
 import { debug } from '~/utils/log';
-import Utils from '~utils/GeneralUtils';
+import Utils from 'common/src/utils/GeneralUtils';
 
 const props = defineProps<{
   shortcut?: string;

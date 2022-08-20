@@ -1,18 +1,17 @@
-import { usePlayerConfig } from '~/composables/usePlayerConfig';
-import { useIsLoggedIn } from '~/stores/useAuth';
-import { useShowDialog, useShowLoginOverlay } from '~/stores/useDialogState';
+import { usePlayerConfig } from '../composables/usePlayerConfig';
+import { useIsLoggedIn } from '../stores/useAuth';
+import { useShowDialog, useShowLoginOverlay } from '../stores/useDialogState';
 import {
   EditTimestampMode,
   useUpdateActiveTimestamp,
   useUpdateEditTimestampMode,
-} from '~/stores/useEditingState';
-import { useGeneralPreferences } from '~/stores/useGeneralPreferences';
-import { useVideoController } from '~/stores/useVideoState';
-import { TIMESTAMP_TYPE_NOT_SELECTED } from '~/utils/constants';
-import { warn } from '~/utils/log';
-import UsageStats from '~/utils/UsageStats';
-import { TimestampSource } from '~api';
-import GeneralUtils from '~utils/GeneralUtils';
+} from '../stores/useEditingState';
+import { useGeneralPreferences } from '../stores/useGeneralPreferences';
+import { useVideoController } from '../stores/useVideoState';
+import { TIMESTAMP_TYPE_NOT_SELECTED } from '../utils/constants';
+import { warn } from '../utils/log';
+import { TimestampSource } from 'common/src/api';
+import GeneralUtils from 'common/src/utils/GeneralUtils';
 import { useStartEditing } from './useStartEditing';
 
 export function useCreateNewTimestamp() {
@@ -47,7 +46,9 @@ export function useCreateNewTimestamp() {
       return;
     }
 
-    void UsageStats.saveEvent('started_creating_timestamp', { atTime: video.currentTime });
+    void playerConfig.usageClient.saveEvent('started_creating_timestamp', {
+      atTime: video.currentTime,
+    });
     startEditing(() => {
       updateEditTimestampMode(EditTimestampMode.ADD);
       updateActiveTimestamp({

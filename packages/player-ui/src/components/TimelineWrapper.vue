@@ -42,22 +42,24 @@
 <script lang="ts" setup>
 import { Utils as UiUtils } from '@anime-skip/ui';
 import { computed, ref, watch } from 'vue';
-import { useDisplayedTimestamps } from '~/composables/useDisplayedTimestamps';
-import { useGetTimestampColor } from '~/composables/useTimelineColors';
-import { useIsLoggedIn } from '~/stores/useAuth';
-import { useEditingState, useIsEditing } from '~/stores/useEditingState';
-import { useGeneralPreferences } from '~/stores/useGeneralPreferences';
-import { useHoveredTimestampId } from '~/stores/useHoveredTimestamp';
-import { usePlayHistory, useUpdatePlayHistory } from '~/stores/usePlayHistory';
-import { useDuration, useVideoController, useVideoState } from '~/stores/useVideoState';
-import { TIMESTAMP_TYPES } from '~/utils/constants';
-import UsageStats from '~/utils/UsageStats';
-import * as Api from '~api';
-import Utils from '~utils/GeneralUtils';
+import { useDisplayedTimestamps } from '../composables/useDisplayedTimestamps';
+import { useGetTimestampColor } from '../composables/useTimelineColors';
+import { useIsLoggedIn } from '../stores/useAuth';
+import { useEditingState, useIsEditing } from '../stores/useEditingState';
+import { useGeneralPreferences } from '../stores/useGeneralPreferences';
+import { useHoveredTimestampId } from '../stores/useHoveredTimestamp';
+import { usePlayHistory, useUpdatePlayHistory } from '../stores/usePlayHistory';
+import { useDuration, useVideoController, useVideoState } from '../stores/useVideoState';
+import { TIMESTAMP_TYPES } from '../utils/constants';
+import * as Api from 'common/src/api';
+import Utils from 'common/src/utils/GeneralUtils';
+import { usePlayerConfig } from '../composables/usePlayerConfig';
 
 const props = defineProps<{
   isFlipped?: boolean;
 }>();
+
+const { usageClient } = usePlayerConfig();
 
 const preferences = useGeneralPreferences();
 const { setCurrentTime } = useVideoController();
@@ -166,7 +168,7 @@ watch(currentTime, (newTime, oldTime) => {
   ) {
     updatePlayHistory({ hasSkippedFromZero: true });
     goToNextTimestampOnTimeChange(newTime);
-    void UsageStats.saveEvent('skipped_timestamp', {
+    void usageClient.saveEvent('skipped_timestamp', {
       fromTime: oldTime,
       toTime: newTime,
       skippedDuration: oldTime - newTime,

@@ -2,7 +2,7 @@ import { setup9animePlayer } from '~/modules/9anime/player';
 import { initCrunchyrollPlayer } from '~/modules/crunchyroll/player';
 import { initFunimation20210926Player } from '~/modules/funimation-2021-09-26/player';
 import { initFunimationPlayer } from '~/modules/funimation/player';
-import { loadPlayerUi } from '~/modules/player';
+import { mountPlayerUi } from '@anime-skip/player-ui';
 import { initTestServicePlayer } from '~/modules/test-service/player';
 import { initVrvPlayer } from '~/modules/vrv/player';
 import { setupZoroPlayer } from '~/modules/zoro/player';
@@ -26,7 +26,7 @@ function init() {
   for (const pattern in services) {
     if (urlPatternMatch(pattern, window.location)) {
       const playerConfig = services[pattern as PlayerHosts]();
-      return loadPlayerUi(playerConfig);
+      return mountPlayerUi(playerConfig);
     }
   }
 }

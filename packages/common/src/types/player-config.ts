@@ -1,8 +1,10 @@
 import joi from 'joi';
+import { CustomAnimeSkipClient } from '../utils/CustomApiClient';
 import { InferredEpisodeInfo, PlayerOptionGroup } from './models';
 import { WithRequired } from './modifiers';
 import { PlayerStorage } from './player-storage';
 import { ScreenshotController } from './screenshot-controller';
+import { UsageStatsClient } from '@anime-skip/usage-stats-client';
 
 export interface ExternalPlayerConfig {
   service: string;
@@ -95,7 +97,7 @@ export interface ExternalPlayerConfig {
    * Storage interface use to persist data to the browser's storage between player visits. Things
    * like your preferences and player settings are stored in this storage.
    */
-  storage?: PlayerStorage;
+  storage: PlayerStorage;
 
   /**
    * Method that opens the "all settings" page
@@ -107,6 +109,9 @@ export interface ExternalPlayerConfig {
    * captures the screen.
    */
   screenshotController: ScreenshotController;
+  apiClient: CustomAnimeSkipClient;
+  isUrlSupported(url: string): boolean;
+  usageClient: UsageStatsClient & { getUser(): string | Promise<string> };
 }
 
 export const PlayerConfig = joi.object<ExternalPlayerConfig, true>({
@@ -126,6 +131,9 @@ export const PlayerConfig = joi.object<ExternalPlayerConfig, true>({
   storage: joi.object().required(),
   openAllSettings: joi.func().required(),
   screenshotController: joi.object().required(),
+  apiClient: joi.object().required(),
+  isUrlSupported: joi.func().required(),
+  usageClient: joi.object().required(),
 });
 
 /**
@@ -133,5 +141,5 @@ export const PlayerConfig = joi.object<ExternalPlayerConfig, true>({
  */
 export type InternalPlayerConfig = WithRequired<
   ExternalPlayerConfig,
-  'transformServiceUrl' | 'onPlayDebounceMs' | 'storage'
+  'transformServiceUrl' | 'onPlayDebounceMs'
 >;

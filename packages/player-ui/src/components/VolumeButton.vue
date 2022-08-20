@@ -18,8 +18,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useKeyboardShortcuts } from '~/composables/useKeyboardShortcuts';
-import { useVideoController, useVideoState } from '~/stores/useVideoState';
+import { useKeyboardShortcuts } from '../composables/useKeyboardShortcuts';
+import { useVideoController, useVideoState } from '../stores/useVideoState';
 
 const isDragging = ref(false);
 

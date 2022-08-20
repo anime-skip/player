@@ -38,14 +38,14 @@
 
 <script lang="ts" setup>
 import useRequestState, { RequestState } from 'vue-use-request-state';
-import { CreateEpisodePrefill } from '~/@types';
-import { useApiClient } from '~/composables/useApiClient';
-import { useIsLoggedIn } from '~/stores/useAuth';
-import { useEpisodeRequestState } from '~/stores/useEpisodeState';
-import { useInferredEpisode } from '~/stores/useInferredEpisodeState';
-import { debug, log, warn } from '~/utils/log';
-import * as Api from '~api';
-import * as Mappers from '~utils/mappers';
+import { CreateEpisodePrefill } from '../../@types';
+import { useApiClient } from '../../composables/useApiClient';
+import { useIsLoggedIn } from '../../stores/useAuth';
+import { useEpisodeRequestState } from '../../stores/useEpisodeState';
+import { useInferredEpisode } from '../../stores/useInferredEpisodeState';
+import { debug, log, warn } from '../../utils/log';
+import * as Api from 'common/src/api';
+import * as Mappers from 'common/src/utils/mappers';
 
 const prefill = ref<CreateEpisodePrefill>({
   show: { title: '' },

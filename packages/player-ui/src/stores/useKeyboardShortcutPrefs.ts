@@ -1,4 +1,4 @@
-import { usePlayerStorage } from '~/composables/usePlayerStorage';
+import { usePlayerStorage } from '../composables/usePlayerStorage';
 import {
   DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS,
   DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS,

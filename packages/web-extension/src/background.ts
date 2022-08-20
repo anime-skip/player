@@ -3,7 +3,7 @@ import { initMessenger } from '~/scripts/messenger';
 import { initMetrics } from '~/scripts/metrics';
 import { initPageAction } from '~/scripts/page-action';
 import { initTabChange } from '~/scripts/tab-change';
-import { initStoreReviewPrompt } from '~/stores/store-review-prompt';
+import { initStoreReviewPrompt } from '@anime-skip/player-ui/src/stores/store-review-prompt';
 import { error, loadedLog } from '~/utils/log';
 
 function init() {

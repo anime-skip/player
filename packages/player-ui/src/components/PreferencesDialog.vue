@@ -75,11 +75,11 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue';
-import { usePlayerConfig } from '~/composables/usePlayerConfig';
-import useRadioIcon from '~/composables/useRadioIcon';
-import { useHideDialog } from '~/stores/useDialogState';
-import { useShowOriginalPlayer } from '~/stores/usePlayerVisibility';
-import { PlayerOption, PlayerOptionGroup } from '~types';
+import { usePlayerConfig } from '../composables/usePlayerConfig';
+import useRadioIcon from '../composables/useRadioIcon';
+import { useHideDialog } from '../stores/useDialogState';
+import { useShowOriginalPlayer } from '../stores/usePlayerVisibility';
+import { PlayerOption, PlayerOptionGroup } from 'common/src/types';
 
 const playerConfig = usePlayerConfig();
 
@@ -122,7 +122,7 @@ function showOriginalPlayer() {
 </script>
 
 <style lang="scss">
-@import '../utils/constants.scss';
+@import '../assets/constants.scss';
 
 #PreferencesDialog {
   padding-right: 16px;

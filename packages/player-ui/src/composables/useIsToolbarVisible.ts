@@ -1,7 +1,7 @@
-import { useIsEditing } from '~/stores/useEditingState';
-import { useGeneralPreferences } from '~/stores/useGeneralPreferences';
-import { usePlayHistory } from '~/stores/usePlayHistory';
-import { useVideoState } from '~/stores/useVideoState';
+import { useIsEditing } from '../stores/useEditingState';
+import { useGeneralPreferences } from '../stores/useGeneralPreferences';
+import { usePlayHistory } from '../stores/usePlayHistory';
+import { useVideoState } from '../stores/useVideoState';
 
 export function useIsToolbarVisible() {
   const videoState = useVideoState();

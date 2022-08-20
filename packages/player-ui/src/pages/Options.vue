@@ -41,14 +41,14 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { useIsLoggedIn } from '~/stores/useAuth';
+import { useIsLoggedIn } from '../stores/useAuth';
 import {
   useGeneralPreferences,
   useToggleBooleanPref,
   useUpdateRemotePref,
-} from '~/stores/useGeneralPreferences';
+} from '../stores/useGeneralPreferences';
 import UsageStats from '~/utils/UsageStats';
-import { ColorTheme } from '~api';
+import { ColorTheme } from 'common/src/api';
 
 onMounted(() => {
   void UsageStats.saveEvent('opened_all_settings');

@@ -59,27 +59,27 @@
 </template>
 
 <script lang="ts" setup>
-import { usePlayerConfig } from '~/composables/usePlayerConfig';
-import { useLoadAllEpisodeData } from '~/composables/useLoadAllEpisodeData';
-import { usePlaybackRateConnector } from '~/composables/usePlaybackRateConnector';
-import { useTabUrl } from '~/composables/useTabUrl';
-import { useTheme } from '~/composables/useTheme';
-import { useVideoElement } from '~/composables/useVideoElement';
-import { useDialogState } from '~/stores/useDialogState';
+import { usePlayerConfig } from '../composables/usePlayerConfig';
+import { useLoadAllEpisodeData } from '../composables/useLoadAllEpisodeData';
+import { usePlaybackRateConnector } from '../composables/usePlaybackRateConnector';
+import { useTabUrl } from '../composables/useTabUrl';
+import { useTheme } from '../composables/useTheme';
+import { useVideoElement } from '../composables/useVideoElement';
+import { useDialogState } from '../stores/useDialogState';
 import {
   useHideAnimeSkipPlayer,
   useIsAnimeSkipPlayerVisible,
   useIsOriginalPlayerVisible,
   useShowAnimeSkipPlayer,
-} from '~/stores/usePlayerVisibility';
+} from '../stores/usePlayerVisibility';
 import {
   usePlayHistory,
   useResetInitialBuffer,
   useResetSkippedFromZero,
-} from '~/stores/usePlayHistory';
-import { useVideoState } from '~/stores/useVideoState';
+} from '../stores/usePlayHistory';
+import { useVideoState } from '../stores/useVideoState';
 import UsageStats from '~/utils/UsageStats';
-import Utils from '~utils/GeneralUtils';
+import Utils from 'common/src/utils/GeneralUtils';
 
 onMounted(() => {
   void UsageStats.saveEvent('player_injected');

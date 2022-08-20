@@ -45,26 +45,26 @@
 <script lang="ts" setup>
 import { Utils as UiUtils } from '@anime-skip/ui';
 import { useFullscreen } from '@vueuse/core';
-import { usePlayerConfig } from '~/composables/usePlayerConfig';
-import { useCreateNewTimestamp } from '~/composables/useCreateNewTimestamp';
-import { useDisplayedTimestamps } from '~/composables/useDisplayedTimestamps';
-import { useIsToolbarVisible } from '~/composables/useIsToolbarVisible';
-import { useKeyboardShortcuts } from '~/composables/useKeyboardShortcuts';
-import { useStopEditing } from '~/composables/useStopEditing';
-import { useHideDialog, useShowDialog, useToggleDialog } from '~/stores/useDialogState';
+import { usePlayerConfig } from '../composables/usePlayerConfig';
+import { useCreateNewTimestamp } from '../composables/useCreateNewTimestamp';
+import { useDisplayedTimestamps } from '../composables/useDisplayedTimestamps';
+import { useIsToolbarVisible } from '../composables/useIsToolbarVisible';
+import { useKeyboardShortcuts } from '../composables/useKeyboardShortcuts';
+import { useStopEditing } from '../composables/useStopEditing';
+import { useHideDialog, useShowDialog, useToggleDialog } from '../stores/useDialogState';
 import {
   EditTimestampMode,
   useEditingState,
   useIsEditing,
   useUpdateActiveTimestamp,
   useUpdateEditTimestampMode,
-} from '~/stores/useEditingState';
-import { useGeneralPreferences } from '~/stores/useGeneralPreferences';
-import { useDuration, useVideoController, useVideoState } from '~/stores/useVideoState';
-import { FRAME, LOOKUP_PREV_TIMESTAMP_OFFSET } from '~/utils/constants';
-import { warn } from '~/utils/log';
-import * as Api from '~api';
-import Utils from '~utils/GeneralUtils';
+} from '../stores/useEditingState';
+import { useGeneralPreferences } from '../stores/useGeneralPreferences';
+import { useDuration, useVideoController, useVideoState } from '../stores/useVideoState';
+import { FRAME, LOOKUP_PREV_TIMESTAMP_OFFSET } from '../utils/constants';
+import { warn } from '../utils/log';
+import * as Api from 'common/src/api';
+import Utils from 'common/src/utils/GeneralUtils';
 
 // Video State
 
@@ -221,7 +221,7 @@ useKeyboardShortcuts('toolbar', {
 </script>
 
 <style lang="scss" scoped>
-@import '../utils/constants.scss';
+@import '../assets/constants.scss';
 
 .as-h-toolbar {
   height: $toolbarHeight;

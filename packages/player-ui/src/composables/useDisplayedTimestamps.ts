@@ -1,6 +1,6 @@
-import { useDraftTimestamps, useIsEditing } from '~/stores/useEditingState';
-import { useUneditedTimestamps } from '~/stores/useEpisodeState';
-import * as Api from '~api';
+import { useDraftTimestamps, useIsEditing } from '../stores/useEditingState';
+import { useUneditedTimestamps } from '../stores/useEpisodeState';
+import * as Api from 'common/src/api';
 
 /**
  * Used to return the current timestamps being displayed based on remote/template/edited timestamps

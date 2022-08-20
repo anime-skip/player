@@ -1,11 +1,11 @@
 import { RequestState } from 'vue-use-request-state';
-import { useApiClient } from '~/composables/useApiClient';
-import { useHideDialog } from '~/stores/useDialogState';
-import { useEpisodeUrl, useUpdateEpisodeRequestState } from '~/stores/useEpisodeState';
-import { useTemplateTimestamps } from '~/stores/useTemplateState';
+import { useApiClient } from '../composables/useApiClient';
+import { useHideDialog } from '../stores/useDialogState';
+import { useEpisodeUrl, useUpdateEpisodeRequestState } from '../stores/useEpisodeState';
+import { useTemplateTimestamps } from '../stores/useTemplateState';
 import { warn } from '~/utils/log';
-import * as Api from '~api';
-import GeneralUtils from '~utils/GeneralUtils';
+import * as Api from 'common/src/api';
+import GeneralUtils from 'common/src/utils/GeneralUtils';
 import { useFetchEpisodeByUrl } from './useFetchEpisodeByUrl';
 
 export interface CreateEpisodeDataPayload {

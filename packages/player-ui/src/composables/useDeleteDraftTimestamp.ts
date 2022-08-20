@@ -1,5 +1,5 @@
-import { useDraftTimestamps, useUpdateDraftTimestamps } from '~/stores/useEditingState';
-import * as Api from '~api';
+import { useDraftTimestamps, useUpdateDraftTimestamps } from '../stores/useEditingState';
+import * as Api from 'common/src/api';
 import { useStartEditing } from './useStartEditing';
 
 export function useDeleteDraftTimestamp() {

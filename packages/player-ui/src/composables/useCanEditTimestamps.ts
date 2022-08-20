@@ -1,5 +1,5 @@
-import { useIsLoggedIn } from '~/stores/useAuth';
-import { useEpisode, useEpisodeUrl } from '~/stores/useEpisodeState';
+import { useIsLoggedIn } from '../stores/useAuth';
+import { useEpisode, useEpisodeUrl } from '../stores/useEpisodeState';
 
 export function useCanEditTimestamps() {
   const isLoggedIn = useIsLoggedIn();

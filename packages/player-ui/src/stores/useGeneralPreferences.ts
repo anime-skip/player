@@ -1,8 +1,8 @@
 import { GqlPreferences } from '@anime-skip/api-client';
-import { useApiClient } from '~/composables/useApiClient';
-import * as Api from '~api';
-import { ColorTheme } from '~api';
-import { PickTypes } from '~types';
+import { useApiClient } from '../composables/useApiClient';
+import * as Api from 'common/src/api';
+import { ColorTheme } from 'common/src/api';
+import { PickTypes } from 'common/src/types';
 import { createWebExtProvideInject } from '../utils/createWebExtProvideInject';
 import { warn } from '../utils/log';
 
@@ -51,7 +51,6 @@ const {
   useValue: _useGeneralPreferences,
 } = createWebExtProvideInject<GeneralPreferences>(
   'general-preferences',
-  'local',
   DEFAULT_GENERAL_PREFERENCES
 );
 

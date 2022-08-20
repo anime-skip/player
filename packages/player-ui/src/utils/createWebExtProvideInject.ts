@@ -1,13 +1,8 @@
 import { Ref } from 'vue';
-import { usePlayerStorage } from '~/composables/usePlayerStorage';
-import { AreaName } from './web-ext-storage';
+import { usePlayerStorage } from '../composables/usePlayerStorage';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export function createWebExtProvideInject<T extends object>(
-  label: string,
-  _: AreaName,
-  defaultValue: T
-) {
+export function createWebExtProvideInject<T extends object>(label: string, defaultValue: T) {
   const valueKey = label + '-value';
   const updateKey = label + '-set-value';
   const provideValue = () => {

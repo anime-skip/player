@@ -1,8 +1,8 @@
 import { RequestState } from 'vue-use-request-state';
-import { useApiClient } from '~/composables/useApiClient';
-import { useUpdateTemplateRequestState, useUpdateTemplateState } from '~/stores/useTemplateState';
+import { useApiClient } from '../composables/useApiClient';
+import { useUpdateTemplateRequestState, useUpdateTemplateState } from '../stores/useTemplateState';
 import { log } from '~/utils/log';
-import * as Api from '~api';
+import * as Api from 'common/src/api';
 
 export function useDeleteTemplate() {
   const api = useApiClient();
