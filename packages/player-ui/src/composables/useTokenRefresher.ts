@@ -7,7 +7,7 @@ import { getAuthAsync, updateAuthAsync } from '../stores/useAuth';
 import * as Api from 'common/src/api';
 import { LogoutError } from 'common/src/utils/LogoutError';
 import { log, warn } from '../utils/log';
-import UsageStats from '../utils/UsageStats';
+import { usePlayerConfig } from './usePlayerConfig';
 
 const lock = new Mutex();
 
@@ -17,6 +17,7 @@ function isResponseExpiredToken(res: AxiosResponse<any>): boolean {
 }
 
 export default function useTokenRefresher(client: ReturnType<typeof createAnimeSkipClient>): void {
+  const { usageClient } = usePlayerConfig();
   client.axios.interceptors.request.use(async config => {
     if (!config.headers) config.headers = {};
     if (config.headers['Authorization'] == null) {
@@ -48,7 +49,7 @@ export default function useTokenRefresher(client: ReturnType<typeof createAnimeS
         refreshToken: auth.refreshToken,
       });
       await updateAuthAsync({ refreshToken: newTokens.refreshToken, token: newTokens.authToken });
-      void UsageStats.saveEvent('login_refresh');
+      void usageClient.saveEvent('login_refresh');
       log('Refreshed token!');
     } catch (err) {
       warn('Could not refresh token:', err);

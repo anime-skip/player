@@ -11,7 +11,7 @@ export function useLogin(api = useApiClient()) {
   const { usageClient } = usePlayerConfig();
 
   return async (username: string, password: string): Promise<Api.LoginResponse> => {
-    const res = await api.value.login(Api.LOGIN_QUERY, {
+    const res = await api.login(Api.LOGIN_QUERY, {
       usernameEmail: username,
       passwordHash: md5(password),
     });

@@ -5,6 +5,7 @@ import { WithRequired } from './modifiers';
 import { PlayerStorage } from './player-storage';
 import { ScreenshotController } from './screenshot-controller';
 import { UsageStatsClient } from '@anime-skip/usage-stats-client';
+import { Ref } from 'vue';
 
 export interface ExternalPlayerConfig {
   service: string;
@@ -109,9 +110,9 @@ export interface ExternalPlayerConfig {
    * captures the screen.
    */
   screenshotController: ScreenshotController;
-  apiClient: CustomAnimeSkipClient;
+  useApiClient: () => CustomAnimeSkipClient;
   isUrlSupported(url: string): boolean;
-  usageClient: UsageStatsClient & { getUser(): string | Promise<string> };
+  usageClient: UsageStatsClient & { getUserId(): string | Promise<string | undefined> | undefined };
 }
 
 export const PlayerConfig = joi.object<ExternalPlayerConfig, true>({
@@ -131,7 +132,7 @@ export const PlayerConfig = joi.object<ExternalPlayerConfig, true>({
   storage: joi.object().required(),
   openAllSettings: joi.func().required(),
   screenshotController: joi.object().required(),
-  apiClient: joi.object().required(),
+  useApiClient: joi.func().required(),
   isUrlSupported: joi.func().required(),
   usageClient: joi.object().required(),
 });

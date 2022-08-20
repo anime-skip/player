@@ -4,6 +4,10 @@ import { SECOND } from '~utils/time';
 import { debug, log, warn } from './log';
 import WebExtScreenshotController from '../components/WebExtScreenshotController.vue';
 import { sendMessage } from '~/utils/web-ext-bridge';
+import { createPlayerWebExtStorage } from './player-web-ext-storage';
+import UsageStats from './UsageStats';
+import { isUrlSupported } from './url-supported';
+import { useApiClient } from '~/composables/useApiClient';
 
 /**
  * Configures the default player config for a player injected by the web extension
@@ -66,6 +70,10 @@ export function setupPlayerConfig(
       void sendMessage('@anime-skip/open-all-settings', undefined);
     },
     screenshotController: WebExtScreenshotController,
+    storage: createPlayerWebExtStorage(),
+    usageClient: UsageStats,
+    useApiClient,
+    isUrlSupported,
   };
 }
 
