@@ -1,7 +1,7 @@
 import { useApiClient } from '../composables/useApiClient';
 import { useEpisodeTemplate, useUpdateTemplateState } from '../stores/useTemplateState';
 import { useDuration } from '../stores/useVideoState';
-import { debug, log } from '~/utils/log';
+import { debug, log } from '../utils/log';
 import * as Api from 'common/src/api';
 import GeneralUtils from 'common/src/utils/GeneralUtils';
 import { sleep } from 'common/src/utils/time';

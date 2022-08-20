@@ -2,7 +2,7 @@ import { RequestState } from 'vue-use-request-state';
 import { useApiClient } from '../composables/useApiClient';
 import { useUpdateEpisodeRequestState } from '../stores/useEpisodeState';
 import { useDuration } from '../stores/useVideoState';
-import { warn } from '~/utils/log';
+import { warn } from '../utils/log';
 import * as Api from 'common/src/api';
 import GeneralUtils from 'common/src/utils/GeneralUtils';
 import * as Mappers from 'common/src/utils/mappers';

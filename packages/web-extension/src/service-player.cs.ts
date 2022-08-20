@@ -9,7 +9,14 @@ import { setupZoroPlayer } from '~/modules/zoro/player';
 import { PlayerHosts } from '~/utils/compile-time-constants';
 import { error, loadedLog } from '~/utils/log';
 import { urlPatternMatch } from '~/utils/strings';
-import { ExternalPlayerConfig } from '~types';
+import { ExternalPlayerConfig, PlayerStorage } from '~types';
+import { DAYS, SECONDS, sleep, today } from '~utils/time';
+import {
+  getDontShowStoreReviewPromptAgain,
+  getStoreReviewPromptAt,
+  setStoreReviewPromptAt,
+} from '@anime-skip/player-ui/src/stores/store-review-prompt';
+import Browser from 'webextension-polyfill';
 
 const services: Record<PlayerHosts, () => ExternalPlayerConfig> = {
   [PlayerHosts.CRUNCHYROLL]: initCrunchyrollPlayer,
@@ -22,18 +29,39 @@ const services: Record<PlayerHosts, () => ExternalPlayerConfig> = {
   [PlayerHosts.NINE_ANIME]: setup9animePlayer,
 };
 
-function init() {
-  for (const pattern in services) {
-    if (urlPatternMatch(pattern, window.location)) {
-      const playerConfig = services[pattern as PlayerHosts]();
-      return mountPlayerUi(playerConfig);
+function initService(service: PlayerHosts) {
+  const playerConfig = services[service]();
+  initStoreReviewPrompt(playerConfig.storage);
+  return mountPlayerUi(playerConfig);
+}
+
+function initStoreReviewPrompt(storage: PlayerStorage) {
+  // Initialize for new users, NEEDS TO BE BEFORE FIRST AWAIT so it adds the listener synchronously
+  Browser.runtime.onInstalled.addListener(async () => {
+    await setStoreReviewPromptAt(storage, today() + DAYS(3));
+  });
+
+  // Initialize for existing users
+  (async () => {
+    const dontPrompt = await getDontShowStoreReviewPromptAgain(storage);
+    if (dontPrompt) return undefined;
+    const currentDate = await getStoreReviewPromptAt(storage);
+    if (currentDate == null) {
+      await sleep(SECONDS(10));
+      await setStoreReviewPromptAt(storage, today() + DAYS(1));
     }
-  }
+  })();
 }
 
 try {
   loadedLog('service-player.cs.ts');
-  init();
+
+  for (const pattern in services) {
+    if (urlPatternMatch(pattern, window.location)) {
+      initService(pattern as PlayerHosts);
+      break;
+    }
+  }
 } catch (err) {
   error(err);
 }

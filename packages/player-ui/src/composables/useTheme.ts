@@ -2,7 +2,7 @@ import { usePlayerConfig } from '../composables/usePlayerConfig';
 import { useGeneralPreferences } from '../stores/useGeneralPreferences';
 import { ColorTheme } from 'common/src/api';
 
-const colorThemeToCssClassNameMap: Record<ColorTheme, Service | undefined> = {
+const colorThemeToCssClassNameMap: Record<ColorTheme, string | undefined> = {
   ANIME_SKIP_BLUE: undefined,
   PER_SERVICE: undefined,
   CRUNCHYROLL_ORANGE: 'crunchyroll',
@@ -13,7 +13,7 @@ const colorThemeToCssClassNameMap: Record<ColorTheme, Service | undefined> = {
 /**
  * A map between services and their associated color themes
  */
-const serviceToTheme: Record<string, Service | undefined> = {
+const serviceToTheme: Record<string, string | undefined> = {
   'funimation-2021-09-26': 'funimation',
   crunchyroll: 'crunchyroll',
   funimation: 'funimation',

@@ -1,9 +1,8 @@
-import { sendMessage } from '~/utils/web-ext-bridge';
 import { onScopeDispose } from 'vue';
 import Browser from 'webextension-polyfill';
 import { createSharedComposable } from '../composables/createSharedComposable';
 import { usePlayerConfig } from '../composables/usePlayerConfig';
-import { log } from '~/utils/log';
+import { log } from '../utils/log';
 
 interface ChangeUrlMessage {
   type: '@anime-skip/changeUrl';
@@ -15,10 +14,10 @@ interface UnknownMessage {
 
 export const useTabUrl = createSharedComposable(function () {
   const tabUrl = ref<string>();
-  const { transformServiceUrl } = usePlayerConfig();
+  const { transformServiceUrl, getUrl } = usePlayerConfig();
 
   onMounted(async () => {
-    const initialUrl = await sendMessage('@anime-skip/get-url', undefined);
+    const initialUrl = await getUrl();
 
     const correctedNewUrl = transformServiceUrl(initialUrl);
     log('Initial URL: ' + correctedNewUrl);

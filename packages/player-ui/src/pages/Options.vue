@@ -47,11 +47,13 @@ import {
   useToggleBooleanPref,
   useUpdateRemotePref,
 } from '../stores/useGeneralPreferences';
-import UsageStats from '~/utils/UsageStats';
 import { ColorTheme } from 'common/src/api';
+import { usePlayerConfig } from '../composables/usePlayerConfig';
+
+const { usageClient } = usePlayerConfig();
 
 onMounted(() => {
-  void UsageStats.saveEvent('opened_all_settings');
+  void usageClient.saveEvent('opened_all_settings');
 });
 
 const isLoggedIn = useIsLoggedIn();

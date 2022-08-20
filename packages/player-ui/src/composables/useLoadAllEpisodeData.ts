@@ -4,7 +4,7 @@ import {
   useInferredEpisode,
   useUpdateInferredEpisodeState,
 } from '../stores/useInferredEpisodeState';
-import { log, warn } from '~/utils/log';
+import { log, warn } from '../utils/log';
 import { useClearAllEpisodeState } from './useClearAllEpisodeState';
 import { useFetchEpisodeByUrl } from './useFetchEpisodeByUrl';
 import { useFetchThirdPartyEpisode } from './useFetchThirdPartyEpisode';

@@ -113,6 +113,7 @@ export interface ExternalPlayerConfig {
   useApiClient: () => CustomAnimeSkipClient;
   isUrlSupported(url: string): boolean;
   usageClient: UsageStatsClient & { getUserId(): string | Promise<string | undefined> | undefined };
+  getUrl: () => string | Promise<string>;
 }
 
 export const PlayerConfig = joi.object<ExternalPlayerConfig, true>({
@@ -135,6 +136,7 @@ export const PlayerConfig = joi.object<ExternalPlayerConfig, true>({
   useApiClient: joi.func().required(),
   isUrlSupported: joi.func().required(),
   usageClient: joi.object().required(),
+  getUrl: joi.func().required(),
 });
 
 /**

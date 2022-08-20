@@ -60,7 +60,7 @@ unset</pre
 
 <script lang="ts" setup>
 import { useDuplicateBindingChecker } from '../composables/useDubplicateBindingChecker';
-import { debug } from '~/utils/log';
+import { debug } from '../utils/log';
 import Utils from 'common/src/utils/GeneralUtils';
 
 const props = defineProps<{

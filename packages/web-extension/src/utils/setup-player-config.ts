@@ -74,6 +74,7 @@ export function setupPlayerConfig(
     usageClient: UsageStats,
     useApiClient,
     isUrlSupported,
+    getUrl: () => sendMessage('@anime-skip/get-url', undefined),
   };
 }
 

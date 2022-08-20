@@ -3,7 +3,7 @@ import { usePlayerConfig } from '../composables/usePlayerConfig';
 import { useEpisode } from '../stores/useEpisodeState';
 import { useUpdateInferredEpisodeState } from '../stores/useInferredEpisodeState';
 import { useEpisodeTemplate } from '../stores/useTemplateState';
-import { warn } from '~/utils/log';
+import { warn } from '../utils/log';
 import { useFindTemplate } from './useFindTemplate';
 
 export function useInferEpisodeDetails() {

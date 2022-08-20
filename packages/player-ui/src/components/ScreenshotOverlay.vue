@@ -29,7 +29,7 @@
 import { useTimeout } from '@anime-skip/ui';
 import { ref } from 'vue';
 import { usePlayerStorage } from '../composables/usePlayerStorage';
-import { log } from '~/utils/log';
+import { log } from '../utils/log';
 
 interface ImageDetails {
   url: string;

@@ -2,7 +2,7 @@ import { RequestState } from 'vue-use-request-state';
 import { useApiClient } from '../composables/useApiClient';
 import { useEpisode, useEpisodeUrl } from '../stores/useEpisodeState';
 import { useUpdateTemplateRequestState } from '../stores/useTemplateState';
-import { warn } from '~/utils/log';
+import { warn } from '../utils/log';
 import * as Api from 'common/src/api';
 import { useFetchEpisodeByUrl } from './useFetchEpisodeByUrl';
 import { useSaveTemplateTimestamps } from './useSaveTemplateTimestamps';

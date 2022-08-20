@@ -3,7 +3,7 @@ import { useApiClient } from '../composables/useApiClient';
 import { useHideDialog } from '../stores/useDialogState';
 import { useEpisodeUrl, useUpdateEpisodeRequestState } from '../stores/useEpisodeState';
 import { useTemplateTimestamps } from '../stores/useTemplateState';
-import { warn } from '~/utils/log';
+import { warn } from '../utils/log';
 import * as Api from 'common/src/api';
 import GeneralUtils from 'common/src/utils/GeneralUtils';
 import { useFetchEpisodeByUrl } from './useFetchEpisodeByUrl';

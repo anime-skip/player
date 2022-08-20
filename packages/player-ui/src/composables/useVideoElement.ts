@@ -7,8 +7,7 @@ import {
   useUpdatePlayHistory,
 } from '../stores/usePlayHistory';
 import { useVideoController, useVideoState } from '../stores/useVideoState';
-import { log } from '~/utils/log';
-import UsageStats from '~/utils/UsageStats';
+import { log } from '../utils/log';
 import { useTabUrl } from './useTabUrl';
 
 export function useVideoElement() {
@@ -17,7 +16,7 @@ export function useVideoElement() {
   const updatePlayHistory = useUpdatePlayHistory();
   const incrementPlayTicks = useIncrementPlayTicks();
   const playHistory = usePlayHistory();
-  const { service, getVideo, onVideoChanged, onPlayDebounceMs } = usePlayerConfig();
+  const { service, getVideo, onVideoChanged, onPlayDebounceMs, usageClient } = usePlayerConfig();
   const video = ref(getVideo?.()) as Ref<HTMLVideoElement | undefined>;
   const url = useTabUrl();
   const canPlayCalled = ref(false);
@@ -82,7 +81,7 @@ export function useVideoElement() {
       ) {
         reportedService = 'crunchyroll-beta';
       }
-      void UsageStats.saveEvent('episode_started', {
+      void usageClient.saveEvent('episode_started', {
         episodeDuration: videoState.duration,
         service: reportedService,
       });
@@ -149,7 +148,7 @@ export function useVideoElement() {
 
   const onEnded = () => {
     if (videoState.duration) {
-      void UsageStats.saveEvent('episode_finished', { episodeDuration: videoState.duration });
+      void usageClient.saveEvent('episode_finished', { episodeDuration: videoState.duration });
     }
   };
 

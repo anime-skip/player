@@ -17,13 +17,13 @@ function isResponseExpiredToken(res: AxiosResponse<any>): boolean {
 }
 
 export default function useTokenRefresher(client: ReturnType<typeof createAnimeSkipClient>): void {
-  const { usageClient } = usePlayerConfig();
+  const { usageClient, storage } = usePlayerConfig();
   client.axios.interceptors.request.use(async config => {
     if (!config.headers) config.headers = {};
     if (config.headers['Authorization'] == null) {
       if (lock.isLocked() && config.data?.operationName !== 'LoginRefresh')
         await lock.waitForUnlock();
-      const auth = await getAuthAsync();
+      const auth = await getAuthAsync(storage);
       if (auth.token) config.headers['Authorization'] = `Bearer ${auth.token}`;
     }
     return config;
@@ -41,14 +41,17 @@ export default function useTokenRefresher(client: ReturnType<typeof createAnimeS
     }
 
     const release = await lock.acquire();
-    const auth = await getAuthAsync();
+    const auth = await getAuthAsync(storage);
     if (!auth.refreshToken) throw new LogoutError(auth.token, auth.refreshToken, undefined);
 
     try {
       const newTokens = await client.loginRefresh(Api.LOGIN_QUERY, {
         refreshToken: auth.refreshToken,
       });
-      await updateAuthAsync({ refreshToken: newTokens.refreshToken, token: newTokens.authToken });
+      await updateAuthAsync(storage, {
+        refreshToken: newTokens.refreshToken,
+        token: newTokens.authToken,
+      });
       void usageClient.saveEvent('login_refresh');
       log('Refreshed token!');
     } catch (err) {

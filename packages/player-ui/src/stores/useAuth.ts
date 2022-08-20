@@ -1,5 +1,4 @@
-import { webExtStorage } from '~/utils/web-ext-storage';
-import { Auth } from 'common/src/types';
+import { Auth, PlayerStorage } from 'common/src/types';
 import { createWebExtProvideInject } from '../utils/createWebExtProvideInject';
 
 export const AUTH_STORAGE_KEY = 'auth';
@@ -31,10 +30,10 @@ export function useClearTokens() {
   };
 }
 
-export function updateAuthAsync(newAuth: Auth) {
-  return webExtStorage.setItem(AUTH_STORAGE_KEY, newAuth);
+export async function updateAuthAsync(storage: PlayerStorage, newAuth: Auth) {
+  await storage.setItem(AUTH_STORAGE_KEY, newAuth);
 }
 
-export function getAuthAsync(): Promise<Auth> {
-  return webExtStorage.getItem<Auth>(AUTH_STORAGE_KEY).then(auth => auth || {});
+export async function getAuthAsync(storage: PlayerStorage): Promise<Auth> {
+  return await storage.getItem<Auth>(AUTH_STORAGE_KEY, {});
 }

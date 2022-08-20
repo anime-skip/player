@@ -78,11 +78,12 @@ import {
   useResetSkippedFromZero,
 } from '../stores/usePlayHistory';
 import { useVideoState } from '../stores/useVideoState';
-import UsageStats from '~/utils/UsageStats';
 import Utils from 'common/src/utils/GeneralUtils';
 
+const { usageClient } = usePlayerConfig();
+
 onMounted(() => {
-  void UsageStats.saveEvent('player_injected');
+  void usageClient.saveEvent('player_injected'); // TODO move
 });
 
 const dialogState = useDialogState();

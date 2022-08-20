@@ -19,10 +19,11 @@ import {
   useDontShowStoreReviewPromptAgain,
   useStoreReviewPromptDate,
 } from '../stores/store-review-prompt';
-import UsageStats from '~/utils/UsageStats';
 import Utils from 'common/src/utils/GeneralUtils';
 import { DAYS, MINUTES, SECOND, SECONDS, today } from 'common/src/utils/time';
 import { NotificationButton } from './Notification.vue';
+import { usePlayerStorage } from '../composables/usePlayerStorage';
+import { usePlayerConfig } from '../composables/usePlayerConfig';
 
 interface Notification {
   id: string;
@@ -36,48 +37,16 @@ function randomStringId(): string {
   return `${Utils.randomId()}`;
 }
 
-// Dev only stuff
-
-const isDev = EXTENSION_MODE === 'dev' || EXTENSION_MODE === 'test';
-
 const notifications = ref<Notification[]>([]);
 
-function addDevNotification() {
-  const id1 = randomStringId();
-  const id2 = randomStringId();
-  addNotification({
-    id: id1,
-    title: 'No buttons',
-    message: 'This is the notification body',
-    dismissAt: Date.now() + SECONDS(15),
-    buttons: [],
-  });
-  addNotification({
-    id: id2,
-    title: 'Multiple buttons',
-    message: 'Click the add button to add more of these test notifications',
-    dismissAt: Date.now() + SECONDS(10),
-    buttons: [
-      {
-        text: 'Add',
-        onClick: () =>
-          setTimeout(() => {
-            addDevNotification();
-            addDevNotification();
-          }, SECONDS(2)),
-        primary: true,
-      },
-      {
-        text: 'Dismiss',
-        onClick: () => dismissNotificationById(id2),
-      },
-    ],
-  });
+// Prompting for review
+
+function isFirefox(): boolean {
+  // TODO: implement
+  return false;
 }
 
-if (isDev) addDevNotification();
-
-// Prompting for review
+const { usageClient } = usePlayerConfig();
 
 const promptReviewAt = useStoreReviewPromptDate();
 const dontShowReviewPromptAgain = useDontShowStoreReviewPromptAgain();
@@ -85,7 +54,7 @@ const dontShowReviewPromptAgain = useDontShowStoreReviewPromptAgain();
 function addPromptReviewNotifications() {
   if (dontShowReviewPromptAgain.value) return;
 
-  void UsageStats.saveEvent('prompt_store_review');
+  void usageClient.saveEvent('prompt_store_review');
   // Setup the next notification if ignored
   promptReviewAt.value = today() + DAYS(3);
   addNotification({
@@ -98,10 +67,10 @@ function addPromptReviewNotifications() {
         text: 'Rate',
         primary: true,
         onClick() {
-          void UsageStats.saveEvent('prompt_store_review_rate');
+          void usageClient.saveEvent('prompt_store_review_rate');
           dontShowReviewPromptAgain.value = true;
           window.open(
-            TARGET_BROWSER === 'firefox'
+            isFirefox()
               ? 'https://addons.mozilla.org/en-US/firefox/addon/anime-skip/?utm_source=extension&utm_medium=review-prompt'
               : 'https://chrome.google.com/webstore/detail/mgmdkjcljneegjfajchedjpdhbadklcf/reviews'
           );
@@ -110,7 +79,7 @@ function addPromptReviewNotifications() {
       {
         text: "Don't ask again",
         onClick() {
-          void UsageStats.saveEvent('prompt_store_review_dont_ask_again');
+          void usageClient.saveEvent('prompt_store_review_dont_ask_again');
           dontShowReviewPromptAgain.value = true;
         },
       },

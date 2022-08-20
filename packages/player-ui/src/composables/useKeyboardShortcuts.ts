@@ -5,8 +5,7 @@ import {
   usePrimaryKeyboardShortcutPrefs,
   useSecondaryKeyboardShortcutPrefs,
 } from '../stores/useKeyboardShortcutPrefs';
-import { debug } from '~/utils/log';
-import UsageStats from '~/utils/UsageStats';
+import { debug } from '../utils/log';
 import GeneralUtils from 'common/src/utils/GeneralUtils';
 
 // The first instance of this helper should only report usage stats
@@ -20,7 +19,7 @@ export function useKeyboardShortcuts(
   instanceCount++;
   debug(`[${componentName}] useKeyboardShortcuts()`);
 
-  const { addKeyDownListener, removeKeyDownListener } = usePlayerConfig();
+  const { addKeyDownListener, removeKeyDownListener, usageClient } = usePlayerConfig();
   const { primaryShortcutsKeyToActionsMap } = usePrimaryKeyboardShortcutPrefs();
   const { secondaryShortcutsKeyToActionsMap } = useSecondaryKeyboardShortcutPrefs();
 
@@ -40,7 +39,7 @@ export function useKeyboardShortcuts(
     setTimeout(() => {
       keyActions.forEach(action => {
         if (isFirst)
-          void UsageStats.saveEvent('used_keyboard_shortcut', { keyCombo, operation: action });
+          void usageClient.saveEvent('used_keyboard_shortcut', { keyCombo, operation: action });
         shortcuts[action]?.();
       });
     }, 0);
