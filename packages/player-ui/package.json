@@ -10,9 +10,7 @@
   "main": "src/index.ts",
   "scripts": {
     "dev": "vite",
-    "compile": "vue-tsc --noEmit",
-    "lint": "pnpm lint:check -- --fix",
-    "lint:check": "pnpm eslint . --ext .ts,.vue --max-warnings 0"
+    "compile": "vue-tsc --noEmit"
   },
   "dependencies": {
     "@anime-skip/api-client": "^2.6.2",
@@ -33,7 +31,6 @@
     "vue-use-request-state": "^0.2.2"
   },
   "devDependencies": {
-    "@anime-skip/eslint-config": "workspace:*",
     "@iconify/json": "^1.1.461",
     "@tailwindcss/line-clamp": "^0.2.2",
     "@types/lodash.isequal": "^4.5.6",
@@ -43,7 +40,6 @@
     "@vitejs/plugin-vue": "^2.3.2",
     "@vue/compiler-sfc": "^3.2.37",
     "autoprefixer": "^10.4.8",
-    "eslint": "^8.21.0",
     "form-data": "^4.0.0",
     "lodash.merge": "^4.6.2",
     "postcss": "^8.4.16",

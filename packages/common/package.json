@@ -3,9 +3,7 @@
   "type": "module",
   "scripts": {
     "compile": "tsc --noEmit",
-    "test": "vitest",
-    "lint": "pnpm lint:check -- --fix",
-    "lint:check": "pnpm eslint '**/*' --ext .ts --max-warnings 0"
+    "test": "vitest"
   },
   "dependencies": {
     "@anime-skip/api-client": "^2.6.2",
@@ -15,7 +13,6 @@
     "vue": "*"
   },
   "devDependencies": {
-    "@anime-skip/eslint-config": "workspace:*",
     "@anime-skip/usage-stats-client": "^1.4.4",
     "@types/ua-parser-js": "^0.7.36",
     "jsdom": "*",
