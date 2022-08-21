@@ -7,18 +7,10 @@ import { Provider } from './components/Provider';
 import { providePlayerConfig } from './composables/usePlayerConfig';
 import '@anime-skip/ui/tailwind.css';
 import { debug, error, log, warn } from './utils/log';
-import { ExternalPlayerConfig, InternalPlayerConfig } from 'common/src/types';
+import { ExternalPlayerConfig, InternalPlayerConfig, mapToInternalConfig } from 'common/src/types';
 import GeneralUtils from 'common/src/utils/GeneralUtils';
 import { sleep } from 'common/src/utils/time';
 import { provideApiClient } from './composables/useApiClient';
-
-function mapExternalConfig(config: ExternalPlayerConfig): InternalPlayerConfig {
-  return {
-    ...config,
-    onPlayDebounceMs: config.onPlayDebounceMs ?? 0,
-    transformServiceUrl: config.transformServiceUrl ?? GeneralUtils.stripUrl,
-  };
-}
 
 export function mountPlayerUi(config: ExternalPlayerConfig) {
   log('Loading Player UI', { config });
@@ -54,7 +46,7 @@ export function mountPlayerUi(config: ExternalPlayerConfig) {
 
     try {
       const container = document.createElement('div');
-      const internalConfig = mapExternalConfig(config);
+      const internalConfig = mapToInternalConfig(config);
       const RootComponent = Provider(() => providePlayerConfig(internalConfig), PlayerContainer);
       const app = createApp(RootComponent)
         .use(ui)

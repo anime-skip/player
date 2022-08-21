@@ -1,9 +1,9 @@
 import isEqual from 'lodash.isequal';
 import { Ref } from 'vue';
-import { injectPlayerStorage } from './usePlayerConfig';
+import { usePlayerConfig } from './usePlayerConfig';
 
 export function usePlayerStorage<T>(key: string, defaultValue: T): Ref<T> {
-  const storage = injectPlayerStorage();
+  const { storage } = usePlayerConfig();
   const v = ref(defaultValue) as Ref<T>;
 
   // Restore the value from storage

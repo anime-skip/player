@@ -24,7 +24,7 @@ describe('9anime Player Config', () => {
     it.each(playerHtmlFiles)('should find a video element in %s', async () => {
       const dom = await createDomFromFile(__dirname, 'player-show-2022-08-01.gen.html');
 
-      const video = dom.querySelector(playerConfig.getVideoQuery());
+      const video = dom.querySelector(playerConfig.getVideo() as string);
 
       expect(video).toBeDefined();
       expect(video?.tagName).toBe('VIDEO');

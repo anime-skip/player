@@ -4,9 +4,9 @@ import 'vue-global-api';
 import PopupContainer from './components/PopupContainer.vue';
 import '~/styles';
 import { Provider } from '@anime-skip/player-ui/src/components/Provider';
-import { providePlayerStorage } from '@anime-skip/player-ui/src/composables/usePlayerConfig';
-import { createPlayerWebExtStorage } from './utils/player-web-ext-storage';
+import { providePlayerConfig } from '@anime-skip/player-ui/src/composables/usePlayerConfig';
+import { defineNonPlayerConfig } from './utils/define-player-config';
 
-const Root = Provider(() => providePlayerStorage(createPlayerWebExtStorage()), PopupContainer);
+const Root = Provider(() => providePlayerConfig(defineNonPlayerConfig()), PopupContainer);
 
 createApp(Root).use(ui).mount('#app');

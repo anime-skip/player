@@ -76,9 +76,12 @@ const isSupported = computed<boolean>(() => !!currentUrl.value && isUrlSupported
 const notSupportedMessage = computed(() => {
   if (isSupported.value || currentUrl.value?.startsWith(Browser.runtime.getURL('/')))
     return undefined;
-  if (!currentUrl.value) return 'Anime Skip does not support this website';
-  if (currentUrl.value.includes('extension://'))
-    return 'Anime Skip does not support other extensions';
+  if (
+    !currentUrl.value ||
+    currentUrl.value.startsWith('chrome://') ||
+    currentUrl.value.includes('extension://')
+  )
+    return 'Anime Skip does not support this website';
   return `Anime Skip does not support ${new URL(currentUrl.value!).hostname}`;
 });
 </script>

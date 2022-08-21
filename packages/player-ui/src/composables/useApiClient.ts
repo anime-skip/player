@@ -78,7 +78,7 @@ export function useApiClient(): CustomAnimeSkipClient {
     INJECTION_KEY,
     () => {
       throw Error(
-        'Could not find provided API client. Did you forget to call `provideApiClient` higher up the component tree?'
+        'Could not inject API client. Did you forget to call `provideApiClient` higher up the component tree?'
       );
     },
     true

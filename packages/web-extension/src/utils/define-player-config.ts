@@ -1,5 +1,10 @@
 import { backOff } from 'exponential-backoff';
-import { ExternalPlayerConfig } from '~types';
+import {
+  ExternalPlayerConfig,
+  InternalPlayerConfig,
+  mapToInternalGetVideo,
+  mapToInternalConfig,
+} from '~types';
 import { SECOND } from '~utils/time';
 import { debug, log, warn } from './log';
 import WebExtScreenshotController from '../components/WebExtScreenshotController.vue';
@@ -7,19 +12,21 @@ import { sendMessage } from '~/utils/web-ext-bridge';
 import { createPlayerWebExtStorage } from './player-web-ext-storage';
 import UsageStats from './UsageStats';
 import { isUrlSupported } from './url-supported';
-import { useApiClient } from '~/composables/useApiClient';
+
+const API_CLIENT_ID = 'OB3AfF3fZg9XlZhxtLvhwLhDcevslhnr';
+const API_ENV = EXTENSION_MODE === 'prod' ? 'prod' : 'local';
 
 /**
  * Configures the default player config for a player injected by the web extension
  */
-export function setupPlayerConfig(
+export function defineWebExtPlayerConfig(
   service: Service,
   customConfig: Pick<
     ExternalPlayerConfig,
     | 'serviceDisplayName'
     | 'onPlayDebounceMs'
     | 'getRootQuery'
-    | 'getVideoQuery'
+    | 'getVideo'
     | 'transformServiceUrl'
     | 'getPlaybackOptions'
     | 'doNotReplacePlayer'
@@ -29,7 +36,7 @@ export function setupPlayerConfig(
     serviceDisplayName,
     onPlayDebounceMs,
     getRootQuery,
-    getVideoQuery,
+    getVideo,
     transformServiceUrl,
     getPlaybackOptions,
   } = customConfig;
@@ -38,7 +45,7 @@ export function setupPlayerConfig(
     serviceDisplayName,
     onPlayDebounceMs,
     getRootQuery,
-    getVideoQuery,
+    getVideo,
     transformServiceUrl,
     async getPlaybackOptions() {
       try {
@@ -62,33 +69,29 @@ export function setupPlayerConfig(
         { timeMultiple: 1, startingDelay: SECOND, numOfAttempts: 20 }
       );
     },
-    ...initVideoChangeWatcher(getVideoQuery),
+    onVideoChanged: initVideoChangeWatcher(getVideo),
     // Listeners need setup in a different content script, and accessible via window
     addKeyDownListener: window.addKeyDownListener,
     removeKeyDownListener: window.removeKeyDownListener,
-    openAllSettings() {
-      void sendMessage('@anime-skip/open-all-settings', undefined);
-    },
+    openAllSettings: () => sendMessage('@anime-skip/open-all-settings', undefined),
     screenshotController: WebExtScreenshotController,
     storage: createPlayerWebExtStorage(),
     usageClient: UsageStats,
-    useApiClient,
+    apiClientId: API_CLIENT_ID,
+    apiEnv: API_ENV,
     isUrlSupported,
     getUrl: () => sendMessage('@anime-skip/get-url', undefined),
   };
 }
 
 function initVideoChangeWatcher(
-  getVideoQuery: ExternalPlayerConfig['getVideoQuery']
-): Pick<ExternalPlayerConfig, 'getVideo' | 'onVideoChanged'> {
+  getVideoExternal: ExternalPlayerConfig['getVideo']
+): ExternalPlayerConfig['onVideoChanged'] {
   const videoCallbacks: ((video: HTMLVideoElement) => void)[] = [];
+  const getVideo = mapToInternalGetVideo(getVideoExternal);
 
   function onVideoChanged(callback: (video: HTMLVideoElement) => void): void {
     videoCallbacks.push(callback);
-  }
-
-  function getVideo(): HTMLVideoElement {
-    return document.querySelector(getVideoQuery()) as HTMLVideoElement;
   }
 
   // Listen for video changes
@@ -114,8 +117,30 @@ function initVideoChangeWatcher(
     }
   }, CHECK_IF_CHANGED_INTERVAL);
 
-  return {
-    getVideo,
-    onVideoChanged,
-  };
+  return onVideoChanged;
+}
+
+const notImplemented = (): any => {
+  throw Error('Not implemented');
+};
+
+export function defineNonPlayerConfig(): InternalPlayerConfig {
+  return mapToInternalConfig({
+    apiClientId: API_CLIENT_ID,
+    getUrl: () => sendMessage('@anime-skip/get-url', undefined),
+    isUrlSupported,
+    apiEnv: API_ENV,
+    getRootQuery: notImplemented,
+    getVideo: notImplemented,
+    inferEpisodeInfo: notImplemented,
+    onVideoChanged: notImplemented,
+    openAllSettings: () => sendMessage('@anime-skip/open-all-settings', undefined),
+    screenshotController: WebExtScreenshotController,
+    service: 'extension-page',
+    serviceDisplayName: 'Extension Page',
+    storage: createPlayerWebExtStorage(),
+    usageClient: UsageStats,
+    addKeyDownListener: notImplemented,
+    removeKeyDownListener: notImplemented,
+  });
 }

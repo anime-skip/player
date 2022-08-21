@@ -1,5 +1,5 @@
 import { loadedLog } from '~/utils/log';
-import { setupPlayerConfig } from '~/utils/setup-player-config';
+import { defineWebExtPlayerConfig } from '~/utils/define-player-config';
 import GeneralUtils from '~utils/GeneralUtils';
 import { getService } from './get-service';
 import './player-overrides.scss';
@@ -7,11 +7,11 @@ import './player-overrides.scss';
 export function initCrunchyrollPlayer() {
   loadedLog('content-scripts/services/crunchyroll/player.ts');
 
-  return setupPlayerConfig(getService(), {
+  return defineWebExtPlayerConfig(getService(), {
     serviceDisplayName: 'Crunchyroll',
     onPlayDebounceMs: 100,
     getRootQuery: () => 'body',
-    getVideoQuery: () => 'video',
+    getVideo: () => 'video',
     transformServiceUrl(inputUrl) {
       // Strip and remove -XXXXXX from end of url
       return GeneralUtils.stripUrl(inputUrl).replace(/-[0-9]+$/, '');

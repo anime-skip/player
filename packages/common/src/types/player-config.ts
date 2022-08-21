@@ -1,9 +1,10 @@
-import joi from 'joi';
+import joi, { func } from 'joi';
 import { InferredEpisodeInfo, PlayerOptionGroup } from './models';
 import { WithRequired } from './modifiers';
 import { PlayerStorage } from './player-storage';
 import { ScreenshotController } from './screenshot-controller';
 import { UsageStatsClient } from '@anime-skip/usage-stats-client';
+import GeneralUtils from '../utils/GeneralUtils';
 
 export interface ExternalPlayerConfig {
   service: string;
@@ -40,7 +41,7 @@ export interface ExternalPlayerConfig {
   /**
    * Return the video element to be used by the player
    */
-  getVideo(): HTMLVideoElement;
+  getVideo(): HTMLVideoElement | string;
 
   /**
    * EXTENSION ONLY
@@ -78,7 +79,8 @@ export interface ExternalPlayerConfig {
   getPlaybackOptions?(): Promise<PlayerOptionGroup[] | undefined> | PlayerOptionGroup[] | undefined;
 
   /**
-   * Add a callback that gets called when a video changes (duration is different than before)   */
+   * Add a callback that gets called when a video changes (duration is different than before)
+   */
   onVideoChanged(callback: (video: HTMLVideoElement) => void): void;
 
   addKeyDownListener?(callback: (event: KeyboardEvent) => void): void;
@@ -133,7 +135,38 @@ export const PlayerConfig = joi.object<ExternalPlayerConfig, true>({
 /**
  * Same as `IPlayerConfig`, but with defaults applied
  */
-export type InternalPlayerConfig = WithRequired<
-  ExternalPlayerConfig,
-  'transformServiceUrl' | 'onPlayDebounceMs'
->;
+export type InternalPlayerConfig = Omit<
+  WithRequired<ExternalPlayerConfig, 'transformServiceUrl' | 'onPlayDebounceMs'>,
+  'getVideo'
+> & {
+  /**
+   * The internal version of getVideo validates the element and converts the string query to the
+   * actual element.
+   */
+  getVideo(): HTMLVideoElement;
+};
+
+export function mapToInternalConfig(config: ExternalPlayerConfig): InternalPlayerConfig {
+  return {
+    ...config,
+    onPlayDebounceMs: config.onPlayDebounceMs ?? 0,
+    transformServiceUrl: config.transformServiceUrl ?? GeneralUtils.stripUrl,
+    getVideo: mapToInternalGetVideo(config.getVideo),
+  };
+}
+
+export function mapToInternalGetVideo(
+  getVideo: ExternalPlayerConfig['getVideo']
+): InternalPlayerConfig['getVideo'] {
+  return (): HTMLVideoElement => {
+    let video = getVideo();
+    if (typeof video === 'string') {
+      const element = document.querySelector(video);
+      if (element == null) throw Error(`Could not find video element using: ${video}`);
+      video = element as HTMLVideoElement;
+    }
+    if (video.tagName !== 'VIDEO')
+      throw Error(`getVideo returned a <${video.tagName}> instead of a <video>`);
+    return video;
+  };
+}
