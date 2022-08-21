@@ -1,11 +1,9 @@
 import joi from 'joi';
-import { CustomAnimeSkipClient } from '../utils/CustomApiClient';
 import { InferredEpisodeInfo, PlayerOptionGroup } from './models';
 import { WithRequired } from './modifiers';
 import { PlayerStorage } from './player-storage';
 import { ScreenshotController } from './screenshot-controller';
 import { UsageStatsClient } from '@anime-skip/usage-stats-client';
-import { Ref } from 'vue';
 
 export interface ExternalPlayerConfig {
   service: string;
@@ -40,17 +38,9 @@ export interface ExternalPlayerConfig {
   getRootQuery(): string;
 
   /**
-   * Query used to get the video element the player wraps around
+   * Return the video element to be used by the player
    */
-  getVideoQuery(): string;
-
-  /**
-   * Returns the video element whenever the player needs to get it. This should just be a
-   * `document.querySelector` or `document.findElementById` for performance reasons
-   *
-   * TODO: Remove and just use `getVideoQuery`?s
-   */
-  getVideo?(): HTMLVideoElement;
+  getVideo(): HTMLVideoElement;
 
   /**
    * EXTENSION ONLY
@@ -110,7 +100,8 @@ export interface ExternalPlayerConfig {
    * captures the screen.
    */
   screenshotController: ScreenshotController;
-  useApiClient: () => CustomAnimeSkipClient;
+  apiClientId: string;
+  apiEnv: 'prod' | 'test' | 'local';
   isUrlSupported(url: string): boolean;
   usageClient: UsageStatsClient & { getUserId(): string | Promise<string | undefined> | undefined };
   getUrl: () => string | Promise<string>;
@@ -121,8 +112,7 @@ export const PlayerConfig = joi.object<ExternalPlayerConfig, true>({
   serviceDisplayName: joi.string().required(),
   onPlayDebounceMs: joi.number().optional(),
   getRootQuery: joi.func().required(),
-  getVideoQuery: joi.func().required(),
-  getVideo: joi.func().optional(),
+  getVideo: joi.func().required(),
   doNotReplacePlayer: joi.func().optional(),
   inferEpisodeInfo: joi.func().required(),
   transformServiceUrl: joi.func().optional(),
@@ -133,7 +123,8 @@ export const PlayerConfig = joi.object<ExternalPlayerConfig, true>({
   storage: joi.object().required(),
   openAllSettings: joi.func().required(),
   screenshotController: joi.object().required(),
-  useApiClient: joi.func().required(),
+  apiClientId: joi.string().required(),
+  apiEnv: joi.string().required(),
   isUrlSupported: joi.func().required(),
   usageClient: joi.object().required(),
   getUrl: joi.func().required(),

@@ -1,8 +1,8 @@
 <template>
   <h5 class="as-pb-2">
-    <span class="as-text-opacity-high as-font-bold">{{ title }}</span>
-    <span class="as-text-opacity-low">&ensp;&bull;&ensp;</span>
-    <span class="as-text-primary">Anime Skip</span>
+    <span class="as-text-primary as-font-bold">Anime Skip</span>
+    <span class="as-text-opacity-medium"> &bull; </span>
+    <span class="as-text-opacity-medium">{{ title }}</span>
   </h5>
 </template>
 

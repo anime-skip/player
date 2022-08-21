@@ -30,11 +30,7 @@ export function useCreateNewTimestamp() {
   }
 
   return (): void => {
-    const video = playerConfig.getVideo?.();
-    if (video == null) {
-      warn('Tried adding timestamp in a context without a video');
-      return;
-    }
+    const video = playerConfig.getVideo();
     pause();
     if (preferences.value.createTimestampSnapBack) {
       rewindToNearest(0.5);

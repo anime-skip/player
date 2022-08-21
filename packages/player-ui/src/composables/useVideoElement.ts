@@ -17,7 +17,7 @@ export function useVideoElement() {
   const incrementPlayTicks = useIncrementPlayTicks();
   const playHistory = usePlayHistory();
   const { service, getVideo, onVideoChanged, onPlayDebounceMs, usageClient } = usePlayerConfig();
-  const video = ref(getVideo?.()) as Ref<HTMLVideoElement | undefined>;
+  const video = ref(getVideo()) as Ref<HTMLVideoElement | undefined>;
   const url = useTabUrl();
   const canPlayCalled = ref(false);
 

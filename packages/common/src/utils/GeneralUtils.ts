@@ -82,8 +82,8 @@ export default class GeneralUtils {
     if (!this._videoLoadPromise) {
       this._videoLoadPromise = new Promise(res => {
         const timeout = window.setInterval(function () {
-          const video = playerConfig.getVideo?.();
-          if (video && video.readyState > 0) {
+          const video = playerConfig.getVideo();
+          if (video.readyState > 0) {
             res(video.duration);
             clearInterval(timeout);
           }

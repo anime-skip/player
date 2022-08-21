@@ -19,17 +19,17 @@ onMessage('@anime-skip/start-screenshot', () => {
 });
 onMessage('@anime-skip/stop-screenshot', props.showPlayer);
 onMessage('@anime-skip/player-screenshot-details', () => {
-  const video = config.getVideo?.();
+  const video = config.getVideo();
 
-  const boundingRect = video?.getBoundingClientRect();
+  const boundingRect = video.getBoundingClientRect();
   const elementBounds = {
     height: fallbackBound(boundingRect?.height),
     left: fallbackBound(boundingRect?.left),
     top: fallbackBound(boundingRect?.top),
     width: fallbackBound(boundingRect?.width),
   };
-  const videoWidth = fallbackBound(video?.videoWidth, 1);
-  const videoHeight = fallbackBound(video?.videoHeight, 1);
+  const videoWidth = fallbackBound(video.videoWidth, 1);
+  const videoHeight = fallbackBound(video.videoHeight, 1);
   return centerFitVideoBounds(elementBounds, videoWidth, videoHeight);
 });
 

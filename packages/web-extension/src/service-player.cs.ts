@@ -9,14 +9,8 @@ import { setupZoroPlayer } from '~/modules/zoro/player';
 import { PlayerHosts } from '~/utils/compile-time-constants';
 import { error, loadedLog } from '~/utils/log';
 import { urlPatternMatch } from '~/utils/strings';
-import { ExternalPlayerConfig, PlayerStorage } from '~types';
-import { DAYS, SECONDS, sleep, today } from '~utils/time';
-import {
-  getDontShowStoreReviewPromptAgain,
-  getStoreReviewPromptAt,
-  setStoreReviewPromptAt,
-} from '@anime-skip/player-ui/src/stores/store-review-prompt';
-import Browser from 'webextension-polyfill';
+import { ExternalPlayerConfig } from '~types';
+import '~/assets/themes.scss';
 
 const services: Record<PlayerHosts, () => ExternalPlayerConfig> = {
   [PlayerHosts.CRUNCHYROLL]: initCrunchyrollPlayer,

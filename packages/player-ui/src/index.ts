@@ -1,16 +1,16 @@
 import ui from '@anime-skip/ui';
 import { createApp } from 'vue';
 import 'vue-global-api';
-import '~/assets/themes.scss';
 import FakeRouterLink from './components/FakeRouterLink.vue';
 import { PlayerContainer } from './components/PlayerContainer';
 import { Provider } from './components/Provider';
 import { providePlayerConfig } from './composables/usePlayerConfig';
-import '~/styles';
-import { debug, log, warn } from './utils/log';
+import '@anime-skip/ui/tailwind.css';
+import { debug, error, log, warn } from './utils/log';
 import { ExternalPlayerConfig, InternalPlayerConfig } from 'common/src/types';
 import GeneralUtils from 'common/src/utils/GeneralUtils';
 import { sleep } from 'common/src/utils/time';
+import { provideApiClient } from './composables/useApiClient';
 
 function mapExternalConfig(config: ExternalPlayerConfig): InternalPlayerConfig {
   return {
@@ -66,7 +66,7 @@ export function mountPlayerUi(config: ExternalPlayerConfig) {
 
       debug(`Added player to ${rootQuery}`);
     } catch (err) {
-      warn('Failed to inject player UI', err);
+      error('Failed to inject player UI', err);
     }
   }
 

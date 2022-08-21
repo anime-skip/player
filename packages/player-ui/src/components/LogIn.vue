@@ -1,7 +1,7 @@
 <template>
   <LoadingOverlay :is-loading="isLoggingIn">
     <form class="as-w-popup-sm as-p-6 as-flex as-flex-col as-space-y-4" @submit.prevent.stop>
-      <PopupHeader title="Log In" />
+      <LabeledHeader title="Log In" />
       <TextInput
         ref="usernameInput"
         placeholder="Username"

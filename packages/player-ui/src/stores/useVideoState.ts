@@ -54,6 +54,14 @@ export interface VideoState {
   playbackRate: number;
 }
 
+export enum VideoReadyState {
+  HAVE_NOTHING = 0,
+  HAVE_METADATA = 1,
+  HAVE_CURRENT_DATA = 2,
+  HAVE_FUTURE_DATA = 3,
+  HAVE_ENOUGH_DATA = 4,
+}
+
 const {
   provideValue: provideVideoState,
   useValue: useVideoState,
@@ -61,17 +69,17 @@ const {
 } = createProvideInject<VideoState>(
   'video-state',
   () => {
-    const initialVideo = usePlayerConfig().getVideo?.();
+    const v = usePlayerConfig().getVideo();
     return {
       isActive: false,
       isBuffering: true,
-      isPaused: initialVideo?.paused ?? false,
-      isMuted: initialVideo?.muted ?? false,
+      isPaused: v.paused,
+      isMuted: v.muted,
       volumePercent: 100,
       allowVolumeChangeTo: undefined,
-      currentTime: initialVideo?.currentTime ?? 0,
-      duration: initialVideo?.duration || (undefined as number | undefined),
-      playbackRate: initialVideo?.playbackRate ?? 1,
+      currentTime: v.currentTime,
+      duration: v.duration || (undefined as number | undefined),
+      playbackRate: v.playbackRate,
     };
   },
   true
@@ -154,13 +162,13 @@ export function useVideoController() {
       if (!updateVideo) return;
 
       // always update the video unless the update is coming from the video element itself
-      const video = getVideo?.();
+      const video = getVideo();
       if (video) {
         video.currentTime = newBoundedTime;
       }
     },
     rewindToNearest(second: number) {
-      const video = getVideo?.();
+      const video = getVideo();
       if (!video) return;
 
       const currentTime = video.currentTime;

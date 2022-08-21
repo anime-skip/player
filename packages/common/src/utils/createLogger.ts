@@ -48,6 +48,10 @@ export function createLogger(prefix: string, disabled?: boolean) {
 
   return {
     print,
+    debug,
+    log,
+    warn,
+    error,
     groupCollapsed(
       label: string,
       callback: (fns: { log: LogFn; warn: LogFn; error: LogFn; debug: LogFn }) => void

@@ -11,22 +11,44 @@ export interface PlayerStorage {
 /**
  * A player storage backed by `localStorage`
  */
-export const playerLocalStorage: PlayerStorage = {
-  getItem(key, defaultValue) {
-    return JSON.parse(localStorage.getItem(key) ?? '{}').value ?? defaultValue;
-  },
-  setItem(key, newValue) {
-    localStorage.setItem(key, JSON.stringify({ value: newValue }));
-  },
-  removeItem(key) {
-    localStorage.removeItem(key);
-  },
-  addChangeListener(key, cb) {
-    // TODO: use the storage event to implement the listener
-    throw Error('Not implemented');
-  },
-  removeChangeListener(key, cb) {
-    // TODO: use the storage event to implement the listener
-    throw Error('Not implemented');
-  },
-};
+export function createPlayerLocalStorage(): PlayerStorage {
+  const { addListener, removeListener } = createListenerManager();
+  // TODO: listen
+
+  return {
+    getItem(key, defaultValue) {
+      return JSON.parse(localStorage.getItem(key) ?? '{}').value ?? defaultValue;
+    },
+    setItem(key, newValue) {
+      localStorage.setItem(key, JSON.stringify({ value: newValue }));
+    },
+    removeItem(key) {
+      localStorage.removeItem(key);
+    },
+    addChangeListener: addListener,
+    removeChangeListener: removeListener,
+  };
+}
+
+export function createListenerManager() {
+  const listeners: Record<string, PlayerStorageOnChanged<any>[] | undefined> = {};
+  return {
+    async triggerListeners(changes: Record<string, { newValue?: any; oldValue?: any }>) {
+      for (const [key, keyListeners] of Object.entries(listeners)) {
+        if (changes[key] == null) continue;
+        const newValue = changes[key].newValue ?? null;
+        const oldValue = changes[key].oldValue ?? null;
+        for (const listener of keyListeners ?? []) {
+          await listener(newValue, oldValue);
+        }
+      }
+    },
+    addListener(key: string, cb: PlayerStorageOnChanged<any>) {
+      listeners[key] ??= [];
+      listeners[key]?.push(cb);
+    },
+    removeListener(key: string, cb: PlayerStorageOnChanged<any>) {
+      listeners[key] = listeners[key]?.filter(l => l !== cb);
+    },
+  };
+}

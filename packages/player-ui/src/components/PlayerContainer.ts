@@ -12,9 +12,11 @@ import { providePlayHistory } from '../stores/usePlayHistory';
 import { provideTemplateState } from '../stores/useTemplateState';
 import { provideVideoState } from '../stores/useVideoState';
 import Player from '../pages/Player.vue';
+import { provideApiClient } from '../composables/useApiClient';
 
 export const PlayerContainer = Provider(
   [
+    provideApiClient,
     provideAuth,
     provideGeneralPreferences,
     provideTimestampsPanelState,

@@ -1,5 +1,6 @@
+import { useInterval, useIntervalFn } from '@vueuse/core';
+import { SECOND } from 'common/src/utils/time';
 import { onScopeDispose } from 'vue';
-import Browser from 'webextension-polyfill';
 import { createSharedComposable } from '../composables/createSharedComposable';
 import { usePlayerConfig } from '../composables/usePlayerConfig';
 import { log } from '../utils/log';
@@ -24,18 +25,13 @@ export const useTabUrl = createSharedComposable(function () {
     tabUrl.value = correctedNewUrl;
   });
 
-  const onReceiveMessage = (message: ChangeUrlMessage | UnknownMessage) => {
-    if (message.type != '@anime-skip/changeUrl') return;
-    const newUrl = message.payload;
-
-    const correctedNewUrl = transformServiceUrl(newUrl);
-    log('Change URL: ' + correctedNewUrl);
-    tabUrl.value = correctedNewUrl;
-  };
-  Browser.runtime.onMessage.addListener(onReceiveMessage);
-  onScopeDispose(() => {
-    Browser.runtime.onMessage.removeListener(onReceiveMessage);
-  });
+  useIntervalFn(async () => {
+    const oldUrl = tabUrl.value;
+    const newUrl = transformServiceUrl(await getUrl());
+    if (oldUrl === newUrl) return;
+    log(`Change URL: ${newUrl}`);
+    tabUrl.value = newUrl;
+  }, SECOND);
 
   return tabUrl;
 });
