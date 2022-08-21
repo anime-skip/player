@@ -93,7 +93,7 @@ jobs:
 
       - name: Check Lint
         run: pnpm lint:check
-        working-directory: packages/web-extension
+        working-directory: packages/common
 
       - name: Type Check
         run: pnpm compile
@@ -126,7 +126,7 @@ jobs:
 
       - name: Check Lint
         run: pnpm lint:check
-        working-directory: packages/web-extension
+        working-directory: packages/web-ext-bridge
 
       - name: Type Check
         run: pnpm compile
@@ -155,7 +155,7 @@ jobs:
 
       - name: Check Lint
         run: pnpm lint:check
-        working-directory: packages/web-extension
+        working-directory: packages/player-ui
 
       - name: Type Check
         run: pnpm compile
