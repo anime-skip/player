@@ -1,4 +1,4 @@
-import joi, { func } from 'joi';
+import joi from 'joi';
 import { InferredEpisodeInfo, PlayerOptionGroup } from './models';
 import { WithRequired } from './modifiers';
 import { PlayerStorage } from './player-storage';

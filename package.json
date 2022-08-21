@@ -36,7 +36,6 @@
   "devDependencies": {
     "husky": "^7.0.4",
     "prettier": "^2.6.2",
-    "pretty-quick": "^3.1.3",
-    "typescript": "*"
+    "pretty-quick": "^3.1.3"
   }
 }
