@@ -3,9 +3,7 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "compile": "tsc --noEmit",
-    "lint": "pnpm lint:check -- --fix",
-    "lint:check": "pnpm eslint . --ext .ts,.vue --max-warnings 0"
+    "compile": "tsc --noEmit"
   },
   "dependencies": {
     "webextension-polyfill": "*"
