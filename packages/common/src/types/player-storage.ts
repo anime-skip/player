@@ -12,8 +12,19 @@ export interface PlayerStorage {
  * A player storage backed by `localStorage`
  */
 export function createPlayerLocalStorage(): PlayerStorage {
-  const { addListener, removeListener } = createListenerManager();
-  // TODO: listen
+  const { addListener, removeListener, triggerListeners } = createListenerManager();
+  document.addEventListener('storage', async e => {
+    const event = e as StorageEvent;
+    if (event.storageArea !== localStorage) return;
+    if (event.key === null) return;
+
+    await triggerListeners({
+      [event.key]: {
+        oldValue: event.oldValue == null ? null : JSON.parse(event.oldValue),
+        newValue: event.newValue == null ? null : JSON.parse(event.newValue),
+      },
+    });
+  });
 
   return {
     getItem(key, defaultValue) {

@@ -15,7 +15,6 @@ mountPlayerUi({
     return video;
   },
   inferEpisodeInfo: async () => ({}),
-  isUrlSupported: () => true,
   onVideoChanged: noop,
   openAllSettings: noop,
   service: 'test',
@@ -27,7 +26,7 @@ mountPlayerUi({
     saveEvent: asyncNoop,
   },
   apiClientId: 'OB3AfF3fZg9XlZhxtLvhwLhDcevslhnr',
-  apiEnv: 'prod',
+  apiEnv: import.meta.env.API_ENV ?? 'local',
   addKeyDownListener: l => document.addEventListener('keydown', l),
   removeKeyDownListener: l => document.removeEventListener('keydown', l),
 });

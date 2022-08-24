@@ -10,7 +10,6 @@ import { SECOND } from '~utils/time';
 import WebExtScreenshotController from '../components/WebExtScreenshotController.vue';
 import { debug, log, warn } from './log';
 import { createPlayerWebExtStorage } from './player-web-ext-storage';
-import { isUrlSupported } from './url-supported';
 import UsageStats from './UsageStats';
 
 const API_CLIENT_ID = 'OB3AfF3fZg9XlZhxtLvhwLhDcevslhnr';
@@ -79,7 +78,6 @@ export function defineWebExtPlayerConfig(
     usageClient: UsageStats,
     apiClientId: API_CLIENT_ID,
     apiEnv: API_ENV,
-    isUrlSupported,
     getUrl: () => sendMessage('@anime-skip/get-url', undefined),
   };
 }
@@ -129,7 +127,6 @@ export function defineNonPlayerConfig(): InternalPlayerConfig {
   return mapToInternalConfig({
     apiClientId: API_CLIENT_ID,
     getUrl: () => sendMessage('@anime-skip/get-url', undefined),
-    isUrlSupported,
     apiEnv: API_ENV,
     getRootQuery: notImplemented,
     getVideo: notImplemented,

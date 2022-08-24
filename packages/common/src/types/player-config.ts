@@ -102,10 +102,24 @@ export interface ExternalPlayerConfig {
    * captures the screen.
    */
   screenshotController: ScreenshotController;
+  /**
+   * The client ID passed via the `X-Client-ID` header on all API calls.
+   */
   apiClientId: string;
+  /**
+   * Which API endpoint to use:
+   * - `prod`: <https://api.anime-skip.com>
+   * - `test`: <https://test.api.anime-skip.com>
+   * - `local`: <http://localhost:3000>
+   */
   apiEnv: 'prod' | 'test' | 'local';
-  isUrlSupported(url: string): boolean;
+  /**
+   * A configured client for reporting usage metrics.
+   */
   usageClient: UsageStatsClient & { getUserId(): string | Promise<string | undefined> | undefined };
+  /**
+   * Get the current URL shown in the browser's URL bar.
+   */
   getUrl: () => string | Promise<string>;
 }
 
@@ -127,7 +141,6 @@ export const PlayerConfig = joi.object<ExternalPlayerConfig, true>({
   screenshotController: joi.object().required(),
   apiClientId: joi.string().required(),
   apiEnv: joi.string().required(),
-  isUrlSupported: joi.func().required(),
   usageClient: joi.object().required(),
   getUrl: joi.func().required(),
 });

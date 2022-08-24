@@ -15,15 +15,14 @@
 
 <script lang="ts" setup>
 import { useNow } from '@vueuse/core';
+import Utils from 'common/src/utils/GeneralUtils';
+import { DAYS, MINUTES, SECOND, today } from 'common/src/utils/time';
+import { usePlayerConfig } from '../composables/usePlayerConfig';
 import {
   useDontShowStoreReviewPromptAgain,
   useStoreReviewPromptDate,
 } from '../stores/store-review-prompt';
-import Utils from 'common/src/utils/GeneralUtils';
-import { DAYS, MINUTES, SECOND, SECONDS, today } from 'common/src/utils/time';
 import { NotificationButton } from './Notification.vue';
-import { usePlayerStorage } from '../composables/usePlayerStorage';
-import { usePlayerConfig } from '../composables/usePlayerConfig';
 
 interface Notification {
   id: string;
@@ -42,8 +41,7 @@ const notifications = ref<Notification[]>([]);
 // Prompting for review
 
 function isFirefox(): boolean {
-  // TODO: implement
-  return false;
+  return navigator.userAgent.includes('Firefox');
 }
 
 const { usageClient } = usePlayerConfig();
