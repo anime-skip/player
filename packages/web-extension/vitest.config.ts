@@ -11,6 +11,9 @@ export default defineConfig({
     mockReset: true,
     restoreMocks: true,
     setupFiles: rootPath('vitest.setup.ts'),
+    cache: {
+      dir: rootPath('node_modules/.vitest'),
+    },
   },
   plugins: [
     components({

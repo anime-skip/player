@@ -1,5 +1,5 @@
 import Browser from 'webextension-polyfill';
-import { createListenerManager, PlayerStorage, PlayerStorageOnChanged } from '~types';
+import { createListenerManager, PlayerStorage } from '~types';
 import { webExtStorage } from './web-ext-storage';
 
 interface PlayerWebExtStorageConfig {

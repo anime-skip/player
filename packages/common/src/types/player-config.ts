@@ -1,10 +1,10 @@
+import { UsageStatsClient } from '@anime-skip/usage-stats-client';
 import joi from 'joi';
+import GeneralUtils from '../utils/GeneralUtils';
 import { InferredEpisodeInfo, PlayerOptionGroup } from './models';
 import { WithRequired } from './modifiers';
 import { PlayerStorage } from './player-storage';
 import { ScreenshotController } from './screenshot-controller';
-import { UsageStatsClient } from '@anime-skip/usage-stats-client';
-import GeneralUtils from '../utils/GeneralUtils';
 
 export interface ExternalPlayerConfig {
   service: string;
@@ -162,7 +162,7 @@ export function mapToInternalGetVideo(
     let video = getVideo();
     if (typeof video === 'string') {
       const element = document.querySelector(video);
-      if (element == null) throw Error(`Could not find video element using: ${video}`);
+      if (element == null) throw Error(`Could not find video element using: "${video}"`);
       video = element as HTMLVideoElement;
     }
     if (video.tagName !== 'VIDEO')

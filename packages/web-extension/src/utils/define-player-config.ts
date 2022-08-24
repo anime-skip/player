@@ -1,17 +1,17 @@
 import { backOff } from 'exponential-backoff';
+import { sendMessage } from '~/utils/web-ext-bridge';
 import {
   ExternalPlayerConfig,
   InternalPlayerConfig,
-  mapToInternalGetVideo,
   mapToInternalConfig,
+  mapToInternalGetVideo,
 } from '~types';
 import { SECOND } from '~utils/time';
-import { debug, log, warn } from './log';
 import WebExtScreenshotController from '../components/WebExtScreenshotController.vue';
-import { sendMessage } from '~/utils/web-ext-bridge';
+import { debug, log, warn } from './log';
 import { createPlayerWebExtStorage } from './player-web-ext-storage';
-import UsageStats from './UsageStats';
 import { isUrlSupported } from './url-supported';
+import UsageStats from './UsageStats';
 
 const API_CLIENT_ID = 'OB3AfF3fZg9XlZhxtLvhwLhDcevslhnr';
 const API_ENV = EXTENSION_MODE === 'prod' ? 'prod' : 'local';
@@ -98,6 +98,7 @@ function initVideoChangeWatcher(
 
   let oldVideoSrc: string | undefined;
   const CHECK_IF_CHANGED_INTERVAL = SECOND;
+  console.trace('hmm');
   setInterval(function checkVideoChanged(): void {
     const newVideo = getVideo();
     if (newVideo?.src !== oldVideoSrc) {
