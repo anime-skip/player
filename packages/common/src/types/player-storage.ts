@@ -1,3 +1,5 @@
+import isEqual from 'lodash.isequal';
+
 export type PlayerStorageOnChanged<T> = (newValue: T | null, oldValue: T | null) => void;
 
 export interface PlayerStorage {
@@ -13,24 +15,30 @@ export interface PlayerStorage {
  */
 export function createPlayerLocalStorage(): PlayerStorage {
   const { addListener, removeListener, triggerListeners } = createListenerManager();
-  document.addEventListener('storage', async e => {
-    const event = e as StorageEvent;
-    if (event.storageArea !== localStorage) return;
-    if (event.key === null) return;
+  const getJsonValueOrNull = (jsonString: string | null): any | null => {
+    if (!jsonString) return null;
+    return JSON.parse(jsonString)?.value;
+  };
+
+  window.addEventListener('storage', async e => {
+    if (e.storageArea !== localStorage) return;
+    if (e.key === null) return;
 
     await triggerListeners({
-      [event.key]: {
-        oldValue: event.oldValue == null ? null : JSON.parse(event.oldValue),
-        newValue: event.newValue == null ? null : JSON.parse(event.newValue),
+      [e.key]: {
+        oldValue: getJsonValueOrNull(e.oldValue),
+        newValue: getJsonValueOrNull(e.newValue),
       },
     });
   });
 
   return {
     getItem(key, defaultValue) {
-      return JSON.parse(localStorage.getItem(key) ?? '{}').value ?? defaultValue;
+      return getJsonValueOrNull(localStorage.getItem(key)) ?? defaultValue;
     },
     setItem(key, newValue) {
+      const oldValue = getJsonValueOrNull(localStorage.getItem(key));
+      if (isEqual(newValue, oldValue)) return;
       localStorage.setItem(key, JSON.stringify({ value: newValue }));
     },
     removeItem(key) {
