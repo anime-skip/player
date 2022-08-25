@@ -27,11 +27,6 @@ describe('9anime Player Config', () => {
   describe('getRootQuery', () => {
     it.each(playerHtmlFiles)('should find a video element in %s', async () => {
       const dom = await createDomFromFile(__dirname, 'player-show-2022-08-01.gen.html');
-      process.stdout.write(
-        Array.from(dom.querySelectorAll('video'))
-          .map(e => e.outerHTML)
-          .join('\n')
-      );
 
       const playerConfig = setup9animePlayer();
       const video = dom.querySelector(playerConfig.getVideo() as string);

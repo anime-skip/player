@@ -96,7 +96,6 @@ function initVideoChangeWatcher(
 
   let oldVideoSrc: string | undefined;
   const CHECK_IF_CHANGED_INTERVAL = SECOND;
-  console.trace('hmm');
   setInterval(function checkVideoChanged(): void {
     const newVideo = getVideo();
     if (newVideo?.src !== oldVideoSrc) {
