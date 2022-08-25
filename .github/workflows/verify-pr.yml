@@ -49,11 +49,11 @@ jobs:
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Check Lint
-        run: pnpm lint:check
-        working-directory: packages/web-extension
-
+      #
+      #      - name: Check Lint
+      #        run: pnpm lint:check
+      #        working-directory: packages/web-extension
+      #
       - name: Type Check
         run: pnpm compile
         working-directory: packages/web-extension
@@ -90,7 +90,11 @@ jobs:
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
-
+      #
+      #      - name: Check Lint
+      #        run: pnpm lint:check
+      #        working-directory: packages/common
+      #
       - name: Type Check
         run: pnpm compile
         working-directory: packages/common
@@ -119,7 +123,40 @@ jobs:
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
-
+      #
+      #      - name: Check Lint
+      #        run: pnpm lint:check
+      #        working-directory: packages/web-ext-bridge
+      #
       - name: Type Check
         run: pnpm compile
         working-directory: packages/web-ext-bridge
+
+  player-ui:
+    name: packages/player-ui
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - uses: pnpm/action-setup@v2.0.1
+        name: Install PNPM
+        with:
+          version: 7.x.x
+
+      - name: Install Node 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+      #
+      #      - name: Check Lint
+      #        run: pnpm lint:check
+      #        working-directory: packages/player-ui
+      #
+      - name: Type Check
+        run: pnpm compile
+        working-directory: packages/player-ui

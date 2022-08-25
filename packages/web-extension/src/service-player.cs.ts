@@ -2,7 +2,7 @@ import { setup9animePlayer } from '~/modules/9anime/player';
 import { initCrunchyrollPlayer } from '~/modules/crunchyroll/player';
 import { initFunimation20210926Player } from '~/modules/funimation-2021-09-26/player';
 import { initFunimationPlayer } from '~/modules/funimation/player';
-import { loadPlayerUi } from '~/modules/player';
+import { mountPlayerUi } from '@anime-skip/player-ui';
 import { initTestServicePlayer } from '~/modules/test-service/player';
 import { initVrvPlayer } from '~/modules/vrv/player';
 import { setupZoroPlayer } from '~/modules/zoro/player';
@@ -10,6 +10,7 @@ import { PlayerHosts } from '~/utils/compile-time-constants';
 import { error, loadedLog } from '~/utils/log';
 import { urlPatternMatch } from '~/utils/strings';
 import { ExternalPlayerConfig } from '~types';
+import '~/assets/themes.scss';
 
 const services: Record<PlayerHosts, () => ExternalPlayerConfig> = {
   [PlayerHosts.CRUNCHYROLL]: initCrunchyrollPlayer,
@@ -22,18 +23,20 @@ const services: Record<PlayerHosts, () => ExternalPlayerConfig> = {
   [PlayerHosts.NINE_ANIME]: setup9animePlayer,
 };
 
-function init() {
-  for (const pattern in services) {
-    if (urlPatternMatch(pattern, window.location)) {
-      const playerConfig = services[pattern as PlayerHosts]();
-      return loadPlayerUi(playerConfig);
-    }
-  }
+function initService(service: PlayerHosts) {
+  const playerConfig = services[service]();
+  return mountPlayerUi(playerConfig);
 }
 
 try {
   loadedLog('service-player.cs.ts');
-  init();
+
+  for (const pattern in services) {
+    if (urlPatternMatch(pattern, window.location)) {
+      initService(pattern as PlayerHosts);
+      break;
+    }
+  }
 } catch (err) {
   error(err);
 }

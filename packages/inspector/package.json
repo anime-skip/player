@@ -1,6 +1,7 @@
 {
   "name": "@anime-skip/inspector",
   "private": true,
+  "type": "module",
   "scripts": {
     "start": "TARGET=firefox vite build --watch",
     "build": "TARGET=firefox vite build",

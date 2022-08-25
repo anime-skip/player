@@ -41,13 +41,13 @@ export default defineConfig({
   plugins: [
     icons({
       customCollections: {
-        my: FileSystemIconLoader(rootPath('src', 'assets')),
+        my: FileSystemIconLoader(rootPath('..', 'player-ui', 'src', 'assets')),
       },
     }),
     components({
       dts: true,
       allowOverrides: true,
-      dirs: [rootPath('src')],
+      dirs: [rootPath('src'), rootPath('..', 'player-ui', 'src')],
 
       /**
        * Hack to fix:
@@ -68,6 +68,7 @@ export default defineConfig({
       browser,
       webExtConfig,
       skipManifestValidation: true,
+      watchFilePaths: [rootPath('..', 'player-ui', 'src')],
     }),
     vue(),
   ],

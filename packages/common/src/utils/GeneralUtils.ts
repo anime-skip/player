@@ -1,5 +1,5 @@
 import * as Api from '../api';
-import { ExternalPlayerConfig } from '../types';
+import { ExternalPlayerConfig, InternalPlayerConfig } from '../types';
 
 // TODO: Refactor all the functions out of "GeneralUtils" and into targeted files
 
@@ -78,12 +78,12 @@ export default class GeneralUtils {
   /**
    * Returns a promise containing the video's duration
    */
-  public static async waitForVideoLoad(playerConfig: ExternalPlayerConfig): Promise<number> {
+  public static async waitForVideoLoad(playerConfig: InternalPlayerConfig): Promise<number> {
     if (!this._videoLoadPromise) {
       this._videoLoadPromise = new Promise(res => {
         const timeout = window.setInterval(function () {
-          const video = playerConfig.getVideo?.();
-          if (video && video.readyState > 0) {
+          const video = playerConfig.getVideo();
+          if (video.readyState > 0) {
             res(video.duration);
             clearInterval(timeout);
           }

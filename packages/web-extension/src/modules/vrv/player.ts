@@ -1,5 +1,5 @@
 import { loadedLog } from '~/utils/log';
-import { setupPlayerConfig } from '~/utils/setup-player-config';
+import { defineWebExtPlayerConfig } from '~/utils/define-player-config';
 import { PlayerOption, PlayerOptionGroup } from '~types';
 import { cleanupUrl } from '~utils/urls';
 import './player-overrides.scss';
@@ -49,12 +49,12 @@ function getPlaybackOptions(): PlayerOptionGroup[] {
 export function initVrvPlayer() {
   loadedLog('content-scripts/services/vrv/player.ts');
 
-  return setupPlayerConfig('vrv', {
+  return defineWebExtPlayerConfig('vrv', {
     serviceDisplayName: 'VRV',
     onPlayDebounceMs: 50,
     getPlaybackOptions,
     getRootQuery: () => 'body>div',
-    getVideoQuery: () => 'video',
+    getVideo: () => 'video',
     transformServiceUrl: url => cleanupUrl(url),
   });
 }

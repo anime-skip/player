@@ -1,4 +1,6 @@
+import { UsageStatsClient } from '@anime-skip/usage-stats-client';
 import joi from 'joi';
+import GeneralUtils from '../utils/GeneralUtils';
 import { InferredEpisodeInfo, PlayerOptionGroup } from './models';
 import { WithRequired } from './modifiers';
 import { PlayerStorage } from './player-storage';
@@ -37,17 +39,9 @@ export interface ExternalPlayerConfig {
   getRootQuery(): string;
 
   /**
-   * Query used to get the video element the player wraps around
+   * Return the video element to be used by the player
    */
-  getVideoQuery(): string;
-
-  /**
-   * Returns the video element whenever the player needs to get it. This should just be a
-   * `document.querySelector` or `document.findElementById` for performance reasons
-   *
-   * TODO: Remove and just use `getVideoQuery`?s
-   */
-  getVideo?(): HTMLVideoElement;
+  getVideo(): HTMLVideoElement | string;
 
   /**
    * EXTENSION ONLY
@@ -85,7 +79,8 @@ export interface ExternalPlayerConfig {
   getPlaybackOptions?(): Promise<PlayerOptionGroup[] | undefined> | PlayerOptionGroup[] | undefined;
 
   /**
-   * Add a callback that gets called when a video changes (duration is different than before)   */
+   * Add a callback that gets called when a video changes (duration is different than before)
+   */
   onVideoChanged(callback: (video: HTMLVideoElement) => void): void;
 
   addKeyDownListener?(callback: (event: KeyboardEvent) => void): void;
@@ -95,7 +90,7 @@ export interface ExternalPlayerConfig {
    * Storage interface use to persist data to the browser's storage between player visits. Things
    * like your preferences and player settings are stored in this storage.
    */
-  storage?: PlayerStorage;
+  storage: PlayerStorage;
 
   /**
    * Method that opens the "all settings" page
@@ -107,6 +102,25 @@ export interface ExternalPlayerConfig {
    * captures the screen.
    */
   screenshotController: ScreenshotController;
+  /**
+   * The client ID passed via the `X-Client-ID` header on all API calls.
+   */
+  apiClientId: string;
+  /**
+   * Which API endpoint to use:
+   * - `prod`: <https://api.anime-skip.com>
+   * - `test`: <https://test.api.anime-skip.com>
+   * - `local`: <http://localhost:3000>
+   */
+  apiEnv: 'prod' | 'test' | 'local';
+  /**
+   * A configured client for reporting usage metrics.
+   */
+  usageClient: UsageStatsClient & { getUserId(): string | Promise<string | undefined> | undefined };
+  /**
+   * Get the current URL shown in the browser's URL bar.
+   */
+  getUrl: () => string | Promise<string>;
 }
 
 export const PlayerConfig = joi.object<ExternalPlayerConfig, true>({
@@ -114,8 +128,7 @@ export const PlayerConfig = joi.object<ExternalPlayerConfig, true>({
   serviceDisplayName: joi.string().required(),
   onPlayDebounceMs: joi.number().optional(),
   getRootQuery: joi.func().required(),
-  getVideoQuery: joi.func().required(),
-  getVideo: joi.func().optional(),
+  getVideo: joi.func().required(),
   doNotReplacePlayer: joi.func().optional(),
   inferEpisodeInfo: joi.func().required(),
   transformServiceUrl: joi.func().optional(),
@@ -126,12 +139,47 @@ export const PlayerConfig = joi.object<ExternalPlayerConfig, true>({
   storage: joi.object().required(),
   openAllSettings: joi.func().required(),
   screenshotController: joi.object().required(),
+  apiClientId: joi.string().required(),
+  apiEnv: joi.string().required(),
+  usageClient: joi.object().required(),
+  getUrl: joi.func().required(),
 });
 
 /**
  * Same as `IPlayerConfig`, but with defaults applied
  */
-export type InternalPlayerConfig = WithRequired<
-  ExternalPlayerConfig,
-  'transformServiceUrl' | 'onPlayDebounceMs' | 'storage'
->;
+export type InternalPlayerConfig = Omit<
+  WithRequired<ExternalPlayerConfig, 'transformServiceUrl' | 'onPlayDebounceMs'>,
+  'getVideo'
+> & {
+  /**
+   * The internal version of getVideo validates the element and converts the string query to the
+   * actual element.
+   */
+  getVideo(): HTMLVideoElement;
+};
+
+export function mapToInternalConfig(config: ExternalPlayerConfig): InternalPlayerConfig {
+  return {
+    ...config,
+    onPlayDebounceMs: config.onPlayDebounceMs ?? 0,
+    transformServiceUrl: config.transformServiceUrl ?? GeneralUtils.stripUrl,
+    getVideo: mapToInternalGetVideo(config.getVideo),
+  };
+}
+
+export function mapToInternalGetVideo(
+  getVideo: ExternalPlayerConfig['getVideo']
+): InternalPlayerConfig['getVideo'] {
+  return (): HTMLVideoElement => {
+    let video = getVideo();
+    if (typeof video === 'string') {
+      const element = document.querySelector(video);
+      if (element == null) throw Error(`Could not find video element using: "${video}"`);
+      video = element as HTMLVideoElement;
+    }
+    if (video.tagName !== 'VIDEO')
+      throw Error(`getVideo returned a <${video.tagName}> instead of a <video>`);
+    return video;
+  };
+}

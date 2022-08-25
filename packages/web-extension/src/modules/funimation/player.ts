@@ -1,5 +1,5 @@
 import { loadedLog } from '~/utils/log';
-import { setupPlayerConfig } from '~/utils/setup-player-config';
+import { defineWebExtPlayerConfig } from '~/utils/define-player-config';
 import { PlayerOption, PlayerOptionGroup } from '~types';
 import GeneralUtils from '~utils/GeneralUtils';
 import './player-overrides.scss';
@@ -38,11 +38,11 @@ function getPlaybackOptions(): PlayerOptionGroup[] {
 export function initFunimationPlayer() {
   loadedLog('content-scripts/services/funimation/player.ts');
 
-  return setupPlayerConfig('funimation', {
+  return defineWebExtPlayerConfig('funimation', {
     serviceDisplayName: 'Funimation',
     getPlaybackOptions,
     getRootQuery: () => 'body #funimation-player',
-    getVideoQuery: () => '#brightcove-player > video',
+    getVideo: () => '#brightcove-player > video',
     doNotReplacePlayer() {
       const path = GeneralUtils.stripUrl(window.parent.location.href)
         .replace('https://www.funimation.com/', '')

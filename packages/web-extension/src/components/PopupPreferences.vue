@@ -26,7 +26,7 @@
 
 <script lang="ts" setup>
 import useRequestState from 'vue-use-request-state';
-import { useLogout } from '~/composables/useLogout';
+import { useLogout } from '@anime-skip/player-ui/src/composables/useLogout';
 import { sendMessage } from '~/utils/web-ext-bridge';
 
 const { wrapRequest, isLoading: isLoggingOut } = useRequestState();

@@ -11,3 +11,7 @@ node_modules
 .DS_Store
 *.log
 TODO.md
+
+# unplugin-components
+#
+components.d.ts

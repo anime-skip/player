@@ -1,5 +1,5 @@
 import Browser from 'webextension-polyfill';
-import { isUrlSupported } from '~/stores/url-supported';
+import { isUrlSupported } from '~/utils/url-supported';
 import { loadedLog, log } from '~/utils/log';
 import { webExtStorage } from '~/utils/web-ext-storage';
 

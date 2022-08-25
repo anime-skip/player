@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html class="anime-skip-scope" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@anime-skip/player-ui</title>
+  </head>
+  <body>
+    <div
+      id="video-player"
+      class="as-relative as-flex"
+      style="
+        background-color: black;
+        max-height: 80vh;
+        min-height: 40vh;
+        height: calc(9 / 16 * 100vw);
+      "
+    >
+      <video class="as-absolute as-inset-0 as-h-full as-m-auto as-object-center" src="demo.mp4" />
+    </div>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
