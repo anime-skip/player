@@ -35,8 +35,7 @@ export default defineConfig({
     alias,
   },
   define: {
-    EXTENSION_VERSION: `'${pkg.version}'`,
-    EXTENSION_MODE: `'development'`,
-    TARGET_BROWSER: `'firefox'`,
+    __EXTENSION_VERSION__: `'${pkg.version}'`,
+    __TARGET_BROWSER__: `'firefox'`,
   },
 });

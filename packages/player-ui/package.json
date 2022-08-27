@@ -37,7 +37,7 @@
     "@types/lodash.merge": "^4.6.7",
     "@types/md5": "^2.3.2",
     "@typescript/lib-dom": "npm:@types/web",
-    "@vitejs/plugin-vue": "^2.3.2",
+    "@vitejs/plugin-vue": "*",
     "@vue/compiler-sfc": "^3.2.37",
     "autoprefixer": "^10.4.8",
     "form-data": "^4.0.0",

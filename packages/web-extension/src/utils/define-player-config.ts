@@ -13,7 +13,7 @@ import { createPlayerWebExtStorage } from './player-web-ext-storage';
 import UsageStats from './UsageStats';
 
 const API_CLIENT_ID = 'OB3AfF3fZg9XlZhxtLvhwLhDcevslhnr';
-const API_ENV = EXTENSION_MODE === 'prod' ? 'prod' : 'local';
+const API_ENV = import.meta.env.VITE_API_ENV ?? 'test';
 
 /**
  * Configures the default player config for a player injected by the web extension

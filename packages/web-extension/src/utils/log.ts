@@ -1,15 +1,12 @@
 import { createLogger, PURPLE_LABEL_STYLE } from '~utils/createLogger';
 
-const SHOULD_LOG =
-  EXTENSION_MODE === 'dev' || EXTENSION_MODE === 'test' || EXTENSION_MODE === 'staged';
-
 const { debug, error, groupCollapsed, print, log, warn } = createLogger(
   '@anime-skip/web-extension',
-  SHOULD_LOG
+  import.meta.env.DEV
 );
 
 function loadedLog(file: string): void {
-  if (SHOULD_LOG) return;
+  if (import.meta.env.DEV) return;
   print(console.log, PURPLE_LABEL_STYLE, `Loaded ${file}`);
 }
 

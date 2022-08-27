@@ -6,8 +6,8 @@ import { detectBrowser } from '~utils/browser';
 function getUninstallUrl(userId: string | undefined): string | undefined {
   if (userId == null) return undefined;
   const encodedUserId = encodeURIComponent(userId);
-  const browserName = encodeURIComponent(detectBrowser() ?? TARGET_BROWSER);
-  const appVersion = encodeURIComponent(EXTENSION_VERSION);
+  const browserName = encodeURIComponent(detectBrowser() ?? __TARGET_BROWSER__);
+  const appVersion = encodeURIComponent(__EXTENSION_VERSION__);
   return `https://usage-stats.anime-skip.com/redirects/extension-uninstalled?user_id=${encodedUserId}&app_version=${appVersion}&browser=${browserName}`;
 }
 
@@ -22,7 +22,7 @@ export function initMetrics() {
     } else if (event.reason === 'update') {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const fromVersion = event.previousVersion!;
-      const toVersion = EXTENSION_VERSION;
+      const toVersion = __EXTENSION_VERSION__;
 
       // Reloading temp extension triggers an "update" event with the same versions
       if (fromVersion !== toVersion)

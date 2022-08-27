@@ -132,11 +132,3 @@ export function requireOr<T>(callback: () => T, fallback: T): T {
     return fallback;
   }
 }
-
-export function isDev(mode: ExtensionMode) {
-  return mode === 'dev' || mode === 'staged' || mode === 'test';
-}
-
-export function isProd(mode: ExtensionMode) {
-  return mode === 'beta' || mode === 'prod';
-}
