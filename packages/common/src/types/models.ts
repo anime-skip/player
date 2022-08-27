@@ -30,7 +30,7 @@ export interface AutocompleteItem<T = any> {
 /**
  * Episode data pulled from the parent webpage
  */
-export interface InferredEpisodeInfo {
+export interface CrawledEpisodeInfo {
   name?: string;
   number?: string;
   absoluteNumber?: string;

@@ -30,7 +30,8 @@
         "body-parser",
         "download",
         "express",
-        "safe-compare"
+        "safe-compare",
+        "react"
       ]
     }
   },

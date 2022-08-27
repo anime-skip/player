@@ -14,10 +14,10 @@ mountPlayerUi({
     if (video == null) throw Error('Could not find video in DOM');
     return video;
   },
-  inferEpisodeInfo: async () => ({}),
+  crawlEpisodeInfo: async () => ({}),
   onVideoChanged: noop,
   openAllSettings: noop,
-  service: 'test',
+  service: import.meta.env.API_ENV ?? 'test',
   serviceDisplayName: 'Player UI Test',
   storage: createPlayerLocalStorage(),
   screenshotController: NoopScreenshotController,

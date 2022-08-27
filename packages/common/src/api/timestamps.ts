@@ -12,10 +12,10 @@ export { GqlTimestampSource as TimestampSource };
 
 // AmbiguousTimestamp
 
+/**
+ * Either a local timestamp with a temporary numeric ID, or a real timestamp with a UUID.
+ */
 export interface AmbiguousTimestamp extends InputTimestamp {
-  /**
-   * It is a number when it is local, randomly generated. It is remote when the id is a string (GUID)
-   */
   id: number | string;
   source: GqlTimestampSource;
   edited?: boolean;

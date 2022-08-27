@@ -11,7 +11,7 @@ export function useInferEpisodeDetails() {
   const findTemplate = useFindTemplate();
   const episode = useEpisode();
   const template = useEpisodeTemplate();
-  const { inferEpisodeInfo } = usePlayerConfig();
+  const { crawlEpisodeInfo: inferEpisodeInfo } = usePlayerConfig();
 
   return async (): Promise<void> => {
     try {

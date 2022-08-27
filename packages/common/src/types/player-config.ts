@@ -1,7 +1,7 @@
 import { UsageStatsClient } from '@anime-skip/usage-stats-client';
 import joi from 'joi';
 import GeneralUtils from '../utils/GeneralUtils';
-import { InferredEpisodeInfo, PlayerOptionGroup } from './models';
+import { CrawledEpisodeInfo, PlayerOptionGroup } from './models';
 import { WithRequired } from './modifiers';
 import { PlayerStorage } from './player-storage';
 import { ScreenshotController } from './screenshot-controller';
@@ -59,7 +59,7 @@ export interface ExternalPlayerConfig {
    * Get the current webpage's suggested episode info. If HTML5 history mode is enabled, and you go
    * to the next episode, this should return the next episode details automatically.
    */
-  inferEpisodeInfo(): Promise<InferredEpisodeInfo>;
+  crawlEpisodeInfo(): Promise<CrawledEpisodeInfo>;
 
   /**
    * Convert a raw URL string to one that can be used with Anime Skip. If not passed, query
@@ -130,7 +130,7 @@ export const PlayerConfig = joi.object<ExternalPlayerConfig, true>({
   getRootQuery: joi.func().required(),
   getVideo: joi.func().required(),
   doNotReplacePlayer: joi.func().optional(),
-  inferEpisodeInfo: joi.func().required(),
+  crawlEpisodeInfo: joi.func().required(),
   transformServiceUrl: joi.func().optional(),
   getPlaybackOptions: joi.func().optional(),
   onVideoChanged: joi.func().required(),

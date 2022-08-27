@@ -1,11 +1,11 @@
 import { RequestState } from 'vue-use-request-state';
 import * as Api from 'common/src/api';
-import { InferredEpisodeInfo } from 'common/src/types';
+import { CrawledEpisodeInfo } from 'common/src/types';
 import { createProvideInject } from 'common/src/utils/createProvideInject';
 
 interface InferredEpisodeState {
   requestState: RequestState;
-  inferredEpisode?: InferredEpisodeInfo;
+  inferredEpisode?: CrawledEpisodeInfo;
   inferredTimestamps?: Api.AmbiguousTimestamp[];
 }
 
