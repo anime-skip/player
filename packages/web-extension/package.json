@@ -57,7 +57,7 @@
     "@types/node": "^16.11.48",
     "@types/webextension-polyfill": "^0.9.0",
     "@typescript/lib-dom": "npm:@types/web",
-    "@vitejs/plugin-vue": "^2.3.2",
+    "@vitejs/plugin-vue": "*",
     "@vue/compiler-sfc": "^3.2.37",
     "autoprefixer": "^10.4.8",
     "caniuse-lite": "^1.0.30001375",
