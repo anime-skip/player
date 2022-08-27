@@ -65,7 +65,7 @@ export default defineConfig(({ mode }) => ({
     outDir: rootPath('dist'),
     emptyOutDir: true,
     sourcemap: mode === 'development' ? 'inline' : undefined,
-    // minify: mode === 'production',
+    minify: mode === 'production' ? 'esbuild' : false,
   },
   define: {
     __EXTENSION_VERSION__: `'${pkg.version}'`,
