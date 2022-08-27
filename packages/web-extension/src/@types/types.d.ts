@@ -19,8 +19,6 @@ type ServiceDisplayName =
 
 type SupportedBrowser = 'firefox' | 'chrome';
 
-type ExtensionMode = 'dev' | 'test' | 'staged' | 'beta' | 'prod';
-
 declare class OffscreenCanvas {
   constructor(readonly width: number, readonly height: number);
   getContext(type: '2d'): CanvasRenderingContext2D;

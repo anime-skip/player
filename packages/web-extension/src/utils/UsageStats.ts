@@ -11,11 +11,9 @@ const getUserId: UsageStatsClientConfig['getUserId'] = () => {
     .then(user => user ?? undefined);
 };
 
-const reportModes: ExtensionMode[] = ['prod', 'beta'];
-
 const client = createUsageStatsClient({
   app: 'Anime Skip Player',
-  appVersion: EXTENSION_VERSION,
+  appVersion: __EXTENSION_VERSION__,
   browser: detectBrowser(),
   getUserId,
   log: (...args) => debug('[usage-client]', ...args),
@@ -24,7 +22,7 @@ const client = createUsageStatsClient({
   },
   source: 'browser',
   canSendMetrics() {
-    return reportModes.includes(EXTENSION_MODE) && TARGET_BROWSER !== 'firefox';
+    return import.meta.env.PROD && __TARGET_BROWSER__ !== 'firefox';
   },
 });
 

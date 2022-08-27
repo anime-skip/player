@@ -27,21 +27,35 @@ pnpm i
 ### Running Locally
 
 ```bash
-cd packages/web-extension
-
 # Start in Firefox
 pnpm start
 # Start in Chrome
 pnpm start:chrome
 ```
 
-> **WSL2 users**, you won't be able to run the start commands, I would recommend either using the CMD/Powershell or [configuring Vite to not open the browser and install the extension manually](https://github.com/aklinker1/vite-plugin-web-extension/pull/12).
+> **WSL2 users**, you won't be able to run the start commands, I would recommend either using the CMD/Powershell or [configure Vite to not open the browser and install the extension manually](https://github.com/aklinker1/vite-plugin-web-extension/pull/12).
 >
 > https://github.com/mozilla/web-ext/issues/2108
 
-### Backend Devs Only
+#### Configuration
 
-To run the extension against a local version of the backend, use `pnpm dev` instead of `pnpm start`. You'll also need to install:
+You can create a `.env` file in the `packages/web-extension` directory to configure how the extension runs.
 
-- `docker` to run the backend
-- `docker-compose` installed (or aliased to `docker compose` on versions of docker that ship with compose)
+Below is a list of all the options and what they do:
+
+```bash
+# Configure which API to use (default: "test")
+#  - prod: https://api.anime-skip.com/graphql
+#  - test: http://test.api.anime-skip.com/graphql
+#  - local: http://localhost:8081/graphql
+VITE_API_ENV="prod|test|local"
+```
+
+#### Build Modes
+
+You can use [Vite's build modes](https://vitejs.dev/guide/env-and-mode.html) to build the project for different targets with different behaviors:
+
+```bash
+vite build --mode development # Print logs, NOT minimized
+vite build --mode production  # Don't print logs, minimized
+```

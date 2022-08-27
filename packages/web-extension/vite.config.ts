@@ -16,17 +16,7 @@ try {
   // noop
 }
 
-const browser = process.env.BUILD_FOR || 'firefox';
-const mode = process.env.BUILD_MODE || 'test';
-
-const developmentModes: ExtensionMode[] = ['dev', 'test', 'staged'];
-const viteModes: Record<ExtensionMode, 'development' | 'production'> = {
-  beta: 'production',
-  dev: 'development',
-  prod: 'production',
-  staged: 'development',
-  test: 'development',
-};
+const browser = process.env.BROWSER || 'firefox';
 
 export const alias = {
   '~/': rootPath('src') + '/',
@@ -35,9 +25,8 @@ export const alias = {
   '~types': rootPath('../common/src/types'),
 };
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   root: rootPath('src'),
-  mode: viteModes[mode],
   plugins: [
     icons({
       customCollections: {
@@ -75,12 +64,12 @@ export default defineConfig({
   build: {
     outDir: rootPath('dist'),
     emptyOutDir: true,
-    sourcemap: developmentModes.includes(mode) ? 'inline' : undefined,
+    sourcemap: mode === 'development' ? 'inline' : undefined,
+    // minify: mode === 'production',
   },
   define: {
-    EXTENSION_VERSION: `'${pkg.version}'`,
-    EXTENSION_MODE: `'${mode}'`,
-    TARGET_BROWSER: `'${browser}'`,
+    __EXTENSION_VERSION__: `'${pkg.version}'`,
+    __TARGET_BROWSER__: `'${browser}'`,
   },
   resolve: {
     alias,
@@ -89,4 +78,4 @@ export default defineConfig({
     include: ['vue', '@vueuse/core'],
     exclude: ['vue-demi'],
   },
-});
+}));
