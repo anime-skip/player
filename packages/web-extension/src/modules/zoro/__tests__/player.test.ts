@@ -1,7 +1,7 @@
 /**
  * @vitest-environment jsdom
  */
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createDomFromFile } from '~/utils/testing/jsdom';
 import { setupZoroPlayer } from '../player';
 
@@ -12,6 +12,11 @@ const playerHtmlFiles = [
 ];
 
 describe('Zoro.to Player Config', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.clearAllTimers();
+  });
+
   describe('getRootQuery', () => {
     it.each(playerHtmlFiles)('should find an element in %s', async () => {
       const dom = await createDomFromFile(__dirname, 'player-show-2022-05-06.gen.html');
