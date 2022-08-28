@@ -1,13 +1,16 @@
-import { useEpisodeState } from '../stores/useEpisodeState';
 import * as Api from 'common/src/api';
+import { storeToRefs } from 'pinia';
+import { useEpisodeStore } from '../state/stores/useEpisodeStore';
 
 /**
  * Return a utility that will compare the passed in timestamp to the one that is saved remotely,
  * updating the `edited` flag if it has been edited
  */
-export function useApplyTimestampDiff(episodeState = useEpisodeState()) {
+export function useApplyTimestampDiff() {
+  const { timestamps } = storeToRefs(useEpisodeStore());
+
   return (timestamp: Api.Timestamp | Api.AmbiguousTimestamp): Api.AmbiguousTimestamp => {
-    const original = episodeState.savedTimestamps.find(t => t.id === timestamp.id);
+    const original = timestamps.value?.find(t => t.id === timestamp.id);
     const edited = original?.at !== timestamp.at || original.typeId !== timestamp.typeId;
     return {
       ...timestamp,

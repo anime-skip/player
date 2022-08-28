@@ -1,15 +1,15 @@
 <template>
   <ScopedStylesRoot>
     <div
-      v-if="!isOriginalPlayerVisible"
+      v-if="!playerVisibility.serviceUi"
       id="AnimeSkipPlayer"
       class="as-absolute as-inset-0 as-grid as-overflow-hidden as-bg-background as-bg-opacity-0"
       :class="{
-        'as-active': isActive,
+        'as-active': activity.isActive,
         'as-paused as-bg-opacity-medium': videoState.isPaused,
         'as-buffering as-bg-opacity-medium': videoState.isBuffering,
         'as-showing': isEpisodeInfoShowing,
-        'as-opacity-0': !isPlayerVisible,
+        'as-opacity-0': !playerVisibility.animeSkipUi,
         [themeClass]: true,
       }"
       @mouseenter.prevent="onMouseEnter"
@@ -44,11 +44,11 @@
 
       <!-- Dialogs -->
       <ScreenshotOverlay />
-      <screenshot-controller
+      <!-- <screenshot-controller
         :mouse-over="mouseOver"
-        :show-player="showPlayer"
-        :hide-player="hidePlayer"
-      />
+        :show-player="(playerVisibility.animeSkipUi = true)"
+        :hide-player="(playerVisibility.animeSkipUi = false)"
+      /> -->
       <TimestampsPanel />
       <PreferencesDialog />
       <ConnectEpisodeDialog />
@@ -59,98 +59,48 @@
 </template>
 
 <script lang="ts" setup>
-import { usePlayerConfig } from '../composables/usePlayerConfig';
-import { useLoadAllEpisodeData } from '../composables/useLoadAllEpisodeData';
-import { usePlaybackRateConnector } from '../composables/usePlaybackRateConnector';
-import { useTabUrl } from '../composables/useTabUrl';
 import { useTheme } from '../composables/useTheme';
-import { useVideoElement } from '../composables/useVideoElement';
-import { useDialogState } from '../stores/useDialogState';
-import {
-  useHideAnimeSkipPlayer,
-  useIsAnimeSkipPlayerVisible,
-  useIsOriginalPlayerVisible,
-  useShowAnimeSkipPlayer,
-} from '../stores/usePlayerVisibility';
-import {
-  usePlayHistory,
-  useResetInitialBuffer,
-  useResetSkippedFromZero,
-} from '../stores/usePlayHistory';
-import { useVideoState } from '../stores/useVideoState';
-import Utils from 'common/src/utils/GeneralUtils';
+import { DialogName, useDialogStore } from '../state/stores/useDialogStore';
+import { usePlayHistoryStore } from '../state/stores/usePlayHistoryStore';
+import { useVideoController } from '../state/composables/useVideoController';
+import { useUserActivityStore } from '../state/stores/useUserActivityStore';
+import { useVideoStateStore } from '../state/stores/useVideoStateStore';
+import { usePlayerVisibilityStore } from '../state/stores/usePlayerVisibilityStore';
 
-const { usageClient } = usePlayerConfig();
+const dialogs = useDialogStore();
+const isTimestampsPanelOpen = computed(() => dialogs.activeDialog === DialogName.TIMESTAMPS_PANEL);
+const isPreferencesDialogOpen = computed(() => dialogs.activeDialog === DialogName.PREFERENCES);
 
-onMounted(() => {
-  void usageClient.saveEvent('player_injected'); // TODO move
-});
+const playHistory = usePlayHistoryStore();
 
-const dialogState = useDialogState();
-const isTimestampsPanelOpen = computed(() => dialogState.activeDialog === 'TimestampsPanel');
-const isPreferencesDialogOpen = computed(() => dialogState.activeDialog === 'PreferencesDialog');
-
-const resetHasSkippedFromZero = useResetSkippedFromZero();
-const resetInitialBuffer = useResetInitialBuffer();
-
-// Url/Video Change
-
-const loadAllEpisodeData = useLoadAllEpisodeData();
-const tabUrl = useTabUrl();
-watch(tabUrl, newUrl => {
-  resetHasSkippedFromZero();
-  resetInitialBuffer();
-
-  if (newUrl) {
-    loadAllEpisodeData(newUrl);
-  }
-});
-
-const { video, togglePlayPause, setActive, setInactive, setDuration } = useVideoElement();
-watch(video, newVideo => {
-  if (!newVideo) return;
-  newVideo.playbackRate = videoState.playbackRate;
-});
-
-// Sync the playback rate between prefs and videoState
-usePlaybackRateConnector();
-
-const playerConfig = usePlayerConfig();
-onMounted(() => {
-  Utils.waitForVideoLoad(playerConfig).then(setDuration);
-});
+const { togglePlayPause } = useVideoController();
+const activity = useUserActivityStore();
 
 // Hover Activity
 
-const videoState = useVideoState();
+const videoState = useVideoStateStore();
 
-const isActive = computed(() => videoState.isActive);
 const mouseOver = ref(false);
 function onMouseEnter() {
   mouseOver.value = true;
-  setActive();
+  activity.triggerActive();
 }
 function onMouseLeave() {
   mouseOver.value = false;
-  setInactive();
+  activity.clearActive();
 }
 function onMouseMove() {
-  setActive();
+  activity.triggerActive();
 }
 
 // Display flags
-
-const playHistory = usePlayHistory();
 
 const isEpisodeInfoShowing = computed<boolean>(
   () => videoState.isPaused || (videoState.isBuffering && playHistory.isInitialBuffer)
 );
 const showBufferLoading = computed<boolean>(() => videoState.isBuffering && !videoState.isPaused);
 
-const showPlayer = useShowAnimeSkipPlayer();
-const hidePlayer = useHideAnimeSkipPlayer();
-const isPlayerVisible = useIsAnimeSkipPlayerVisible();
-const isOriginalPlayerVisible = useIsOriginalPlayerVisible();
+const playerVisibility = usePlayerVisibilityStore();
 
 const { themeClass } = useTheme();
 </script>

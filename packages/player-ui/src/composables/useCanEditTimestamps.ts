@@ -1,13 +1,13 @@
-import { useIsLoggedIn } from '../stores/useAuth';
-import { useEpisode, useEpisodeUrl } from '../stores/useEpisodeState';
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '../state/stores/useAuthStore';
+import { useEpisodeStore } from '../state/stores/useEpisodeStore';
 
 export function useCanEditTimestamps() {
-  const isLoggedIn = useIsLoggedIn();
-  const episodeUrl = useEpisodeUrl();
-  const episode = useEpisode();
+  const auth = useAuthStore();
+  const { episode, episodeUrl } = storeToRefs(useEpisodeStore());
 
   return computed<boolean>(() => {
-    if (!isLoggedIn.value) return false;
+    if (!auth.isLoggedIn) return false;
     if (episodeUrl.value == null) return false;
     if (episode.value == null) return false;
     const { name, show } = episode.value;

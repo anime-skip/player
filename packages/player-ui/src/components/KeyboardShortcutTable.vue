@@ -182,31 +182,24 @@
 </template>
 
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia';
 import {
-  usePrimaryKeyboardShortcutPrefs,
-  useSecondaryKeyboardShortcutPrefs,
-} from '../stores/useKeyboardShortcutPrefs';
+  KeyboardShortcutAction,
+  useKeyboardShortcutStore,
+} from '../state/stores/useKeyboardShortcutStore';
 
 // Updates
 
-const { primaryShortcutsActionToKeyMap } = usePrimaryKeyboardShortcutPrefs();
-const { secondaryShortcutsActionToKeyMap } = useSecondaryKeyboardShortcutPrefs();
+const shortcuts = useKeyboardShortcutStore();
+const { primaryActionToKey, secondaryActionToKey } = storeToRefs(shortcuts);
 
-function updatePrimaryKeyBinding(action: string) {
-  return (newKeyBinding: string | undefined) => {
-    primaryShortcutsActionToKeyMap.value = {
-      ...primaryShortcutsActionToKeyMap.value,
-      [action]: newKeyBinding,
-    };
-  };
+function updatePrimaryKeyBinding(action: KeyboardShortcutAction) {
+  return (newKeyBinding: string | undefined) =>
+    shortcuts.setPrimaryKeyBinding(action, newKeyBinding);
 }
-function updateSecondaryKeyBinding(action: string) {
-  return (newKeyBinding: string | undefined) => {
-    secondaryShortcutsActionToKeyMap.value = {
-      ...secondaryShortcutsActionToKeyMap.value,
-      [action]: newKeyBinding,
-    };
-  };
+function updateSecondaryKeyBinding(action: KeyboardShortcutAction) {
+  return (newKeyBinding: string | undefined) =>
+    shortcuts.setSecondaryKeyBinding(action, newKeyBinding);
 }
 </script>
 

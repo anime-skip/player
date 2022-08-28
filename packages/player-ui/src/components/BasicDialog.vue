@@ -1,11 +1,11 @@
 <template>
   <transition name="as-dialog">
     <div
-      v-if="isVisible"
-      class="BasicDialog as-absolute as-inset-0 as-flex as-flex-col as-cursor-pointer as-overflow-visible"
+      v-if="visible"
       :id="name"
+      class="BasicDialog as-absolute as-inset-0 as-flex as-flex-col as-cursor-pointer as-overflow-visible"
       :style="`align-items: ${gravityX}; justify-content: ${gravityY}`"
-      @click.stop="dismiss()"
+      @click.stop="emit('dismiss')"
     >
       <Card
         class="as-dialog-root-container as-bg-background as-overflow-x-hidden as-overflow-y-auto as-cursor-auto as-rounded-md"
@@ -19,54 +19,26 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType } from 'vue';
-import { useDialogState, useHideDialog } from '../stores/useDialogState';
+const props = defineProps<{
+  name: string;
+  visible: boolean;
+  gravityX: 'center' | 'flex-start' | 'flex-end';
+  gravityY: 'center' | 'flex-start' | 'flex-end';
+}>();
 
-const props = defineProps({
-  name: { type: String, required: true },
-  gravityX: {
-    type: String as PropType<'center' | 'flex-start' | 'flex-end'>,
-    default: 'center',
-  },
-  gravityY: {
-    type: String as PropType<'center' | 'flex-start' | 'flex-end'>,
-    default: 'center',
-  },
-  isShowing: {
-    type: Function as PropType<(dialogName: string, activeDialog?: string) => boolean>,
-    default: undefined,
-  },
-  hideDialog: { type: Function as PropType<() => void>, default: undefined },
-});
-const emits = defineEmits({
-  show: () => true,
-  hide: () => true,
-});
+const emit = defineEmits<{
+  (event: 'show'): void;
+  (event: 'hide'): void;
+  (event: 'dismiss'): void;
+}>();
 
-const dialogState = useDialogState();
-const isVisible = computed(() => {
-  return (
-    props.isShowing?.(props.name, dialogState.activeDialog) ??
-    props.name === dialogState.activeDialog
-  );
-});
 watch(
-  () => dialogState.activeDialog,
-  (newDialog, oldDialog) => {
-    if (newDialog === oldDialog) return;
-
-    if (props.name === newDialog && props.name !== oldDialog) {
-      emits('show');
-    } else if (props.name === oldDialog && props.name !== newDialog) {
-      emits('hide');
-    }
+  () => props.visible,
+  (newVisible, oldVisible) => {
+    if (newVisible && !oldVisible) emit('show');
+    if (!newVisible && oldVisible) emit('hide');
   }
 );
-
-const hideDialog = useHideDialog();
-function dismiss() {
-  props.hideDialog?.() ?? hideDialog();
-}
 </script>
 
 <style lang="scss" scoped>

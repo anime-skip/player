@@ -1,17 +1,17 @@
-import { useClearTokens } from '../stores/useAuth';
-import { useResetPreferences } from '../stores/useGeneralPreferences';
 import { sleep } from 'common/src/utils/time';
+import { useAuthStore } from '../state/stores/useAuthStore';
+import { usePreferencesStore } from '../state/stores/usePreferencesStore';
 import { usePlayerConfig } from './usePlayerConfig';
 
 export function useLogout() {
-  const clearTokens = useClearTokens();
-  const resetPreferences = useResetPreferences();
-  const { usageClient } = usePlayerConfig();
+  const auth = useAuthStore();
+  const prefs = usePreferencesStore();
+  const config = usePlayerConfig();
 
   return async () => {
-    await sleep(500);
-    clearTokens();
-    resetPreferences();
-    void usageClient.saveEvent('logout');
+    await sleep(500); // Just slow the process down a little to seem more secure lol
+    auth.clearTokens();
+    prefs.resetToDefault();
+    void config.usageClient.saveEvent('logout');
   };
 }

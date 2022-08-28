@@ -14,30 +14,32 @@
         v-for="preference in SKIPPABLE_PREFERENCES"
         :key="preference.key"
         :checked="!preferences[preference.key]"
-        :disabled="!isLoggedIn"
+        :disabled="!auth.isLoggedIn"
         :label="preference.title"
-        @click="toggleBooleanPref(preference.key)"
+        @click="togglePref.mutate(preference.key)"
       />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
-import { useIsLoggedIn } from '../stores/useAuth';
-import { useGeneralPreferences, useToggleBooleanPref } from '../stores/useGeneralPreferences';
+import { useToggleBooleanPreferenceMutation } from '../state/composables/useToggleBooleanPreferenceMutation';
+import { useAuthStore } from '../state/stores/useAuthStore';
+import { usePreferencesStore } from '../state/stores/usePreferencesStore';
 import { SKIPPABLE_PREFERENCES } from '../utils/constants';
 
 defineProps({
   twoColumns: Boolean,
 });
 
-const isLoggedIn = useIsLoggedIn();
+const auth = useAuthStore();
+const { preferences } = storeToRefs(usePreferencesStore());
 
-const preferences = useGeneralPreferences();
-const toggleBooleanPref = useToggleBooleanPref();
+const togglePref = useToggleBooleanPreferenceMutation();
 const autoSkipDisabled = computed<boolean>(
-  () => !isLoggedIn.value || !preferences.value.enableAutoSkip
+  () => !auth.isLoggedIn || !preferences.value.enableAutoSkip
 );
 </script>
 

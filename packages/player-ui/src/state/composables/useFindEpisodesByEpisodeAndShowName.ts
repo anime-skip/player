@@ -1,17 +1,15 @@
 import { Ref } from 'vue';
 import { useQuery } from 'vue-query';
 import { useApiClient } from '../../composables/useApiClient';
-import { gql } from '../../utils/gql';
 import { TimestampTypeFragment, TimestampType } from './useAllTimestampTypesQuery';
 import * as Api from '@anime-skip/api-client';
+import { EpisodeUrlEpisodeTimestampFragment } from './useFindEpisodeUrlQuery';
 
 // ThirdPartyEpisodeTimestamp
 
-export const ThirdPartyEpisodeTimestampFragment = gql`
-  fragment ThirdPartyEpisodeTimestampFragment on ThirdPartyShow {
-    id
-    at
-  }
+export const ThirdPartyEpisodeTimestampFragment = `
+  id
+  at
 `;
 
 export interface ThirdPartyEpisodeTimestamp extends Pick<Api.GqlThirdPartyTimestamp, 'id' | 'at'> {
@@ -20,26 +18,22 @@ export interface ThirdPartyEpisodeTimestamp extends Pick<Api.GqlThirdPartyTimest
 
 // ThirdPartyEpisodeShow
 
-export const ThirdPartyEpisodeShowFragment = gql`
-  fragment ThirdPartyEpisodeShowFragment on ThirdPartyShow {
-    name
-  }
+export const ThirdPartyEpisodeShowFragment = `
+  name
 `;
 
 export interface ThirdPartyEpisodeShow extends Pick<Api.GqlThirdPartyShow, 'name'> {}
 
 // ThirdPartyEpisode
 
-const ThirdPartyEpisodeFragment = gql`
-  fragment ThirdPartyEpisodeFragment on ThirdPartyEpisode {
-    id
-    name
-    season
-    number
-    absoluteNumber
-    source
-    baseDuration
-  }
+const ThirdPartyEpisodeFragment = `
+  id
+  name
+  season
+  number
+  absoluteNumber
+  source
+  baseDuration
 `;
 
 export interface ThirdPartyEpisode
@@ -52,23 +46,19 @@ export interface ThirdPartyEpisode
 
 // Query
 
-const query = gql`
+const query = `
   {
-    ...ThirdPartyEpisodeFragment
+    ${ThirdPartyEpisodeFragment}
     timestamps {
-      ...EpisodeUrlEpisodeTimestampFragment
+      ${EpisodeUrlEpisodeTimestampFragment}
       type {
-        ...TimestampTypeFragment
+        ${TimestampTypeFragment}
       }
     }
     show {
-      ...ThirdPartyEpisodeShowFragment
+      ${ThirdPartyEpisodeShowFragment}
     }
   }
-  ${ThirdPartyEpisodeFragment}
-  ${ThirdPartyEpisodeTimestampFragment}
-  ${TimestampTypeFragment}
-  ${ThirdPartyEpisodeShowFragment}
 `;
 
 export const FIND_EPISODES_BY_EPISODE_AND_SHOW_NAME_QUERY_KEY =

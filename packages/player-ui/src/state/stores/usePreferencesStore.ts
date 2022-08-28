@@ -46,31 +46,35 @@ export const PREFERENCES_STORAGE_KEY = 'general-preferences';
 
 export const usePreferencesStore = defineStore('preferences', () => {
   const { storage } = usePlayerConfig();
-  const storedPrefs = usePlayerStorage<AllPreferences>(
+  const storedPreferences = usePlayerStorage<AllPreferences>(
     PREFERENCES_STORAGE_KEY,
     DEFAULT_PREFERENCES
   );
   // If preferences are updated, the stored value might not have all the fields. This adds the
   // missing fields
-  const allPreferences = computed<AllPreferences>(() => ({
+  const preferences = computed<AllPreferences>(() => ({
     ...DEFAULT_PREFERENCES,
-    ...storedPrefs.value,
+    ...storedPreferences.value,
   }));
 
   function setAllPrefs(newPrefs: AllPreferences) {
     return storage.setItem(PREFERENCES_STORAGE_KEY, newPrefs);
   }
   function setPref<T>(key: PickTypes<AllPreferences, T>, newValue: T) {
-    return setAllPrefs({ ...storedPrefs.value, [key]: newValue });
+    return setAllPrefs({ ...storedPreferences.value, [key]: newValue });
   }
   function setPartialPrefs(newPrefs: Partial<AllPreferences>) {
-    return setAllPrefs({ ...storedPrefs.value, ...newPrefs });
+    return setAllPrefs({ ...storedPreferences.value, ...newPrefs });
+  }
+  function resetToDefault() {
+    return setAllPrefs(DEFAULT_PREFERENCES);
   }
 
   return {
-    allPreferences,
+    preferences,
     setPref,
     setAllPrefs,
     setPartialPrefs,
+    resetToDefault,
   };
 });

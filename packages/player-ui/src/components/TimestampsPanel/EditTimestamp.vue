@@ -1,5 +1,5 @@
 <template>
-  <TimestampPanelLayout mode="back" :title="title" @back="clearActiveTimestamp">
+  <TimestampPanelLayout mode="back" :title="title" @back="editing.activeTimestamp = undefined">
     <template #content>
       <div
         class="as-flex as-flex-col as-flex-1 as-space-y-2 as-pt-3 as-px-4 as-pb-2 as-overflow-y-hidden"
@@ -112,68 +112,68 @@ import { useDeleteDraftTimestamp } from '../../composables/useDeleteDraftTimesta
 import useKeyboardShortcutBindingDisplay from '../../composables/useKeyboardShortcutBindingDisplay';
 import { useKeyboardShortcuts } from '../../composables/useKeyboardShortcuts';
 import { useSaveDraftTimestamp } from '../../composables/useSaveDraftTimestamp';
-import { useHideDialog } from '../../stores/useDialogState';
-import {
-  EditTimestampMode,
-  useActiveTimestamp,
-  useClearActiveTimestamp,
-  useEditTimestampMode,
-  useUpdateActiveTimestamp,
-} from '../../stores/useEditingState';
-import { useEpisodeUrl } from '../../stores/useEpisodeState';
-import { useVideoController, useVideoState } from '../../stores/useVideoState';
 import { TIMESTAMP_TYPES, TIMESTAMP_TYPE_NOT_SELECTED } from '../../utils/constants';
 import { warn } from '../../utils/log';
 import * as Api from 'common/src/api';
 import { isTimestampLocal } from '../../utils/isTimestampLocal';
+import { useDialogStore } from '../../state/stores/useDialogStore';
+import { useVideoStateStore } from '../../state/stores/useVideoStateStore';
+import { useVideoController } from '../../state/composables/useVideoController';
+import {
+  EditTimestampMode,
+  useTimestampEditingStore,
+} from '../../state/stores/useTimestampEditingStore';
+import { storeToRefs } from 'pinia';
+import { useEpisodeStore } from '../../state/stores/useEpisodeStore';
 
 const props = defineProps<{
   initialTab: 'edit' | 'details';
 }>();
 
-const videoState = useVideoState();
-const { play } = useVideoController();
-const episodeUrl = useEpisodeUrl();
-const editTimestampMode = useEditTimestampMode();
+const dialogs = useDialogStore();
+const videoState = useVideoStateStore();
+const controller = useVideoController();
+const editing = useTimestampEditingStore();
+const { episodeUrl } = storeToRefs(useEpisodeStore());
 
 // Active Timestamp Tracking
 
-const activeTimestamp = useActiveTimestamp();
-
 function reset() {
-  selectedType.value = TIMESTAMP_TYPES.find(type => type.id === activeTimestamp.value?.typeId);
+  selectedType.value = TIMESTAMP_TYPES.find(type => type.id === editing.activeTimestamp?.typeId);
   typeFilter.value = '';
 }
 
-watch(activeTimestamp, (newTimestamp, oldTimestamp) => {
-  if (newTimestamp && newTimestamp.id !== oldTimestamp?.id) {
-    reset();
+watch(
+  () => editing.activeTimestamp,
+  (newTimestamp, oldTimestamp) => {
+    if (newTimestamp && newTimestamp.id !== oldTimestamp?.id) {
+      reset();
+    }
   }
-});
+);
 
 onMounted(() => {
   reset();
   if (canAdjustTime.value) focusOnTimeSelect();
 });
 
-const clearActiveTimestamp = useClearActiveTimestamp();
-onUnmounted(clearActiveTimestamp);
+onUnmounted(() => {
+  editing.activeTimestamp = undefined;
+});
 
 // Keyboard Shortcuts
 
-const updateActiveTimestamp = useUpdateActiveTimestamp();
-
 function updateTimestampAt() {
-  if (activeTimestamp.value == null) {
+  if (editing.activeTimestamp == null) {
     warn('Cannot update timestamp position when none are selected');
     return;
   }
   focusOnTimeSelect();
   const newTimestamp = applyTimestampDiff({
-    ...activeTimestamp.value,
+    ...editing.activeTimestamp,
     at: videoState.currentTime,
   });
-  updateActiveTimestamp(newTimestamp);
+  editing.activeTimestamp = newTimestamp;
 }
 
 useKeyboardShortcuts('Edit Timestamp', {
@@ -210,8 +210,8 @@ const canAdjustTime = computed<boolean>(
 
 const isTimeSelectFocused = ref(false);
 const timestampAtFormatted = computed(() => {
-  if (activeTimestamp.value == null) return 'NA';
-  return Utils.formatSeconds(activeTimestamp.value.at, true);
+  if (editing.activeTimestamp == null) return 'NA';
+  return Utils.formatSeconds(editing.activeTimestamp.at, true);
 });
 
 const timeSelectRef = ref<HTMLDivElement>();
@@ -270,19 +270,17 @@ function onPressDown() {
 
 // Buttons
 
-const hideDialog = useHideDialog();
-
 const isSaveDisabled = computed(() => {
-  if (activeTimestamp.value == null || episodeUrl.value == null) return true;
-  if (isTimestampLocal(activeTimestamp.value)) return selectedType.value == null;
-  return activeTimestamp.value.typeId === TIMESTAMP_TYPE_NOT_SELECTED;
+  if (editing.activeTimestamp == null || episodeUrl.value == null) return true;
+  if (isTimestampLocal(editing.activeTimestamp)) return selectedType.value == null;
+  return editing.activeTimestamp.typeId === TIMESTAMP_TYPE_NOT_SELECTED;
 });
 
-const isShowingDelete = computed(() => editTimestampMode.value === EditTimestampMode.EDIT);
+const isShowingDelete = computed(() => editing.editTimestampMode === EditTimestampMode.EDIT);
 
 const title = computed(() => {
-  if (editTimestampMode.value == null) return 'ERROR';
-  if (editTimestampMode.value === EditTimestampMode.ADD) return 'New Timestamp';
+  if (editing.editTimestampMode == null) return 'ERROR';
+  if (editing.editTimestampMode === EditTimestampMode.CREATE) return 'New Timestamp';
   return 'Edit Timestamp';
 });
 
@@ -290,23 +288,23 @@ const saveDraftTimestamp = useSaveDraftTimestamp();
 const deleteDraftTimestamp = useDeleteDraftTimestamp();
 
 function leaveDialog() {
-  play();
+  controller.play();
   if (props.initialTab === 'edit') {
-    hideDialog();
+    dialogs.hideDialog();
   } else {
-    clearActiveTimestamp(); // So we go back to the timestamp list
+    editing.activeTimestamp = undefined; // So we go back to the timestamp list
   }
 }
 
 const applyTimestampDiff = useApplyTimestampDiff();
 function onClickDone() {
-  if (activeTimestamp.value == null) {
+  if (editing.activeTimestamp == null) {
     throw new Error("Cannot click done when there isn't an active timestamp to be done with");
   }
   if (selectedType.value == null) {
     throw new Error("Cannot click done when the timestamp type hasn't been selected");
   }
-  const base = activeTimestamp.value;
+  const base = editing.activeTimestamp;
   // Makes sure the timestamp shows as edited
   const updatedTimestamp = applyTimestampDiff({
     at: base.at,
@@ -319,10 +317,10 @@ function onClickDone() {
 }
 
 function onClickDelete() {
-  if (activeTimestamp.value == null) {
+  if (editing.activeTimestamp == null) {
     throw new Error("Cannot delete the active timestamp when there isn't an active timestamp");
   }
-  deleteDraftTimestamp(activeTimestamp.value);
+  deleteDraftTimestamp(editing.activeTimestamp);
   leaveDialog();
 }
 </script>

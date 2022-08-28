@@ -4,8 +4,8 @@ import {
   CustomAnimeSkipClient,
 } from 'common/src/utils/CustomApiClient';
 import { LogoutError } from 'common/src/utils/LogoutError';
-import { useClearTokens } from '../stores/useAuth';
-import { useResetPreferences } from '../stores/useGeneralPreferences';
+import { useAuthStore } from '../state/stores/useAuthStore';
+import { usePreferencesStore } from '../state/stores/usePreferencesStore';
 import { log, warn } from '../utils/log';
 import { usePlayerConfig } from './usePlayerConfig';
 import useTokenRefresher from './useTokenRefresher';
@@ -18,12 +18,11 @@ const BASE_URLS: Record<InternalPlayerConfig['apiEnv'], string> = {
   local: 'http://localhost:8081/',
 };
 
-export function provideApiClient() {
-  const config = usePlayerConfig();
+export function provideApiClient(config: InternalPlayerConfig) {
   const client = createCustomAnimeSkipClient(BASE_URLS[config.apiEnv], config.apiClientId, log);
 
-  const clearTokens = useClearTokens();
-  const resetPreferences = useResetPreferences();
+  const auth = useAuthStore();
+  const prefs = usePreferencesStore();
 
   useTokenRefresher(client);
 
@@ -56,8 +55,8 @@ export function provideApiClient() {
         } catch (err) {
           if (err instanceof LogoutError) {
             warn('Logging out...');
-            clearTokens();
-            resetPreferences();
+            auth.clearTokens();
+            prefs.resetToDefault();
             void config.usageClient.saveEvent('forced_logout', {
               tokenExpiredAt: err.tokenExpiresAt(),
               refreshTokenExpiredAt: err.refreshTokenExpiresAt(),

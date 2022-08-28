@@ -1,12 +1,12 @@
 <template>
-  <LoadingOverlay class="as-h-full" :is-loading="isSavingTimestamps">
-    <TimestampPanelLayout mode="close" title="Timestamps" @close="hideDialog">
+  <LoadingOverlay class="as-h-full" :is-loading="editing.isSaving">
+    <TimestampPanelLayout mode="close" title="Timestamps" @close="dialogs.hideDialog()">
       <template #content>
         <table class="as-w-full">
           <tr>
             <td :colspan="4" class="as-px-4 as-text-center">
               <ToolbarButton
-                v-if="isEditing"
+                v-if="editing.isEditing"
                 class="as-w-full"
                 title="New timestamp"
                 @click="onClickAddNew"
@@ -14,7 +14,7 @@
                 <i-mdi-plus class="as-w-6 as-h-6 as-inline" />
               </ToolbarButton>
               <p v-if="!canEditTimestamps" class="as-text-error as-my-2">
-                <LoginWarning v-if="!isLoggedIn" before="editing timestamps" />
+                <LoginWarning v-if="!auth.isLoggedIn" before="editing timestamps" />
                 <template v-else-if="episodeUrl == null">
                   Connect the episode to Anime Skip before editing timestamps
                 </template>
@@ -33,7 +33,7 @@
               v-for="timestamp of activeTimestamps"
               class="as-bg-on-surface as-bg-opacity-0 hover:as-bg-opacity-hover focus-within:as-bg-opacity-active as-transition-colors as-cursor-pointer as-py-2 as-px-4 as-group"
               :key="timestamp.id"
-              @click="onClickTimestamp(timestamp)"
+              @click="controller.seekTo(timestamp.at)"
               @mouseenter="onHoverTimestamp(timestamp)"
               @mouseleave.stop.prevent="onStopHoverTimestamp()"
             >
@@ -88,7 +88,7 @@
         <div class="as-h-3" />
       </template>
       <template v-if="canEditTimestamps" #footer>
-        <template v-if="isEditing">
+        <template v-if="editing.isEditing">
           <RaisedButton class="as-text-on-primary as-flex-grow" @click="onClickSave">
             Save Changes
           </RaisedButton>
@@ -119,25 +119,27 @@ import { useMatchingTemplate } from '../../composables/useMatchingTemplate';
 import { useStartEditing } from '../../composables/useStartEditing';
 import { useStopEditing } from '../../composables/useStopEditing';
 import { useGetTimestampColor } from '../../composables/useTimelineColors';
-import { useIsLoggedIn } from '../../stores/useAuth';
-import { useHideDialog } from '../../stores/useDialogState';
-import {
-  EditTimestampMode,
-  useIsEditing,
-  useIsSavingChanges,
-  useUpdateActiveTimestamp,
-  useUpdateEditTimestampMode,
-} from '../../stores/useEditingState';
-import { useEpisodeUrl } from '../../stores/useEpisodeState';
-import {
-  useClearHoveredTimestamp,
-  useUpdateHoveredTimestamp,
-} from '../../stores/useHoveredTimestamp';
-import { useVideoController } from '../../stores/useVideoState';
 import { TIMESTAMP_SOURCES, TIMESTAMP_TYPES } from '../../utils/constants';
 import * as Api from 'common/src/api';
 import { SECONDS } from 'common/src/utils/time';
 import { useUpdateIsEditingTemplate } from './useTimestampPanelState';
+import { useAuthStore } from '../../state/stores/useAuthStore';
+import {
+  EditTimestampMode,
+  useTimestampEditingStore,
+} from '../../state/stores/useTimestampEditingStore';
+import { useEpisodeStore } from '../../state/stores/useEpisodeStore';
+import { storeToRefs } from 'pinia';
+import { useVideoController } from '../../state/composables/useVideoController';
+import { useFocusedTimestampStore } from '../../state/stores/useFocusedTimestampStore';
+import { useDialogStore } from '../../state/stores/useDialogStore';
+
+const auth = useAuthStore();
+const editing = useTimestampEditingStore();
+const { episodeUrl } = storeToRefs(useEpisodeStore());
+const controller = useVideoController();
+const focusedTimestamp = useFocusedTimestampStore();
+const dialogs = useDialogStore();
 
 const timestampTypeMap = TIMESTAMP_TYPES.reduce<{ [typeId: string]: Api.TimestampType }>(
   (map, timestamp) => {
@@ -146,25 +148,19 @@ const timestampTypeMap = TIMESTAMP_TYPES.reduce<{ [typeId: string]: Api.Timestam
   },
   {}
 );
-const isLoggedIn = useIsLoggedIn();
-const isEditing = useIsEditing();
-const episodeUrl = useEpisodeUrl();
-const { pause, setCurrentTime } = useVideoController();
 
 // Timestamp Hover
 
 const [setTimestampHoverTimeout, clearTimestampHoverTimeout] = useTimeout();
-const updateHoveredTimestamp = useUpdateHoveredTimestamp();
 function onHoverTimestamp(timestamp: Api.AmbiguousTimestamp): void {
   clearTimestampHoverTimeout();
-  updateHoveredTimestamp(timestamp);
-  setTimestampHoverTimeout(clearHoveredTimestamp, SECONDS(3));
+  focusedTimestamp.timestamp = timestamp;
+  setTimestampHoverTimeout(() => (focusedTimestamp.timestamp = undefined), SECONDS(3));
 }
 
-const clearHoveredTimestamp = useClearHoveredTimestamp(updateHoveredTimestamp);
 function onStopHoverTimestamp(): void {
   clearTimestampHoverTimeout();
-  clearHoveredTimestamp();
+  focusedTimestamp.timestamp = undefined;
 }
 onUnmounted(onStopHoverTimestamp);
 
@@ -195,26 +191,23 @@ function itemHasSource(timestamp: Api.AmbiguousTimestamp): boolean {
 const getTimestampClass = useGetTimestampColor('text');
 
 function onClickTimestamp(timestamp: Api.AmbiguousTimestamp) {
-  setCurrentTime(timestamp.at);
+  controller.seekTo(timestamp.at);
 }
 
 // Editing
 
 const activeTimestamps = useDisplayedTimestamps();
-const updateActiveTimestamp = useUpdateActiveTimestamp();
 const canEditTimestamps = useCanEditTimestamps();
-const isSavingTimestamps = useIsSavingChanges();
-const updateEditTimestampMode = useUpdateEditTimestampMode();
 
 const startEditing = useStartEditing();
 const stopEditing = useStopEditing();
 
 function editTimestamp(timestamp: Api.AmbiguousTimestamp): void {
-  pause();
+  controller.pause();
   startEditing(() => {
-    updateEditTimestampMode(EditTimestampMode.EDIT);
-    updateActiveTimestamp(timestamp);
-    setCurrentTime(timestamp.at);
+    editing.editTimestampMode = EditTimestampMode.EDIT;
+    editing.activeTimestamp = timestamp;
+    controller.seekTo(timestamp.at);
   });
 }
 
@@ -225,14 +218,13 @@ function onClickAddNew(): void {
   createNewTimestamp();
 }
 
-const hideDialog = useHideDialog();
 async function onClickSave(): Promise<void> {
   await stopEditing();
-  await hideDialog();
+  dialogs.hideDialog();
 }
 async function onClickDiscard(): Promise<void> {
   await stopEditing(true);
-  await hideDialog();
+  dialogs.hideDialog();
 }
 const updateIsEditingTemplate = useUpdateIsEditingTemplate();
 function onClickOpenTemplate(): void {

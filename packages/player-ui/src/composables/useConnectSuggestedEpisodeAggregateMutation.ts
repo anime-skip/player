@@ -1,29 +1,34 @@
 import { RequestState } from 'vue-use-request-state';
-import { useApiClient } from '../composables/useApiClient';
-import { useUpdateEpisodeRequestState } from '../stores/useEpisodeState';
-import { useDuration } from '../stores/useVideoState';
+import { useApiClient } from './useApiClient';
 import { warn } from '../utils/log';
 import * as Api from 'common/src/api';
 import GeneralUtils from 'common/src/utils/GeneralUtils';
 import * as Mappers from 'common/src/utils/mappers';
-import { useCreateEpisodeData } from './useCreateEpisodeData';
-import { useSyncTimestamps } from './useSyncTimestamps';
-import { useTabUrl } from './useTabUrl';
+import { useConnectEpisodeAggregateMutation } from './useConnectEpisodeAggregateMutation';
+import { useTimestampEditingStore } from '../state/stores/useTimestampEditingStore';
+import { useMutation, UseMutationOptions } from 'vue-query';
 
-export function useCreateEpisodeFromThirdParty() {
-  const updateEpisodeRequestState = useUpdateEpisodeRequestState();
-  const createEpisode = useCreateEpisodeData();
-  const syncTimestamps = useSyncTimestamps();
-  const tabUrl = useTabUrl();
-  const durationRef = useDuration();
+export interface ThirdPartyCreateEpisodeData {
+  thirdPartyEpisode: Api.ThirdPartyEpisode;
+  url?: string;
+  duration?: number;
+}
+
+export function useConnectSuggestedEpisodeAggregateMutation(
+  options?: UseMutationOptions<void, unknown, ThirdPartyCreateEpisodeData, unknown>
+) {
+  // const updateEpisodeRequestState = useUpdateEpisodeRequestState();
+  // const saveTimestamps = useSaveTimestampsMutation();
+  // const tabUrl = useTabUrl();
+  // const durationRef = useDuration();
   const api = useApiClient();
+  const editing = useTimestampEditingStore();
 
-  return async (
-    thirdPartyEpisode: Api.ThirdPartyEpisode,
-    onSuccess?: () => void
-  ): Promise<void> => {
-    updateEpisodeRequestState(RequestState.LOADING);
-    try {
+  const connectEpisode = useConnectEpisodeAggregateMutation();
+
+  return useMutation({
+    ...options,
+    async mutationFn({ thirdPartyEpisode, url, duration }: ThirdPartyCreateEpisodeData) {
       const showName = thirdPartyEpisode.show.name;
       const showSearchResults: Api.ShowSearchResult[] = await api.searchShows(
         Api.SHOW_SEARCH_RESULT_DATA,
@@ -33,8 +38,6 @@ export function useCreateEpisodeFromThirdParty() {
         searchResult => searchResult.name.toLowerCase() === showName.toLowerCase()
       )[0];
 
-      const url = tabUrl.value;
-      const duration = durationRef.value;
       if (!url || !duration) {
         throw new Error('Cannot create episode without a URL and duration');
       }
@@ -55,7 +58,7 @@ export function useCreateEpisodeFromThirdParty() {
             : undefined,
       };
 
-      await createEpisode({
+      await connectEpisode.mutateAsync({
         show:
           existingShow == null
             ? {
@@ -74,22 +77,25 @@ export function useCreateEpisodeFromThirdParty() {
           create: true,
           data: episodeUrl,
         },
+        initialTimestampsWithOffset: thirdPartyEpisode.timestamps.map<Api.AmbiguousTimestamp>(
+          t => ({
+            id: t.id ?? GeneralUtils.randomId(),
+            at: GeneralUtils.applyTimestampsOffset(episodeUrl.timestampsOffset, t.at),
+            typeId: t.typeId,
+            source: thirdPartyEpisode.source,
+            edited: false,
+          })
+        ),
       });
-
-      // Publish timestamps if present
-      if (thirdPartyEpisode.timestamps.length > 0) {
-        const timestamps = Mappers.thirdPartyEpisodeToAmbiguousTimestamps(thirdPartyEpisode);
-        const offsetTimestamps: Api.AmbiguousTimestamp[] = timestamps.map(timestamp => ({
-          ...timestamp,
-          at: GeneralUtils.applyTimestampsOffset(episodeUrl.timestampsOffset, timestamp.at),
-        }));
-        await syncTimestamps([], offsetTimestamps);
-      }
-      onSuccess?.();
-      updateEpisodeRequestState(RequestState.SUCCESS);
-    } catch (err) {
-      warn('Failed to create episode from third party data', err);
-      updateEpisodeRequestState(RequestState.FAILURE);
-    }
-  };
+    },
+    onMutate() {
+      editing.isSaving = true;
+    },
+    onSettled() {
+      editing.isSaving = false;
+    },
+    onError(err) {
+      warn('Failed to connect third party episode', err);
+    },
+  });
 }

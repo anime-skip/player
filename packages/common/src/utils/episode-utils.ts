@@ -1,19 +1,4 @@
-import * as Api from '../api';
-import { DisplayEpisodeInfo } from '../types';
-
 export default {
-  seasonAndNumberFromEpisodeUrl(episodeUrl?: Api.EpisodeUrl): string {
-    if (episodeUrl?.episode == null) return '';
-
-    return this.seasonAndNumberDisplay(episodeUrl.episode);
-  },
-
-  seasonAndNumberFromEpisodeInfo(episodeInfo?: DisplayEpisodeInfo): string {
-    if (episodeInfo == null) return '';
-
-    return this.seasonAndNumberDisplay(episodeInfo);
-  },
-
   seasonAndNumberDisplay({
     absoluteNumber,
     number,

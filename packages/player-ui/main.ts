@@ -17,7 +17,7 @@ mountPlayerUi({
   crawlEpisodeInfo: async () => ({}),
   onVideoChanged: noop,
   openAllSettings: noop,
-  service: import.meta.env.API_ENV ?? 'test',
+  service: 'test',
   serviceDisplayName: 'Player UI Test',
   storage: createPlayerLocalStorage(),
   screenshotController: NoopScreenshotController,
@@ -26,7 +26,7 @@ mountPlayerUi({
     saveEvent: asyncNoop,
   },
   apiClientId: 'OB3AfF3fZg9XlZhxtLvhwLhDcevslhnr',
-  apiEnv: import.meta.env.API_ENV ?? 'local',
+  apiEnv: import.meta.env.VITE_API_ENV ?? 'local',
   addKeyDownListener: l => document.addEventListener('keydown', l),
   removeKeyDownListener: l => document.removeEventListener('keydown', l),
 });

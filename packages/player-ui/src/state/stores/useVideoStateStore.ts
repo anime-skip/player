@@ -1,12 +1,13 @@
 import { GeneralEventListener, useThrottle, useThrottleFn } from '@vueuse/core';
 import isEqual from 'lodash.isequal';
 import { defineStore, storeToRefs } from 'pinia';
-import { Ref, WatchCallback } from 'vue';
+import { Ref, UnwrapRef, WatchCallback } from 'vue';
 import { usePlayerConfig } from '../../composables/usePlayerConfig';
 import { debug, log } from '../../utils/log';
-import { usePlayerActivityStore } from './usePlayerActivityStore';
+import { useUserActivityStore } from './useUserActivityStore';
 import { usePlayHistoryStore } from './usePlayHistoryStore';
 import { useTabUrlStore } from './useTabUrlStore';
+import { usePreferencesStore } from './usePreferencesStore';
 
 export enum VideoReadyState {
   HAVE_NOTHING = 0,
@@ -43,7 +44,7 @@ function useVideoEventListener<EventType = Event>(
  * that method's corresponding event callback being triggered, which would set the source's value
  * again. By doing a deep comparison, we can NOT call the method again if nothing has changed.
  */
-function watchDeepEqual<T extends object>(source: T, cb: WatchCallback<T>) {
+function watchDeepEqual<T>(source: Ref<T>, cb: WatchCallback<T>) {
   watch(source, (newValue, oldValue, onCleanup) => {
     if (isEqual(newValue, oldValue)) return;
     return cb(newValue, oldValue, onCleanup);
@@ -52,9 +53,10 @@ function watchDeepEqual<T extends object>(source: T, cb: WatchCallback<T>) {
 
 export const useVideoStateStore = defineStore('video-state', () => {
   const config = usePlayerConfig();
-  const playerActivity = usePlayerActivityStore();
+  const playerActivity = useUserActivityStore();
   const playHistory = usePlayHistoryStore();
   const { url } = storeToRefs(useTabUrlStore());
+  const { preferences } = storeToRefs(usePreferencesStore());
 
   // Video
 
@@ -104,8 +106,6 @@ export const useVideoStateStore = defineStore('video-state', () => {
    * Useful when initializing a new video to use the same settings as the previous one.
    */
   function applyVideoState() {
-    if (!video.value) return;
-
     debug('Applying video state to video element:', {
       stateIsMuted: isMuted.value,
       videoIsMuted: video.value.muted,
@@ -152,7 +152,7 @@ export const useVideoStateStore = defineStore('video-state', () => {
   );
 
   function updateWaitingState() {
-    // updatePlayingState.stop() // TODO - how can I stop this?
+    // updatePlayingState.stop() // TODO[state] - how can I stop this?
     isBuffering.value = true;
   }
 
@@ -184,6 +184,11 @@ export const useVideoStateStore = defineStore('video-state', () => {
   watchDeepEqual(isPaused, newIsPaused => {
     if (newIsPaused) video.value.pause();
     else video.value.play();
+  });
+
+  const playbackRatePref = computed(() => preferences.value.playbackRate);
+  watchDeepEqual(playbackRatePref, newPlaybackRate => {
+    playbackRate.value = newPlaybackRate;
   });
 
   // Sync on startup if player is loaded into existing page on install

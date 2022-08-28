@@ -1,47 +1,49 @@
 import { RequestState } from 'vue-use-request-state';
 import { useApiClient } from '../composables/useApiClient';
-import { useEpisode, useEpisodeUrl } from '../stores/useEpisodeState';
-import { useUpdateTemplateRequestState } from '../stores/useTemplateState';
 import { warn } from '../utils/log';
 import * as Api from 'common/src/api';
-import { useFetchEpisodeByUrl } from './useFetchEpisodeByUrl';
 import { useSaveTemplateTimestamps } from './useSaveTemplateTimestamps';
+import { useTemplateEditingStore } from '../state/stores/useTemplateEditingStore';
+import { useQueryClient } from 'vue-query';
+import { useEpisodeStore } from '../state/stores/useEpisodeStore';
+import { storeToRefs } from 'pinia';
+import { EPISODE_URL_QUERY_KEY } from '../state/composables/useFindEpisodeUrlQuery';
 
 export function useSaveNewTemplate() {
   const api = useApiClient();
-  const updateTemplateRequestState = useUpdateTemplateRequestState();
+  const editing = useTemplateEditingStore();
+  const { episode } = storeToRefs(useEpisodeStore());
+
+  const queryClient = useQueryClient();
+
   const saveTemplateTimestamps = useSaveTemplateTimestamps();
-  const fetchEpisodeUrl = useFetchEpisodeByUrl();
-  const episodeUrl = useEpisodeUrl();
-  const episodeRef = useEpisode();
 
   return async (
     type: Api.TemplateType,
     seasons: string[] | undefined,
     selectedTimestampIds: string[]
   ): Promise<void> => {
-    updateTemplateRequestState(RequestState.LOADING);
+    editing.isSaving = true;
     try {
-      const episode = episodeRef.value as Api.Episode | undefined;
-      if (!episode?.show) throw Error('Cannot create a template when there is no episode or show');
+      if (!episode.value?.show)
+        throw Error('Cannot create a template when there is no episode or show');
 
       // Publish and build local template
       const template = await api.createTemplate(Api.TEMPLATE_DATA, {
         newTemplate: {
-          showId: episode.show.id,
+          showId: episode.value.show.id,
           type,
           seasons,
-          sourceEpisodeId: episode.id,
+          sourceEpisodeId: episode.value.id,
         },
       });
       await saveTemplateTimestamps(template, [], selectedTimestampIds);
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      void fetchEpisodeUrl(episodeUrl.value!.url);
-      updateTemplateRequestState(RequestState.SUCCESS);
+      await queryClient.invalidateQueries(EPISODE_URL_QUERY_KEY);
     } catch (err) {
       warn('Failed to create template:', { type, seasons, selectedTimestampIds }, err);
-      updateTemplateRequestState(RequestState.FAILURE);
+    } finally {
+      editing.isSaving = false;
     }
   };
 }

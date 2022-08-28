@@ -5,6 +5,7 @@ import { usePlayerStorage } from '../../composables/usePlayerStorage';
 
 const SHOW_AT_STORAGE_KEY = 'storeReviewPromptAt';
 const PROMPT_COUNT_STORAGE_KEY = 'prompt-count';
+const NEVER_PROMPT_AGAIN_STORAGE_KEY = 'dontShowStoreReviewPromptAgain';
 
 const BASE_BACKOFF = 2 * DAY;
 
@@ -12,6 +13,7 @@ export const useReviewPromptStore = defineStore('review-prompt', () => {
   const { storage } = usePlayerConfig();
   const showAt = usePlayerStorage<number>(SHOW_AT_STORAGE_KEY, Infinity);
   const promptCount = usePlayerStorage<number>(PROMPT_COUNT_STORAGE_KEY, 0);
+  const neverShowAgain = usePlayerStorage<boolean>(NEVER_PROMPT_AGAIN_STORAGE_KEY, false);
 
   // Purposefully not reactive!
   // This should be set when the player is opened (ie: when this store is created!). No need to
@@ -20,6 +22,7 @@ export const useReviewPromptStore = defineStore('review-prompt', () => {
 
   return {
     shouldShow: computed(() => now >= showAt.value),
+    neverShowAgain,
     /**
      * Apply an exponential backoff.
      */

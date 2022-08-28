@@ -2,9 +2,9 @@
   <teleport to="body">
     <scoped-styles-root>
       <div
-        v-if="shouldShowReturnButton"
+        v-if="playerVisibility.serviceUi"
         class="as-fixed as-right-16 as-top-16 as-z-1000000 as-bg-background as-shadow-md as-flex as-flex-row as-items-center as-py-2 as-px-3 as-cursor-pointer as-rounded-lg"
-        @click="hideOriginalPlayer()"
+        @click="showAnimeSkipUi()"
       >
         <themed-logo class="as-w-8 as-h-8 as-mr-3" />
         <p class="as-text-on-surface">Return to Anime Skip</p>
@@ -15,11 +15,14 @@
 
 <script lang="ts" setup>
 import { Teleport } from 'vue';
-import { useHideOriginalPlayer, useIsOriginalPlayerVisible } from '../stores/usePlayerVisibility';
+import { usePlayerVisibilityStore } from '../state/stores/usePlayerVisibilityStore';
 
-const shouldShowReturnButton = useIsOriginalPlayerVisible();
+const playerVisibility = usePlayerVisibilityStore();
 
-const hideOriginalPlayer = useHideOriginalPlayer();
+function showAnimeSkipUi() {
+  playerVisibility.animeSkipUi = true;
+  playerVisibility.serviceUi = false;
+}
 </script>
 
 <style lang="scss" scoped>

@@ -1,41 +1,38 @@
-import { RequestState } from 'vue-use-request-state';
 import { useApiClient } from '../composables/useApiClient';
-import { useUpdateEpisodeRequestState, useUpdateEpisodeState } from '../stores/useEpisodeState';
-import { useUpdateInferredTimestamps } from '../stores/useInferredEpisodeState';
 import { warn } from '../utils/log';
 import * as Api from 'common/src/api';
 import * as Mappers from 'common/src/utils/mappers';
+import { useTimestampEditingStore } from '../state/stores/useTimestampEditingStore';
+import { storeToRefs } from 'pinia';
+import { useSuggestedEpisodesStore } from '../state/stores/useSuggestedEpisodesStore';
 
 export function useFetchThirdPartyEpisode() {
-  const updateEpisodeRequestState = useUpdateEpisodeRequestState();
-  const updateEpisodeState = useUpdateEpisodeState();
-  const updateInferredTimestamps = useUpdateInferredTimestamps();
+  const editing = useTimestampEditingStore();
+  const { inferredTimestamps, suggestedEpisodes } = storeToRefs(useSuggestedEpisodesStore());
   const api = useApiClient();
 
   return async (episodeName: string, showName: string): Promise<void> => {
     try {
-      updateEpisodeRequestState(RequestState.LOADING);
-      const episodes: Api.ThirdPartyEpisode[] = await api.findEpisodesByEpisodeAndShowName(
+      editing.isSaving = true;
+      suggestedEpisodes.value = await api.findEpisodesByEpisodeAndShowName(
         Api.THIRD_PARTY_EPISODE_DATA,
         { episodeName, showName }
       );
-      const episodesWithTimestamps = episodes.filter(episode => episode.timestamps.length > 0);
+      const episodesWithTimestamps = suggestedEpisodes.value.filter(
+        episode => episode.timestamps.length > 0
+      );
       if (episodesWithTimestamps.length > 0) {
         const episode = episodesWithTimestamps[0];
         const timestamps = Mappers.thirdPartyEpisodeToAmbiguousTimestamps(episode);
-        updateEpisodeState({
-          episodeUrl: undefined,
-          episode,
-        });
-        updateInferredTimestamps(timestamps);
+
+        inferredTimestamps.value = timestamps;
       } else {
-        updateInferredTimestamps(undefined);
+        inferredTimestamps.value = undefined;
       }
-      updateEpisodeRequestState(RequestState.SUCCESS);
     } catch (err) {
       warn('Failed to load suggestions', err);
-      updateEpisodeRequestState(RequestState.FAILURE);
-      updateEpisodeState({ episodeUrl: undefined, episode: undefined });
+    } finally {
+      editing.isSaving = false;
     }
   };
 }

@@ -18,10 +18,7 @@ import { useNow } from '@vueuse/core';
 import Utils from 'common/src/utils/GeneralUtils';
 import { DAYS, MINUTES, SECOND, today } from 'common/src/utils/time';
 import { usePlayerConfig } from '../composables/usePlayerConfig';
-import {
-  useDontShowStoreReviewPromptAgain,
-  useStoreReviewPromptDate,
-} from '../stores/store-review-prompt';
+import { useReviewPromptStore } from '../state/stores/useReviewPromptStore';
 import { NotificationButton } from './Notification.vue';
 
 interface Notification {
@@ -46,15 +43,19 @@ function isFirefox(): boolean {
 
 const { usageClient } = usePlayerConfig();
 
-const promptReviewAt = useStoreReviewPromptDate();
-const dontShowReviewPromptAgain = useDontShowStoreReviewPromptAgain();
+const reviewPrompt = useReviewPromptStore();
+
+watch(
+  () => reviewPrompt.shouldShow,
+  shouldShow => {
+    if (shouldShow) addPromptReviewNotifications();
+  }
+);
 
 function addPromptReviewNotifications() {
-  if (dontShowReviewPromptAgain.value) return;
+  if (!reviewPrompt.shouldShow) return;
 
   void usageClient.saveEvent('prompt_store_review');
-  // Setup the next notification if ignored
-  promptReviewAt.value = today() + DAYS(3);
   addNotification({
     id: randomStringId(),
     title: 'Enjoying Anime Skip?',
@@ -66,7 +67,7 @@ function addPromptReviewNotifications() {
         primary: true,
         onClick() {
           void usageClient.saveEvent('prompt_store_review_rate');
-          dontShowReviewPromptAgain.value = true;
+          reviewPrompt.neverShowAgain = true;
           window.open(
             isFirefox()
               ? 'https://addons.mozilla.org/en-US/firefox/addon/anime-skip/?utm_source=extension&utm_medium=review-prompt'
@@ -78,25 +79,16 @@ function addPromptReviewNotifications() {
         text: "Don't ask again",
         onClick() {
           void usageClient.saveEvent('prompt_store_review_dont_ask_again');
-          dontShowReviewPromptAgain.value = true;
+          reviewPrompt.neverShowAgain = true;
         },
       },
     ],
   });
+
+  reviewPrompt.showAgainInFuture();
 }
 
 // Managing Notifications
-
-const now = useNow({ interval: SECOND });
-watch(now, nextNow => {
-  const ms = nextNow.getTime();
-
-  // Remove notifications that should be dismissed
-  // notifications.value = notifications.value.filter(({ dismissAt }) => dismissAt > ms);
-
-  // Add schedule based notifications
-  if (promptReviewAt.value && promptReviewAt.value <= ms) addPromptReviewNotifications();
-});
 
 function dismissNotificationById(dismissedId: string) {
   notifications.value = notifications.value.filter(({ id }) => id !== dismissedId);
@@ -111,10 +103,10 @@ onUnmounted(() => {
 });
 
 /**
- * Add it with a delay so if it is loaded on mount, it still gets animated
+ * Add the notification with a delay so if it is loaded on mount, it still gets animated in
  */
-function addNotification(notificaiton: Notification) {
-  setTimeout(() => notifications.value.push(notificaiton), SECOND);
+function addNotification(notification: Notification) {
+  setTimeout(() => notifications.value.push(notification), SECOND);
 }
 </script>
 

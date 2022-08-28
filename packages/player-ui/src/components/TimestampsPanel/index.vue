@@ -1,10 +1,12 @@
 <template>
   <BasicDialog
     id="TimestampsPanel"
+    :visible="dialogs.activeDialog === DialogName.TIMESTAMPS_PANEL"
     name="TimestampsPanel"
     gravity-x="flex-end"
     gravity-y="center"
     @show="onShow"
+    @dismiss="dialogs.hideDialog()"
   >
     <EditTimestamp v-if="isShowingEditTimestamp" :initial-tab="initialTab" />
     <EditTemplate v-else-if="isShowingTemplate" />
@@ -13,17 +15,18 @@
 </template>
 
 <script lang="ts" setup>
-import { useEditingState } from '../../stores/useEditingState';
+import { DialogName, useDialogStore } from '../../state/stores/useDialogStore';
+import { useTimestampEditingStore } from '../../state/stores/useTimestampEditingStore';
 import { useIsEditingTemplate } from './useTimestampPanelState';
 
-const editingState = useEditingState();
-const activeTimestamp = computed(() => editingState.activeTimestamp);
-const isShowingEditTimestamp = computed(() => activeTimestamp.value != null);
+const dialogs = useDialogStore();
+const editing = useTimestampEditingStore();
+const isShowingEditTimestamp = computed(() => editing.activeTimestamp != null);
 const isShowingTemplate = useIsEditingTemplate();
 
 const initialTab = ref<'details' | 'edit'>('details');
 function onShow(): void {
-  initialTab.value = activeTimestamp.value == null ? 'details' : 'edit';
+  initialTab.value = editing.activeTimestamp == null ? 'details' : 'edit';
 }
 </script>
 

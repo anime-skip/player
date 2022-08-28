@@ -1,6 +1,7 @@
 import { usePlayerConfig } from '../composables/usePlayerConfig';
-import { useGeneralPreferences } from '../stores/useGeneralPreferences';
 import { ColorTheme } from 'common/src/api';
+import { usePreferencesStore } from '../state/stores/usePreferencesStore';
+import { storeToRefs } from 'pinia';
 
 const colorThemeToCssClassNameMap: Record<ColorTheme, string | undefined> = {
   ANIME_SKIP_BLUE: undefined,
@@ -21,11 +22,11 @@ const serviceToTheme: Record<string, string | undefined> = {
 };
 
 export function useTheme() {
-  const prefs = useGeneralPreferences();
+  const { preferences } = storeToRefs(usePreferencesStore());
   const { service } = usePlayerConfig();
 
   const themeService = computed(() => {
-    const themePref = prefs.value.colorTheme;
+    const themePref = preferences.value.colorTheme;
     return themePref === ColorTheme.PER_SERVICE
       ? serviceToTheme[service]
       : colorThemeToCssClassNameMap[themePref];

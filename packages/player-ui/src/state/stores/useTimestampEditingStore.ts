@@ -12,6 +12,10 @@ export const useTimestampEditingStore = defineStore('timestamp-editing', () => {
    */
   const isEditing = ref(false);
   /**
+   * Whether or not the changes are being saved.
+   */
+  const isSaving = ref(false);
+  /**
    * The current timestamp being edited, or `undefined` if none are being edited.
    */
   const activeTimestamp = ref<AmbiguousTimestamp>();
@@ -31,6 +35,7 @@ export const useTimestampEditingStore = defineStore('timestamp-editing', () => {
 
   return {
     isEditing,
+    isSaving,
     activeTimestamp,
     editTimestampMode,
     draftTimestamps,

@@ -1,14 +1,12 @@
+import { storeToRefs } from 'pinia';
 import {
   KeyboardShortcutAction,
-  usePrimaryKeyboardShortcutPrefs,
-  useSecondaryKeyboardShortcutPrefs,
-} from '../stores/useKeyboardShortcutPrefs';
+  useKeyboardShortcutStore,
+} from '../state/stores/useKeyboardShortcutStore';
 
 export default function useKeyboardShortcutBindingDisplay(action: KeyboardShortcutAction) {
-  const { primaryShortcutsActionToKeyMap } = usePrimaryKeyboardShortcutPrefs();
-  const { secondaryShortcutsActionToKeyMap } = useSecondaryKeyboardShortcutPrefs();
+  const { primaryActionToKey, secondaryActionToKey } = storeToRefs(useKeyboardShortcutStore());
   return computed<string | undefined>(
-    () =>
-      primaryShortcutsActionToKeyMap.value[action] || secondaryShortcutsActionToKeyMap.value[action]
+    () => primaryActionToKey.value[action] || secondaryActionToKey.value[action]
   );
 }

@@ -12,34 +12,38 @@
 <script lang="ts" setup>
 import { useDisplayedTimestamps } from '../composables/useDisplayedTimestamps';
 import { useIsToolbarVisible } from '../composables/useIsToolbarVisible';
-import { useIsEditing } from '../stores/useEditingState';
-import { useGeneralPreferences } from '../stores/useGeneralPreferences';
-import { useDuration, useVideoController, useVideoState } from '../stores/useVideoState';
 import { TIMESTAMP_TYPES } from '../utils/constants';
 import Utils from 'common/src/utils/GeneralUtils';
+import { useVideoController } from '../state/composables/useVideoController';
+import { useVideoStateStore } from '../state/stores/useVideoStateStore';
+import { usePreferencesStore } from '../state/stores/usePreferencesStore';
+import { storeToRefs } from 'pinia';
+import { useTimestampEditingStore } from '../state/stores/useTimestampEditingStore';
+import { useUserActivityStore } from '../state/stores/useUserActivityStore';
 
 const SKIP_BUTTON_OFFSET = 0.1;
 const IS_VIDEO_OVER_ALLOWED_DIFF = 0.1;
 
-const { setCurrentTime, setActive } = useVideoController();
-const videoState = useVideoState();
+const controller = useVideoController();
+const editing = useTimestampEditingStore();
+const videoState = useVideoStateStore();
+const activity = useUserActivityStore();
+
 const isToolbarVisible = useIsToolbarVisible();
-const currentTime = computed(() => videoState.currentTime);
-const preferences = useGeneralPreferences();
+const { preferences } = storeToRefs(usePreferencesStore());
 const activeTimestamps = useDisplayedTimestamps();
-const duration = useDuration(videoState);
 const isVideoOver = computed(
-  () => Math.abs(duration.value - currentTime.value) < IS_VIDEO_OVER_ALLOWED_DIFF
+  () => Math.abs(videoState.duration - videoState.currentTime) < IS_VIDEO_OVER_ALLOWED_DIFF
 );
 
 // Timestamps
 
 const currentTimestamp = computed(() => {
-  const time = currentTime.value + SKIP_BUTTON_OFFSET;
+  const time = videoState.currentTime + SKIP_BUTTON_OFFSET;
   return Utils.previousTimestampInVideo(time, activeTimestamps.value);
 });
 const nextTimestamp = computed(() =>
-  Utils.nextTimestamp(currentTime.value, activeTimestamps.value, preferences.value)
+  Utils.nextTimestamp(videoState.currentTime, activeTimestamps.value, preferences.value)
 );
 const currentTimestampTitle = computed<string | undefined>(() => {
   const currentTimestampTypeId = currentTimestamp.value?.typeId;
@@ -52,24 +56,23 @@ const currentTimeStampIsSkipped = computed(
 
 // Show / Skip
 
-const isEditing = useIsEditing();
 const showSkipButton = computed(
   () =>
     isToolbarVisible.value &&
     currentTimeStampIsSkipped.value &&
     !preferences.value.enableAutoSkip &&
     !isVideoOver.value &&
-    !isEditing.value &&
+    !editing.isEditing &&
     currentTimestampTitle.value
 );
 watch(currentTimeStampIsSkipped, newIsSkipped => {
-  if (newIsSkipped) setActive();
+  if (newIsSkipped) activity.triggerActive();
 });
 
 const skip = () => {
-  const goToTime = nextTimestamp.value?.at ?? duration.value;
+  const goToTime = nextTimestamp.value?.at ?? videoState.duration;
   if (goToTime != null) {
-    setCurrentTime(goToTime);
+    controller.seekTo(goToTime);
   }
 };
 </script>

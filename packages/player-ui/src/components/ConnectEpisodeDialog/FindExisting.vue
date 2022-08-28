@@ -64,31 +64,40 @@
         {{ suggestionsHeader }}
       </FlatButton>
       <div class="as-flex-1" />
-      <FlatButton transparent @click.stop.prevent="hideDialog">Cancel</FlatButton>
+      <FlatButton transparent @click.stop.prevent="dialogs.hideDialog()">Cancel</FlatButton>
     </div>
   </form>
 </template>
 
 <script lang="ts" setup>
 import { CreateEpisodePrefill } from '../../@types';
-import { useCreateEpisodeFromThirdParty } from '../../composables/useCreateEpisodeFromThirdParty';
+import { useConnectSuggestedEpisodeAggregateMutation } from '../../composables/useConnectSuggestedEpisodeAggregateMutation';
 import { useEpisodeAutocomplete } from '../../composables/useEpisodeAutocomplete';
 import { useLinkEpisodeUrl } from '../../composables/useLinkEpisodeUrl';
 import { useShowAutocomplete } from '../../composables/useShowAutocomplete';
-import { useHideDialog } from '../../stores/useDialogState';
 import { TIMESTAMP_SOURCES } from '../../utils/constants';
 import { error, warn } from '../../utils/log';
 import * as Api from 'common/src/api';
 import { TextInputRef } from 'common/src/types';
 import EpisodeUtils from 'common/src/utils/episode-utils';
+import { useDialogStore } from '../../state/stores/useDialogStore';
+import { storeToRefs } from 'pinia';
+import { useTabUrlStore } from '../../state/stores/useTabUrlStore';
+import { useEpisodeStore } from '../../state/stores/useEpisodeStore';
+import { useVideoStateStore } from '../../state/stores/useVideoStateStore';
 
 const props = defineProps<{
   suggestions: Api.ThirdPartyEpisode[];
   prefill: CreateEpisodePrefill;
 }>();
+
 const emit = defineEmits({
   createNew: (_arg: CreateEpisodePrefill) => true,
 });
+
+const dialogs = useDialogStore();
+const { url } = storeToRefs(useTabUrlStore());
+const videoState = useVideoStateStore();
 
 // Autocomplete
 
@@ -99,7 +108,6 @@ const { episodeOptions, searchEpisodes, episodeItem } = useEpisodeAutocomplete(
   props.prefill.episode,
   show
 );
-const hideDialog = useHideDialog();
 
 // Suggestions
 
@@ -202,12 +210,20 @@ function onClickSave(): void {
 
 const _linkEpisodeUrl = useLinkEpisodeUrl();
 function linkToExistingEpisode(episodeToSave: Api.EpisodeSearchResult) {
-  _linkEpisodeUrl(episodeToSave, hideDialog).catch(warn);
+  _linkEpisodeUrl(episodeToSave, dialogs.hideDialog).catch(warn);
 }
 
-const _createFromThirdParty = useCreateEpisodeFromThirdParty();
-function createFromThirdParty(thirdPartyEpisodeToSave: Api.ThirdPartyEpisode) {
-  _createFromThirdParty(thirdPartyEpisodeToSave, hideDialog).catch(warn);
+const connectThirdParty = useConnectSuggestedEpisodeAggregateMutation({
+  onSuccess() {
+    dialogs.hideDialog();
+  },
+});
+function createFromThirdParty(thirdPartyEpisode: Api.ThirdPartyEpisode) {
+  connectThirdParty.mutate({
+    thirdPartyEpisode,
+    duration: videoState.duration,
+    url: url.value,
+  });
 }
 </script>
 

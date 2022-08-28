@@ -1,7 +1,10 @@
 <template>
   <div class="as-space-y-4">
     <h6>General Settings</h6>
-    <login-warning v-if="!isLoggedIn && !hideLoginButton" before="all settings are available" />
+    <login-warning
+      v-if="!auth.isLoggedIn && !hideLoginButton"
+      before="all settings are available"
+    />
     <div
       class="as-grid as-gap-3 as-items-start"
       :class="{
@@ -13,8 +16,8 @@
       <raised-checkbox
         label="Auto-skip sections"
         :checked="enableAutoSkip"
-        @click="toggleBooleanPref('enableAutoSkip')"
-        :disabled="!isLoggedIn"
+        @click="togglePref('enableAutoSkip')"
+        :disabled="!auth.isLoggedIn"
       />
       <slot />
     </div>
@@ -22,18 +25,21 @@
 </template>
 
 <script lang="ts" setup>
-import { useIsLoggedIn } from '../stores/useAuth';
-import { useGeneralPreferences, useToggleBooleanPref } from '../stores/useGeneralPreferences';
+import { storeToRefs } from 'pinia';
+import { useToggleBooleanPreferenceMutation } from '../state/composables/useToggleBooleanPreferenceMutation';
+import { useAuthStore } from '../state/stores/useAuthStore';
+import { usePreferencesStore } from '../state/stores/usePreferencesStore';
 
 defineProps<{
   small?: boolean;
   hideLoginButton?: boolean;
 }>();
 
-const isLoggedIn = useIsLoggedIn();
+const auth = useAuthStore();
+const prefsStore = usePreferencesStore();
+const { preferences } = storeToRefs(prefsStore);
 
-const toggleBooleanPref = useToggleBooleanPref();
+const { mutate: togglePref } = useToggleBooleanPreferenceMutation();
 
-const preferences = useGeneralPreferences();
-const enableAutoSkip = computed(() => isLoggedIn.value && preferences.value.enableAutoSkip);
+const enableAutoSkip = computed(() => auth.isLoggedIn && preferences.value.enableAutoSkip);
 </script>

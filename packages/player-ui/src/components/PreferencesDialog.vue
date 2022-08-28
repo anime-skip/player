@@ -1,9 +1,11 @@
 <template>
   <BasicDialog
-    name="PreferencesDialog"
+    :name="DialogName.PREFERENCES"
+    :visible="dialogs.activeDialog === DialogName.PREFERENCES"
     gravity-x="flex-end"
     gravity-y="flex-end"
     @show="loadPlayerOptions"
+    @dismiss="dialogs.hideDialog()"
   >
     <template v-if="!hasActivePlayerGroup">
       <div class="as-p-4 as-space-y-8">
@@ -29,7 +31,7 @@
           </template>
           <RaisedButton v-else dark @click="showOriginalPlayer">
             <div class="as-flex as-justify-between as-w-full">
-              <p class="as-remove-text as-body-1">{{ serviceName }} Settings</p>
+              <p class="as-remove-text as-body-1">{{ config.serviceDisplayName }} Settings</p>
             </div>
           </RaisedButton>
           <RaisedButton dark @click="openExtensionOptions">
@@ -77,14 +79,16 @@
 import { computed, onMounted, ref } from 'vue';
 import { usePlayerConfig } from '../composables/usePlayerConfig';
 import useRadioIcon from '../composables/useRadioIcon';
-import { useHideDialog } from '../stores/useDialogState';
-import { useShowOriginalPlayer } from '../stores/usePlayerVisibility';
 import { PlayerOption, PlayerOptionGroup } from 'common/src/types';
+import { DialogName, useDialogStore } from '../state/stores/useDialogStore';
+import { usePlayerVisibilityStore } from '../state/stores/usePlayerVisibilityStore';
 
-const playerConfig = usePlayerConfig();
+const config = usePlayerConfig();
+const dialogs = useDialogStore();
+const playerVisibility = usePlayerVisibilityStore();
 
 const openExtensionOptions = () => {
-  playerConfig.openAllSettings();
+  config.openAllSettings();
 };
 const activePlayerGroup = ref<PlayerOptionGroup | undefined>();
 const hasActivePlayerGroup = computed(() => activePlayerGroup.value != null);
@@ -99,25 +103,23 @@ const getSelectedOption = (optionGroup: PlayerOptionGroup) => {
 };
 const playerOptions = ref<PlayerOptionGroup[]>();
 const loadPlayerOptions = async () => {
-  playerOptions.value = (await playerConfig.getPlaybackOptions?.())?.filter(
+  playerOptions.value = (await config.getPlaybackOptions?.())?.filter(
     group => group.options.length > 0
   );
 };
 
 const activeOptions = computed(() => activePlayerGroup.value?.options ?? []);
 const { getRadioIconClass, getLabelClass } = useRadioIcon();
-const hideDialog = useHideDialog();
 const onClickOption = (option: PlayerOption) => {
   option.node.click();
-  hideDialog();
+  dialogs.hideDialog();
   setActiveOptionGroup(undefined);
 };
 
-const serviceName = playerConfig.serviceDisplayName;
-const _showOriginalPlayer = useShowOriginalPlayer();
 function showOriginalPlayer() {
-  hideDialog();
-  _showOriginalPlayer();
+  dialogs.hideDialog();
+  playerVisibility.animeSkipUi = false;
+  playerVisibility.serviceUi = true;
 }
 </script>
 

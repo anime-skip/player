@@ -47,7 +47,7 @@ export function useVideoController() {
       videoState.volumeIntPercent = clamp(intPercent, 0, 100);
     },
     /**
-     * TODO: Document and implement correctly
+     * TODO[state]: Document and implement correctly
      */
     clearVolumeChange() {
       videoState.allowVolumeChangeTo = undefined;

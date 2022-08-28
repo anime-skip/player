@@ -14,7 +14,7 @@
       :is-flipped="!isToolbarVisible && !videoState.isPaused"
     />
     <div class="as-h-toolbar as-flex as-flex-row as-items-center as-space-x-1 as-px-2 as-pt-0.5">
-      <ToolbarButton @click="togglePlayPause()">
+      <ToolbarButton @click="controller.togglePlayPause()">
         <PlayPauseButton :state="playAnimationState" />
       </ToolbarButton>
       <ToolbarButton v-if="hasTimestamps" @click="gotoPreviousTimestamp()">
@@ -24,15 +24,15 @@
         <i-mdi-fast-forward class="as-w-6 as-h-6" />
       </ToolbarButton>
       <VolumeButton />
-      <p class="as-body-2">{{ formattedTime }} / {{ formattedDuration }}</p>
+      <p class="as-body-2">{{ currentFormattedTime }} / {{ formattedDuration }}</p>
       <div class="as-flex-1" />
-      <ToolbarButton title="Timestamps" @click="toggleTimestampsDialog">
+      <ToolbarButton title="Timestamps" @click="dialogs.toggleDialog(DialogName.TIMESTAMPS_PANEL)">
         <i-fe-timeline class="as-w-6 as-h-6 as-inline" />
       </ToolbarButton>
       <ToolbarButton v-if="canSaveEdits" title="Save Changes" @click="saveChanges()">
         <i-mdi-content-save class="as-w-6 as-h-6 as-inline" />
       </ToolbarButton>
-      <ToolbarButton @click="togglePreferencesDialog">
+      <ToolbarButton @click="dialogs.toggleDialog(DialogName.PREFERENCES)">
         <i-mdi-dots-vertical class="as-w-6 as-h-6" />
       </ToolbarButton>
       <ToolbarButton v-if="isFullscreenEnabled" @click="toggleFullscreen()">
@@ -51,63 +51,54 @@ import { useDisplayedTimestamps } from '../composables/useDisplayedTimestamps';
 import { useIsToolbarVisible } from '../composables/useIsToolbarVisible';
 import { useKeyboardShortcuts } from '../composables/useKeyboardShortcuts';
 import { useStopEditing } from '../composables/useStopEditing';
-import { useHideDialog, useShowDialog, useToggleDialog } from '../stores/useDialogState';
-import {
-  EditTimestampMode,
-  useEditingState,
-  useIsEditing,
-  useUpdateActiveTimestamp,
-  useUpdateEditTimestampMode,
-} from '../stores/useEditingState';
-import { useGeneralPreferences } from '../stores/useGeneralPreferences';
-import { useDuration, useVideoController, useVideoState } from '../stores/useVideoState';
 import { FRAME, LOOKUP_PREV_TIMESTAMP_OFFSET } from '../utils/constants';
 import { warn } from '../utils/log';
 import * as Api from 'common/src/api';
 import Utils from 'common/src/utils/GeneralUtils';
+import { useVideoStateStore } from '../state/stores/useVideoStateStore';
+import { useVideoController } from '../state/composables/useVideoController';
+import { usePreferencesStore } from '../state/stores/usePreferencesStore';
+import { storeToRefs } from 'pinia';
+import {
+  EditTimestampMode,
+  useTimestampEditingStore,
+} from '../state/stores/useTimestampEditingStore';
+import { useUserActivityStore } from '../state/stores/useUserActivityStore';
+import { DialogName, useDialogStore } from '../state/stores/useDialogStore';
+import { useFocusedTimestampStore } from '../state/stores/useFocusedTimestampStore';
+
+const videoState = useVideoStateStore();
+const controller = useVideoController();
+const editing = useTimestampEditingStore();
+const prefsStore = usePreferencesStore();
+const { preferences } = storeToRefs(prefsStore);
+const activity = useUserActivityStore();
+const dialogs = useDialogStore();
+const focusedTimestamp = useFocusedTimestampStore();
 
 // Video State
 
-const videoState = useVideoState();
-const { setCurrentTime, pause, togglePlayPause } = useVideoController();
-
-function addTime(seconds: number) {
-  setCurrentTime(videoState.currentTime + seconds);
-}
-
-const isPaused = computed(() => videoState.isPaused);
-const currentTime = computed(() => videoState.currentTime);
-const showDecimalsInFormattedTime = computed(() => isPaused.value);
-const formattedTime = computed(() =>
-  UiUtils.formatSeconds(currentTime.value, showDecimalsInFormattedTime.value)
+const showDecimalsInFormattedTime = computed(() => videoState.isPaused);
+const currentFormattedTime = computed(() =>
+  UiUtils.formatSeconds(videoState.currentTime, showDecimalsInFormattedTime.value)
 );
 
-const duration = useDuration(videoState);
-const hasDuration = computed(() => !!duration.value);
+const hasDuration = computed(() => !!videoState.duration);
 const formattedDuration = computed<string>(() =>
   videoState.duration ? UiUtils.formatSeconds(videoState.duration, false) : 'Loading...'
 );
 
-// Preferences
-
-const preferences = useGeneralPreferences();
-const hideTimelineWhenMinimized = computed(() => preferences.value.hideTimelineWhenMinimized);
-const minimizeToolbarWhenEditing = computed(() => preferences.value.minimizeToolbarWhenEditing);
-
 // Editing
 
-const editingState = useEditingState();
-const isEditing = useIsEditing(editingState);
-const canSaveEdits = computed(() => editingState.isEditing && !editingState.isSaving);
+const canSaveEdits = computed(() => editing.isEditing && !editing.isSaving);
 const isToolbarVisible = useIsToolbarVisible();
 const fullyHideToolbar = computed(
-  () => !videoState.isActive && !videoState.isPaused && hideTimelineWhenMinimized.value
+  () => !activity.isActive && !videoState.isPaused && preferences.value.hideTimelineWhenMinimized
 );
-const setEditTimestampMode = useUpdateEditTimestampMode();
 
 // Button Animations
 
-const playAnimationState = computed<1 | 0>(() => (isPaused.value ? 1 : 0));
+const playAnimationState = computed<1 | 0>(() => (videoState.isPaused ? 1 : 0));
 
 const playerConfig = usePlayerConfig();
 const isFullscreenEnabled = ref(document.fullscreenEnabled);
@@ -116,24 +107,10 @@ const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(
 );
 const fullscreenAnimationState = computed<1 | 0>(() => (isFullscreen.value ? 0 : 1));
 
-// Dialogs
-
-const showDialog = useShowDialog();
-const hideDialog = useHideDialog();
-const toggleDialog = useToggleDialog();
-function togglePreferencesDialog(): void {
-  toggleDialog('PreferencesDialog');
-}
-function toggleTimestampsDialog(): void {
-  toggleDialog('TimestampsPanel');
-}
-
 // Timestamps
 
 const timestamps = useDisplayedTimestamps();
 const hasTimestamps = computed(() => timestamps.value.length > 0);
-const activeTimestamp = computed(() => editingState.activeTimestamp);
-const updateActiveTimestamp = useUpdateActiveTimestamp();
 
 // Keyboard Shortcuts
 
@@ -142,43 +119,40 @@ const createNewTimestamp = useCreateNewTimestamp();
 const saveChanges = useStopEditing();
 
 function editTimestampOnJump(timestamp: Api.AmbiguousTimestamp): void {
-  pause();
-  updateActiveTimestamp(timestamp);
-  setEditTimestampMode(EditTimestampMode.EDIT);
-  showDialog('TimestampsPanel');
+  controller.pause();
+  focusedTimestamp.timestamp = timestamp;
+  editing.editTimestampMode = EditTimestampMode.EDIT;
+  dialogs.showDialog(DialogName.TIMESTAMPS_PANEL);
 }
 
 function gotoNextTimestamp(): void {
-  const nextTimestamp = Utils.nextTimestampInVideo(currentTime.value + 0.1, timestamps.value);
+  const nextTimestamp = Utils.nextTimestampInVideo(videoState.currentTime + 0.1, timestamps.value);
   if (nextTimestamp) {
-    setCurrentTime(nextTimestamp.at);
-    if (isEditing.value) editTimestampOnJump(nextTimestamp);
+    controller.seekTo(nextTimestamp.at);
+    if (editing.isEditing) editTimestampOnJump(nextTimestamp);
     return;
   }
 
-  const end = duration.value;
+  const end = videoState.duration;
   if (end) {
-    setCurrentTime(end);
+    controller.seekTo(end);
     return;
   }
 
   warn(
-    'Tried to go to next timestamp, but there was not one and the duration had not been initalized'
+    'Tried to go to next timestamp, but there was not one and the duration had not been initialized'
   );
 }
 
 function gotoPreviousTimestamp(): void {
   const previousTimestamp = Utils.previousTimestampInVideo(
-    currentTime.value - LOOKUP_PREV_TIMESTAMP_OFFSET,
+    videoState.currentTime - LOOKUP_PREV_TIMESTAMP_OFFSET,
     timestamps.value
   );
-  if (previousTimestamp) {
-    setCurrentTime(previousTimestamp.at);
-    if (isEditing.value) editTimestampOnJump(previousTimestamp);
-    return;
-  }
+  if (!previousTimestamp) return controller.seekTo(0);
 
-  setCurrentTime(0);
+  controller.seekTo(previousTimestamp.at);
+  if (editing.isEditing) editTimestampOnJump(previousTimestamp);
 }
 
 const INCREMENT_SMALL = 2;
@@ -186,21 +160,24 @@ const INCREMENT_MEDIUM = 5;
 const INCREMENT_LARGE = 90;
 
 useKeyboardShortcuts('toolbar', {
-  playPause: togglePlayPause,
+  playPause: () => controller.togglePlayPause(),
   toggleFullscreen,
-  hideDialog,
+  hideDialog: () => {
+    dialogs.hideDialog();
+    dialogs.hideLoginOverlay();
+  },
   nextTimestamp: gotoNextTimestamp,
   previousTimestamp: gotoPreviousTimestamp,
-  advanceFrame: () => addTime(FRAME),
-  advanceSmall: () => addTime(INCREMENT_SMALL),
-  advanceMedium: () => addTime(INCREMENT_MEDIUM),
-  advanceLarge: () => addTime(INCREMENT_LARGE),
-  rewindFrame: () => addTime(-FRAME),
-  rewindSmall: () => addTime(-INCREMENT_SMALL),
-  rewindMedium: () => addTime(-INCREMENT_MEDIUM),
-  rewindLarge: () => addTime(-INCREMENT_LARGE),
+  advanceFrame: () => controller.fastForward(FRAME),
+  advanceSmall: () => controller.fastForward(INCREMENT_SMALL),
+  advanceMedium: () => controller.fastForward(INCREMENT_MEDIUM),
+  advanceLarge: () => controller.fastForward(INCREMENT_LARGE),
+  rewindFrame: () => controller.rewind(FRAME),
+  rewindSmall: () => controller.rewind(INCREMENT_SMALL),
+  rewindMedium: () => controller.rewind(INCREMENT_MEDIUM),
+  rewindLarge: () => controller.rewind(INCREMENT_LARGE),
   createTimestamp() {
-    if (activeTimestamp.value != null) return;
+    if (editing.activeTimestamp != null) return;
     createNewTimestamp();
   },
   saveTimestamps() {
@@ -213,7 +190,7 @@ useKeyboardShortcuts('toolbar', {
   },
 });
 
-// Data Maintainence
+// Data Maintenance
 
 // TODO: Fix missing durations, then require it
 // SELECT * FROM episodes WHERE duration IS NULL;

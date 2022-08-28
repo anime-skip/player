@@ -4,30 +4,30 @@
     class="as-bg-control-variant as-bg-opacity-medium as-z-50"
     gravity-x="center"
     gravity-y="center"
-    :is-showing="isShowing"
-    :hide-dialog="hideLoginOverlay"
+    :visible="dialogs.isLoginOverlayVisible"
+    @dismiss="dialogs.hideLoginOverlay()"
   >
-    <LogIn close-after-login :close="hideLoginOverlay" />
+    <LogIn @logged-in="dialogs.hideLoginOverlay()" />
   </BasicDialog>
 </template>
 
 <script lang="ts" setup>
-import { useIsLoggedIn } from '../stores/useAuth';
-import { useDialogState, useHideLoginOverlay } from '../stores/useDialogState';
+import { useAuthStore } from '../state/stores/useAuthStore';
+import { useDialogStore } from '../state/stores/useDialogStore';
 
-const dialogState = useDialogState();
-const isShowing = () => dialogState.isShowingLoginOverlay;
-const hideLoginOverlay = useHideLoginOverlay();
+const dialogs = useDialogStore();
+const auth = useAuthStore();
 
-const isLoggedIn = useIsLoggedIn();
-
-const autoclose = () => {
-  if (isLoggedIn.value) {
-    hideLoginOverlay();
-  }
-};
-watch(isLoggedIn, autoclose);
-onMounted(autoclose);
+// Close the dialog when the user logs in
+watch(
+  () => auth.isLoggedIn,
+  () => {
+    if (auth.isLoggedIn) {
+      dialogs.isLoginOverlayVisible = false;
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <style lang="scss">

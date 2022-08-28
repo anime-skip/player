@@ -5,9 +5,9 @@
       <GeneralSettings>
         <SelectDropDown
           label="Player Color Theme"
-          :value="colorTheme"
+          :value="preferences.colorTheme"
           @update:value="onChangeColorTheme"
-          :disabled="!isLoggedIn"
+          :disabled="!auth.isLoggedIn"
         >
           <option v-for="theme in colorThemes" :key="theme.value" :value="theme.value">
             {{ theme.display }}
@@ -16,21 +16,21 @@
         <div />
         <RaisedCheckbox
           label="Hide timeline when minimized"
-          :checked="hideTimelineWhenMinimized"
-          @click="toggleBooleanPreference('hideTimelineWhenMinimized')"
-          :disabled="!isLoggedIn"
+          :checked="preferences.hideTimelineWhenMinimized"
+          @click="togglePref.mutate('hideTimelineWhenMinimized')"
+          :disabled="!auth.isLoggedIn"
         />
         <RaisedCheckbox
           label="Allow minimized toolbar when editing"
-          :checked="minimizeToolbarWhenEditing"
-          @click="toggleBooleanPreference('minimizeToolbarWhenEditing')"
-          :disabled="!isLoggedIn"
+          :checked="preferences.minimizeToolbarWhenEditing"
+          @click="togglePref.mutate('minimizeToolbarWhenEditing')"
+          :disabled="!auth.isLoggedIn"
         />
         <RaisedCheckbox
           label="Snap to the previous 0.5s when inserting a timestamp"
-          :checked="createTimestampSnapBack"
-          @click="toggleBooleanPreference('createTimestampSnapBack', true)"
-          :disabled="!isLoggedIn"
+          :checked="preferences.createTimestampSnapBack"
+          @click="togglePref.mutate('createTimestampSnapBack')"
+          :disabled="!auth.isLoggedIn"
         />
       </GeneralSettings>
       <SkippedSections />
@@ -40,35 +40,30 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
-import { useIsLoggedIn } from '../stores/useAuth';
-import {
-  useGeneralPreferences,
-  useToggleBooleanPref,
-  useUpdateRemotePref,
-} from '../stores/useGeneralPreferences';
 import { ColorTheme } from 'common/src/api';
 import { usePlayerConfig } from '../composables/usePlayerConfig';
+import { useAuthStore } from '../state/stores/useAuthStore';
+import { AllPreferences, usePreferencesStore } from '../state/stores/usePreferencesStore';
+import { storeToRefs } from 'pinia';
+import { useToggleBooleanPreferenceMutation } from '../state/composables/useToggleBooleanPreferenceMutation';
+import { useSavePreferencesMutation } from '../state/composables/useSavePreferencesMutation';
+import { PickTypes } from 'common/src/types';
 
-const { usageClient } = usePlayerConfig();
+const config = usePlayerConfig();
+const auth = useAuthStore();
+const prefsStore = usePreferencesStore();
+const { preferences } = storeToRefs(prefsStore);
 
 onMounted(() => {
-  void usageClient.saveEvent('opened_all_settings');
+  void config.usageClient.saveEvent('opened_all_settings');
 });
 
-const isLoggedIn = useIsLoggedIn();
-const preferences = useGeneralPreferences();
-const toggleBooleanPreference = useToggleBooleanPref();
+const togglePref = useToggleBooleanPreferenceMutation();
+const savePreferences = useSavePreferencesMutation();
 
-const hideTimelineWhenMinimized = computed(() => preferences.value.hideTimelineWhenMinimized);
-const minimizeToolbarWhenEditing = computed(() => preferences.value.minimizeToolbarWhenEditing);
-const createTimestampSnapBack = computed(() => preferences.value.createTimestampSnapBack);
-
-const updateColorTheme = useUpdateRemotePref<ColorTheme>();
 function onChangeColorTheme(newValue: ColorTheme) {
-  updateColorTheme('colorTheme', newValue);
+  savePreferences.mutate({ colorTheme: newValue });
 }
-const colorTheme = computed(() => preferences.value.colorTheme);
 const colorThemes: Array<{ value: ColorTheme; display: string }> = [
   { value: ColorTheme.ANIME_SKIP_BLUE, display: 'Anime Skip (Blue)' },
   { value: ColorTheme.PER_SERVICE, display: 'Dynamic' },

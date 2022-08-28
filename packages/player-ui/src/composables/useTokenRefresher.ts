@@ -3,9 +3,9 @@
 import type createAnimeSkipClient from '@anime-skip/api-client';
 import { Mutex } from 'async-mutex';
 import { AxiosResponse } from 'axios';
-import { getAuthAsync, updateAuthAsync } from '../stores/useAuth';
 import * as Api from 'common/src/api';
 import { LogoutError } from 'common/src/utils/LogoutError';
+import { useAuthStore } from '../state/stores/useAuthStore';
 import { log, warn } from '../utils/log';
 import { usePlayerConfig } from './usePlayerConfig';
 
@@ -18,13 +18,14 @@ function isResponseExpiredToken(res: AxiosResponse<any>): boolean {
 
 export default function useTokenRefresher(client: ReturnType<typeof createAnimeSkipClient>): void {
   const { usageClient, storage } = usePlayerConfig();
+  const auth = useAuthStore();
+
   client.axios.interceptors.request.use(async config => {
     if (!config.headers) config.headers = {};
     if (config.headers['Authorization'] == null) {
       if (lock.isLocked() && config.data?.operationName !== 'LoginRefresh')
         await lock.waitForUnlock();
-      const auth = await getAuthAsync(storage);
-      if (auth.token) config.headers['Authorization'] = `Bearer ${auth.token}`;
+      if (auth.accessToken) config.headers['Authorization'] = `Bearer ${auth.accessToken}`;
     }
     return config;
   });
@@ -41,23 +42,22 @@ export default function useTokenRefresher(client: ReturnType<typeof createAnimeS
     }
 
     const release = await lock.acquire();
-    const auth = await getAuthAsync(storage);
-    if (!auth.refreshToken) throw new LogoutError(auth.token, auth.refreshToken, undefined);
+    if (!auth.refreshToken) throw new LogoutError(auth.accessToken, auth.refreshToken, undefined);
 
     try {
       const newTokens = await client.loginRefresh(Api.LOGIN_QUERY, {
         refreshToken: auth.refreshToken,
       });
-      await updateAuthAsync(storage, {
+      await auth.setTokens({
+        accessToken: newTokens.authToken,
         refreshToken: newTokens.refreshToken,
-        token: newTokens.authToken,
       });
       void usageClient.saveEvent('login_refresh');
       log('Refreshed token!');
     } catch (err) {
       warn('Could not refresh token:', err);
       throw new LogoutError(
-        auth.token,
+        auth.accessToken,
         auth.refreshToken,
         (err as any).message ?? JSON.stringify(err)
       );

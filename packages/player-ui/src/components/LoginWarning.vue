@@ -7,16 +7,16 @@
 </template>
 
 <script lang="ts" setup>
-import { useShowLoginOverlay } from '../stores/useDialogState';
+import { useDialogStore } from '../state/stores/useDialogStore';
 
 defineProps<{ before?: string }>();
 
-const showLoginOverlay = useShowLoginOverlay();
+const dialogs = useDialogStore();
 
 const onClickLogin = () => {
   const isInInjectedPlayer = !window.location.protocol.includes('extension');
   if (isInInjectedPlayer) {
-    showLoginOverlay();
+    dialogs.isLoginOverlayVisible = true;
   } else {
     window.open('popup.html?closeAfterLogin=true', '_blank');
   }

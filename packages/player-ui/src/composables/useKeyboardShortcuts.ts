@@ -1,12 +1,12 @@
 import { onUnmounted } from 'vue';
 import { usePlayerConfig } from '../composables/usePlayerConfig';
-import {
-  KeyboardShortcutActionToExecuteMap,
-  usePrimaryKeyboardShortcutPrefs,
-  useSecondaryKeyboardShortcutPrefs,
-} from '../stores/useKeyboardShortcutPrefs';
 import { debug } from '../utils/log';
 import GeneralUtils from 'common/src/utils/GeneralUtils';
+import {
+  KeyboardShortcutActionToExecuteMap,
+  useKeyboardShortcutStore,
+} from '../state/stores/useKeyboardShortcutStore';
+import { storeToRefs } from 'pinia';
 
 // The first instance of this helper should only report usage stats
 let instanceCount = 0;
@@ -20,8 +20,7 @@ export function useKeyboardShortcuts(
   debug(`[${componentName}] useKeyboardShortcuts()`);
 
   const { addKeyDownListener, removeKeyDownListener, usageClient } = usePlayerConfig();
-  const { primaryShortcutsKeyToActionsMap } = usePrimaryKeyboardShortcutPrefs();
-  const { secondaryShortcutsKeyToActionsMap } = useSecondaryKeyboardShortcutPrefs();
+  const { primaryKeyToActions, secondaryKeyToActions } = storeToRefs(useKeyboardShortcutStore());
 
   const onKeyDownInstance = (event: KeyboardEvent) => {
     // Prevent triggers from firing while typing
@@ -31,8 +30,8 @@ export function useKeyboardShortcuts(
 
     const keyCombo = GeneralUtils.keyComboFromEvent(event);
     const keyActions = [
-      ...(primaryShortcutsKeyToActionsMap.value[keyCombo] ?? []),
-      ...(secondaryShortcutsKeyToActionsMap.value[keyCombo] ?? []),
+      ...(primaryKeyToActions.value[keyCombo] ?? []),
+      ...(secondaryKeyToActions.value[keyCombo] ?? []),
     ];
 
     debug(`[${componentName}] Pressed ${keyCombo} -> [${keyActions.join(', ')}]`);

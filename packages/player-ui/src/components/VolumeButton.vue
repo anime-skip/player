@@ -1,6 +1,6 @@
 <template>
   <div class="VolumeButton" :class="{ 'as-dragging': isDragging }">
-    <ToolbarButton class="as-inner-button as-w-12" @click="toggleMute">
+    <ToolbarButton class="as-inner-button as-w-12" @click="controller.toggleMute()">
       <i-my-volume-muted class="as-w-6 as-h-6 as-ic-muted" :class="volumeClass" />
       <i-my-volume-speaker class="as-w-6 as-h-6 as-ic-speaker" :class="volumeClass" />
       <i-my-volume-low class="as-w-6 as-h-6 as-ic-low" :class="volumeClass" />
@@ -8,9 +8,9 @@
     </ToolbarButton>
     <Slider
       class="as-slider"
-      :progress="videoState.volumePercent"
+      :progress="videoState.volumeIntPercent"
       :max="100"
-      @seek="setVolumePercent"
+      @seek="controller.setVolume"
       @seek:start="isDragging = true"
       @seek:end="isDragging = false"
     />
@@ -19,26 +19,27 @@
 
 <script lang="ts" setup>
 import { useKeyboardShortcuts } from '../composables/useKeyboardShortcuts';
-import { useVideoController, useVideoState } from '../stores/useVideoState';
+import { useVideoController } from '../state/composables/useVideoController';
+import { useVideoStateStore } from '../state/stores/useVideoStateStore';
 
 const isDragging = ref(false);
 
-const videoState = useVideoState();
+const videoState = useVideoStateStore();
 const volumeClass = computed(() => {
   if (videoState.isMuted) return 'as-muted';
-  if (videoState.volumePercent <= 10) return 'as-low';
-  if (videoState.volumePercent < 60) return 'as-medium';
+  if (videoState.volumeIntPercent <= 10) return 'as-low';
+  if (videoState.volumeIntPercent < 60) return 'as-medium';
   return 'as-high';
 });
 
 const VOLUME_STEP = 10; // percent
-const { setVolumePercent, toggleMute } = useVideoController();
+const controller = useVideoController();
 useKeyboardShortcuts('VolumeButton', {
   volumeUp() {
-    setVolumePercent(videoState.volumePercent + VOLUME_STEP);
+    controller.setVolume(videoState.volumeIntPercent + VOLUME_STEP);
   },
   volumeDown() {
-    setVolumePercent(videoState.volumePercent - VOLUME_STEP);
+    controller.setVolume(videoState.volumeIntPercent - VOLUME_STEP);
   },
 });
 </script>

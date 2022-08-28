@@ -13,7 +13,7 @@ export const useAuthStore = defineStore('auth', () => {
   /**
    * Set the tokens in the player storage in a async manner that can be awaited.
    */
-  async function setTokensAsync(tokens: {
+  async function setTokens(tokens: {
     accessToken: string | undefined;
     refreshToken: string | undefined;
   }) {
@@ -23,10 +23,16 @@ export const useAuthStore = defineStore('auth', () => {
 
   const isLoggedIn = computed(() => !!accessToken.value);
 
+  async function clearTokens() {
+    await storage.removeItem(ACCESS_TOKEN_STORAGE_KEY);
+    await storage.removeItem(REFRESH_TOKEN_STORAGE_KEY);
+  }
+
   return {
     accessToken,
     refreshToken,
     isLoggedIn,
-    setTokens: setTokensAsync,
+    setTokens,
+    clearTokens,
   };
 });

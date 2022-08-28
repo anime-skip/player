@@ -1,28 +1,24 @@
 import { DAY } from 'common/src/utils/time';
 import { useQuery } from 'vue-query';
 import { useApiClient } from '../../composables/useApiClient';
-import { gql } from '../../utils/gql';
 import * as Api from '@anime-skip/api-client';
 
 // TimestampType
 
-export const TimestampTypeFragment = gql`
-  fragment TimestampType on TimestampType {
+export const TimestampTypeFragment = `
     id
     name
     description
-  }
 `;
 
 export interface TimestampType extends Pick<Api.GqlTimestampType, 'id' | 'name' | 'description'> {}
 
 // Query
 
-const query = gql`
+const query = `
   {
-    ...TimestampTypeFragment
+    ${TimestampTypeFragment}
   }
-  ${TimestampTypeFragment}
 `;
 
 export const ALL_TIMESTAMP_TYPES_QUERY_KEY = 'all-timestamp-types';

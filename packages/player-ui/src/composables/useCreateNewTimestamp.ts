@@ -1,60 +1,55 @@
 import { usePlayerConfig } from '../composables/usePlayerConfig';
-import { useIsLoggedIn } from '../stores/useAuth';
-import { useShowDialog, useShowLoginOverlay } from '../stores/useDialogState';
-import {
-  EditTimestampMode,
-  useUpdateActiveTimestamp,
-  useUpdateEditTimestampMode,
-} from '../stores/useEditingState';
-import { useGeneralPreferences } from '../stores/useGeneralPreferences';
-import { useVideoController } from '../stores/useVideoState';
 import { TIMESTAMP_TYPE_NOT_SELECTED } from '../utils/constants';
-import { warn } from '../utils/log';
 import { TimestampSource } from 'common/src/api';
 import GeneralUtils from 'common/src/utils/GeneralUtils';
 import { useStartEditing } from './useStartEditing';
+import { useVideoController } from '../state/composables/useVideoController';
+import {
+  EditTimestampMode,
+  useTimestampEditingStore,
+} from '../state/stores/useTimestampEditingStore';
+import { DialogName, useDialogStore } from '../state/stores/useDialogStore';
+import { useAuthStore } from '../state/stores/useAuthStore';
+import { storeToRefs } from 'pinia';
+import { usePreferencesStore } from '../state/stores/usePreferencesStore';
+import { useVideoStateStore } from '../state/stores/useVideoStateStore';
 
 export function useCreateNewTimestamp() {
-  const { pause, rewindToNearest } = useVideoController();
-  const startEditing = useStartEditing();
-  const updateEditTimestampMode = useUpdateEditTimestampMode();
-  const updateActiveTimestamp = useUpdateActiveTimestamp();
-  const showDialog = useShowDialog();
-  const showLoginOverlay = useShowLoginOverlay();
-  const isLoggedIn = useIsLoggedIn();
-  const preferences = useGeneralPreferences();
-  const playerConfig = usePlayerConfig();
+  const controller = useVideoController();
+  const editing = useTimestampEditingStore();
+  const dialogs = useDialogStore();
+  const auth = useAuthStore();
+  const config = usePlayerConfig();
+  const { preferences } = storeToRefs(usePreferencesStore());
+  const videoState = useVideoStateStore();
 
-  function showTimestampsPanel() {
-    showDialog('TimestampsPanel');
-  }
+  const startEditing = useStartEditing();
 
   return (): void => {
-    const video = playerConfig.getVideo();
-    pause();
+    controller.pause();
     if (preferences.value.createTimestampSnapBack) {
-      rewindToNearest(0.5);
+      controller.rewindToNearest(0.5);
     }
 
-    if (!isLoggedIn.value) {
-      showLoginOverlay();
-      showTimestampsPanel();
+    if (!auth.isLoggedIn) {
+      dialogs.isLoginOverlayVisible = true;
+      dialogs.showDialog(DialogName.TIMESTAMPS_PANEL);
       return;
     }
 
-    void playerConfig.usageClient.saveEvent('started_creating_timestamp', {
-      atTime: video.currentTime,
+    void config.usageClient.saveEvent('started_creating_timestamp', {
+      atTime: videoState.currentTime,
     });
     startEditing(() => {
-      updateEditTimestampMode(EditTimestampMode.ADD);
-      updateActiveTimestamp({
-        at: video.currentTime,
-        typeId: TIMESTAMP_TYPE_NOT_SELECTED,
+      editing.editTimestampMode = EditTimestampMode.CREATE;
+      editing.activeTimestamp = {
         id: GeneralUtils.randomId(),
+        at: videoState.currentTime,
         source: TimestampSource.ANIME_SKIP,
         edited: true,
-      });
-      showTimestampsPanel();
+        typeId: TIMESTAMP_TYPE_NOT_SELECTED,
+      };
+      dialogs.showDialog(DialogName.TIMESTAMPS_PANEL);
     });
   };
 }

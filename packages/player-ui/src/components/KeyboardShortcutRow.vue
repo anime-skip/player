@@ -33,11 +33,11 @@
 </template>
 
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia';
 import {
   KeyboardShortcutAction,
-  usePrimaryKeyboardShortcutPrefs,
-  useSecondaryKeyboardShortcutPrefs,
-} from '../stores/useKeyboardShortcutPrefs';
+  useKeyboardShortcutStore,
+} from '../state/stores/useKeyboardShortcutStore';
 
 const props = defineProps<{
   name: string;
@@ -45,10 +45,10 @@ const props = defineProps<{
   groupTop?: boolean;
   groupBottom?: boolean;
 }>();
-const emit = defineEmits({
-  updatePrimary: (_newKeyBinding: string | null) => true,
-  updateSecondary: (_newKeyBinding: string | null) => true,
-});
+const emit = defineEmits<{
+  (event: 'updatePrimary', newKeyBinding: string | null): void;
+  (event: 'updateSecondary', newKeyBinding: string | null): void;
+}>();
 
 function updatePrimaryKeyBinding(newKeyBinding: string | undefined): void {
   emit('updatePrimary', newKeyBinding ?? null);
@@ -57,12 +57,10 @@ function updateSecondaryKeyBinding(newKeyBinding: string | undefined): void {
   emit('updateSecondary', newKeyBinding ?? null);
 }
 
-const { primaryShortcutsActionToKeyMap } = usePrimaryKeyboardShortcutPrefs();
-const primaryKeyBinding = computed(() => primaryShortcutsActionToKeyMap.value[props.actionName]);
-const { secondaryShortcutsActionToKeyMap } = useSecondaryKeyboardShortcutPrefs();
-const secondaryKeyBinding = computed(
-  () => secondaryShortcutsActionToKeyMap.value[props.actionName]
-);
+const { primaryActionToKey, secondaryActionToKey } = storeToRefs(useKeyboardShortcutStore());
+
+const primaryKeyBinding = computed(() => primaryActionToKey.value[props.actionName]);
+const secondaryKeyBinding = computed(() => secondaryActionToKey.value[props.actionName]);
 </script>
 
 <style scoped>

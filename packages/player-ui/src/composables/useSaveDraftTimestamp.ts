@@ -1,22 +1,26 @@
-import { useDraftTimestamps, useUpdateDraftTimestamps } from '../stores/useEditingState';
 import * as Api from 'common/src/api';
 import GeneralUtils from 'common/src/utils/GeneralUtils';
+import { useTimestampEditingStore } from '../state/stores/useTimestampEditingStore';
+import { warn } from '../utils/log';
 
 export function useSaveDraftTimestamp() {
-  const updateDraftTimestamps = useUpdateDraftTimestamps();
-  const draftTimestamps = useDraftTimestamps();
+  const editing = useTimestampEditingStore();
 
   return (newTimestamp: Api.AmbiguousTimestamp) => {
-    const index = draftTimestamps.value.findIndex(
+    if (editing.draftTimestamps == null) {
+      warn('Cannot save draft timestamp when none exist');
+      return;
+    }
+    const index = editing.draftTimestamps.findIndex(
       draftTimestamp => draftTimestamp.id === newTimestamp.id
     );
     let unsortedTimestamps: Api.AmbiguousTimestamp[];
     if (index == -1) {
-      unsortedTimestamps = [...draftTimestamps.value, newTimestamp];
+      unsortedTimestamps = [...editing.draftTimestamps, newTimestamp];
     } else {
-      unsortedTimestamps = [...draftTimestamps.value];
+      unsortedTimestamps = [...editing.draftTimestamps];
       unsortedTimestamps[index] = newTimestamp;
     }
-    updateDraftTimestamps(unsortedTimestamps.sort(GeneralUtils.timestampSorter));
+    editing.draftTimestamps = unsortedTimestamps.sort(GeneralUtils.timestampSorter);
   };
 }

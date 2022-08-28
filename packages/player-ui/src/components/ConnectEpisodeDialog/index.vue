@@ -3,12 +3,14 @@
     name="ConnectEpisodeDialog"
     gravity-x="center"
     gravity-y="center"
+    :visible="dialogs.activeDialog === DialogName.CONNECT_EPISODE"
     @show="onShow"
     @hide="onHide"
+    @dismiss="dialogs.hideDialog()"
   >
     <LoadingOverlay class="as-min-h-6" :is-loading="isLoading || !prefill">
       <div
-        v-if="!isLoggedIn"
+        v-if="!auth.isLoggedIn"
         class="as-px-16 as-py-8 as-text-center as-self-center as-justify-self-center"
       >
         <LoginWarning before="connecting this episode to Anime Skip" />
@@ -40,19 +42,25 @@
 import useRequestState, { RequestState } from 'vue-use-request-state';
 import { CreateEpisodePrefill } from '../../@types';
 import { useApiClient } from '../../composables/useApiClient';
-import { useIsLoggedIn } from '../../stores/useAuth';
-import { useEpisodeRequestState } from '../../stores/useEpisodeState';
-import { useInferredEpisode } from '../../stores/useInferredEpisodeState';
 import { debug, log, warn } from '../../utils/log';
 import * as Api from 'common/src/api';
 import * as Mappers from 'common/src/utils/mappers';
+import { DialogName, useDialogStore } from '../../state/stores/useDialogStore';
+import { useCrawlEpisodeInfoQuery } from '../../state/composables/useCrawlEpisodeInfoQuery';
+import { useAuthStore } from '../../state/stores/useAuthStore';
+import { useEpisodeStore } from '../../state/stores/useEpisodeStore';
+import { useTimestampEditingStore } from '../../state/stores/useTimestampEditingStore';
+
+const dialogs = useDialogStore();
+const auth = useAuthStore();
+const editing = useTimestampEditingStore();
 
 const prefill = ref<CreateEpisodePrefill>({
   show: { title: '' },
   episode: { title: '' },
 });
 const showing = ref(false);
-const inferredEpisode = useInferredEpisode();
+const crawledQuery = useCrawlEpisodeInfoQuery();
 
 // Data Fetching
 
@@ -79,7 +87,7 @@ const fetchSuggestionsByName = wrapFetchSuggestionsByName(
 const { wrapRequest: wrapLoadDefaultShowOption, isLoading: isLoadingDefaultShow } =
   useRequestState();
 const loadDefaultShowOption = wrapLoadDefaultShowOption(async (): Promise<void> => {
-  const showName = inferredEpisode.value?.show;
+  const showName = crawledQuery.data.value?.show;
   if (showName == null) {
     debug('Not fetching default show, name could not be inferred');
     return;
@@ -117,7 +125,7 @@ const { wrapRequest: wrapLoadDefaultEpisodeOption, isLoading: isLoadingDefaultEp
   useRequestState();
 const loadDefaultEpisodeOption = wrapLoadDefaultEpisodeOption(
   async (showId: string): Promise<Api.EpisodeSearchResult | undefined> => {
-    const episodeName = inferredEpisode.value?.name;
+    const episodeName = crawledQuery.data.value?.name;
     if (episodeName == null) {
       debug('Not fetching default episode, name could not be inferred');
       return undefined;
@@ -168,16 +176,15 @@ function enableCreateNew(newPrefill: CreateEpisodePrefill): void {
 
 // Loading
 
-const isLoggedIn = useIsLoggedIn();
-watch(isLoggedIn, (newIsLoggedIn, oldIsLoggedIn) => {
-  if (showing.value && newIsLoggedIn && !oldIsLoggedIn) {
-    loadData();
+watch(
+  () => auth.isLoggedIn,
+  (newIsLoggedIn, oldIsLoggedIn) => {
+    if (showing.value && newIsLoggedIn && !oldIsLoggedIn) loadData();
   }
-});
-const episodeRequestState = useEpisodeRequestState();
+);
 const isLoading = computed(
   () =>
-    episodeRequestState.value === RequestState.LOADING ||
+    editing.isSaving ||
     isLoadingSuggestions.value ||
     isLoadingDefaultShow.value ||
     isLoadingDefaultEpisode.value
@@ -193,16 +200,16 @@ function loadData() {
 }
 
 async function loadSuggestions() {
-  if (inferredEpisode.value?.name == null || inferredEpisode.value.show == null) {
+  if (crawledQuery.data.value?.name == null || crawledQuery.data.value.show == null) {
     log(
       'Not fetching suggestions, episode or show name could not be inferred',
-      toRaw(inferredEpisode)
+      toRaw(crawledQuery.data)
     );
     return;
   }
   suggestions.value = await fetchSuggestionsByName(
-    inferredEpisode.value.name,
-    inferredEpisode.value.show
+    crawledQuery.data.value.name,
+    crawledQuery.data.value.show
   );
 
   if (suggestions.value.length === 0) onClickCreateNew();
@@ -214,18 +221,18 @@ function onShow() {
   tab.value = Tab.FIND_EXISTING;
   prefill.value = {
     show: {
-      title: inferredEpisode.value?.show || '',
+      title: crawledQuery.data.value?.show || '',
     },
     episode: {
-      title: inferredEpisode.value?.name || '',
+      title: crawledQuery.data.value?.name || '',
     },
-    season: inferredEpisode.value?.season,
-    number: inferredEpisode.value?.number,
-    absoluteNumber: inferredEpisode.value?.absoluteNumber,
+    season: crawledQuery.data.value?.season,
+    number: crawledQuery.data.value?.number,
+    absoluteNumber: crawledQuery.data.value?.absoluteNumber,
   };
   suggestions.value = [];
 
-  if (isLoggedIn) loadData();
+  if (auth.isLoggedIn) loadData();
   showing.value = true;
 }
 

@@ -10,14 +10,14 @@
       >
         <ThemedLogo class="as-w-8 as-h-8 as-object-contain" />
       </a>
-      <h5 class="as-text-primary as-pt-1 as-line-clamp-2" :title="episodeDisplayInfo.show">
-        {{ episodeDisplayInfo.show }}
+      <h5 class="as-text-primary as-pt-1 as-line-clamp-2" :title="showName">
+        {{ showName }}
         <span class="as-font-normal as-text-opacity-low"
           >&ensp;&bull;&ensp;{{ serviceDisplayName }}</span
         >
       </h5>
     </div>
-    <h3 class="as-line-clamp-2" :title="episodeDisplayInfo.name">{{ episodeDisplayInfo.name }}</h3>
+    <h3 class="as-line-clamp-2" :title="episodeName">{{ episodeName }}</h3>
     <h6 class="as-text-on-surface as-text-opacity-high">{{ episodeDetails }}</h6>
     <FlatButton v-if="isConnectButtonShowing" transparent @click.stop="showConnectEpisodeDialog">
       <i-mdi-link-variant class="as-w-6 as-h-6 as-fill-on-surface as-inline" />
@@ -30,47 +30,51 @@
 import { RequestState } from 'vue-use-request-state';
 import ThemedLogo from './ThemedLogo.vue';
 import { usePlayerConfig } from '../composables/usePlayerConfig';
-import { useEpisodeDisplayInfo } from '../composables/useEpisodeDisplayInfo';
 import { useTheme } from '../composables/useTheme';
-import { useDialogState, useShowConnectEpisodeDialog } from '../stores/useDialogState';
-import { useEpisodeUrl } from '../stores/useEpisodeState';
-import { useInferRequestState } from '../stores/useInferredEpisodeState';
-import { usePlayHistory } from '../stores/usePlayHistory';
-import { useDuration, useVideoState } from '../stores/useVideoState';
 import EpisodeUtils from 'common/src/utils/episode-utils';
+import { useDisplayedEpisodeInfo } from '../state/composables/useDisplayedEpisodeInfo';
+import { useEpisodeStore } from '../state/stores/useEpisodeStore';
+import { storeToRefs } from 'pinia';
+import { DialogName, useDialogStore } from '../state/stores/useDialogStore';
+import { useShowConnectEpisodeDialog } from '../state/composables/useShowConnectEpisodeDialog';
+import { useCrawlEpisodeStore } from '../state/stores/useCrawledEpisodeStore';
+import { useCrawlEpisodeInfoQuery } from '../state/composables/useCrawlEpisodeInfoQuery';
+import { useVideoStateStore } from '../state/stores/useVideoStateStore';
+import { usePlayHistoryStore } from '../state/stores/usePlayHistoryStore';
 
 const { serviceDisplayName } = usePlayerConfig();
+const { episodeUrl, episode } = storeToRefs(useEpisodeStore());
+const crawlStore = useCrawlEpisodeStore();
+const { crawledInfo } = storeToRefs(crawlStore);
+const dialogs = useDialogStore();
+const videoState = useVideoStateStore();
+const playHistory = usePlayHistoryStore();
 
-const episodeDisplayInfo = useEpisodeDisplayInfo();
+const { episodeName, episodeNumber, season, absoluteNumber, showName } = useDisplayedEpisodeInfo(
+  episode,
+  crawledInfo
+);
 const episodeDetails = computed(() =>
-  EpisodeUtils.seasonAndNumberFromEpisodeInfo(episodeDisplayInfo.value)
+  EpisodeUtils.seasonAndNumberDisplay({
+    number: episodeNumber.value,
+    season: season.value,
+    absoluteNumber: absoluteNumber.value,
+  })
 );
 
-const episodeUrl = useEpisodeUrl();
 const hasEpisodeUrl = computed(() => episodeUrl.value != null);
-
-const { activeDialog } = useDialogState();
 
 const showConnectEpisodeDialog = useShowConnectEpisodeDialog();
 
-const inferRequestState = useInferRequestState();
-const hasRequestedInferredDetails = computed(
-  () =>
-    inferRequestState.value === RequestState.SUCCESS ||
-    inferRequestState.value === RequestState.FAILURE
-);
-const videoState = useVideoState();
-const playHistory = usePlayHistory();
 const isShowing = computed<boolean>(() => videoState.isPaused || playHistory.isInitialBuffer);
 
-const duration = useDuration();
 const isConnectButtonShowing = computed(() => {
-  const allowedActiveDialogs = [undefined, 'TimestampsPanel'];
+  const allowedActiveDialogs = [undefined, DialogName.TIMESTAMPS_PANEL];
   return (
     !hasEpisodeUrl.value &&
-    hasRequestedInferredDetails.value &&
-    allowedActiveDialogs.includes(activeDialog) &&
-    !!duration.value
+    crawlStore.query.isIdle &&
+    allowedActiveDialogs.includes(dialogs.activeDialog) &&
+    !!videoState.duration
   );
 });
 

@@ -59,7 +59,7 @@ function defineKeyboardShortcutUtils(
     );
   });
 
-  function setKeyBinding(action: KeyboardShortcutAction, keyBinding: string) {
+  function setKeyBinding(action: KeyboardShortcutAction, keyBinding: string | undefined) {
     actionToKey.value = { ...toRaw(actionToKey.value), [action]: keyBinding };
   }
 

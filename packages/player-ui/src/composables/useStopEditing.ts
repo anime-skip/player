@@ -1,18 +1,40 @@
-import { useDraftTimestamps, useUpdateEditingState } from '../stores/useEditingState';
-import { useEpisodeState } from '../stores/useEpisodeState';
-import { useSyncTimestamps } from './useSyncTimestamps';
+import { storeToRefs } from 'pinia';
+import { useEpisodeStore } from '../state/stores/useEpisodeStore';
+import { useTimestampEditingStore } from '../state/stores/useTimestampEditingStore';
+import { useSaveTimestampsMutation } from './useSaveTimestampsMutation';
 
 export function useStopEditing() {
-  const episodeState = useEpisodeState();
-  const updateEditingState = useUpdateEditingState();
-  const oldTimestamps = computed(() => episodeState.savedTimestamps);
-  const newTimestamps = useDraftTimestamps();
-  const syncTimestamps = useSyncTimestamps();
+  const editing = useTimestampEditingStore();
+  const { episodeUrl, episode } = storeToRefs(useEpisodeStore());
+
+  function clearEditingMode() {
+    editing.isEditing = false;
+    editing.draftTimestamps = undefined;
+    editing.activeTimestamp = undefined;
+  }
+
+  const saveMutation = useSaveTimestampsMutation({
+    onMutate() {
+      editing.isSaving = true;
+    },
+    onSettled() {
+      editing.isSaving = false;
+    },
+    onSuccess() {
+      clearEditingMode();
+    },
+  });
 
   return async (discardChanges?: boolean): Promise<void> => {
     if (!discardChanges) {
-      await syncTimestamps(oldTimestamps.value, newTimestamps.value);
+      await saveMutation.mutateAsync({
+        episodeUrl: episodeUrl.value,
+        episode: episode.value,
+        newTimestampsWithOffset: editing.draftTimestamps ?? [],
+        oldTimestampsWithOffset: episode.value?.timestamps ?? [],
+      });
+    } else {
+      clearEditingMode();
     }
-    updateEditingState({ isEditing: false, draftTimestamps: [] });
   };
 }

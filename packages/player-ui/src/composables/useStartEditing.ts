@@ -1,30 +1,30 @@
-import { useIsLoggedIn } from '../stores/useAuth';
-import { useShowDialog, useShowLoginOverlay } from '../stores/useDialogState';
-import { useIsEditing, useUpdateEditingState } from '../stores/useEditingState';
-import { useEpisodeUrl } from '../stores/useEpisodeState';
-import { useDisplayedTimestamps } from './useDisplayedTimestamps';
+import { storeToRefs } from 'pinia';
+import { useDisplayedTimestamps } from '../composables/useDisplayedTimestamps';
+import { useAuthStore } from '../state/stores/useAuthStore';
+import { DialogName, useDialogStore } from '../state/stores/useDialogStore';
+import { useEpisodeStore } from '../state/stores/useEpisodeStore';
+import { useTimestampEditingStore } from '../state/stores/useTimestampEditingStore';
 
 export function useStartEditing() {
-  const isLoggedIn = useIsLoggedIn();
-  const showLoginOverlay = useShowLoginOverlay();
-  const showDialog = useShowDialog();
-  const isEditing = useIsEditing();
-  const updateIsEditing = useUpdateEditingState();
+  const auth = useAuthStore();
+  const dialogs = useDialogStore();
+  const editing = useTimestampEditingStore();
   const timestamps = useDisplayedTimestamps();
-  const episodeUrl = useEpisodeUrl();
+  const { episodeUrl } = storeToRefs(useEpisodeStore());
 
-  return async (onStartedEditing?: () => void): Promise<void> => {
-    if (!isLoggedIn.value) {
-      showLoginOverlay();
+  return async (onStartedCallback?: () => void): Promise<void> => {
+    if (!auth.isLoggedIn) {
+      dialogs.isLoginOverlayVisible = true;
     }
     if (episodeUrl.value == null) {
-      await showDialog('ConnectEpisodeDialog');
+      dialogs.showDialog(DialogName.CONNECT_EPISODE);
       return;
     }
 
-    if (!isEditing.value) {
-      updateIsEditing({ isEditing: true, draftTimestamps: timestamps.value });
+    if (!editing.isEditing) {
+      editing.isEditing = true;
+      editing.draftTimestamps = timestamps.value;
     }
-    onStartedEditing?.();
+    onStartedCallback?.();
   };
 }

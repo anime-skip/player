@@ -1,19 +1,22 @@
-import { useIsEditing } from '../stores/useEditingState';
-import { useGeneralPreferences } from '../stores/useGeneralPreferences';
-import { usePlayHistory } from '../stores/usePlayHistory';
-import { useVideoState } from '../stores/useVideoState';
+import { storeToRefs } from 'pinia';
+import { usePlayHistoryStore } from '../state/stores/usePlayHistoryStore';
+import { usePreferencesStore } from '../state/stores/usePreferencesStore';
+import { useTimestampEditingStore } from '../state/stores/useTimestampEditingStore';
+import { useUserActivityStore } from '../state/stores/useUserActivityStore';
+import { useVideoStateStore } from '../state/stores/useVideoStateStore';
 
 export function useIsToolbarVisible() {
-  const videoState = useVideoState();
-  const playHistory = usePlayHistory();
-  const preferences = useGeneralPreferences();
-  const isEditing = useIsEditing();
+  const videoState = useVideoStateStore();
+  const activity = useUserActivityStore();
+  const playHistory = usePlayHistoryStore();
+  const { preferences } = storeToRefs(usePreferencesStore());
+  const editing = useTimestampEditingStore();
 
   return computed(
     () =>
       playHistory.isInitialBuffer ||
-      videoState.isActive ||
+      activity.isActive ||
       videoState.isPaused ||
-      (isEditing.value && !preferences.value.minimizeToolbarWhenEditing)
+      (editing.isEditing && !preferences.value.minimizeToolbarWhenEditing)
   );
 }

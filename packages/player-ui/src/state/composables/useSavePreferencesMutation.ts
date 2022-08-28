@@ -1,7 +1,6 @@
 import { GqlInputPreferences } from '@anime-skip/api-client';
 import { useMutation } from 'vue-query';
 import { useApiClient } from '../../composables/useApiClient';
-import { gql } from '../../utils/gql';
 import {
   AllPreferences,
   DEFAULT_REMOTE_PREFERENCES,
@@ -9,12 +8,10 @@ import {
 } from '../stores/usePreferencesStore';
 import { AuthAccountPreferences, AuthAccountPreferencesFragment } from './useLoginMutation';
 
-const query = gql`
+const query = `
   {
-    ...AuthAccountPreferencesFragment
+    ${AuthAccountPreferencesFragment}
   }
-
-  ${AuthAccountPreferencesFragment}
 `;
 
 export function useSavePreferencesMutation() {
@@ -23,7 +20,7 @@ export function useSavePreferencesMutation() {
 
   return useMutation({
     async mutationFn(changes: Partial<AllPreferences>): Promise<AllPreferences> {
-      const preferences = toRaw(prefs.allPreferences);
+      const preferences = toRaw(prefs.preferences);
       const isRemote = Object.entries(changes).reduce<GqlInputPreferences>((res, [key, change]) => {
         // @ts-expect-error: res[key] is bad?
         if (isRemotePref(key)) res[key] = change;
@@ -34,7 +31,7 @@ export function useSavePreferencesMutation() {
     },
     async onMutate(changes) {
       // Define a value we can rollback to
-      const rollbackTo = toRaw(prefs.allPreferences);
+      const rollbackTo = toRaw(prefs.preferences);
 
       // Perform optimistic update
       await prefs.setPartialPrefs(changes);

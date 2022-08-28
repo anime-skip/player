@@ -51,9 +51,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useGeneralPreferences, useUpdateLocalPref } from '../stores/useGeneralPreferences';
 import { PLAYBACK_SPEEDS } from '../utils/constants';
 import { PlaybackRate } from 'common/src/types';
+import { usePreferencesStore } from '../state/stores/usePreferencesStore';
+import { storeToRefs } from 'pinia';
 
 const props = defineProps<{
   showLess: boolean;
@@ -65,16 +66,17 @@ onMounted(() => {
   }
 });
 
-const updateNumberPref = useUpdateLocalPref<number>();
-const changePlaybackRate = (newRate: number) => updateNumberPref('playbackRate', newRate);
-const generalPrefs = useGeneralPreferences();
-const playbackRate = computed(() => generalPrefs.value.playbackRate);
+const prefsStore = usePreferencesStore();
+const { preferences } = storeToRefs(prefsStore);
+
+const changePlaybackRate = (newRate: number) => prefsStore.setPref('playbackRate', newRate);
+const playbackRate = computed(() => preferences.value.playbackRate);
 
 const customRate = ref('');
 const playbackSpeeds = PLAYBACK_SPEEDS.filter(speed => !speed.hideWhenSmall || !props.showLess);
 
 watch(
-  () => generalPrefs.value.playbackRate,
+  () => preferences.value.playbackRate,
   newRate => {
     if (!isConstantSelected.value) {
       customRate.value = newRate ? String(newRate) : '';

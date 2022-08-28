@@ -1,5 +1,5 @@
 <template>
-  <LoadingOverlay class="as-h-full" :is-loading="isSavingTemplate">
+  <LoadingOverlay class="as-h-full" :is-loading="templateStore.isSaving">
     <TimestampPanelLayout mode="back" title="Template" @back="discardChanges">
       <template #content>
         <div class="as-px-4 as-pt-2 as-pb-3 as-space-y-2">
@@ -95,19 +95,11 @@
 <script lang="ts" setup>
 import { useTimeout } from '@anime-skip/ui';
 import { computed, ref } from 'vue';
-import { RequestState } from 'vue-use-request-state';
-import { useDeleteTemplate } from '../../composables/useDeleteTemplate';
 import { useDisplayedTimestamps } from '../../composables/useDisplayedTimestamps';
-import { useEpisodeDisplayInfo } from '../../composables/useEpisodeDisplayInfo';
 import { useMatchingTemplate } from '../../composables/useMatchingTemplate';
 import useRadioIcon from '../../composables/useRadioIcon';
 import { useSaveNewTemplate } from '../../composables/useSaveNewTemplate';
 import { useSaveTemplate } from '../../composables/useSaveTemplate';
-import {
-  useClearHoveredTimestamp,
-  useUpdateHoveredTimestamp,
-} from '../../stores/useHoveredTimestamp';
-import { useTemplateRequestState, useTemplateTimestamps } from '../../stores/useTemplateState';
 import { TIMESTAMP_TYPES } from '../../utils/constants';
 import { warn } from '../../utils/log';
 import * as Api from 'common/src/api';
@@ -115,27 +107,40 @@ import { TemplateType } from 'common/src/api';
 import Utils from 'common/src/utils/GeneralUtils';
 import { SECONDS } from 'common/src/utils/time';
 import { useUpdateIsEditingTemplate } from './useTimestampPanelState';
+import { useTemplateEditingStore } from '../../state/stores/useTemplateEditingStore';
+import { useFocusedTimestampStore } from '../../state/stores/useFocusedTimestampStore';
+import { useDisplayedEpisodeInfo } from '../../state/composables/useDisplayedEpisodeInfo';
+import { useEpisodeStore } from '../../state/stores/useEpisodeStore';
+import { storeToRefs } from 'pinia';
+import { useCrawlEpisodeStore } from '../../state/stores/useCrawledEpisodeStore';
+import { useDeleteTemplateMutation } from '../../state/composables/useDeleteTemplateMutation';
 
-const deleteTemplate = useDeleteTemplate();
+const deleteTemplate = useDeleteTemplateMutation();
 const updateIsEditingTemplate = useUpdateIsEditingTemplate();
-const templateRequestState = useTemplateRequestState();
+const templateStore = useTemplateEditingStore();
+const { episode, episodeUrl } = storeToRefs(useEpisodeStore());
+const { crawledInfo } = storeToRefs(useCrawlEpisodeStore());
 
 const template = useMatchingTemplate();
-const templateTimestamps = useTemplateTimestamps();
+const templateTimestamps = computed(() => templateStore.selectedTimestamps ?? []);
 
 const onClickDelete = () => {
   if (template.value == null) {
     warn("Cannot delete a template that doesn't exist", JSON.stringify(template.value, null, 2));
     return;
   }
-  void deleteTemplate(template.value.id)
-    .then()
-    .then(() => updateIsEditingTemplate(false));
+  deleteTemplate.mutate(
+    { templateId: template.value.id },
+    {
+      onSuccess() {
+        updateIsEditingTemplate(false);
+      },
+    }
+  );
 };
 const discardChanges = () => {
   updateIsEditingTemplate(false);
 };
-const isSavingTemplate = computed(() => templateRequestState.value === RequestState.LOADING);
 
 const type = ref<Api.TemplateType>(template.value?.type ?? TemplateType.SHOW);
 const changeType = (newType: Api.TemplateType) => {
@@ -145,8 +150,8 @@ const isShowSelected = computed(() => type.value === TemplateType.SHOW);
 const { getRadioIconClass: getShowRadioIconClass, getLabelClass: getShowLabelClass } =
   useRadioIcon();
 const isSeasonSelected = computed(() => type.value === TemplateType.SEASONS);
-const episodeDisplayInfo = useEpisodeDisplayInfo();
-const season = ref<string>(template.value?.seasons?.[0] ?? episodeDisplayInfo.value.season ?? '');
+const episodeDisplayInfo = useDisplayedEpisodeInfo(episode, crawledInfo);
+const season = ref<string>(template.value?.seasons?.[0] ?? episodeDisplayInfo.season.value ?? '');
 const seasonsToSave = computed<string[] | undefined>(() =>
   type.value === TemplateType.SEASONS ? [season.value] : undefined
 );
@@ -178,17 +183,16 @@ const timestampType = (timestamp: Api.AmbiguousTimestamp): string => {
 
 // Hovered Timestamps
 
+const focusedTimestamp = useFocusedTimestampStore();
 const [setHoveredTimeout, clearHoveredTimeout] = useTimeout();
-const setHoveredTimestamp = useUpdateHoveredTimestamp();
-const clearHoveredTimestamp = useClearHoveredTimestamp();
 const onHoverTimestamp = (timestamp: Api.AmbiguousTimestamp): void => {
   clearHoveredTimeout();
-  setHoveredTimestamp(timestamp);
-  setHoveredTimeout(clearHoveredTimestamp, SECONDS(3));
+  focusedTimestamp.timestamp = timestamp;
+  setHoveredTimeout(() => (focusedTimestamp.timestamp = undefined), SECONDS(3));
 };
 const onStopHoverTimestamp = (): void => {
   clearHoveredTimeout();
-  clearHoveredTimestamp();
+  focusedTimestamp.timestamp = undefined;
 };
 
 // Saving

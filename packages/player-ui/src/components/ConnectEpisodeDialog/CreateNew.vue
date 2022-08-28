@@ -34,24 +34,29 @@
       <RaisedButton :disabled="isCreateDisabled" @click.stop.prevent="onClickCreate">
         {{ createButtonText }}
       </RaisedButton>
-      <FlatButton transparent @click.stop.prevent="hideDialog">Cancel</FlatButton>
+      <FlatButton transparent @click.stop.prevent="dialogs.hideDialog()">Cancel</FlatButton>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { CreateEpisodePrefill } from '../../@types';
-import { useCreateEpisodeData } from '../../composables/useCreateEpisodeData';
+import { useConnectEpisodeAggregateMutation } from '../../composables/useConnectEpisodeAggregateMutation';
 import { useShowAutocomplete } from '../../composables/useShowAutocomplete';
-import { useTabUrl } from '../../composables/useTabUrl';
-import { useHideDialog } from '../../stores/useDialogState';
-import { useDuration } from '../../stores/useVideoState';
 import * as Api from 'common/src/api';
 import { TextInputRef } from 'common/src/types';
+import { useDialogStore } from '../../state/stores/useDialogStore';
+import { useTabUrlStore } from '../../state/stores/useTabUrlStore';
+import { storeToRefs } from 'pinia';
+import { useVideoStateStore } from '../../state/stores/useVideoStateStore';
 
 const props = defineProps<{
   prefill: CreateEpisodePrefill;
 }>();
+
+const dialogs = useDialogStore();
+const { url } = storeToRefs(useTabUrlStore());
+const videoState = useVideoStateStore();
 
 const {
   showItem,
@@ -60,8 +65,6 @@ const {
   onSelectShow,
   searchShows,
 } = useShowAutocomplete(props.prefill.show, ref());
-
-const hideDialog = useHideDialog();
 
 const showNameInput = ref<TextInputRef>();
 
@@ -81,29 +84,25 @@ const isCreateDisabled = computed<boolean>(() => {
   return showItem.value.title.trim() === '' || name.value.trim() === '';
 });
 
-const tabUrl = useTabUrl();
-const createEpisodeData = useCreateEpisodeData();
-const durationRef = useDuration();
+const connectEpisode = useConnectEpisodeAggregateMutation();
 async function onClickCreate(): Promise<void> {
-  const url = tabUrl.value;
-  if (url == null) {
+  if (url.value == null) {
     throw new Error("Cannot create an episode without it's URL");
   }
-  const duration = durationRef.value;
   const episode: Api.InputEpisode = {
     name: name.value.trim() || undefined,
     season: season.value.trim() || undefined,
     number: number.value.trim() || undefined,
     absoluteNumber: absoluteNumber.value.trim() || undefined,
-    baseDuration: duration,
+    baseDuration: videoState.duration,
   };
   const episodeUrl: Api.InputEpisodeUrl = {
-    url,
-    duration,
+    url: url.value,
+    duration: videoState.duration,
     timestampsOffset: 0,
   };
 
-  await createEpisodeData({
+  await connectEpisode.mutateAsync({
     show:
       showItem.value.data == null
         ? {
@@ -122,9 +121,10 @@ async function onClickCreate(): Promise<void> {
       create: true,
       data: episodeUrl,
     },
+    // TODO[state]: Still pass the initialTimestamps based on the matching template timestamps
   });
 
-  hideDialog();
+  dialogs.hideDialog();
 }
 </script>
 

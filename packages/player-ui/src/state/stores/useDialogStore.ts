@@ -2,9 +2,9 @@ import { sleep } from 'common/src/utils/time';
 import { defineStore } from 'pinia';
 
 export enum DialogName {
-  PREFERENCES,
-  TIMESTAMPS_PANEL,
-  CONNECT_EPISODE,
+  PREFERENCES = 'preferences',
+  TIMESTAMPS_PANEL = 'timestamps-panel',
+  CONNECT_EPISODE = 'connect-episode',
 }
 
 export const useDialogStore = defineStore('dialogs', () => {

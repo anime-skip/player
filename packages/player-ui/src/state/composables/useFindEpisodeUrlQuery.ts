@@ -1,19 +1,17 @@
 import { Ref } from 'vue';
 import { useQuery } from 'vue-query';
-import { gql } from '../../utils/gql';
 import * as Api from '@anime-skip/api-client';
 import { useApiClient } from '../../composables/useApiClient';
 import { TimestampType, TimestampTypeFragment } from './useAllTimestampTypesQuery';
+import { log } from '../../utils/log';
 
 // Timestamp
 
-export const EpisodeUrlEpisodeTimestampFragment = gql`
-  fragment EpisodeUrlEpisodeTimestamp on Timestamp {
-    id
-    at
-    typeId
-    source
-  }
+export const EpisodeUrlEpisodeTimestampFragment = `
+  id
+  at
+  typeId
+  source
 `;
 
 export interface EpisodeUrlEpisodeTimestamp
@@ -23,14 +21,12 @@ export interface EpisodeUrlEpisodeTimestamp
 
 // Show
 
-export const EpisodeUrlEpisodeShowFragment = gql`
-  fragment EpisodeUrlEpisodeShow on Show {
-    id
-    name
-    originalName
-    website
-    image
-  }
+export const EpisodeUrlEpisodeShowFragment = `
+  id
+  name
+  originalName
+  website
+  image
 `;
 
 export interface EpisodeUrlEpisodeShow
@@ -38,14 +34,12 @@ export interface EpisodeUrlEpisodeShow
 
 // Template
 
-export const EpisodeUrlEpisodeTemplateFragment = gql`
-  fragment EpisodeUrlEpisodeTemplate on Template {
-    id
-    showId
-    sourceEpisodeId
-    type
-    seasons
-  }
+export const EpisodeUrlEpisodeTemplateFragment = `
+  id
+  showId
+  sourceEpisodeId
+  type
+  seasons
 `;
 
 export interface EpisodeUrlEpisodeTemplate
@@ -55,15 +49,13 @@ export interface EpisodeUrlEpisodeTemplate
 
 // Episode
 
-export const EpisodeUrlEpisodeFragment = gql`
-  fragment EpisodeUrlEpisode on Episode {
-    id
-    absoluteNumber
-    number
-    season
-    name
-    baseDuration
-  }
+export const EpisodeUrlEpisodeFragment = `
+  id
+  absoluteNumber
+  number
+  season
+  name
+  baseDuration
 `;
 
 export interface EpisodeUrlEpisode
@@ -78,13 +70,11 @@ export interface EpisodeUrlEpisode
 
 // EpisodeUrl
 
-export const EpisodeUrlFragment = gql`
-  fragment EpisodeUrlFragment on EpisodeUrl {
-    url
-    createdAt
-    duration
-    timestampsOffset
-  }
+export const EpisodeUrlFragment = `
+  url
+  createdAt
+  duration
+  timestampsOffset
 `;
 export interface EpisodeUrl
   extends Pick<Api.GqlEpisodeUrl, 'url' | 'createdAt' | 'duration' | 'timestampsOffset'> {
@@ -93,39 +83,32 @@ export interface EpisodeUrl
 
 // Query
 
-const query = gql`
+const query = `
   {
-    ...EpisodeUrlFragment
+    ${EpisodeUrlFragment}
     episode {
-      ...EpisodeUrlEpisodeFragment
+      ${EpisodeUrlEpisodeFragment}
       show {
-        ...EpisodeUrlEpisodeShowFragment
+        ${EpisodeUrlEpisodeShowFragment}
       }
       timestamps {
-        ...EpisodeUrlEpisodeTimestampFragment
+        ${EpisodeUrlEpisodeTimestampFragment}
         type {
-          ...TimestampTypeFragment
-        }
-      }
-      template {
-        ...EpisodeUrlEpisodeTemplateFragment
-        timestamps {
-          ...EpisodeUrlEpisodeTimestampFragment
-          type {
-            ...EpisodeUrlEpisodeTimestampTypeFragment
-          }
+          ${TimestampTypeFragment}
         }
       }
     }
   }
-
-  ${EpisodeUrlFragment}
-  ${EpisodeUrlEpisodeFragment}
-  ${EpisodeUrlEpisodeShowFragment}
-  ${EpisodeUrlEpisodeTimestampFragment}
-  ${TimestampTypeFragment}
-  ${EpisodeUrlEpisodeTemplateFragment}
 `;
+// template {
+//   ${EpisodeUrlEpisodeTemplateFragment}
+//   timestamps {
+//     ${EpisodeUrlEpisodeTimestampFragment}
+//     type {
+//       ${TimestampTypeFragment}
+//     }
+//   }
+// }
 
 export const EPISODE_URL_QUERY_KEY = 'episode-url';
 
@@ -136,6 +119,7 @@ export function useFindEpisodeUrlQuery(url: Ref<string | undefined>) {
     queryKey: [EPISODE_URL_QUERY_KEY, url],
     enabled: computed(() => !!url.value),
     queryFn() {
+      log('Querying episode URL', url.value);
       return api.findEpisodeUrl(query, { episodeUrl: url.value! }) as Promise<EpisodeUrl>;
     },
   });

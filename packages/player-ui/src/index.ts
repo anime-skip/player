@@ -6,14 +6,23 @@ import { PlayerContainer } from './components/PlayerContainer';
 import { Provider } from './components/Provider';
 import { providePlayerConfig } from './composables/usePlayerConfig';
 import '@anime-skip/ui/tailwind.css';
-import { debug, error, log, warn } from './utils/log';
+import { debug, error, log } from './utils/log';
 import { ExternalPlayerConfig, InternalPlayerConfig, mapToInternalConfig } from 'common/src/types';
-import GeneralUtils from 'common/src/utils/GeneralUtils';
 import { sleep } from 'common/src/utils/time';
+import { createPinia } from 'pinia';
+import { VueQueryPlugin } from 'vue-query';
+import TestComp from './TestComp.vue';
 import { provideApiClient } from './composables/useApiClient';
+
+const RootComponent = (config: InternalPlayerConfig) =>
+  Provider(
+    () => providePlayerConfig(config),
+    Provider(() => provideApiClient(config), PlayerContainer)
+  );
 
 export function mountPlayerUi(config: ExternalPlayerConfig) {
   log('Loading Player UI', { config });
+  void config.usageClient.saveEvent('player_injected');
 
   // Initial Setup
 
@@ -47,9 +56,10 @@ export function mountPlayerUi(config: ExternalPlayerConfig) {
     try {
       const container = document.createElement('div');
       const internalConfig = mapToInternalConfig(config);
-      const RootComponent = Provider(() => providePlayerConfig(internalConfig), PlayerContainer);
-      const app = createApp(RootComponent)
+      const app = createApp(RootComponent(internalConfig))
         .use(ui)
+        .use(createPinia())
+        .use(VueQueryPlugin)
         .component('RouterLink', FakeRouterLink)
         .component('ScreenshotController', internalConfig.screenshotController);
       const mountedApp = app.mount(container);

@@ -1,5 +1,5 @@
 <template>
-  <LoadingOverlay :is-loading="isLoggingIn">
+  <LoadingOverlay :is-loading="isLoading">
     <form class="as-w-popup-sm as-p-6 as-flex as-flex-col as-space-y-4" @submit.prevent.stop>
       <LabeledHeader title="Log In" />
       <TextInput
@@ -15,7 +15,7 @@
       </TextInput>
       <TextInput
         placeholder="Password"
-        :error-message="isLogInError ? 'Username or password is incorrect' : undefined"
+        :error-message="isError ? 'Username or password is incorrect' : undefined"
         autocomplete="current-password"
         type="password"
         v-model:value="password"
@@ -41,26 +41,40 @@
 </template>
 
 <script lang="ts" setup>
-import useRequestState from 'vue-use-request-state';
-import { useLogin } from '../composables/useLogin';
 import { TextInputRef } from 'common/src/types';
+import { useLoginMutation } from '../state/composables/useLoginMutation';
+import { useAuthStore } from '../state/stores/useAuthStore';
+import { useDialogStore } from '../state/stores/useDialogStore';
 
-defineProps<{
-  closeAfterLogin?: boolean;
-  close?: () => void;
+const emit = defineEmits<{
+  (event: 'logged-in'): void;
 }>();
+
+const auth = useAuthStore();
 
 // Login
 
-const { wrapRequest, isFailure: isLogInError, isLoading: isLoggingIn } = useRequestState();
 const username = ref('');
 const password = ref('');
-const performLogin = useLogin();
-const login = wrapRequest(async () => {
-  await performLogin(username.value, password.value);
-  username.value = '';
-  password.value = '';
-});
+
+const { isError, mutate: _login, isLoading } = useLoginMutation();
+
+function login() {
+  _login(
+    { username: username.value, password: password.value },
+    {
+      async onSuccess(data) {
+        username.value = '';
+        password.value = '';
+        await auth.setTokens({
+          accessToken: data.authToken,
+          refreshToken: data.refreshToken,
+        });
+        emit('logged-in');
+      },
+    }
+  );
+}
 
 // Input Ref Focus
 

@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 
 export const PLAYER_ACTIVITY_TIMEOUT = 3 * SECOND;
 
-export const usePlayerActivityStore = defineStore('player-activity', () => {
+export const useUserActivityStore = defineStore('player-activity', () => {
   /**
    * Whether or not the user has recently interacted with the video player.
    */
@@ -32,7 +32,7 @@ export const usePlayerActivityStore = defineStore('player-activity', () => {
   }
 
   return {
-    isActive,
+    isActive: readonly(isActive),
     triggerActive,
     clearActive,
   };
