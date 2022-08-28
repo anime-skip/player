@@ -17,10 +17,6 @@ export interface ThirdPartyCreateEpisodeData {
 export function useConnectSuggestedEpisodeAggregateMutation(
   options?: UseMutationOptions<void, unknown, ThirdPartyCreateEpisodeData, unknown>
 ) {
-  // const updateEpisodeRequestState = useUpdateEpisodeRequestState();
-  // const saveTimestamps = useSaveTimestampsMutation();
-  // const tabUrl = useTabUrl();
-  // const durationRef = useDuration();
   const api = useApiClient();
   const editing = useTimestampEditingStore();
 

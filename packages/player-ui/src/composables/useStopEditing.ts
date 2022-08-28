@@ -13,26 +13,27 @@ export function useStopEditing() {
     editing.activeTimestamp = undefined;
   }
 
-  const saveMutation = useSaveTimestampsMutation({
-    onMutate() {
-      editing.isSaving = true;
-    },
-    onSettled() {
-      editing.isSaving = false;
-    },
-    onSuccess() {
-      clearEditingMode();
-    },
-  });
+  const saveTimestamps = useSaveTimestampsMutation();
 
   return async (discardChanges?: boolean): Promise<void> => {
     if (!discardChanges) {
-      await saveMutation.mutateAsync({
-        episodeUrl: episodeUrl.value,
-        episode: episode.value,
-        newTimestampsWithOffset: editing.draftTimestamps ?? [],
-        oldTimestampsWithOffset: episode.value?.timestamps ?? [],
-      });
+      editing.isSaving = true;
+      await saveTimestamps.mutateAsync(
+        {
+          episodeUrl: episodeUrl.value,
+          episode: episode.value,
+          newTimestampsWithOffset: editing.draftTimestamps ?? [],
+          oldTimestampsWithOffset: episode.value?.timestamps ?? [],
+        },
+        {
+          onSettled() {
+            editing.isSaving = false;
+          },
+          onSuccess() {
+            clearEditingMode();
+          },
+        }
+      );
     } else {
       clearEditingMode();
     }

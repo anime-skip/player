@@ -5,11 +5,12 @@ import GeneralUtils from 'common/src/utils/GeneralUtils';
 import { isTimestampRemote } from '../utils/isTimestampLocal';
 import { storeToRefs } from 'pinia';
 import { useEpisodeStore } from '../state/stores/useEpisodeStore';
-import { useMutation, UseMutationOptions } from 'vue-query';
+import { useMutation, UseMutationOptions, useQueryClient } from 'vue-query';
 import {
   EpisodeUrl,
   EpisodeUrlEpisode,
   EpisodeUrlEpisodeTimestamp,
+  EPISODE_URL_QUERY_KEY,
 } from '../state/composables/useFindEpisodeUrlQuery';
 import { AmbiguousTimestamp } from 'common/src/api';
 import { GqlInputTimestamp } from '@anime-skip/api-client';
@@ -21,13 +22,9 @@ interface SaveTimestampsMutationInput {
   newTimestampsWithOffset: AmbiguousTimestamp[];
 }
 
-export function useSaveTimestampsMutation(
-  options?: Omit<
-    UseMutationOptions<unknown, unknown, SaveTimestampsMutationInput, unknown>,
-    'mutationFn'
-  >
-) {
+export function useSaveTimestampsMutation() {
   const api = useApiClient();
+  const queryClient = useQueryClient();
 
   function removeOffset<T extends Api.AmbiguousTimestamp>(episodeUrl: EpisodeUrl, timestamp: T): T {
     const at = GeneralUtils.undoTimestampOffset(episodeUrl?.timestampsOffset, timestamp.at);
@@ -38,7 +35,6 @@ export function useSaveTimestampsMutation(
   }
 
   return useMutation({
-    ...options,
     async mutationFn({
       episodeUrl,
       episode,
@@ -94,6 +90,9 @@ export function useSaveTimestampsMutation(
 
       // TODO: this sort backwards?
       return [created, updated, deleted].flat().sort((l, r) => l.at - r.at);
+    },
+    async onSuccess() {
+      await queryClient.invalidateQueries(EPISODE_URL_QUERY_KEY);
     },
   });
 }

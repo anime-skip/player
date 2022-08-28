@@ -1,5 +1,5 @@
 <template>
-  <LoadingOverlay class="as-h-full" :is-loading="templateStore.isSaving">
+  <LoadingOverlay class="as-h-full" :is-loading="editing.isSaving">
     <TimestampPanelLayout mode="back" title="Template" @back="discardChanges">
       <template #content>
         <div class="as-px-4 as-pt-2 as-pb-3 as-space-y-2">
@@ -96,7 +96,6 @@
 import { useTimeout } from '@anime-skip/ui';
 import { computed, ref } from 'vue';
 import { useDisplayedTimestamps } from '../../composables/useDisplayedTimestamps';
-import { useMatchingTemplate } from '../../composables/useMatchingTemplate';
 import useRadioIcon from '../../composables/useRadioIcon';
 import { useSaveNewTemplate } from '../../composables/useSaveNewTemplate';
 import { useSaveTemplate } from '../../composables/useSaveTemplate';
@@ -107,22 +106,21 @@ import { TemplateType } from 'common/src/api';
 import Utils from 'common/src/utils/GeneralUtils';
 import { SECONDS } from 'common/src/utils/time';
 import { useUpdateIsEditingTemplate } from './useTimestampPanelState';
-import { useTemplateEditingStore } from '../../state/stores/useTemplateEditingStore';
 import { useFocusedTimestampStore } from '../../state/stores/useFocusedTimestampStore';
 import { useDisplayedEpisodeInfo } from '../../state/composables/useDisplayedEpisodeInfo';
 import { useEpisodeStore } from '../../state/stores/useEpisodeStore';
 import { storeToRefs } from 'pinia';
 import { useCrawlEpisodeStore } from '../../state/stores/useCrawledEpisodeStore';
 import { useDeleteTemplateMutation } from '../../state/composables/useDeleteTemplateMutation';
+import { useTemplateEditingStore } from '../../state/stores/useTemplateEditingStore';
 
 const deleteTemplate = useDeleteTemplateMutation();
 const updateIsEditingTemplate = useUpdateIsEditingTemplate();
-const templateStore = useTemplateEditingStore();
-const { episode, episodeUrl } = storeToRefs(useEpisodeStore());
+const { episode, template } = storeToRefs(useEpisodeStore());
 const { crawledInfo } = storeToRefs(useCrawlEpisodeStore());
+const editing = useTemplateEditingStore();
 
-const template = useMatchingTemplate();
-const templateTimestamps = computed(() => templateStore.selectedTimestamps ?? []);
+const templateTimestamps = computed(() => template.value?.timestamps ?? []);
 
 const onClickDelete = () => {
   if (template.value == null) {

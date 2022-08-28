@@ -126,7 +126,7 @@ function showOriginalPlayer() {
 <style lang="scss">
 @import '../assets/constants.scss';
 
-#PreferencesDialog {
+#preferences {
   padding-right: 16px;
   padding-bottom: $toolbarHeight + 4px + 8px;
 

@@ -97,18 +97,18 @@ const query = `
           ${TimestampTypeFragment}
         }
       }
+      template {
+        ${EpisodeUrlEpisodeTemplateFragment}
+        timestamps {
+          ${EpisodeUrlEpisodeTimestampFragment}
+          type {
+            ${TimestampTypeFragment}
+          }
+        }
+      }
     }
   }
 `;
-// template {
-//   ${EpisodeUrlEpisodeTemplateFragment}
-//   timestamps {
-//     ${EpisodeUrlEpisodeTimestampFragment}
-//     type {
-//       ${TimestampTypeFragment}
-//     }
-//   }
-// }
 
 export const EPISODE_URL_QUERY_KEY = 'episode-url';
 

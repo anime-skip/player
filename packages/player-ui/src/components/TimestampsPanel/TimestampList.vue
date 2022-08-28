@@ -136,7 +136,7 @@ import { useVideoStateStore } from '../../state/stores/useVideoStateStore';
 
 const auth = useAuthStore();
 const editing = useTimestampEditingStore();
-const { episodeUrl } = storeToRefs(useEpisodeStore());
+const { episodeUrl, template } = storeToRefs(useEpisodeStore());
 const focusedTimestamp = useFocusedTimestampStore();
 const dialogs = useDialogStore();
 const videoState = useVideoStateStore();
@@ -166,10 +166,7 @@ onUnmounted(onStopHoverTimestamp);
 
 // Templates
 
-const existingTemplate = useMatchingTemplate();
-const editTemplateText = computed(() =>
-  !existingTemplate.value ? 'Create Template' : 'Edit Template'
-);
+const editTemplateText = computed(() => (!template.value ? 'Create Template' : 'Edit Template'));
 
 // List Items
 

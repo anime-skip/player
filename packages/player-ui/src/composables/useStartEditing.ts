@@ -9,8 +9,7 @@ export function useStartEditing() {
   const auth = useAuthStore();
   const dialogs = useDialogStore();
   const editing = useTimestampEditingStore();
-  const timestamps = useDisplayedTimestamps();
-  const { episodeUrl } = storeToRefs(useEpisodeStore());
+  const { episodeUrl, timestamps } = storeToRefs(useEpisodeStore());
 
   return async (onStartedCallback?: () => void): Promise<void> => {
     if (!auth.isLoggedIn) {
