@@ -118,7 +118,6 @@ import * as Api from 'common/src/api';
 import { isTimestampLocal } from '../../utils/isTimestampLocal';
 import { useDialogStore } from '../../state/stores/useDialogStore';
 import { useVideoStateStore } from '../../state/stores/useVideoStateStore';
-import { useVideoController } from '../../state/composables/useVideoController';
 import {
   EditTimestampMode,
   useTimestampEditingStore,
@@ -132,7 +131,6 @@ const props = defineProps<{
 
 const dialogs = useDialogStore();
 const videoState = useVideoStateStore();
-const controller = useVideoController();
 const editing = useTimestampEditingStore();
 const { episodeUrl } = storeToRefs(useEpisodeStore());
 
@@ -288,7 +286,7 @@ const saveDraftTimestamp = useSaveDraftTimestamp();
 const deleteDraftTimestamp = useDeleteDraftTimestamp();
 
 function leaveDialog() {
-  controller.play();
+  videoState.play();
   if (props.initialTab === 'edit') {
     dialogs.hideDialog();
   } else {

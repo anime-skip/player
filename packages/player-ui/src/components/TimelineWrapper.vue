@@ -50,7 +50,6 @@ import Utils from 'common/src/utils/GeneralUtils';
 import { usePlayerConfig } from '../composables/usePlayerConfig';
 import { storeToRefs } from 'pinia';
 import { usePreferencesStore } from '../state/stores/usePreferencesStore';
-import { useVideoController } from '../state/composables/useVideoController';
 import { useVideoStateStore } from '../state/stores/useVideoStateStore';
 import { useFocusedTimestampStore } from '../state/stores/useFocusedTimestampStore';
 import { usePlayHistoryStore } from '../state/stores/usePlayHistoryStore';
@@ -64,7 +63,6 @@ const props = defineProps<{
 const { usageClient } = usePlayerConfig();
 const auth = useAuthStore();
 const { preferences } = storeToRefs(usePreferencesStore());
-const controller = useVideoController();
 const videoState = useVideoStateStore();
 const focusedTimestamp = useFocusedTimestampStore();
 const playHistory = usePlayHistoryStore();
@@ -100,7 +98,7 @@ const goToNextTimestampOnTimeChange = (newTime: number): void => {
   const newNext = Utils.nextTimestamp(newTime, activeTimestamps.value, preferences.value);
   const goToTime = newNext?.at ?? videoState.duration;
   if (goToTime != null) {
-    controller.seekTo(goToTime);
+    videoState.seekTo(goToTime);
   }
 };
 
@@ -110,7 +108,7 @@ const isSeeking = ref(false);
 const onSeek = (newNormalizedTime: number): void => {
   if (!videoState.duration) return;
   const newTime = (newNormalizedTime / 100) * videoState.duration;
-  controller.seekTo(newTime);
+  videoState.seekTo(newTime);
 };
 const normalizedTime = computed(() => {
   if (!videoState.duration) return 0;
@@ -136,7 +134,7 @@ watch(
     // Do nothing
     const timeDiff = Math.abs(oldTime - newTime);
     const hasNoMoreTimestamps = oldNext == null;
-    const isSeeking = timeDiff > 1 * videoState.playbackRate; // Multiple the base number, 1s, by the speed so that high playback rates don't "skip" over timestamps
+    const isSeeking = timeDiff > 1 * videoState.rate; // Multiple the base number, 1s, by the speed so that high playback rates don't "skip" over timestamps
     const isAtEnd = newTime >= videoState.duration;
     if (hasNoMoreTimestamps || isSeeking || isAtEnd || editing.isEditing) {
       return;

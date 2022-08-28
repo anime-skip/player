@@ -1,14 +1,14 @@
 import { useAuthStore } from '../stores/useAuthStore';
 import { DialogName, useDialogStore } from '../stores/useDialogStore';
-import { useVideoController } from './useVideoController';
+import { useVideoStateStore } from '../stores/useVideoStateStore';
 
 export function useShowConnectEpisodeDialog() {
   const dialogs = useDialogStore();
   const auth = useAuthStore();
-  const { pause } = useVideoController();
+  const videoState = useVideoStateStore();
 
   return () => {
-    pause();
+    videoState.pause();
     if (!auth.isLoggedIn) {
       dialogs.showLoginOverlay();
     }

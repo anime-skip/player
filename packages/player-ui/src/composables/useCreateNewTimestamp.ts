@@ -3,7 +3,6 @@ import { TIMESTAMP_TYPE_NOT_SELECTED } from '../utils/constants';
 import { TimestampSource } from 'common/src/api';
 import GeneralUtils from 'common/src/utils/GeneralUtils';
 import { useStartEditing } from './useStartEditing';
-import { useVideoController } from '../state/composables/useVideoController';
 import {
   EditTimestampMode,
   useTimestampEditingStore,
@@ -15,7 +14,6 @@ import { usePreferencesStore } from '../state/stores/usePreferencesStore';
 import { useVideoStateStore } from '../state/stores/useVideoStateStore';
 
 export function useCreateNewTimestamp() {
-  const controller = useVideoController();
   const editing = useTimestampEditingStore();
   const dialogs = useDialogStore();
   const auth = useAuthStore();
@@ -26,9 +24,9 @@ export function useCreateNewTimestamp() {
   const startEditing = useStartEditing();
 
   return (): void => {
-    controller.pause();
+    videoState.pause();
     if (preferences.value.createTimestampSnapBack) {
-      controller.rewindToNearest(0.5);
+      videoState.rewindToNearest(0.5);
     }
 
     if (!auth.isLoggedIn) {

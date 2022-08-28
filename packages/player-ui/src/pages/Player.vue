@@ -6,8 +6,8 @@
       class="as-absolute as-inset-0 as-grid as-overflow-hidden as-bg-background as-bg-opacity-0"
       :class="{
         'as-active': activity.isActive,
-        'as-paused as-bg-opacity-medium': videoState.isPaused,
-        'as-buffering as-bg-opacity-medium': videoState.isBuffering,
+        'as-paused as-bg-opacity-medium': !videoState.playing,
+        'as-buffering as-bg-opacity-medium': showBufferLoading,
         'as-showing': isEpisodeInfoShowing,
         'as-opacity-0': !playerVisibility.animeSkipUi,
         [themeClass]: true,
@@ -15,7 +15,7 @@
       @mouseenter.prevent="onMouseEnter"
       @mousemove.prevent="onMouseMove"
       @mouseleave.prevent="onMouseLeave"
-      @click="togglePlayPause()"
+      @click="videoState.togglePlayPause()"
     >
       <div
         v-if="showBufferLoading"
@@ -62,10 +62,10 @@
 import { useTheme } from '../composables/useTheme';
 import { DialogName, useDialogStore } from '../state/stores/useDialogStore';
 import { usePlayHistoryStore } from '../state/stores/usePlayHistoryStore';
-import { useVideoController } from '../state/composables/useVideoController';
 import { useUserActivityStore } from '../state/stores/useUserActivityStore';
 import { useVideoStateStore } from '../state/stores/useVideoStateStore';
 import { usePlayerVisibilityStore } from '../state/stores/usePlayerVisibilityStore';
+import { useMouseActivity } from '../state/composables/useMouseActivity';
 
 const dialogs = useDialogStore();
 const isTimestampsPanelOpen = computed(() => dialogs.activeDialog === DialogName.TIMESTAMPS_PANEL);
@@ -73,32 +73,17 @@ const isPreferencesDialogOpen = computed(() => dialogs.activeDialog === DialogNa
 
 const playHistory = usePlayHistoryStore();
 
-const { togglePlayPause } = useVideoController();
+const videoState = useVideoStateStore();
 const activity = useUserActivityStore();
 
 // Hover Activity
 
-const videoState = useVideoStateStore();
-
-const mouseOver = ref(false);
-function onMouseEnter() {
-  mouseOver.value = true;
-  activity.triggerActive();
-}
-function onMouseLeave() {
-  mouseOver.value = false;
-  activity.clearActive();
-}
-function onMouseMove() {
-  activity.triggerActive();
-}
+const { onMouseEnter, onMouseLeave, onMouseMove } = useMouseActivity();
 
 // Display flags
 
-const isEpisodeInfoShowing = computed<boolean>(
-  () => videoState.isPaused || (videoState.isBuffering && playHistory.isInitialBuffer)
-);
-const showBufferLoading = computed<boolean>(() => videoState.isBuffering && !videoState.isPaused);
+const isEpisodeInfoShowing = computed<boolean>(() => !videoState.playing || videoState.waiting);
+const showBufferLoading = computed<boolean>(() => videoState.stalled || videoState.waiting);
 
 const playerVisibility = usePlayerVisibilityStore();
 

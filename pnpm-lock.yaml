@@ -75,7 +75,6 @@ importers:
       '@anime-skip/usage-stats-client': ^1.4.4
       '@iconify/json': ^1.1.461
       '@tailwindcss/line-clamp': ^0.2.2
-      '@types/lodash.clamp': ^4.0.7
       '@types/lodash.isequal': ^4.5.6
       '@types/lodash.merge': ^4.6.7
       '@types/md5': ^2.3.2
@@ -91,7 +90,6 @@ importers:
       exponential-backoff: ^3.1.0
       form-data: ^4.0.0
       fuzzysort: ^1.9.0
-      lodash.clamp: ^4.0.3
       lodash.isequal: ^4.5.0
       lodash.merge: ^4.6.2
       md5: ^2.3.0
@@ -101,13 +99,13 @@ importers:
       tailwindcss: ^3.1.8
       typescript: ^4.7.4
       vite: ^3.0.9
+      vite-plugin-vue-auto-name: ^0.0.4
       vue: ^3.2.37
       vue-demi: ^0.13.8
       vue-global-api: ^0.4.1
       vue-query: ^1.26.0
       vue-router: ^4.1.3
       vue-tsc: ^0.40.1
-      vue-use-request-state: ^0.2.2
     dependencies:
       '@anime-skip/api-client': 2.6.2
       '@anime-skip/ui': 3.1.5_mz2vds2zqcmlq67h2rep6oxw5e
@@ -119,7 +117,6 @@ importers:
       common: link:../common
       exponential-backoff: 3.1.0
       fuzzysort: 1.9.0
-      lodash.clamp: 4.0.3
       lodash.isequal: 4.5.0
       md5: 2.3.0
       pinia: 2.0.21_j6bzmzd4ujpabbp5objtwxyjp4
@@ -127,11 +124,9 @@ importers:
       vue-demi: 0.13.8_vue@3.2.37
       vue-query: 1.26.0_vue@3.2.37
       vue-router: 4.1.3_vue@3.2.37
-      vue-use-request-state: 0.2.2_vue@3.2.37
     devDependencies:
       '@iconify/json': 1.1.461
       '@tailwindcss/line-clamp': 0.2.2_tailwindcss@3.1.8
-      '@types/lodash.clamp': 4.0.7
       '@types/lodash.isequal': 4.5.6
       '@types/lodash.merge': 4.6.7
       '@types/md5': 2.3.2
@@ -146,6 +141,7 @@ importers:
       tailwindcss: 3.1.8
       typescript: 4.7.4
       vite: 3.0.9
+      vite-plugin-vue-auto-name: 0.0.4
       vue-global-api: 0.4.1_vue@3.2.37
       vue-tsc: 0.40.1_typescript@4.7.4
 
@@ -672,12 +668,6 @@ packages:
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
     dependencies:
       '@types/node': 16.11.48
-    dev: true
-
-  /@types/lodash.clamp/4.0.7:
-    resolution: {integrity: sha512-qr2pQl+7Ntd/5q9sZfY/MUOMd7FgGvfyTwqutf1c/mwZiVseaoD/xsp/OeOLAkT/XmM7wGfZcm6vzNShnNF2+g==}
-    dependencies:
-      '@types/lodash': 4.14.172
     dev: true
 
   /@types/lodash.debounce/4.0.7:
@@ -3951,10 +3941,6 @@ packages:
     resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==}
     dev: true
 
-  /lodash.clamp/4.0.3:
-    resolution: {integrity: sha512-HvzRFWjtcguTW7yd8NJBshuNaCa8aqNFtnswdT7f/cMd/1YKy5Zzoq4W/Oxvnx9l7aeY258uSdDfM793+eLsVg==}
-    dev: false
-
   /lodash.debounce/4.0.8:
     resolution: {integrity: sha1-gteb/zCmfEAF/9XiUVMArZyk168=}
     dev: false
@@ -5993,6 +5979,10 @@ packages:
       assert-plus: 1.0.0
       core-util-is: 1.0.2
       extsprintf: 1.3.0
+    dev: true
+
+  /vite-plugin-vue-auto-name/0.0.4:
+    resolution: {integrity: sha512-Fkp8mO3xzXgsYKNbGbS9T36hX3nMyp2T1cLRhjBVFW8M/QCdrq4BPkkX5WkY9ANZ1VuilJox6MtKjtzwzZWKmQ==}
     dev: true
 
   /vite-plugin-web-extension/1.4.4_vite@3.0.9:

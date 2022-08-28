@@ -7,6 +7,7 @@ export function Provider(
   child: Component
 ): Component {
   return defineComponent({
+    name: 'Provider',
     setup() {
       if (Array.isArray(provideValues)) {
         provideValues.forEach(provideValue => provideValue());

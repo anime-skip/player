@@ -1,6 +1,6 @@
 <template>
   <div class="VolumeButton" :class="{ 'as-dragging': isDragging }">
-    <ToolbarButton class="as-inner-button as-w-12" @click="controller.toggleMute()">
+    <ToolbarButton class="as-inner-button as-w-12" @click="videoState.toggleMute()">
       <i-my-volume-muted class="as-w-6 as-h-6 as-ic-muted" :class="volumeClass" />
       <i-my-volume-speaker class="as-w-6 as-h-6 as-ic-speaker" :class="volumeClass" />
       <i-my-volume-low class="as-w-6 as-h-6 as-ic-low" :class="volumeClass" />
@@ -8,9 +8,9 @@
     </ToolbarButton>
     <Slider
       class="as-slider"
-      :progress="videoState.volumeIntPercent"
-      :max="100"
-      @seek="controller.setVolume"
+      :progress="videoState.volume"
+      :max="1"
+      @seek="videoState.setVolume"
       @seek:start="isDragging = true"
       @seek:end="isDragging = false"
     />
@@ -19,27 +19,26 @@
 
 <script lang="ts" setup>
 import { useKeyboardShortcuts } from '../composables/useKeyboardShortcuts';
-import { useVideoController } from '../state/composables/useVideoController';
 import { useVideoStateStore } from '../state/stores/useVideoStateStore';
 
+// TODO[state]: fix dragging volume?
 const isDragging = ref(false);
 
 const videoState = useVideoStateStore();
 const volumeClass = computed(() => {
-  if (videoState.isMuted) return 'as-muted';
-  if (videoState.volumeIntPercent <= 10) return 'as-low';
-  if (videoState.volumeIntPercent < 60) return 'as-medium';
+  if (videoState.muted) return 'as-muted';
+  if (videoState.volume <= 0.1) return 'as-low';
+  if (videoState.volume < 0.6) return 'as-medium';
   return 'as-high';
 });
 
-const VOLUME_STEP = 10; // percent
-const controller = useVideoController();
+const VOLUME_STEP = 0.1; // 10%
 useKeyboardShortcuts('VolumeButton', {
   volumeUp() {
-    controller.setVolume(videoState.volumeIntPercent + VOLUME_STEP);
+    videoState.setVolume(videoState.volume + VOLUME_STEP);
   },
   volumeDown() {
-    controller.setVolume(videoState.volumeIntPercent - VOLUME_STEP);
+    videoState.setVolume(videoState.volume - VOLUME_STEP);
   },
 });
 </script>

@@ -33,7 +33,7 @@
               v-for="timestamp of activeTimestamps"
               class="as-bg-on-surface as-bg-opacity-0 hover:as-bg-opacity-hover focus-within:as-bg-opacity-active as-transition-colors as-cursor-pointer as-py-2 as-px-4 as-group"
               :key="timestamp.id"
-              @click="controller.seekTo(timestamp.at)"
+              @click="videoState.seekTo(timestamp.at)"
               @mouseenter="onHoverTimestamp(timestamp)"
               @mouseleave.stop.prevent="onStopHoverTimestamp()"
             >
@@ -130,16 +130,16 @@ import {
 } from '../../state/stores/useTimestampEditingStore';
 import { useEpisodeStore } from '../../state/stores/useEpisodeStore';
 import { storeToRefs } from 'pinia';
-import { useVideoController } from '../../state/composables/useVideoController';
 import { useFocusedTimestampStore } from '../../state/stores/useFocusedTimestampStore';
 import { useDialogStore } from '../../state/stores/useDialogStore';
+import { useVideoStateStore } from '../../state/stores/useVideoStateStore';
 
 const auth = useAuthStore();
 const editing = useTimestampEditingStore();
 const { episodeUrl } = storeToRefs(useEpisodeStore());
-const controller = useVideoController();
 const focusedTimestamp = useFocusedTimestampStore();
 const dialogs = useDialogStore();
+const videoState = useVideoStateStore();
 
 const timestampTypeMap = TIMESTAMP_TYPES.reduce<{ [typeId: string]: Api.TimestampType }>(
   (map, timestamp) => {
@@ -190,10 +190,6 @@ function itemHasSource(timestamp: Api.AmbiguousTimestamp): boolean {
 }
 const getTimestampClass = useGetTimestampColor('text');
 
-function onClickTimestamp(timestamp: Api.AmbiguousTimestamp) {
-  controller.seekTo(timestamp.at);
-}
-
 // Editing
 
 const activeTimestamps = useDisplayedTimestamps();
@@ -203,11 +199,11 @@ const startEditing = useStartEditing();
 const stopEditing = useStopEditing();
 
 function editTimestamp(timestamp: Api.AmbiguousTimestamp): void {
-  controller.pause();
+  videoState.pause();
   startEditing(() => {
     editing.editTimestampMode = EditTimestampMode.EDIT;
     editing.activeTimestamp = timestamp;
-    controller.seekTo(timestamp.at);
+    videoState.seekTo(timestamp.at);
   });
 }
 

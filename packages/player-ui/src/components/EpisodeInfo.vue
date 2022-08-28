@@ -43,7 +43,8 @@ import { useVideoStateStore } from '../state/stores/useVideoStateStore';
 import { usePlayHistoryStore } from '../state/stores/usePlayHistoryStore';
 
 const { serviceDisplayName } = usePlayerConfig();
-const { episodeUrl, episode } = storeToRefs(useEpisodeStore());
+const episodeStore = useEpisodeStore();
+const { episodeUrl, episode } = storeToRefs(episodeStore);
 const crawlStore = useCrawlEpisodeStore();
 const { crawledInfo } = storeToRefs(crawlStore);
 const dialogs = useDialogStore();
@@ -66,7 +67,10 @@ const hasEpisodeUrl = computed(() => episodeUrl.value != null);
 
 const showConnectEpisodeDialog = useShowConnectEpisodeDialog();
 
-const isShowing = computed<boolean>(() => videoState.isPaused || playHistory.isInitialBuffer);
+const isLoadingInfo = computed(() => episodeStore.query.isLoading || crawlStore.query.isLoading);
+const isShowing = computed<boolean>(
+  () => !isLoadingInfo.value && (videoState.waiting || !videoState.playing)
+);
 
 const isConnectButtonShowing = computed(() => {
   const allowedActiveDialogs = [undefined, DialogName.TIMESTAMPS_PANEL];

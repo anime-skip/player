@@ -39,4 +39,7 @@ export default defineConfig({
   optimizeDeps: {
     include: ['vue', '@vueuse/core'],
   },
+  define: {
+    __VUE_PROD_DEVTOOLS__: true,
+  },
 });

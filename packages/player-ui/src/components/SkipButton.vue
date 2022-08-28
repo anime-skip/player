@@ -14,7 +14,6 @@ import { useDisplayedTimestamps } from '../composables/useDisplayedTimestamps';
 import { useIsToolbarVisible } from '../composables/useIsToolbarVisible';
 import { TIMESTAMP_TYPES } from '../utils/constants';
 import Utils from 'common/src/utils/GeneralUtils';
-import { useVideoController } from '../state/composables/useVideoController';
 import { useVideoStateStore } from '../state/stores/useVideoStateStore';
 import { usePreferencesStore } from '../state/stores/usePreferencesStore';
 import { storeToRefs } from 'pinia';
@@ -24,7 +23,6 @@ import { useUserActivityStore } from '../state/stores/useUserActivityStore';
 const SKIP_BUTTON_OFFSET = 0.1;
 const IS_VIDEO_OVER_ALLOWED_DIFF = 0.1;
 
-const controller = useVideoController();
 const editing = useTimestampEditingStore();
 const videoState = useVideoStateStore();
 const activity = useUserActivityStore();
@@ -72,7 +70,7 @@ watch(currentTimeStampIsSkipped, newIsSkipped => {
 const skip = () => {
   const goToTime = nextTimestamp.value?.at ?? videoState.duration;
   if (goToTime != null) {
-    controller.seekTo(goToTime);
+    videoState.seekTo(goToTime);
   }
 };
 </script>
