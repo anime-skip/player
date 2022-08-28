@@ -34,6 +34,7 @@ export const useVideoStateStore = defineStore('video-state', () => {
 
   return {
     ...media,
+    paused: computed(() => !media.playing.value),
     /**
      * Play the video, or do nothing if it's already playing
      */

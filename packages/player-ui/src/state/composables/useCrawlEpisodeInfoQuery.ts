@@ -8,6 +8,6 @@ export function useCrawlEpisodeInfoQuery() {
 
   return useQuery({
     queryKey: CRAWL_EPISODE_INFO_QUERY,
-    queryFn: config.crawlEpisodeInfo,
+    queryFn: () => config.crawlEpisodeInfo(),
   });
 }

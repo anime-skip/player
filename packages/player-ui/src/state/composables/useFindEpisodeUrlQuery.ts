@@ -118,9 +118,17 @@ export function useFindEpisodeUrlQuery(url: Ref<string | undefined>) {
   return useQuery({
     queryKey: [EPISODE_URL_QUERY_KEY, url],
     enabled: computed(() => !!url.value),
-    queryFn() {
-      log('Querying episode URL', url.value);
-      return api.findEpisodeUrl(query, { episodeUrl: url.value! }) as Promise<EpisodeUrl>;
+    async queryFn() {
+      log('Finding episode URL', url.value);
+      try {
+        const res: EpisodeUrl = await api.findEpisodeUrl(query, { episodeUrl: url.value! });
+        return res;
+      } catch (err) {
+        if ((err as any)?.errors?.[0]?.message === 'EpisodeURL not found') {
+          return undefined;
+        }
+        throw err;
+      }
     },
   });
 }
