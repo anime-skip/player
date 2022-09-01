@@ -1,6 +1,6 @@
 import { Ref } from 'vue';
 import { useQuery } from 'vue-query';
-import { useApiClient } from '../../composables/useApiClient';
+import { useApiClient } from '../composables/useApiClient';
 import { TimestampTypeFragment, TimestampType } from './useAllTimestampTypesQuery';
 import * as Api from '@anime-skip/api-client';
 import { EpisodeUrlEpisodeTimestampFragment } from './useFindEpisodeUrlQuery';

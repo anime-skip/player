@@ -1,6 +1,6 @@
 import { GqlUpdateTemplateArgs } from '@anime-skip/api-client';
 import { useMutation, UseMutationOptions } from 'vue-query';
-import { useApiClient } from '../../composables/useApiClient';
+import { useApiClient } from '../composables/useApiClient';
 import {
   EpisodeUrlEpisodeTemplate,
   EpisodeUrlEpisodeTemplateFragment,
