@@ -1,11 +1,12 @@
 import vue from '@vitejs/plugin-vue';
 import components from 'unplugin-vue-components/vite';
+import { loadEnv } from 'vite';
 import { defineConfig } from 'vitest/config';
 import pkg from './package.json';
 import { rootPath } from './scripts/utils';
 import { alias } from './vite.config';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   root: rootPath('src'),
   test: {
     mockReset: true,
@@ -37,5 +38,6 @@ export default defineConfig({
   define: {
     __EXTENSION_VERSION__: `'${pkg.version}'`,
     __TARGET_BROWSER__: `'firefox'`,
+    'vite.env': loadEnv(mode, process.cwd()),
   },
-});
+}));
