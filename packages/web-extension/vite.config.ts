@@ -25,60 +25,56 @@ export const alias = {
   '~types': rootPath('../common/src/types'),
 };
 
-export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd());
-  return {
-    root: rootPath('src'),
-    plugins: [
-      icons({
-        customCollections: {
-          my: FileSystemIconLoader(rootPath('..', 'player-ui', 'src', 'assets')),
-        },
-      }),
-      components({
-        dts: true,
-        allowOverrides: true,
-        dirs: [rootPath('src'), rootPath('..', 'player-ui', 'src')],
+export default defineConfig(({ mode }) => ({
+  root: rootPath('src'),
+  plugins: [
+    icons({
+      customCollections: {
+        my: FileSystemIconLoader(rootPath('..', 'player-ui', 'src', 'assets')),
+      },
+    }),
+    components({
+      dts: true,
+      allowOverrides: true,
+      dirs: [rootPath('src'), rootPath('..', 'player-ui', 'src')],
 
-        /**
-         * Hack to fix:
-         * https://github.com/anime-skip/web-extension/issues/169
-         */
-        importPathTransform: path => {
-          return path.startsWith('C:') ? path.replaceAll('\\', '\\\\') : path;
-        },
-        resolvers: [
-          IconResolver({
-            customCollections: ['my'],
-          }),
-        ],
-      }),
-      webExtension({
-        assets: 'assets',
-        manifest: () => generateManifest({ browser, mode }),
-        browser,
-        webExtConfig,
-        skipManifestValidation: true,
-        watchFilePaths: [rootPath('..', 'player-ui', 'src')],
-      }),
-      vue(),
-    ],
-    build: {
-      outDir: rootPath('dist'),
-      emptyOutDir: true,
-      sourcemap: mode === 'development' ? 'inline' : undefined,
-      minify: mode === 'production' ? 'esbuild' : false,
-    },
-    define: {
-      __EXTENSION_VERSION__: `'${pkg.version}'`,
-      __TARGET_BROWSER__: `'${browser}'`,
-      'vite.env': loadEnv(mode, process.cwd()),
-    },
-    resolve: {
-      alias,
-    },
-    optimizeDeps: {
-      include: ['vue', '@vueuse/core'],
-    },
-  };
-});
+      /**
+       * Hack to fix:
+       * https://github.com/anime-skip/web-extension/issues/169
+       */
+      importPathTransform: path => {
+        return path.startsWith('C:') ? path.replaceAll('\\', '\\\\') : path;
+      },
+      resolvers: [
+        IconResolver({
+          customCollections: ['my'],
+        }),
+      ],
+    }),
+    webExtension({
+      assets: 'assets',
+      manifest: () => generateManifest({ browser, mode }),
+      browser,
+      webExtConfig,
+      skipManifestValidation: true,
+      watchFilePaths: [rootPath('..', 'player-ui', 'src')],
+    }),
+    vue(),
+  ],
+  build: {
+    outDir: rootPath('dist'),
+    emptyOutDir: true,
+    sourcemap: mode === 'development' ? 'inline' : undefined,
+    minify: mode === 'production' ? 'esbuild' : false,
+  },
+  define: {
+    __EXTENSION_VERSION__: `'${pkg.version}'`,
+    __TARGET_BROWSER__: `'${browser}'`,
+  },
+  resolve: {
+    alias,
+  },
+  optimizeDeps: {
+    include: ['vue', '@vueuse/core'],
+  },
+}));

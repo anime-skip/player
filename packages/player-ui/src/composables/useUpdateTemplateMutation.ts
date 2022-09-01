@@ -14,9 +14,6 @@ const query = `
       ${EpisodeUrlEpisodeTimestampFragment}
     }
   }
-
-  ${EpisodeUrlEpisodeTemplateFragment}
-  ${EpisodeUrlEpisodeTimestampFragment}
 `;
 
 export function useUpdateTemplateMutation(

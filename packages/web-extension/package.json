@@ -78,7 +78,7 @@
     "typescript": "*",
     "unplugin-icons": "^0.14.8",
     "unplugin-vue-components": "^0.22.4",
-    "vite": "^3.0.9",
+    "vite": "*",
     "vite-plugin-web-extension": "*",
     "vitest": "*",
     "vitest-mock-extended": "*",

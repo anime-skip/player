@@ -20,7 +20,6 @@ export function createPlayerLocalStorage(): PlayerStorage {
     return JSON.parse(jsonString)?.value;
   };
 
-  console.log('Added listener');
   window.addEventListener('storage', async e => {
     if (e.storageArea !== localStorage) return;
     if (e.key === null) return;

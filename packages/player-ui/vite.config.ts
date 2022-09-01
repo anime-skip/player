@@ -6,7 +6,7 @@ import icons from 'unplugin-icons/vite';
 import components from 'unplugin-vue-components/vite';
 import { defineConfig, loadEnv } from 'vite';
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig({
   plugins: [
     icons({
       customCollections: {
@@ -41,6 +41,5 @@ export default defineConfig(({ mode }) => ({
   },
   define: {
     __VUE_PROD_DEVTOOLS__: true,
-    'vite.env': loadEnv(mode, process.cwd()),
   },
-}));
+});

@@ -6,7 +6,7 @@ import pkg from './package.json';
 import { rootPath } from './scripts/utils';
 import { alias } from './vite.config';
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig({
   root: rootPath('src'),
   test: {
     mockReset: true,
@@ -38,6 +38,5 @@ export default defineConfig(({ mode }) => ({
   define: {
     __EXTENSION_VERSION__: `'${pkg.version}'`,
     __TARGET_BROWSER__: `'firefox'`,
-    'vite.env': loadEnv(mode, process.cwd()),
   },
-}));
+});
