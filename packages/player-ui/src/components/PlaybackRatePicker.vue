@@ -55,6 +55,7 @@ import { PLAYBACK_SPEEDS } from '../utils/constants';
 import { PlaybackRate } from 'common/src/types';
 import { usePreferencesStore } from '../state/stores/usePreferencesStore';
 import { storeToRefs } from 'pinia';
+import { useSavePreferencesMutation } from '../state/composables/useSavePreferencesMutation';
 
 const props = defineProps<{
   showLess: boolean;
@@ -69,7 +70,9 @@ onMounted(() => {
 const prefsStore = usePreferencesStore();
 const { preferences } = storeToRefs(prefsStore);
 
-const changePlaybackRate = (newRate: number) => prefsStore.setPref('playbackRate', newRate);
+const { mutate: savePref } = useSavePreferencesMutation();
+
+const changePlaybackRate = (newRate: number) => savePref({ playbackRate: newRate });
 const playbackRate = computed(() => preferences.value.playbackRate);
 
 const customRate = ref('');

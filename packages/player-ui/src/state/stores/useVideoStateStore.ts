@@ -32,6 +32,16 @@ export const useVideoStateStore = defineStore('video-state', () => {
     applyPlayerSettings();
   });
 
+  // Sync the preferences playback rate with the video's actual rate
+  const preferencesRate = computed(() => preferences.value.playbackRate);
+  watch(
+    preferencesRate,
+    newRate => {
+      media.rate.value = newRate;
+    },
+    { immediate: true }
+  );
+
   return {
     ...media,
     paused: computed(() => !media.playing.value),

@@ -21,12 +21,16 @@ export function useSavePreferencesMutation() {
   return useMutation({
     async mutationFn(changes: Partial<AllPreferences>): Promise<AllPreferences> {
       const preferences = toRaw(prefs.preferences);
-      const isRemote = Object.entries(changes).reduce<GqlInputPreferences>((res, [key, change]) => {
-        // @ts-expect-error: res[key] is bad?
-        if (isRemotePref(key)) res[key] = change;
-        return res;
-      }, {});
-      if (isRemote) await api.savePreferences(query, { preferences: changes });
+      const remoteChanges = Object.entries(changes).reduce<GqlInputPreferences>(
+        (res, [key, change]) => {
+          // @ts-expect-error: res[key] is bad?
+          if (isRemotePref(key)) res[key] = change;
+          return res;
+        },
+        {}
+      );
+      if (Object.keys(remoteChanges).length > 0)
+        await api.savePreferences(query, { preferences: remoteChanges });
       return { ...preferences, ...changes };
     },
     async onMutate(changes) {
@@ -40,7 +44,10 @@ export function useSavePreferencesMutation() {
     },
     async onError(_err, _vars, ctx) {
       // Rollback optimistic update on error
-      if (ctx) await prefs.setAllPrefs(ctx.rollbackTo);
+      if (ctx) {
+        console.warn('Rolling back preferences mutation to', ctx.rollbackTo);
+        await prefs.setAllPrefs(ctx.rollbackTo);
+      }
     },
   });
 }

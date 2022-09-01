@@ -57,8 +57,12 @@ export const usePreferencesStore = defineStore('preferences', () => {
     ...storedPreferences.value,
   }));
 
-  function setAllPrefs(newPrefs: AllPreferences) {
-    return storage.setItem(PREFERENCES_STORAGE_KEY, newPrefs);
+  async function setAllPrefs(newPrefs: AllPreferences) {
+    await storage.setItem(PREFERENCES_STORAGE_KEY, newPrefs);
+    // Set ref because storage listeners aren't fired to the tab the change originated from.
+    // We do update the storage when setting this value, but we skip updating it since it's the same
+    // value.
+    storedPreferences.value = newPrefs;
   }
   function setPref<T>(key: PickTypes<AllPreferences, T>, newValue: T) {
     return setAllPrefs({ ...storedPreferences.value, [key]: newValue });
