@@ -53,6 +53,11 @@ If the dev commands don't work, you can also build and install it the old fasion
 
 #### Configuration
 
+To use a different API endpoint, change the `API_ENV` to `"prod"` or `"test"` or `"local"`.
+
+> Not using .env file because of the build command hangs...
+
+<!--
 You can create a `.env` file in the `packages/web-extension` directory to configure how the extension runs.
 
 Below is a list of all the options and what they do:
@@ -64,6 +69,7 @@ Below is a list of all the options and what they do:
 #  - local: http://localhost:8081/graphql
 VITE_API_ENV="prod|test|local"
 ```
+-->
 
 #### Build Modes
 
