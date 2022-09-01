@@ -17,12 +17,12 @@ export function createPlayerLocalStorage(): PlayerStorage {
   const { addListener, removeListener, triggerListeners } = createListenerManager();
   const getJsonValueOrNull = (jsonString: string | null): any | null => {
     if (!jsonString) return null;
+    console.log(jsonString);
     return JSON.parse(jsonString)?.value;
   };
 
   console.log('Added listener');
   window.addEventListener('storage', async e => {
-    console.log('STORAGE_CHANGED', e.storageArea, e.key, e.oldValue, e.newValue);
     if (e.storageArea !== localStorage) return;
     if (e.key === null) return;
 
@@ -42,6 +42,16 @@ export function createPlayerLocalStorage(): PlayerStorage {
       const oldValue = getJsonValueOrNull(localStorage.getItem(key));
       if (isEqual(newValue, oldValue)) return;
       localStorage.setItem(key, JSON.stringify({ value: newValue }));
+      // Trigger the storage event for this window so everything updates on the current tab as well
+      // as other tabs - by default, storage change events are only dispatched on other tabs.
+      window.dispatchEvent(
+        new StorageEvent('storage', {
+          key: key,
+          newValue: JSON.stringify({ value: newValue }),
+          oldValue: JSON.stringify({ value: oldValue }),
+          storageArea: localStorage,
+        })
+      );
     },
     removeItem(key) {
       localStorage.removeItem(key);
