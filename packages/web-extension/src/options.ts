@@ -7,8 +7,18 @@ import { Provider } from '@anime-skip/player-ui/src/components/Provider';
 import { providePlayerConfig } from '@anime-skip/player-ui/src/composables/usePlayerConfig';
 import { defineNonPlayerConfig } from './utils/define-player-config';
 import { createPinia } from 'pinia';
+import { InternalPlayerConfig } from '~types';
+import { provideApiClient } from '@anime-skip/player-ui/src/composables/useApiClient';
+import { VueQueryPlugin } from 'vue-query';
 
-const Root = Provider(() => providePlayerConfig(defineNonPlayerConfig()), Options);
+const RootComponent = (config: InternalPlayerConfig) =>
+  Provider(
+    () => providePlayerConfig(config),
+    Provider(() => provideApiClient(config), Options)
+  );
 
-// TODO[state]: add pinia
-createApp(Root).use(ui).use(createPinia()).mount('#app');
+createApp(RootComponent(defineNonPlayerConfig()))
+  .use(ui)
+  .use(VueQueryPlugin)
+  .use(createPinia())
+  .mount('#app');

@@ -3,9 +3,9 @@ import { defineStore } from 'pinia';
 import { usePlayerConfig } from '../composables/usePlayerConfig';
 import { usePlayerStorage } from '../composables/usePlayerStorage';
 
-const SHOW_AT_STORAGE_KEY = 'storeReviewPromptAt';
-const PROMPT_COUNT_STORAGE_KEY = 'prompt-count';
-const NEVER_PROMPT_AGAIN_STORAGE_KEY = 'dontShowStoreReviewPromptAgain';
+export const SHOW_AT_STORAGE_KEY = 'storeReviewPromptAt';
+export const PROMPT_COUNT_STORAGE_KEY = 'prompt-count';
+export const NEVER_PROMPT_AGAIN_STORAGE_KEY = 'dontShowStoreReviewPromptAgain';
 
 const BASE_BACKOFF = 2 * DAY;
 

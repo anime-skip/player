@@ -18,7 +18,7 @@
     </div>
     <div class="as-flex-1 as-flex as-items-center as-justify-center">
       <LogIn
-        v-if="!isLoggedIn"
+        v-if="!auth.isLoggedIn"
         :small="small"
         :close-after-login="shouldCloseAfterLogin"
         :close="closePopup"
@@ -35,22 +35,22 @@
 import Browser from 'webextension-polyfill';
 import { usePlayerStorage } from '@anime-skip/player-ui/src/composables/usePlayerStorage';
 import { isUrlSupported } from '../utils/url-supported';
-import { useIsLoggedIn } from '@anime-skip/player-ui/src/stores/useAuth';
 import { log } from '~/utils/log';
 import UsageStats from '~/utils/UsageStats';
 import { detectBrowser } from '~utils/browser';
+import { useAuthStore } from '@anime-skip/player-ui/src/stores/useAuthStore';
 
 defineProps<{
   small?: boolean;
 }>();
+
+const auth = useAuthStore();
 
 onMounted(() => {
   void UsageStats.saveEvent('opened_popup');
 });
 
 const browser = detectBrowser();
-
-const isLoggedIn = useIsLoggedIn();
 
 const shouldCloseAfterLogin = computed(() => {
   const urlParams = new URLSearchParams(window?.location.search);
@@ -60,11 +60,11 @@ const shouldCloseAfterLogin = computed(() => {
 });
 
 const autoclose = () => {
-  if (isLoggedIn.value && shouldCloseAfterLogin.value) {
+  if (auth.isLoggedIn && shouldCloseAfterLogin.value) {
     setTimeout(closePopup, 500);
   }
 };
-watch(isLoggedIn, autoclose);
+watch(() => auth.isLoggedIn, autoclose);
 onMounted(autoclose);
 
 function closePopup() {

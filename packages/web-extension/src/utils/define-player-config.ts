@@ -13,7 +13,7 @@ import { createPlayerWebExtStorage } from './player-web-ext-storage';
 import UsageStats from './UsageStats';
 
 const API_CLIENT_ID = 'OB3AfF3fZg9XlZhxtLvhwLhDcevslhnr';
-const API_ENV = import.meta.env.VITE_API_ENV ?? 'test';
+const API_ENV = 'prod';
 
 /**
  * Configures the default player config for a player injected by the web extension
@@ -57,8 +57,8 @@ export function defineWebExtPlayerConfig(
         return undefined;
       }
     },
-    async inferEpisodeInfo() {
-      debug(`${service}.inferEpisodeInfo`);
+    async crawlEpisodeInfo() {
+      debug(`${service}.crawlEpisodeInfo`);
       return await backOff(
         async () => {
           const res = await sendMessage('@anime-skip/inferEpisodeInfo', undefined);
@@ -129,7 +129,7 @@ export function defineNonPlayerConfig(): InternalPlayerConfig {
     apiEnv: API_ENV,
     getRootQuery: notImplemented,
     getVideo: notImplemented,
-    inferEpisodeInfo: notImplemented,
+    crawlEpisodeInfo: notImplemented,
     onVideoChanged: notImplemented,
     openAllSettings: () => sendMessage('@anime-skip/open-all-settings', undefined),
     screenshotController: WebExtScreenshotController,

@@ -32,7 +32,7 @@ mountPlayerUi({
     saveEvent: asyncNoop,
   },
   apiClientId: 'OB3AfF3fZg9XlZhxtLvhwLhDcevslhnr',
-  apiEnv: import.meta.env.VITE_API_ENV ?? 'local',
+  apiEnv: 'prod',
   addKeyDownListener: l => document.addEventListener('keydown', l),
   removeKeyDownListener: l => document.removeEventListener('keydown', l),
 });

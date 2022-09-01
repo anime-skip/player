@@ -2,18 +2,12 @@ import Browser from 'webextension-polyfill';
 import { createListenerManager, PlayerStorage } from '~types';
 import { webExtStorage } from './web-ext-storage';
 
-interface PlayerWebExtStorageConfig {
-  disableListener?: true;
-}
-
-export const createPlayerWebExtStorage = (config?: PlayerWebExtStorageConfig): PlayerStorage => {
+export const createPlayerWebExtStorage = (): PlayerStorage => {
   const { removeListener, addListener, triggerListeners } = createListenerManager();
-  if (!config?.disableListener) {
-    Browser.storage.onChanged.addListener(async (changes, area) => {
-      if (area !== 'local') return;
-      await triggerListeners(changes);
-    });
-  }
+  Browser.storage.onChanged.addListener(async (changes, area) => {
+    if (area !== 'local') return;
+    await triggerListeners(changes);
+  });
 
   return {
     getItem<T>(key: string, defaultValue: T) {

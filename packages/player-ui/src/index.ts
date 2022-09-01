@@ -11,7 +11,6 @@ import { ExternalPlayerConfig, InternalPlayerConfig, mapToInternalConfig } from 
 import { sleep } from 'common/src/utils/time';
 import { createPinia } from 'pinia';
 import { VueQueryPlugin } from 'vue-query';
-import TestComp from './TestComp.vue';
 import { provideApiClient } from './composables/useApiClient';
 
 const RootComponent = (config: InternalPlayerConfig) =>

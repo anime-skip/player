@@ -6,7 +6,7 @@ import { loadedLog } from '~/utils/log';
 export function initMessenger() {
   loadedLog('background/messenger.ts');
 
-  onMessage('@anime-skip/open-all-settings', Browser.runtime.openOptionsPage);
+  onMessage('@anime-skip/open-all-settings', () => Browser.runtime.openOptionsPage());
   onMessage('@anime-skip/open-login', async () => {
     await Browser.tabs.create({ url: getPopupUrl({ closeAfterLogin: true }) });
   });
