@@ -4,9 +4,9 @@ import { FileSystemIconLoader } from 'unplugin-icons/loaders';
 import IconResolver from 'unplugin-icons/resolver';
 import icons from 'unplugin-icons/vite';
 import components from 'unplugin-vue-components/vite';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
     icons({
       customCollections: {
@@ -41,5 +41,6 @@ export default defineConfig({
   },
   define: {
     __VUE_PROD_DEVTOOLS__: true,
+    'vite.env': loadEnv(mode, process.cwd()),
   },
-});
+}));

@@ -72,6 +72,7 @@ export default defineConfig(({ mode }) => {
     define: {
       __EXTENSION_VERSION__: `'${pkg.version}'`,
       __TARGET_BROWSER__: `'${browser}'`,
+      'vite.env': loadEnv(mode, process.cwd()),
     },
     resolve: {
       alias,
