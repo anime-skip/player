@@ -27,7 +27,7 @@ export function useCreateNewTimestamp() {
     }
 
     if (!auth.isLoggedIn) {
-      dialogs.isLoginOverlayVisible = true;
+      dialogs.showLoginOverlay();
       dialogs.showDialog(DialogName.TIMESTAMPS_PANEL);
       return;
     }

@@ -13,7 +13,7 @@ export function useStartEditing() {
 
   return async (onStartedCallback?: () => void): Promise<void> => {
     if (!auth.isLoggedIn) {
-      dialogs.isLoginOverlayVisible = true;
+      dialogs.showLoginOverlay();
     }
     if (episodeUrl.value == null) {
       dialogs.showDialog(DialogName.CONNECT_EPISODE);

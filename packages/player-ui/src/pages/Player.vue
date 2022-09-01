@@ -6,7 +6,7 @@
       class="as-absolute as-inset-0 as-grid as-overflow-hidden as-bg-background as-bg-opacity-0"
       :class="{
         'as-active': activity.isActive,
-        'as-paused as-bg-opacity-medium': !videoState.playing,
+        'as-paused as-bg-opacity-medium': videoState.paused,
         'as-buffering as-bg-opacity-medium': showBufferLoading,
         'as-showing': isEpisodeInfoShowing,
         'as-opacity-0': !playerVisibility.animeSkipUi,
@@ -82,7 +82,7 @@ const { onMouseEnter, onMouseLeave, onMouseMove } = useMouseActivity();
 
 // Display flags
 
-const isEpisodeInfoShowing = computed<boolean>(() => !videoState.playing || videoState.waiting);
+const isEpisodeInfoShowing = computed<boolean>(() => videoState.paused || videoState.waiting);
 const showBufferLoading = computed<boolean>(() => videoState.stalled || videoState.waiting);
 
 const playerVisibility = usePlayerVisibilityStore();

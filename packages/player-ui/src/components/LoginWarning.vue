@@ -16,7 +16,7 @@ const dialogs = useDialogStore();
 const onClickLogin = () => {
   const isInInjectedPlayer = !window.location.protocol.includes('extension');
   if (isInInjectedPlayer) {
-    dialogs.isLoginOverlayVisible = true;
+    dialogs.showLoginOverlay();
   } else {
     window.open('popup.html?closeAfterLogin=true', '_blank');
   }

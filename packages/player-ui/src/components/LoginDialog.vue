@@ -23,6 +23,7 @@ watch(
   () => auth.isLoggedIn,
   () => {
     if (auth.isLoggedIn) {
+      dialogs.hideLoginOverlay();
       dialogs.isLoginOverlayVisible = false;
     }
   },

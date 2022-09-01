@@ -17,7 +17,6 @@ export function createPlayerLocalStorage(): PlayerStorage {
   const { addListener, removeListener, triggerListeners } = createListenerManager();
   const getJsonValueOrNull = (jsonString: string | null): any | null => {
     if (!jsonString) return null;
-    console.log(jsonString);
     return JSON.parse(jsonString)?.value;
   };
 

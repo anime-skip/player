@@ -13,7 +13,7 @@ export function useIsToolbarVisible() {
   return computed(
     () =>
       activity.isActive ||
-      !videoState.playing ||
+      videoState.paused ||
       (editing.isEditing && !preferences.value.minimizeToolbarWhenEditing)
   );
 }

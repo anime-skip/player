@@ -3,7 +3,7 @@
     class="ToolBar as-relative as-cursor-default"
     :class="{
       'as-active': isToolbarVisible,
-      'as-paused': !videoState.playing,
+      'as-paused': videoState.paused,
       'as-hide-timeline-when-minimized': fullyHideToolbar,
     }"
     @click.stop
@@ -73,7 +73,7 @@ const focusedTimestamp = useFocusedTimestampStore();
 
 // Video State
 
-const showDecimalsInFormattedTime = computed(() => !videoState.playing);
+const showDecimalsInFormattedTime = computed(() => videoState.paused);
 const currentFormattedTime = computed(() =>
   UiUtils.formatSeconds(videoState.currentTime, showDecimalsInFormattedTime.value)
 );
@@ -93,7 +93,7 @@ const fullyHideToolbar = computed(
 
 // Button Animations
 
-const playAnimationState = computed<1 | 0>(() => (!videoState.playing ? 1 : 0));
+const playAnimationState = computed<1 | 0>(() => (videoState.paused ? 1 : 0));
 
 const playerConfig = usePlayerConfig();
 const isFullscreenEnabled = ref(document.fullscreenEnabled);

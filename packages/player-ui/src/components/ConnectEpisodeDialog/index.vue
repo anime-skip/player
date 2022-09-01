@@ -63,7 +63,6 @@ const prefill = ref<CreateEpisodePrefill>({
 });
 const showing = ref(false);
 const { crawledInfo } = storeToRefs(useCrawlEpisodeStore());
-const crawledQuery = useCrawlEpisodeInfoQuery();
 
 // Data Fetching
 
@@ -128,7 +127,7 @@ const { wrapRequest: wrapLoadDefaultEpisodeOption, isLoading: isLoadingDefaultEp
   useRequestState();
 const loadDefaultEpisodeOption = wrapLoadDefaultEpisodeOption(
   async (showId: string): Promise<Api.EpisodeSearchResult | undefined> => {
-    const episodeName = crawledQuery.data.value?.name;
+    const episodeName = crawledInfo.value?.name;
     if (episodeName == null) {
       debug('Not fetching default episode, name could not be inferred');
       return undefined;
@@ -203,17 +202,11 @@ function loadData() {
 }
 
 async function loadSuggestions() {
-  if (crawledQuery.data.value?.name == null || crawledQuery.data.value.show == null) {
-    log(
-      'Not fetching suggestions, episode or show name could not be inferred',
-      toRaw(crawledQuery.data)
-    );
+  if (crawledInfo.value?.name == null || crawledInfo.value.show == null) {
+    log('Not fetching suggestions, episode or show name could not be inferred', toRaw(crawledInfo));
     return;
   }
-  suggestions.value = await fetchSuggestionsByName(
-    crawledQuery.data.value.name,
-    crawledQuery.data.value.show
-  );
+  suggestions.value = await fetchSuggestionsByName(crawledInfo.value.name, crawledInfo.value.show);
 
   if (suggestions.value.length === 0) onClickCreateNew();
 }
@@ -224,14 +217,14 @@ function onShow() {
   tab.value = Tab.FIND_EXISTING;
   prefill.value = {
     show: {
-      title: crawledQuery.data.value?.show || '',
+      title: crawledInfo.value?.show || '',
     },
     episode: {
-      title: crawledQuery.data.value?.name || '',
+      title: crawledInfo.value?.name || '',
     },
-    season: crawledQuery.data.value?.season,
-    number: crawledQuery.data.value?.number,
-    absoluteNumber: crawledQuery.data.value?.absoluteNumber,
+    season: crawledInfo.value?.season,
+    number: crawledInfo.value?.number,
+    absoluteNumber: crawledInfo.value?.absoluteNumber,
   };
   suggestions.value = [];
 
