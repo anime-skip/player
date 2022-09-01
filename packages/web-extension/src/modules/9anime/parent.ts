@@ -1,9 +1,9 @@
 import { loadedLog } from '~/utils/log';
 import setupParent from '~/utils/setupParent';
 import { newlinesToSpaces } from '~/utils/strings';
-import { InferredEpisodeInfo } from '~types';
+import { CrawledEpisodeInfo } from '~types';
 
-export function getEpisodeInfo(dom = document): InferredEpisodeInfo {
+export function getEpisodeInfo(dom = document): CrawledEpisodeInfo {
   const episodeLink = dom.querySelector<HTMLAnchorElement>('.episodes.name a.active');
   const number = episodeLink?.getAttribute('data-num')?.trim();
   let name = episodeLink?.querySelector('.d-title')?.textContent?.trim() || undefined;

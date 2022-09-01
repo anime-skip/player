@@ -3,7 +3,7 @@
  */
 import { describe, expect, it, vi } from 'vitest';
 import setupParent from '~/utils/setupParent';
-import { InferredEpisodeInfo } from '~types';
+import { CrawledEpisodeInfo } from '~types';
 import { initFunimation20210926Parent } from '../parent';
 
 vi.mock('~/utils/setupParent', () => ({
@@ -23,7 +23,7 @@ function setupDom(show: string, episode: string, details: string) {
 }
 
 describe('Parent functionalities', () => {
-  let getEpisodeInfo: () => InferredEpisodeInfo | Promise<InferredEpisodeInfo>;
+  let getEpisodeInfo: () => CrawledEpisodeInfo | Promise<CrawledEpisodeInfo>;
 
   it('should mock the setupParent function so these tests can be ran', () => {
     initFunimation20210926Parent();

@@ -3,12 +3,12 @@
  */
 import { describe, expect, it } from 'vitest';
 import { createDomFromFile } from '~/utils/testing/jsdom';
-import { InferredEpisodeInfo } from '~types';
+import { CrawledEpisodeInfo } from '~types';
 import { getEpisodeInfo } from '../parent';
 
 describe('Zoro.to Parent Content Script', () => {
   describe('getEpisodeInfo', () => {
-    it.each<[string, InferredEpisodeInfo]>([
+    it.each<[string, CrawledEpisodeInfo]>([
       [
         'parent-show-2022-05-06.gen.html',
         { name: 'Operationã€ˆStrixã€‰', show: 'Spy x Family', number: '1' },
@@ -27,7 +27,7 @@ describe('Zoro.to Parent Content Script', () => {
 
     it('should find the correct episode details for a movie', async () => {
       const dom = await createDomFromFile(__dirname, 'parent-movie-2022-05-06.gen.html');
-      const expected: InferredEpisodeInfo = {
+      const expected: CrawledEpisodeInfo = {
         name: 'A Silent Voice',
         show: 'A Silent Voice',
       };

@@ -3,12 +3,12 @@
  */
 import { describe, expect, it } from 'vitest';
 import { createDomFromFile } from '~/utils/testing/jsdom';
-import { InferredEpisodeInfo } from '~types';
+import { CrawledEpisodeInfo } from '~types';
 import { getEpisodeInfo } from '../parent';
 
 describe('9anime Parent Content Script', () => {
   describe('getEpisodeInfo', () => {
-    it.each<[string, InferredEpisodeInfo]>([
+    it.each<[string, CrawledEpisodeInfo]>([
       [
         'parent-show-2022-08-01.gen.html',
         {
@@ -27,7 +27,7 @@ describe('9anime Parent Content Script', () => {
 
     it('should find the correct episode details for a movie', async () => {
       const dom = await createDomFromFile(__dirname, 'parent-movie-2022-08-01.gen.html');
-      const expected: InferredEpisodeInfo = {
+      const expected: CrawledEpisodeInfo = {
         name: 'Your Name.',
         show: 'Your Name.',
       };

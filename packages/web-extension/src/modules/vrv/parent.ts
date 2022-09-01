@@ -1,8 +1,8 @@
 import { loadedLog } from '~/utils/log';
 import setupParent from '~/utils/setupParent';
-import { InferredEpisodeInfo } from '~types';
+import { CrawledEpisodeInfo } from '~types';
 
-export function getEpisodeInfo(dom = document): InferredEpisodeInfo {
+export function getEpisodeInfo(dom = document): CrawledEpisodeInfo {
   const show = dom.querySelector('.episode-info span.series')?.textContent?.trim() || undefined;
   const fullSeason = dom.querySelector('.episode-info span.season');
   const season = fullSeason?.textContent?.replace('SEASON', '')?.trim();

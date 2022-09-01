@@ -1,5 +1,5 @@
 import { onMessage } from '~/utils/web-ext-bridge';
-import { InferredEpisodeInfo, ScreenshotDetails } from '~types';
+import { CrawledEpisodeInfo, ScreenshotDetails } from '~types';
 import { fallbackBound } from '~utils/drawing';
 import { sleep } from '~utils/time';
 import { error } from './log';
@@ -16,7 +16,7 @@ function defaultGetScreenshotDetails() {
 }
 
 export default function setupParent(options: {
-  getEpisodeInfo(): Promise<InferredEpisodeInfo> | InferredEpisodeInfo;
+  getEpisodeInfo(): Promise<CrawledEpisodeInfo> | CrawledEpisodeInfo;
   getScreenshotDetails?(): ScreenshotDetails;
 }): void {
   // Sites using HTML5 History mode don't update immediately, so we track the url to know if we
@@ -26,7 +26,7 @@ export default function setupParent(options: {
 
   onMessage('@anime-skip/inferEpisodeInfo', async () => {
     const currentUrl: string = window.location.href;
-    let episode: InferredEpisodeInfo;
+    let episode: CrawledEpisodeInfo;
 
     try {
       if (previousUrl != null && currentUrl !== previousUrl) {

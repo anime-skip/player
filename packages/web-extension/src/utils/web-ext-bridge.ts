@@ -1,9 +1,9 @@
 import { createWebExtBridge, ProtocolWithReturn } from '@anime-skip/web-ext-bridge';
-import { InferredEpisodeInfo, ScreenshotDetails } from '~types';
+import { CrawledEpisodeInfo, ScreenshotDetails } from '~types';
 import * as logger from './log';
 
 interface ProtocolMap {
-  '@anime-skip/inferEpisodeInfo': ProtocolWithReturn<undefined, InferredEpisodeInfo>;
+  '@anime-skip/inferEpisodeInfo': ProtocolWithReturn<undefined, CrawledEpisodeInfo>;
   '@anime-skip/parent-screenshot-details': ProtocolWithReturn<undefined, ScreenshotDetails>;
   '@anime-skip/player-screenshot-details': ProtocolWithReturn<undefined, ScreenshotDetails>;
   '@anime-skip/start-screenshot': undefined;
