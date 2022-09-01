@@ -45,11 +45,13 @@ import { useApiClient } from '../../composables/useApiClient';
 import { debug, log, warn } from '../../utils/log';
 import * as Api from 'common/src/api';
 import * as Mappers from 'common/src/utils/mappers';
-import { DialogName, useDialogStore } from '../../state/stores/useDialogStore';
-import { useCrawlEpisodeInfoQuery } from '../../state/composables/useCrawlEpisodeInfoQuery';
-import { useAuthStore } from '../../state/stores/useAuthStore';
-import { useEpisodeStore } from '../../state/stores/useEpisodeStore';
-import { useTimestampEditingStore } from '../../state/stores/useTimestampEditingStore';
+import { DialogName, useDialogStore } from '../../stores/useDialogStore';
+import { useCrawlEpisodeInfoQuery } from '../../composables/useCrawlEpisodeInfoQuery';
+import { useAuthStore } from '../../stores/useAuthStore';
+import { useEpisodeStore } from '../../stores/useEpisodeStore';
+import { useTimestampEditingStore } from '../../stores/useTimestampEditingStore';
+import { useCrawlEpisodeStore } from '../../stores/useCrawledEpisodeStore';
+import { storeToRefs } from 'pinia';
 
 const dialogs = useDialogStore();
 const auth = useAuthStore();
@@ -60,6 +62,7 @@ const prefill = ref<CreateEpisodePrefill>({
   episode: { title: '' },
 });
 const showing = ref(false);
+const { crawledInfo } = storeToRefs(useCrawlEpisodeStore());
 const crawledQuery = useCrawlEpisodeInfoQuery();
 
 // Data Fetching
@@ -87,7 +90,7 @@ const fetchSuggestionsByName = wrapFetchSuggestionsByName(
 const { wrapRequest: wrapLoadDefaultShowOption, isLoading: isLoadingDefaultShow } =
   useRequestState();
 const loadDefaultShowOption = wrapLoadDefaultShowOption(async (): Promise<void> => {
-  const showName = crawledQuery.data.value?.show;
+  const showName = crawledInfo.value?.show;
   if (showName == null) {
     debug('Not fetching default show, name could not be inferred');
     return;

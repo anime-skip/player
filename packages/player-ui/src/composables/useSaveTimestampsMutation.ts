@@ -4,14 +4,14 @@ import * as Api from 'common/src/api';
 import GeneralUtils from 'common/src/utils/GeneralUtils';
 import { isTimestampRemote } from '../utils/isTimestampLocal';
 import { storeToRefs } from 'pinia';
-import { useEpisodeStore } from '../state/stores/useEpisodeStore';
+import { useEpisodeStore } from '../stores/useEpisodeStore';
 import { useMutation, UseMutationOptions, useQueryClient } from 'vue-query';
 import {
   EpisodeUrl,
   EpisodeUrlEpisode,
   EpisodeUrlEpisodeTimestamp,
   EPISODE_URL_QUERY_KEY,
-} from '../state/composables/useFindEpisodeUrlQuery';
+} from '../composables/useFindEpisodeUrlQuery';
 import { AmbiguousTimestamp } from 'common/src/api';
 import { GqlInputTimestamp } from '@anime-skip/api-client';
 

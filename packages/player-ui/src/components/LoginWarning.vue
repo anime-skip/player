@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useDialogStore } from '../state/stores/useDialogStore';
+import { useDialogStore } from '../stores/useDialogStore';
 
 defineProps<{ before?: string }>();
 

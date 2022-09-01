@@ -1,6 +1,6 @@
 import { storeToRefs } from 'pinia';
-import { useEpisodeStore } from '../state/stores/useEpisodeStore';
-import { useTimestampEditingStore } from '../state/stores/useTimestampEditingStore';
+import { useEpisodeStore } from '../stores/useEpisodeStore';
+import { useTimestampEditingStore } from '../stores/useTimestampEditingStore';
 import { useSaveTimestampsMutation } from './useSaveTimestampsMutation';
 
 export function useStopEditing() {

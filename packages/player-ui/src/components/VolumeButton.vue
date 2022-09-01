@@ -19,9 +19,8 @@
 
 <script lang="ts" setup>
 import { useKeyboardShortcuts } from '../composables/useKeyboardShortcuts';
-import { useVideoStateStore } from '../state/stores/useVideoStateStore';
+import { useVideoStateStore } from '../stores/useVideoStateStore';
 
-// TODO[state]: fix dragging volume?
 const isDragging = ref(false);
 
 const videoState = useVideoStateStore();

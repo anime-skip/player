@@ -3,12 +3,12 @@ import { useApiClient } from '../composables/useApiClient';
 import { warn } from '../utils/log';
 import * as Api from 'common/src/api';
 import GeneralUtils from 'common/src/utils/GeneralUtils';
-import { useTimestampEditingStore } from '../state/stores/useTimestampEditingStore';
+import { useTimestampEditingStore } from '../stores/useTimestampEditingStore';
 import { storeToRefs } from 'pinia';
-import { useTabUrlStore } from '../state/stores/useTabUrlStore';
-import { useVideoStateStore } from '../state/stores/useVideoStateStore';
+import { useTabUrlStore } from '../stores/useTabUrlStore';
+import { useVideoStateStore } from '../stores/useVideoStateStore';
 import { useQueryClient } from 'vue-query';
-import { EPISODE_URL_QUERY_KEY } from '../state/composables/useFindEpisodeUrlQuery';
+import { EPISODE_URL_QUERY_KEY } from '../composables/useFindEpisodeUrlQuery';
 
 export function useLinkEpisodeUrl() {
   const api = useApiClient();

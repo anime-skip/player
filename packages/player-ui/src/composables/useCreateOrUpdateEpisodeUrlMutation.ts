@@ -1,6 +1,6 @@
 import { GqlCreateEpisodeUrlArgs } from '@anime-skip/api-client';
 import { useMutation } from 'vue-query';
-import { useApiClient } from '../../composables/useApiClient';
+import { useApiClient } from '../composables/useApiClient';
 import { EpisodeUrlFragment, EpisodeUrl } from './useFindEpisodeUrlQuery';
 
 const query = `

@@ -42,9 +42,9 @@
 
 <script lang="ts" setup>
 import { TextInputRef } from 'common/src/types';
-import { useLoginMutation } from '../state/composables/useLoginMutation';
-import { useAuthStore } from '../state/stores/useAuthStore';
-import { useDialogStore } from '../state/stores/useDialogStore';
+import { useLoginMutation } from '../composables/useLoginMutation';
+import { useAuthStore } from '../stores/useAuthStore';
+import { useDialogStore } from '../stores/useDialogStore';
 
 const emit = defineEmits<{
   (event: 'logged-in'): void;

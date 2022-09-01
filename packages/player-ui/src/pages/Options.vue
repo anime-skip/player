@@ -42,11 +42,11 @@
 <script lang="ts" setup>
 import { ColorTheme } from 'common/src/api';
 import { usePlayerConfig } from '../composables/usePlayerConfig';
-import { useAuthStore } from '../state/stores/useAuthStore';
-import { AllPreferences, usePreferencesStore } from '../state/stores/usePreferencesStore';
+import { useAuthStore } from '../stores/useAuthStore';
+import { AllPreferences, usePreferencesStore } from '../stores/usePreferencesStore';
 import { storeToRefs } from 'pinia';
-import { useToggleBooleanPreferenceMutation } from '../state/composables/useToggleBooleanPreferenceMutation';
-import { useSavePreferencesMutation } from '../state/composables/useSavePreferencesMutation';
+import { useToggleBooleanPreferenceMutation } from '../composables/useToggleBooleanPreferenceMutation';
+import { useSavePreferencesMutation } from '../composables/useSavePreferencesMutation';
 import { PickTypes } from 'common/src/types';
 
 const config = usePlayerConfig();

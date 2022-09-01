@@ -1,6 +1,6 @@
 import { sleep } from 'common/src/utils/time';
-import { useAuthStore } from '../state/stores/useAuthStore';
-import { usePreferencesStore } from '../state/stores/usePreferencesStore';
+import { useAuthStore } from '../stores/useAuthStore';
+import { usePreferencesStore } from '../stores/usePreferencesStore';
 import { usePlayerConfig } from './usePlayerConfig';
 
 export function useLogout() {

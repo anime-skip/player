@@ -3,11 +3,11 @@ import { useApiClient } from '../composables/useApiClient';
 import { log } from '../utils/log';
 import * as Api from 'common/src/api';
 import { useSaveTemplateTimestamps } from './useSaveTemplateTimestamps';
-import { useTemplateEditingStore } from '../state/stores/useTemplateEditingStore';
+import { useTemplateEditingStore } from '../stores/useTemplateEditingStore';
 import { useQueryClient } from 'vue-query';
-import { useEpisodeStore } from '../state/stores/useEpisodeStore';
+import { useEpisodeStore } from '../stores/useEpisodeStore';
 import { storeToRefs } from 'pinia';
-import { EPISODE_URL_QUERY_KEY } from '../state/composables/useFindEpisodeUrlQuery';
+import { EPISODE_URL_QUERY_KEY } from '../composables/useFindEpisodeUrlQuery';
 
 export function useSaveTemplate() {
   const api = useApiClient();

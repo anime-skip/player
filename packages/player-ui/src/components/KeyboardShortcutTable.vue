@@ -186,7 +186,7 @@ import { storeToRefs } from 'pinia';
 import {
   KeyboardShortcutAction,
   useKeyboardShortcutStore,
-} from '../state/stores/useKeyboardShortcutStore';
+} from '../stores/useKeyboardShortcutStore';
 
 // Updates
 

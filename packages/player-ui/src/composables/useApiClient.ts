@@ -4,8 +4,8 @@ import {
   CustomAnimeSkipClient,
 } from 'common/src/utils/CustomApiClient';
 import { LogoutError } from 'common/src/utils/LogoutError';
-import { useAuthStore } from '../state/stores/useAuthStore';
-import { usePreferencesStore } from '../state/stores/usePreferencesStore';
+import { useAuthStore } from '../stores/useAuthStore';
+import { usePreferencesStore } from '../stores/usePreferencesStore';
 import { log, warn } from '../utils/log';
 import { usePlayerConfig } from './usePlayerConfig';
 import useTokenRefresher from './useTokenRefresher';

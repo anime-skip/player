@@ -55,16 +55,13 @@ import { FRAME, LOOKUP_PREV_TIMESTAMP_OFFSET } from '../utils/constants';
 import { log, warn } from '../utils/log';
 import * as Api from 'common/src/api';
 import Utils from 'common/src/utils/GeneralUtils';
-import { useVideoStateStore } from '../state/stores/useVideoStateStore';
-import { usePreferencesStore } from '../state/stores/usePreferencesStore';
+import { useVideoStateStore } from '../stores/useVideoStateStore';
+import { usePreferencesStore } from '../stores/usePreferencesStore';
 import { storeToRefs } from 'pinia';
-import {
-  EditTimestampMode,
-  useTimestampEditingStore,
-} from '../state/stores/useTimestampEditingStore';
-import { useUserActivityStore } from '../state/stores/useUserActivityStore';
-import { DialogName, useDialogStore } from '../state/stores/useDialogStore';
-import { useFocusedTimestampStore } from '../state/stores/useFocusedTimestampStore';
+import { EditTimestampMode, useTimestampEditingStore } from '../stores/useTimestampEditingStore';
+import { useUserActivityStore } from '../stores/useUserActivityStore';
+import { DialogName, useDialogStore } from '../stores/useDialogStore';
+import { useFocusedTimestampStore } from '../stores/useFocusedTimestampStore';
 
 const videoState = useVideoStateStore();
 const editing = useTimestampEditingStore();

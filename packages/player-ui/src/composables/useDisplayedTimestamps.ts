@@ -1,6 +1,6 @@
 import * as Api from 'common/src/api';
-import { useEpisodeStore } from '../state/stores/useEpisodeStore';
-import { useTimestampEditingStore } from '../state/stores/useTimestampEditingStore';
+import { useEpisodeStore } from '../stores/useEpisodeStore';
+import { useTimestampEditingStore } from '../stores/useTimestampEditingStore';
 
 /**
  * Used to return the current timestamps being displayed based on remote/template/edited timestamps

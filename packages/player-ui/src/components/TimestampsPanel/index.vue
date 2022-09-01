@@ -15,8 +15,8 @@
 </template>
 
 <script lang="ts" setup>
-import { DialogName, useDialogStore } from '../../state/stores/useDialogStore';
-import { useTimestampEditingStore } from '../../state/stores/useTimestampEditingStore';
+import { DialogName, useDialogStore } from '../../stores/useDialogStore';
+import { useTimestampEditingStore } from '../../stores/useTimestampEditingStore';
 import { useIsEditingTemplate } from './useTimestampPanelState';
 
 const dialogs = useDialogStore();

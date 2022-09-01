@@ -1,9 +1,9 @@
 import { Ref } from 'vue';
 import { useQuery } from 'vue-query';
 import * as Api from '@anime-skip/api-client';
-import { useApiClient } from '../../composables/useApiClient';
+import { useApiClient } from '../composables/useApiClient';
 import { TimestampType, TimestampTypeFragment } from './useAllTimestampTypesQuery';
-import { log } from '../../utils/log';
+import { log } from '../utils/log';
 
 // Timestamp
 

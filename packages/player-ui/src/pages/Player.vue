@@ -60,12 +60,12 @@
 
 <script lang="ts" setup>
 import { useTheme } from '../composables/useTheme';
-import { DialogName, useDialogStore } from '../state/stores/useDialogStore';
-import { usePlayHistoryStore } from '../state/stores/usePlayHistoryStore';
-import { useUserActivityStore } from '../state/stores/useUserActivityStore';
-import { useVideoStateStore } from '../state/stores/useVideoStateStore';
-import { usePlayerVisibilityStore } from '../state/stores/usePlayerVisibilityStore';
-import { useMouseActivity } from '../state/composables/useMouseActivity';
+import { DialogName, useDialogStore } from '../stores/useDialogStore';
+import { usePlayHistoryStore } from '../stores/usePlayHistoryStore';
+import { useUserActivityStore } from '../stores/useUserActivityStore';
+import { useVideoStateStore } from '../stores/useVideoStateStore';
+import { usePlayerVisibilityStore } from '../stores/usePlayerVisibilityStore';
+import { useMouseActivity } from '../composables/useMouseActivity';
 
 const dialogs = useDialogStore();
 const isTimestampsPanelOpen = computed(() => dialogs.activeDialog === DialogName.TIMESTAMPS_PANEL);

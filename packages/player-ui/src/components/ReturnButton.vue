@@ -15,7 +15,7 @@
 
 <script lang="ts" setup>
 import { Teleport } from 'vue';
-import { usePlayerVisibilityStore } from '../state/stores/usePlayerVisibilityStore';
+import { usePlayerVisibilityStore } from '../stores/usePlayerVisibilityStore';
 
 const playerVisibility = usePlayerVisibilityStore();
 

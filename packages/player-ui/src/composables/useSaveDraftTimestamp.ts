@@ -1,6 +1,6 @@
 import * as Api from 'common/src/api';
 import GeneralUtils from 'common/src/utils/GeneralUtils';
-import { useTimestampEditingStore } from '../state/stores/useTimestampEditingStore';
+import { useTimestampEditingStore } from '../stores/useTimestampEditingStore';
 import { warn } from '../utils/log';
 
 export function useSaveDraftTimestamp() {

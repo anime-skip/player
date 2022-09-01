@@ -19,7 +19,9 @@
         </h5>
       </div>
       <h3 class="as-line-clamp-2" :title="episodeName">{{ episodeName }}</h3>
-      <h6 class="as-text-on-surface as-text-opacity-high">{{ episodeDetails }}</h6>
+      <h6 v-if="episodeDetails" class="as-text-on-surface as-text-opacity-high">
+        {{ episodeDetails }}
+      </h6>
       <FlatButton v-if="isConnectButtonShowing" transparent @click.stop="showConnectEpisodeDialog">
         <i-mdi-link-variant class="as-w-6 as-h-6 as-fill-on-surface as-inline" />
         <span class="as-pl-2">Connect to Anime Skip</span>
@@ -34,13 +36,13 @@ import ThemedLogo from './ThemedLogo.vue';
 import { usePlayerConfig } from '../composables/usePlayerConfig';
 import { useTheme } from '../composables/useTheme';
 import EpisodeUtils from 'common/src/utils/episode-utils';
-import { useDisplayedEpisodeInfo } from '../state/composables/useDisplayedEpisodeInfo';
-import { useEpisodeStore } from '../state/stores/useEpisodeStore';
+import { useDisplayedEpisodeInfo } from '../composables/useDisplayedEpisodeInfo';
+import { useEpisodeStore } from '../stores/useEpisodeStore';
 import { storeToRefs } from 'pinia';
-import { DialogName, useDialogStore } from '../state/stores/useDialogStore';
-import { useShowConnectEpisodeDialog } from '../state/composables/useShowConnectEpisodeDialog';
-import { useCrawlEpisodeStore } from '../state/stores/useCrawledEpisodeStore';
-import { useVideoStateStore } from '../state/stores/useVideoStateStore';
+import { DialogName, useDialogStore } from '../stores/useDialogStore';
+import { useShowConnectEpisodeDialog } from '../composables/useShowConnectEpisodeDialog';
+import { useCrawlEpisodeStore } from '../stores/useCrawledEpisodeStore';
+import { useVideoStateStore } from '../stores/useVideoStateStore';
 import { log } from '../utils/log';
 
 const { serviceDisplayName } = usePlayerConfig();

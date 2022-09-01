@@ -45,10 +45,10 @@ import { useConnectEpisodeAggregateMutation } from '../../composables/useConnect
 import { useShowAutocomplete } from '../../composables/useShowAutocomplete';
 import * as Api from 'common/src/api';
 import { TextInputRef } from 'common/src/types';
-import { useDialogStore } from '../../state/stores/useDialogStore';
-import { useTabUrlStore } from '../../state/stores/useTabUrlStore';
+import { useDialogStore } from '../../stores/useDialogStore';
+import { useTabUrlStore } from '../../stores/useTabUrlStore';
 import { storeToRefs } from 'pinia';
-import { useVideoStateStore } from '../../state/stores/useVideoStateStore';
+import { useVideoStateStore } from '../../stores/useVideoStateStore';
 
 const props = defineProps<{
   prefill: CreateEpisodePrefill;

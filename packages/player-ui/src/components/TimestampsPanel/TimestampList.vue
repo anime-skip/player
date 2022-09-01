@@ -123,16 +123,13 @@ import { TIMESTAMP_SOURCES, TIMESTAMP_TYPES } from '../../utils/constants';
 import * as Api from 'common/src/api';
 import { SECONDS } from 'common/src/utils/time';
 import { useUpdateIsEditingTemplate } from './useTimestampPanelState';
-import { useAuthStore } from '../../state/stores/useAuthStore';
-import {
-  EditTimestampMode,
-  useTimestampEditingStore,
-} from '../../state/stores/useTimestampEditingStore';
-import { useEpisodeStore } from '../../state/stores/useEpisodeStore';
+import { useAuthStore } from '../../stores/useAuthStore';
+import { EditTimestampMode, useTimestampEditingStore } from '../../stores/useTimestampEditingStore';
+import { useEpisodeStore } from '../../stores/useEpisodeStore';
 import { storeToRefs } from 'pinia';
-import { useFocusedTimestampStore } from '../../state/stores/useFocusedTimestampStore';
-import { useDialogStore } from '../../state/stores/useDialogStore';
-import { useVideoStateStore } from '../../state/stores/useVideoStateStore';
+import { useFocusedTimestampStore } from '../../stores/useFocusedTimestampStore';
+import { useDialogStore } from '../../stores/useDialogStore';
+import { useVideoStateStore } from '../../stores/useVideoStateStore';
 
 const auth = useAuthStore();
 const editing = useTimestampEditingStore();

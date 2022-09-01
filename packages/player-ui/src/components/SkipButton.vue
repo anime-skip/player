@@ -14,11 +14,11 @@ import { useDisplayedTimestamps } from '../composables/useDisplayedTimestamps';
 import { useIsToolbarVisible } from '../composables/useIsToolbarVisible';
 import { TIMESTAMP_TYPES } from '../utils/constants';
 import Utils from 'common/src/utils/GeneralUtils';
-import { useVideoStateStore } from '../state/stores/useVideoStateStore';
-import { usePreferencesStore } from '../state/stores/usePreferencesStore';
+import { useVideoStateStore } from '../stores/useVideoStateStore';
+import { usePreferencesStore } from '../stores/usePreferencesStore';
 import { storeToRefs } from 'pinia';
-import { useTimestampEditingStore } from '../state/stores/useTimestampEditingStore';
-import { useUserActivityStore } from '../state/stores/useUserActivityStore';
+import { useTimestampEditingStore } from '../stores/useTimestampEditingStore';
+import { useUserActivityStore } from '../stores/useUserActivityStore';
 
 const SKIP_BUTTON_OFFSET = 0.1;
 const IS_VIDEO_OVER_ALLOWED_DIFF = 0.1;

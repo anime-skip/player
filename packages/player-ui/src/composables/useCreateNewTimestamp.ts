@@ -3,15 +3,12 @@ import { TIMESTAMP_TYPE_NOT_SELECTED } from '../utils/constants';
 import { TimestampSource } from 'common/src/api';
 import GeneralUtils from 'common/src/utils/GeneralUtils';
 import { useStartEditing } from './useStartEditing';
-import {
-  EditTimestampMode,
-  useTimestampEditingStore,
-} from '../state/stores/useTimestampEditingStore';
-import { DialogName, useDialogStore } from '../state/stores/useDialogStore';
-import { useAuthStore } from '../state/stores/useAuthStore';
+import { EditTimestampMode, useTimestampEditingStore } from '../stores/useTimestampEditingStore';
+import { DialogName, useDialogStore } from '../stores/useDialogStore';
+import { useAuthStore } from '../stores/useAuthStore';
 import { storeToRefs } from 'pinia';
-import { usePreferencesStore } from '../state/stores/usePreferencesStore';
-import { useVideoStateStore } from '../state/stores/useVideoStateStore';
+import { usePreferencesStore } from '../stores/usePreferencesStore';
+import { useVideoStateStore } from '../stores/useVideoStateStore';
 
 export function useCreateNewTimestamp() {
   const editing = useTimestampEditingStore();

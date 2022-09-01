@@ -1,5 +1,5 @@
 import * as Api from 'common/src/api';
-import { useTimestampEditingStore } from '../state/stores/useTimestampEditingStore';
+import { useTimestampEditingStore } from '../stores/useTimestampEditingStore';
 import { useStartEditing } from './useStartEditing';
 
 export function useDeleteDraftTimestamp() {

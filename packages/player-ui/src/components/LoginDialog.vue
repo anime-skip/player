@@ -12,8 +12,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useAuthStore } from '../state/stores/useAuthStore';
-import { useDialogStore } from '../state/stores/useDialogStore';
+import { useAuthStore } from '../stores/useAuthStore';
+import { useDialogStore } from '../stores/useDialogStore';
 
 const dialogs = useDialogStore();
 const auth = useAuthStore();

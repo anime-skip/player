@@ -25,9 +25,9 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
-import { useToggleBooleanPreferenceMutation } from '../state/composables/useToggleBooleanPreferenceMutation';
-import { useAuthStore } from '../state/stores/useAuthStore';
-import { usePreferencesStore } from '../state/stores/usePreferencesStore';
+import { useToggleBooleanPreferenceMutation } from '../composables/useToggleBooleanPreferenceMutation';
+import { useAuthStore } from '../stores/useAuthStore';
+import { usePreferencesStore } from '../stores/usePreferencesStore';
 import { SKIPPABLE_PREFERENCES } from '../utils/constants';
 
 defineProps({

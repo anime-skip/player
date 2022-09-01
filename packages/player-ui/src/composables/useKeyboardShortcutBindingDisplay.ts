@@ -2,7 +2,7 @@ import { storeToRefs } from 'pinia';
 import {
   KeyboardShortcutAction,
   useKeyboardShortcutStore,
-} from '../state/stores/useKeyboardShortcutStore';
+} from '../stores/useKeyboardShortcutStore';
 
 export default function useKeyboardShortcutBindingDisplay(action: KeyboardShortcutAction) {
   const { primaryActionToKey, secondaryActionToKey } = storeToRefs(useKeyboardShortcutStore());

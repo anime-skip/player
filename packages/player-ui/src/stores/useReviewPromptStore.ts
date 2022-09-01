@@ -1,7 +1,7 @@
 import { DAY } from 'common/src/utils/time';
 import { defineStore } from 'pinia';
-import { usePlayerConfig } from '../../composables/usePlayerConfig';
-import { usePlayerStorage } from '../../composables/usePlayerStorage';
+import { usePlayerConfig } from '../composables/usePlayerConfig';
+import { usePlayerStorage } from '../composables/usePlayerStorage';
 
 const SHOW_AT_STORAGE_KEY = 'storeReviewPromptAt';
 const PROMPT_COUNT_STORAGE_KEY = 'prompt-count';

@@ -1,7 +1,7 @@
 import { useTimeoutFn } from '@vueuse/core';
 import { SECOND } from 'common/src/utils/time';
 import { defineStore } from 'pinia';
-import { debug } from '../../utils/log';
+import { debug } from '../utils/log';
 
 export const PLAYER_ACTIVITY_TIMEOUT = 3 * SECOND;
 

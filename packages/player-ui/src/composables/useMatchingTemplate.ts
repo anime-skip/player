@@ -1,4 +1,4 @@
-import { EpisodeUrlEpisodeTemplate } from '../state/composables/useFindEpisodeUrlQuery';
+import { EpisodeUrlEpisodeTemplate } from '../composables/useFindEpisodeUrlQuery';
 
 /**
  * Returns the template that matches the current episode if it exists

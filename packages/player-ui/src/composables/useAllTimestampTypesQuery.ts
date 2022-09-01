@@ -1,6 +1,6 @@
 import { DAY } from 'common/src/utils/time';
 import { useQuery } from 'vue-query';
-import { useApiClient } from '../../composables/useApiClient';
+import { useApiClient } from '../composables/useApiClient';
 import * as Api from '@anime-skip/api-client';
 
 // TimestampType

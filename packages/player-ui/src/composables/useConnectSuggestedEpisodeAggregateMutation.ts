@@ -5,7 +5,7 @@ import * as Api from 'common/src/api';
 import GeneralUtils from 'common/src/utils/GeneralUtils';
 import * as Mappers from 'common/src/utils/mappers';
 import { useConnectEpisodeAggregateMutation } from './useConnectEpisodeAggregateMutation';
-import { useTimestampEditingStore } from '../state/stores/useTimestampEditingStore';
+import { useTimestampEditingStore } from '../stores/useTimestampEditingStore';
 import { useMutation, UseMutationOptions } from 'vue-query';
 
 export interface ThirdPartyCreateEpisodeData {

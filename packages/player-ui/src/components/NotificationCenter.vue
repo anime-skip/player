@@ -18,7 +18,7 @@ import { useNow } from '@vueuse/core';
 import Utils from 'common/src/utils/GeneralUtils';
 import { DAYS, MINUTES, SECOND, today } from 'common/src/utils/time';
 import { usePlayerConfig } from '../composables/usePlayerConfig';
-import { useReviewPromptStore } from '../state/stores/useReviewPromptStore';
+import { useReviewPromptStore } from '../stores/useReviewPromptStore';
 import { NotificationButton } from './Notification.vue';
 
 interface Notification {

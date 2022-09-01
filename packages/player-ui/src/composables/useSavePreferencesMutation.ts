@@ -1,6 +1,6 @@
 import { GqlInputPreferences } from '@anime-skip/api-client';
 import { useMutation } from 'vue-query';
-import { useApiClient } from '../../composables/useApiClient';
+import { useApiClient } from '../composables/useApiClient';
 import {
   AllPreferences,
   DEFAULT_REMOTE_PREFERENCES,

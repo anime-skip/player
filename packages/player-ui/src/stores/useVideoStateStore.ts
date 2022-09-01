@@ -1,6 +1,6 @@
 import { clamp, useEventListener, useMediaControls } from '@vueuse/core';
 import { defineStore, storeToRefs } from 'pinia';
-import { usePlayerConfig } from '../../composables/usePlayerConfig';
+import { usePlayerConfig } from '../composables/usePlayerConfig';
 import { usePreferencesStore } from './usePreferencesStore';
 
 export const useVideoStateStore = defineStore('video-state', () => {

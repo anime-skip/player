@@ -6,7 +6,8 @@ import '~/styles';
 import { Provider } from '@anime-skip/player-ui/src/components/Provider';
 import { providePlayerConfig } from '@anime-skip/player-ui/src/composables/usePlayerConfig';
 import { defineNonPlayerConfig } from './utils/define-player-config';
+import { createPinia } from 'pinia';
 
 const Root = Provider(() => providePlayerConfig(defineNonPlayerConfig()), PopupContainer);
 
-createApp(Root).use(ui).mount('#app');
+createApp(Root).use(ui).use(createPinia()).mount('#app');

@@ -1,6 +1,6 @@
 import { usePlayerConfig } from '../composables/usePlayerConfig';
 import { ColorTheme } from 'common/src/api';
-import { usePreferencesStore } from '../state/stores/usePreferencesStore';
+import { usePreferencesStore } from '../stores/usePreferencesStore';
 import { storeToRefs } from 'pinia';
 
 const colorThemeToCssClassNameMap: Record<ColorTheme, string | undefined> = {

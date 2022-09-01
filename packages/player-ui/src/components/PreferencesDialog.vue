@@ -80,8 +80,8 @@ import { computed, onMounted, ref } from 'vue';
 import { usePlayerConfig } from '../composables/usePlayerConfig';
 import useRadioIcon from '../composables/useRadioIcon';
 import { PlayerOption, PlayerOptionGroup } from 'common/src/types';
-import { DialogName, useDialogStore } from '../state/stores/useDialogStore';
-import { usePlayerVisibilityStore } from '../state/stores/usePlayerVisibilityStore';
+import { DialogName, useDialogStore } from '../stores/useDialogStore';
+import { usePlayerVisibilityStore } from '../stores/usePlayerVisibilityStore';
 
 const config = usePlayerConfig();
 const dialogs = useDialogStore();

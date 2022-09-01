@@ -1,7 +1,7 @@
 import { GqlDeleteTemplateArgs } from '@anime-skip/api-client';
 import { useMutation, useQueryClient } from 'vue-query';
-import { useApiClient } from '../../composables/useApiClient';
-import { log } from '../../utils/log';
+import { useApiClient } from '../composables/useApiClient';
+import { log } from '../utils/log';
 import { useTemplateEditingStore } from '../stores/useTemplateEditingStore';
 import { TimestampTypeFragment } from './useAllTimestampTypesQuery';
 import {

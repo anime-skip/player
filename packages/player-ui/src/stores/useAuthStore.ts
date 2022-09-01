@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import { usePlayerConfig } from '../../composables/usePlayerConfig';
-import { usePlayerStorage } from '../../composables/usePlayerStorage';
+import { usePlayerConfig } from '../composables/usePlayerConfig';
+import { usePlayerStorage } from '../composables/usePlayerStorage';
 
 const ACCESS_TOKEN_STORAGE_KEY = 'access-token';
 const REFRESH_TOKEN_STORAGE_KEY = 'refresh-token';

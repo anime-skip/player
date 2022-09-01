@@ -3,18 +3,18 @@ import { useApiClient } from './useApiClient';
 import { warn } from '../utils/log';
 import * as Api from 'common/src/api';
 import GeneralUtils from 'common/src/utils/GeneralUtils';
-import { useDialogStore } from '../state/stores/useDialogStore';
-import { useTimestampEditingStore } from '../state/stores/useTimestampEditingStore';
-import { useCreateShowMutation } from '../state/composables/useCreateShowMutation';
-import { useCreateOrUpdateEpisodeUrlMutation } from '../state/composables/useCreateOrUpdateEpisodeUrlMutation';
-import { useCreateEpisodeMutation } from '../state/composables/useCreateEpisodeMutation';
+import { useDialogStore } from '../stores/useDialogStore';
+import { useTimestampEditingStore } from '../stores/useTimestampEditingStore';
+import { useCreateShowMutation } from '../composables/useCreateShowMutation';
+import { useCreateOrUpdateEpisodeUrlMutation } from '../composables/useCreateOrUpdateEpisodeUrlMutation';
+import { useCreateEpisodeMutation } from '../composables/useCreateEpisodeMutation';
 import { useMutation, useQueryClient } from 'vue-query';
 import {
   EpisodeUrl,
   EpisodeUrlEpisode,
   EpisodeUrlEpisodeTimestamp,
   EPISODE_URL_QUERY_KEY,
-} from '../state/composables/useFindEpisodeUrlQuery';
+} from '../composables/useFindEpisodeUrlQuery';
 import { useSaveTimestampsMutation } from './useSaveTimestampsMutation';
 
 export interface ConnectEpisodeVariables {
@@ -65,7 +65,7 @@ export function useConnectEpisodeAggregateMutation() {
   return useMutation({
     onMutate() {
       dialogs.hideDialog();
-      editing.isSaving = true; // TODO[state]: don't use editing.isSaving for everything, use query/mutation.isLoading
+      editing.isSaving = true;
     },
     async mutationFn(variables: ConnectEpisodeVariables): Promise<void> {
       // Show

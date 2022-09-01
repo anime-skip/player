@@ -14,7 +14,13 @@ mountPlayerUi({
     if (video == null) throw Error('Could not find video in DOM');
     return video;
   },
-  crawlEpisodeInfo: async () => ({}),
+  crawlEpisodeInfo: async () => ({
+    show: 'Sword Art Online',
+    name: 'Pilot',
+    season: '1',
+    number: '2',
+    absoluteNumber: '3',
+  }),
   onVideoChanged: noop,
   openAllSettings: noop,
   service: 'test',

@@ -5,7 +5,7 @@ import { Mutex } from 'async-mutex';
 import { AxiosResponse } from 'axios';
 import * as Api from 'common/src/api';
 import { LogoutError } from 'common/src/utils/LogoutError';
-import { useAuthStore } from '../state/stores/useAuthStore';
+import { useAuthStore } from '../stores/useAuthStore';
 import { log, warn } from '../utils/log';
 import { usePlayerConfig } from './usePlayerConfig';
 

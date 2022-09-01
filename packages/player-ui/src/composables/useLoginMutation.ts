@@ -1,6 +1,6 @@
 import { useMutation } from 'vue-query';
 import md5 from 'md5';
-import { useApiClient } from '../../composables/useApiClient';
+import { useApiClient } from '../composables/useApiClient';
 import * as Api from '@anime-skip/api-client';
 
 // Preferences

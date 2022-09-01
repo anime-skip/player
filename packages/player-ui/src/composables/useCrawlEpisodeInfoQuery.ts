@@ -1,5 +1,5 @@
 import { useQuery } from 'vue-query';
-import { usePlayerConfig } from '../../composables/usePlayerConfig';
+import { usePlayerConfig } from '../composables/usePlayerConfig';
 
 export const CRAWL_EPISODE_INFO_QUERY = 'crawl-episode-info';
 

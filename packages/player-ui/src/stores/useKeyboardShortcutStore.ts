@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
-import { usePlayerStorage } from '../../composables/usePlayerStorage';
+import { usePlayerStorage } from '../composables/usePlayerStorage';
 import {
   DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS,
   DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS,
-} from '../../utils/constants';
+} from '../utils/constants';
 
 export type KeyboardShortcutAction =
   | 'playPause'

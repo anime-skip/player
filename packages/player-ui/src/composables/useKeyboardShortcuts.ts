@@ -5,7 +5,7 @@ import GeneralUtils from 'common/src/utils/GeneralUtils';
 import {
   KeyboardShortcutActionToExecuteMap,
   useKeyboardShortcutStore,
-} from '../state/stores/useKeyboardShortcutStore';
+} from '../stores/useKeyboardShortcutStore';
 import { storeToRefs } from 'pinia';
 
 // The first instance of this helper should only report usage stats

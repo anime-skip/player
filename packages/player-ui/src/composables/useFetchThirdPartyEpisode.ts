@@ -2,9 +2,9 @@ import { useApiClient } from '../composables/useApiClient';
 import { warn } from '../utils/log';
 import * as Api from 'common/src/api';
 import * as Mappers from 'common/src/utils/mappers';
-import { useTimestampEditingStore } from '../state/stores/useTimestampEditingStore';
+import { useTimestampEditingStore } from '../stores/useTimestampEditingStore';
 import { storeToRefs } from 'pinia';
-import { useSuggestedEpisodesStore } from '../state/stores/useSuggestedEpisodesStore';
+import { useSuggestedEpisodesStore } from '../stores/useSuggestedEpisodesStore';
 
 export function useFetchThirdPartyEpisode() {
   const editing = useTimestampEditingStore();

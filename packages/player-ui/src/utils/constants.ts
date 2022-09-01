@@ -1,4 +1,4 @@
-import type { KeyboardShortcutActionToKeyBindingMap } from '../state/stores/useKeyboardShortcutStore';
+import type { KeyboardShortcutActionToKeyBindingMap } from '../stores/useKeyboardShortcutStore';
 import type * as Api from 'common/src/api';
 import { TimestampSource } from 'common/src/api';
 import { PickTypes, PlaybackRate } from 'common/src/types';

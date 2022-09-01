@@ -1,7 +1,7 @@
 import { storeToRefs } from 'pinia';
 import { Ref } from 'vue';
 import { createSharedComposable } from '../composables/createSharedComposable';
-import { useKeyboardShortcutStore } from '../state/stores/useKeyboardShortcutStore';
+import { useKeyboardShortcutStore } from '../stores/useKeyboardShortcutStore';
 
 export const useDuplicateBindingChecker = createSharedComposable(() => {
   const { primaryKeyToActions, secondaryKeyToActions } = storeToRefs(useKeyboardShortcutStore());

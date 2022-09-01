@@ -53,9 +53,9 @@
 <script lang="ts" setup>
 import { PLAYBACK_SPEEDS } from '../utils/constants';
 import { PlaybackRate } from 'common/src/types';
-import { usePreferencesStore } from '../state/stores/usePreferencesStore';
+import { usePreferencesStore } from '../stores/usePreferencesStore';
 import { storeToRefs } from 'pinia';
-import { useSavePreferencesMutation } from '../state/composables/useSavePreferencesMutation';
+import { useSavePreferencesMutation } from '../composables/useSavePreferencesMutation';
 
 const props = defineProps<{
   showLess: boolean;

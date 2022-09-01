@@ -1,8 +1,8 @@
 import { useIntervalFn } from '@vueuse/core';
 import { SECOND } from 'common/src/utils/time';
 import { defineStore } from 'pinia';
-import { usePlayerConfig } from '../../composables/usePlayerConfig';
-import { log } from '../../utils/log';
+import { usePlayerConfig } from '../composables/usePlayerConfig';
+import { log } from '../utils/log';
 
 const CHECK_FOR_CHANGE_INTERVAL = SECOND;
 

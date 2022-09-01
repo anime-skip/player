@@ -80,11 +80,11 @@ import { error, warn } from '../../utils/log';
 import * as Api from 'common/src/api';
 import { TextInputRef } from 'common/src/types';
 import EpisodeUtils from 'common/src/utils/episode-utils';
-import { useDialogStore } from '../../state/stores/useDialogStore';
+import { useDialogStore } from '../../stores/useDialogStore';
 import { storeToRefs } from 'pinia';
-import { useTabUrlStore } from '../../state/stores/useTabUrlStore';
-import { useEpisodeStore } from '../../state/stores/useEpisodeStore';
-import { useVideoStateStore } from '../../state/stores/useVideoStateStore';
+import { useTabUrlStore } from '../../stores/useTabUrlStore';
+import { useEpisodeStore } from '../../stores/useEpisodeStore';
+import { useVideoStateStore } from '../../stores/useVideoStateStore';
 
 const props = defineProps<{
   suggestions: Api.ThirdPartyEpisode[];

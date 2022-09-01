@@ -1,6 +1,6 @@
 import { storeToRefs } from 'pinia';
-import { useAuthStore } from '../state/stores/useAuthStore';
-import { useEpisodeStore } from '../state/stores/useEpisodeStore';
+import { useAuthStore } from '../stores/useAuthStore';
+import { useEpisodeStore } from '../stores/useEpisodeStore';
 
 export function useCanEditTimestamps() {
   const auth = useAuthStore();

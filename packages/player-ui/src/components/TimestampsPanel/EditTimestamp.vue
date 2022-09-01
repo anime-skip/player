@@ -116,14 +116,11 @@ import { TIMESTAMP_TYPES, TIMESTAMP_TYPE_NOT_SELECTED } from '../../utils/consta
 import { warn } from '../../utils/log';
 import * as Api from 'common/src/api';
 import { isTimestampLocal } from '../../utils/isTimestampLocal';
-import { useDialogStore } from '../../state/stores/useDialogStore';
-import { useVideoStateStore } from '../../state/stores/useVideoStateStore';
-import {
-  EditTimestampMode,
-  useTimestampEditingStore,
-} from '../../state/stores/useTimestampEditingStore';
+import { useDialogStore } from '../../stores/useDialogStore';
+import { useVideoStateStore } from '../../stores/useVideoStateStore';
+import { EditTimestampMode, useTimestampEditingStore } from '../../stores/useTimestampEditingStore';
 import { storeToRefs } from 'pinia';
-import { useEpisodeStore } from '../../state/stores/useEpisodeStore';
+import { useEpisodeStore } from '../../stores/useEpisodeStore';
 
 const props = defineProps<{
   initialTab: 'edit' | 'details';

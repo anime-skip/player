@@ -49,12 +49,12 @@ import * as Api from 'common/src/api';
 import Utils from 'common/src/utils/GeneralUtils';
 import { usePlayerConfig } from '../composables/usePlayerConfig';
 import { storeToRefs } from 'pinia';
-import { usePreferencesStore } from '../state/stores/usePreferencesStore';
-import { useVideoStateStore } from '../state/stores/useVideoStateStore';
-import { useFocusedTimestampStore } from '../state/stores/useFocusedTimestampStore';
-import { usePlayHistoryStore } from '../state/stores/usePlayHistoryStore';
-import { useAuthStore } from '../state/stores/useAuthStore';
-import { useTimestampEditingStore } from '../state/stores/useTimestampEditingStore';
+import { usePreferencesStore } from '../stores/usePreferencesStore';
+import { useVideoStateStore } from '../stores/useVideoStateStore';
+import { useFocusedTimestampStore } from '../stores/useFocusedTimestampStore';
+import { usePlayHistoryStore } from '../stores/usePlayHistoryStore';
+import { useAuthStore } from '../stores/useAuthStore';
+import { useTimestampEditingStore } from '../stores/useTimestampEditingStore';
 
 const props = defineProps<{
   isFlipped?: boolean;

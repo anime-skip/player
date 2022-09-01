@@ -2,8 +2,8 @@ import { GqlInputPreferences } from '@anime-skip/api-client';
 import { ColorTheme } from 'common/src/api';
 import { PickTypes } from 'common/src/types';
 import { defineStore } from 'pinia';
-import { usePlayerConfig } from '../../composables/usePlayerConfig';
-import { usePlayerStorage } from '../../composables/usePlayerStorage';
+import { usePlayerConfig } from '../composables/usePlayerConfig';
+import { usePlayerStorage } from '../composables/usePlayerStorage';
 import { AuthAccountPreferences } from '../composables/useLoginMutation';
 
 export interface LocalPreferences {

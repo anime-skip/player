@@ -1,9 +1,9 @@
 import { storeToRefs } from 'pinia';
 import { useDisplayedTimestamps } from '../composables/useDisplayedTimestamps';
-import { useAuthStore } from '../state/stores/useAuthStore';
-import { DialogName, useDialogStore } from '../state/stores/useDialogStore';
-import { useEpisodeStore } from '../state/stores/useEpisodeStore';
-import { useTimestampEditingStore } from '../state/stores/useTimestampEditingStore';
+import { useAuthStore } from '../stores/useAuthStore';
+import { DialogName, useDialogStore } from '../stores/useDialogStore';
+import { useEpisodeStore } from '../stores/useEpisodeStore';
+import { useTimestampEditingStore } from '../stores/useTimestampEditingStore';
 
 export function useStartEditing() {
   const auth = useAuthStore();

@@ -1,8 +1,8 @@
 import { storeToRefs } from 'pinia';
-import { usePreferencesStore } from '../state/stores/usePreferencesStore';
-import { useTimestampEditingStore } from '../state/stores/useTimestampEditingStore';
-import { useUserActivityStore } from '../state/stores/useUserActivityStore';
-import { useVideoStateStore } from '../state/stores/useVideoStateStore';
+import { usePreferencesStore } from '../stores/usePreferencesStore';
+import { useTimestampEditingStore } from '../stores/useTimestampEditingStore';
+import { useUserActivityStore } from '../stores/useUserActivityStore';
+import { useVideoStateStore } from '../stores/useVideoStateStore';
 
 export function useIsToolbarVisible() {
   const videoState = useVideoStateStore();
