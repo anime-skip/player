@@ -21,6 +21,7 @@ const services: Record<PlayerHosts, () => ExternalPlayerConfig> = {
   [PlayerHosts.ZORO_2]: setupZoroPlayer,
   [PlayerHosts.TEST_SERVICE]: initTestServicePlayer,
   [PlayerHosts.NINE_ANIME]: setup9animePlayer,
+  [PlayerHosts.NINE_ANIME_2]: setup9animePlayer,
 };
 
 function initService(service: PlayerHosts) {

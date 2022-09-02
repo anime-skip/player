@@ -5,7 +5,11 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createDomFromFile } from '~/utils/testing/jsdom';
 import { setup9animePlayer } from '../player';
 
-const playerHtmlFiles = ['player-show-2022-08-01.gen.html', 'player-movie-2022-08-01.gen.html'];
+const playerHtmlFiles = [
+  'player-show-2022-08-01.gen.html',
+  'player-movie-2022-08-01.gen.html',
+  'player-show-2022-09-02.html',
+];
 
 describe('9anime Player Config', () => {
   beforeEach(() => {

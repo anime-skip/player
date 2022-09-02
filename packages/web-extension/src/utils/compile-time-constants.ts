@@ -26,6 +26,7 @@ export enum PlayerHosts {
   ZORO = 'https://rapid-cloud.ru/*',
   ZORO_2 = 'https://rapid-cloud.co/*',
   NINE_ANIME = 'https://vizcloud.site/*',
+  NINE_ANIME_2 = 'https://mcloud.to/*',
 }
 
 /**
