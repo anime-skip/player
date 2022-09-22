@@ -3,7 +3,7 @@ import { defineWebExtPlayerConfig } from '~/utils/define-player-config';
 import { cleanupUrl } from '~utils/urls';
 import './player-overrides.scss';
 
-export function setup9animePlayer() {
+export function init9animePlayer() {
   loadedLog('content-scripts/services/9anime/player.ts');
 
   return defineWebExtPlayerConfig('9anime', {

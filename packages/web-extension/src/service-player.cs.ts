@@ -1,11 +1,11 @@
-import { setup9animePlayer } from '~/modules/9anime/player';
+import { init9animePlayer } from '~/modules/9anime/player';
 import { initCrunchyrollPlayer } from '~/modules/crunchyroll/player';
 import { initFunimation20210926Player } from '~/modules/funimation-2021-09-26/player';
 import { initFunimationPlayer } from '~/modules/funimation/player';
 import { mountPlayerUi } from '@anime-skip/player-ui';
 import { initTestServicePlayer } from '~/modules/test-service/player';
 import { initVrvPlayer } from '~/modules/vrv/player';
-import { setupZoroPlayer } from '~/modules/zoro/player';
+import { initZoroPlayer } from '~/modules/zoro/player';
 import { PlayerHosts } from '~/utils/compile-time-constants';
 import { error, loadedLog } from '~/utils/log';
 import { urlPatternMatch } from '~/utils/strings';
@@ -17,11 +17,11 @@ const services: Record<PlayerHosts, () => ExternalPlayerConfig> = {
   [PlayerHosts.FUNIMATION_20210926]: initFunimation20210926Player,
   [PlayerHosts.FUNIMATION]: initFunimationPlayer,
   [PlayerHosts.VRV]: initVrvPlayer,
-  [PlayerHosts.ZORO]: setupZoroPlayer,
-  [PlayerHosts.ZORO_2]: setupZoroPlayer,
+  [PlayerHosts.ZORO]: initZoroPlayer,
+  [PlayerHosts.ZORO_2]: initZoroPlayer,
   [PlayerHosts.TEST_SERVICE]: initTestServicePlayer,
-  [PlayerHosts.NINE_ANIME]: setup9animePlayer,
-  [PlayerHosts.NINE_ANIME_2]: setup9animePlayer,
+  [PlayerHosts.NINE_ANIME]: init9animePlayer,
+  [PlayerHosts.NINE_ANIME_2]: init9animePlayer,
 };
 
 function initService(service: PlayerHosts) {
