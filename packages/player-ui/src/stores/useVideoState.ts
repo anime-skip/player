@@ -72,7 +72,7 @@ const {
     const v = usePlayerConfig().getVideo();
     return {
       isActive: false,
-      isBuffering: true,
+      isBuffering: v.paused,
       isPaused: v.paused,
       isMuted: v.muted,
       volumePercent: 100,
