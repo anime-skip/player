@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 import path from 'path';
-import { bash, BOLD, CODE, DIM, RESET, run, script, step, title } from '../utils';
+import { bash, BOLD, CODE, DIM, RESET, rootPath, run, script, step, title } from '../utils';
 import { buildChrome } from './buildChrome';
 import { buildFirefox } from './buildFirefox';
 import { getConfig } from './config';
@@ -31,7 +31,7 @@ script(async () => {
     fs.ensureDirSync(config.OUTPUT_DIR)
   );
   await run(`Removing ${CODE}dist/`, () => {
-    const dist = path.join(__dirname, '..', 'dist');
+    const dist = rootPath('dist');
     fs.emptyDirSync(dist);
     fs.rmdirSync(dist);
   });
@@ -46,7 +46,7 @@ script(async () => {
       await run('Install dependencies',  () => bash('pnpm install'));
       await run('Compile TypeScript',    () => bash('pnpm compile'));
       // await run('Lint source code',      () => bash('pnpm lint:check'));
-      await run('Run tests',             () => bash('pnpm test'));
+      await run('Run tests',             () => bash('pnpm test run'));
       await run('Run E2E tests',         () => bash('pnpm test:e2e'));
     })()
   }

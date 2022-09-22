@@ -1,8 +1,9 @@
-import { execSync } from 'child_process';
-import path from 'path';
+import { execSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
 
 export function rootPath(...args: string[]): string {
-  return path.resolve(__dirname, '..', ...args);
+  return path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', ...args);
 }
 
 const isCi = process.env.CI === 'true';
@@ -108,7 +109,7 @@ export function isDryRun(): boolean {
 export async function bash(command: string, env?: any): Promise<void> {
   try {
     execSync(`${command} 2>&1`, {
-      cwd: path.join(__dirname, '..'),
+      cwd: rootPath(),
       env: { ...process.env, ...env },
     });
   } catch (err: any) {
