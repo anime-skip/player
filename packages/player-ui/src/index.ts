@@ -10,8 +10,16 @@ import { debug, error, log } from './utils/log';
 import { ExternalPlayerConfig, mapToInternalConfig } from 'common/src/types';
 import { sleep } from 'common/src/utils/time';
 
-export function mountPlayerUi(config: ExternalPlayerConfig) {
+export async function mountPlayerUi(config: ExternalPlayerConfig) {
   log('Loading Player UI', { config });
+
+  if (config.delayMountingUntil) {
+    let shouldLoad = false;
+    while (!shouldLoad) {
+      await sleep(100);
+      shouldLoad = await config.delayMountingUntil();
+    }
+  }
 
   // Initial Setup
 
@@ -37,12 +45,10 @@ export function mountPlayerUi(config: ExternalPlayerConfig) {
     const rootQuery = config.getRootQuery();
     debug(`Adding player to ${rootQuery}`);
 
-    document.body?.classList.add(`as-1`);
     while (document.querySelector(rootQuery) == null) {
       debug("Player's root node not found, trying again");
       await sleep(100);
     }
-    document.body?.classList.add(`as-2`);
 
     try {
       const container = document.createElement('div');
@@ -65,17 +71,6 @@ export function mountPlayerUi(config: ExternalPlayerConfig) {
   if (config.doNotReplacePlayer?.()) {
     log('Did not inject Anime Skip on purpose');
   } else {
-    injectPlayer();
-    // Zoro.to's player removes the body elements before mounting it's player, so we need to make
-    // sure the player exists
-    if (config.service === 'zoro') {
-      setInterval(() => {
-        const existingPlayers = document.querySelectorAll('#AnimeSkipPlayer');
-        if (existingPlayers.length === 0) {
-          debug('Player was removed, adding it back');
-          injectPlayer();
-        }
-      }, 1000);
-    }
+    await injectPlayer();
   }
 }

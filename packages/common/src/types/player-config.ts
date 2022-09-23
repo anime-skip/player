@@ -121,6 +121,11 @@ export interface ExternalPlayerConfig {
    * Get the current URL shown in the browser's URL bar.
    */
   getUrl: () => string | Promise<string>;
+  /**
+   * Delay mounting the player until a certain condition is true. This method is ran every 250ms
+   * until it returns true, then the player is mounted.
+   */
+  delayMountingUntil?(): Promise<boolean> | boolean;
 }
 
 export const PlayerConfig = joi.object<ExternalPlayerConfig, true>({
@@ -143,6 +148,7 @@ export const PlayerConfig = joi.object<ExternalPlayerConfig, true>({
   apiEnv: joi.string().required(),
   usageClient: joi.object().required(),
   getUrl: joi.func().required(),
+  delayMountingUntil: joi.func().required(),
 });
 
 /**
