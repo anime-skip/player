@@ -148,7 +148,7 @@ export const PlayerConfig = joi.object<ExternalPlayerConfig, true>({
   apiEnv: joi.string().required(),
   usageClient: joi.object().required(),
   getUrl: joi.func().required(),
-  delayMountingUntil: joi.func().required(),
+  delayMountingUntil: joi.func().optional(),
 });
 
 /**
