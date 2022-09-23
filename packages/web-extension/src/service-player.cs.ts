@@ -34,7 +34,7 @@ try {
 
   for (const pattern in services) {
     if (urlPatternMatch(pattern, window.location)) {
-      initService(pattern as PlayerHosts);
+      initService(pattern as PlayerHosts).catch(error);
       break;
     }
   }

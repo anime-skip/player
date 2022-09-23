@@ -1,3 +1,4 @@
+import { config } from 'dotenv';
 import { backOff } from 'exponential-backoff';
 import { sendMessage } from '~/utils/web-ext-bridge';
 import {
@@ -29,6 +30,7 @@ export function defineWebExtPlayerConfig(
     | 'transformServiceUrl'
     | 'getPlaybackOptions'
     | 'doNotReplacePlayer'
+    | 'delayMountingUntil'
   >
 ): ExternalPlayerConfig {
   const {
@@ -38,6 +40,7 @@ export function defineWebExtPlayerConfig(
     getVideo,
     transformServiceUrl,
     getPlaybackOptions,
+    delayMountingUntil,
   } = customConfig;
   return {
     service,
@@ -79,6 +82,7 @@ export function defineWebExtPlayerConfig(
     apiClientId: API_CLIENT_ID,
     apiEnv: API_ENV,
     getUrl: () => sendMessage('@anime-skip/get-url', undefined),
+    delayMountingUntil,
   };
 }
 

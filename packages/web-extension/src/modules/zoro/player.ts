@@ -11,5 +11,12 @@ export function initZoroPlayer() {
     getRootQuery: () => 'body',
     getVideo: () => 'video',
     transformServiceUrl: url => cleanupUrl(url, { allowedQueryParams: ['ep'] }),
+    /**
+     * Zoro replaces HTML content when loading the player, this waits for that content to be loaded
+     * before loading the anime skip player.
+     */
+    async delayMountingUntil() {
+      return !!document.getElementById('vidcloud-player') && !!document.querySelector('video');
+    },
   });
 }
