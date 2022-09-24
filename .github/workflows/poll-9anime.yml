@@ -27,7 +27,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Check Redirect
-        run: pnpm esno scripts/check-9anime-domain.ts
+        run: pnpm tsx scripts/check-9anime-domain.ts
         working-directory: packages/web-extension
 
       - name: Discord Notification
