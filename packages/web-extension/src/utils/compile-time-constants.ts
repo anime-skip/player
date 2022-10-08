@@ -13,6 +13,7 @@ export enum ParentHosts {
   ZORO = 'https://zoro.to/*',
   NINE_ANIME_1 = 'https://9anime.id/*',
   NINE_ANIME_2 = 'https://9anime.to/*',
+  ANIMEFLIX = 'https://animeflix.live/watch/*',
 }
 
 /**
@@ -28,6 +29,7 @@ export enum PlayerHosts {
   ZORO_2 = 'https://rapid-cloud.co/*',
   NINE_ANIME = 'https://vizcloud.site/*',
   NINE_ANIME_2 = 'https://mcloud.to/*',
+  ANIMEFLIX = 'https://animeflix.live/watch/*',
 }
 
 /**
