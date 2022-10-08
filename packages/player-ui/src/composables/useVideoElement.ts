@@ -52,7 +52,6 @@ export function useVideoElement() {
   }
 
   function updateDuration(e: Event) {
-    console.warn('Updating duration...', (e as any).target?.duration);
     controls.setDuration(((e.target as HTMLVideoElement) || null)?.duration);
   }
 
