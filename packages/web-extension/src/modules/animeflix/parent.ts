@@ -1,27 +1,26 @@
 import { loadedLog } from '~/utils/log';
 import setupParent from '~/utils/setupParent';
-import { newlinesToSpaces } from '~/utils/strings';
 import { InferredEpisodeInfo } from '~types';
 
 export function getEpisodeInfo(dom = document): InferredEpisodeInfo {
-  const episodeLink = dom.querySelector<HTMLAnchorElement>('.episodes.name a.active');
-  const number = episodeLink?.getAttribute('data-num')?.trim();
-  let name = episodeLink?.querySelector('.d-title')?.textContent?.trim() || undefined;
-  if (name) name = newlinesToSpaces(name);
-  let show =
-    dom.querySelector<HTMLHeadingElement>('.info .d-title')?.textContent?.trim() || undefined;
-  if (show) show = newlinesToSpaces(show);
-
-  const isMovie = !!dom.querySelector('a[href="movie"]');
-  if (isMovie) {
-    return { name: show, show };
-  } else {
-    return { name, number, show };
-  }
+  const show = dom
+    .querySelector<HTMLMetaElement>('meta[name="anime-skip.show.name"]')
+    ?.content.trim();
+  const name = dom
+    .querySelector<HTMLMetaElement>('meta[name="anime-skip.episode.name"]')
+    ?.content.trim();
+  const number = dom
+    .querySelector<HTMLMetaElement>('meta[name="anime-skip.episode.number"]')
+    ?.content.trim();
+  return {
+    show,
+    name,
+    number,
+  };
 }
 
-export function init9animeParent() {
-  loadedLog('content-scripts/services/9anime/parent.ts');
+export function initAnimeflixParent() {
+  loadedLog('content-scripts/services/animeflix/parent.ts');
 
   setupParent({
     getEpisodeInfo,

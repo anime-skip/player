@@ -9,6 +9,7 @@ import { initZoroParent } from '~/modules/zoro/parent';
 import { ParentHosts } from '~/utils/compile-time-constants';
 import { error, loadedLog } from '~/utils/log';
 import { urlPatternMatch } from '~/utils/strings';
+import { initAnimeflixParent } from './modules/animeflix/parent';
 
 const services: Record<ParentHosts, () => void> = {
   [ParentHosts.ANIME_SKIP]: initAnimeSkipParent,
@@ -22,6 +23,7 @@ const services: Record<ParentHosts, () => void> = {
   [ParentHosts.ZORO]: initZoroParent,
   [ParentHosts.NINE_ANIME_1]: init9animeParent,
   [ParentHosts.NINE_ANIME_2]: init9animeParent,
+  [ParentHosts.ANIMEFLIX]: initAnimeflixParent,
 };
 
 function initParent() {

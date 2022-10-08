@@ -32,12 +32,14 @@ export function useVideoElement() {
       volumePercent: videoState.volumePercent,
       playbackRate: videoState.playbackRate,
       paused: video.value.paused,
+      duration: video.value.duration,
     });
 
     restoreMute(video.value);
     video.value.volume = videoState.volumePercent / 100;
     video.value.playbackRate = videoState.playbackRate;
     video.value.paused ? controls.pause() : controls.play();
+    controls.setDuration(video.value.duration);
   }
 
   function restoreMute(video: HTMLVideoElement) {
@@ -49,8 +51,9 @@ export function useVideoElement() {
     if (shouldShowAsMuted) controls.mute();
   }
 
-  function updateDuration() {
-    controls.setDuration(video.value?.duration);
+  function updateDuration(e: Event) {
+    console.warn('Updating duration...', (e as any).target?.duration);
+    controls.setDuration(((e.target as HTMLVideoElement) || null)?.duration);
   }
 
   function updateCurrentTime() {
@@ -62,9 +65,9 @@ export function useVideoElement() {
     incrementPlayTicks();
   }
 
-  const onDurationChange = () => updateDuration();
-  const onLoadedMetadata = () => {
-    updateDuration();
+  const onDurationChange = (e: Event) => updateDuration(e);
+  const onLoadedMetadata = (e: Event) => {
+    updateDuration(e);
   };
   const onLoadedData = () => {
     updateCurrentTime();

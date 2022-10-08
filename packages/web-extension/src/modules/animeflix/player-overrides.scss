@@ -1,5 +1,19 @@
-.hide-for-anime-skip.\39 anime {
-  .jw-controlbar {
+// Reset for anime skip, set to 68% on page
+html,
+:root {
+  font-size: 120% !important;
+}
+
+.hide-for-anime-skip.animeflix {
+  .plyr__controls,
+  .plyr__poster,
+  .plyr__control,
+  #skipbutton {
     display: none !important;
+  }
+
+  // Shift details down below overlaid navigation bar
+  #AnimeSkipPlayer {
+    padding-top: max(3rem, 3.5vw); // Same as the header's height
   }
 }

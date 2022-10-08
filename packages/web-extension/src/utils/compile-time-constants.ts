@@ -13,7 +13,7 @@ export enum ParentHosts {
   ZORO = 'https://zoro.to/*',
   NINE_ANIME_1 = 'https://9anime.id/*',
   NINE_ANIME_2 = 'https://9anime.to/*',
-  ANIMEFLIX = 'https://animeflix.live/watch/*',
+  ANIMEFLIX = 'https://animeflix.live/*',
 }
 
 /**
