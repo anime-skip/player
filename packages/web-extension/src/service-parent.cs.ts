@@ -20,7 +20,8 @@ const services: Record<ParentHosts, () => void> = {
   [ParentHosts.TEST_SERVICE]: initTestServiceParent,
   [ParentHosts.VRV]: initVrvParent,
   [ParentHosts.ZORO]: initZoroParent,
-  [ParentHosts.NINE_ANIME]: init9animeParent,
+  [ParentHosts.NINE_ANIME_1]: init9animeParent,
+  [ParentHosts.NINE_ANIME_2]: init9animeParent,
 };
 
 function initParent() {
