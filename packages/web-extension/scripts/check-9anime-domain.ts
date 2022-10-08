@@ -16,7 +16,7 @@ http.get('http://9anime.to', res => {
     );
 
   const actualDomain = new URL(redirect).hostname;
-  const expectedDomain = new URL(ParentHosts.NINE_ANIME).hostname;
+  const expectedDomain = new URL(ParentHosts.NINE_ANIME_1).hostname;
   if (actualDomain !== expectedDomain)
     return exit(
       `Player is configured for ${expectedDomain}, but 9anime's domain changed to ${actualDomain}`

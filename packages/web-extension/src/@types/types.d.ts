@@ -6,7 +6,8 @@ type Service =
   | 'crunchyroll'
   | 'crunchyroll-beta'
   | 'zoro'
-  | '9anime';
+  | '9anime'
+  | 'animeflix';
 
 type ServiceDisplayName =
   | 'Anime Skip Test'
@@ -15,6 +16,7 @@ type ServiceDisplayName =
   | 'Crunchyroll'
   | 'Zoro.to'
   | '9anime'
+  | 'Animeflix'
   | undefined;
 
 type SupportedBrowser = 'firefox' | 'chrome';

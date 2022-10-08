@@ -1,4 +1,3 @@
-import { config } from 'dotenv';
 import { backOff } from 'exponential-backoff';
 import { sendMessage } from '~/utils/web-ext-bridge';
 import {
@@ -108,14 +107,18 @@ function initVideoChangeWatcher(
         newVideo: newVideo.src,
         videoCallbacks,
       });
-      videoCallbacks.forEach(callback => {
-        try {
-          callback(newVideo);
-        } catch (err) {
-          warn('onVideoChangedCallback failed', err);
-        }
+      // Wait for all other events to fire in the current task before notifying the callbacks
+      // This was neccessary for animeflix
+      setTimeout(() => {
+        videoCallbacks.forEach(callback => {
+          try {
+            callback(newVideo);
+          } catch (err) {
+            warn('onVideoChangedCallback failed', err);
+          }
+        });
+        oldVideoSrc = newVideo.src;
       });
-      oldVideoSrc = newVideo.src;
     }
   }, CHECK_IF_CHANGED_INTERVAL);
 

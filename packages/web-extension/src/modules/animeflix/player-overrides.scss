@@ -1,0 +1,13 @@
+.hide-for-anime-skip.animeflix {
+  .plyr__controls,
+  .plyr__poster,
+  .plyr__control,
+  #skipbutton {
+    display: none !important;
+  }
+
+  // Shift details down below overlaid navigation bar
+  #AnimeSkipPlayer {
+    padding-top: max(3rem, 3.5vw); // Same as the header's height
+  }
+}
