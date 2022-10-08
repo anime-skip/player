@@ -20,7 +20,7 @@ describe('VRV Player Config', () => {
       const playerConfig = initVrvPlayer();
       const root = dom.querySelector(playerConfig.getRootQuery());
 
-      expect(root).toBeDefined();
+      expect(root).toBeTruthy();
     });
   });
 

@@ -24,11 +24,11 @@ describe('9anime Player Config', () => {
       const playerConfig = init9animePlayer();
       const root = dom.querySelector(playerConfig.getRootQuery());
 
-      expect(root).toBeDefined();
+      expect(root).toBeTruthy();
     });
   });
 
-  describe('getRootQuery', () => {
+  describe('getVideo', () => {
     it.each(playerHtmlFiles)('should find a video element in %s', async file => {
       const dom = await createDomFromFile(__dirname, file);
 

@@ -24,11 +24,11 @@ describe('Zoro.to Player Config', () => {
       const playerConfig = initZoroPlayer();
       const root = dom.querySelector(playerConfig.getRootQuery());
 
-      expect(root).toBeDefined();
+      expect(root).toBeTruthy();
     });
   });
 
-  describe('getRootQuery', () => {
+  describe('getVideo', () => {
     it.each(playerHtmlFiles)('should find a video element in %s', async () => {
       const dom = await createDomFromFile(__dirname, 'player-show-2022-05-06.gen.html');
 
