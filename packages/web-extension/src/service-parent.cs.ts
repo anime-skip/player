@@ -23,6 +23,8 @@ const services: Record<ParentHosts, () => void> = {
   [ParentHosts.ZORO]: initZoroParent,
   [ParentHosts.NINE_ANIME_1]: init9animeParent,
   [ParentHosts.NINE_ANIME_2]: init9animeParent,
+  [ParentHosts.NINE_ANIME_3]: init9animeParent,
+  [ParentHosts.NINE_ANIME_4]: init9animeParent,
   [ParentHosts.ANIMEFLIX]: initAnimeflixParent,
 };
 
