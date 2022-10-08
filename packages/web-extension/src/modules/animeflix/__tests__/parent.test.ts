@@ -12,9 +12,9 @@ describe('Animeflix Parent Content Script', () => {
       [
         'show-2022-10-08.gen.html',
         {
-          // name: 'Infiltrating an Ominous Village',
-          // show: 'My Isekai Life: I Gained a Second Character Class and Became the Strongest Sage in the World!',
-          // number: '6',
+          name: 'A Quiet Beginning',
+          show: 'Boku no Hero Academia 6',
+          number: '1',
         },
       ],
     ])('should find the correct episode details for a show: %s', async (file, expected) => {
