@@ -1,12 +1,12 @@
-import { onMessage, sendMessage } from '~/utils/web-ext-bridge';
 import Browser from 'webextension-polyfill';
 import { getPopupUrl } from '~/utils/extension-pages';
 import { loadedLog } from '~/utils/log';
+import { onMessage, sendMessage } from '~/utils/web-ext-bridge';
 
 export function initMessenger() {
   loadedLog('background/messenger.ts');
 
-  onMessage('@anime-skip/open-all-settings', Browser.runtime.openOptionsPage);
+  onMessage('@anime-skip/open-all-settings', () => Browser.runtime.openOptionsPage());
   onMessage('@anime-skip/open-login', async () => {
     await Browser.tabs.create({ url: getPopupUrl({ closeAfterLogin: true }) });
   });
