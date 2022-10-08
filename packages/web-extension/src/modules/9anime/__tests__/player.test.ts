@@ -18,8 +18,8 @@ describe('9anime Player Config', () => {
   });
 
   describe('getRootQuery', () => {
-    it.each(playerHtmlFiles)('should find an element in %s', async () => {
-      const dom = await createDomFromFile(__dirname, 'player-show-2022-08-01.gen.html');
+    it.each(playerHtmlFiles)('should find an element in %s', async file => {
+      const dom = await createDomFromFile(__dirname, file);
 
       const playerConfig = init9animePlayer();
       const root = dom.querySelector(playerConfig.getRootQuery());
@@ -29,8 +29,8 @@ describe('9anime Player Config', () => {
   });
 
   describe('getRootQuery', () => {
-    it.each(playerHtmlFiles)('should find a video element in %s', async () => {
-      const dom = await createDomFromFile(__dirname, 'player-show-2022-08-01.gen.html');
+    it.each(playerHtmlFiles)('should find a video element in %s', async file => {
+      const dom = await createDomFromFile(__dirname, file);
 
       const playerConfig = init9animePlayer();
       const video = dom.querySelector(playerConfig.getVideo() as string);
