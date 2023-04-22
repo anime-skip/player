@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import IconNext from '~icons/anime-skip/next';
 import IconPrevious from '~icons/anime-skip/previous';
-import IconTimestamps from '~icons/anime-skip/timestamps';
 import ToolbarButton from './ToolbarButton.vue';
 import ToolbarButtonFullscreen from './ToolbarButtonFullscreen.vue';
 import ToolbarButtonPlay from './ToolbarButtonPlay.vue';
@@ -35,6 +34,13 @@ const toggleTimestampsPanel = useToggleTimestampsPanel();
 const currentTimestamp = useTimestampAtTime(currentTime);
 
 const currentTimestampType = useTimestampType(currentTimestamp);
+
+const { isLoading, isError } = useEpisodeInfoQuery();
+const currentTimestampDisplay = computed(() => {
+  if (isLoading.value) return 'Loading...';
+  if (isError.value) return 'Timestamps error!';
+  return currentTimestampType.value?.name ?? 'No timestamps';
+});
 </script>
 
 <template>
@@ -71,23 +77,18 @@ const currentTimestampType = useTimestampType(currentTimestamp);
           </span>
         </p>
 
-        <template v-if="currentTimestampType">
-          <p class="text-xs text-base-content text-opacity-50">&bull;</p>
+        <p class="text-xs text-base-content text-opacity-50">&bull;</p>
 
-          <!-- Current Timestamp -->
-          <p class="text-xs text-base-content text-opacity-50">
-            {{ currentTimestampType?.name }}
-          </p>
-        </template>
+        <!-- Current Timestamp -->
+        <p
+          class="text-xs text-base-content text-opacity-50 link link-hover"
+          @click="toggleTimestampsPanel"
+        >
+          {{ currentTimestampDisplay }}
+        </p>
       </template>
 
       <div class="flex-1" />
-
-      <!-- Timestamps -->
-      <toolbar-button @click="toggleTimestampsPanel">
-        <icon-timestamps />
-        Timestamps
-      </toolbar-button>
 
       <!-- Account -->
       <toolbar-account class="shrink-0" />
