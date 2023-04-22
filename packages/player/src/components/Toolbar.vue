@@ -7,6 +7,8 @@ import ToolbarButtonPlay from './ToolbarButtonPlay.vue';
 import ToolbarButtonVolume from './ToolbarButtonVolume.vue';
 import ToolbarButtonSettings from './ToolbarButtonSettings.vue';
 import ToolbarAccount from './ToolbarAccount.vue';
+import IconMdiAlertCircle from '~icons/mdi/alert-circle';
+import IconEdit from '~icons/anime-skip/edit';
 import Timeline from './Timeline.vue';
 import { formatTimestampInS } from '../utils/time-utils';
 
@@ -17,7 +19,7 @@ defineProps<{
   hidden: boolean;
 }>();
 
-const { duration, currentTime, volume, playing } = useVideoControls();
+const { duration, currentTime, playing } = useVideoControls();
 
 const goToNext = useGoToNext();
 const goToPrevious = useGoToPrevious();
@@ -38,7 +40,7 @@ const currentTimestampType = useTimestampType(currentTimestamp);
 const { isLoading, isError } = useEpisodeInfoQuery();
 const currentTimestampDisplay = computed(() => {
   if (isLoading.value) return 'Loading...';
-  if (isError.value) return 'Timestamps error!';
+  if (isError.value) return 'Error';
   return currentTimestampType.value?.name ?? 'No timestamps';
 });
 </script>
@@ -80,12 +82,14 @@ const currentTimestampDisplay = computed(() => {
         <p class="text-xs text-base-content text-opacity-50">&bull;</p>
 
         <!-- Current Timestamp -->
-        <p
-          class="text-xs text-base-content text-opacity-50 link link-hover"
+        <div
+          class="h-full flex items-center text-xs text-base-content text-opacity-50 link link-hover gap-1"
           @click="toggleTimestampsPanel"
         >
-          {{ currentTimestampDisplay }}
-        </p>
+          <icon-mdi-alert-circle v-if="isError" class="w-3 h-3" />
+          <p>{{ currentTimestampDisplay }}</p>
+          <icon-edit v-if="!isError" class="w-3 h-3" />
+        </div>
       </template>
 
       <div class="flex-1" />
