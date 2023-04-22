@@ -1,0 +1,5 @@
+query loginRefresh($refreshToken: String!) {
+  loginRefresh(refreshToken: $refreshToken) {
+    ...AuthDetails
+  }
+}

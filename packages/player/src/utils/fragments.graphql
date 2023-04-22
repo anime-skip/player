@@ -1,0 +1,90 @@
+fragment MyAccount on Account {
+  id
+  username
+  email
+  emailVerified
+  profileUrl
+  role
+}
+
+fragment AuthDetails on LoginData {
+  authToken
+  refreshToken
+  account {
+    ...MyAccount
+  }
+}
+
+fragment EpisodeUrl on EpisodeUrl {
+  url
+  createdAt
+  updatedAt
+  duration
+  timestampsOffset
+  episode {
+    ...Episode
+  }
+  source
+}
+
+fragment Episode on Episode {
+  id
+  createdAt
+  updatedAt
+  season
+  number
+  absoluteNumber
+  name
+  baseDuration
+  show {
+    ...Show
+  }
+  timestamps {
+    ...Timestamp
+  }
+}
+
+fragment Show on Show {
+  id
+  name
+  originalName
+  createdAt
+  updatedAt
+  website
+  image
+}
+
+fragment Timestamp on Timestamp {
+  id
+  createdAt
+  createdBy {
+    ...User
+  }
+  updatedAt
+  updatedBy {
+    ...User
+  }
+  at
+  source
+  typeId
+  episodeId
+}
+
+fragment TimestampType on TimestampType {
+  id
+  name
+  description
+}
+
+fragment User on User {
+  id
+  username
+  profileUrl
+  createdAt
+}
+
+fragment TimestampType on TimestampType {
+  id
+  name
+  description
+}

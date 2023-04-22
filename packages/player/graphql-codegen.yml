@@ -1,0 +1,19 @@
+overwrite: true
+schema:
+  - https://api.anime-skip.com/graphql:
+      headers:
+        X-Client-ID: OB3AfF3fZg9XlZhxtLvhwLhDcevslhnr
+documents: 'src/**/*.graphql'
+generates:
+  src/utils/api/graphql.generated.ts:
+    plugins:
+      - add:
+          content: 'import type { DocumentNode } from "graphql";'
+      - typescript
+      - typescript-operations
+      - typescript-graphql-request
+    config:
+      useTypeImports: true
+      scalars:
+        Time: string
+        UInt: string

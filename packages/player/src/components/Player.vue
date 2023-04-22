@@ -1,0 +1,46 @@
+<script lang="ts" setup>
+import Toolbar from './Toolbar.vue';
+import EpisodeInfo from './EpisodeInfo.vue';
+import SidePanel from './SidePanel.vue';
+import useCurrentUrlQuery from '../composables/useCurrentUrlQuery';
+
+const root = ref<HTMLDivElement>();
+
+const isMouseActive = usePlayerMouseActive(root);
+
+const { playing, buffering } = useVideoControls();
+
+// Preload queries that need ran ASAP
+useAllTimestampTypesQuery();
+useCurrentUrlQuery();
+useFindEpisodeUrlQuery();
+</script>
+
+<template>
+  <div class="w-full h-full pointer-events-auto flex">
+    <div
+      ref="root"
+      class="relative transition-colors flex-1"
+      :class="{
+        'bg-base-100 bg-opacity-50': !playing || buffering,
+      }"
+      @click="playing = !playing"
+    >
+      <div
+        v-if="playing && buffering"
+        class="flex absolute inset-0 pointer-events-none"
+      >
+        <div class="spinner w-16 h-16 m-auto" />
+      </div>
+
+      <episode-info class="absolute top-0 inset-x-0" :hidden="playing" />
+
+      <toolbar
+        class="absolute bottom-0 inset-x-0"
+        :hidden="!isMouseActive && playing"
+      />
+    </div>
+
+    <side-panel class="h-full z-10" />
+  </div>
+</template>

@@ -1,0 +1,5 @@
+query login($usernameEmail: String!, $passwordHash: String!) {
+  login(usernameEmail: $usernameEmail, passwordHash: $passwordHash) {
+    ...AuthDetails
+  }
+}

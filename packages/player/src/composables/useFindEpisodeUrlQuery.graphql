@@ -1,0 +1,5 @@
+query findEpisodeUrl($url: String!) {
+  findEpisodeUrl(episodeUrl: $url) {
+    ...EpisodeUrl
+  }
+}

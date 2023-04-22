@@ -1,0 +1,19 @@
+{
+  "name": "@anime-skip/embedded-demo",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm build:dependencies && vite dev",
+    "compile": "turbo turbo:compile --filter=@anime-skip/extension...",
+    "build:dependencies": "turbo turbo:build --filter=@anime-skip/embedded-demo^...",
+    "turbo:compile": "vue-tsc"
+  },
+  "dependencies": {
+    "@anime-skip/player": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.3",
+    "vite": "^4.2.0"
+  }
+}
