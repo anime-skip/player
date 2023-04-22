@@ -8,6 +8,12 @@
   html {
     --bc: 0 0% 100%; /* white */
   }
+
+  /* Themed logo colors */
+  html, html[data-theme=anime-skip] {
+    --logo-primary: 199 100% 57%;
+    --logo-secondary: 265 53% 58%;
+  }
 }
 
 @layer components {

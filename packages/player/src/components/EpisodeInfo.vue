@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import IconLogo from '~icons/anime-skip/logo-theme';
+import ThemedLogo from './ThemedLogo.vue';
 import { getSeasonAndNumberText } from '../utils/episode-utils';
 
 defineProps<{
@@ -36,7 +36,7 @@ const summary = computed(() => getSeasonAndNumberText(episodeDetails.value));
     }"
   >
     <h2 class="flex items-center gap-4 truncate">
-      <icon-logo class="h-6 w-8 shrink-0" />
+      <themed-logo class="h-6 w-8 shrink-0" />
 
       <!-- Show name -->
       <span
