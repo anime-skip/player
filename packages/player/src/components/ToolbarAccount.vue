@@ -16,7 +16,7 @@ const loginCompleted = useViewOperationCompleted('account');
     <template #button="{ toggle }">
       <div class="tooltip" data-tip="Account" @click="toggle">
         <profile-image
-          class="w-[30px] h-[30px] m-[10px] cursor-pointer transition-all ring-base-content text-base-100 active:text-opacity-70 ring-opacity-30 ring-0 hover:ring-4 active:ring-2"
+          class="w-[28px] h-[28px] m-[11px] cursor-pointer transition-all ring-base-content text-base-100 active:text-opacity-70 ring-opacity-30 ring-0 hover:ring-4 active:ring-2"
         />
       </div>
     </template>
