@@ -11,12 +11,11 @@
   ],
   "scripts": {
     "dev": "vite dev",
-    "build": "turbo turbo:build --filter=@anime-skip/player...",
-    "compile": "turbo turbo:compile --filter=@anime-skip/player...",
+    "build": "vite build",
+    "compile": "vue-tsc --noEmit",
     "test": "vitest",
     "generate:graphql": "graphql-codegen --config graphql-codegen.yml",
-    "turbo:build": "vite build",
-    "turbo:compile": "vue-tsc --noEmit"
+    "prepare": "pnpm build"
   },
   "devDependencies": {
     "@graphql-codegen/add": "^4.0.1",

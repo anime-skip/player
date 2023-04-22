@@ -21,7 +21,9 @@ const view = useView();
       </button>
     </header>
 
-    <div class="flex-1 overflow-y-auto">
+    <div
+      class="flex-1 overflow-y-auto divide-y divide-base-content divide-opacity-20"
+    >
       <slot name="content" />
     </div>
 

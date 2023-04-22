@@ -1,6 +1,10 @@
 <script lang="ts" setup>
 import TimestampListItem from './TimestampListItem.vue';
 
+const props = defineProps<{
+  disabled?: boolean;
+}>();
+
 const timestamps = useCurrentTimestamps();
 const { isLoading, isError, error } = useFindEpisodeUrlQuery();
 const errorMessage = useErrorMessage(error);
@@ -17,7 +21,11 @@ const errorMessage = useErrorMessage(error);
     <p v-if="isError">{{ errorMessage }}</p>
 
     <!-- Timestamps -->
-    <table v-else class="w-full">
+    <table
+      v-else
+      class="w-full"
+      :class="{ 'opacity-50 pointer-events-none': disabled }"
+    >
       <timestamp-list-item
         v-for="timestamp of timestamps"
         :key="timestamp.id"

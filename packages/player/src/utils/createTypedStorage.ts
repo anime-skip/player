@@ -1,5 +1,6 @@
 import { IPlayerStorage } from '../options';
 import * as uuid from 'uuid';
+import { MyAccountFragment } from './api/graphql.generated';
 
 export function createTypedStorage(storage: IPlayerStorage): TypedStorage {
   const createProperty = <T>(key: string): TypedStorageProperty<T | null> => ({
@@ -27,7 +28,7 @@ export function createTypedStorage(storage: IPlayerStorage): TypedStorage {
 
   // prettier-ignore
   return {
-    auth: createProperty('auth'),
+    auth: createProperty('@anime-skip/player/auth'),
     dontShowStoreReviewPromptAgain: createProperty('dontShowStoreReviewPromptAgain'),
     preferences: createProperty('general-preferences'),
     keyboardShortcutsPrimary: createProperty('keyboard-shortcut-primary-action-mapping'),
@@ -41,6 +42,7 @@ export interface TypedStorage {
   auth: TypedStorageProperty<{
     refreshToken: string;
     token: string;
+    account: MyAccountFragment;
   } | null>;
   dontShowStoreReviewPromptAgain: TypedStorageProperty<boolean | null>;
   preferences: TypedStorageProperty<GeneralPreferences>;

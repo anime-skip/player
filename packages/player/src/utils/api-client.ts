@@ -26,6 +26,7 @@ export function useAuthorizedGraphqlClient(): GraphQLClient {
         auth.value = {
           refreshToken: data.loginRefresh.refreshToken,
           token: data.loginRefresh.authToken,
+          account: data.loginRefresh.account,
         };
       },
       shouldRefreshToken(error) {

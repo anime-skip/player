@@ -1411,18 +1411,18 @@ export type LoginQueryVariables = Exact<{
 }>;
 
 
-export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'LoginData', authToken: string, refreshToken: string, account: { __typename?: 'Account', id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role } } };
+export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'LoginData', authToken: string, refreshToken: string, account: { __typename?: 'Account', id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role, createdAt: string } } };
 
 export type LoginRefreshQueryVariables = Exact<{
   refreshToken: Scalars['String'];
 }>;
 
 
-export type LoginRefreshQuery = { __typename?: 'Query', loginRefresh: { __typename?: 'LoginData', authToken: string, refreshToken: string, account: { __typename?: 'Account', id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role } } };
+export type LoginRefreshQuery = { __typename?: 'Query', loginRefresh: { __typename?: 'LoginData', authToken: string, refreshToken: string, account: { __typename?: 'Account', id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role, createdAt: string } } };
 
-export type MyAccountFragment = { __typename?: 'Account', id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role };
+export type MyAccountFragment = { __typename?: 'Account', id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role, createdAt: string };
 
-export type AuthDetailsFragment = { __typename?: 'LoginData', authToken: string, refreshToken: string, account: { __typename?: 'Account', id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role } };
+export type AuthDetailsFragment = { __typename?: 'LoginData', authToken: string, refreshToken: string, account: { __typename?: 'Account', id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role, createdAt: string } };
 
 export type EpisodeUrlFragment = { __typename?: 'EpisodeUrl', url: string, createdAt: string, updatedAt: string, duration?: number | null, timestampsOffset?: number | null, source: EpisodeSource, episode: { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> } };
 
@@ -1444,6 +1444,7 @@ export const MyAccountFragmentDoc = gql`
   emailVerified
   profileUrl
   role
+  createdAt
 }
     `;
 export const AuthDetailsFragmentDoc = gql`

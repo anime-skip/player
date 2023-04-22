@@ -5,6 +5,7 @@ fragment MyAccount on Account {
   emailVerified
   profileUrl
   role
+  createdAt
 }
 
 fragment AuthDetails on LoginData {

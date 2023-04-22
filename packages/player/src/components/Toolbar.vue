@@ -7,6 +7,7 @@ import ToolbarButtonFullscreen from './ToolbarButtonFullscreen.vue';
 import ToolbarButtonPlay from './ToolbarButtonPlay.vue';
 import ToolbarButtonVolume from './ToolbarButtonVolume.vue';
 import ToolbarButtonSettings from './ToolbarButtonSettings.vue';
+import ToolbarAccount from './ToolbarAccount.vue';
 import Timeline from './Timeline.vue';
 import { formatTimestampInS } from '../utils/time-utils';
 
@@ -87,6 +88,9 @@ const currentTimestampType = useTimestampType(currentTimestamp);
         <icon-timestamps />
         Timestamps
       </toolbar-button>
+
+      <!-- Account -->
+      <toolbar-account class="shrink-0" />
 
       <!-- Menu -->
       <toolbar-button-settings />
