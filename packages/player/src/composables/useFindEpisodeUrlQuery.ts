@@ -1,6 +1,5 @@
 import { useQuery } from 'vue-query';
 import { QueryKey } from '../utils/QueryKey';
-import { FindEpisodeUrlQueryVariables } from '../utils/api/graphql.generated';
 
 export default function () {
   const client = useApiClient(false);

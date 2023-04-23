@@ -1,8 +1,5 @@
-import { getSdk } from '../utils/api/graphql.generated';
-import {
-  useAuthorizedGraphqlClient,
-  useBaseGraphqlClient,
-} from '../utils/api-client';
+import { getSdk } from '../utils/api';
+import { useAuthorizedGraphqlClient, useBaseGraphqlClient } from '../utils/api';
 
 export default function (authorized = true) {
   return getSdk(

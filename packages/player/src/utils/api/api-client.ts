@@ -1,5 +1,5 @@
 import { GraphQLClient } from 'graphql-request';
-import { getSdk } from './api/graphql.generated';
+import { getSdk } from './graphql.generated';
 import { configureRefreshFetch } from 'refresh-fetch';
 
 export function useBaseGraphqlClient(): GraphQLClient {

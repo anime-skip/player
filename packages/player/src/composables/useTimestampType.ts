@@ -1,4 +1,4 @@
-import { TimestampFragment } from '../utils/api/graphql.generated';
+import { TimestampFragment } from '../utils/api';
 import { Ref } from 'vue';
 
 export default function (timestamp: Ref<TimestampFragment | undefined>) {

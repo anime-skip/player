@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { TimestampFragment } from '../utils/api/graphql.generated';
+import { TimestampFragment } from '../utils/api';
 import IconChevronDown from '~icons/anime-skip/chevron-down';
 
 const props = defineProps<{

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { TimestampFragment } from '../utils/api/graphql.generated';
+import { TimestampFragment } from '../utils/api';
 import { formatTimestampInS } from '../utils/time-utils';
 import IconEdit from '~icons/anime-skip/edit';
 import IconClose from '~icons/anime-skip/close';

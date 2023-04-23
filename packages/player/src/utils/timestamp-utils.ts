@@ -1,4 +1,4 @@
-import { TimestampFragment } from './api/graphql.generated';
+import { TimestampFragment } from './api';
 
 export interface Section extends TimestampFragment {
   endAt: number;

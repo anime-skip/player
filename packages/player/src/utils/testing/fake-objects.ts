@@ -1,8 +1,4 @@
-import {
-  UserFragment,
-  TimestampFragment,
-  TimestampSource,
-} from '../api/graphql.generated';
+import { UserFragment, TimestampFragment, TimestampSource } from '../api';
 import chance from 'chance';
 import { MINUTE, SECOND } from '../time';
 

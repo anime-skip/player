@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { MyAccountFragment } from '../utils/api/graphql.generated';
+import { MyAccountFragment } from '../utils/api';
 import ProfileImage from './ProfileImage.vue';
 import IconMdiOpenInNew from '~icons/mdi/open-in-new';
 

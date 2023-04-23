@@ -8,6 +8,27 @@ fragment MyAccount on Account {
   createdAt
 }
 
+fragment Preferences on Preferences {
+  enableAutoSkip
+  enableAutoPlay
+  minimizeToolbarWhenEditing
+  hideTimelineWhenMinimized
+  colorTheme
+  skipBranding
+  skipCanon
+  skipCredits
+  skipFiller
+  skipIntros
+  skipMixedCredits
+  skipMixedIntros
+  skipNewCredits
+  skipNewIntros
+  skipPreview
+  skipRecaps
+  skipTitleCard
+  skipTransitions
+}
+
 fragment AuthDetails on LoginData {
   authToken
   refreshToken

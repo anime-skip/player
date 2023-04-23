@@ -1422,6 +1422,8 @@ export type LoginRefreshQuery = { __typename?: 'Query', loginRefresh: { __typena
 
 export type MyAccountFragment = { __typename?: 'Account', id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role, createdAt: string };
 
+export type PreferencesFragment = { __typename?: 'Preferences', enableAutoSkip: boolean, enableAutoPlay: boolean, minimizeToolbarWhenEditing: boolean, hideTimelineWhenMinimized: boolean, colorTheme: ColorTheme, skipBranding: boolean, skipCanon: boolean, skipCredits: boolean, skipFiller: boolean, skipIntros: boolean, skipMixedCredits: boolean, skipMixedIntros: boolean, skipNewCredits: boolean, skipNewIntros: boolean, skipPreview: boolean, skipRecaps: boolean, skipTitleCard: boolean, skipTransitions: boolean };
+
 export type AuthDetailsFragment = { __typename?: 'LoginData', authToken: string, refreshToken: string, account: { __typename?: 'Account', id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role, createdAt: string } };
 
 export type EpisodeUrlFragment = { __typename?: 'EpisodeUrl', url: string, createdAt: string, updatedAt: string, duration?: number | null, timestampsOffset?: number | null, source: EpisodeSource, episode: { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> } };
@@ -1436,6 +1438,28 @@ export type TimestampTypeFragment = { __typename?: 'TimestampType', id: string, 
 
 export type UserFragment = { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string };
 
+export const PreferencesFragmentDoc = gql`
+    fragment Preferences on Preferences {
+  enableAutoSkip
+  enableAutoPlay
+  minimizeToolbarWhenEditing
+  hideTimelineWhenMinimized
+  colorTheme
+  skipBranding
+  skipCanon
+  skipCredits
+  skipFiller
+  skipIntros
+  skipMixedCredits
+  skipMixedIntros
+  skipNewCredits
+  skipNewIntros
+  skipPreview
+  skipRecaps
+  skipTitleCard
+  skipTransitions
+}
+    `;
 export const MyAccountFragmentDoc = gql`
     fragment MyAccount on Account {
   id

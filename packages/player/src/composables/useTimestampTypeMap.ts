@@ -1,4 +1,4 @@
-import { TimestampTypeFragment } from '../utils/api/graphql.generated';
+import { TimestampTypeFragment } from '../utils/api';
 
 export default createSharedComposable(() => {
   const { data: types } = useAllTimestampTypesQuery();
