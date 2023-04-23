@@ -43,13 +43,17 @@ const currentTimestampDisplay = computed(() => {
   if (isError.value) return 'Error';
   return currentTimestampType.value?.name ?? 'No timestamps';
 });
+
+const { pref: hideFully } = useReadonlyPreference('hideTimelineWhenMinimized');
 </script>
 
 <template>
   <div
     class="flex flex-col translate-y-0 transition-transform duration-200 z-0 before:-z-10 before:absolute before:h-36 before:inset-x-0 before:-bottom-4 before:bg-gradient-to-t before:from-base-100 before:transition-opacity before:pointer-events-none"
     :class="{
-      'translate-y-[53px] before:opacity-0': hidden,
+      'before:opacity-0': hidden,
+      'translate-y-[53px]': hidden && !hideFully,
+      'translate-y-[65px]': hidden && hideFully,
     }"
     @click.stop
   >

@@ -13,7 +13,7 @@ Monorepo for the Anime Skip Player, the web extension and embedded player.
   - [ ] Service settings
   - [x] Watched timestamps
   - [x] Theme
-  - [ ] Hide timeline when minimized
+  - [x] Hide timeline when minimized
   - [ ] Minimize while editing
   - [ ] Snap to nearest 0.5s when creating timestamp
 - [ ] Keyboard shortcuts
