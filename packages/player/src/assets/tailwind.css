@@ -93,4 +93,13 @@
     top: 50%;
     transform: translateY(-50%);
   }
+  
+  .checkbox-pref:checked,
+  .checkbox-pref[checked='true'],
+  .checkbox-pref[aria-checked='true'] {
+    --chkbg: var(--b1);
+    --chkfg: var(--p);
+    border-color: hsl(var(--b1));
+    background-color: hsl(var(--b1));
+  }
 }

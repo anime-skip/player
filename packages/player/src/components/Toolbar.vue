@@ -5,7 +5,7 @@ import ToolbarButton from './ToolbarButton.vue';
 import ToolbarButtonFullscreen from './ToolbarButtonFullscreen.vue';
 import ToolbarButtonPlay from './ToolbarButtonPlay.vue';
 import ToolbarButtonVolume from './ToolbarButtonVolume.vue';
-import ToolbarButtonSettings from './ToolbarButtonSettings.vue';
+import ToolbarButtonPreferences from './ToolbarButtonPreferences.vue';
 import ToolbarAccount from './ToolbarAccount.vue';
 import IconMdiAlertCircle from '~icons/mdi/alert-circle';
 import IconEdit from '~icons/anime-skip/edit';
@@ -98,7 +98,7 @@ const currentTimestampDisplay = computed(() => {
       <toolbar-account class="shrink-0" />
 
       <!-- Menu -->
-      <toolbar-button-settings />
+      <toolbar-button-preferences />
 
       <!-- Fullscreen -->
       <toolbar-button-fullscreen />

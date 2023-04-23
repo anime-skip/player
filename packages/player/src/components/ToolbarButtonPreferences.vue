@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import ToolbarButton from './ToolbarButton.vue';
-import Settings from './Settings.vue';
+import Preferences from './Preferences.vue';
 import IconGear from '~icons/anime-skip/gear';
 import ToolbarModal from './ToolbarModal.vue';
 </script>
 
 <template>
-  <toolbar-modal view="settings" modal-class="w-96 h-72">
+  <toolbar-modal view="preferences" modal-class="h-72">
     <!-- Button -->
     <template #button="{ toggle }">
       <toolbar-button title="Settings" @click="toggle">
@@ -16,7 +16,9 @@ import ToolbarModal from './ToolbarModal.vue';
 
     <!-- Modal -->
     <template #modal>
-      <settings size="small" />
+      <div class="w-96 p-4">
+        <preferences size="small" />
+      </div>
     </template>
   </toolbar-modal>
 </template>

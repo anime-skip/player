@@ -27,7 +27,7 @@ function toggle() {
     <transition>
       <div
         v-if="currentView === props.view"
-        class="bg-base-100 rounded shadow-xl absolute right-0 bottom-full mb-6"
+        class="bg-base-100 rounded shadow-xl absolute right-0 bottom-full mb-6 overflow-y-auto"
         :class="modalClass"
       >
         <slot name="modal" />

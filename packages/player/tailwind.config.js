@@ -2,7 +2,7 @@ import daisyui from 'daisyui';
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./src/**/*.vue'],
+  content: ['./src/**/*.vue', './src/components/**/*'],
   theme: {
     extend: {},
     // fontFamily: {

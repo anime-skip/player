@@ -1420,6 +1420,13 @@ export type LoginRefreshQueryVariables = Exact<{
 
 export type LoginRefreshQuery = { __typename?: 'Query', loginRefresh: { __typename?: 'LoginData', authToken: string, refreshToken: string, account: { __typename?: 'Account', id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role, createdAt: string } } };
 
+export type SavePreferencesMutationVariables = Exact<{
+  preferences: InputPreferences;
+}>;
+
+
+export type SavePreferencesMutation = { __typename?: 'Mutation', savePreferences: { __typename?: 'Preferences', updatedAt: string } };
+
 export type MyAccountFragment = { __typename?: 'Account', id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role, createdAt: string };
 
 export type PreferencesFragment = { __typename?: 'Preferences', enableAutoSkip: boolean, enableAutoPlay: boolean, minimizeToolbarWhenEditing: boolean, hideTimelineWhenMinimized: boolean, colorTheme: ColorTheme, skipBranding: boolean, skipCanon: boolean, skipCredits: boolean, skipFiller: boolean, skipIntros: boolean, skipMixedCredits: boolean, skipMixedIntros: boolean, skipNewCredits: boolean, skipNewIntros: boolean, skipPreview: boolean, skipRecaps: boolean, skipTitleCard: boolean, skipTransitions: boolean };
@@ -1583,6 +1590,13 @@ export const LoginRefreshDocument = gql`
   }
 }
     ${AuthDetailsFragmentDoc}`;
+export const SavePreferencesDocument = gql`
+    mutation savePreferences($preferences: InputPreferences!) {
+  savePreferences(preferences: $preferences) {
+    updatedAt
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
@@ -1602,6 +1616,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     loginRefresh(variables: LoginRefreshQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<LoginRefreshQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<LoginRefreshQuery>(LoginRefreshDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'loginRefresh', 'query');
+    },
+    savePreferences(variables: SavePreferencesMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SavePreferencesMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<SavePreferencesMutation>(SavePreferencesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'savePreferences', 'mutation');
     }
   };
 }

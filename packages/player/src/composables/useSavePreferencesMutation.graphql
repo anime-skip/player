@@ -1,0 +1,5 @@
+mutation savePreferences($preferences: InputPreferences!) {
+  savePreferences(preferences: $preferences) {
+    updatedAt
+  }
+}

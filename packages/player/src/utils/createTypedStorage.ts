@@ -1,6 +1,8 @@
 import { IPlayerStorage } from '../options';
 import * as uuid from 'uuid';
-import { MyAccountFragment } from './api/graphql.generated';
+import { MyAccountFragment } from './api';
+import { defaultPreferences } from './preferences/defaultPreferences';
+import { AllPreferences } from './preferences';
 
 export function createTypedStorage(storage: IPlayerStorage): TypedStorage {
   const createProperty = <T>(key: string): TypedStorageProperty<T | null> => ({
@@ -8,6 +10,9 @@ export function createTypedStorage(storage: IPlayerStorage): TypedStorage {
     set: async (newValue) => await storage.setItem(key, newValue),
     key,
   });
+  /**
+   * Init the value in storage if it is `null`.
+   */
   const createPropertyWithInit = <T>(
     key: string,
     init: () => T,
@@ -25,12 +30,29 @@ export function createTypedStorage(storage: IPlayerStorage): TypedStorage {
       },
     };
   };
+  /**
+   * Merge an object of defaults into the returned object if `null`.
+   */
+  const createPropertyWithMergedDefaults = <T>(
+    key: string,
+    defaultObject: T,
+  ) => {
+    const prop = createProperty<T>(key);
+    return {
+      ...prop,
+      async get() {
+        const value = await prop.get();
+        return { ...defaultObject, ...value };
+      },
+    };
+  };
 
   // prettier-ignore
   return {
+    // TODO: Use response type for auth object.
     auth: createProperty('@anime-skip/player/auth'),
     dontShowStoreReviewPromptAgain: createProperty('dontShowStoreReviewPromptAgain'),
-    preferences: createProperty('general-preferences'),
+    preferences: createPropertyWithMergedDefaults('general-preferences', defaultPreferences),
     keyboardShortcutsPrimary: createProperty('keyboard-shortcut-primary-action-mapping'),
     keyboardShortcutsSecondary: createProperty('keyboard-shortcut-secondary-action-mapping'),
     storeReviewPromptAt: createProperty("storeReviewPromptAt"),
@@ -45,7 +67,7 @@ export interface TypedStorage {
     account: MyAccountFragment;
   } | null>;
   dontShowStoreReviewPromptAgain: TypedStorageProperty<boolean | null>;
-  preferences: TypedStorageProperty<GeneralPreferences>;
+  preferences: TypedStorageProperty<AllPreferences>;
   keyboardShortcutsPrimary: TypedStorageProperty<KeyboardShortcutActionMapping>;
   keyboardShortcutsSecondary: TypedStorageProperty<KeyboardShortcutActionMapping>;
   storeReviewPromptAt: TypedStorageProperty<number | null>;

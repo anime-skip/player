@@ -1,5 +1,6 @@
 import { useQuery } from 'vue-query';
 import { QueryKey } from '../utils/QueryKey';
+import { MINUTE } from '../utils/time';
 
 export default function () {
   const client = useApiClient(false);
@@ -12,5 +13,6 @@ export default function () {
       const data = await client.findEpisodeUrl({ url: url.value });
       return data.findEpisodeUrl;
     },
+    staleTime: 30 * MINUTE,
   });
 }
