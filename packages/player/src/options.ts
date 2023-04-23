@@ -107,14 +107,6 @@ export interface IPlayerStorage {
    * Clear all items from storage.
    */
   clear: () => MaybePromise<void>;
-  /**
-   * Add a listener that is called when the specific key in storage is changed.
-   * @returns a function that, when called, removes the listener.
-   */
-  onChange: (
-    key: string,
-    callback: StorageChangedCallback,
-  ) => RemoveStorageListenerFn;
 }
 
 /**

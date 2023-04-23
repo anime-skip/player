@@ -55,6 +55,7 @@ export function createPlayer(options?: PlayerOptions): AnimeSkipPlayer {
       shadowBody.style.width = '100%';
       shadowBody.style.height = '100%';
       shadowHtml.appendChild(shadowBody);
+      app.provide(InjectionKey.ShadowRoot, { shadowHtml, shadow });
       app.mount(shadowBody);
 
       // Add the ShadowRoot to the DOM

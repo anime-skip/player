@@ -10,9 +10,6 @@ export function createLocalPlayerStorage(): IPlayerStorage {
     clear() {
       localStorage.clear();
     },
-    onChange() {
-      throw Error('Not implemented: LocalStorage.onChange()');
-    },
     removeItem(key) {
       localStorage.removeItem(key);
     },

@@ -15,6 +15,8 @@ const toolbarModalOpen = computed(
   () => view.value === 'preferences' || view.value === 'account',
 );
 
+useTheme();
+
 // Preload queries that need ran ASAP
 useAllTimestampTypesQuery();
 useCurrentUrlQuery();
