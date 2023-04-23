@@ -35,7 +35,7 @@ const { value: preferences } = usePlayerStorage(storage.preferences);
 </script>
 
 <template>
-  <div ref="root" class="relative h-[9px] group">
+  <div ref="root" class="relative h-[9px] group cursor-pointer">
     <!-- Timstamp Segments -->
     <template v-if="sections?.length">
       <timeline-section
