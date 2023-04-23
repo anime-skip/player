@@ -3,6 +3,7 @@ import Toolbar from './Toolbar.vue';
 import EpisodeInfo from './EpisodeInfo.vue';
 import SidePanel from './SidePanel.vue';
 import useCurrentUrlQuery from '../composables/useCurrentUrlQuery';
+import useSyncPlaybackRate from '../composables/useSyncPlaybackRate';
 
 const root = ref<HTMLDivElement>();
 
@@ -16,6 +17,7 @@ const toolbarModalOpen = computed(
 );
 
 useTheme();
+useSyncPlaybackRate();
 
 // Preload queries that need ran ASAP
 useAllTimestampTypesQuery();

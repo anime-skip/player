@@ -145,6 +145,7 @@ export default createSharedComposable(() => {
     muted,
     seeking,
     currentTime,
+    playbackRate,
     buffering: readonly(useDebounce(buffering, 0.1 * SECOND)),
     duration: readonly(duration),
   };
