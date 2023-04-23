@@ -18,11 +18,11 @@ export default function (
 
   function updateSeekingValue(event: MouseEvent) {
     seekingValue.value = 0;
-    console.log({
-      left: left.value,
-      right: right.value,
-      mouse: event.x,
-    });
+    // console.log({
+    //   left: left.value,
+    //   right: right.value,
+    //   mouse: event.x,
+    // });
     const decimalPercent = (event.x - left.value) / (right.value - left.value);
     seekingValue.value = (max.value - min.value) * decimalPercent + min.value;
   }
