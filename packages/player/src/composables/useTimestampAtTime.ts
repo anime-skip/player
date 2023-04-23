@@ -6,7 +6,10 @@ import { Ref } from 'vue';
 export default function (timeInS: Ref<number>) {
   const timestamps = useCurrentTimestamps();
 
+  const timePlusFloatingPointError = computed(() => timeInS.value + 0.001);
   return computed(() =>
-    timestamps.value?.filter((t) => timeInS.value >= t.at).pop(),
+    timestamps.value
+      ?.filter((t) => timePlusFloatingPointError.value >= t.at)
+      .pop(),
   );
 }
