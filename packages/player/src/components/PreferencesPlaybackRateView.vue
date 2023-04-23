@@ -30,7 +30,7 @@ const playbackRate = computed({
       <input
         type="number"
         class="input input-bordered focus:input-primary min-w-0 w-full"
-        step="0.05"
+        step="0.25"
         min="0.25"
         max="4"
         v-model="playbackRate"
