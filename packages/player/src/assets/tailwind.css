@@ -1,5 +1,17 @@
 :host { all: initial }
 
+/* Transitions */
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.2s ease;
+}
+
+.slide-up-enter-from,
+.slide-up-leave-to {
+  opacity: 0;
+  transform: translateY(2rem);
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

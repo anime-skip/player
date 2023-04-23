@@ -24,7 +24,7 @@ function toggle() {
     <slot name="button" :toggle="toggle" />
 
     <!-- Dialog -->
-    <transition>
+    <transition name="slide-up">
       <div
         v-if="currentView === props.view"
         class="bg-base-100 rounded shadow-xl absolute right-0 bottom-full mb-6 overflow-y-auto"
@@ -35,17 +35,3 @@ function toggle() {
     </transition>
   </div>
 </template>
-
-<style scoped>
-/* we will explain what these classes do next! */
-.v-enter-active,
-.v-leave-active {
-  transition: all 0.2s ease;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
-  transform: translateY(2rem);
-}
-</style>
