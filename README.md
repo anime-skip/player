@@ -8,10 +8,10 @@ Monorepo for the Anime Skip Player, the web extension and embedded player.
 - [x] Fetch and display existing timestamps
 - [x] Local settings
   - [ ] Autoskip
-  - [ ] Skipped sections
+  - [x] Skipped sections
   - [ ] Playback rate
   - [ ] Service settings
-  - [ ] Watched timestamps
+  - [x] Watched timestamps
   - [x] Theme
   - [ ] Hide timeline when minimized
   - [ ] Minimize while editing

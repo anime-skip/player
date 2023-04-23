@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-import { Section } from '../utils/timestamp-utils';
+import { AllPreferences } from '../utils/preferences';
+import { Section, isTimestampSkipped } from '../utils/timestamp-utils';
 
 const props = defineProps<{
   section: Section;
   currentTime: number;
   duration?: number;
+  preferences: AllPreferences | undefined | null;
 }>();
 
 const leftInt = computed(() => (props.section.at / props.duration!) * 100);
@@ -25,21 +27,22 @@ const currentTimeWidth = computed(
     }%`,
 );
 
-const isSkipped = false;
+const isSkipped = computed(() =>
+  isTimestampSkipped(props.section.typeId, props.preferences),
+);
 </script>
 
 <template>
-  <div
-    v-if="!isSkipped"
-    class="absolute top-[3px] h-[3px]"
-    :style="{ left, right: right }"
-  >
+  <div class="absolute top-[3px] h-[3px]" :style="{ left, right: right }">
     <!-- Light Background -->
-    <div class="absolute h-full w-full bg-base-content bg-opacity-30" />
+    <div
+      v-if="!isSkipped"
+      class="absolute h-full w-full bg-base-content bg-opacity-30"
+    />
 
     <!-- Primary Currnet Time -->
     <div
-      v-if="(currentTime ?? 0) >= section.at"
+      v-if="!isSkipped && (currentTime ?? 0) >= section.at"
       class="absolute h-full bg-primary left-0"
       :style="{ width: currentTimeWidth }"
     />

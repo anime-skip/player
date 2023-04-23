@@ -29,6 +29,9 @@ const sections = computed<Section[]>(() => {
   if (!duration.value || !timestamps.value?.length) return [];
   return buildSections(timestamps.value ?? [], duration.value);
 });
+
+const { storage } = usePlayerOptions();
+const { value: preferences } = usePlayerStorage(storage.preferences);
 </script>
 
 <template>
@@ -41,6 +44,7 @@ const sections = computed<Section[]>(() => {
         :section="section"
         :current-time="seekingValue ?? currentTime"
         :duration="duration"
+        :preferences="preferences"
       />
     </template>
 
