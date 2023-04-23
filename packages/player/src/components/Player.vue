@@ -10,6 +10,11 @@ const isMouseActive = usePlayerMouseActive(root);
 
 const { playing, buffering } = useVideoControls();
 
+const view = useView();
+const toolbarModalOpen = computed(
+  () => view.value === 'preferences' || view.value === 'account',
+);
+
 // Preload queries that need ran ASAP
 useAllTimestampTypesQuery();
 useCurrentUrlQuery();
@@ -37,7 +42,7 @@ useFindEpisodeUrlQuery();
 
       <toolbar
         class="absolute bottom-0 inset-x-0"
-        :hidden="!isMouseActive && playing"
+        :hidden="!isMouseActive && playing && !toolbarModalOpen"
       />
     </div>
 
