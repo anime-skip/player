@@ -40,7 +40,6 @@ function login() {
           token: data.login.authToken,
           account: data.login.account,
         };
-        console.log('Emitting loggedIn');
         emits('loggedIn');
       },
     },

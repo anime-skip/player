@@ -21,7 +21,6 @@ import { View } from './useView';
  */
 export default function (view: View): ViewOperationCompletedFn {
   return () => {
-    console.log('Dispatching view operation completed:', view);
     window.dispatchEvent(new ViewOperationCompletedEvent(view));
   };
 }
