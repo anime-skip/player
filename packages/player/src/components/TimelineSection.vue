@@ -27,8 +27,9 @@ const currentTimeWidth = computed(
     }%`,
 );
 
+const isSkipping = useIsAutoSkipEnabled();
 const isSkipped = computed(() =>
-  isTimestampSkipped(props.section.typeId, props.preferences),
+  isTimestampSkipped(props.section.typeId, props.preferences, isSkipping.value),
 );
 </script>
 

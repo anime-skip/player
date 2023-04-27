@@ -1,7 +1,5 @@
 <script lang="ts" setup>
-import useRangeInput from '../composables/useRangeInput';
 import { Section, buildSections } from '../utils/timestamp-utils';
-import FloatingLabel from './FloatingLabel.vue';
 import TimelineSection from './TimelineSection.vue';
 
 const { currentTime, duration, playing } = useVideoControls();
@@ -30,8 +28,7 @@ const sections = computed<Section[]>(() => {
   return buildSections(timestamps.value ?? [], duration.value);
 });
 
-const { storage } = usePlayerOptions();
-const { value: preferences } = usePlayerStorage(storage.preferences);
+const { value: preferences } = usePreferences();
 </script>
 
 <template>
