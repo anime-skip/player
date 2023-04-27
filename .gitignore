@@ -15,6 +15,7 @@ dist-ssr
 vite.config.ts.timestamp-*.mjs
 **/@types/auto-import.d.ts
 packages/player/**/*.mp4
+stats.html
 
 # Editor directories and files
 .vscode/*

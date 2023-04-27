@@ -80,6 +80,7 @@ importers:
       postcss: ^8.4.22
       postcss-unroot: ^1.0.2
       refresh-fetch: ^0.8.0
+      rollup-plugin-visualizer: ^5.9.0
       tailwindcss: ^3.3.1
       typescript: ^5.0.4
       unplugin-auto-import: ^0.15.3
@@ -119,6 +120,7 @@ importers:
       daisyui: 2.51.5_sdbpblax374q56eabcljdsk5hu
       postcss: 8.4.22
       postcss-unroot: 1.0.2
+      rollup-plugin-visualizer: 5.9.0
       tailwindcss: 3.3.1_postcss@8.4.22
       typescript: 5.0.4
       unplugin-auto-import: 0.15.3_@vueuse+core@10.0.2
@@ -6307,6 +6309,22 @@ packages:
     dependencies:
       glob: 7.2.3
 
+  /rollup-plugin-visualizer/5.9.0:
+    resolution: {integrity: sha512-bbDOv47+Bw4C/cgs0czZqfm8L82xOZssk4ayZjG40y9zbXclNk7YikrZTDao6p7+HDiGxrN0b65SgZiVm9k1Cg==}
+    engines: {node: '>=14'}
+    hasBin: true
+    peerDependencies:
+      rollup: 2.x || 3.x
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+    dependencies:
+      open: 8.4.2
+      picomatch: 2.3.1
+      source-map: 0.7.4
+      yargs: 17.7.1
+    dev: true
+
   /rollup/3.20.4:
     resolution: {integrity: sha512-n7J4tuctZXUErM9Uc916httwqmTc63zzCr2+TLCiSCpfO/Xuk3g/marGN1IlRJZi+QF3XMYx75PxXRfZDVgaRw==}
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
@@ -6527,6 +6545,11 @@ packages:
   /source-map/0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
+
+  /source-map/0.7.4:
+    resolution: {integrity: sha512-l3BikUxvPOcn5E74dZiq5BGsTb5yEwhaTSzccU6t4sDOH8NWJCstKO5QT2CvtFoK6F0saL7p9xHAqHOlCPJygA==}
+    engines: {node: '>= 8'}
+    dev: true
 
   /sourcemap-codec/1.4.8:
     resolution: {integrity: sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==}

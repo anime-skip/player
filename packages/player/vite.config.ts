@@ -7,6 +7,7 @@ import autoImport from 'unplugin-auto-import/vite';
 import inlineCss from 'vite-plugin-css-injected-by-js';
 import icons from 'unplugin-icons/vite';
 import { FileSystemIconLoader } from 'unplugin-icons/loaders';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 function vueTsc(): Plugin {
   return {
@@ -44,6 +45,7 @@ export default defineConfig(({ mode }) => {
       restoreMocks: true,
     },
     plugins: [
+      visualizer(),
       vueTsc(),
       vue(),
       generate(),
