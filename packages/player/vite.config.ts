@@ -4,18 +4,22 @@ import { defineConfig, Plugin } from 'vite';
 import { execSync } from 'node:child_process';
 import vue from '@vitejs/plugin-vue';
 import autoImport from 'unplugin-auto-import/vite';
-import inlineCss from 'vite-plugin-css-injected-by-js';
 import icons from 'unplugin-icons/vite';
 import { FileSystemIconLoader } from 'unplugin-icons/loaders';
 import { visualizer } from 'rollup-plugin-visualizer';
 
 function vueTsc(): Plugin {
+  let alreadyExecuted = false;
   return {
     name: 'vue-tsc',
     writeBundle() {
+      if (alreadyExecuted) return;
+
+      console.log('Generating types...');
       execSync('vue-tsc -p tsconfig.build.json --emitDeclarationOnly', {
         stdio: 'inherit',
       });
+      alreadyExecuted = true;
     },
   };
 }
@@ -69,14 +73,6 @@ export default defineConfig(({ mode }) => {
           },
         ],
       }),
-      // Add the CSS to the window object so it can be added to a ShadowRoot inside the library.
-      // Production build only
-      inlineCss({
-        injectCodeFunction: function injectCodeCustomRunTimeFunction(cssCode) {
-          // @ts-expect-error: shims-window.d.ts not present in vite.config.ts
-          window.animeSkipPlayerCss = cssCode;
-        },
-      }),
     ],
     build: {
       lib: {
@@ -85,7 +81,6 @@ export default defineConfig(({ mode }) => {
         formats: ['cjs', 'iife', 'es'],
         fileName: 'index',
       },
-      cssCodeSplit: true,
       sourcemap: true,
     },
     define: {
