@@ -18,7 +18,7 @@ const { value: auth } = useAuth();
         <profile-image class="w-12 h-12" />
         <div>
           <p
-            class="text-base-content text-opacity-30 text-xs uppercase font-bold"
+            class="text-base-content text-opacity-30 text-xs uppercase font-bold -mb-1"
           >
             Anime Skip
           </p>
