@@ -30,3 +30,21 @@ Monorepo for the Anime Skip Player, the web extension and embedded player.
 2. Install PNPM: `corepack enable`
 
 > Info: This project uses `unplugin-auto-import`, so you may not see import for common fucntions. See each package/apps's vite.config.ts for a list of packages and directories that are auto-imported.
+
+```sh
+pnpm i
+```
+
+To develop the player's UI:
+
+```sh
+cd packages/player
+pnpm dev
+```
+
+To develop the web extension:
+
+```sh
+cd apps/extension
+pnpm dev
+```
