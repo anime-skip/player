@@ -8,7 +8,8 @@ export type PreferencesView =
   | PreferencesSelectView
   | PreferencesAlertView
   | PreferencesKeyboardShortcutsView
-  | PreferencesAllSettingsLink;
+  | PreferencesAllSettingsLinkView
+  | PreferencesServiceSettingsView;
 
 export interface PreferencesHeaderView {
   type: 'header';
@@ -64,6 +65,10 @@ export interface PreferencesKeyboardShortcutsView {
   type: 'keyboard-shortcuts';
 }
 
-export interface PreferencesAllSettingsLink {
+export interface PreferencesAllSettingsLinkView {
   type: 'all-settings-link';
+}
+
+export interface PreferencesServiceSettingsView {
+  type: 'service-settings';
 }

@@ -72,6 +72,7 @@ export const allPreferencesView: PreferencesView[] = [
         preferenceKey: 'minimizeToolbarWhenEditing',
         text: prefTitles.minimizeToolbarWhenEditing,
       },
+      { type: 'service-settings' },
     ],
   },
 

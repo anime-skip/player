@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { PreferencesPlaybackRateView } from '../utils/preferences';
+import { PreferencesAllSettingsLinkView } from '../utils/preferences';
 
 const props = defineProps<{
-  view: PreferencesPlaybackRateView;
+  view: PreferencesAllSettingsLinkView;
 }>();
 
 const currentView = useView();

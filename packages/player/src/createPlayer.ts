@@ -149,5 +149,7 @@ function getInternalOptions(options?: PlayerOptions): InternalPlayerOptions {
 
     getEpisodeUrl:
       options?.getEpisodeUrl ?? (() => stripHashAndQuery(location.href)),
+
+    onVisibilityChange: options?.onVisibilityChange,
   };
 }

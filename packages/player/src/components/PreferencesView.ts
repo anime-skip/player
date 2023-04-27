@@ -8,6 +8,7 @@ import PreferencesKeyboardShortcutsView from './PreferencesKeyboardShortcutsView
 import PreferencesPlaybackRateView from './PreferencesPlaybackRateView.vue';
 import PreferencesSelectView from './PreferencesSelectView.vue';
 import PreferencesAllSettingsLinkView from './PreferencesAllSettingsLinkView.vue';
+import PreferencesServiceSettingsView from './PreferencesServiceSettingsView.vue';
 import { PropType } from 'vue';
 
 const typeToComponentMap: Record<PreferencesView['type'], Component> = {
@@ -19,6 +20,7 @@ const typeToComponentMap: Record<PreferencesView['type'], Component> = {
   select: PreferencesSelectView,
   alert: PreferencesAlertView,
   'all-settings-link': PreferencesAllSettingsLinkView,
+  'service-settings': PreferencesServiceSettingsView,
 };
 
 export default defineComponent({

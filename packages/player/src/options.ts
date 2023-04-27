@@ -1,3 +1,4 @@
+import { PlayerVisibility } from './utils/PlayerVisibility';
 import type { TypedStorage } from './utils/createTypedStorage';
 
 export interface PlayerOptions {
@@ -63,6 +64,13 @@ export interface PlayerOptions {
    * leaving just the "protocol://host/path".
    */
   getEpisodeUrl?: () => MaybePromise<string>;
+
+  /**
+   * An optional callback that is executed when the player's visibility changes.
+   *
+   * Does nothing if not passed.
+   */
+  onVisibilityChange?: OnVisibilityChangeCallback;
 }
 
 export interface InternalPlayerOptions {
@@ -80,9 +88,15 @@ export interface InternalPlayerOptions {
   apiUrl: string;
   apiClientId: string;
   getEpisodeUrl: () => MaybePromise<string>;
+  onVisibilityChange: OnVisibilityChangeCallback | undefined;
 }
 
 export type ElementOption = string | Element | (() => string | Element);
+
+export type OnVisibilityChangeCallback = (
+  newVisibility: PlayerVisibility,
+  oldVisibility: PlayerVisibility,
+) => void;
 
 /**
  * Storage implementation used by the player.

@@ -15,6 +15,7 @@ export const smallPreferencesView: PreferencesView[] = [
         preferenceKey: 'enableAutoSkip',
         text: 'Enable Autoskip',
       },
+      { type: 'service-settings' },
       { type: 'all-settings-link' },
     ],
   },

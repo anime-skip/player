@@ -2,6 +2,8 @@
 import Toolbar from './Toolbar.vue';
 import EpisodeInfo from './EpisodeInfo.vue';
 import SidePanel from './SidePanel.vue';
+import ReturnToPlayerButton from './ReturnToPlayerButton.vue';
+import { PlayerVisibility } from '../utils/PlayerVisibility';
 
 const root = ref<HTMLDivElement>();
 
@@ -14,6 +16,8 @@ const toolbarModalOpen = computed(
   () => view.value === 'preferences' || view.value === 'account',
 );
 
+const visibility = usePlayerVisibility();
+
 useTheme();
 useSyncPlaybackRate();
 useAutoSkip();
@@ -25,7 +29,11 @@ useFindEpisodeUrlQuery();
 </script>
 
 <template>
-  <div class="w-full h-full pointer-events-auto flex">
+  <!-- Player -->
+  <div
+    v-show="visibility === PlayerVisibility.Visible"
+    class="w-full h-full pointer-events-auto flex"
+  >
     <div
       ref="root"
       class="relative transition-colors flex-1"
@@ -51,4 +59,10 @@ useFindEpisodeUrlQuery();
 
     <side-panel class="h-full z-10" />
   </div>
+
+  <!-- Other top level UIs -->
+  <return-to-player-button
+    v-if="visibility === PlayerVisibility.ServiceSettings"
+    class="pointer-events-auto absolute top-16 right-16 z-[9999]"
+  />
 </template>
