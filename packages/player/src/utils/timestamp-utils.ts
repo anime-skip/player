@@ -41,9 +41,9 @@ export function getPreviousTimestamp(
 export function isTimestampSkipped(
   timestampTypeId: TimestampType['id'],
   preferences: AllPreferences | undefined | null,
+  isSkipping: boolean,
 ): boolean {
-  // If preferences have loaded and autoskip is disabled, never skip timestamps
-  if (preferences?.enableAutoSkip === false) return false;
+  if (!isSkipping) return false; 
 
   if (timestampTypeId === '97e3629a-95e5-4b1a-9411-73a47c0d0e25') return !!preferences?.skipBranding;
   if (timestampTypeId === '9edc0037-fa4e-47a7-a29a-d9c43368daa8') return !!preferences?.skipCanon;
@@ -59,4 +59,14 @@ export function isTimestampSkipped(
   if (timestampTypeId === '9f0c6532-ccae-4238-83ec-a2804fe5f7b0') return !!preferences?.skipTransitions;
   if (timestampTypeId === '67321535-a4ea-4f21-8bed-fb3c8286b510') return !!preferences?.skipTitleCard;
   return false;
+}
+
+/**
+ * Return the timestamp that the provided time is in seconds. Assumes that the timestamps are sorted.
+ */
+export function getTimestampAtTime(
+  timestamps: ReadonlyArray<TimestampFragment> | undefined,
+  timeInS: number,
+) {
+  return timestamps?.filter((t) => timeInS + 0.001 >= t.at).pop();
 }

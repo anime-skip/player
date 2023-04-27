@@ -1,4 +1,5 @@
 import { AllPreferences } from '../utils/preferences';
+import usePreferences from './usePreferences';
 import useSavePreferencesMutation from './useSavePreferencesMutation';
 
 /**
@@ -20,9 +21,7 @@ export default function <T extends keyof AllPreferences>(
   key: T,
   isLocal: boolean | undefined,
 ) {
-  const { storage } = usePlayerOptions();
-  const { value: storedPrefs } = usePlayerStorage(storage.preferences);
-
+  const { value: storedPrefs } = usePreferences();
   const { value: auth } = useAuth();
 
   const { mutateAsync: savePrefs } = useSavePreferencesMutation();

@@ -7,7 +7,7 @@ Monorepo for the Anime Skip Player, the web extension and embedded player.
 - [x] Basic player controls (play/pause, volume controls, fullscreen, etc)
 - [x] Fetch and display existing timestamps
 - [x] Local settings
-  - [ ] Autoskip
+  - [x] Autoskip
   - [x] Skipped sections
   - [x] Playback rate
   - [ ] Service settings

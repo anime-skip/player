@@ -1,11 +1,11 @@
 import { AllPreferences } from '../utils/preferences';
+import usePreferences from './usePreferences';
 
 /**
  * An alternative to `usePreference` that returns a readonly, reactive value.
  */
 export default function <T extends keyof AllPreferences>(key: T) {
-  const { storage } = usePlayerOptions();
-  const { value, ...asyncState } = usePlayerStorage(storage.preferences);
+  const { value, ...asyncState } = usePreferences();
   const pref = computed(() => value.value?.[key]);
   return { ...asyncState, pref };
 }
