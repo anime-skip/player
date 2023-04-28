@@ -8,7 +8,7 @@ const props = defineProps<{
 }>();
 const joinedAgo = useTimeAgo(computed(() => props.account.createdAt));
 
-const { value: auth } = useAuth();
+const { state: auth } = useAuth();
 </script>
 
 <template>

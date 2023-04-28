@@ -26,6 +26,7 @@ useAutoSkip();
 useAllTimestampTypesQuery();
 useCurrentUrlQuery();
 useFindEpisodeUrlQuery();
+useAccountQuery();
 </script>
 
 <template>

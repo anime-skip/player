@@ -21,8 +21,8 @@ export default function <T extends keyof AllPreferences>(
   key: T,
   isLocal: boolean | undefined,
 ) {
-  const { value: storedPrefs } = usePreferences();
-  const { value: auth } = useAuth();
+  const { state: storedPrefs } = usePreferences();
+  const { state: auth } = useAuth();
 
   const { mutateAsync: savePrefs } = useSavePreferencesMutation();
 

@@ -1,0 +1,8 @@
+query account {
+  account {
+    ...MyAccount
+    preferences {
+      ...Preferences
+    }
+  }
+}

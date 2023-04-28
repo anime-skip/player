@@ -8,7 +8,7 @@ const emits = defineEmits<{
   (event: 'loggedIn'): void;
 }>();
 
-const { value: auth } = useAuth();
+const { state: auth } = useAuth();
 
 const username = ref('');
 const password = ref('');

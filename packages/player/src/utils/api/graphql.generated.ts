@@ -1393,6 +1393,11 @@ export type UserReport = BaseModel & {
   updatedByUserId: Scalars['ID'];
 };
 
+export type AccountQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AccountQuery = { __typename?: 'Query', account: { __typename?: 'Account', id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role, createdAt: string, preferences: { __typename?: 'Preferences', enableAutoSkip: boolean, enableAutoPlay: boolean, minimizeToolbarWhenEditing: boolean, hideTimelineWhenMinimized: boolean, colorTheme: ColorTheme, skipBranding: boolean, skipCanon: boolean, skipCredits: boolean, skipFiller: boolean, skipIntros: boolean, skipMixedCredits: boolean, skipMixedIntros: boolean, skipNewCredits: boolean, skipNewIntros: boolean, skipPreview: boolean, skipRecaps: boolean, skipTitleCard: boolean, skipTransitions: boolean } } };
+
 export type AllTimestampTypesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1562,6 +1567,17 @@ export const TimestampTypeFragmentDoc = gql`
   description
 }
     `;
+export const AccountDocument = gql`
+    query account {
+  account {
+    ...MyAccount
+    preferences {
+      ...Preferences
+    }
+  }
+}
+    ${MyAccountFragmentDoc}
+${PreferencesFragmentDoc}`;
 export const AllTimestampTypesDocument = gql`
     query allTimestampTypes {
   allTimestampTypes {
@@ -1605,6 +1621,9 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
+    account(variables?: AccountQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<AccountQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AccountQuery>(AccountDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'account', 'query');
+    },
     allTimestampTypes(variables?: AllTimestampTypesQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<AllTimestampTypesQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<AllTimestampTypesQuery>(AllTimestampTypesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allTimestampTypes', 'query');
     },

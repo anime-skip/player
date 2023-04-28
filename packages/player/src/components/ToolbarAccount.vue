@@ -5,7 +5,7 @@ import ProfileImage from './ProfileImage.vue';
 import AccountMenu from './AccountMenu.vue';
 import useViewOperationCompleted from '../composables/useViewOperationCompleted';
 
-const { value: auth } = useAuth();
+const { state: auth } = useAuth();
 
 const loginCompleted = useViewOperationCompleted('account');
 </script>

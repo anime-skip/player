@@ -29,7 +29,7 @@ const sections = computed<Section[]>(() => {
   return buildSections(timestamps.value ?? [], duration.value);
 });
 
-const { value: preferences } = usePreferences();
+const { state: preferences } = usePreferences();
 </script>
 
 <template>

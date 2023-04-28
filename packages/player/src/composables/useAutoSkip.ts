@@ -6,7 +6,7 @@ import usePreferences from './usePreferences';
  * Watch the current time and list of timestamps. Auto-skip over skipped sections if needed.
  */
 export default createSharedComposable(() => {
-  const { value: preferences } = usePreferences();
+  const { state: preferences } = usePreferences();
   const timestamps = useCurrentTimestamps();
   const isSkipping = useIsAutoSkipEnabled();
   const hasSkippedFromZero = ref(false);

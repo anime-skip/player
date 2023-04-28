@@ -5,7 +5,7 @@ import TimestampList from './TimestampList.vue';
 import IconMdiChevronRight from '~icons/mdi/chevron-right';
 import IconMdiAlertDecagram from '~icons/mdi/alert-circle';
 
-const { value: auth } = useAuth();
+const { state: auth } = useAuth();
 
 const view = useView();
 /**

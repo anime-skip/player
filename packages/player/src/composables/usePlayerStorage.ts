@@ -34,7 +34,7 @@ export default function <T>(property: TypedStorageProperty<T>) {
   });
 
   return {
-    value,
+    state: value,
     isLoading,
     isReady,
   };

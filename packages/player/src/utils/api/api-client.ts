@@ -12,7 +12,7 @@ export function useBaseGraphqlClient(): GraphQLClient {
 export function useAuthorizedGraphqlClient(): GraphQLClient {
   const { apiUrl, apiClientId } = usePlayerOptions();
   const baseClient = getSdk(useBaseGraphqlClient());
-  const { value: auth } = useAuth();
+  const { state: auth } = useAuth();
 
   return new GraphQLClient(apiUrl, {
     fetch: configureRefreshFetch({

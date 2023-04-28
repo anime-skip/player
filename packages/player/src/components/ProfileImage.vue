@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import IconAccount from '~icons/anime-skip/account';
 
-const { value: auth } = useAuth();
+const { state: auth } = useAuth();
 </script>
 
 <template>

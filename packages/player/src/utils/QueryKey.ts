@@ -3,4 +3,5 @@ export enum QueryKey {
   CurrentUrl = 'CurrentUrl',
   AllTimestampTypes = 'AllTimestampTypes',
   FindEpisodeUrl = 'FindEpisodeUrl',
+  Account = 'Account',
 }
