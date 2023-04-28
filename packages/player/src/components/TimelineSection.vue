@@ -37,8 +37,8 @@ const isSkipped = computed(() =>
   <div class="absolute top-[3px] h-[3px]" :style="{ left, right: right }">
     <!-- Light Background -->
     <div
-      v-if="!isSkipped"
-      class="absolute h-full w-full bg-base-content bg-opacity-30"
+      class="absolute h-full w-full bg-base-content transition bg-opacity-0"
+      :class="{ 'bg-opacity-30': !isSkipped }"
     />
 
     <!-- Primary Currnet Time -->
