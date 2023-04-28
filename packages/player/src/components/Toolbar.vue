@@ -83,11 +83,11 @@ const { pref: hideFully } = useReadonlyPreference('hideTimelineWhenMinimized');
           </span>
         </p>
 
-        <p class="text-xs text-base-content text-opacity-50">&bull;</p>
+        <p class="shrink-0 text-xs text-base-content text-opacity-50">&bull;</p>
 
         <!-- Current Timestamp -->
         <div
-          class="h-full flex items-center text-xs text-base-content text-opacity-50 link link-hover gap-1"
+          class="shrink-0 h-full flex items-center text-xs text-base-content text-opacity-50 link link-hover gap-1"
           @click="toggleTimestampsPanel"
         >
           <icon-mdi-alert-circle v-if="isError" class="w-3 h-3" />
