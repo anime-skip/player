@@ -94,6 +94,11 @@ export const allPreferencesView: PreferencesView[] = [
 
   { type: 'header', text: 'Keyboard Shortcuts' },
   {
+    type: 'alert',
+    message:
+      'Keyboard shortcuts only work inside the Anime Skip video player. If you click outside the player then try and use one, it may not work.',
+  },
+  {
     type: 'keyboard-shortcuts',
   },
 ];
