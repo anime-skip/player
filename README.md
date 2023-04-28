@@ -18,7 +18,7 @@ Monorepo for the Anime Skip Player, the web extension and embedded player.
   - [ ] Snap to nearest 0.5s when creating timestamp
 - [ ] Keyboard shortcuts
 - [x] Sync remote settings
-- [ ] Timeline hover (show hovered time and timestamp type)
+- [x] Timeline hover (show hovered time and timestamp type)
 - [ ] Edit timestamps
 - [ ] Save timestamps
 - [ ] Templates
