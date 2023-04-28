@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { Section, buildSections } from '../utils/timestamp-utils';
 import TimelineSection from './TimelineSection.vue';
+import TimelinePreview from './TimelinePreview.vue';
 
 const { currentTime, duration, playing } = useVideoControls();
 const intProgress = computed(() => {
@@ -32,7 +33,7 @@ const { value: preferences } = usePreferences();
 </script>
 
 <template>
-  <div ref="root" class="relative h-[9px] group cursor-pointer">
+  <div ref="root" class="relative h-[9px] group cursor-pointer select-none">
     <!-- Timstamp Segments -->
     <template v-if="sections?.length">
       <timeline-section
@@ -70,15 +71,6 @@ const { value: preferences } = usePreferences();
     </div>
 
     <!-- Hover timestamp -->
-    <!-- <floating-label>
-      <template #label>
-        <div class="flex flex-col items-center">
-          <p>{{ currentTimeDisplay }}</p>
-          <p class="text-sm opacity-50">{{ currentTimestamp }}</p>
-        </div>
-      </template>
-
-      <template #default> </template>
-    </floating-label> -->
+    <timeline-preview :is-seeking="isSeeking" />
   </div>
 </template>
