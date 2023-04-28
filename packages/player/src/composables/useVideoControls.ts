@@ -44,27 +44,28 @@ export default createSharedComposable(() => {
   // The play event is fired when the paused property is changed from true to false, as a result of
   // the play method, or the autoplay attribute.
   useEventListener(video, 'play', () => {
-    playing.value = true;
+    ignoreUpdatesPlaying(() => (playing.value = true));
   });
-  watch(playing, () => {
-    if (!video.value.paused === playing.value) return;
-
-    if (playing.value) video.value.play();
-    else video.value.pause();
-  });
+  const { ignoreUpdates: ignoreUpdatesPlaying } = watchIgnorable(
+    playing,
+    () => {
+      if (playing.value) video.value.play();
+      else video.value.pause();
+    },
+  );
 
   // The pause event is sent when a request to pause an activity is handled and the activity has
   // entered its paused state, most commonly after the media has been paused through a call to the
   // element's pause() method.
   useEventListener(video, 'pause', () => {
-    playing.value = false;
+    ignoreUpdatesPlaying(() => (playing.value = false));
   });
 
   // The playing event is fired after playback is first started, and whenever it is restarted. For
   // example it is fired when playback resumes after having been paused or delayed due to lack of
   // data.
   useEventListener(video, 'playing', () => {
-    playing.value = true;
+    ignoreUpdatesPlaying(() => (playing.value = true));
     buffering.value = false;
   });
 
@@ -92,13 +93,16 @@ export default createSharedComposable(() => {
 
   // The ratechange event is fired when the playback rate has changed.
   useEventListener(video, 'ratechange', () => {
-    playbackRate.value = video.value.playbackRate;
+    ignoreUpdatesPlaybackRate(
+      () => (playbackRate.value = video.value.playbackRate),
+    );
   });
-  watch(playbackRate, () => {
-    if (video.value.playbackRate === playbackRate.value) return;
-
-    video.value.playbackRate = playbackRate.value;
-  });
+  const { ignoreUpdates: ignoreUpdatesPlaybackRate } = watchIgnorable(
+    playbackRate,
+    () => {
+      video.value.playbackRate = playbackRate.value;
+    },
+  );
 
   // The seeked event is fired when a seek operation completed, the current playback position has
   // changed, and the Boolean seeking attribute is changed to false.
@@ -115,22 +119,23 @@ export default createSharedComposable(() => {
   // The timeupdate event is fired when the time indicated by the currentTime attribute has been
   // updated.
   useEventListener(video, 'timeupdate', () => {
-    currentTime.value = video.value.currentTime;
+    ignoreUpdatesCurrentTime(
+      () => (currentTime.value = video.value.currentTime),
+    );
     buffering.value = false;
   });
-  watch(currentTime, () => {
-    if (video.value.currentTime === currentTime.value) return;
-
-    video.value.currentTime = currentTime.value;
-  });
+  const { ignoreUpdates: ignoreUpdatesCurrentTime } = watchIgnorable(
+    currentTime,
+    () => {
+      video.value.currentTime = currentTime.value;
+    },
+  );
 
   // The volumechange event is fired when the volume has changed.
   useEventListener(video, 'volumechange', () => {
-    volume.value = video.value.volume;
+    ignoreUpdatesVolume(() => (volume.value = video.value.volume));
   });
-  watch(volume, () => {
-    if (video.value.volume === volume.value) return;
-
+  const { ignoreUpdates: ignoreUpdatesVolume } = watchIgnorable(volume, () => {
     video.value.volume = volume.value;
   });
   watch(muted, () => {
