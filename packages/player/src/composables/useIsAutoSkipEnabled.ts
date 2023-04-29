@@ -5,7 +5,7 @@ import useIsEditing from './useIsEditing';
  */
 export default function () {
   const { pref } = useReadonlyPreference('enableAutoSkip');
-  const isEditing = useIsEditing();
+  const { isEditing } = useIsEditing();
 
   return computed<boolean>(() => !!pref.value && !isEditing.value);
 }

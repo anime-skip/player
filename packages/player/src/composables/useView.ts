@@ -1,7 +1,12 @@
 /**
  * The current "view" show in the player.
  */
-export type View = 'timestamps' | 'preferences' | 'all-preferences' | 'account';
+export type View =
+  | 'timestamps'
+  | 'edit-timestamp'
+  | 'preferences'
+  | 'all-preferences'
+  | 'account';
 
 /**
  * Returns a global reference to which "view" is active. A "view" is the current dialog or panel

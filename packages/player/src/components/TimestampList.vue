@@ -2,13 +2,11 @@
 import TimestampListItem from './TimestampListItem.vue';
 import IconPlus from '~icons/anime-skip/plus';
 
-const props = defineProps<{
-  disabled?: boolean;
-}>();
-
 const timestamps = useCurrentTimestamps();
 const { isLoading, isError, error } = useFindEpisodeUrlQuery();
 const errorMessage = useErrorMessage(error);
+
+const createTimestamp = useCreateTimestamp();
 </script>
 
 <template>
@@ -19,20 +17,19 @@ const errorMessage = useErrorMessage(error);
     </div>
 
     <!-- Error -->
-    <p v-if="isError">{{ errorMessage }}</p>
+    <p v-else-if="isError">{{ errorMessage }}</p>
 
-    <!-- Timestamps -->
-    <table
-      v-else
-      class="w-full"
-      :class="{ 'opacity-50 pointer-events-none': disabled }"
-    >
-      <timestamp-list-item
-        v-for="timestamp of timestamps"
-        :key="timestamp.id"
-        :timestamp="timestamp"
-      />
+    <template v-else>
+      <!-- Timestamps -->
+      <table class="w-full">
+        <timestamp-list-item
+          v-for="timestamp of timestamps"
+          :key="timestamp.id"
+          :timestamp="timestamp"
+        />
+      </table>
 
+      <!-- Empty -->
       <p
         v-if="!timestamps.length"
         class="p-4 text-center w-full text-sm opacity-50"
@@ -40,10 +37,11 @@ const errorMessage = useErrorMessage(error);
         No timestmaps
       </p>
 
-      <button class="btn gap-2 w-full">
+      <!-- Add button -->
+      <button class="btn gap-2 w-full" @click="createTimestamp">
         <icon-plus />
         <span>Add Timestamp</span>
       </button>
-    </table>
+    </template>
   </div>
 </template>

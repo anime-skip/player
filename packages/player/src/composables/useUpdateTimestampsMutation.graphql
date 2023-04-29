@@ -1,0 +1,17 @@
+mutation updateTimestamps(
+  $create: [InputTimestampOn!]!
+  $update: [InputExistingTimestamp!]!
+  $delete: [ID!]!
+) {
+  updateTimestamps(create: $create, update: $update, delete: $delete) {
+    created {
+      ...Timestamp
+    }
+    updated {
+      ...Timestamp
+    }
+    deleted {
+      ...Timestamp
+    }
+  }
+}

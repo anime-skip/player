@@ -72,6 +72,7 @@ const validationError = ref<string>();
           type="text"
           placeholder="Username or email"
           v-model="username"
+          @keydown.stop
         />
       </label>
     </div>
@@ -87,6 +88,7 @@ const validationError = ref<string>();
           type="password"
           placeholder="Password"
           v-model="password"
+          @keydown.stop
         />
       </label>
     </div>

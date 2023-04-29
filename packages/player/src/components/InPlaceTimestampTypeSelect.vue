@@ -38,9 +38,9 @@ const type = computed(() => timestampTypesMap.value?.[props.timestamp.typeId]);
     </select>
 
     <!-- Chevron placement -->
-    <p class="absolute left-0 top-0 pointer-events-none">
-      <span class="text-base opacity-0">{{ type?.name }}</span>
-      <icon-chevron-down class="inline opacity-50" />
+    <p class="absolute left-0 top-0 pointer-events-none truncate">
+      <span class="text-base opacity-0 truncate">{{ type?.name }}</span>
+      <icon-chevron-down class="inline text-base-content text-opacity-50" />
     </p>
   </div>
 </template>

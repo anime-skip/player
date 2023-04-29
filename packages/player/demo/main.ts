@@ -8,7 +8,7 @@ document.querySelector('video')!.src = videoUrl;
 
 // Load and mount the player
 const player = createPlayer({
-  serviceName: '© Dev Streaming',
+  serviceName: 'Development',
   getEpisodeInfo() {
     return {
       showName: document.getElementById('show')?.textContent,
@@ -19,7 +19,5 @@ const player = createPlayer({
     };
   },
   fullscreenElement: '.video-container',
-  getEpisodeUrl: () =>
-    'https://www.crunchyroll.com/watch/G7PU4J2WM/the-magic-academys-taboo',
 });
 player.mount('.video-container');

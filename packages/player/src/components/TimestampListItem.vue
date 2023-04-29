@@ -9,6 +9,8 @@ const props = defineProps<{
   timestamp: AmbiguousTimestamp;
 }>();
 
+const timestamp = toRef(props, 'timestamp');
+const type = useTimestampType(timestamp);
 const at = computed(() => formatTimestampInS(props.timestamp.at, false));
 
 const { currentTime } = useVideoControls();
@@ -16,8 +18,8 @@ function goToTimestamp() {
   currentTime.value = props.timestamp.at;
 }
 
-const timestamp = toRef(props, 'timestamp');
-const type = useTimestampType(timestamp);
+const deleteTimestamp = useDeleteTimestamp();
+const editTimestamp = useEditExistingTimestamp();
 </script>
 
 <template>
@@ -42,6 +44,7 @@ const type = useTimestampType(timestamp);
         <button
           class="shrink-0 btn btn-circle btn-ghost text-base-content text-opacity-50 hover:text-opacity-100"
           title="Edit"
+          @click.prevent="editTimestamp(timestamp)"
         >
           <icon-edit class="w-[1.375rem] h-[1.375rem]" />
         </button>
@@ -50,6 +53,7 @@ const type = useTimestampType(timestamp);
         <button
           class="shrink-0 btn btn-circle btn-ghost text-base-content text-opacity-50 hover:text-error hover:text-opacity-100"
           title="Delete"
+          @click.prevent="deleteTimestamp(timestamp)"
         >
           <icon-close class="w-5 h-5" />
         </button>

@@ -1432,6 +1432,15 @@ export type SavePreferencesMutationVariables = Exact<{
 
 export type SavePreferencesMutation = { __typename?: 'Mutation', savePreferences: { __typename?: 'Preferences', updatedAt: string } };
 
+export type UpdateTimestampsMutationVariables = Exact<{
+  create: Array<InputTimestampOn> | InputTimestampOn;
+  update: Array<InputExistingTimestamp> | InputExistingTimestamp;
+  delete: Array<Scalars['ID']> | Scalars['ID'];
+}>;
+
+
+export type UpdateTimestampsMutation = { __typename?: 'Mutation', updateTimestamps: { __typename?: 'UpdatedTimestamps', created: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }>, updated: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }>, deleted: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> } };
+
 export type MyAccountFragment = { __typename?: 'Account', id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role, createdAt: string };
 
 export type PreferencesFragment = { __typename?: 'Preferences', enableAutoSkip: boolean, enableAutoPlay: boolean, minimizeToolbarWhenEditing: boolean, hideTimelineWhenMinimized: boolean, colorTheme: ColorTheme, skipBranding: boolean, skipCanon: boolean, skipCredits: boolean, skipFiller: boolean, skipIntros: boolean, skipMixedCredits: boolean, skipMixedIntros: boolean, skipNewCredits: boolean, skipNewIntros: boolean, skipPreview: boolean, skipRecaps: boolean, skipTitleCard: boolean, skipTransitions: boolean };
@@ -1613,6 +1622,21 @@ export const SavePreferencesDocument = gql`
   }
 }
     `;
+export const UpdateTimestampsDocument = gql`
+    mutation updateTimestamps($create: [InputTimestampOn!]!, $update: [InputExistingTimestamp!]!, $delete: [ID!]!) {
+  updateTimestamps(create: $create, update: $update, delete: $delete) {
+    created {
+      ...Timestamp
+    }
+    updated {
+      ...Timestamp
+    }
+    deleted {
+      ...Timestamp
+    }
+  }
+}
+    ${TimestampFragmentDoc}`;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
@@ -1638,6 +1662,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     savePreferences(variables: SavePreferencesMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SavePreferencesMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<SavePreferencesMutation>(SavePreferencesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'savePreferences', 'mutation');
+    },
+    updateTimestamps(variables: UpdateTimestampsMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateTimestampsMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UpdateTimestampsMutation>(UpdateTimestampsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'updateTimestamps', 'mutation');
     }
   };
 }

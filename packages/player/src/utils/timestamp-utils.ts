@@ -7,6 +7,8 @@ import {
 } from './api';
 import { AllPreferences } from './preferences';
 
+export const UNKNOWN_TIMESTAMP_TYPE_ID = 'ae57fcf9-27b0-49a7-9a99-a91aa7518a29';
+
 /**
  * Either a timestamp from the API, or a local timestamp that hasn't been saved yet.
  */
@@ -18,7 +20,6 @@ export interface LocalTimestamp extends InputTimestamp {
    */
   id: number;
   source: TimestampSource;
-  type: TimestampTypeFragment;
 }
 
 export type Section = AmbiguousTimestamp & {
@@ -89,4 +90,13 @@ export function getTimestampAtTime<T extends { at: number }>(
   timeInS: number,
 ) {
   return timestamps.filter((t) => timeInS + 0.001 >= t.at).pop();
+}
+
+/**
+ * Sorts a list of timestamps in place.
+ */
+export function sortTimestamps<T extends { at: number }>(
+  timestamps: T[],
+): void {
+  timestamps.sort((l, r) => l.at - r.at);
 }

@@ -14,10 +14,14 @@ const { view } = useView();
 const loginAndReturn = useViewOperation('account', () => {
   view.value = 'timestamps';
 });
+
+const { isEditing } = useIsEditing();
+const discardChanges = useDiscardChanges();
+const { saveChanges } = useSaveChangesMutation();
 </script>
 
 <template>
-  <side-panel-layout class="w-72 lg:w-80">
+  <side-panel-layout class="w-72 lg:w-80" @submit="saveChanges">
     <template #title>Timestamps</template>
 
     <template #content>
@@ -33,7 +37,7 @@ const loginAndReturn = useViewOperation('account', () => {
             <span>Log In</span>
           </h4>
           <p class="text-sm">
-            To edit timestamps, create an account or log into Anime Skip
+            To save timestamps, create an account or log into Anime Skip
           </p>
         </div>
 
@@ -41,12 +45,24 @@ const loginAndReturn = useViewOperation('account', () => {
       </div>
 
       <!-- Timestamps -->
-      <timestamp-list :disabled="!auth" />
+      <timestamp-list />
     </template>
 
-    <template v-if="auth" #buttons>
-      <button class="flex-1 btn btn-primary">Save</button>
-      <button class="flex-1 btn btn-outline hover:btn-error">Discard</button>
+    <template v-if="isEditing" #buttons>
+      <button
+        type="submit"
+        class="grow-1 btn btn-primary"
+        @click="saveChanges"
+        :disabled="!auth"
+      >
+        Save Changes
+      </button>
+      <button
+        class="flex-1 btn btn-outline hover:btn-error"
+        @click.prevent="discardChanges"
+      >
+        Discard
+      </button>
     </template>
   </side-panel-layout>
 </template>

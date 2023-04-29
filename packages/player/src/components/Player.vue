@@ -18,6 +18,19 @@ const toolbarModalOpen = computed(
 
 const visibility = usePlayerVisibility();
 
+const { isEditing } = useIsEditing();
+const { pref: minimizeToolbarWhenEditing } = useReadonlyPreference(
+  'minimizeToolbarWhenEditing',
+);
+
+const isToolbarHidden = computed(
+  () =>
+    !isMouseActive.value &&
+    playing.value &&
+    !toolbarModalOpen.value &&
+    (!isEditing.value || !!minimizeToolbarWhenEditing.value),
+);
+
 useTheme();
 useSyncPlaybackRate();
 useAutoSkip();
@@ -41,6 +54,7 @@ useAccountQuery();
       class="relative transition-colors flex-1"
       :class="{
         'bg-base-100 bg-opacity-50': !playing || buffering,
+        'cursor-none': isToolbarHidden,
       }"
       @click="playing = !playing"
     >
@@ -53,10 +67,7 @@ useAccountQuery();
 
       <episode-info class="absolute top-0 inset-x-0" :hidden="playing" />
 
-      <toolbar
-        class="absolute bottom-0 inset-x-0"
-        :hidden="!isMouseActive && playing && !toolbarModalOpen"
-      />
+      <toolbar class="absolute bottom-0 inset-x-0" :hidden="isToolbarHidden" />
     </div>
 
     <side-panel class="h-full z-10" />

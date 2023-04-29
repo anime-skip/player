@@ -13,9 +13,23 @@ export default createSharedComposable(() => {
 
   const { duration, currentTime, playing, volume } = useVideoControls();
   const { view } = useView();
+  const { isEditing } = useIsEditing();
+  const activeTimestamp = useActiveTimestamp();
 
   const advance = (s: number) => {
     currentTime.value = bounded(currentTime.value + s, 0, duration.value ?? 0);
+
+    // If we're editing a timestamp, change it's `at` to match the new time
+    if (
+      isEditing.value &&
+      activeTimestamp.value &&
+      view.value === 'edit-timestamp'
+    ) {
+      activeTimestamp.value = {
+        ...toRaw(activeTimestamp.value),
+        at: currentTime.value,
+      };
+    }
   };
   const raiseVolume = (diff: number) => {
     volume.value = bounded(volume.value + diff, 0, 1);
@@ -29,6 +43,9 @@ export default createSharedComposable(() => {
   const { toggle: toggleFullscreen } = usePlayerFullscreen();
   const goToNext = useGoToNext();
   const goToPrevious = useGoToPrevious();
+  const createTimestamp = useCreateTimestamp();
+  const discardChanges = useDiscardChanges();
+  const { saveChanges } = useSaveChangesMutation();
 
   const actionFns: Record<KeyboardShortcutAction, () => void> = {
     playPause: () => {
@@ -60,9 +77,9 @@ export default createSharedComposable(() => {
     nextTimestamp: goToNext,
     previousTimestamp: goToPrevious,
 
-    createTimestamp: () => {},
-    discardChanges: () => {},
-    saveTimestamps: () => {},
+    createTimestamp,
+    discardChanges,
+    saveTimestamps: saveChanges,
   };
 
   useEventListener(window, 'keydown', (event) => {
