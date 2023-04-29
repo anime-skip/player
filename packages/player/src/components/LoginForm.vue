@@ -70,6 +70,7 @@ const validationError = ref<string>();
         <input
           class="w-full input input-bordered focus:input-primary"
           type="text"
+          autocomplete="username"
           placeholder="Username or email"
           v-model="username"
           @keydown.stop
@@ -86,6 +87,7 @@ const validationError = ref<string>();
         <input
           class="w-full input input-bordered focus:input-primary"
           type="password"
+          autocomplete="current-password"
           placeholder="Password"
           v-model="password"
           @keydown.stop
