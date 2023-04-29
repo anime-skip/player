@@ -1,18 +1,32 @@
 <script lang="ts" setup>
 import IconClose from '~icons/anime-skip/close';
+import IconArrowLeft from '~icons/anime-skip/arrow-left';
 
-const view = useView();
+const props = defineProps<{
+  mode?: 'close' | 'back';
+}>();
+
+const { view, goBack } = useView();
 </script>
 
 <template>
   <div class="bg-base-100 flex flex-col h-full">
     <header
-      class="flex items-center pl-4 pr-2 py-2 gap-4 shrink-0 border-b border-base-content border-opacity-20"
+      class="flex items-center pl-4 pr-2 py-2 gap-2 shrink-0 border-b border-base-content border-opacity-20"
     >
-      <h2 class="flex-1 truncate text-xl">
+      <button
+        v-if="mode === 'back'"
+        class="btn btn-ghost btn-circle -ml-2"
+        @click="goBack"
+        title="Close"
+      >
+        <icon-arrow-left />
+      </button>
+      <h2 class="flex-1 text-xl">
         <slot name="title" />
       </h2>
       <button
+        v-if="mode !== 'back'"
         class="btn btn-ghost btn-circle"
         @click="view = undefined"
         title="Close"

@@ -19,7 +19,7 @@ watch(width, (width) => {
 
 <template>
   <div
-    class="bg-neutral overflow-x-hidden ease-in"
+    class="bg-base-100 overflow-x-hidden"
     :class="{
       'shadow-xl': !!width,
     }"
