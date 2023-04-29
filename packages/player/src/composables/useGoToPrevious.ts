@@ -24,14 +24,12 @@ export default function () {
     console.log({
       currentTime: currentTime.value,
       shifted: currentTime.value - OFFSET,
-      timestamps: timestamps.value?.map((t) => t.at),
-      prev: getPreviousTimestamp(
-        timestamps.value ?? [],
-        currentTime.value - OFFSET,
-      )?.at,
+      timestamps: timestamps.value.map((t) => t.at),
+      prev: getPreviousTimestamp(timestamps.value, currentTime.value - OFFSET)
+        ?.at,
     });
     currentTime.value =
-      getPreviousTimestamp(timestamps.value ?? [], currentTime.value - OFFSET)
-        ?.at ?? 0;
+      getPreviousTimestamp(timestamps.value, currentTime.value - OFFSET)?.at ??
+      0;
   };
 }

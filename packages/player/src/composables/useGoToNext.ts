@@ -21,7 +21,7 @@ export default function () {
     if (!duration.value) return;
 
     currentTime.value =
-      getNextTimestamp(timestamps.value ?? [], currentTime.value + OFFSET)
-        ?.at ?? duration.value;
+      getNextTimestamp(timestamps.value, currentTime.value + OFFSET)?.at ??
+      duration.value;
   };
 }

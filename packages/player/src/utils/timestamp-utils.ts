@@ -1,12 +1,32 @@
-import { TimestampFragment, TimestampType } from './api';
+import {
+  InputTimestamp,
+  TimestampFragment,
+  TimestampSource,
+  TimestampType,
+  TimestampTypeFragment,
+} from './api';
 import { AllPreferences } from './preferences';
 
-export interface Section extends TimestampFragment {
-  endAt: number;
+/**
+ * Either a timestamp from the API, or a local timestamp that hasn't been saved yet.
+ */
+export type AmbiguousTimestamp = TimestampFragment | LocalTimestamp;
+
+export interface LocalTimestamp extends InputTimestamp {
+  /**
+   * The ID is a number (randomly generated) when the timestamp is local.
+   */
+  id: number;
+  source: TimestampSource;
+  type: TimestampTypeFragment;
 }
 
+export type Section = AmbiguousTimestamp & {
+  endAt: number;
+};
+
 export function buildSections(
-  timestamps: ReadonlyArray<TimestampFragment>,
+  timestamps: ReadonlyArray<AmbiguousTimestamp>,
   duration: number,
 ): Section[] {
   const sections: Section[] = [];
@@ -23,17 +43,17 @@ export function buildSections(
   return sections;
 }
 
-export function getNextTimestamp(
-  timestamps: Readonly<TimestampFragment[]>,
+export function getNextTimestamp<T extends { at: number }>(
+  timestamps: Readonly<T[]>,
   timeInS: number,
-): TimestampFragment | undefined {
+): T | undefined {
   return timestamps.find((t) => timeInS < t.at);
 }
 
-export function getPreviousTimestamp(
-  timestamps: Readonly<TimestampFragment[]>,
+export function getPreviousTimestamp<T extends { at: number }>(
+  timestamps: Readonly<T[]>,
   timeInS: number,
-): TimestampFragment | undefined {
+): T | undefined {
   return timestamps.filter((t) => timeInS > t.at).pop();
 }
 
@@ -64,9 +84,9 @@ export function isTimestampSkipped(
 /**
  * Return the timestamp that the provided time is in seconds. Assumes that the timestamps are sorted.
  */
-export function getTimestampAtTime(
-  timestamps: ReadonlyArray<TimestampFragment> | undefined,
+export function getTimestampAtTime<T extends { at: number }>(
+  timestamps: ReadonlyArray<T>,
   timeInS: number,
 ) {
-  return timestamps?.filter((t) => timeInS + 0.001 >= t.at).pop();
+  return timestamps.filter((t) => timeInS + 0.001 >= t.at).pop();
 }

@@ -25,8 +25,8 @@ watch(isSeeking, (isSeeking) => {
 
 const timestamps = useCurrentTimestamps();
 const sections = computed<Section[]>(() => {
-  if (!duration.value || !timestamps.value?.length) return [];
-  return buildSections(timestamps.value ?? [], duration.value);
+  if (!duration.value || !timestamps.value.length) return [];
+  return buildSections(timestamps.value, duration.value);
 });
 
 const { state: preferences } = usePreferences();

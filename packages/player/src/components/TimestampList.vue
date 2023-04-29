@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import TimestampListItem from './TimestampListItem.vue';
+import IconPlus from '~icons/anime-skip/plus';
 
 const props = defineProps<{
   disabled?: boolean;
@@ -13,7 +14,7 @@ const errorMessage = useErrorMessage(error);
 <template>
   <div class="p-2">
     <!-- Loading -->
-    <div v-if="isLoading" class="flex h-full w-full p-16">
+    <div v-if="isLoading" class="flex w-full aspect-square p-16">
       <span class="spinner w-8 h-8 m-auto" />
     </div>
 
@@ -31,6 +32,18 @@ const errorMessage = useErrorMessage(error);
         :key="timestamp.id"
         :timestamp="timestamp"
       />
+
+      <p
+        v-if="!timestamps.length"
+        class="p-4 text-center w-full text-sm opacity-50"
+      >
+        No timestmaps
+      </p>
+
+      <button class="btn gap-2 w-full">
+        <icon-plus />
+        <span>Add Timestamp</span>
+      </button>
     </table>
   </div>
 </template>

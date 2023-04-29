@@ -37,10 +37,7 @@ const hoveredTimeDisplay = computed(() =>
 const timestamps = useCurrentTimestamps();
 const typeMap = useTimestampTypeMap();
 const hoveredTimestampType = computed(() => {
-  const timestamp = getTimestampAtTime(
-    timestamps.value ?? [],
-    hoveredTime.value,
-  );
+  const timestamp = getTimestampAtTime(timestamps.value, hoveredTime.value);
   if (!timestamp) return undefined;
   return typeMap.value?.[timestamp.typeId].name;
 });

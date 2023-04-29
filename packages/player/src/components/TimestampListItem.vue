@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { TimestampFragment } from '../utils/api';
 import { formatTimestampInS } from '../utils/time-utils';
 import IconEdit from '~icons/anime-skip/edit';
 import IconClose from '~icons/anime-skip/close';
 import InPlaceTimestampTypeSelect from './InPlaceTimestampTypeSelect.vue';
+import { AmbiguousTimestamp } from '../utils/timestamp-utils';
 
 const props = defineProps<{
-  timestamp: TimestampFragment;
+  timestamp: AmbiguousTimestamp;
 }>();
 
 const at = computed(() => formatTimestampInS(props.timestamp.at, false));

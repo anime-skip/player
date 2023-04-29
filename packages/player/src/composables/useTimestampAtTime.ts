@@ -1,6 +1,8 @@
 import { Ref } from 'vue';
-import { getTimestampAtTime } from '../utils/timestamp-utils';
-import { TimestampFragment } from '../utils/api';
+import {
+  AmbiguousTimestamp,
+  getTimestampAtTime,
+} from '../utils/timestamp-utils';
 
 /**
  * Return the timestamp that the provided time is in. Assumes that the timestamps are sorted.
@@ -8,7 +10,7 @@ import { TimestampFragment } from '../utils/api';
 export default function (timeInS: Ref<number>) {
   const timestamps = useCurrentTimestamps();
 
-  return computed<TimestampFragment | undefined>(() =>
+  return computed<AmbiguousTimestamp | undefined>(() =>
     getTimestampAtTime(timestamps.value, timeInS.value),
   );
 }

@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { TimestampFragment } from '../utils/api';
 import IconChevronDown from '~icons/anime-skip/chevron-down';
+import { AmbiguousTimestamp } from '../utils/timestamp-utils';
 
 const props = defineProps<{
-  timestamp: TimestampFragment;
+  timestamp: AmbiguousTimestamp;
 }>();
 
 const {

@@ -1,7 +1,7 @@
-import { TimestampFragment } from '../utils/api';
 import { Ref } from 'vue';
+import { AmbiguousTimestamp } from '../utils/timestamp-utils';
 
-export default function (timestamp: Ref<TimestampFragment | undefined>) {
+export default function (timestamp: Ref<AmbiguousTimestamp | undefined>) {
   const timestampTypeMap = useTimestampTypeMap();
 
   return computed(() =>

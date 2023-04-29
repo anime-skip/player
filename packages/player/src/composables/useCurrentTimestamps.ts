@@ -1,3 +1,5 @@
+import { AmbiguousTimestamp } from '../utils/timestamp-utils';
+
 /**
  * Based on your current state (editing vs not editing), return the list of timestamps that should
  * be shown on the UI.
@@ -6,7 +8,9 @@
  */
 export default function () {
   const apiTimestamps = useApiTimestamps();
-  // TODO: Show editing timestamps while editing.
 
-  return readonly(apiTimestamps);
+  return computed<AmbiguousTimestamp[]>(() => {
+    if (apiTimestamps.value) return apiTimestamps.value;
+    return [];
+  });
 }

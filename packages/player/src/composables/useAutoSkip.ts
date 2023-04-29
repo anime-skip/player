@@ -12,7 +12,7 @@ export default createSharedComposable(() => {
   const hasSkippedFromZero = ref(false);
 
   const watchedTimestamps = computed(() =>
-    timestamps.value?.filter(
+    timestamps.value.filter(
       (t) => !isTimestampSkipped(t.typeId, preferences.value, isSkipping.value),
     ),
   );
@@ -51,10 +51,7 @@ export default createSharedComposable(() => {
     if (passedTimestamps?.length) {
       // At this point, skipping is enabled and we're going to pass over a skipped timestamp next
       // time update, so we should skip to the next timestamp or end of the video.
-      const nextTimestamp = getNextTimestamp(
-        watchedTimestamps.value ?? [],
-        newTime,
-      );
+      const nextTimestamp = getNextTimestamp(watchedTimestamps.value, newTime);
       currentTime.value = nextTimestamp?.at ?? duration.value;
       return;
     }
