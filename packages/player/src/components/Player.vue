@@ -21,6 +21,7 @@ const visibility = usePlayerVisibility();
 useTheme();
 useSyncPlaybackRate();
 useAutoSkip();
+useKeyboardActions();
 
 // Preload queries that need ran ASAP
 useAllTimestampTypesQuery();
