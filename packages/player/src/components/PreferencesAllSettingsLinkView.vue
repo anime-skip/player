@@ -5,7 +5,7 @@ const props = defineProps<{
   view: PreferencesAllSettingsLinkView;
 }>();
 
-const currentView = useView();
+const { view: currentView } = useView();
 </script>
 
 <template>

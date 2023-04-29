@@ -12,7 +12,7 @@ export default createSharedComposable(() => {
   } = useKeyboardShortcuts();
 
   const { duration, currentTime, playing, volume } = useVideoControls();
-  const view = useView();
+  const { view } = useView();
 
   const advance = (s: number) => {
     currentTime.value = bounded(currentTime.value + s, 0, duration.value ?? 0);

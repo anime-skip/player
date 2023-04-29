@@ -5,7 +5,7 @@ import SidePanelTimestamps from './SidePanelTimestamps.vue';
 const contentDiv = ref<HTMLDivElement>();
 const width = useWidthAnimation(contentDiv);
 
-const view = useView();
+const { view } = useView();
 
 // Autoscale video based on side panel width
 const { shadowHtml } = useShadowRoot();

@@ -12,7 +12,7 @@ const props = defineProps<{
   modalClass?: string;
 }>();
 
-const currentView = useView();
+const { view: currentView } = useView();
 
 function toggle() {
   currentView.value = currentView.value === props.view ? undefined : props.view;

@@ -11,7 +11,7 @@ const isMouseActive = usePlayerMouseActive(root);
 
 const { playing, buffering } = useVideoControls();
 
-const view = useView();
+const { view } = useView();
 const toolbarModalOpen = computed(
   () => view.value === 'preferences' || view.value === 'account',
 );

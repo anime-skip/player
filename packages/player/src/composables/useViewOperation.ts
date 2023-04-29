@@ -16,7 +16,7 @@ import { View } from './useView';
  *
  * @example
  * // SidePanelTimestamps.vue
- * const view = useView();
+ * const { view } = useView();
  * const loginThen = useViewOperation("account")
  *
  * // Login, and once logged in, open this view back up
@@ -28,7 +28,7 @@ export default function <T extends (...args: any[]) => void>(
   operationView: View,
   operation: T,
 ): T {
-  const currentView = useView();
+  const { view: currentView } = useView();
 
   function waitForCompleted(): Promise<void> {
     return new Promise<void>((res) => {

@@ -7,7 +7,7 @@ import IconMdiAlertDecagram from '~icons/mdi/alert-circle';
 
 const { state: auth } = useAuth();
 
-const view = useView();
+const { view } = useView();
 /**
  * Open the login form, then switch back to this view.
  */
