@@ -23,7 +23,7 @@ const width = useWidthAnimation(contentDiv);
 
 <template>
   <toolbar-button class="group" title="Volume" @click="muted = !muted">
-    <div class="overflow-x-hidden" :style="{ width }">
+    <div class="overflow-x-hidden" :style="{ width: `${width}px` }">
       <div
         ref="contentDiv"
         class="w-fit flex items-center justify-center gap-2"

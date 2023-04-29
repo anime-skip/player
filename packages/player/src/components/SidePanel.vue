@@ -6,15 +6,24 @@ const contentDiv = ref<HTMLDivElement>();
 const width = useWidthAnimation(contentDiv);
 
 const view = useView();
+
+// Autoscale video based on side panel width
+const { shadowHtml } = useShadowRoot();
+const video = useVideoElement();
+watch(width, (width) => {
+  const scale = 1 - width / shadowHtml.clientWidth;
+  video.value.style.transform = `scale(${scale * 100}%)`;
+  video.value.style.transformOrigin = 'left';
+});
 </script>
 
 <template>
   <div
     class="bg-neutral overflow-x-hidden ease-in"
     :class="{
-      'shadow-xl': width !== '0px',
+      'shadow-xl': !!width,
     }"
-    :style="{ width }"
+    :style="{ width: `${width}px` }"
     @click.stop
   >
     <div ref="contentDiv" class="w-fit h-full">

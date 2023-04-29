@@ -13,7 +13,7 @@ import { MS } from '../utils/time';
  * </script>
  *
  * <template>
- *   <div class="overflow-x-hidden" :style="{ width }">
+ *   <div class="overflow-x-hidden" :style="{ width: `${width}px` }">
  *     <div ref="content" class="w-fit">
  *       <!-- dynamic width content -->
  *     </div>
@@ -24,7 +24,5 @@ import { MS } from '../utils/time';
 export default function (element: MaybeComputedElementRef<MaybeElement>) {
   const { width } = useElementSize(element);
 
-  const animated = useTransition(width, { duration: 200 * MS });
-
-  return computed(() => `${animated.value}px`);
+  return useTransition(width, { duration: 200 * MS });
 }

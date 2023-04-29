@@ -6,7 +6,7 @@ const POLL_RATE = SECOND;
 /**
  * Poll for the current video element, updating the returned ref if it's different.
  */
-export default createSharedComposable((): Readonly<Ref<HTMLVideoElement>> => {
+export default createGlobalState(() => {
   const options = usePlayerOptions();
   const currentVideo = ref(options.video());
 
