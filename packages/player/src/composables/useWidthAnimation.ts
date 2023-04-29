@@ -1,5 +1,5 @@
 import { MaybeComputedElementRef, MaybeElement } from '@vueuse/core';
-import gsap from 'gsap';
+import { MS } from '../utils/time';
 
 /**
  * Return an animated width that can be used in the `style` attribute.
@@ -24,16 +24,7 @@ import gsap from 'gsap';
 export default function (element: MaybeComputedElementRef<MaybeElement>) {
   const { width } = useElementSize(element);
 
-  const animated = reactive({
-    width: width.value,
-  });
+  const animated = useTransition(width, { duration: 200 * MS });
 
-  watch(width, (width) => {
-    gsap.to(animated, {
-      duration: 0.2,
-      width,
-    });
-  });
-
-  return computed(() => `${animated.width}px`);
+  return computed(() => `${animated.value}px`);
 }

@@ -49,7 +49,6 @@
     "graphql": "^16.6.0",
     "graphql-request": "~5.1.0",
     "graphql-tag": "^2.12.6",
-    "gsap": "^3.11.5",
     "md5": "^2.3.0",
     "refresh-fetch": "^0.8.0",
     "uuid": "^9.0.0",
