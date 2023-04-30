@@ -48,6 +48,10 @@ const { view, goBack } = useView();
       <slot name="content" />
     </div>
 
+    <div v-if="$slots['bottom-content']">
+      <slot name="bottom-content" />
+    </div>
+
     <footer
       v-if="$slots.buttons"
       class="flex flex-row-reverse shrink-0 p-2 gap-2 border-t border-base-content border-opacity-20"

@@ -16,15 +16,20 @@ const loginAndReturn = useViewOperation('account', () => {
 
 const { isEditing } = useIsEditing();
 const discardChanges = useDiscardChanges();
-const { saveChanges } = useSaveChangesMutation();
+const { mutate: saveChanges } = useSaveChangesMutation();
 </script>
 
 <template>
   <side-panel-layout class="w-72 lg:w-80" @submit="saveChanges">
     <template #title>Timestamps</template>
 
+    <!-- Timestamps -->
     <template #content>
-      <!-- Login Warning -->
+      <timestamp-list />
+    </template>
+
+    <!-- Login Warning -->
+    <template #bottom-content>
       <div
         v-if="!auth"
         class="bg-warning cursor-pointer hover:saturate-150 text-warning-content p-4 flex gap-4 items-center transition-all"
@@ -42,16 +47,13 @@ const { saveChanges } = useSaveChangesMutation();
 
         <icon-mdi-chevron-right />
       </div>
-
-      <!-- Timestamps -->
-      <timestamp-list />
     </template>
 
     <template v-if="isEditing" #buttons>
       <button
         type="submit"
         class="grow-1 btn btn-primary"
-        @click="saveChanges"
+        @click="() => saveChanges()"
         :disabled="!auth"
       >
         Save Changes
