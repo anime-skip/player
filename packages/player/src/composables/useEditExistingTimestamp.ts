@@ -5,6 +5,9 @@ import { AmbiguousTimestamp } from '../utils/timestamp-utils';
  * timestamp is not in the list.
  *
  * See `useCreateTimestamp` to create a new timestamp and start edting it.
+ *
+ * When passing in an `undefined` timestamp, we still enter edit mode, but we close the edit panel
+ * and clear the timestamp being edited.
  */
 export default function () {
   const { currentTime, playing } = useVideoControls();
@@ -13,20 +16,21 @@ export default function () {
   const { startEditing } = useIsEditing();
   const currentTimestamps = useCurrentTimestamps();
 
-  return (timestamp: AmbiguousTimestamp) => {
+  return (timestamp: AmbiguousTimestamp | undefined) => {
     // Start editing if necessary
     startEditing(currentTimestamps.value);
 
-    // Pause
-    playing.value = false;
-
-    // Go to the timestamp
-    currentTime.value = timestamp.at;
-
-    // Set the timestamp to edit
-    activeTimestamp.value = timestamp;
-
-    // Open the view
-    view.value = 'edit-timestamp';
+    if (timestamp) {
+      playing.value = false;
+      currentTime.value = timestamp.at;
+      activeTimestamp.value = timestamp;
+      view.value = 'edit-timestamp';
+    } else {
+      if (view.value === 'edit-timestamp') view.value = undefined;
+      setTimeout(() => {
+        // Do on next tick so that the view can be unmounted
+        activeTimestamp.value = undefined;
+      });
+    }
   };
 }

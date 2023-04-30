@@ -15,21 +15,18 @@ const OFFSET = 0.25; // seconds
  * end of the episode.
  */
 export default function () {
-  const { currentTime, duration } = useVideoControls();
+  const { currentTime } = useVideoControls();
   const timestamps = useCurrentTimestamps();
+  const { isEditing } = useIsEditing();
+  const editTimestamp = useEditExistingTimestamp();
 
   return () => {
-    if (!duration.value) return;
+    const prevTimestamp = getPreviousTimestamp(
+      timestamps.value,
+      currentTime.value - OFFSET,
+    );
+    currentTime.value = prevTimestamp?.at ?? 0;
 
-    console.log({
-      currentTime: currentTime.value,
-      shifted: currentTime.value - OFFSET,
-      timestamps: timestamps.value.map((t) => t.at),
-      prev: getPreviousTimestamp(timestamps.value, currentTime.value - OFFSET)
-        ?.at,
-    });
-    currentTime.value =
-      getPreviousTimestamp(timestamps.value, currentTime.value - OFFSET)?.at ??
-      0;
+    if (isEditing.value) editTimestamp(prevTimestamp);
   };
 }

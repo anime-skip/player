@@ -45,7 +45,7 @@ export default createSharedComposable(() => {
   const goToPrevious = useGoToPrevious();
   const createTimestamp = useCreateTimestamp();
   const discardChanges = useDiscardChanges();
-  const { saveChanges } = useSaveChangesMutation();
+  const { mutate: saveChanges } = useSaveChangesMutation();
 
   const actionFns: Record<KeyboardShortcutAction, () => void> = {
     playPause: () => {

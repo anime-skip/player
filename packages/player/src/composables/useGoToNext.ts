@@ -16,12 +16,18 @@ const OFFSET = 0.001; // seconds
 export default function () {
   const { currentTime, duration } = useVideoControls();
   const timestamps = useCurrentTimestamps();
+  const { isEditing } = useIsEditing();
+  const editTimestamp = useEditExistingTimestamp();
 
   return () => {
     if (!duration.value) return;
 
-    currentTime.value =
-      getNextTimestamp(timestamps.value, currentTime.value + OFFSET)?.at ??
-      duration.value;
+    const nextTimestamp = getNextTimestamp(
+      timestamps.value,
+      currentTime.value + OFFSET,
+    );
+    currentTime.value = nextTimestamp?.at ?? duration.value;
+
+    if (isEditing.value) editTimestamp(nextTimestamp);
   };
 }

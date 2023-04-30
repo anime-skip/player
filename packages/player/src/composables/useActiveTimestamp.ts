@@ -17,7 +17,10 @@ export default createGlobalState(() => {
       return editedTimestamps.value[index.value];
     },
     set(newTimestamp) {
-      if (newTimestamp == null) return;
+      if (newTimestamp == null) {
+        index.value = undefined;
+        return;
+      }
 
       let newIndex = editedTimestamps.value.findIndex(
         (t) => t.id === newTimestamp.id,
