@@ -1,4 +1,5 @@
 import { TimestampSource } from '../utils/api';
+import { floorToNearest } from '../utils/math-utils';
 import {
   LocalTimestamp,
   UNKNOWN_TIMESTAMP_TYPE_ID,
@@ -10,6 +11,7 @@ export default function () {
   const { playing, currentTime } = useVideoControls();
   const { view } = useView();
   const activeTimestamp = useActiveTimestamp();
+  const { pref: snap } = useReadonlyPreference('createTimestampSnapBack');
 
   return () => {
     // Enter edit mode if necessary
@@ -17,6 +19,9 @@ export default function () {
 
     // Pause the video
     playing.value = false;
+    if (snap) {
+      currentTime.value = floorToNearest(currentTime.value, 0.5, 1);
+    }
 
     // Set the active timestamp to a new timestamp
     const newTimestamp: LocalTimestamp = {

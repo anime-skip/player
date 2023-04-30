@@ -7,6 +7,7 @@ import autoImport from 'unplugin-auto-import/vite';
 import icons from 'unplugin-icons/vite';
 import { FileSystemIconLoader } from 'unplugin-icons/loaders';
 import { visualizer } from 'rollup-plugin-visualizer';
+import path from 'node:path';
 
 function vueTsc(): Plugin {
   let alreadyExecuted = false;
