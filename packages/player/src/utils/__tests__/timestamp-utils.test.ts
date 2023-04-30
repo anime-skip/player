@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import {
   fakeTimestampFragment,
   fakeVideoDuration,
@@ -9,6 +9,11 @@ import {
   getNextTimestamp,
   getPreviousTimestamp,
 } from '../timestamp-utils';
+
+// Side effect?
+vi.mock('../StorageChangedEvent', () => ({
+  StorageChangedEvent: class {},
+}));
 
 describe('Timestamp Utils', () => {
   describe('buildSections', () => {
