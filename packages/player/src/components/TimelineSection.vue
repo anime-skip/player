@@ -31,6 +31,16 @@ const isSkipping = useIsAutoSkipEnabled();
 const isSkipped = computed(() =>
   isTimestampSkipped(props.section.typeId, props.preferences, isSkipping.value),
 );
+
+const { view } = useView();
+const activeTimestamp = useActiveTimestamp();
+const hoveredTimestampId = useHoveredTimestampId();
+const isHighlighted = computed(
+  () =>
+    (activeTimestamp.value?.id === props.section.id &&
+      view.value === 'edit-timestamp') ||
+    hoveredTimestampId.value === props.section.id,
+);
 </script>
 
 <template>
@@ -48,9 +58,12 @@ const isSkipped = computed(() =>
       :style="{ width: currentTimeWidth }"
     />
 
-    <!-- Tick -->
+    <!-- Tick - handwritten SVG -->
     <svg
-      class="absolute left-[-6px] top-0 text-primary"
+      class="absolute left-[-6px] top-0 text-primary transition-transform"
+      :class="{
+        '-translate-y-2': isHighlighted,
+      }"
       width="12"
       height="6"
       viewBox="0 0 2 1"

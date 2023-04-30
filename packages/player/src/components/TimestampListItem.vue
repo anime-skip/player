@@ -20,10 +20,22 @@ function goToTimestamp() {
 
 const deleteTimestamp = useDeleteTimestamp();
 const editTimestamp = useEditExistingTimestamp();
+
+const hoveredId = useHoveredTimestampId();
+const setHovered = useThrottleFn(() => {
+  hoveredId.value = props.timestamp.id;
+});
+function clearHovered() {
+  hoveredId.value = undefined;
+}
 </script>
 
 <template>
-  <tr>
+  <tr
+    @mouseenter="setHovered"
+    @mousemove="setHovered"
+    @mouseleave="clearHovered"
+  >
     <td class="h-12">
       <div class="pl-2 pr-4 cursor-pointer" @click="goToTimestamp">
         <p class="text-lg font-black text-primary text-right">{{ at }}</p>
