@@ -3,7 +3,6 @@ import ToolbarModal from './ToolbarModal.vue';
 import LoginForm from './LoginForm.vue';
 import ProfileImage from './ProfileImage.vue';
 import AccountMenu from './AccountMenu.vue';
-import useViewOperationCompleted from '../composables/useViewOperationCompleted';
 
 const { state: auth } = useAuth();
 

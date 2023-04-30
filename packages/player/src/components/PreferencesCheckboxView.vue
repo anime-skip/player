@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import usePreference from '../composables/usePreference';
 import { PreferencesCheckboxView } from '../utils/preferences';
 
 const props = defineProps<{

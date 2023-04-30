@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import usePreference from '../composables/usePreference';
 import { PreferencesPlaybackRateView } from '../utils/preferences';
 
 const props = defineProps<{

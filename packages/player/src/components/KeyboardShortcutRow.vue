@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import useIsDuplicateKeyboardShortcut from '../composables/useIsDuplicateKeyboardShortcut';
-import useKeyboardBinding from '../composables/useKeyboardBinding';
 import { KeyboardShortcutAction } from '../utils/keyboard-shortcut-utils';
 import KeyboardShortcutChooser from './KeyboardShortcutChooser.vue';
 

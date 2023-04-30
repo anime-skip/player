@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import useViewOperation from '../composables/useViewOperation';
 import SidePanelLayout from './SidePanelLayout.vue';
 import TimestampList from './TimestampList.vue';
 import IconMdiChevronRight from '~icons/mdi/chevron-right';
