@@ -38,7 +38,7 @@ const createTimestamp = useCreateTimestamp();
       </p>
 
       <!-- Add button -->
-      <button class="btn gap-2 w-full" @click="createTimestamp">
+      <button class="btn gap-2 w-full mt-2" @click="createTimestamp">
         <icon-plus />
         <span>Add Timestamp</span>
       </button>

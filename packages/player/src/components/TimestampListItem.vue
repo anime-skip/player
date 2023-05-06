@@ -4,6 +4,8 @@ import IconEdit from '~icons/anime-skip/edit';
 import IconClose from '~icons/anime-skip/close';
 import InPlaceTimestampTypeSelect from './InPlaceTimestampTypeSelect.vue';
 import { AmbiguousTimestamp } from '../utils/timestamp-utils';
+import useTimestampEditedState from '../composables/useTimestampEditedState';
+import { TimestampState } from '../utils/TimestampState';
 
 const props = defineProps<{
   timestamp: AmbiguousTimestamp;
@@ -28,6 +30,8 @@ const setHovered = useThrottleFn(() => {
 function clearHovered() {
   hoveredId.value = undefined;
 }
+
+const state = useTimestampEditedState(timestamp);
 </script>
 
 <template>
@@ -38,8 +42,26 @@ function clearHovered() {
   >
     <td class="h-12">
       <div class="pl-2 pr-4 cursor-pointer" @click="goToTimestamp">
-        <p class="text-lg font-black text-primary text-right">{{ at }}</p>
-        <p v-if="false" class="uppercase text-xs text-primary -mt-1 text-right">
+        <p
+          class="text-lg font-black text-right"
+          :class="{
+            'text-primary': state === TimestampState.NotChanged,
+            'text-secondary': state === TimestampState.Edited,
+            'text-success': state === TimestampState.New,
+          }"
+        >
+          {{ at }}
+        </p>
+        <p
+          v-if="state === TimestampState.Edited"
+          class="uppercase text-[0.66rem] text-secondary font-bold -mt-1.5 text-right"
+        >
+          Edited
+        </p>
+        <p
+          v-else-if="state === TimestampState.New"
+          class="uppercase text-[0.66rem] text-success font-bold -mt-1.5 text-right"
+        >
           New
         </p>
       </div>

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { TimestampState } from '../utils/TimestampState';
 import { AllPreferences } from '../utils/preferences';
 import { Section, isTimestampSkipped } from '../utils/timestamp-utils';
 
@@ -41,6 +42,8 @@ const isHighlighted = computed(
       view.value === 'edit-timestamp') ||
     hoveredTimestampId.value === props.section.id,
 );
+
+const state = useTimestampEditedState(toRef(props, 'section'));
 </script>
 
 <template>
@@ -60,8 +63,11 @@ const isHighlighted = computed(
 
     <!-- Tick - handwritten SVG -->
     <svg
-      class="absolute left-[-6px] top-0 text-primary transition-transform"
+      class="absolute left-[-6px] top-0 transition-transform"
       :class="{
+        'text-primary': state === TimestampState.NotChanged,
+        'text-secondary': state === TimestampState.Edited,
+        'text-success': state === TimestampState.New,
         '-translate-y-2': isHighlighted,
       }"
       width="12"
