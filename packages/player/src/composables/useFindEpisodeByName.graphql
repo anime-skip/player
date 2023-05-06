@@ -1,0 +1,5 @@
+query findEpisodeByName($name: String!) {
+  findEpisodeByName(name: $name) {
+    ...ThirdPartyEpisode
+  }
+}

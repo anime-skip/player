@@ -10,8 +10,9 @@ export default function () {
   return useQuery({
     queryKey: [QueryKey.FindEpisodeUrl, url],
     async queryFn() {
+      if (url.value == null) return undefined;
+
       try {
-        if (url.value == null) return undefined;
         const data = await client.findEpisodeUrl({ url: url.value });
         return data.findEpisodeUrl;
       } catch (err) {
@@ -25,5 +26,6 @@ export default function () {
       }
     },
     staleTime: 30 * MINUTE,
+    enabled: computed(() => !!url.value),
   });
 }

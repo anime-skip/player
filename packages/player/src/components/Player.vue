@@ -35,11 +35,10 @@ useTheme();
 useSyncPlaybackRate();
 useAutoSkip();
 useKeyboardActions();
+useAutoconnectEpisode();
 
 // Preload queries that need ran ASAP
 useAllTimestampTypesQuery();
-useCurrentUrlQuery();
-useFindEpisodeUrlQuery();
 useAccountQuery();
 </script>
 

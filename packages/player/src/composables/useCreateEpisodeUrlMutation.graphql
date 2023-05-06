@@ -1,0 +1,5 @@
+mutation createEpisodeUrl($episodeId: ID!, $episodeUrlInput: InputEpisodeUrl!) {
+  createEpisodeUrl(episodeId: $episodeId, episodeUrlInput: $episodeUrlInput) {
+    ...EpisodeUrl
+  }
+}

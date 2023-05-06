@@ -110,3 +110,30 @@ fragment TimestampType on TimestampType {
   name
   description
 }
+
+fragment ThirdPartyEpisode on ThirdPartyEpisode {
+  id
+  name
+  season
+  number
+  absoluteNumber
+  baseDuration
+  source
+  showId
+  show {
+    ...ThirdPartyShow
+  }
+  timestamps {
+    ...ThirdPartyTimestamp
+  }
+}
+
+fragment ThirdPartyShow on ThirdPartyShow {
+  name
+}
+
+fragment ThirdPartyTimestamp on ThirdPartyTimestamp {
+  id
+  at
+  typeId
+}

@@ -1403,6 +1403,21 @@ export type AllTimestampTypesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type AllTimestampTypesQuery = { __typename?: 'Query', allTimestampTypes: Array<{ __typename?: 'TimestampType', id: string, name: string, description: string }> };
 
+export type CreateEpisodeUrlMutationVariables = Exact<{
+  episodeId: Scalars['ID'];
+  episodeUrlInput: InputEpisodeUrl;
+}>;
+
+
+export type CreateEpisodeUrlMutation = { __typename?: 'Mutation', createEpisodeUrl: { __typename?: 'EpisodeUrl', url: string, createdAt: string, updatedAt: string, duration?: number | null, timestampsOffset?: number | null, source: EpisodeSource, episode: { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> } } };
+
+export type FindEpisodeByNameQueryVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type FindEpisodeByNameQuery = { __typename?: 'Query', findEpisodeByName: Array<{ __typename?: 'ThirdPartyEpisode', id?: string | null, name?: string | null, season?: string | null, number?: string | null, absoluteNumber?: string | null, baseDuration?: number | null, source?: TimestampSource | null, showId: string, show: { __typename?: 'ThirdPartyShow', name: string }, timestamps: Array<{ __typename?: 'ThirdPartyTimestamp', id?: string | null, at: number, typeId: string }> }> };
+
 export type FindEpisodeUrlQueryVariables = Exact<{
   url: Scalars['String'];
 }>;
@@ -1458,6 +1473,12 @@ export type TimestampFragment = { __typename?: 'Timestamp', id: string, createdA
 export type TimestampTypeFragment = { __typename?: 'TimestampType', id: string, name: string, description: string };
 
 export type UserFragment = { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string };
+
+export type ThirdPartyEpisodeFragment = { __typename?: 'ThirdPartyEpisode', id?: string | null, name?: string | null, season?: string | null, number?: string | null, absoluteNumber?: string | null, baseDuration?: number | null, source?: TimestampSource | null, showId: string, show: { __typename?: 'ThirdPartyShow', name: string }, timestamps: Array<{ __typename?: 'ThirdPartyTimestamp', id?: string | null, at: number, typeId: string }> };
+
+export type ThirdPartyShowFragment = { __typename?: 'ThirdPartyShow', name: string };
+
+export type ThirdPartyTimestampFragment = { __typename?: 'ThirdPartyTimestamp', id?: string | null, at: number, typeId: string };
 
 export const PreferencesFragmentDoc = gql`
     fragment Preferences on Preferences {
@@ -1576,6 +1597,37 @@ export const TimestampTypeFragmentDoc = gql`
   description
 }
     `;
+export const ThirdPartyShowFragmentDoc = gql`
+    fragment ThirdPartyShow on ThirdPartyShow {
+  name
+}
+    `;
+export const ThirdPartyTimestampFragmentDoc = gql`
+    fragment ThirdPartyTimestamp on ThirdPartyTimestamp {
+  id
+  at
+  typeId
+}
+    `;
+export const ThirdPartyEpisodeFragmentDoc = gql`
+    fragment ThirdPartyEpisode on ThirdPartyEpisode {
+  id
+  name
+  season
+  number
+  absoluteNumber
+  baseDuration
+  source
+  showId
+  show {
+    ...ThirdPartyShow
+  }
+  timestamps {
+    ...ThirdPartyTimestamp
+  }
+}
+    ${ThirdPartyShowFragmentDoc}
+${ThirdPartyTimestampFragmentDoc}`;
 export const AccountDocument = gql`
     query account {
   account {
@@ -1594,6 +1646,20 @@ export const AllTimestampTypesDocument = gql`
   }
 }
     ${TimestampTypeFragmentDoc}`;
+export const CreateEpisodeUrlDocument = gql`
+    mutation createEpisodeUrl($episodeId: ID!, $episodeUrlInput: InputEpisodeUrl!) {
+  createEpisodeUrl(episodeId: $episodeId, episodeUrlInput: $episodeUrlInput) {
+    ...EpisodeUrl
+  }
+}
+    ${EpisodeUrlFragmentDoc}`;
+export const FindEpisodeByNameDocument = gql`
+    query findEpisodeByName($name: String!) {
+  findEpisodeByName(name: $name) {
+    ...ThirdPartyEpisode
+  }
+}
+    ${ThirdPartyEpisodeFragmentDoc}`;
 export const FindEpisodeUrlDocument = gql`
     query findEpisodeUrl($url: String!) {
   findEpisodeUrl(episodeUrl: $url) {
@@ -1650,6 +1716,12 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     allTimestampTypes(variables?: AllTimestampTypesQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<AllTimestampTypesQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<AllTimestampTypesQuery>(AllTimestampTypesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allTimestampTypes', 'query');
+    },
+    createEpisodeUrl(variables: CreateEpisodeUrlMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreateEpisodeUrlMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<CreateEpisodeUrlMutation>(CreateEpisodeUrlDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'createEpisodeUrl', 'mutation');
+    },
+    findEpisodeByName(variables: FindEpisodeByNameQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<FindEpisodeByNameQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<FindEpisodeByNameQuery>(FindEpisodeByNameDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'findEpisodeByName', 'query');
     },
     findEpisodeUrl(variables: FindEpisodeUrlQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<FindEpisodeUrlQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<FindEpisodeUrlQuery>(FindEpisodeUrlDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'findEpisodeUrl', 'query');

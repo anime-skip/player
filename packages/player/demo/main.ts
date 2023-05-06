@@ -38,5 +38,6 @@ const player = createPlayer({
     };
   },
   fullscreenElement: '.video-container',
+  apiUrl: import.meta.env.VITE_API_URL,
 });
 player.mount('.video-container');
