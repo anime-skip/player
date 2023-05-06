@@ -1,6 +1,6 @@
 import { GraphQLClient } from 'graphql-request';
 import { getSdk } from './graphql.generated';
-import { configureRefreshFetch } from 'refresh-fetch';
+import { fetchRefresh } from './fetch-refresh';
 
 export function useBaseGraphqlClient(): GraphQLClient {
   const options = usePlayerOptions();
@@ -15,9 +15,9 @@ export function useAuthorizedGraphqlClient(): GraphQLClient {
   const { state: auth } = useAuth();
 
   return new GraphQLClient(apiUrl, {
-    fetch: configureRefreshFetch({
+    fetch: fetchRefresh({
       fetch,
-      async refreshToken() {
+      async refresh() {
         if (auth.value == null)
           throw Error('Not logged in, cannot refresh token.');
         const data = await baseClient.loginRefresh({
@@ -29,16 +29,13 @@ export function useAuthorizedGraphqlClient(): GraphQLClient {
           account: data.loginRefresh.account,
         };
       },
-      shouldRefreshToken(error) {
-        // TODO: implement
-        // res.status === 200 && !!error.find(e => e.message === 'Access token is expired');
-        console.log(error);
-        return false;
+      shouldRefresh(response) {
+        return response.errors?.[0]?.message === 'Invalid Token';
       },
-    }),
-    headers: () => ({
-      Authorization: `Bearer ${auth.value?.token}`,
-      'X-Client-ID': apiClientId,
+      headers: () => ({
+        Authorization: `Bearer ${auth.value?.token}`,
+        'X-Client-ID': apiClientId,
+      }),
     }),
   });
 }

@@ -26,7 +26,6 @@
     "@iconify/json": "^2.2.51",
     "@types/chance": "^1.1.3",
     "@types/md5": "^2.3.2",
-    "@types/refresh-fetch": "^0.6.2",
     "@types/uuid": "^9.0.1",
     "@vitejs/plugin-vue": "^4.1.0",
     "autoprefixer": "^10.4.14",
@@ -51,7 +50,7 @@
     "graphql-request": "~5.1.0",
     "graphql-tag": "^2.12.6",
     "md5": "^2.3.0",
-    "refresh-fetch": "^0.8.0",
+    "p-singleton": "^1.0.4",
     "uuid": "^9.0.0",
     "vue": "^3.2.47",
     "vue-query": "^1.26.0"
