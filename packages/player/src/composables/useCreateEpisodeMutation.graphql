@@ -1,0 +1,5 @@
+mutation createEpisode($showId: ID!, $episodeInput: InputEpisode!) {
+  createEpisode(showId: $showId, episodeInput: $episodeInput) {
+    ...Episode
+  }
+}

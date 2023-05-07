@@ -1,5 +1,6 @@
 import {
   InputTimestamp,
+  Scalars,
   TimestampFragment,
   TimestampSource,
   TimestampType,
@@ -99,4 +100,10 @@ export function sortTimestamps<T extends { at: number }>(
   timestamps: T[],
 ): void {
   timestamps.sort((l, r) => l.at - r.at);
+}
+
+export function isTimestampEqual<
+  T extends { at: number; source: TimestampSource; typeId: Scalars['ID'] },
+>(t1: T, t2: T): boolean {
+  return t1.at === t2.at && t1.source === t2.source && t1.typeId === t2.typeId;
 }

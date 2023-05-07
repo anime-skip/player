@@ -16,7 +16,7 @@ export default createGlobalState(() => {
     startEditing(timestamps: AmbiguousTimestamp[]) {
       if (!isEditing.value) {
         isEditing.value = true;
-        editedTimestamps.value = timestamps;
+        editedTimestamps.value = [...timestamps.map((t) => toRaw(t))];
       }
     },
     /**

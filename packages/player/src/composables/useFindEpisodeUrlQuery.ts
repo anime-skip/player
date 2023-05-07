@@ -27,5 +27,6 @@ export default function () {
     },
     staleTime: 30 * MINUTE,
     enabled: computed(() => !!url.value),
+    keepPreviousData: true,
   });
 }

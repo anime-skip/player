@@ -27,7 +27,7 @@ export default function ({
       const lowerEName = eName?.toLowerCase();
       return data.findEpisodeByName.find(
         (episode) =>
-          episode.name === lowerEName &&
+          episode.name?.toLowerCase() === lowerEName &&
           episode.show.name.toLowerCase() === sName,
       );
     },

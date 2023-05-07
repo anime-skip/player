@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
   fakeTimestampFragment,
   fakeVideoDuration,
@@ -8,12 +8,9 @@ import {
   buildSections,
   getNextTimestamp,
   getPreviousTimestamp,
+  isTimestampEqual,
 } from '../timestamp-utils';
-
-// Side effect?
-vi.mock('../StorageChangedEvent', () => ({
-  StorageChangedEvent: class {},
-}));
+import { TimestampSource } from '../api/graphql.generated';
 
 describe('Timestamp Utils', () => {
   describe('buildSections', () => {
@@ -91,6 +88,50 @@ describe('Timestamp Utils', () => {
       const timestamps = [fakeTimestampFragment({ at: 10 })];
 
       expect(getNextTimestamp(timestamps, 20)).toBeUndefined();
+    });
+  });
+
+  describe('isTimestampEqual', () => {
+    it('should return true when the at, typeId, and source are the same', () => {
+      const t1 = fakeTimestampFragment({
+        at: 1,
+        typeId: '1',
+        source: TimestampSource.AnimeSkip,
+      });
+      const t2 = fakeTimestampFragment({
+        at: 1,
+        typeId: '1',
+        source: TimestampSource.AnimeSkip,
+      });
+
+      expect(isTimestampEqual(t1, t2)).toBe(true);
+    });
+
+    it('should return false when the at, typeId, or source are different', () => {
+      const t1 = fakeTimestampFragment({
+        at: 1,
+        typeId: '1',
+        source: TimestampSource.AnimeSkip,
+      });
+      const t2 = fakeTimestampFragment({
+        at: 2,
+        typeId: '1',
+        source: TimestampSource.AnimeSkip,
+      });
+      const t3 = fakeTimestampFragment({
+        at: 1,
+        typeId: '2',
+        source: TimestampSource.AnimeSkip,
+      });
+      const t4 = fakeTimestampFragment({
+        at: 1,
+        typeId: '1',
+        source: TimestampSource.BetterVrv,
+      });
+
+      expect(isTimestampEqual(t1, t2)).toBe(false);
+      expect(isTimestampEqual(t1, t3)).toBe(false);
+      expect(isTimestampEqual(t1, t4)).toBe(false);
     });
   });
 });

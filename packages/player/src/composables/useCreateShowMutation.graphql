@@ -1,0 +1,5 @@
+mutation createShow($showInput: InputShow!, $becomeAdmin: Boolean!) {
+  createShow(showInput: $showInput, becomeAdmin: $becomeAdmin) {
+    ...Show
+  }
+}

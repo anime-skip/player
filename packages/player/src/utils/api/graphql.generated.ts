@@ -1403,6 +1403,14 @@ export type AllTimestampTypesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type AllTimestampTypesQuery = { __typename?: 'Query', allTimestampTypes: Array<{ __typename?: 'TimestampType', id: string, name: string, description: string }> };
 
+export type CreateEpisodeMutationVariables = Exact<{
+  showId: Scalars['ID'];
+  episodeInput: InputEpisode;
+}>;
+
+
+export type CreateEpisodeMutation = { __typename?: 'Mutation', createEpisode: { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> } };
+
 export type CreateEpisodeUrlMutationVariables = Exact<{
   episodeId: Scalars['ID'];
   episodeUrlInput: InputEpisodeUrl;
@@ -1410,6 +1418,14 @@ export type CreateEpisodeUrlMutationVariables = Exact<{
 
 
 export type CreateEpisodeUrlMutation = { __typename?: 'Mutation', createEpisodeUrl: { __typename?: 'EpisodeUrl', url: string, createdAt: string, updatedAt: string, duration?: number | null, timestampsOffset?: number | null, source: EpisodeSource, episode: { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> } } };
+
+export type CreateShowMutationVariables = Exact<{
+  showInput: InputShow;
+  becomeAdmin: Scalars['Boolean'];
+}>;
+
+
+export type CreateShowMutation = { __typename?: 'Mutation', createShow: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null } };
 
 export type FindEpisodeByNameQueryVariables = Exact<{
   name: Scalars['String'];
@@ -1446,6 +1462,21 @@ export type SavePreferencesMutationVariables = Exact<{
 
 
 export type SavePreferencesMutation = { __typename?: 'Mutation', savePreferences: { __typename?: 'Preferences', updatedAt: string } };
+
+export type SearchShowsQueryVariables = Exact<{
+  search: Scalars['String'];
+}>;
+
+
+export type SearchShowsQuery = { __typename?: 'Query', searchShows: Array<{ __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }> };
+
+export type UpdateEpisodeMutationVariables = Exact<{
+  episodeId: Scalars['ID'];
+  newEpisode: InputEpisode;
+}>;
+
+
+export type UpdateEpisodeMutation = { __typename?: 'Mutation', updateEpisode: { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> } };
 
 export type UpdateTimestampsMutationVariables = Exact<{
   create: Array<InputTimestampOn> | InputTimestampOn;
@@ -1646,6 +1677,13 @@ export const AllTimestampTypesDocument = gql`
   }
 }
     ${TimestampTypeFragmentDoc}`;
+export const CreateEpisodeDocument = gql`
+    mutation createEpisode($showId: ID!, $episodeInput: InputEpisode!) {
+  createEpisode(showId: $showId, episodeInput: $episodeInput) {
+    ...Episode
+  }
+}
+    ${EpisodeFragmentDoc}`;
 export const CreateEpisodeUrlDocument = gql`
     mutation createEpisodeUrl($episodeId: ID!, $episodeUrlInput: InputEpisodeUrl!) {
   createEpisodeUrl(episodeId: $episodeId, episodeUrlInput: $episodeUrlInput) {
@@ -1653,6 +1691,13 @@ export const CreateEpisodeUrlDocument = gql`
   }
 }
     ${EpisodeUrlFragmentDoc}`;
+export const CreateShowDocument = gql`
+    mutation createShow($showInput: InputShow!, $becomeAdmin: Boolean!) {
+  createShow(showInput: $showInput, becomeAdmin: $becomeAdmin) {
+    ...Show
+  }
+}
+    ${ShowFragmentDoc}`;
 export const FindEpisodeByNameDocument = gql`
     query findEpisodeByName($name: String!) {
   findEpisodeByName(name: $name) {
@@ -1688,6 +1733,20 @@ export const SavePreferencesDocument = gql`
   }
 }
     `;
+export const SearchShowsDocument = gql`
+    query searchShows($search: String!) {
+  searchShows(search: $search) {
+    ...Show
+  }
+}
+    ${ShowFragmentDoc}`;
+export const UpdateEpisodeDocument = gql`
+    mutation updateEpisode($episodeId: ID!, $newEpisode: InputEpisode!) {
+  updateEpisode(episodeId: $episodeId, newEpisode: $newEpisode) {
+    ...Episode
+  }
+}
+    ${EpisodeFragmentDoc}`;
 export const UpdateTimestampsDocument = gql`
     mutation updateTimestamps($create: [InputTimestampOn!]!, $update: [InputExistingTimestamp!]!, $delete: [ID!]!) {
   updateTimestamps(create: $create, update: $update, delete: $delete) {
@@ -1717,8 +1776,14 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     allTimestampTypes(variables?: AllTimestampTypesQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<AllTimestampTypesQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<AllTimestampTypesQuery>(AllTimestampTypesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allTimestampTypes', 'query');
     },
+    createEpisode(variables: CreateEpisodeMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreateEpisodeMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<CreateEpisodeMutation>(CreateEpisodeDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'createEpisode', 'mutation');
+    },
     createEpisodeUrl(variables: CreateEpisodeUrlMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreateEpisodeUrlMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<CreateEpisodeUrlMutation>(CreateEpisodeUrlDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'createEpisodeUrl', 'mutation');
+    },
+    createShow(variables: CreateShowMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreateShowMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<CreateShowMutation>(CreateShowDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'createShow', 'mutation');
     },
     findEpisodeByName(variables: FindEpisodeByNameQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<FindEpisodeByNameQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<FindEpisodeByNameQuery>(FindEpisodeByNameDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'findEpisodeByName', 'query');
@@ -1734,6 +1799,12 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     savePreferences(variables: SavePreferencesMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SavePreferencesMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<SavePreferencesMutation>(SavePreferencesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'savePreferences', 'mutation');
+    },
+    searchShows(variables: SearchShowsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SearchShowsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<SearchShowsQuery>(SearchShowsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'searchShows', 'query');
+    },
+    updateEpisode(variables: UpdateEpisodeMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateEpisodeMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UpdateEpisodeMutation>(UpdateEpisodeDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'updateEpisode', 'mutation');
     },
     updateTimestamps(variables: UpdateTimestampsMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateTimestampsMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<UpdateTimestampsMutation>(UpdateTimestampsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'updateTimestamps', 'mutation');

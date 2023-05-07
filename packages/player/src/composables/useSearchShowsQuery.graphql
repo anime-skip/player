@@ -1,0 +1,5 @@
+query searchShows($search: String!) {
+  searchShows(search: $search) {
+    ...Show
+  }
+}

@@ -5,5 +5,4 @@ export enum QueryKey {
   FindEpisodeUrl = 'FindEpisodeUrl',
   Account = 'Account',
   FindEpisodeByName = 'FindEpisodeByName',
-  CreateEpisodeUrl = 'CreateEpisodeUrl',
 }

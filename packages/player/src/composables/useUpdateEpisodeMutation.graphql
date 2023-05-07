@@ -1,0 +1,5 @@
+mutation updateEpisode($episodeId: ID!, $newEpisode: InputEpisode!) {
+  updateEpisode(episodeId: $episodeId, newEpisode: $newEpisode) {
+    ...Episode
+  }
+}

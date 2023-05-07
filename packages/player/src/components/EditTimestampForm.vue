@@ -83,7 +83,7 @@ function onKeyDown(event: KeyboardEvent) {
     <button
       ref="atBtn"
       class="btn btn-lg gap-4 focus:btn-primary"
-      @click="focusOnAt"
+      @click.prevent.stop="focusOnAt"
     >
       <icon-mdi-clock class="w-6 h-6" />
       <span class="flex-1 text-left">{{ at }}</span>
@@ -111,7 +111,7 @@ function onKeyDown(event: KeyboardEvent) {
           v-for="t of typeSearchResults"
           :key="t.id"
           :title="t.description"
-          @click="typeId = t.id"
+          @click.prevent.stop="typeId = t.id"
         >
           <button class="rounded px-2" :class="{ active: typeId === t.id }">
             <icon-mdi-radio-marked v-if="typeId === t.id" class="w-5 h-5" />

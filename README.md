@@ -15,9 +15,8 @@ Monorepo for the Anime Skip Player, the web extension and embedded player.
 - [x] Raise timestamp ticks when editing and hovering
 - [x] Timestamp colors
 - [x] Auto-connect exact matches
-- [ ] Save timestamps
+- [x] Save timestamps
 - [ ] Templates
-- [ ] Screenshots
 
 ## Setup
 
