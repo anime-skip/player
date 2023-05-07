@@ -17,6 +17,7 @@ Monorepo for the Anime Skip Player, the web extension and embedded player.
 - [x] Auto-connect exact matches
 - [x] Save timestamps
 - [x] Timestamp offsets
+- [x] In-place timestamp type editing
 - [ ] Templates
 
 ## Setup

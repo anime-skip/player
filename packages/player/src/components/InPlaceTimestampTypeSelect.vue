@@ -14,16 +14,18 @@ const {
 } = useAllTimestampTypesQuery();
 const typesErrorMessage = useErrorMessage(typesError);
 
+const typeId = useEditableTimestampTypeId(toRef(props, 'timestamp'));
+
 const timestampTypesMap = useTimestampTypeMap();
-const type = computed(() => timestampTypesMap.value?.[props.timestamp.typeId]);
+const type = computed(() => (timestampTypesMap.value ?? {})[typeId.value]);
 </script>
 
 <template>
   <div class="relative">
     <select
       class="appearance-none bg-transparent text-base mr-2 cursor-pointer"
-      :value="type?.id"
-      :disabled="true || isTypesLoading"
+      v-model="typeId"
+      :disabled="isTypesLoading"
     >
       <!-- Error Message -->
       <option v-if="isTypesError" disabled>{{ typesErrorMessage }}</option>
