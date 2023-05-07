@@ -34,6 +34,7 @@ const durationDisplay = computed(
 const toggleTimestampsPanel = useToggleTimestampsPanel();
 
 const currentTimestamp = useTimestampAtTime(currentTime);
+const currentTimestamps = useCurrentTimestamps();
 
 const currentTimestampType = useTimestampType(currentTimestamp);
 
@@ -41,7 +42,8 @@ const { isLoading, isError } = useEpisodeInfoQuery();
 const currentTimestampDisplay = computed(() => {
   if (isLoading.value) return 'Loading...';
   if (isError.value) return 'Error';
-  return currentTimestampType.value?.name ?? 'No timestamps';
+  if (currentTimestamps.value.length === 0) return 'No timestamps';
+  return currentTimestampType.value?.name ?? 'Unknown';
 });
 
 const { pref: hideFully } = useReadonlyPreference('hideTimelineWhenMinimized');
