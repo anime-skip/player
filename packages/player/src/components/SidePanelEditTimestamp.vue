@@ -19,9 +19,16 @@ const willAutoDelete = computed(
     activeTimestamp.value.typeId === UNKNOWN_TIMESTAMP_TYPE_ID &&
     typeof activeTimestamp.value.id === 'number',
 );
-const deleteTimestamp = useDeleteTimestamp();
+
+const queueDelete = ref(false);
+const deleteTimestampImmediately = useDeleteTimestamp();
+function deleteTimestamp() {
+  queueDelete.value = true;
+  goBack();
+}
 onUnmounted(() => {
-  if (willAutoDelete.value) deleteTimestamp(activeTimestamp.value);
+  if (willAutoDelete.value || queueDelete.value)
+    deleteTimestampImmediately(activeTimestamp.value);
 });
 </script>
 
@@ -39,7 +46,7 @@ onUnmounted(() => {
       </button>
       <button
         class="flex-1 btn btn-outline hover:btn-error"
-        @click.prevent="deleteTimestamp(activeTimestamp!)"
+        @click.prevent="deleteTimestamp"
       >
         Delete
       </button>
