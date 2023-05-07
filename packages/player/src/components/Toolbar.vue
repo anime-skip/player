@@ -47,6 +47,8 @@ const currentTimestampDisplay = computed(() => {
 });
 
 const { pref: hideFully } = useReadonlyPreference('hideTimelineWhenMinimized');
+
+const { isEditing } = useIsEditing();
 </script>
 
 <template>
@@ -59,7 +61,11 @@ const { pref: hideFully } = useReadonlyPreference('hideTimelineWhenMinimized');
     }"
     @click.stop
   >
-    <timeline v-if="duration" :class="{ '-scale-y-100': hidden }" />
+    <timeline
+      v-if="duration"
+      class="transition"
+      :class="{ '-scale-y-100': hidden, 'mx-4': isEditing }"
+    />
 
     <!-- Main horizontal list -->
     <div class="flex px-2 items-center h-[3.125rem] gap-2">
