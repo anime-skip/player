@@ -22,7 +22,7 @@ const { mutate: saveChanges, isLoading } = useSaveChangesMutation();
 
 <template>
   <side-panel-layout class="w-72 lg:w-80" @submit="saveChanges">
-    <template #title>Timestamps</template>
+    <template #title>Edit Episode</template>
 
     <!-- Timestamps -->
     <template #content>
