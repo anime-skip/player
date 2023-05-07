@@ -107,3 +107,23 @@ export function isTimestampEqual<
 >(t1: T, t2: T): boolean {
   return t1.at === t2.at && t1.source === t2.source && t1.typeId === t2.typeId;
 }
+
+/**
+ * Apply a `timestampsOffset` for an `EpisodeUrl`.
+ */
+export function applyTimestampsOffset<T extends { at: number }>(
+  timestamps: T[],
+  offset: number,
+): T[] {
+  return timestamps.map((t) => ({ ...t, at: t.at + offset }));
+}
+
+/**
+ * Remove the `timestampsOffset` from an `EpisodeUrl`.
+ */
+export function undoTimestampsOffset<T extends { at: number }>(
+  timestamps: T[],
+  offset: number,
+): T[] {
+  return applyTimestampsOffset(timestamps, -offset);
+}

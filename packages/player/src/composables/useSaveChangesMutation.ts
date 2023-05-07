@@ -1,4 +1,3 @@
-import { QueryKey } from '../utils/QueryKey';
 import {
   EpisodeFragment,
   InputEpisode,
@@ -11,7 +10,10 @@ import {
   ShowFragment,
 } from '../utils/api';
 import { getUniqueExistenceMap } from '../utils/array-utils';
-import { isTimestampEqual } from '../utils/timestamp-utils';
+import {
+  isTimestampEqual,
+  undoTimestampsOffset,
+} from '../utils/timestamp-utils';
 
 export default createSharedComposable(() => {
   const { state: auth } = useAuth();
@@ -62,11 +64,13 @@ export default createSharedComposable(() => {
 
       let show: ShowFragment;
       let episode: EpisodeFragment;
+      let timestampsOffset: number;
 
       if (episodeUrl.value) {
         // Update existing values
         episode = episodeUrl.value.episode;
         show = episode.show;
+        timestampsOffset = episodeUrl.value.timestampsOffset ?? 0;
 
         const updateTasks: Promise<unknown>[] = [];
         if (
@@ -96,26 +100,34 @@ export default createSharedComposable(() => {
         episode = (await createEpisode({ showId: show.id, episodeInput }))
           .createEpisode;
 
+        timestampsOffset =
+          currentDuration - (episode.baseDuration ?? currentDuration);
         const episodeUrlInput: InputEpisodeUrl = {
           url,
           duration: currentDuration,
-          timestampsOffset:
-            currentDuration - (episode.baseDuration ?? currentDuration),
+          timestampsOffset,
         };
         await createEpisodeUrl({ episodeId: episode.id, episodeUrlInput });
       }
 
       // Save timestamps
       {
+        // Remove timestamp offsets so values are saved without them
+        const realExistingTimestamps = undoTimestampsOffset(
+          existingTimestamps.value ?? [],
+          timestampsOffset,
+        );
+        const realCurrentTimestamps = undoTimestampsOffset(
+          currentTimestamps.value,
+          timestampsOffset,
+        );
+
         const createdTimestamps: InputTimestampOn[] = [];
         const updatedTimestamps: InputExistingTimestamp[] = [];
         const deletedTimestamps: Scalars['ID'][] = [];
 
-        const existingMap = getUniqueExistenceMap(
-          existingTimestamps.value ?? [],
-          'id',
-        );
-        for (const edited of currentTimestamps.value) {
+        const existingMap = getUniqueExistenceMap(realExistingTimestamps, 'id');
+        for (const edited of realCurrentTimestamps) {
           const inputTimestamp: InputTimestamp = {
             at: edited.at,
             typeId: edited.typeId,
@@ -136,11 +148,8 @@ export default createSharedComposable(() => {
           }
         }
 
-        const currentMap = getUniqueExistenceMap(
-          currentTimestamps.value ?? [],
-          'id',
-        );
-        for (const existing of existingTimestamps.value ?? []) {
+        const currentMap = getUniqueExistenceMap(realCurrentTimestamps, 'id');
+        for (const existing of realExistingTimestamps) {
           if (currentMap[existing.id] == null) {
             deletedTimestamps.push(existing.id);
           }

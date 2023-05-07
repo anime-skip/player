@@ -1,7 +1,13 @@
+import { applyTimestampsOffset } from '../utils/timestamp-utils';
+
 /**
  * Wrapper around `useFindEpisodeUrlQuery` returning only the `Show` if it has loaded.
  */
 export default function () {
   const { data } = useFindEpisodeUrlQuery();
-  return computed(() => data.value?.episode.timestamps);
+  return computed(() => {
+    const timestamps = data.value?.episode.timestamps;
+    if (!timestamps) return undefined;
+    return applyTimestampsOffset(timestamps, data.value?.timestampsOffset ?? 0);
+  });
 }
