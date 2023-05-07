@@ -1,5 +1,5 @@
 import { Ref } from 'vue';
-import fuzzy from 'fuzzy';
+import fuzzysort from 'fuzzysort';
 
 export default function <T>(
   search: Ref<string>,
@@ -12,10 +12,8 @@ export default function <T>(
     const s = search.value.toLowerCase().trim();
     if (!s) return fullList.value;
 
-    return fuzzy
-      .filter(s, fullList.value, { extract: (t) => extract(t).toLowerCase() })
-      .sort((l, r) => r.score - l.score)
-      .filter((i) => i.score > 0.75)
-      .map((t) => t.original);
+    return fuzzysort
+      .go(search.value, fullList.value, { key: 'name', limit: 5 })
+      .map((res) => res.obj);
   });
 }
