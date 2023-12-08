@@ -30,7 +30,7 @@
     "@vitejs/plugin-vue": "^4.1.0",
     "autoprefixer": "^10.4.14",
     "chance": "^1.1.11",
-    "daisyui": "^2.51.5",
+    "daisyui": "^2.52.0",
     "postcss": "^8.4.22",
     "postcss-unroot": "^1.0.2",
     "rollup-plugin-visualizer": "^5.9.0",

@@ -19,6 +19,7 @@ Monorepo for the Anime Skip Player, the web extension and embedded player.
 - [x] Timestamp offsets
 - [x] In-place timestamp type editing
 - [ ] Templates
+- [ ] Manual Skip Buttons
 
 ## Setup
 

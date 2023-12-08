@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import SidePanelAllPreferences from './SidePanelAllPreferences.vue';
 import SidePanelEditTimestamp from './SidePanelEditTimestamp.vue';
+import SidePanelEditTemplate from './SidePanelEditTemplate.vue';
 import SidePanelTimestamps from './SidePanelTimestamps.vue';
 
 const contentDiv = ref<HTMLDivElement>();
@@ -31,6 +32,7 @@ watch(width, (width) => {
       <side-panel-timestamps v-if="view === 'timestamps'" />
       <side-panel-all-preferences v-else-if="view === 'all-preferences'" />
       <side-panel-edit-timestamp v-else-if="view === 'edit-timestamp'" />
+      <side-panel-edit-template v-else-if="view === 'edit-template'" />
     </div>
   </div>
 </template>

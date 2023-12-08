@@ -6,6 +6,7 @@ export function fetchRefresh(options: {
   fetch: Fetch;
   shouldRefresh(response: any): boolean;
   refresh(): Promise<void>;
+  onLogout?(): void;
   headers(): Promise<Record<string, string>> | Record<string, string>;
 }): Fetch {
   const getRequest = async (
@@ -32,9 +33,15 @@ export function fetchRefresh(options: {
 
     const needsRefreshed = options.shouldRefresh(json);
     if (!needsRefreshed) return initialResponse;
-    await refresh();
+
+    try {
+      await refresh();
+    } catch (err) {
+      options.onLogout?.();
+      throw err;
+    }
 
     const refreshedRequest = await getRequest(input, init);
-    return fetch(refreshedRequest);
+    return await fetch(refreshedRequest);
   };
 }

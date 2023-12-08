@@ -1,0 +1,13 @@
+query findTemplateByDetails(
+  $episodeId: ID
+  $showName: String
+  $season: String
+) {
+  findTemplateByDetails(
+    episodeId: $episodeId
+    showName: $showName
+    season: $season
+  ) {
+    ...Template
+  }
+}

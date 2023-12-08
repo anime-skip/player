@@ -54,11 +54,8 @@ const validationError = ref<string>();
     <!-- Header -->
     <div>
       <h3 class="text-base-content font-bold text-opacity-90 text-lg">
-        Login to Anime Skip
+        Log in to Anime Skip
       </h3>
-      <p class="text-base-content text-opacity-70 text-sm">
-        Start contributing timestamps!
-      </p>
     </div>
 
     <!-- Username -->
@@ -98,7 +95,7 @@ const validationError = ref<string>();
     <p v-if="isError" class="text-error text-sm text-center">{{ gqlError }}</p>
 
     <!-- Buttons -->
-    <div class="flex gap-4">
+    <div class="flex gap-4 flex-row-reverse">
       <button
         class="flex-1 btn btn-primary"
         :class="{ loading: isLoading }"
@@ -108,7 +105,7 @@ const validationError = ref<string>();
         Login
       </button>
       <a
-        class="flex-1 btn btn-outline btn-primary gap-2"
+        class="flex-1 btn btn-ghost gap-2"
         href="https://anime-skip.com/sign-up"
         target="_blank"
         >Sign Up<icon-mdi-open-in-new class="w-5 h-5" />

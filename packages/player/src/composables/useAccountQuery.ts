@@ -21,6 +21,7 @@ export default function () {
       return account;
     },
     {
+      refetchOnWindowFocus: false,
       onSuccess(data) {
         if (!data || !auth.value || !prefs.value) return;
 

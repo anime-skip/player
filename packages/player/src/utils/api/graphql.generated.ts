@@ -1427,12 +1427,35 @@ export type CreateShowMutationVariables = Exact<{
 
 export type CreateShowMutation = { __typename?: 'Mutation', createShow: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null } };
 
+export type FindTemplateByDetailsQueryVariables = Exact<{
+  episodeId?: InputMaybe<Scalars['ID']>;
+  showName?: InputMaybe<Scalars['String']>;
+  season?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type FindTemplateByDetailsQuery = { __typename?: 'Query', findTemplateByDetails: { __typename?: 'Template', id: string, type: TemplateType, createdAt: string, createdByUserId: string, updatedAt: string, updatedByUserId: string, seasons?: Array<string> | null, sourceEpisodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, sourceEpisode: { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> } };
+
+export type DeleteTemplateMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteTemplateMutation = { __typename?: 'Mutation', deleteTemplate: { __typename?: 'Template', id: string, type: TemplateType, createdAt: string, createdByUserId: string, updatedAt: string, updatedByUserId: string, seasons?: Array<string> | null, sourceEpisodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, sourceEpisode: { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> } };
+
 export type FindEpisodeByNameQueryVariables = Exact<{
   name: Scalars['String'];
 }>;
 
 
 export type FindEpisodeByNameQuery = { __typename?: 'Query', findEpisodeByName: Array<{ __typename?: 'ThirdPartyEpisode', id?: string | null, name?: string | null, season?: string | null, number?: string | null, absoluteNumber?: string | null, baseDuration?: number | null, source?: TimestampSource | null, showId: string, show: { __typename?: 'ThirdPartyShow', name: string }, timestamps: Array<{ __typename?: 'ThirdPartyTimestamp', id?: string | null, at: number, typeId: string }> }> };
+
+export type FindEpisodeQueryVariables = Exact<{
+  episodeId: Scalars['ID'];
+}>;
+
+
+export type FindEpisodeQuery = { __typename?: 'Query', findEpisode: { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> } };
 
 export type FindEpisodeUrlQueryVariables = Exact<{
   url: Scalars['String'];
@@ -1462,6 +1485,35 @@ export type SavePreferencesMutationVariables = Exact<{
 
 
 export type SavePreferencesMutation = { __typename?: 'Mutation', savePreferences: { __typename?: 'Preferences', updatedAt: string } };
+
+export type UpdateTemplateMutationVariables = Exact<{
+  id: Scalars['ID'];
+  newTemplate: InputTemplate;
+}>;
+
+
+export type UpdateTemplateMutation = { __typename?: 'Mutation', updateTemplate: { __typename?: 'Template', id: string, type: TemplateType, createdAt: string, createdByUserId: string, updatedAt: string, updatedByUserId: string, seasons?: Array<string> | null, sourceEpisodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, sourceEpisode: { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> } };
+
+export type CreateTemplateMutationVariables = Exact<{
+  newTemplate: InputTemplate;
+}>;
+
+
+export type CreateTemplateMutation = { __typename?: 'Mutation', createTemplate: { __typename?: 'Template', id: string, type: TemplateType, createdAt: string, createdByUserId: string, updatedAt: string, updatedByUserId: string, seasons?: Array<string> | null, sourceEpisodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, sourceEpisode: { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> } };
+
+export type AddTimestampToTemplateMutationVariables = Exact<{
+  timestamp: InputTemplateTimestamp;
+}>;
+
+
+export type AddTimestampToTemplateMutation = { __typename?: 'Mutation', addTimestampToTemplate: { __typename?: 'TemplateTimestamp', timestamp: { __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } } } };
+
+export type RemoveTimestampFromTemplateMutationVariables = Exact<{
+  timestamp: InputTemplateTimestamp;
+}>;
+
+
+export type RemoveTimestampFromTemplateMutation = { __typename?: 'Mutation', removeTimestampFromTemplate: { __typename?: 'TemplateTimestamp', timestamp: { __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } } } };
 
 export type SearchShowsQueryVariables = Exact<{
   search: Scalars['String'];
@@ -1510,6 +1562,8 @@ export type ThirdPartyEpisodeFragment = { __typename?: 'ThirdPartyEpisode', id?:
 export type ThirdPartyShowFragment = { __typename?: 'ThirdPartyShow', name: string };
 
 export type ThirdPartyTimestampFragment = { __typename?: 'ThirdPartyTimestamp', id?: string | null, at: number, typeId: string };
+
+export type TemplateFragment = { __typename?: 'Template', id: string, type: TemplateType, createdAt: string, createdByUserId: string, updatedAt: string, updatedByUserId: string, seasons?: Array<string> | null, sourceEpisodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, sourceEpisode: { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> };
 
 export const PreferencesFragmentDoc = gql`
     fragment Preferences on Preferences {
@@ -1659,6 +1713,32 @@ export const ThirdPartyEpisodeFragmentDoc = gql`
 }
     ${ThirdPartyShowFragmentDoc}
 ${ThirdPartyTimestampFragmentDoc}`;
+export const TemplateFragmentDoc = gql`
+    fragment Template on Template {
+  id
+  type
+  createdAt
+  createdByUserId
+  createdBy {
+    ...User
+  }
+  updatedAt
+  updatedByUserId
+  updatedBy {
+    ...User
+  }
+  seasons
+  sourceEpisodeId
+  sourceEpisode {
+    ...Episode
+  }
+  timestamps {
+    ...Timestamp
+  }
+}
+    ${UserFragmentDoc}
+${EpisodeFragmentDoc}
+${TimestampFragmentDoc}`;
 export const AccountDocument = gql`
     query account {
   account {
@@ -1698,6 +1778,24 @@ export const CreateShowDocument = gql`
   }
 }
     ${ShowFragmentDoc}`;
+export const FindTemplateByDetailsDocument = gql`
+    query findTemplateByDetails($episodeId: ID, $showName: String, $season: String) {
+  findTemplateByDetails(
+    episodeId: $episodeId
+    showName: $showName
+    season: $season
+  ) {
+    ...Template
+  }
+}
+    ${TemplateFragmentDoc}`;
+export const DeleteTemplateDocument = gql`
+    mutation deleteTemplate($id: ID!) {
+  deleteTemplate(templateId: $id) {
+    ...Template
+  }
+}
+    ${TemplateFragmentDoc}`;
 export const FindEpisodeByNameDocument = gql`
     query findEpisodeByName($name: String!) {
   findEpisodeByName(name: $name) {
@@ -1705,6 +1803,13 @@ export const FindEpisodeByNameDocument = gql`
   }
 }
     ${ThirdPartyEpisodeFragmentDoc}`;
+export const FindEpisodeDocument = gql`
+    query findEpisode($episodeId: ID!) {
+  findEpisode(episodeId: $episodeId) {
+    ...Episode
+  }
+}
+    ${EpisodeFragmentDoc}`;
 export const FindEpisodeUrlDocument = gql`
     query findEpisodeUrl($url: String!) {
   findEpisodeUrl(episodeUrl: $url) {
@@ -1733,6 +1838,38 @@ export const SavePreferencesDocument = gql`
   }
 }
     `;
+export const UpdateTemplateDocument = gql`
+    mutation updateTemplate($id: ID!, $newTemplate: InputTemplate!) {
+  updateTemplate(templateId: $id, newTemplate: $newTemplate) {
+    ...Template
+  }
+}
+    ${TemplateFragmentDoc}`;
+export const CreateTemplateDocument = gql`
+    mutation createTemplate($newTemplate: InputTemplate!) {
+  createTemplate(newTemplate: $newTemplate) {
+    ...Template
+  }
+}
+    ${TemplateFragmentDoc}`;
+export const AddTimestampToTemplateDocument = gql`
+    mutation addTimestampToTemplate($timestamp: InputTemplateTimestamp!) {
+  addTimestampToTemplate(templateTimestamp: $timestamp) {
+    timestamp {
+      ...Timestamp
+    }
+  }
+}
+    ${TimestampFragmentDoc}`;
+export const RemoveTimestampFromTemplateDocument = gql`
+    mutation removeTimestampFromTemplate($timestamp: InputTemplateTimestamp!) {
+  removeTimestampFromTemplate(templateTimestamp: $timestamp) {
+    timestamp {
+      ...Timestamp
+    }
+  }
+}
+    ${TimestampFragmentDoc}`;
 export const SearchShowsDocument = gql`
     query searchShows($search: String!) {
   searchShows(search: $search) {
@@ -1785,8 +1922,17 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     createShow(variables: CreateShowMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreateShowMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<CreateShowMutation>(CreateShowDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'createShow', 'mutation');
     },
+    findTemplateByDetails(variables?: FindTemplateByDetailsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<FindTemplateByDetailsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<FindTemplateByDetailsQuery>(FindTemplateByDetailsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'findTemplateByDetails', 'query');
+    },
+    deleteTemplate(variables: DeleteTemplateMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<DeleteTemplateMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<DeleteTemplateMutation>(DeleteTemplateDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'deleteTemplate', 'mutation');
+    },
     findEpisodeByName(variables: FindEpisodeByNameQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<FindEpisodeByNameQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<FindEpisodeByNameQuery>(FindEpisodeByNameDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'findEpisodeByName', 'query');
+    },
+    findEpisode(variables: FindEpisodeQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<FindEpisodeQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<FindEpisodeQuery>(FindEpisodeDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'findEpisode', 'query');
     },
     findEpisodeUrl(variables: FindEpisodeUrlQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<FindEpisodeUrlQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<FindEpisodeUrlQuery>(FindEpisodeUrlDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'findEpisodeUrl', 'query');
@@ -1799,6 +1945,18 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     savePreferences(variables: SavePreferencesMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SavePreferencesMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<SavePreferencesMutation>(SavePreferencesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'savePreferences', 'mutation');
+    },
+    updateTemplate(variables: UpdateTemplateMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateTemplateMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UpdateTemplateMutation>(UpdateTemplateDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'updateTemplate', 'mutation');
+    },
+    createTemplate(variables: CreateTemplateMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreateTemplateMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<CreateTemplateMutation>(CreateTemplateDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'createTemplate', 'mutation');
+    },
+    addTimestampToTemplate(variables: AddTimestampToTemplateMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<AddTimestampToTemplateMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AddTimestampToTemplateMutation>(AddTimestampToTemplateDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'addTimestampToTemplate', 'mutation');
+    },
+    removeTimestampFromTemplate(variables: RemoveTimestampFromTemplateMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RemoveTimestampFromTemplateMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<RemoveTimestampFromTemplateMutation>(RemoveTimestampFromTemplateDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'removeTimestampFromTemplate', 'mutation');
     },
     searchShows(variables: SearchShowsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SearchShowsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<SearchShowsQuery>(SearchShowsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'searchShows', 'query');

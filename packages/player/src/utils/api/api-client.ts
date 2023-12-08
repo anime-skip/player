@@ -32,6 +32,7 @@ export function useAuthorizedGraphqlClient(): GraphQLClient {
       shouldRefresh(response) {
         return response.errors?.[0]?.message === 'Invalid Token';
       },
+      onLogout: () => {},
       headers: () => ({
         Authorization: `Bearer ${auth.value?.token}`,
         'X-Client-ID': apiClientId,

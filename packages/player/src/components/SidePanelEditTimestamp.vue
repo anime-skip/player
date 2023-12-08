@@ -45,7 +45,7 @@ onUnmounted(() => {
         Save Timestamp
       </button>
       <button
-        class="flex-1 btn btn-outline hover:btn-error"
+        class="flex-1 btn hover:btn-error"
         @click.prevent="deleteTimestamp"
       >
         Delete

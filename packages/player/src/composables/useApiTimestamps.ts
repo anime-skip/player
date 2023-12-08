@@ -7,7 +7,7 @@ export default function () {
   const { data } = useFindEpisodeUrlQuery();
   return computed(() => {
     const timestamps = data.value?.episode.timestamps;
-    if (!timestamps) return undefined;
+    if (!timestamps || timestamps.length === 0) return undefined;
     return applyTimestampsOffset(timestamps, data.value?.timestampsOffset ?? 0);
   });
 }

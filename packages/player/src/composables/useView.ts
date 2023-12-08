@@ -6,7 +6,8 @@ export type View =
   | 'edit-timestamp'
   | 'preferences'
   | 'all-preferences'
-  | 'account';
+  | 'account'
+  | 'edit-template';
 
 /**
  * Returns a global reference to which "view" is active. A "view" is the current dialog or panel

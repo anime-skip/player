@@ -13,9 +13,12 @@ export default function () {
   const { isEditing } = useIsEditing();
   const editedTimestamps = useEditedTimestamps();
 
+  const { data: currentTemplate } = useCurrentTemplateQuery();
+
   return computed<AmbiguousTimestamp[]>(() => {
     if (isEditing.value) return editedTimestamps.value;
     if (apiTimestamps.value) return apiTimestamps.value;
+    if (currentTemplate.value) return currentTemplate.value.timestamps;
     return [];
   });
 }

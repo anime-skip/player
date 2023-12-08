@@ -18,6 +18,18 @@ const loginAndReturn = useViewOperation('account', () => {
 const { isEditing } = useIsEditing();
 const discardChanges = useDiscardChanges();
 const { mutate: saveChanges, isLoading } = useSaveChangesMutation();
+
+const episodeUrl = useApiEpisodeUrl();
+const timestamps = useCurrentTimestamps();
+
+const { data: currentTemplate, isFetched: isCurrentTemplateFetched } =
+  useCurrentTemplateQuery();
+
+const isTemplateButtonsVisible = computed(
+  () =>
+    (timestamps.value.length > 0 || currentTemplate.value) &&
+    !!episodeUrl.value,
+);
 </script>
 
 <template>
@@ -51,7 +63,8 @@ const { mutate: saveChanges, isLoading } = useSaveChangesMutation();
       </div>
     </template>
 
-    <template v-if="isEditing" #buttons>
+    <template #buttons v-if="isEditing">
+      <!-- Save -->
       <button
         type="submit"
         class="grow-1 btn btn-primary"
@@ -60,12 +73,21 @@ const { mutate: saveChanges, isLoading } = useSaveChangesMutation();
       >
         Save Changes
       </button>
+
+      <!-- Discard -->
       <button
-        class="flex-1 btn btn-outline hover:btn-error"
+        class="flex-1 btn hover:btn-error"
         @click.prevent="discardChanges"
         :disabled="isLoading"
       >
         Discard
+      </button>
+    </template>
+
+    <template #buttons v-else-if="isTemplateButtonsVisible">
+      <!-- Create Template -->
+      <button class="flex-1 btn" @click.prevent="view = 'edit-template'">
+        {{ currentTemplate ? 'Edit' : 'Create' }} Template
       </button>
     </template>
   </side-panel-layout>

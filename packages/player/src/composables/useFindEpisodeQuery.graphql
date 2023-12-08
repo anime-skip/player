@@ -1,0 +1,5 @@
+query findEpisode($episodeId: ID!) {
+  findEpisode(episodeId: $episodeId) {
+    ...Episode
+  }
+}

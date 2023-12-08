@@ -1,0 +1,25 @@
+mutation updateTemplate($id: ID!, $newTemplate: InputTemplate!) {
+  updateTemplate(templateId: $id, newTemplate: $newTemplate) {
+    ...Template
+  }
+}
+mutation createTemplate($newTemplate: InputTemplate!) {
+  createTemplate(newTemplate: $newTemplate) {
+    ...Template
+  }
+}
+mutation addTimestampToTemplate($timestamp: InputTemplateTimestamp!) {
+  addTimestampToTemplate(templateTimestamp: $timestamp) {
+    timestamp {
+      ...Timestamp
+    }
+  }
+}
+
+mutation removeTimestampFromTemplate($timestamp: InputTemplateTimestamp!) {
+  removeTimestampFromTemplate(templateTimestamp: $timestamp) {
+    timestamp {
+      ...Timestamp
+    }
+  }
+}

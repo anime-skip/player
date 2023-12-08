@@ -137,3 +137,26 @@ fragment ThirdPartyTimestamp on ThirdPartyTimestamp {
   at
   typeId
 }
+
+fragment Template on Template {
+  id
+  type
+  createdAt
+  createdByUserId
+  createdBy {
+    ...User
+  }
+  updatedAt
+  updatedByUserId
+  updatedBy {
+    ...User
+  }
+  seasons
+  sourceEpisodeId
+  sourceEpisode {
+    ...Episode
+  }
+  timestamps {
+    ...Timestamp
+  }
+}
