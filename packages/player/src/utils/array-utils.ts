@@ -10,10 +10,13 @@ export function getUniqueExistenceMap<
   TType extends Record<string, any>,
   TKey extends keyof TType,
 >(array: TType[], key: TKey): Record<TType[TKey], TType> {
-  return array.reduce((map, t) => {
-    map[t[key]] = t;
-    return map;
-  }, {} as Record<TType[TKey], TType>);
+  return array.reduce(
+    (map, t) => {
+      map[t[key]] = t;
+      return map;
+    },
+    {} as Record<TType[TKey], TType>,
+  );
 }
 
 export function deleteMatches<T>(array: T[], isMatch: (t: T) => boolean): T[] {

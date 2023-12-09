@@ -1,4 +1,6 @@
-:host { all: initial }
+:host {
+  all: initial;
+}
 
 /* Transitions */
 .slide-up-enter-active,
@@ -22,23 +24,24 @@
   }
 
   /* Themed logo colors */
-  html, html[data-theme=anime-skip] {
+  html,
+  html[data-theme='anime-skip'] {
     --logo-primary: 199 100% 57%;
     --logo-secondary: 265 53% 58%;
   }
-  html[data-theme=CRUNCHYROLL_ORANGE] {
+  html[data-theme='CRUNCHYROLL_ORANGE'] {
     --logo-primary: 42 96% 54%;
     --logo-secondary: 24 91% 54%;
   }
-  html[data-theme=VRV_YELLOW] {
+  html[data-theme='VRV_YELLOW'] {
     --logo-primary: 52 100% 50%;
     --logo-secondary: 22 100% 50%;
   }
-  html[data-theme=FUNIMATION_PURPLE] {
+  html[data-theme='FUNIMATION_PURPLE'] {
     --logo-primary: 216 83% 65%;
     --logo-secondary: 246 83% 65%;
   }
-  html[data-theme=ZORO_GREEN] {
+  html[data-theme='ZORO_GREEN'] {
     --logo-primary: 72 80% 55%;
     --logo-secondary: 41 94% 69%;
   }
@@ -64,10 +67,10 @@
   }
 
   .spinner {
-      aspect-ratio: 1/1;
-      border-radius: 50%;
-      box-sizing: border-box;
-      animation: rotation 4s linear infinite;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    box-sizing: border-box;
+    animation: rotation 4s linear infinite;
   }
   @keyframes rotation {
     0% {
@@ -98,7 +101,8 @@
     border-radius: 3px;
     outline: none;
   }
-   .volume::-moz-range-track, .volume::-moz-range-track {
+  .volume::-moz-range-track,
+  .volume::-moz-range-track {
     height: 6px;
     width: 100%;
     border-radius: 3px;
@@ -114,9 +118,13 @@
     appearance: none;
     -webkit-appearance: none;
     top: 0px;
-    --filler-size: 100rem/* 1600px */;
+    --filler-size: 100rem /* 1600px */;
     --filler-offset: 3px;
-    box-shadow: 0 0 0 3px hsl(var(--in)) inset, var(--focus-shadow, 0 0), calc(var(--filler-size) * -1 - var(--filler-offset)) 0 0 var(--filler-size);
+    box-shadow:
+      0 0 0 3px hsl(var(--in)) inset,
+      var(--focus-shadow, 0 0),
+      calc(var(--filler-size) * -1 - var(--filler-offset)) 0 0
+        var(--filler-size);
   }
   .volume::-webkit-slider-thumb {
     position: relative;
@@ -129,7 +137,7 @@
     top: 50%;
     transform: translateY(-50%);
   }
-  
+
   .checkbox-pref:checked,
   .checkbox-pref[checked='true'],
   .checkbox-pref[aria-checked='true'] {

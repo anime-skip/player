@@ -10,8 +10,9 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
-*.local
-.turbo
+.output
+.wxt
+web-ext.config.ts
 vite.config.ts.timestamp-*.mjs
 **/@types/auto-import.d.ts
 packages/player/**/*.mp4
@@ -32,7 +33,3 @@ stats.html
 .env
 .env.*
 !.env.template
-
-# Config files
-.webextrc
-.webextrc.*

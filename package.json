@@ -4,18 +4,15 @@
   "scripts": {
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky install",
+    "prepare": "simple-git-hooks",
     "compile": "turbo turbo:compile",
     "build": "turbo turbo:build",
     "test": "turbo turbo:test"
   },
   "devDependencies": {
-    "husky": "^8.0.3",
-    "prettier": "^2.8.7",
-    "pretty-quick": "^3.1.3"
-  },
-  "dependencies": {
-    "turbo": "^1.9.3"
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.1.0",
+    "simple-git-hooks": "^2.9.0"
   },
   "pnpm": {
     "peerDependencyRules": {
@@ -27,5 +24,11 @@
         "node-fetch"
       ]
     }
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged"
+  },
+  "lint-staged": {
+    "*": "prettier --ignore-unknown --write"
   }
 }
