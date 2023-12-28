@@ -34,24 +34,24 @@
     "@types/chance": "^1.1.3",
     "@types/md5": "^2.3.2",
     "@types/uuid": "^9.0.1",
-    "@vitejs/plugin-vue": "^4.1.0",
+    "@vitejs/plugin-vue": "^5.0.0",
     "autoprefixer": "^10.4.14",
     "chance": "^1.1.11",
     "daisyui": "^2.52.0",
     "postcss": "^8.4.22",
     "postcss-unroot": "^1.0.2",
-    "rollup-plugin-visualizer": "^5.9.0",
+    "rollup-plugin-visualizer": "^5.12.0",
     "tailwindcss": "^3.3.1",
-    "typescript": "^5.0.4",
+    "typescript": "^5.3.3",
     "unplugin-auto-import": "^0.15.3",
     "unplugin-icons": "^0.16.1",
-    "vite": "^4.2.1",
-    "vite-plugin-css-injected-by-js": "^3.1.0",
+    "vite": "^5.0.0",
+    "vite-plugin-css-injected-by-js": "^3.3.1",
     "vitest": "^0.30.1",
-    "vue-tsc": "^1.2.0"
+    "vue-tsc": "^1.8.27"
   },
   "dependencies": {
-    "@vueuse/core": "^10.0.2",
+    "@vueuse/core": "^10.7.1",
     "fuzzysort": "^2.0.4",
     "graphql": "^16.6.0",
     "graphql-request": "~5.1.0",
@@ -59,7 +59,7 @@
     "md5": "^2.3.0",
     "p-singleton": "^1.0.4",
     "uuid": "^9.0.0",
-    "vue": "^3.2.47",
+    "vue": "^3.3.13",
     "vue-query": "^1.26.0"
   }
 }

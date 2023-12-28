@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { timestamp } from '@vueuse/core';
 import { TimestampFragment } from '../utils/api';
 import { formatTimestampInS } from '../utils/time-utils';
 
