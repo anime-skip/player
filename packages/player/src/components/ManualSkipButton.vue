@@ -37,25 +37,32 @@ function goToNextTimestamp() {
 
 const { isEditing } = useIsEditing();
 const isVisible = computed<boolean>(() => {
-  const isAtEnd = Math.abs(currentTime.value - (duration.value ?? 0)) < 0.1;
+  // We consider anything "close" to the end as the end. When skipping to the end of the video, it
+  // doesn't always go to the end, it usually goes to within 1 to 1.5 seconds of the end. So this
+  // covers that case and prevents the button from showing up after skipping to the end of the
+  // video.
+  const isAtEnd = Math.abs(currentTime.value - (duration.value ?? 0)) < 1.5;
+
   return (
     !!currentTimestampType.value && isCurrentTimestampSkipped.value && !isAtEnd
   );
 });
 
-const button = ref<HTMLButtonElement>();
-watch(isVisible, (isVisible) => {
-  if (isVisible && !isEditing.value) {
-    console.log('Focusing on skip button');
-    button.value?.focus();
-  }
-});
+const skipButton = ref<HTMLButtonElement>();
+whenever(
+  // The skip button only becomes available after it becomes visible, so we need to wait for both checks
+  () => isVisible.value && skipButton.value != null,
+  () => {
+    if (isEditing.value) return;
+    skipButton.value?.focus();
+  },
+);
 </script>
 
 <template>
   <button
     v-if="isVisible"
-    ref="button"
+    ref="skipButton"
     class="btn btn-primary"
     @click.stop="goToNextTimestamp"
   >
