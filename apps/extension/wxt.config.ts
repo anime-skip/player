@@ -7,9 +7,7 @@ export default defineConfig({
   manifest: ({ mode }) => ({
     name: `Anime Skip Player${mode === 'development' ? ' (DEV)' : ''}`,
     description: 'Custom video player for anime streaming websites.',
-    permissions: ['storage', 'tabs', 'contextMenus'],
+    permissions: ['storage', 'tabs'],
+    host_permissions: ['<all_urls>'],
   }),
-  experimental: {
-    // includeBrowserPolyfill: false,
-  },
 });

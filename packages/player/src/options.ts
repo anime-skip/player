@@ -71,6 +71,11 @@ export interface PlayerOptions {
    * Does nothing if not passed.
    */
   onVisibilityChange?: OnVisibilityChangeCallback;
+
+  /**
+   * Given some bounds, return a URL to the screenshot (usuaslly a base64 encoded data URL).
+   */
+  takeScreenshot?: (bounds: ScreenshotBounds) => Promise<string>;
 }
 
 export interface InternalPlayerOptions {
@@ -89,6 +94,7 @@ export interface InternalPlayerOptions {
   apiClientId: string;
   getEpisodeUrl: () => MaybePromise<string>;
   onVisibilityChange: OnVisibilityChangeCallback | undefined;
+  takeScreenshot: false | ((bounds: ScreenshotBounds) => Promise<string>);
 }
 
 export type ElementOption = string | Element | (() => string | Element);
@@ -98,6 +104,12 @@ export type OnVisibilityChangeCallback = (
   oldVisibility: PlayerVisibility,
 ) => void;
 
+export interface ScreenshotBounds {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
 /**
  * Storage implementation used by the player.
  */

@@ -1,4 +1,4 @@
-import { PlayerOptions } from '@anime-skip/player';
+import { PlayerOptions, ScreenshotBounds } from '@anime-skip/player';
 import { defineExtensionMessaging } from '@webext-core/messaging';
 import { Tabs } from 'webextension-polyfill';
 
@@ -9,6 +9,7 @@ export const messaging = defineExtensionMessaging<MessagingProtocol>({
 interface MessagingProtocol {
   getSenderTab(): Tabs.Tab;
   getEpisodeInfoFromHelper(): EpisodeInfo;
+  takeScreenshot(bounds: ScreenshotBounds): string;
 }
 
 type EpisodeInfo = Awaited<

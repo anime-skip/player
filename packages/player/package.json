@@ -1,5 +1,6 @@
 {
   "name": "@anime-skip/player",
+  "version": "2.0.0",
   "description": "Video player integrated with Anime Skip",
   "type": "module",
   "main": "dist/index.cjs",

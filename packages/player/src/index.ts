@@ -4,3 +4,4 @@ export * from './utils/createLocalPlayerStorage';
 export * from './utils/logger';
 export * from './utils/keydown';
 export { PlayerVisibility } from './utils/PlayerVisibility';
+export { version } from '../package.json';

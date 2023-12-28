@@ -1,15 +1,15 @@
 export enum PlayerVisibility {
   /**
-   * The video player and controls are visible
+   * The Anime Skip Player is showing.
    */
   Visible,
   /**
-   * The video player and controls are hidden, but a button to show them again appears. Used for
-   * service settings.
+   * The Anime Skip Player is hidden, the builtin player is visible, and a button to show Anime Skip
+   * again appears. Used for the extension's service settings.
    */
   ServiceSettings,
   /**
-   * The player is hidden completely without a button to show it again. Used for screenshots
+   * Everything is hidden but the video.
    */
   Hidden,
 }

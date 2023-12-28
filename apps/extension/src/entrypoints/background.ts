@@ -11,4 +11,13 @@ export default defineBackground(() => {
       sender.tab?.id,
     );
   });
+
+  messaging.onMessage('takeScreenshot', async ({ data: bounds }) => {
+    const full = await browser.tabs.captureVisibleTab(undefined, {
+      format: 'jpeg',
+      quality: 100,
+      // rect: bounds,
+    });
+    return full;
+  });
 });

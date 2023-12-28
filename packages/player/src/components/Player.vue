@@ -6,6 +6,8 @@ import ReturnToPlayerButton from './ReturnToPlayerButton.vue';
 import { PlayerVisibility } from '../utils/PlayerVisibility';
 import ManualSkipButton from './ManualSkipButton.vue';
 import { QueryKey } from '../utils/QueryKey';
+import ContextMenu from './ContextMenu.vue';
+import ScreenshotPreview from './ScreenshotPreview.vue';
 
 const root = ref<HTMLDivElement>();
 
@@ -84,9 +86,13 @@ watch(url, () => {
       <toolbar class="absolute bottom-0 inset-x-0" :hidden="isToolbarHidden" />
 
       <manual-skip-button class="absolute bottom-20 right-4" />
+
+      <screenshot-preview />
     </div>
 
     <side-panel class="h-full z-10" />
+
+    <context-menu />
   </div>
 
   <!-- Other top level UIs -->

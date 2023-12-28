@@ -20,12 +20,19 @@ export function initExtensionPlayer(options: ExtensionPlayerOptions): void {
       return messaging.sendMessage('getEpisodeInfoFromHelper', undefined);
     },
     onVisibilityChange(visiblity) {
-      const isVisible = visiblity === PlayerVisibility.Visible;
+      const hideBuiltinPlayer =
+        visiblity === PlayerVisibility.Visible ||
+        visiblity === PlayerVisibility.Hidden;
 
-      if (isVisible) {
-        document.documentElement.setAttribute('anime-skip-visible', '');
+      if (hideBuiltinPlayer) {
+        document.documentElement.setAttribute(
+          'anime-skip-hide-builtin-player',
+          '',
+        );
       } else {
-        document.documentElement.removeAttribute('anime-skip-visible');
+        document.documentElement.removeAttribute(
+          'anime-skip-hide-builtin-player',
+        );
       }
     },
     async getEpisodeUrl() {
@@ -33,6 +40,9 @@ export function initExtensionPlayer(options: ExtensionPlayerOptions): void {
       if (url == null) throw Error("Could not find episode's URL");
 
       return options.transformServiceUrl(url);
+    },
+    async takeScreenshot(bounds) {
+      return await messaging.sendMessage('takeScreenshot', bounds);
     },
     ...options,
   });

@@ -161,5 +161,7 @@ function getInternalOptions(options?: PlayerOptions): InternalPlayerOptions {
       options?.getEpisodeUrl ?? (() => stripHashAndQuery(location.href)),
 
     onVisibilityChange: options?.onVisibilityChange,
+
+    takeScreenshot: options?.takeScreenshot ?? false,
   };
 }

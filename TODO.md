@@ -1,5 +1,5 @@
 - [x] Skip section buttons
-- [ ] Screenshots
+- [x] Screenshots
 - [x] Crunchyroll
 
   - [x] Resume playing after saving a timestamp
