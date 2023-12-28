@@ -2,7 +2,7 @@ import '~/assets/crunchyroll-player.scss';
 import { ColorTheme } from '@anime-skip/player';
 
 export default defineContentScript({
-  matches: ['*://static.crunchyroll.com/vilos-v2/web/vilos/player.html*'],
+  matches: ['*://static.crunchyroll.com/vilos-v2/web/vilos/player.html'],
   allFrames: true,
   main(ctx) {
     // Load player
