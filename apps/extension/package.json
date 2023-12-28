@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "pnpm --filter player build && wxt",
     "dev:firefox": "pnpm -s dev -- -b firefox",
+    "dev:prod": "pnpm --filter player build && wxt --mode production",
+    "dev:prod:firefox": "pnpm -s dev:prod -- -b firefox",
     "build": "pnpm --filter player build && wxt build",
     "build:firefox": "pnpm -s build -- -b firefox",
     "zip": "pnpm --filter player build && wxt zip",
