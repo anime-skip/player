@@ -1,6 +1,4 @@
 import { getNextTimestamp, isTimestampSkipped } from '../utils/timestamp-utils';
-import useIsAutoSkipEnabled from './useIsAutoSkipEnabled';
-import usePreferences from './usePreferences';
 
 /**
  * Watch the current time and list of timestamps. Auto-skip over skipped sections if needed.

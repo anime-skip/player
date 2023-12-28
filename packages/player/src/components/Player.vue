@@ -4,6 +4,7 @@ import EpisodeInfo from './EpisodeInfo.vue';
 import SidePanel from './SidePanel.vue';
 import ReturnToPlayerButton from './ReturnToPlayerButton.vue';
 import { PlayerVisibility } from '../utils/PlayerVisibility';
+import ManualSkipButton from './ManualSkipButton.vue';
 
 const root = ref<HTMLDivElement>();
 
@@ -67,6 +68,8 @@ useAccountQuery();
       <episode-info class="absolute top-0 inset-x-0" :hidden="playing" />
 
       <toolbar class="absolute bottom-0 inset-x-0" :hidden="isToolbarHidden" />
+
+      <manual-skip-button class="absolute bottom-20 right-4" />
     </div>
 
     <side-panel class="h-full z-10" />
