@@ -34,7 +34,6 @@ export default function <T extends (...args: any[]) => void>(
     return new Promise<void>((res) => {
       const callback = (e: Event) => {
         const event = e as ViewOperationCompletedEvent;
-        console.log('EVENT RECIEVED', event.detail, event.view);
         if (event.view === operationView) {
           removeEventListener();
           res();

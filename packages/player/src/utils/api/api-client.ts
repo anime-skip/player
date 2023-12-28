@@ -20,14 +20,18 @@ export function useAuthorizedGraphqlClient(): GraphQLClient {
       async refresh() {
         if (auth.value == null)
           throw Error('Not logged in, cannot refresh token.');
-        const data = await baseClient.loginRefresh({
-          refreshToken: auth.value.refreshToken,
-        });
-        auth.value = {
-          refreshToken: data.loginRefresh.refreshToken,
-          token: data.loginRefresh.authToken,
-          account: data.loginRefresh.account,
-        };
+        try {
+          const data = await baseClient.loginRefresh({
+            refreshToken: auth.value.refreshToken,
+          });
+          auth.value = {
+            refreshToken: data.loginRefresh.refreshToken,
+            token: data.loginRefresh.authToken,
+            account: data.loginRefresh.account,
+          };
+        } catch (err) {
+          auth.value = null;
+        }
       },
       shouldRefresh(response) {
         return response.errors?.[0]?.message === 'Invalid Token';

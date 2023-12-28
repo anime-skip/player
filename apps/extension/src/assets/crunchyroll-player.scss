@@ -1,0 +1,8 @@
+[anime-skip-visible] {
+  #velocity-overlay-package,
+  #velocity-controls-package,
+  [data-testid='skipButton'],
+  [data-testid='vilos-loading'] {
+    display: none !important;
+  }
+}

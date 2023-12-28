@@ -9,7 +9,7 @@ defineProps<{
 
 <template>
   <table class="divide-y divide-base-100">
-    <tr class="h-12">
+    <tr class="h-8 align-top">
       <th class="text-sm font-medium text-left">Video Controls</th>
       <th class="text-sm font-medium">Primary</th>
       <th class="text-sm font-medium">Secondary</th>

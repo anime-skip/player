@@ -1,4 +1,4 @@
-import { createPlayer } from '../src';
+import { createPlayer, forwardKeydownEvent } from '../src';
 
 const getShowName = (): HTMLElement => document.getElementById('show')!;
 const getEpisodeName = (): HTMLElement => document.getElementById('episode')!;
@@ -6,6 +6,14 @@ const getSeason = (): HTMLElement => document.getElementById('season')!;
 const getNumber = (): HTMLElement => document.getElementById('number')!;
 const getAbsoluteNumber = (): HTMLElement =>
   document.getElementById('absolute-number')!;
+
+// Forward the custom keydown event consumed by the player
+window.addEventListener('keydown', (event) => {
+  const activeTag = document.activeElement?.tagName;
+  if (activeTag === 'INPUT' || activeTag === 'TEXTAREA') return;
+
+  forwardKeydownEvent(event);
+});
 
 // Set the episode info from env
 if (import.meta.env.VITE_SHOW_NAME)

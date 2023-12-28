@@ -28,12 +28,15 @@ const { data: currentTemplate, isFetched: isCurrentTemplateFetched } =
 const isTemplateButtonsVisible = computed(
   () =>
     (timestamps.value.length > 0 || currentTemplate.value) &&
-    !!episodeUrl.value,
+    !!episodeUrl.value &&
+    !!auth.value,
 );
+
+const isLoginWarningVisible = computed(() => isEditing.value && !auth.value);
 </script>
 
 <template>
-  <side-panel-layout class="w-72 lg:w-80" @submit="saveChanges">
+  <side-panel-layout class="w-72 lg:w-80" @form-submit="saveChanges">
     <template #title>Edit Episode</template>
 
     <!-- Timestamps -->
@@ -43,9 +46,8 @@ const isTemplateButtonsVisible = computed(
     </template>
 
     <!-- Login Warning -->
-    <template #bottom-content>
+    <template #bottom-content v-if="isLoginWarningVisible">
       <div
-        v-if="!auth"
         class="bg-warning cursor-pointer hover:saturate-150 text-warning-content p-4 flex gap-4 items-center transition-all"
         @click="loginAndReturn"
       >
@@ -77,7 +79,8 @@ const isTemplateButtonsVisible = computed(
       <!-- Discard -->
       <button
         class="flex-1 btn hover:btn-error"
-        @click.prevent="discardChanges"
+        type="button"
+        @click="discardChanges"
         :disabled="isLoading"
       >
         Discard
@@ -86,7 +89,7 @@ const isTemplateButtonsVisible = computed(
 
     <template #buttons v-else-if="isTemplateButtonsVisible">
       <!-- Create Template -->
-      <button class="flex-1 btn" @click.prevent="view = 'edit-template'">
+      <button class="flex-1 btn" type="button" @click="view = 'edit-template'">
         {{ currentTemplate ? 'Edit' : 'Create' }} Template
       </button>
     </template>

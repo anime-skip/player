@@ -78,7 +78,8 @@ const state = useTimestampEditedState(timestamp);
         <button
           class="shrink-0 btn btn-circle btn-ghost text-base-content text-opacity-50 hover:text-opacity-100"
           title="Edit"
-          @click.prevent="editTimestamp(timestamp)"
+          type="button"
+          @click="editTimestamp(timestamp)"
         >
           <icon-edit class="w-[1.375rem] h-[1.375rem]" />
         </button>
@@ -87,7 +88,8 @@ const state = useTimestampEditedState(timestamp);
         <button
           class="shrink-0 btn btn-circle btn-ghost text-base-content text-opacity-50 hover:text-error hover:text-opacity-100"
           title="Delete"
-          @click.prevent="deleteTimestamp(timestamp)"
+          type="button"
+          @click="deleteTimestamp(timestamp)"
         >
           <icon-close class="w-5 h-5" />
         </button>

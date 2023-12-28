@@ -44,12 +44,14 @@ export default createSharedComposable(() => {
   // The play event is fired when the paused property is changed from true to false, as a result of
   // the play method, or the autoplay attribute.
   useEventListener(video, 'play', () => {
-    ignoreUpdatesPlaying(() => (playing.value = true));
+    ignoreUpdatesPlaying(() => {
+      playing.value = true;
+    });
   });
   const { ignoreUpdates: ignoreUpdatesPlaying } = watchIgnorable(
     playing,
-    () => {
-      if (playing.value) video.value.play();
+    (playing) => {
+      if (playing) video.value.play();
       else video.value.pause();
     },
   );
@@ -58,14 +60,18 @@ export default createSharedComposable(() => {
   // entered its paused state, most commonly after the media has been paused through a call to the
   // element's pause() method.
   useEventListener(video, 'pause', () => {
-    ignoreUpdatesPlaying(() => (playing.value = false));
+    ignoreUpdatesPlaying(() => {
+      playing.value = false;
+    });
   });
 
   // The playing event is fired after playback is first started, and whenever it is restarted. For
   // example it is fired when playback resumes after having been paused or delayed due to lack of
   // data.
   useEventListener(video, 'playing', () => {
-    ignoreUpdatesPlaying(() => (playing.value = true));
+    ignoreUpdatesPlaying(() => {
+      playing.value = true;
+    });
     buffering.value = false;
   });
 

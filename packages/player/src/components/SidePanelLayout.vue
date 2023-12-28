@@ -7,7 +7,7 @@ const props = defineProps<{
 }>();
 
 const emits = defineEmits<{
-  (event: 'submit'): void;
+  (event: 'formSubmit'): void;
 }>();
 
 const { view, goBack } = useView();
@@ -16,7 +16,7 @@ const { view, goBack } = useView();
 <template>
   <form
     class="bg-base-100 flex flex-col h-full"
-    @submit.prevent="emits('submit')"
+    @submit.prevent.stop="emits('formSubmit')"
   >
     <header
       class="flex items-center pl-4 pr-2 py-2 gap-2 shrink-0 border-b border-base-content border-opacity-20"
@@ -24,6 +24,7 @@ const { view, goBack } = useView();
       <button
         v-if="mode === 'back'"
         class="btn btn-ghost btn-circle -ml-2"
+        type="button"
         @click="goBack"
         title="Close"
       >
@@ -35,6 +36,7 @@ const { view, goBack } = useView();
       <button
         v-if="mode !== 'back'"
         class="btn btn-ghost btn-circle"
+        type="button"
         @click="view = undefined"
         title="Close"
       >

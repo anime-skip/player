@@ -10,18 +10,6 @@ import IconFilter from '~icons/anime-skip/filter';
 import IconMdiRadioBlank from '~icons/mdi/radiobox-blank';
 import IconMdiRadioMarked from '~icons/mdi/radiobox-marked';
 
-// interface EpisodeDetails {
-//     show:
-//       | { type: 'new'; name: string }
-//       | { type: 'existing'; id: Scalars['ID'] };
-//     episode:
-//       | { type: 'new'; name: string }
-//       | { type: 'existing'; id: Scalars['ID'] };
-//     season: string;
-//     number: string;
-//   };
-// }
-
 const props = defineProps<{
   timestamp: AmbiguousTimestamp;
 }>();
@@ -29,6 +17,11 @@ const props = defineProps<{
 const emits = defineEmits<{
   (event: 'update:timestamp', newTimestamp: AmbiguousTimestamp): void;
 }>();
+
+const filterInput = ref<HTMLInputElement>();
+function focusOnFilter() {
+  filterInput.value?.focus();
+}
 
 const timestamp = useVModel(props, 'timestamp', emits);
 const at = computed(() => formatTimestampInS(timestamp.value.at, true));
@@ -83,7 +76,9 @@ function onKeyDown(event: KeyboardEvent) {
     <button
       ref="atBtn"
       class="btn btn-lg gap-4 focus:btn-primary"
-      @click.prevent.stop="focusOnAt"
+      type="button"
+      @click="focusOnAt"
+      @keydown.tab.prevent="focusOnFilter()"
     >
       <icon-mdi-clock class="w-6 h-6" />
       <span class="flex-1 text-left">{{ at }}</span>
@@ -98,6 +93,7 @@ function onKeyDown(event: KeyboardEvent) {
         <label class="input-group">
           <span><icon-filter class="w-6 h-6" /></span>
           <input
+            ref="filterInput"
             class="input input-bordered focus:input-primary w-full"
             v-model="typeSearch"
             placeholder="Filter..."
@@ -108,18 +104,23 @@ function onKeyDown(event: KeyboardEvent) {
       <!-- List of types -->
       <ul class="menu menu-compact gap-1">
         <li
-          v-for="t of typeSearchResults"
-          :key="t.id"
-          :title="t.description"
-          @click.prevent.stop="typeId = t.id"
+          v-for="item of typeSearchResults"
+          :key="item.id"
+          :title="item.description"
         >
-          <button class="rounded px-2" :class="{ active: typeId === t.id }">
-            <icon-mdi-radio-marked v-if="typeId === t.id" class="w-5 h-5" />
+          <button
+            class="rounded px-2"
+            :class="{ active: typeId === item.id }"
+            type="button"
+            @click="typeId = item.id"
+            tabindex="-1"
+          >
+            <icon-mdi-radio-marked v-if="typeId === item.id" class="w-5 h-5" />
             <icon-mdi-radio-blank
               v-else
               class="w-5 h-5 text-base-content text-opacity-50"
             />
-            <span>{{ t.name }}</span>
+            <span>{{ item.name }}</span>
           </button>
         </li>
       </ul>

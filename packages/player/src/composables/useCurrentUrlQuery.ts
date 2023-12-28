@@ -7,8 +7,6 @@ import { SECOND } from '../utils/time';
 export default createGlobalState(() => {
   const { getEpisodeUrl } = usePlayerOptions();
   return useQuery(QueryKey.CurrentUrl, getEpisodeUrl, {
-    cacheTime: SECOND,
-    staleTime: SECOND,
     refetchInterval: SECOND,
   });
 });

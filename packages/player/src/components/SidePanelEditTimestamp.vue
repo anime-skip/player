@@ -5,11 +5,17 @@ import {
 } from '../utils/timestamp-utils';
 import SidePanelLayout from './SidePanelLayout.vue';
 import EditTimestampForm from './EditTimestampForm.vue';
+import useWasPlayingBeforeAddingTimestamp from '../composables/useWasPlayingBeforeAddingTimestamp';
 
 const { goBack } = useView();
 
+const wasPlaying = useWasPlayingBeforeAddingTimestamp();
+const { playing } = useVideoControls();
 function done() {
-  goBack();
+  setTimeout(goBack);
+
+  // Resume playing the video if it was paused before creating the timestamp
+  if (wasPlaying.value) playing.value = true;
 }
 
 // Auto-delete the timestamp if it is local and type unknown
@@ -33,7 +39,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <side-panel-layout class="w-80" mode="back" @submit="done">
+  <side-panel-layout class="w-80" mode="back" @form-submit="done">
     <template #title>Edit Timestamp</template>
 
     <template #content>
@@ -41,12 +47,13 @@ onUnmounted(() => {
     </template>
 
     <template #buttons>
-      <button type="submit" class="grow-1 btn btn-primary" @click="done">
+      <button type="submit" class="grow-1 btn btn-primary">
         Save Timestamp
       </button>
       <button
         class="flex-1 btn hover:btn-error"
-        @click.prevent="deleteTimestamp"
+        type="button"
+        @click="deleteTimestamp"
       >
         Delete
       </button>

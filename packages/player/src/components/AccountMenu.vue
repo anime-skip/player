@@ -26,11 +26,11 @@ const { state: auth } = useAuth();
         </div>
       </div>
 
-      <p
+      <!-- <p
         class="bg-neutral text-center p-2 text-sm text-neutral-content text-opacity-70 rounded"
       >
         Stats coming soon!
-      </p>
+      </p> -->
     </div>
 
     <div class="h-px bg-base-content bg-opacity-20" />

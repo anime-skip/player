@@ -11,7 +11,6 @@ export default function (sourceTimestamp: Ref<AmbiguousTimestamp>) {
       return sourceTimestamp.value.typeId;
     },
     set(newTypeId) {
-      console.log('Setting new type...', newTypeId);
       startEditing(currentTimestamps.value);
       const index = editedTimestamps.value.findIndex(
         (t) => t.id === sourceTimestamp.value.id,

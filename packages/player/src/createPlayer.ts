@@ -30,15 +30,18 @@ export function createPlayer(options?: PlayerOptions): AnimeSkipPlayer {
           'Cannot mount Anime Skip Player. Root container not found in DOM',
         );
 
+      // Don't do anything if it's already mounted
+      const tag = 'anime-skip-player';
+      if (document.querySelector(tag) != null) return;
+
       // Create the ShadowRoot
-      const name = 'anime-skip-player';
-      customElements.define(name, class extends HTMLElement {});
-      const shadowElement = document.createElement(name);
+      const shadowElement = document.createElement(tag);
       const shadow = shadowElement.attachShadow({ mode: 'closed' });
       shadowElement.style.position = 'absolute';
       shadowElement.style.inset = '0';
       shadowElement.style.pointerEvents = 'none'; // Allow clicking through the element. Vue will capture clicks as needed
       shadowElement.style.zIndex = '9999';
+      shadowElement.style.overflow = 'hidden';
 
       const shadowHtml = document.createElement('html');
       shadowHtml.style.width = '100%';
@@ -62,6 +65,9 @@ export function createPlayer(options?: PlayerOptions): AnimeSkipPlayer {
       shadow.append(shadowHtml);
       rootElement.appendChild(shadowElement);
     },
+    unmount() {
+      app.unmount();
+    },
   };
 }
 
@@ -78,6 +84,10 @@ export interface AnimeSkipPlayer {
    * @param rootContainer The query selector or node parent that the player will be appended to.
    */
   mount(rootContainer: string | Element): void;
+  /**
+   * Removes the player from the DOM.
+   */
+  unmount(): void;
 }
 
 function getInternalOptions(options?: PlayerOptions): InternalPlayerOptions {

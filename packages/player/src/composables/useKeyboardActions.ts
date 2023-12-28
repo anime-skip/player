@@ -82,8 +82,14 @@ export default createSharedComposable(() => {
     saveTimestamps: saveChanges,
   };
 
-  useEventListener(window, 'keydown', (event) => {
-    const binding = keyComboFromEvent(event);
+  const { shadow } = useShadowRoot();
+
+  useEventListener(window, 'anime-skip:keydown', (event: KeyboardEvent) => {
+    // Don't perform keyboard shortcuts when typing into an input.
+    const activeTag = shadow.activeElement?.tagName;
+    if (activeTag === 'INPUT' || activeTag === 'TEXTAREA') return;
+
+    const binding = keyComboFromEvent(event as KeyboardEvent);
     const actions = [
       ...(primaryKeyboardBindingActionsMap.value[binding] ?? []),
       ...(secondaryKeyboardBindingActionsMap.value[binding] ?? []),
