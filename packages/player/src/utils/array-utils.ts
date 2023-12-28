@@ -1,5 +1,3 @@
-import { T } from 'vitest/dist/types-e3c9754d';
-
 /**
  * Given an array of objects, return a map of (`key` to `item`).
  *
