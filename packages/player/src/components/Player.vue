@@ -5,6 +5,7 @@ import SidePanel from './SidePanel.vue';
 import ReturnToPlayerButton from './ReturnToPlayerButton.vue';
 import { PlayerVisibility } from '../utils/PlayerVisibility';
 import ManualSkipButton from './ManualSkipButton.vue';
+import { QueryKey } from '../utils/QueryKey';
 
 const root = ref<HTMLDivElement>();
 
@@ -41,6 +42,19 @@ useAutoconnectEpisode();
 // Preload queries that need ran ASAP
 useAllTimestampTypesQuery();
 useAccountQuery();
+
+// URL change behavior
+const client = useQueryClient();
+const { data: url } = useCurrentUrlQuery();
+const discardChanges = useDiscardChanges();
+
+watch(url, () => {
+  client.invalidateQueries(QueryKey.EpisodeInfo);
+  if (isEditing.value) {
+    // TODO: Don't discard changes, ask if the user wants to save their changes for the previous episode
+    discardChanges();
+  }
+});
 </script>
 
 <template>
