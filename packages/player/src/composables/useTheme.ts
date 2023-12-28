@@ -7,13 +7,21 @@ import { ColorTheme } from '../utils/api';
 export default createSharedComposable(() => {
   const { pref: theme } = useReadonlyPreference('colorTheme');
   const { shadowHtml } = useShadowRoot();
-  const { serviceName } = usePlayerOptions();
+  const { serviceTheme } = usePlayerOptions();
 
   watch(
     theme,
     (newTheme) => {
       const themeName =
-        newTheme === ColorTheme.PerService ? serviceName : newTheme;
+        newTheme === ColorTheme.PerService
+          ? serviceTheme ?? ColorTheme.AnimeSkipBlue
+          : newTheme;
+      console.log({
+        newTheme,
+        PerService: ColorTheme.PerService,
+        serviceTheme,
+        themeName,
+      });
 
       if (themeName) shadowHtml.setAttribute('data-theme', themeName);
       else shadowHtml.removeAttribute('data-theme');

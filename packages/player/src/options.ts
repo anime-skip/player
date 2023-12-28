@@ -1,4 +1,5 @@
 import { PlayerVisibility } from './utils/PlayerVisibility';
+import { ColorTheme } from './utils/api';
 import type { TypedStorage } from './utils/createTypedStorage';
 
 export interface PlayerOptions {
@@ -8,6 +9,10 @@ export interface PlayerOptions {
    * If not passed, it is not shown.
    */
   serviceName?: string;
+  /**
+   * The color theme to use when the user choose "dynamic" theme.
+   */
+  serviceTheme?: ColorTheme;
   /**
    * Storage implementation that the player should use.
    *
@@ -80,6 +85,7 @@ export interface PlayerOptions {
 
 export interface InternalPlayerOptions {
   serviceName: string | undefined;
+  serviceTheme: ColorTheme | undefined;
   storage: TypedStorage;
   video: () => HTMLVideoElement;
   getEpisodeInfo: () => MaybePromise<{

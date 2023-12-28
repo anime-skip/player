@@ -1,4 +1,5 @@
 import '~/assets/crunchyroll-player.scss';
+import { ColorTheme } from '@anime-skip/player';
 
 export default defineContentScript({
   matches: ['*://static.crunchyroll.com/vilos-v2/web/vilos/player.html*'],
@@ -7,7 +8,8 @@ export default defineContentScript({
     // Load player
     initExtensionPlayer({
       ctx,
-      serviceName: 'Cruncyroll',
+      serviceName: 'Crunchyroll',
+      serviceTheme: ColorTheme.CrunchyrollOrange,
       parentElement: 'body',
       fullscreenElement: 'body',
       // Strip and remove -XXXXXX from end of url

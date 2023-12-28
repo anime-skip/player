@@ -107,6 +107,7 @@ function getInternalOptions(options?: PlayerOptions): InternalPlayerOptions {
 
   return {
     serviceName: options?.serviceName?.trim(),
+    serviceTheme: options?.serviceTheme,
 
     storage: createTypedStorage(options?.storage ?? createLocalPlayerStorage()),
 
