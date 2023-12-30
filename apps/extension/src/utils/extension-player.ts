@@ -39,7 +39,7 @@ export function initExtensionPlayer(options: ExtensionPlayerOptions): void {
       const { url } = await messaging.sendMessage('getSenderTab', undefined);
       if (url == null) throw Error("Could not find episode's URL");
 
-      return options.transformServiceUrl(url);
+      return options.transformServiceUrl?.(url) ?? stripUrl(url);
     },
     async takeScreenshot(bounds) {
       return await messaging.sendMessage('takeScreenshot', bounds);
@@ -55,6 +55,6 @@ export interface ExtensionPlayerOptions
   extends Omit<PlayerOptions, 'apiClientId' | 'apiUrl' | 'storage'> {
   ctx: ContentScriptContext;
   parentElement: string | Element;
-  transformServiceUrl(url: string): string;
-  isDisabled(): boolean;
+  transformServiceUrl?(url: string): string;
+  isDisabled?(): boolean;
 }

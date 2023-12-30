@@ -5,7 +5,14 @@ import { forwardKeydownEvent } from '@anime-skip/player';
  * "anime-skip:keydown" for the player to handle.
  */
 export default defineContentScript({
-  matches: ['*://static.crunchyroll.com/vilos-v2/web/vilos/player.html'],
+  matches: [
+    // Crunchyroll
+    '*://static.crunchyroll.com/vilos-v2/web/vilos/player.html',
+    // Aniwave (9anime)
+    '*://mcloud.bz/e/*',
+    '*://www.mp4upload.com/embed-*',
+    '*://vidplay.online/e/*',
+  ],
   runAt: 'document_start',
   allFrames: true,
 

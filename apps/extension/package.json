@@ -12,15 +12,18 @@
     "zip": "pnpm --filter player build && wxt zip",
     "zip:firefox": "pnpm -s zip -- -b firefox",
     "compile": "tsc --noEmit",
-    "postinstall": "wxt prepare"
+    "postinstall": "wxt prepare",
+    "test": "vitest"
   },
   "dependencies": {
     "@anime-skip/player": "workspace:*",
     "@webext-core/messaging": "^1.4.0"
   },
   "devDependencies": {
+    "happy-dom": "^12.10.3",
     "sass": "^1.69.5",
     "typescript": "^5.3.3",
+    "vitest": "^1.1.0",
     "wxt": "^0.13.0"
   }
 }

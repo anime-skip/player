@@ -88,19 +88,21 @@ export interface InternalPlayerOptions {
   serviceTheme: ColorTheme | undefined;
   storage: TypedStorage;
   video: () => HTMLVideoElement;
-  getEpisodeInfo: () => MaybePromise<{
-    showName: string | undefined;
-    season: string | undefined;
-    episodeName: string | undefined;
-    number: string | undefined;
-    absoluteNumber: string | undefined;
-  }>;
+  getEpisodeInfo: () => MaybePromise<InferredEpisodeInfo>;
   fullscreenElement: () => HTMLElement;
   apiUrl: string;
   apiClientId: string;
   getEpisodeUrl: () => MaybePromise<string>;
   onVisibilityChange: OnVisibilityChangeCallback | undefined;
   takeScreenshot: false | ((bounds: ScreenshotBounds) => Promise<string>);
+}
+
+export interface InferredEpisodeInfo {
+  showName?: string;
+  season?: string;
+  episodeName?: string;
+  number?: string;
+  absoluteNumber?: string;
 }
 
 export type ElementOption = string | Element | (() => string | Element);

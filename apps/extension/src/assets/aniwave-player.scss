@@ -1,0 +1,8 @@
+[anime-skip-hide-builtin-player] {
+  // All the player controls
+  .jw-controlbar,
+  // Ad that shows up on pause and server list
+  #player-wrapper > div:not(#player) {
+    display: none !important;
+  }
+}
