@@ -3,33 +3,19 @@
 import { defineConfig, Plugin } from 'vite';
 import { execSync } from 'node:child_process';
 import vue from '@vitejs/plugin-vue';
+import dts from 'vite-plugin-dts';
 import autoImport from 'unplugin-auto-import/vite';
 import icons from 'unplugin-icons/vite';
 import { FileSystemIconLoader } from 'unplugin-icons/loaders';
 import { visualizer } from 'rollup-plugin-visualizer';
-import path from 'node:path';
-
-function vueTsc(): Plugin {
-  let alreadyExecuted = false;
-  return {
-    name: 'vue-tsc',
-    writeBundle() {
-      if (alreadyExecuted) return;
-
-      console.log('Generating types...');
-      execSync('vue-tsc -p tsconfig.build.json --emitDeclarationOnly', {
-        stdio: 'inherit',
-      });
-      alreadyExecuted = true;
-    },
-  };
-}
 
 function generate(): Plugin {
   return {
     name: 'generate',
     buildStart() {
+      console.log('Generating GraphQL...');
       execSync('pnpm generate:graphql');
+      console.log('Generated GraphQL');
     },
   };
 }
@@ -51,7 +37,7 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       visualizer(),
-      vueTsc(),
+      dts({ tsconfigPath: 'tsconfig.build.json', entryRoot: 'src' }),
       vue(),
       generate(),
       icons({
