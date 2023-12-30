@@ -48,6 +48,17 @@ export default defineBackground(() => {
       }),
     );
   });
+
+  messaging.onMessage('getFrameBodyInnerHtml', async ({ data }) => {
+    return await messaging.sendMessage(
+      'getFrameBodyInnerHtml',
+      data,
+      data.tabId,
+    );
+  });
+  messaging.onMessage('getFrameHtml', async ({ data }) => {
+    return await messaging.sendMessage('getFrameHtml', data, data.tabId);
+  });
 });
 
 async function openInspector() {

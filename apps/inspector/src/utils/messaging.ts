@@ -8,12 +8,18 @@ export interface ProtocolMap {
   getNetworkRequest(
     id: NetworkRequest['id'],
   ): Promise<NetworkRequest | undefined>;
-  getTabs(): Promise<
-    Array<{
-      tab: Tabs.Tab;
-      frames: WebNavigation.GetAllFramesCallbackDetailsItemType[];
-    }>
-  >;
+  getTabs(): Array<{
+    tab: Tabs.Tab;
+    frames: WebNavigation.GetAllFramesCallbackDetailsItemType[];
+  }>;
+  getFrameHtml(options: {
+    tabId: number | undefined;
+    targetUrl: string | undefined;
+  }): string;
+  getFrameBodyInnerHtml(options: {
+    tabId: number | undefined;
+    targetUrl: string | undefined;
+  }): string;
 }
 
 export const messaging = defineExtensionMessaging<ProtocolMap>();
