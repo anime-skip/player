@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const isNetworkActive = useIsTabActive('/network');
+const isNetworkTabActive = useIsTabActive('/network');
+const isTabsTabActive = useIsTabActive('/tabs');
 </script>
 
 <template>
@@ -14,7 +15,17 @@ const isNetworkActive = useIsTabActive('/network');
       role="tab"
       class="tab"
       :class="{
-        'tab-active': isNetworkActive,
+        'tab-active': isTabsTabActive,
+      }"
+      to="/tabs"
+    >
+      <span>Tabs</span>
+    </RouterLink>
+    <RouterLink
+      role="tab"
+      class="tab"
+      :class="{
+        'tab-active': isNetworkTabActive,
       }"
       to="/network"
     >

@@ -32,6 +32,22 @@ export default defineBackground(() => {
   messaging.onMessage('getNetworkRequest', ({ data: id }) =>
     networkRepo.get(id),
   );
+  messaging.onMessage('getTabs', async () => {
+    const tabs = await browser.tabs.query({});
+    return Promise.all(
+      tabs.map(async (tab) => {
+        const frames =
+          tab.id == null
+            ? []
+            : (await browser.webNavigation.getAllFrames({ tabId: tab.id })) ??
+              [];
+        return {
+          tab,
+          frames,
+        };
+      }),
+    );
+  });
 });
 
 async function openInspector() {

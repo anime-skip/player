@@ -17,6 +17,10 @@ export default createRouter({
             },
           ],
         },
+        {
+          path: 'tabs',
+          component: () => import('~/pages/tabs.vue'),
+        },
       ],
     },
   ],
