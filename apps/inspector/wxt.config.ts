@@ -14,7 +14,6 @@ export default defineConfig({
     plugins: [vue()],
   }),
   manifest: {
-    version: '1.0.0',
     permissions: ['storage', 'contextMenus', 'webNavigation'],
     action: {
       default_area: 'navbar',
