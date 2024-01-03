@@ -128,9 +128,7 @@ function monkeyPatchXhr(options: {
         if (this.readyState === this.DONE) {
           if (this.responseType === 'blob') {
             this.responseBody = await (this.response as Blob).text();
-            console.log(1, this.response);
           } else {
-            console.log(2, this.responseText);
             this.responseBody = this.responseText;
           }
           this.getAllResponseHeaders()
