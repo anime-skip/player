@@ -8,6 +8,9 @@ export async function createDomFromFile(
   const window = await new Window({
     settings: {
       disableJavaScriptEvaluation: true,
+      disableIframePageLoading: true,
+      disableJavaScriptFileLoading: true,
+      disableCSSFileLoading: true,
     },
   });
   const file = await fs.readFile(resolve(...path), 'utf-8');

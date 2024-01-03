@@ -7,9 +7,9 @@
   - [x] Timestamps/episode info don't update when going between episodes
   - [x] Tabbing past filter timestamp type menu should take me to the save and delete buttons, not the menu items
   - [x] Dynamic color theme not working
-- [ ] aniwave.to
-- [ ] aniwatch.to
-- [ ] Funimation
-- [ ] VRV
+- [x] aniwave.to
+- [x] aniwatch.to
 - [ ] Skip button shows above modals
 - [ ] Integration with anime-skip.com
+- [ ] Funimation
+- [ ] VRV

@@ -12,6 +12,9 @@ export default defineContentScript({
     '*://mcloud.bz/e/*',
     '*://www.mp4upload.com/embed-*',
     '*://vidplay.online/e/*',
+    // Aniwatch (Zoro)
+    '*://megacloud.tv/e/embed-*',
+    '*://watchsb.com/e/*',
   ],
   runAt: 'document_start',
   allFrames: true,

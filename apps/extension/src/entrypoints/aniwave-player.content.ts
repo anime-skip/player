@@ -1,5 +1,4 @@
-import '~/assets/aniwave-player.scss';
-import { ColorTheme } from '@anime-skip/player';
+import '~/assets/jw-player.scss';
 
 export default defineContentScript({
   matches: [

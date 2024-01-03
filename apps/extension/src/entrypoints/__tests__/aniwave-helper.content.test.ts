@@ -6,7 +6,7 @@ import { createDomFromFile } from '~/utils/testing/dom';
 import { getEpisodeInfo } from '../aniwave-helper.content';
 import { InferredEpisodeInfo } from '@anime-skip/player';
 
-describe('9anime Parent Content Script', () => {
+describe('Aniwave (previously 9anime) Helper', () => {
   describe('getEpisodeInfo', () => {
     it.each<[string, InferredEpisodeInfo]>([
       [
