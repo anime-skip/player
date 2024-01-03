@@ -36,15 +36,20 @@ function goToNextTimestamp() {
 }
 
 const { isEditing } = useIsEditing();
+const { view } = useView();
 const isVisible = computed<boolean>(() => {
   // We consider anything "close" to the end as the end. When skipping to the end of the video, it
   // doesn't always go to the end, it usually goes to within 1 to 1.5 seconds of the end. So this
   // covers that case and prevents the button from showing up after skipping to the end of the
   // video.
   const isAtEnd = Math.abs(currentTime.value - (duration.value ?? 0)) < 1.5;
+  const hiddenbyView = view.value === 'account' || view.value === 'preferences';
 
   return (
-    !!currentTimestampType.value && isCurrentTimestampSkipped.value && !isAtEnd
+    !!currentTimestampType.value &&
+    isCurrentTimestampSkipped.value &&
+    !isAtEnd &&
+    !hiddenbyView
   );
 });
 
@@ -63,7 +68,7 @@ whenever(
   <button
     v-if="isVisible"
     ref="skipButton"
-    class="btn btn-primary"
+    class="btn btn-primary shadow-xl"
     @click.stop="goToNextTimestamp"
   >
     Skip {{ currentTimestampType?.name }}

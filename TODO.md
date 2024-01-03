@@ -9,7 +9,7 @@
   - [x] Dynamic color theme not working
 - [x] aniwave.to
 - [x] aniwatch.to
-- [ ] Skip button shows above modals
+- [x] Skip button shows above modals
 - [ ] Integration with anime-skip.com
 - [ ] Funimation
 - [ ] VRV
