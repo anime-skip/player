@@ -1,7 +1,0 @@
-{
-  "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "lib": ["dom", "esnext"],
-    "types": ["vite/client", "vue-global-api"]
-  }
-}
