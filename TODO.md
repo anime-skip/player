@@ -11,5 +11,6 @@
 - [x] aniwatch.to
 - [x] Skip button shows above modals
 - [ ] Integration with anime-skip.com
+  - [ ] install check
 - [ ] Funimation
 - [ ] VRV
