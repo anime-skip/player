@@ -29,7 +29,7 @@ const summary = computed(() => getSeasonAndNumberText(episodeDetails.value));
 
 <template>
   <div
-    class="flex flex-col justify-start p-12 duration-200 transition-all"
+    class="flex flex-col justify-start p-12 duration-200 transition-all max-w-[70%]"
     :class="{
       '-translate-y-12 opacity-0': hidden,
       'translate-y-0 opacity-100': !hidden,
