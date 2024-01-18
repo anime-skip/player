@@ -42,14 +42,12 @@ export default createSharedComposable(() => {
       const currentDuration = duration.value;
       const url = currentUrl.value;
 
-      if (
-        !auth.value ||
-        !currentDuration ||
-        !newShowName ||
-        !newEpisodeName ||
-        !url
-      )
-        return;
+      if (auth.value == null) {
+        throw Error('Not logged in, cannot save.');
+      }
+      if (!currentDuration || !newShowName || !newEpisodeName || !url) {
+        throw Error('Episode has not finished loading, cannot save.');
+      }
 
       const showInput: InputShow = {
         name: newShowName,
