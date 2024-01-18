@@ -4,13 +4,13 @@
   "type": "module",
   "scripts": {
     "dev": "pnpm --filter player build && wxt",
-    "dev:firefox": "pnpm -s dev -- -b firefox",
+    "dev:firefox": "pnpm -s dev -b firefox",
     "dev:prod": "pnpm --filter player build && wxt --mode production",
-    "dev:prod:firefox": "pnpm -s dev:prod -- -b firefox",
+    "dev:prod:firefox": "pnpm -s dev:prod -b firefox",
     "build": "pnpm --filter player build && wxt build",
-    "build:firefox": "pnpm -s build -- -b firefox",
+    "build:firefox": "pnpm -s build -b firefox",
     "zip": "pnpm --filter player build && wxt zip",
-    "zip:firefox": "pnpm -s zip -- -b firefox",
+    "zip:firefox": "pnpm -s zip -b firefox",
     "compile": "tsc --noEmit",
     "postinstall": "wxt prepare",
     "test": "vitest"
