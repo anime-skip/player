@@ -8,7 +8,7 @@ export const messaging = defineExtensionMessaging<MessagingProtocol>({
 interface MessagingProtocol {
   getTopFrameUrl(): string;
   getEpisodeInfoFromHelper(): EpisodeInfo;
-  sendScreenshot(image: string): void;
+  sendScreenshotToTab(url: string): void;
   setPlayerVisibility(visibility: PlayerVisibility): void;
 }
 

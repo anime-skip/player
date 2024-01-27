@@ -30,7 +30,7 @@ export default defineBackground(() => {
         format: 'jpeg',
         quality: 100,
       });
-      await messaging.sendMessage('sendScreenshot', res, tab?.id);
+      await messaging.sendMessage('sendScreenshotToTab', res, tab?.id);
     } finally {
       await messaging.sendMessage(
         'setPlayerVisibility',

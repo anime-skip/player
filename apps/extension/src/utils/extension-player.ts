@@ -49,7 +49,7 @@ export function initExtensionPlayer(options: ExtensionPlayerOptions): void {
   messaging.onMessage('setPlayerVisibility', async ({ data }) => {
     player.setPlayerVisibility(data);
   });
-  messaging.onMessage('sendScreenshot', async ({ data }) => {
+  messaging.onMessage('sendScreenshotToTab', async ({ data }) => {
     player.showScreenshot(data);
   });
 
