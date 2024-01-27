@@ -7,6 +7,8 @@ import playerStyles from './assets/tailwind.css?inline';
 import { createTypedStorage } from './utils/createTypedStorage';
 import { VueQueryPlugin } from 'vue-query';
 import { stripHashAndQuery } from './utils/url-utils';
+import { PlayerVisibility } from './utils/PlayerVisibility';
+import { PlayerEvent } from './utils/PlayerEvent';
 
 export function createPlayer(options?: PlayerOptions): AnimeSkipPlayer {
   const internalOptions = getInternalOptions(options);
@@ -68,6 +70,18 @@ export function createPlayer(options?: PlayerOptions): AnimeSkipPlayer {
     unmount() {
       app.unmount();
     },
+    setPlayerVisibility(visibility) {
+      PlayerEvent.dispatch({
+        type: 'setPlayerVisibility',
+        visibility,
+      });
+    },
+    showScreenshot(url) {
+      PlayerEvent.dispatch({
+        type: 'showScreenshot',
+        url,
+      });
+    },
   };
 }
 
@@ -88,6 +102,18 @@ export interface AnimeSkipPlayer {
    * Removes the player from the DOM.
    */
   unmount(): void;
+
+  /**
+   * Change the player's UI visibility.
+   */
+  setPlayerVisibility(visibility: PlayerVisibility): void;
+
+  /**
+   * Tell the player to display a captured screenshot.
+   *
+   * @param url Can be a regular URL or a data URL.
+   */
+  showScreenshot(url: string): void;
 }
 
 function getInternalOptions(options?: PlayerOptions): InternalPlayerOptions {
@@ -164,5 +190,7 @@ function getInternalOptions(options?: PlayerOptions): InternalPlayerOptions {
     onVisibilityChange: options?.onVisibilityChange,
 
     takeScreenshot: options?.takeScreenshot ?? false,
+
+    disableContextMenu: options?.disableContextMenu ?? false,
   };
 }

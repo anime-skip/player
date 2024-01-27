@@ -8,6 +8,7 @@ import ManualSkipButton from './ManualSkipButton.vue';
 import { QueryKey } from '../utils/QueryKey';
 import ContextMenu from './ContextMenu.vue';
 import ScreenshotPreview from './ScreenshotPreview.vue';
+import { PlayerEvent } from '../utils/PlayerEvent';
 
 const root = ref<HTMLDivElement>();
 
@@ -19,6 +20,7 @@ const { view } = useView();
 const toolbarModalOpen = computed(
   () => view.value === 'preferences' || view.value === 'account',
 );
+const { disableContextMenu } = usePlayerOptions();
 
 const visibility = usePlayerVisibility();
 
@@ -57,6 +59,19 @@ watch(url, () => {
     discardChanges();
   }
 });
+
+const preview = useScreenshotPreview();
+
+useCustomEventListener<PlayerEvent>(PlayerEvent.TYPE, ({ detail }) => {
+  switch (detail.type) {
+    case 'setPlayerVisibility':
+      visibility.value = detail.visibility;
+      break;
+    case 'showScreenshot':
+      preview.value = detail.url;
+      break;
+  }
+});
 </script>
 
 <template>
@@ -92,7 +107,7 @@ watch(url, () => {
 
     <side-panel class="h-full z-10" />
 
-    <context-menu />
+    <context-menu v-if="!disableContextMenu" />
   </div>
 
   <!-- Other top level UIs -->

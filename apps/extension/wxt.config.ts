@@ -9,8 +9,7 @@ export default defineConfig({
       name: `Anime Skip Player${mode === 'development' ? ' (DEV)' : ''}`,
       description:
         'Custom video player for anime streaming websites. Skip intros, outros, and more.',
-      permissions: ['storage', 'tabs'],
-      host_permissions: ['<all_urls>'],
+      permissions: ['storage', 'activeTab', 'contextMenus'],
     };
     if (browser === 'firefox') {
       manifest.browser_specific_settings = {
