@@ -20,6 +20,8 @@ export default defineBackground(() => {
     title: 'Take Screenshot',
   });
   browser.contextMenus.onClicked.addListener(async (info, tab) => {
+    if (info.menuItemId !== 'screenshot') return;
+
     try {
       await messaging.sendMessage(
         'setPlayerVisibility',
