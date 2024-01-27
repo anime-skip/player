@@ -6,6 +6,7 @@ export function initExtensionHelper(options: HelperOptions) {
   messaging.onMessage('getEpisodeInfoFromHelper', () =>
     options.getEpisodeInfo(),
   );
+  messaging.onMessage('getTopFrameUrl', () => location.href);
 }
 
 export interface HelperOptions {

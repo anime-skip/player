@@ -36,17 +36,22 @@ export function initExtensionPlayer(options: ExtensionPlayerOptions): void {
       }
     },
     async getEpisodeUrl() {
-      const { url } = await messaging.sendMessage('getSenderTab', undefined);
+      const url = await messaging.sendMessage('getTopFrameUrl', undefined);
       if (url == null) throw Error("Could not find episode's URL");
 
       return options.transformServiceUrl?.(url) ?? stripUrl(url);
     },
-    async takeScreenshot(bounds) {
-      return await messaging.sendMessage('takeScreenshot', bounds);
-    },
+    disableContextMenu: true,
     ...options,
   });
   player.mount(options.parentElement);
+
+  messaging.onMessage('setPlayerVisibility', async ({ data }) => {
+    player.setPlayerVisibility(data);
+  });
+  messaging.onMessage('sendScreenshotToTab', async ({ data }) => {
+    player.showScreenshot(data);
+  });
 
   options.ctx.onInvalidated(() => player.unmount());
 }

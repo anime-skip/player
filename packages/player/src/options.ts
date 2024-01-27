@@ -81,6 +81,11 @@ export interface PlayerOptions {
    * Given some bounds, return a URL to the screenshot (usuaslly a base64 encoded data URL).
    */
   takeScreenshot?: (bounds: ScreenshotBounds) => Promise<string>;
+
+  /**
+   * When true, don't show a custom context menu when right-clicking.
+   */
+  disableContextMenu?: boolean;
 }
 
 export interface InternalPlayerOptions {
@@ -95,6 +100,7 @@ export interface InternalPlayerOptions {
   getEpisodeUrl: () => MaybePromise<string>;
   onVisibilityChange: OnVisibilityChangeCallback | undefined;
   takeScreenshot: false | ((bounds: ScreenshotBounds) => Promise<string>);
+  disableContextMenu: boolean;
 }
 
 export interface InferredEpisodeInfo {
