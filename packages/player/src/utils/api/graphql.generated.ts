@@ -1,21 +1,26 @@
-import type { DocumentNode } from "graphql";
-import type { GraphQLClient } from 'graphql-request';
-import type * as Dom from 'graphql-request/dist/types.dom';
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> =
+  | T
+  | {
+      [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never;
+    };
+import type { DocumentNode } from 'graphql';
+import type { GraphQLClient, RequestOptions } from 'graphql-request';
 import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+type GraphQLClientRequestHeaders = RequestOptions['requestHeaders'];
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
-  Time: string;
-  UInt: string;
+  ID: { input: string; output: string };
+  String: { input: string; output: string };
+  Boolean: { input: boolean; output: boolean };
+  Int: { input: number; output: number };
+  Float: { input: number; output: number };
+  Time: { input: string; output: string };
+  UInt: { input: string; output: string };
 };
 
 /** Account info that should only be accessible by the authorized user */
@@ -27,48 +32,48 @@ export type Account = {
    * > This data is also accessible on the `User` model. It has been added here for convenience
    */
   adminOfShows: Array<ShowAdmin>;
-  createdAt: Scalars['Time'];
-  deletedAt?: Maybe<Scalars['Time']>;
-  email: Scalars['String'];
+  createdAt: Scalars['Time']['output'];
+  deletedAt?: Maybe<Scalars['Time']['output']>;
+  email: Scalars['String']['output'];
   /** If the user's email is verified. Emails must be verified before the user can call a mutation */
-  emailVerified: Scalars['Boolean'];
-  id: Scalars['ID'];
+  emailVerified: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
   /** The user's preferences */
   preferences: Preferences;
   /** Url to an image that is the user's profile picture */
-  profileUrl: Scalars['String'];
+  profileUrl: Scalars['String']['output'];
   /** The user's administrative role. Most users are `Role.USER` */
   role: Role;
   /** Unique string slug that is the easy to remember identifier */
-  username: Scalars['String'];
+  username: Scalars['String']['output'];
 };
 
 export type ApiClient = {
   __typename?: 'ApiClient';
-  appName: Scalars['String'];
-  createdAt: Scalars['Time'];
+  appName: Scalars['String']['output'];
+  createdAt: Scalars['Time']['output'];
   createdBy: User;
-  createdByUserId: Scalars['ID'];
-  deletedAt?: Maybe<Scalars['Time']>;
+  createdByUserId: Scalars['ID']['output'];
+  deletedAt?: Maybe<Scalars['Time']['output']>;
   deletedBy?: Maybe<User>;
-  deletedByUserId?: Maybe<Scalars['ID']>;
-  description: Scalars['String'];
-  id: Scalars['String'];
-  rateLimitRpm?: Maybe<Scalars['UInt']>;
-  updatedAt: Scalars['Time'];
+  deletedByUserId?: Maybe<Scalars['ID']['output']>;
+  description: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  rateLimitRpm?: Maybe<Scalars['UInt']['output']>;
+  updatedAt: Scalars['Time']['output'];
   updatedBy: User;
-  updatedByUserId: Scalars['ID'];
+  updatedByUserId: Scalars['ID']['output'];
   /** The user this client belongs to */
   user: User;
   /** The ID of the user this client belongs to */
-  userId: Scalars['ID'];
+  userId: Scalars['ID']['output'];
 };
 
 export type ApiClientChanges = {
-  appName?: InputMaybe<Scalars['String']>;
-  description?: InputMaybe<Scalars['String']>;
+  appName?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
   /** Rate limits can only be changed by admins */
-  rateLimitRpm?: InputMaybe<Scalars['UInt']>;
+  rateLimitRpm?: InputMaybe<Scalars['UInt']['input']>;
 };
 
 /**
@@ -77,25 +82,25 @@ export type ApiClientChanges = {
  */
 export type BaseModel = {
   /** Time that the item was created at */
-  createdAt: Scalars['Time'];
+  createdAt: Scalars['Time']['output'];
   /** The entire user that created the item */
   createdBy: User;
   /** The user's `id` that created the item */
-  createdByUserId: Scalars['ID'];
+  createdByUserId: Scalars['ID']['output'];
   /** Time that the item was updated at. If this value is present, the item is considered deleted */
-  deletedAt?: Maybe<Scalars['Time']>;
+  deletedAt?: Maybe<Scalars['Time']['output']>;
   /** The entire user that deleted the item */
   deletedBy?: Maybe<User>;
   /** The user's `id` that deleted the item */
-  deletedByUserId?: Maybe<Scalars['ID']>;
+  deletedByUserId?: Maybe<Scalars['ID']['output']>;
   /** Unique, v4 UUID. When asked for an `id` of an object, use this field */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /** Time that the item was updated at */
-  updatedAt: Scalars['Time'];
+  updatedAt: Scalars['Time']['output'];
   /** The entire user that last updated the item */
   updatedBy: User;
   /** The user's `id` that last updated the item */
-  updatedByUserId: Scalars['ID'];
+  updatedByUserId: Scalars['ID']['output'];
 };
 
 /** Color theme the user prefers */
@@ -105,12 +110,12 @@ export enum ColorTheme {
   FunimationPurple = 'FUNIMATION_PURPLE',
   /** Change to match where you're watching */
   PerService = 'PER_SERVICE',
-  VrvYellow = 'VRV_YELLOW'
+  VrvYellow = 'VRV_YELLOW',
 }
 
 export type CreateApiClient = {
-  appName: Scalars['String'];
-  description: Scalars['String'];
+  appName: Scalars['String']['input'];
+  description: Scalars['String']['input'];
 };
 
 /**
@@ -123,7 +128,7 @@ export type Episode = BaseModel & {
    * The absolute episode number out of all the episodes of the show. Generally only regular episodes
    * should have this field
    */
-  absoluteNumber?: Maybe<Scalars['String']>;
+  absoluteNumber?: Maybe<Scalars['String']['output']>;
   /**
    * The duration of the episode's first url, which can be used to calculate a suggested offset for new
    * episode urls. Episodes at different URLs have different branding intros, and that difference can
@@ -131,16 +136,16 @@ export type Episode = BaseModel & {
    * Generally, this works because each service has it's own branding at the beginning of the show, not
    * at the end of it
    */
-  baseDuration?: Maybe<Scalars['Float']>;
-  createdAt: Scalars['Time'];
+  baseDuration?: Maybe<Scalars['Float']['output']>;
+  createdAt: Scalars['Time']['output'];
   createdBy: User;
-  createdByUserId: Scalars['ID'];
-  deletedAt?: Maybe<Scalars['Time']>;
+  createdByUserId: Scalars['ID']['output'];
+  deletedAt?: Maybe<Scalars['Time']['output']>;
   deletedBy?: Maybe<User>;
-  deletedByUserId?: Maybe<Scalars['ID']>;
-  id: Scalars['ID'];
+  deletedByUserId?: Maybe<Scalars['ID']['output']>;
+  id: Scalars['ID']['output'];
   /** The episode's name */
-  name?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']['output']>;
   /**
    * The episode number in the current season
    *
@@ -151,7 +156,7 @@ export type Episode = BaseModel & {
    * - "5.5"
    * - "OVA 1"
    */
-  number?: Maybe<Scalars['String']>;
+  number?: Maybe<Scalars['String']['output']>;
   /**
    * The season number that this episode belongs to
    *
@@ -162,11 +167,11 @@ export type Episode = BaseModel & {
    * - "2"
    * - "Movies"
    */
-  season?: Maybe<Scalars['String']>;
+  season?: Maybe<Scalars['String']['output']>;
   /** The show that the episode belongs to */
   show: Show;
   /** The id of the show that the episode belongs to */
-  showId: Scalars['ID'];
+  showId: Scalars['ID']['output'];
   /** If the episode is the source episode for a `Template`, this will resolve to that template */
   template?: Maybe<Template>;
   /**
@@ -176,9 +181,9 @@ export type Episode = BaseModel & {
    * between urls and not need duplicate data
    */
   timestamps: Array<Timestamp>;
-  updatedAt: Scalars['Time'];
+  updatedAt: Scalars['Time']['output'];
   updatedBy: User;
-  updatedByUserId: Scalars['ID'];
+  updatedByUserId: Scalars['ID']['output'];
   /** The list of urls and services that the episode can be accessed from */
   urls: Array<EpisodeUrl>;
   /**
@@ -189,13 +194,12 @@ export type Episode = BaseModel & {
   userReports: Array<UserReport>;
 };
 
-
 /**
  * Basic information about an episode, including season, numbers, a list of timestamps, and urls that
  * it can be watched at
  */
 export type EpisodeUserReportsArgs = {
-  resolved?: InputMaybe<Scalars['Boolean']>;
+  resolved?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /**
@@ -210,25 +214,25 @@ export enum EpisodeSource {
   /** Data came from an external source */
   Unknown = 'UNKNOWN',
   /** Data is from <vrv.co> */
-  Vrv = 'VRV'
+  Vrv = 'VRV',
 }
 
 /** Stores information about what where an episode can be watched from */
 export type EpisodeUrl = {
   __typename?: 'EpisodeUrl';
-  createdAt: Scalars['Time'];
+  createdAt: Scalars['Time']['output'];
   createdBy: User;
-  createdByUserId: Scalars['ID'];
+  createdByUserId: Scalars['ID']['output'];
   /**
    * The length of the episode at this url. For more information on why this field exists, check out
    * the `Episode.baseDuration`. If an `Episode` does not have a duration, that `Episode` and this
    * `EpisodeUrl` should be given the same value, and the `EpisodeUrl.timestampsOffset` should be set to 0
    */
-  duration?: Maybe<Scalars['Float']>;
+  duration?: Maybe<Scalars['Float']['output']>;
   /** The `Episode` that this url belongs to */
   episode: Episode;
   /** The `Episode.id` that this url belongs to */
-  episodeId: Scalars['ID'];
+  episodeId: Scalars['ID']['output'];
   /** What service this url points to. This is computed when the `EpisodeUrl` is created */
   source: EpisodeSource;
   /**
@@ -237,56 +241,56 @@ export type EpisodeUrl = {
    * to whatever, but it should be suggested to be `EpisodeUrl.duration - Episode.baseDuration`.
    * It can be positive or negative.
    */
-  timestampsOffset?: Maybe<Scalars['Float']>;
-  updatedAt: Scalars['Time'];
+  timestampsOffset?: Maybe<Scalars['Float']['output']>;
+  updatedAt: Scalars['Time']['output'];
   updatedBy: User;
-  updatedByUserId: Scalars['ID'];
+  updatedByUserId: Scalars['ID']['output'];
   /**
    * The url that would take a user to watch the `episode`.
    *
    * This url should be stripped of all query params.
    */
-  url: Scalars['String'];
+  url: Scalars['String']['output'];
 };
 
 export type ExternalLink = {
   __typename?: 'ExternalLink';
-  service: Scalars['String'];
-  serviceId?: Maybe<Scalars['String']>;
+  service: Scalars['String']['output'];
+  serviceId?: Maybe<Scalars['String']['output']>;
   show: Show;
-  showId: Scalars['ID'];
-  url: Scalars['String'];
+  showId: Scalars['ID']['output'];
+  url: Scalars['String']['output'];
 };
 
 /** Allowed services for show's external links */
 export enum ExternalService {
-  Anilist = 'ANILIST'
+  Anilist = 'ANILIST',
 }
 
 /** Data required to create a new `Episode`. See `Episode` for a description of each field */
 export type InputEpisode = {
   /** See `Episode.absoluteNumber` */
-  absoluteNumber?: InputMaybe<Scalars['String']>;
+  absoluteNumber?: InputMaybe<Scalars['String']['input']>;
   /** See `Episode.baseDuration` */
-  baseDuration: Scalars['Float'];
+  baseDuration: Scalars['Float']['input'];
   /** See `Episode.name` */
-  name?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']['input']>;
   /** See `Episode.number` */
-  number?: InputMaybe<Scalars['String']>;
+  number?: InputMaybe<Scalars['String']['input']>;
   /** See `Episode.season` */
-  season?: InputMaybe<Scalars['String']>;
+  season?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** Data required to create a new `EpisodeUrl`. See `EpisodeUrl` for a description of each field */
 export type InputEpisodeUrl = {
-  duration?: InputMaybe<Scalars['Float']>;
-  timestampsOffset?: InputMaybe<Scalars['Float']>;
-  url: Scalars['String'];
+  duration?: InputMaybe<Scalars['Float']['input']>;
+  timestampsOffset?: InputMaybe<Scalars['Float']['input']>;
+  url: Scalars['String']['input'];
 };
 
 export type InputExistingTimestamp = {
   /** The id of the timestamp you want to modify */
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
   /** The new values for the timestamp */
   timestamp: InputTimestamp;
 };
@@ -297,90 +301,90 @@ export type InputExistingTimestamp = {
  */
 export type InputPreferences = {
   colorTheme?: InputMaybe<ColorTheme>;
-  enableAutoPlay?: InputMaybe<Scalars['Boolean']>;
-  enableAutoSkip?: InputMaybe<Scalars['Boolean']>;
-  hideTimelineWhenMinimized?: InputMaybe<Scalars['Boolean']>;
-  minimizeToolbarWhenEditing?: InputMaybe<Scalars['Boolean']>;
-  skipBranding?: InputMaybe<Scalars['Boolean']>;
-  skipCanon?: InputMaybe<Scalars['Boolean']>;
-  skipCredits?: InputMaybe<Scalars['Boolean']>;
-  skipFiller?: InputMaybe<Scalars['Boolean']>;
-  skipIntros?: InputMaybe<Scalars['Boolean']>;
-  skipMixedCredits?: InputMaybe<Scalars['Boolean']>;
-  skipMixedIntros?: InputMaybe<Scalars['Boolean']>;
-  skipNewCredits?: InputMaybe<Scalars['Boolean']>;
-  skipNewIntros?: InputMaybe<Scalars['Boolean']>;
-  skipPreview?: InputMaybe<Scalars['Boolean']>;
-  skipRecaps?: InputMaybe<Scalars['Boolean']>;
-  skipTitleCard?: InputMaybe<Scalars['Boolean']>;
-  skipTransitions?: InputMaybe<Scalars['Boolean']>;
+  enableAutoPlay?: InputMaybe<Scalars['Boolean']['input']>;
+  enableAutoSkip?: InputMaybe<Scalars['Boolean']['input']>;
+  hideTimelineWhenMinimized?: InputMaybe<Scalars['Boolean']['input']>;
+  minimizeToolbarWhenEditing?: InputMaybe<Scalars['Boolean']['input']>;
+  skipBranding?: InputMaybe<Scalars['Boolean']['input']>;
+  skipCanon?: InputMaybe<Scalars['Boolean']['input']>;
+  skipCredits?: InputMaybe<Scalars['Boolean']['input']>;
+  skipFiller?: InputMaybe<Scalars['Boolean']['input']>;
+  skipIntros?: InputMaybe<Scalars['Boolean']['input']>;
+  skipMixedCredits?: InputMaybe<Scalars['Boolean']['input']>;
+  skipMixedIntros?: InputMaybe<Scalars['Boolean']['input']>;
+  skipNewCredits?: InputMaybe<Scalars['Boolean']['input']>;
+  skipNewIntros?: InputMaybe<Scalars['Boolean']['input']>;
+  skipPreview?: InputMaybe<Scalars['Boolean']['input']>;
+  skipRecaps?: InputMaybe<Scalars['Boolean']['input']>;
+  skipTitleCard?: InputMaybe<Scalars['Boolean']['input']>;
+  skipTransitions?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** Data required to create a new `Show`. See `Show` for a description of each field */
 export type InputShow = {
-  image?: InputMaybe<Scalars['String']>;
-  name: Scalars['String'];
-  originalName?: InputMaybe<Scalars['String']>;
-  website?: InputMaybe<Scalars['String']>;
+  image?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  originalName?: InputMaybe<Scalars['String']['input']>;
+  website?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** Data required to create a new `ShowAdmin`. See `ShowAdmin` for a description of each field */
 export type InputShowAdmin = {
-  showId: Scalars['ID'];
-  userId: Scalars['ID'];
+  showId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 /** Data required to create a new template. See `Template` for a description of each field */
 export type InputTemplate = {
-  seasons?: InputMaybe<Array<Scalars['String']>>;
-  showId: Scalars['ID'];
-  sourceEpisodeId: Scalars['ID'];
+  seasons?: InputMaybe<Array<Scalars['String']['input']>>;
+  showId: Scalars['ID']['input'];
+  sourceEpisodeId: Scalars['ID']['input'];
   type: TemplateType;
 };
 
 /** Data required to modify the timestamps on a template */
 export type InputTemplateTimestamp = {
-  templateId: Scalars['ID'];
-  timestampId: Scalars['ID'];
+  templateId: Scalars['ID']['input'];
+  timestampId: Scalars['ID']['input'];
 };
 
 /** Data required to create a new `Timestamp`. See `Timestamp` for a description of each field */
 export type InputTimestamp = {
-  at: Scalars['Float'];
+  at: Scalars['Float']['input'];
   source?: InputMaybe<TimestampSource>;
-  typeId: Scalars['ID'];
+  typeId: Scalars['ID']['input'];
 };
 
 export type InputTimestampOn = {
   /** The episode id the timestamp will be created on */
-  episodeId: Scalars['ID'];
+  episodeId: Scalars['ID']['input'];
   /** The new values for the timestamp */
   timestamp: InputTimestamp;
 };
 
 /** Data required to create a new `TimestampType`. See `TimestampType` for a description of each field */
 export type InputTimestampType = {
-  description: Scalars['String'];
-  name: Scalars['String'];
+  description: Scalars['String']['input'];
+  name: Scalars['String']['input'];
 };
 
 export type InputUserReport = {
   /** The ID of an episode if you're reporting an issue with a specific episode. */
-  episodeId?: InputMaybe<Scalars['ID']>;
+  episodeId?: InputMaybe<Scalars['ID']['input']>;
   /**
    * The URL of the epiosde URL if you're reporting an issue with a specific episode URL.
    *
    * This is different from `reportedFromUrl`, this is related to an EpisodeUrl model, not the url the report is coming from.
    */
-  episodeUrl?: InputMaybe<Scalars['String']>;
+  episodeUrl?: InputMaybe<Scalars['String']['input']>;
   /** The content of the report stating what is wrong with the reported data. */
-  message: Scalars['String'];
+  message: Scalars['String']['input'];
   /** The URL the user made the report from so the reviewer can easily navigate to it. */
-  reportedFromUrl: Scalars['String'];
+  reportedFromUrl: Scalars['String']['input'];
   /** The ID of an show if you're reporting an issue with a specific show. */
-  showId?: InputMaybe<Scalars['ID']>;
+  showId?: InputMaybe<Scalars['ID']['input']>;
   /** The ID of a timestamp if you're reporting an issue with a specific timestamp. */
-  timestampId?: InputMaybe<Scalars['ID']>;
+  timestampId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 /** When logging in with a password or refresh token, you can get new tokens and account info */
@@ -389,9 +393,9 @@ export type LoginData = {
   /** The personal account information of the user that got authenticated */
   account: Account;
   /** A JWT that should be used in the header of all requests: `Authorization: Bearer <authToken>` */
-  authToken: Scalars['String'];
+  authToken: Scalars['String']['output'];
   /** A JWT used for the `loginRefresh` query to get new `LoginData` */
-  refreshToken: Scalars['String'];
+  refreshToken: Scalars['String']['output'];
 };
 
 export type Mutation = {
@@ -494,9 +498,9 @@ export type Mutation = {
    *
    * > Because the `recaptchaResponse` is required, this can not be performed by 3rd parties
    */
-  requestPasswordReset: Scalars['Boolean'];
+  requestPasswordReset: Scalars['Boolean']['output'];
   /** Resend the verification email for the account of the authenticated user */
-  resendVerificationEmail?: Maybe<Scalars['Boolean']>;
+  resendVerificationEmail?: Maybe<Scalars['Boolean']['output']>;
   /**
    * The second step in the password reset process, coming after `requestPasswordReset`
    *
@@ -538,223 +542,184 @@ export type Mutation = {
   verifyEmailAddress: Account;
 };
 
-
 export type MutationAddExternalLinkArgs = {
-  showId: Scalars['ID'];
-  url: Scalars['String'];
+  showId: Scalars['ID']['input'];
+  url: Scalars['String']['input'];
 };
-
 
 export type MutationAddTimestampToTemplateArgs = {
   templateTimestamp: InputTemplateTimestamp;
 };
 
-
 export type MutationChangePasswordArgs = {
-  confirmNewPassword: Scalars['String'];
-  newPassword: Scalars['String'];
-  oldPassword: Scalars['String'];
+  confirmNewPassword: Scalars['String']['input'];
+  newPassword: Scalars['String']['input'];
+  oldPassword: Scalars['String']['input'];
 };
-
 
 export type MutationCreateAccountArgs = {
-  email: Scalars['String'];
-  passwordHash: Scalars['String'];
-  recaptchaResponse: Scalars['String'];
-  username: Scalars['String'];
+  email: Scalars['String']['input'];
+  passwordHash: Scalars['String']['input'];
+  recaptchaResponse: Scalars['String']['input'];
+  username: Scalars['String']['input'];
 };
-
 
 export type MutationCreateApiClientArgs = {
   client: CreateApiClient;
 };
 
-
 export type MutationCreateEpisodeArgs = {
   episodeInput: InputEpisode;
-  showId: Scalars['ID'];
+  showId: Scalars['ID']['input'];
 };
 
-
 export type MutationCreateEpisodeUrlArgs = {
-  episodeId: Scalars['ID'];
+  episodeId: Scalars['ID']['input'];
   episodeUrlInput: InputEpisodeUrl;
 };
 
-
 export type MutationCreateShowArgs = {
-  becomeAdmin: Scalars['Boolean'];
+  becomeAdmin: Scalars['Boolean']['input'];
   showInput: InputShow;
 };
-
 
 export type MutationCreateShowAdminArgs = {
   showAdminInput: InputShowAdmin;
 };
 
-
 export type MutationCreateTemplateArgs = {
   newTemplate: InputTemplate;
 };
 
-
 export type MutationCreateTimestampArgs = {
-  episodeId: Scalars['ID'];
+  episodeId: Scalars['ID']['input'];
   timestampInput: InputTimestamp;
 };
-
 
 export type MutationCreateTimestampTypeArgs = {
   timestampTypeInput: InputTimestampType;
 };
 
-
 export type MutationCreateUserReportArgs = {
   report?: InputMaybe<InputUserReport>;
 };
 
-
 export type MutationDeleteAccountArgs = {
-  deleteToken: Scalars['String'];
+  deleteToken: Scalars['String']['input'];
 };
-
 
 export type MutationDeleteAccountRequestArgs = {
-  passwordHash: Scalars['String'];
+  passwordHash: Scalars['String']['input'];
 };
-
 
 export type MutationDeleteApiClientArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
-
 
 export type MutationDeleteEpisodeArgs = {
-  episodeId: Scalars['ID'];
+  episodeId: Scalars['ID']['input'];
 };
-
 
 export type MutationDeleteEpisodeUrlArgs = {
-  episodeUrl: Scalars['String'];
+  episodeUrl: Scalars['String']['input'];
 };
-
 
 export type MutationDeleteShowArgs = {
-  showId: Scalars['ID'];
+  showId: Scalars['ID']['input'];
 };
-
 
 export type MutationDeleteShowAdminArgs = {
-  showAdminId: Scalars['ID'];
+  showAdminId: Scalars['ID']['input'];
 };
-
 
 export type MutationDeleteTemplateArgs = {
-  templateId: Scalars['ID'];
+  templateId: Scalars['ID']['input'];
 };
-
 
 export type MutationDeleteTimestampArgs = {
-  timestampId: Scalars['ID'];
+  timestampId: Scalars['ID']['input'];
 };
-
 
 export type MutationDeleteTimestampTypeArgs = {
-  timestampTypeId: Scalars['ID'];
+  timestampTypeId: Scalars['ID']['input'];
 };
-
 
 export type MutationRemoveExternalLinkArgs = {
-  showId: Scalars['ID'];
-  url: Scalars['String'];
+  showId: Scalars['ID']['input'];
+  url: Scalars['String']['input'];
 };
-
 
 export type MutationRemoveTimestampFromTemplateArgs = {
   templateTimestamp: InputTemplateTimestamp;
 };
 
-
 export type MutationRequestPasswordResetArgs = {
-  email: Scalars['String'];
-  recaptchaResponse: Scalars['String'];
+  email: Scalars['String']['input'];
+  recaptchaResponse: Scalars['String']['input'];
 };
-
 
 export type MutationResendVerificationEmailArgs = {
-  recaptchaResponse: Scalars['String'];
+  recaptchaResponse: Scalars['String']['input'];
 };
-
 
 export type MutationResetPasswordArgs = {
-  confirmNewPassword: Scalars['String'];
-  newPassword: Scalars['String'];
-  passwordResetToken: Scalars['String'];
+  confirmNewPassword: Scalars['String']['input'];
+  newPassword: Scalars['String']['input'];
+  passwordResetToken: Scalars['String']['input'];
 };
-
 
 export type MutationResolveUserReportArgs = {
-  id: Scalars['ID'];
-  resolvedMessage?: InputMaybe<Scalars['String']>;
+  id: Scalars['ID']['input'];
+  resolvedMessage?: InputMaybe<Scalars['String']['input']>;
 };
-
 
 export type MutationSavePreferencesArgs = {
   preferences: InputPreferences;
 };
 
-
 export type MutationUpdateApiClientArgs = {
   changes: ApiClientChanges;
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
-
 export type MutationUpdateEpisodeArgs = {
-  episodeId: Scalars['ID'];
+  episodeId: Scalars['ID']['input'];
   newEpisode: InputEpisode;
 };
 
-
 export type MutationUpdateEpisodeUrlArgs = {
-  episodeUrl: Scalars['String'];
+  episodeUrl: Scalars['String']['input'];
   newEpisodeUrl: InputEpisodeUrl;
 };
 
-
 export type MutationUpdateShowArgs = {
   newShow: InputShow;
-  showId: Scalars['ID'];
+  showId: Scalars['ID']['input'];
 };
-
 
 export type MutationUpdateTemplateArgs = {
   newTemplate: InputTemplate;
-  templateId: Scalars['ID'];
+  templateId: Scalars['ID']['input'];
 };
-
 
 export type MutationUpdateTimestampArgs = {
   newTimestamp: InputTimestamp;
-  timestampId: Scalars['ID'];
+  timestampId: Scalars['ID']['input'];
 };
-
 
 export type MutationUpdateTimestampTypeArgs = {
   newTimestampType: InputTimestampType;
-  timestampTypeId: Scalars['ID'];
+  timestampTypeId: Scalars['ID']['input'];
 };
-
 
 export type MutationUpdateTimestampsArgs = {
   create: Array<InputTimestampOn>;
-  delete: Array<Scalars['ID']>;
+  delete: Array<Scalars['ID']['input']>;
   update: Array<InputExistingTimestamp>;
 };
 
-
 export type MutationVerifyEmailAddressArgs = {
-  validationToken: Scalars['String'];
+  validationToken: Scalars['String']['input'];
 };
 
 /**
@@ -764,54 +729,54 @@ export type MutationVerifyEmailAddressArgs = {
 export type Preferences = {
   __typename?: 'Preferences';
   colorTheme: ColorTheme;
-  createdAt: Scalars['Time'];
-  deletedAt?: Maybe<Scalars['Time']>;
+  createdAt: Scalars['Time']['output'];
+  deletedAt?: Maybe<Scalars['Time']['output']>;
   /** Whether or not the user wants to auto-play the videos. Default: `true` */
-  enableAutoPlay: Scalars['Boolean'];
+  enableAutoPlay: Scalars['Boolean']['output'];
   /** Whether or not the user wants to automatically skip section. Default: `true` */
-  enableAutoSkip: Scalars['Boolean'];
+  enableAutoSkip: Scalars['Boolean']['output'];
   /**
    * When false, timeline is pinned to the bottom of the screen after inactivity. When true, it is
    * hidden completely
    */
-  hideTimelineWhenMinimized: Scalars['Boolean'];
-  id: Scalars['ID'];
+  hideTimelineWhenMinimized: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
   /**
    * Whether or not the bottom toolbar with the video progress and play button is minimized after
    * inactivity while editing
    */
-  minimizeToolbarWhenEditing: Scalars['Boolean'];
+  minimizeToolbarWhenEditing: Scalars['Boolean']['output'];
   /** Whether or not the user whats to skip branding timestamps. Default: `true` */
-  skipBranding: Scalars['Boolean'];
+  skipBranding: Scalars['Boolean']['output'];
   /** Whether or not the user whats to skip canon content. Default: `false` */
-  skipCanon: Scalars['Boolean'];
+  skipCanon: Scalars['Boolean']['output'];
   /** Whether or not the user whats to skip credits/outros. Default: `true` */
-  skipCredits: Scalars['Boolean'];
+  skipCredits: Scalars['Boolean']['output'];
   /** Whether or not the user whats to skip filler content. Default: `true` */
-  skipFiller: Scalars['Boolean'];
+  skipFiller: Scalars['Boolean']['output'];
   /** Whether or not the user whats to skip regular intros. Default: `true` */
-  skipIntros: Scalars['Boolean'];
+  skipIntros: Scalars['Boolean']['output'];
   /** Whether or not the user whats to skip credits/outros that have plot progression rather than the standard animation. Default: `false` */
-  skipMixedCredits: Scalars['Boolean'];
+  skipMixedCredits: Scalars['Boolean']['output'];
   /** Whether or not the user whats to kip intros that have plot progression rather than the standard animation. Default: `false` */
-  skipMixedIntros: Scalars['Boolean'];
+  skipMixedIntros: Scalars['Boolean']['output'];
   /** Whether or not the user whats to skip the first of a credits/outro. Default: `false` */
-  skipNewCredits: Scalars['Boolean'];
+  skipNewCredits: Scalars['Boolean']['output'];
   /** Whether or not the user whats to skip the first of an intro. Default: `false` */
-  skipNewIntros: Scalars['Boolean'];
+  skipNewIntros: Scalars['Boolean']['output'];
   /** Whether or not to skip the next episode's preview. Default: `true` */
-  skipPreview: Scalars['Boolean'];
+  skipPreview: Scalars['Boolean']['output'];
   /** Whether or not the user whats to skip recaps at the beginning of episodes. Default: `true` */
-  skipRecaps: Scalars['Boolean'];
+  skipRecaps: Scalars['Boolean']['output'];
   /** Whether or not to skip an episode's static title card. Default: `true` */
-  skipTitleCard: Scalars['Boolean'];
+  skipTitleCard: Scalars['Boolean']['output'];
   /** Whether or not the user whats to skip commercial transitions. Default: `true` */
-  skipTransitions: Scalars['Boolean'];
-  updatedAt: Scalars['Time'];
+  skipTransitions: Scalars['Boolean']['output'];
+  updatedAt: Scalars['Time']['output'];
   /** The `User` that the preferences belong to */
   user: User;
   /** The `User.id` that this preferences object belongs to */
-  userId: Scalars['ID'];
+  userId: Scalars['ID']['output'];
 };
 
 export type Query = {
@@ -931,157 +896,130 @@ export type Query = {
   searchShows: Array<Show>;
 };
 
-
 export type QueryFindApiClientArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
-
 
 export type QueryFindEpisodeArgs = {
-  episodeId: Scalars['ID'];
+  episodeId: Scalars['ID']['input'];
 };
-
 
 export type QueryFindEpisodeByNameArgs = {
-  name: Scalars['String'];
+  name: Scalars['String']['input'];
 };
-
 
 export type QueryFindEpisodeUrlArgs = {
-  episodeUrl: Scalars['String'];
+  episodeUrl: Scalars['String']['input'];
 };
-
 
 export type QueryFindEpisodeUrlsByEpisodeIdArgs = {
-  episodeId: Scalars['ID'];
+  episodeId: Scalars['ID']['input'];
 };
-
 
 export type QueryFindEpisodesByShowIdArgs = {
-  showId: Scalars['ID'];
+  showId: Scalars['ID']['input'];
 };
-
 
 export type QueryFindShowArgs = {
-  showId: Scalars['ID'];
+  showId: Scalars['ID']['input'];
 };
-
 
 export type QueryFindShowAdminArgs = {
-  showAdminId: Scalars['ID'];
+  showAdminId: Scalars['ID']['input'];
 };
-
 
 export type QueryFindShowAdminsByShowIdArgs = {
-  showId: Scalars['ID'];
+  showId: Scalars['ID']['input'];
 };
-
 
 export type QueryFindShowAdminsByUserIdArgs = {
-  userId: Scalars['ID'];
+  userId: Scalars['ID']['input'];
 };
-
 
 export type QueryFindShowsByExternalIdArgs = {
   service: ExternalService;
-  serviceId: Scalars['String'];
+  serviceId: Scalars['String']['input'];
 };
-
 
 export type QueryFindTemplateArgs = {
-  templateId: Scalars['ID'];
+  templateId: Scalars['ID']['input'];
 };
-
 
 export type QueryFindTemplateByDetailsArgs = {
-  episodeId?: InputMaybe<Scalars['ID']>;
-  season?: InputMaybe<Scalars['String']>;
-  showName?: InputMaybe<Scalars['String']>;
+  episodeId?: InputMaybe<Scalars['ID']['input']>;
+  season?: InputMaybe<Scalars['String']['input']>;
+  showName?: InputMaybe<Scalars['String']['input']>;
 };
-
 
 export type QueryFindTemplatesByShowIdArgs = {
-  showId: Scalars['ID'];
+  showId: Scalars['ID']['input'];
 };
-
 
 export type QueryFindTimestampArgs = {
-  timestampId: Scalars['ID'];
+  timestampId: Scalars['ID']['input'];
 };
-
 
 export type QueryFindTimestampTypeArgs = {
-  timestampTypeId: Scalars['ID'];
+  timestampTypeId: Scalars['ID']['input'];
 };
-
 
 export type QueryFindTimestampsByEpisodeIdArgs = {
-  episodeId: Scalars['ID'];
+  episodeId: Scalars['ID']['input'];
 };
-
 
 export type QueryFindUserArgs = {
-  userId: Scalars['ID'];
+  userId: Scalars['ID']['input'];
 };
-
 
 export type QueryFindUserByUsernameArgs = {
-  username: Scalars['String'];
+  username: Scalars['String']['input'];
 };
-
 
 export type QueryFindUserReportArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
-
 
 export type QueryFindUserReportsArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  resolved?: InputMaybe<Scalars['Boolean']>;
-  sort?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  resolved?: InputMaybe<Scalars['Boolean']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
 };
-
 
 export type QueryLoginArgs = {
-  passwordHash: Scalars['String'];
-  usernameEmail: Scalars['String'];
+  passwordHash: Scalars['String']['input'];
+  usernameEmail: Scalars['String']['input'];
 };
-
 
 export type QueryLoginRefreshArgs = {
-  refreshToken: Scalars['String'];
+  refreshToken: Scalars['String']['input'];
 };
-
 
 export type QueryMyApiClientsArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  search?: InputMaybe<Scalars['String']>;
-  sort?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
 };
-
 
 export type QueryRecentlyAddedEpisodesArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 export type QuerySearchEpisodesArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  search?: InputMaybe<Scalars['String']>;
-  showId?: InputMaybe<Scalars['ID']>;
-  sort?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  showId?: InputMaybe<Scalars['ID']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
 };
 
-
 export type QuerySearchShowsArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  search?: InputMaybe<Scalars['String']>;
-  sort?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
 };
 
 /**
@@ -1096,7 +1034,7 @@ export enum Role {
   /** Reviewer role. Lets the user review issues with timestamps */
   Reviewer = 'REVIEWER',
   /** Basic role. Has no elevated permissions */
-  User = 'USER'
+  User = 'USER',
 }
 
 /** A show containing a list of episodes and relevant links */
@@ -1104,21 +1042,21 @@ export type Show = BaseModel & {
   __typename?: 'Show';
   /** The list of admins for the show */
   admins: Array<ShowAdmin>;
-  createdAt: Scalars['Time'];
+  createdAt: Scalars['Time']['output'];
   createdBy: User;
-  createdByUserId: Scalars['ID'];
-  deletedAt?: Maybe<Scalars['Time']>;
+  createdByUserId: Scalars['ID']['output'];
+  deletedAt?: Maybe<Scalars['Time']['output']>;
   deletedBy?: Maybe<User>;
-  deletedByUserId?: Maybe<Scalars['ID']>;
+  deletedByUserId?: Maybe<Scalars['ID']['output']>;
   /** How many episodes are apart of this show */
-  episodeCount: Scalars['Int'];
+  episodeCount: Scalars['Int']['output'];
   /** All the episodes that belong to the show */
   episodes: Array<Episode>;
   /** Any links to external sites (just Anilist right now) for the show */
   externalLinks: Array<ExternalLink>;
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /** A link to a show poster */
-  image?: Maybe<Scalars['String']>;
+  image?: Maybe<Scalars['String']['output']>;
   /**
    * The show name
    *
@@ -1127,7 +1065,7 @@ export type Show = BaseModel & {
    * - "Death Note"
    * - "My Hero Academia"
    */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   /**
    * The show's original Japanese name
    *
@@ -1136,16 +1074,16 @@ export type Show = BaseModel & {
    * - "Desu Nōto"
    * - "Boku no Hīrō Akademia"
    */
-  originalName?: Maybe<Scalars['String']>;
+  originalName?: Maybe<Scalars['String']['output']>;
   /** How many seasons are associated with this show */
-  seasonCount: Scalars['Int'];
+  seasonCount: Scalars['Int']['output'];
   /** All the templates that belong to this show */
   templates: Array<Template>;
-  updatedAt: Scalars['Time'];
+  updatedAt: Scalars['Time']['output'];
   updatedBy: User;
-  updatedByUserId: Scalars['ID'];
+  updatedByUserId: Scalars['ID']['output'];
   /** A link to the anime's official website */
-  website?: Maybe<Scalars['String']>;
+  website?: Maybe<Scalars['String']['output']>;
 };
 
 /**
@@ -1160,46 +1098,46 @@ export type Show = BaseModel & {
  */
 export type ShowAdmin = BaseModel & {
   __typename?: 'ShowAdmin';
-  createdAt: Scalars['Time'];
+  createdAt: Scalars['Time']['output'];
   createdBy: User;
-  createdByUserId: Scalars['ID'];
-  deletedAt?: Maybe<Scalars['Time']>;
+  createdByUserId: Scalars['ID']['output'];
+  deletedAt?: Maybe<Scalars['Time']['output']>;
   deletedBy?: Maybe<User>;
-  deletedByUserId?: Maybe<Scalars['ID']>;
-  id: Scalars['ID'];
+  deletedByUserId?: Maybe<Scalars['ID']['output']>;
+  id: Scalars['ID']['output'];
   /** The `Show` that the admin has elevated privileges for */
   show: Show;
   /** The `Show.id` that the admin has elevated privileges for */
-  showId: Scalars['ID'];
-  updatedAt: Scalars['Time'];
+  showId: Scalars['ID']['output'];
+  updatedAt: Scalars['Time']['output'];
   updatedBy: User;
-  updatedByUserId: Scalars['ID'];
+  updatedByUserId: Scalars['ID']['output'];
   /** The `User` that the admin privileges belong to */
   user: User;
   /** The `User.id` that the admin privileges belong to */
-  userId: Scalars['ID'];
+  userId: Scalars['ID']['output'];
 };
 
 /** When no timestamps exist for a specific episode, templates are setup to provide fallback timestamps */
 export type Template = BaseModel & {
   __typename?: 'Template';
-  createdAt: Scalars['Time'];
+  createdAt: Scalars['Time']['output'];
   createdBy: User;
-  createdByUserId: Scalars['ID'];
-  deletedAt?: Maybe<Scalars['Time']>;
+  createdByUserId: Scalars['ID']['output'];
+  deletedAt?: Maybe<Scalars['Time']['output']>;
   deletedBy?: Maybe<User>;
-  deletedByUserId?: Maybe<Scalars['ID']>;
-  id: Scalars['ID'];
+  deletedByUserId?: Maybe<Scalars['ID']['output']>;
+  id: Scalars['ID']['output'];
   /** When the template is for a set of seasons, this is the set of seasons it is applied to */
-  seasons?: Maybe<Array<Scalars['String']>>;
+  seasons?: Maybe<Array<Scalars['String']['output']>>;
   /** The show that this template is for */
   show: Show;
   /** The id of the show that this template is for */
-  showId: Scalars['ID'];
+  showId: Scalars['ID']['output'];
   /** The episode used to create the template. All the timestamps are from this episode */
   sourceEpisode: Episode;
   /** The id of the episode used to create the template. All the timestamps are from this episode */
-  sourceEpisodeId: Scalars['ID'];
+  sourceEpisodeId: Scalars['ID']['output'];
   /**
    * The list of timestamp ids that are apart of this template. Since this is a many-to-many
    * relationship, this field will resolve quicker than `timestamps` since it doesn't have to do an
@@ -1208,23 +1146,23 @@ export type Template = BaseModel & {
    * This is useful when you already got the episode and timestamps, and you just need to know what
    * timestamps are apart of the template
    */
-  timestampIds: Array<Scalars['ID']>;
+  timestampIds: Array<Scalars['ID']['output']>;
   /** The list of timestamps that are apart of this template */
   timestamps: Array<Timestamp>;
   /** Specify the scope of the template, if it's for the entire show, or just for a set of seasons */
   type: TemplateType;
-  updatedAt: Scalars['Time'];
+  updatedAt: Scalars['Time']['output'];
   updatedBy: User;
-  updatedByUserId: Scalars['ID'];
+  updatedByUserId: Scalars['ID']['output'];
 };
 
 /** The many to many object that links a timestamp to a template */
 export type TemplateTimestamp = {
   __typename?: 'TemplateTimestamp';
   template: Template;
-  templateId: Scalars['ID'];
+  templateId: Scalars['ID']['output'];
   timestamp: Timestamp;
-  timestampId: Scalars['ID'];
+  timestampId: Scalars['ID']['output'];
 };
 
 /** The scope that a template applies to */
@@ -1232,7 +1170,7 @@ export enum TemplateType {
   /** The template is loaded for episodes of a given show where their season is included in `Template.seasons` */
   Seasons = 'SEASONS',
   /** The template is loaded for all episodes of a given show */
-  Show = 'SHOW'
+  Show = 'SHOW',
 }
 
 /**
@@ -1248,53 +1186,53 @@ export enum TemplateType {
  */
 export type ThirdPartyEpisode = {
   __typename?: 'ThirdPartyEpisode';
-  absoluteNumber?: Maybe<Scalars['String']>;
-  baseDuration?: Maybe<Scalars['Float']>;
+  absoluteNumber?: Maybe<Scalars['String']['output']>;
+  baseDuration?: Maybe<Scalars['Float']['output']>;
   /** The Anime Skip `Episode.id` when the `source` is `ANIME_SKIP`, otherwise this is null */
-  id?: Maybe<Scalars['ID']>;
-  name?: Maybe<Scalars['String']>;
-  number?: Maybe<Scalars['String']>;
-  season?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  number?: Maybe<Scalars['String']['output']>;
+  season?: Maybe<Scalars['String']['output']>;
   show: ThirdPartyShow;
   /** The id of the show from the third party */
-  showId: Scalars['String'];
+  showId: Scalars['String']['output'];
   source?: Maybe<TimestampSource>;
   timestamps: Array<ThirdPartyTimestamp>;
 };
 
 export type ThirdPartyShow = {
   __typename?: 'ThirdPartyShow';
-  createdAt?: Maybe<Scalars['Time']>;
-  name: Scalars['String'];
-  updatedAt?: Maybe<Scalars['Time']>;
+  createdAt?: Maybe<Scalars['Time']['output']>;
+  name: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['Time']['output']>;
 };
 
 export type ThirdPartyTimestamp = {
   __typename?: 'ThirdPartyTimestamp';
   /** The actual time the timestamp is at */
-  at: Scalars['Float'];
+  at: Scalars['Float']['output'];
   /** The Anime Skip `Timestamp.id` when the `Episode.source` is `ANIME_SKIP`, otherwise this is null */
-  id?: Maybe<Scalars['ID']>;
+  id?: Maybe<Scalars['ID']['output']>;
   type: TimestampType;
   /** The id specifying the type the timestamp is */
-  typeId: Scalars['ID'];
+  typeId: Scalars['ID']['output'];
 };
 
 export type Timestamp = BaseModel & {
   __typename?: 'Timestamp';
   /** The actual time the timestamp is at */
-  at: Scalars['Float'];
-  createdAt: Scalars['Time'];
+  at: Scalars['Float']['output'];
+  createdAt: Scalars['Time']['output'];
   createdBy: User;
-  createdByUserId: Scalars['ID'];
-  deletedAt?: Maybe<Scalars['Time']>;
+  createdByUserId: Scalars['ID']['output'];
+  deletedAt?: Maybe<Scalars['Time']['output']>;
   deletedBy?: Maybe<User>;
-  deletedByUserId?: Maybe<Scalars['ID']>;
+  deletedByUserId?: Maybe<Scalars['ID']['output']>;
   /** The `Episode` that the timestamp belongs to */
   episode: Episode;
   /** The `Episode.id` that the timestamp belongs to */
-  episodeId: Scalars['ID'];
-  id: Scalars['ID'];
+  episodeId: Scalars['ID']['output'];
+  id: Scalars['ID']['output'];
   source: TimestampSource;
   /**
    * The type the timestamp is. This field is a constant string so including it has no effect on
@@ -1302,16 +1240,16 @@ export type Timestamp = BaseModel & {
    */
   type: TimestampType;
   /** The id specifying the type the timestamp is */
-  typeId: Scalars['ID'];
-  updatedAt: Scalars['Time'];
+  typeId: Scalars['ID']['output'];
+  updatedAt: Scalars['Time']['output'];
   updatedBy: User;
-  updatedByUserId: Scalars['ID'];
+  updatedByUserId: Scalars['ID']['output'];
 };
 
 /** Where a timestamp originated from */
 export enum TimestampSource {
   AnimeSkip = 'ANIME_SKIP',
-  BetterVrv = 'BETTER_VRV'
+  BetterVrv = 'BETTER_VRV',
 }
 
 /**
@@ -1322,31 +1260,31 @@ export enum TimestampSource {
  */
 export type TimestampType = BaseModel & {
   __typename?: 'TimestampType';
-  createdAt: Scalars['Time'];
+  createdAt: Scalars['Time']['output'];
   createdBy: User;
-  createdByUserId: Scalars['ID'];
-  deletedAt?: Maybe<Scalars['Time']>;
+  createdByUserId: Scalars['ID']['output'];
+  deletedAt?: Maybe<Scalars['Time']['output']>;
   deletedBy?: Maybe<User>;
-  deletedByUserId?: Maybe<Scalars['ID']>;
+  deletedByUserId?: Maybe<Scalars['ID']['output']>;
   /** The description for what this type represents */
-  description: Scalars['String'];
-  id: Scalars['ID'];
+  description: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
   /** The name of the timestamp type */
-  name: Scalars['String'];
-  updatedAt: Scalars['Time'];
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['Time']['output'];
   updatedBy: User;
-  updatedByUserId: Scalars['ID'];
+  updatedByUserId: Scalars['ID']['output'];
 };
 
 export type TotalCounts = {
   __typename?: 'TotalCounts';
-  episodeUrls: Scalars['Int'];
-  episodes: Scalars['Int'];
-  shows: Scalars['Int'];
-  templates: Scalars['Int'];
-  timestampTypes: Scalars['Int'];
-  timestamps: Scalars['Int'];
-  users: Scalars['Int'];
+  episodeUrls: Scalars['Int']['output'];
+  episodes: Scalars['Int']['output'];
+  shows: Scalars['Int']['output'];
+  templates: Scalars['Int']['output'];
+  timestampTypes: Scalars['Int']['output'];
+  timestamps: Scalars['Int']['output'];
+  users: Scalars['Int']['output'];
 };
 
 export type UpdatedTimestamps = {
@@ -1360,613 +1298,2102 @@ export type UpdatedTimestamps = {
 export type User = {
   __typename?: 'User';
   adminOfShows: Array<ShowAdmin>;
-  createdAt: Scalars['Time'];
-  deletedAt?: Maybe<Scalars['Time']>;
-  id: Scalars['ID'];
-  profileUrl: Scalars['String'];
-  username: Scalars['String'];
+  createdAt: Scalars['Time']['output'];
+  deletedAt?: Maybe<Scalars['Time']['output']>;
+  id: Scalars['ID']['output'];
+  profileUrl: Scalars['String']['output'];
+  username: Scalars['String']['output'];
 };
 
 export type UserReport = BaseModel & {
   __typename?: 'UserReport';
-  createdAt: Scalars['Time'];
+  createdAt: Scalars['Time']['output'];
   createdBy: User;
-  createdByUserId: Scalars['ID'];
-  deletedAt?: Maybe<Scalars['Time']>;
+  createdByUserId: Scalars['ID']['output'];
+  deletedAt?: Maybe<Scalars['Time']['output']>;
   deletedBy?: Maybe<User>;
-  deletedByUserId?: Maybe<Scalars['ID']>;
+  deletedByUserId?: Maybe<Scalars['ID']['output']>;
   episode?: Maybe<Episode>;
-  episodeId?: Maybe<Scalars['ID']>;
+  episodeId?: Maybe<Scalars['ID']['output']>;
   episodeUrl?: Maybe<EpisodeUrl>;
-  episodeUrlString?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
-  message: Scalars['String'];
-  reportedFromUrl: Scalars['String'];
-  resolved: Scalars['Boolean'];
-  resolvedMessage?: Maybe<Scalars['String']>;
+  episodeUrlString?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  message: Scalars['String']['output'];
+  reportedFromUrl: Scalars['String']['output'];
+  resolved: Scalars['Boolean']['output'];
+  resolvedMessage?: Maybe<Scalars['String']['output']>;
   show?: Maybe<Show>;
-  showId?: Maybe<Scalars['ID']>;
+  showId?: Maybe<Scalars['ID']['output']>;
   timestamp?: Maybe<Timestamp>;
-  timestampId?: Maybe<Scalars['ID']>;
-  updatedAt: Scalars['Time'];
+  timestampId?: Maybe<Scalars['ID']['output']>;
+  updatedAt: Scalars['Time']['output'];
   updatedBy: User;
-  updatedByUserId: Scalars['ID'];
+  updatedByUserId: Scalars['ID']['output'];
 };
 
-export type AccountQueryVariables = Exact<{ [key: string]: never; }>;
+/** Color theme the user prefers */
+export type ColorTheme =
+  | 'ANIME_SKIP_BLUE'
+  | 'CRUNCHYROLL_ORANGE'
+  | 'FUNIMATION_PURPLE'
+  /** Change to match where you're watching */
+  | 'PER_SERVICE'
+  | 'VRV_YELLOW';
 
+/**
+ * Which of the supported services the `EpisodeUrl` was created for. This is a simple enum that allows
+ * for simple checks, but this data can also be pulled from the url in the case of UNKNOWN
+ */
+export type EpisodeSource =
+  /** Data is from <crunchyroll.com> and <beta.crunchyroll.com> */
+  | 'CRUNCHYROLL'
+  /** Data is from <funimation.com> */
+  | 'FUNIMATION'
+  /** Data came from an external source */
+  | 'UNKNOWN'
+  /** Data is from <vrv.co> */
+  | 'VRV';
 
-export type AccountQuery = { __typename?: 'Query', account: { __typename?: 'Account', id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role, createdAt: string, preferences: { __typename?: 'Preferences', enableAutoSkip: boolean, enableAutoPlay: boolean, minimizeToolbarWhenEditing: boolean, hideTimelineWhenMinimized: boolean, colorTheme: ColorTheme, skipBranding: boolean, skipCanon: boolean, skipCredits: boolean, skipFiller: boolean, skipIntros: boolean, skipMixedCredits: boolean, skipMixedIntros: boolean, skipNewCredits: boolean, skipNewIntros: boolean, skipPreview: boolean, skipRecaps: boolean, skipTitleCard: boolean, skipTransitions: boolean } } };
+/** Data required to create a new `Episode`. See `Episode` for a description of each field */
+export type InputEpisode = {
+  /** See `Episode.absoluteNumber` */
+  absoluteNumber?: string | null | undefined;
+  /** See `Episode.baseDuration` */
+  baseDuration: number;
+  /** See `Episode.name` */
+  name?: string | null | undefined;
+  /** See `Episode.number` */
+  number?: string | null | undefined;
+  /** See `Episode.season` */
+  season?: string | null | undefined;
+};
 
-export type AllTimestampTypesQueryVariables = Exact<{ [key: string]: never; }>;
+/** Data required to create a new `EpisodeUrl`. See `EpisodeUrl` for a description of each field */
+export type InputEpisodeUrl = {
+  duration?: number | null | undefined;
+  timestampsOffset?: number | null | undefined;
+  url: string;
+};
 
+export type InputExistingTimestamp = {
+  /** The id of the timestamp you want to modify */
+  id: string | number;
+  /** The new values for the timestamp */
+  timestamp: InputTimestamp;
+};
 
-export type AllTimestampTypesQuery = { __typename?: 'Query', allTimestampTypes: Array<{ __typename?: 'TimestampType', id: string, name: string, description: string }> };
+/**
+ * Data used to update a user's `Preferences`. See `Preferences` for a description of each field. If a
+ * field is not passed or passed as `null`, it will leave the value as is and skip updating it
+ */
+export type InputPreferences = {
+  colorTheme?: ColorTheme | null | undefined;
+  enableAutoPlay?: boolean | null | undefined;
+  enableAutoSkip?: boolean | null | undefined;
+  hideTimelineWhenMinimized?: boolean | null | undefined;
+  minimizeToolbarWhenEditing?: boolean | null | undefined;
+  skipBranding?: boolean | null | undefined;
+  skipCanon?: boolean | null | undefined;
+  skipCredits?: boolean | null | undefined;
+  skipFiller?: boolean | null | undefined;
+  skipIntros?: boolean | null | undefined;
+  skipMixedCredits?: boolean | null | undefined;
+  skipMixedIntros?: boolean | null | undefined;
+  skipNewCredits?: boolean | null | undefined;
+  skipNewIntros?: boolean | null | undefined;
+  skipPreview?: boolean | null | undefined;
+  skipRecaps?: boolean | null | undefined;
+  skipTitleCard?: boolean | null | undefined;
+  skipTransitions?: boolean | null | undefined;
+};
+
+/** Data required to create a new `Show`. See `Show` for a description of each field */
+export type InputShow = {
+  image?: string | null | undefined;
+  name: string;
+  originalName?: string | null | undefined;
+  website?: string | null | undefined;
+};
+
+/** Data required to create a new template. See `Template` for a description of each field */
+export type InputTemplate = {
+  seasons?: Array<string> | null | undefined;
+  showId: string | number;
+  sourceEpisodeId: string | number;
+  type: TemplateType;
+};
+
+/** Data required to modify the timestamps on a template */
+export type InputTemplateTimestamp = {
+  templateId: string | number;
+  timestampId: string | number;
+};
+
+/** Data required to create a new `Timestamp`. See `Timestamp` for a description of each field */
+export type InputTimestamp = {
+  at: number;
+  source?: TimestampSource | null | undefined;
+  typeId: string | number;
+};
+
+export type InputTimestampOn = {
+  /** The episode id the timestamp will be created on */
+  episodeId: string | number;
+  /** The new values for the timestamp */
+  timestamp: InputTimestamp;
+};
+
+/**
+ * A user's role in the system. Higher roles allow a user write access to certain data that a normal
+ * user would not. Some queries and mutations are only allowed by certain roles
+ */
+export type Role =
+  /** Administrator role. Has some elevated permissions */
+  | 'ADMIN'
+  /** Highest role. Has super user access to all queries and mutations */
+  | 'DEV'
+  /** Reviewer role. Lets the user review issues with timestamps */
+  | 'REVIEWER'
+  /** Basic role. Has no elevated permissions */
+  | 'USER';
+
+/** The scope that a template applies to */
+export type TemplateType =
+  /** The template is loaded for episodes of a given show where their season is included in `Template.seasons` */
+  | 'SEASONS'
+  /** The template is loaded for all episodes of a given show */
+  | 'SHOW';
+
+/** Where a timestamp originated from */
+export type TimestampSource = 'ANIME_SKIP' | 'BETTER_VRV';
+
+export type AccountQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AccountQuery = {
+  account: {
+    id: string;
+    username: string;
+    email: string;
+    emailVerified: boolean;
+    profileUrl: string;
+    role: Role;
+    createdAt: string;
+    preferences: {
+      enableAutoSkip: boolean;
+      enableAutoPlay: boolean;
+      minimizeToolbarWhenEditing: boolean;
+      hideTimelineWhenMinimized: boolean;
+      colorTheme: ColorTheme;
+      skipBranding: boolean;
+      skipCanon: boolean;
+      skipCredits: boolean;
+      skipFiller: boolean;
+      skipIntros: boolean;
+      skipMixedCredits: boolean;
+      skipMixedIntros: boolean;
+      skipNewCredits: boolean;
+      skipNewIntros: boolean;
+      skipPreview: boolean;
+      skipRecaps: boolean;
+      skipTitleCard: boolean;
+      skipTransitions: boolean;
+    };
+  };
+};
+
+export type AllTimestampTypesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AllTimestampTypesQuery = {
+  allTimestampTypes: Array<{ id: string; name: string; description: string }>;
+};
 
 export type CreateEpisodeMutationVariables = Exact<{
-  showId: Scalars['ID'];
+  showId: string | number;
   episodeInput: InputEpisode;
 }>;
 
-
-export type CreateEpisodeMutation = { __typename?: 'Mutation', createEpisode: { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> } };
+export type CreateEpisodeMutation = {
+  createEpisode: {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    season: string | null;
+    number: string | null;
+    absoluteNumber: string | null;
+    name: string | null;
+    baseDuration: number | null;
+    show: {
+      id: string;
+      name: string;
+      originalName: string | null;
+      createdAt: string;
+      updatedAt: string;
+      website: string | null;
+      image: string | null;
+    };
+    timestamps: Array<{
+      id: string;
+      createdAt: string;
+      updatedAt: string;
+      at: number;
+      source: TimestampSource;
+      typeId: string;
+      episodeId: string;
+      createdBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+      updatedBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+    }>;
+  };
+};
 
 export type CreateEpisodeUrlMutationVariables = Exact<{
-  episodeId: Scalars['ID'];
+  episodeId: string | number;
   episodeUrlInput: InputEpisodeUrl;
 }>;
 
-
-export type CreateEpisodeUrlMutation = { __typename?: 'Mutation', createEpisodeUrl: { __typename?: 'EpisodeUrl', url: string, createdAt: string, updatedAt: string, duration?: number | null, timestampsOffset?: number | null, source: EpisodeSource, episode: { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> } } };
+export type CreateEpisodeUrlMutation = {
+  createEpisodeUrl: {
+    url: string;
+    createdAt: string;
+    updatedAt: string;
+    duration: number | null;
+    timestampsOffset: number | null;
+    source: EpisodeSource;
+    episode: {
+      id: string;
+      createdAt: string;
+      updatedAt: string;
+      season: string | null;
+      number: string | null;
+      absoluteNumber: string | null;
+      name: string | null;
+      baseDuration: number | null;
+      show: {
+        id: string;
+        name: string;
+        originalName: string | null;
+        createdAt: string;
+        updatedAt: string;
+        website: string | null;
+        image: string | null;
+      };
+      timestamps: Array<{
+        id: string;
+        createdAt: string;
+        updatedAt: string;
+        at: number;
+        source: TimestampSource;
+        typeId: string;
+        episodeId: string;
+        createdBy: {
+          id: string;
+          username: string;
+          profileUrl: string;
+          createdAt: string;
+        };
+        updatedBy: {
+          id: string;
+          username: string;
+          profileUrl: string;
+          createdAt: string;
+        };
+      }>;
+    };
+  };
+};
 
 export type CreateShowMutationVariables = Exact<{
   showInput: InputShow;
-  becomeAdmin: Scalars['Boolean'];
+  becomeAdmin: boolean;
 }>;
 
-
-export type CreateShowMutation = { __typename?: 'Mutation', createShow: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null } };
+export type CreateShowMutation = {
+  createShow: {
+    id: string;
+    name: string;
+    originalName: string | null;
+    createdAt: string;
+    updatedAt: string;
+    website: string | null;
+    image: string | null;
+  };
+};
 
 export type FindTemplateByDetailsQueryVariables = Exact<{
-  episodeId?: InputMaybe<Scalars['ID']>;
-  showName?: InputMaybe<Scalars['String']>;
-  season?: InputMaybe<Scalars['String']>;
+  episodeId?: string | number | null | undefined;
+  showName?: string | null | undefined;
+  season?: string | null | undefined;
 }>;
 
-
-export type FindTemplateByDetailsQuery = { __typename?: 'Query', findTemplateByDetails: { __typename?: 'Template', id: string, type: TemplateType, createdAt: string, createdByUserId: string, updatedAt: string, updatedByUserId: string, seasons?: Array<string> | null, sourceEpisodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, sourceEpisode: { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> } };
+export type FindTemplateByDetailsQuery = {
+  findTemplateByDetails: {
+    id: string;
+    type: TemplateType;
+    createdAt: string;
+    createdByUserId: string;
+    updatedAt: string;
+    updatedByUserId: string;
+    seasons: Array<string> | null;
+    sourceEpisodeId: string;
+    createdBy: {
+      id: string;
+      username: string;
+      profileUrl: string;
+      createdAt: string;
+    };
+    updatedBy: {
+      id: string;
+      username: string;
+      profileUrl: string;
+      createdAt: string;
+    };
+    sourceEpisode: {
+      id: string;
+      createdAt: string;
+      updatedAt: string;
+      season: string | null;
+      number: string | null;
+      absoluteNumber: string | null;
+      name: string | null;
+      baseDuration: number | null;
+      show: {
+        id: string;
+        name: string;
+        originalName: string | null;
+        createdAt: string;
+        updatedAt: string;
+        website: string | null;
+        image: string | null;
+      };
+      timestamps: Array<{
+        id: string;
+        createdAt: string;
+        updatedAt: string;
+        at: number;
+        source: TimestampSource;
+        typeId: string;
+        episodeId: string;
+        createdBy: {
+          id: string;
+          username: string;
+          profileUrl: string;
+          createdAt: string;
+        };
+        updatedBy: {
+          id: string;
+          username: string;
+          profileUrl: string;
+          createdAt: string;
+        };
+      }>;
+    };
+    timestamps: Array<{
+      id: string;
+      createdAt: string;
+      updatedAt: string;
+      at: number;
+      source: TimestampSource;
+      typeId: string;
+      episodeId: string;
+      createdBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+      updatedBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+    }>;
+  };
+};
 
 export type DeleteTemplateMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: string | number;
 }>;
 
-
-export type DeleteTemplateMutation = { __typename?: 'Mutation', deleteTemplate: { __typename?: 'Template', id: string, type: TemplateType, createdAt: string, createdByUserId: string, updatedAt: string, updatedByUserId: string, seasons?: Array<string> | null, sourceEpisodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, sourceEpisode: { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> } };
+export type DeleteTemplateMutation = {
+  deleteTemplate: {
+    id: string;
+    type: TemplateType;
+    createdAt: string;
+    createdByUserId: string;
+    updatedAt: string;
+    updatedByUserId: string;
+    seasons: Array<string> | null;
+    sourceEpisodeId: string;
+    createdBy: {
+      id: string;
+      username: string;
+      profileUrl: string;
+      createdAt: string;
+    };
+    updatedBy: {
+      id: string;
+      username: string;
+      profileUrl: string;
+      createdAt: string;
+    };
+    sourceEpisode: {
+      id: string;
+      createdAt: string;
+      updatedAt: string;
+      season: string | null;
+      number: string | null;
+      absoluteNumber: string | null;
+      name: string | null;
+      baseDuration: number | null;
+      show: {
+        id: string;
+        name: string;
+        originalName: string | null;
+        createdAt: string;
+        updatedAt: string;
+        website: string | null;
+        image: string | null;
+      };
+      timestamps: Array<{
+        id: string;
+        createdAt: string;
+        updatedAt: string;
+        at: number;
+        source: TimestampSource;
+        typeId: string;
+        episodeId: string;
+        createdBy: {
+          id: string;
+          username: string;
+          profileUrl: string;
+          createdAt: string;
+        };
+        updatedBy: {
+          id: string;
+          username: string;
+          profileUrl: string;
+          createdAt: string;
+        };
+      }>;
+    };
+    timestamps: Array<{
+      id: string;
+      createdAt: string;
+      updatedAt: string;
+      at: number;
+      source: TimestampSource;
+      typeId: string;
+      episodeId: string;
+      createdBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+      updatedBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+    }>;
+  };
+};
 
 export type FindEpisodeByNameQueryVariables = Exact<{
-  name: Scalars['String'];
+  name: string;
 }>;
 
-
-export type FindEpisodeByNameQuery = { __typename?: 'Query', findEpisodeByName: Array<{ __typename?: 'ThirdPartyEpisode', id?: string | null, name?: string | null, season?: string | null, number?: string | null, absoluteNumber?: string | null, baseDuration?: number | null, source?: TimestampSource | null, showId: string, show: { __typename?: 'ThirdPartyShow', name: string }, timestamps: Array<{ __typename?: 'ThirdPartyTimestamp', id?: string | null, at: number, typeId: string }> }> };
+export type FindEpisodeByNameQuery = {
+  findEpisodeByName: Array<{
+    id: string | null;
+    name: string | null;
+    season: string | null;
+    number: string | null;
+    absoluteNumber: string | null;
+    baseDuration: number | null;
+    source: TimestampSource | null;
+    showId: string;
+    show: { name: string };
+    timestamps: Array<{ id: string | null; at: number; typeId: string }>;
+  }>;
+};
 
 export type FindEpisodeQueryVariables = Exact<{
-  episodeId: Scalars['ID'];
+  episodeId: string | number;
 }>;
 
-
-export type FindEpisodeQuery = { __typename?: 'Query', findEpisode: { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> } };
+export type FindEpisodeQuery = {
+  findEpisode: {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    season: string | null;
+    number: string | null;
+    absoluteNumber: string | null;
+    name: string | null;
+    baseDuration: number | null;
+    show: {
+      id: string;
+      name: string;
+      originalName: string | null;
+      createdAt: string;
+      updatedAt: string;
+      website: string | null;
+      image: string | null;
+    };
+    timestamps: Array<{
+      id: string;
+      createdAt: string;
+      updatedAt: string;
+      at: number;
+      source: TimestampSource;
+      typeId: string;
+      episodeId: string;
+      createdBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+      updatedBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+    }>;
+  };
+};
 
 export type FindEpisodeUrlQueryVariables = Exact<{
-  url: Scalars['String'];
+  url: string;
 }>;
 
-
-export type FindEpisodeUrlQuery = { __typename?: 'Query', findEpisodeUrl: { __typename?: 'EpisodeUrl', url: string, createdAt: string, updatedAt: string, duration?: number | null, timestampsOffset?: number | null, source: EpisodeSource, episode: { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> } } };
+export type FindEpisodeUrlQuery = {
+  findEpisodeUrl: {
+    url: string;
+    createdAt: string;
+    updatedAt: string;
+    duration: number | null;
+    timestampsOffset: number | null;
+    source: EpisodeSource;
+    episode: {
+      id: string;
+      createdAt: string;
+      updatedAt: string;
+      season: string | null;
+      number: string | null;
+      absoluteNumber: string | null;
+      name: string | null;
+      baseDuration: number | null;
+      show: {
+        id: string;
+        name: string;
+        originalName: string | null;
+        createdAt: string;
+        updatedAt: string;
+        website: string | null;
+        image: string | null;
+      };
+      timestamps: Array<{
+        id: string;
+        createdAt: string;
+        updatedAt: string;
+        at: number;
+        source: TimestampSource;
+        typeId: string;
+        episodeId: string;
+        createdBy: {
+          id: string;
+          username: string;
+          profileUrl: string;
+          createdAt: string;
+        };
+        updatedBy: {
+          id: string;
+          username: string;
+          profileUrl: string;
+          createdAt: string;
+        };
+      }>;
+    };
+  };
+};
 
 export type LoginQueryVariables = Exact<{
-  usernameEmail: Scalars['String'];
-  passwordHash: Scalars['String'];
+  usernameEmail: string;
+  passwordHash: string;
 }>;
 
-
-export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'LoginData', authToken: string, refreshToken: string, account: { __typename?: 'Account', id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role, createdAt: string } } };
+export type LoginQuery = {
+  login: {
+    authToken: string;
+    refreshToken: string;
+    account: {
+      id: string;
+      username: string;
+      email: string;
+      emailVerified: boolean;
+      profileUrl: string;
+      role: Role;
+      createdAt: string;
+    };
+  };
+};
 
 export type LoginRefreshQueryVariables = Exact<{
-  refreshToken: Scalars['String'];
+  refreshToken: string;
 }>;
 
-
-export type LoginRefreshQuery = { __typename?: 'Query', loginRefresh: { __typename?: 'LoginData', authToken: string, refreshToken: string, account: { __typename?: 'Account', id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role, createdAt: string } } };
+export type LoginRefreshQuery = {
+  loginRefresh: {
+    authToken: string;
+    refreshToken: string;
+    account: {
+      id: string;
+      username: string;
+      email: string;
+      emailVerified: boolean;
+      profileUrl: string;
+      role: Role;
+      createdAt: string;
+    };
+  };
+};
 
 export type SavePreferencesMutationVariables = Exact<{
   preferences: InputPreferences;
 }>;
 
-
-export type SavePreferencesMutation = { __typename?: 'Mutation', savePreferences: { __typename?: 'Preferences', updatedAt: string } };
+export type SavePreferencesMutation = {
+  savePreferences: { updatedAt: string };
+};
 
 export type UpdateTemplateMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: string | number;
   newTemplate: InputTemplate;
 }>;
 
-
-export type UpdateTemplateMutation = { __typename?: 'Mutation', updateTemplate: { __typename?: 'Template', id: string, type: TemplateType, createdAt: string, createdByUserId: string, updatedAt: string, updatedByUserId: string, seasons?: Array<string> | null, sourceEpisodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, sourceEpisode: { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> } };
+export type UpdateTemplateMutation = {
+  updateTemplate: {
+    id: string;
+    type: TemplateType;
+    createdAt: string;
+    createdByUserId: string;
+    updatedAt: string;
+    updatedByUserId: string;
+    seasons: Array<string> | null;
+    sourceEpisodeId: string;
+    createdBy: {
+      id: string;
+      username: string;
+      profileUrl: string;
+      createdAt: string;
+    };
+    updatedBy: {
+      id: string;
+      username: string;
+      profileUrl: string;
+      createdAt: string;
+    };
+    sourceEpisode: {
+      id: string;
+      createdAt: string;
+      updatedAt: string;
+      season: string | null;
+      number: string | null;
+      absoluteNumber: string | null;
+      name: string | null;
+      baseDuration: number | null;
+      show: {
+        id: string;
+        name: string;
+        originalName: string | null;
+        createdAt: string;
+        updatedAt: string;
+        website: string | null;
+        image: string | null;
+      };
+      timestamps: Array<{
+        id: string;
+        createdAt: string;
+        updatedAt: string;
+        at: number;
+        source: TimestampSource;
+        typeId: string;
+        episodeId: string;
+        createdBy: {
+          id: string;
+          username: string;
+          profileUrl: string;
+          createdAt: string;
+        };
+        updatedBy: {
+          id: string;
+          username: string;
+          profileUrl: string;
+          createdAt: string;
+        };
+      }>;
+    };
+    timestamps: Array<{
+      id: string;
+      createdAt: string;
+      updatedAt: string;
+      at: number;
+      source: TimestampSource;
+      typeId: string;
+      episodeId: string;
+      createdBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+      updatedBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+    }>;
+  };
+};
 
 export type CreateTemplateMutationVariables = Exact<{
   newTemplate: InputTemplate;
 }>;
 
-
-export type CreateTemplateMutation = { __typename?: 'Mutation', createTemplate: { __typename?: 'Template', id: string, type: TemplateType, createdAt: string, createdByUserId: string, updatedAt: string, updatedByUserId: string, seasons?: Array<string> | null, sourceEpisodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, sourceEpisode: { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> } };
+export type CreateTemplateMutation = {
+  createTemplate: {
+    id: string;
+    type: TemplateType;
+    createdAt: string;
+    createdByUserId: string;
+    updatedAt: string;
+    updatedByUserId: string;
+    seasons: Array<string> | null;
+    sourceEpisodeId: string;
+    createdBy: {
+      id: string;
+      username: string;
+      profileUrl: string;
+      createdAt: string;
+    };
+    updatedBy: {
+      id: string;
+      username: string;
+      profileUrl: string;
+      createdAt: string;
+    };
+    sourceEpisode: {
+      id: string;
+      createdAt: string;
+      updatedAt: string;
+      season: string | null;
+      number: string | null;
+      absoluteNumber: string | null;
+      name: string | null;
+      baseDuration: number | null;
+      show: {
+        id: string;
+        name: string;
+        originalName: string | null;
+        createdAt: string;
+        updatedAt: string;
+        website: string | null;
+        image: string | null;
+      };
+      timestamps: Array<{
+        id: string;
+        createdAt: string;
+        updatedAt: string;
+        at: number;
+        source: TimestampSource;
+        typeId: string;
+        episodeId: string;
+        createdBy: {
+          id: string;
+          username: string;
+          profileUrl: string;
+          createdAt: string;
+        };
+        updatedBy: {
+          id: string;
+          username: string;
+          profileUrl: string;
+          createdAt: string;
+        };
+      }>;
+    };
+    timestamps: Array<{
+      id: string;
+      createdAt: string;
+      updatedAt: string;
+      at: number;
+      source: TimestampSource;
+      typeId: string;
+      episodeId: string;
+      createdBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+      updatedBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+    }>;
+  };
+};
 
 export type AddTimestampToTemplateMutationVariables = Exact<{
   timestamp: InputTemplateTimestamp;
 }>;
 
-
-export type AddTimestampToTemplateMutation = { __typename?: 'Mutation', addTimestampToTemplate: { __typename?: 'TemplateTimestamp', timestamp: { __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } } } };
+export type AddTimestampToTemplateMutation = {
+  addTimestampToTemplate: {
+    timestamp: {
+      id: string;
+      createdAt: string;
+      updatedAt: string;
+      at: number;
+      source: TimestampSource;
+      typeId: string;
+      episodeId: string;
+      createdBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+      updatedBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+    };
+  };
+};
 
 export type RemoveTimestampFromTemplateMutationVariables = Exact<{
   timestamp: InputTemplateTimestamp;
 }>;
 
-
-export type RemoveTimestampFromTemplateMutation = { __typename?: 'Mutation', removeTimestampFromTemplate: { __typename?: 'TemplateTimestamp', timestamp: { __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } } } };
+export type RemoveTimestampFromTemplateMutation = {
+  removeTimestampFromTemplate: {
+    timestamp: {
+      id: string;
+      createdAt: string;
+      updatedAt: string;
+      at: number;
+      source: TimestampSource;
+      typeId: string;
+      episodeId: string;
+      createdBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+      updatedBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+    };
+  };
+};
 
 export type SearchShowsQueryVariables = Exact<{
-  search: Scalars['String'];
+  search: string;
 }>;
 
-
-export type SearchShowsQuery = { __typename?: 'Query', searchShows: Array<{ __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }> };
+export type SearchShowsQuery = {
+  searchShows: Array<{
+    id: string;
+    name: string;
+    originalName: string | null;
+    createdAt: string;
+    updatedAt: string;
+    website: string | null;
+    image: string | null;
+  }>;
+};
 
 export type UpdateEpisodeMutationVariables = Exact<{
-  episodeId: Scalars['ID'];
+  episodeId: string | number;
   newEpisode: InputEpisode;
 }>;
 
-
-export type UpdateEpisodeMutation = { __typename?: 'Mutation', updateEpisode: { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> } };
+export type UpdateEpisodeMutation = {
+  updateEpisode: {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    season: string | null;
+    number: string | null;
+    absoluteNumber: string | null;
+    name: string | null;
+    baseDuration: number | null;
+    show: {
+      id: string;
+      name: string;
+      originalName: string | null;
+      createdAt: string;
+      updatedAt: string;
+      website: string | null;
+      image: string | null;
+    };
+    timestamps: Array<{
+      id: string;
+      createdAt: string;
+      updatedAt: string;
+      at: number;
+      source: TimestampSource;
+      typeId: string;
+      episodeId: string;
+      createdBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+      updatedBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+    }>;
+  };
+};
 
 export type UpdateTimestampsMutationVariables = Exact<{
   create: Array<InputTimestampOn> | InputTimestampOn;
   update: Array<InputExistingTimestamp> | InputExistingTimestamp;
-  delete: Array<Scalars['ID']> | Scalars['ID'];
+  delete: Array<string | number> | string | number;
 }>;
 
+export type UpdateTimestampsMutation = {
+  updateTimestamps: {
+    created: Array<{
+      id: string;
+      createdAt: string;
+      updatedAt: string;
+      at: number;
+      source: TimestampSource;
+      typeId: string;
+      episodeId: string;
+      createdBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+      updatedBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+    }>;
+    updated: Array<{
+      id: string;
+      createdAt: string;
+      updatedAt: string;
+      at: number;
+      source: TimestampSource;
+      typeId: string;
+      episodeId: string;
+      createdBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+      updatedBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+    }>;
+    deleted: Array<{
+      id: string;
+      createdAt: string;
+      updatedAt: string;
+      at: number;
+      source: TimestampSource;
+      typeId: string;
+      episodeId: string;
+      createdBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+      updatedBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+    }>;
+  };
+};
 
-export type UpdateTimestampsMutation = { __typename?: 'Mutation', updateTimestamps: { __typename?: 'UpdatedTimestamps', created: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }>, updated: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }>, deleted: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> } };
+export type MyAccountFragment = {
+  id: string;
+  username: string;
+  email: string;
+  emailVerified: boolean;
+  profileUrl: string;
+  role: Role;
+  createdAt: string;
+};
 
-export type MyAccountFragment = { __typename?: 'Account', id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role, createdAt: string };
+export type PreferencesFragment = {
+  enableAutoSkip: boolean;
+  enableAutoPlay: boolean;
+  minimizeToolbarWhenEditing: boolean;
+  hideTimelineWhenMinimized: boolean;
+  colorTheme: ColorTheme;
+  skipBranding: boolean;
+  skipCanon: boolean;
+  skipCredits: boolean;
+  skipFiller: boolean;
+  skipIntros: boolean;
+  skipMixedCredits: boolean;
+  skipMixedIntros: boolean;
+  skipNewCredits: boolean;
+  skipNewIntros: boolean;
+  skipPreview: boolean;
+  skipRecaps: boolean;
+  skipTitleCard: boolean;
+  skipTransitions: boolean;
+};
 
-export type PreferencesFragment = { __typename?: 'Preferences', enableAutoSkip: boolean, enableAutoPlay: boolean, minimizeToolbarWhenEditing: boolean, hideTimelineWhenMinimized: boolean, colorTheme: ColorTheme, skipBranding: boolean, skipCanon: boolean, skipCredits: boolean, skipFiller: boolean, skipIntros: boolean, skipMixedCredits: boolean, skipMixedIntros: boolean, skipNewCredits: boolean, skipNewIntros: boolean, skipPreview: boolean, skipRecaps: boolean, skipTitleCard: boolean, skipTransitions: boolean };
+export type AuthDetailsFragment = {
+  authToken: string;
+  refreshToken: string;
+  account: {
+    id: string;
+    username: string;
+    email: string;
+    emailVerified: boolean;
+    profileUrl: string;
+    role: Role;
+    createdAt: string;
+  };
+};
 
-export type AuthDetailsFragment = { __typename?: 'LoginData', authToken: string, refreshToken: string, account: { __typename?: 'Account', id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role, createdAt: string } };
+export type EpisodeUrlFragment = {
+  url: string;
+  createdAt: string;
+  updatedAt: string;
+  duration: number | null;
+  timestampsOffset: number | null;
+  source: EpisodeSource;
+  episode: {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    season: string | null;
+    number: string | null;
+    absoluteNumber: string | null;
+    name: string | null;
+    baseDuration: number | null;
+    show: {
+      id: string;
+      name: string;
+      originalName: string | null;
+      createdAt: string;
+      updatedAt: string;
+      website: string | null;
+      image: string | null;
+    };
+    timestamps: Array<{
+      id: string;
+      createdAt: string;
+      updatedAt: string;
+      at: number;
+      source: TimestampSource;
+      typeId: string;
+      episodeId: string;
+      createdBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+      updatedBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+    }>;
+  };
+};
 
-export type EpisodeUrlFragment = { __typename?: 'EpisodeUrl', url: string, createdAt: string, updatedAt: string, duration?: number | null, timestampsOffset?: number | null, source: EpisodeSource, episode: { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> } };
+export type EpisodeFragment = {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  season: string | null;
+  number: string | null;
+  absoluteNumber: string | null;
+  name: string | null;
+  baseDuration: number | null;
+  show: {
+    id: string;
+    name: string;
+    originalName: string | null;
+    createdAt: string;
+    updatedAt: string;
+    website: string | null;
+    image: string | null;
+  };
+  timestamps: Array<{
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    at: number;
+    source: TimestampSource;
+    typeId: string;
+    episodeId: string;
+    createdBy: {
+      id: string;
+      username: string;
+      profileUrl: string;
+      createdAt: string;
+    };
+    updatedBy: {
+      id: string;
+      username: string;
+      profileUrl: string;
+      createdAt: string;
+    };
+  }>;
+};
 
-export type EpisodeFragment = { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> };
+export type ShowFragment = {
+  id: string;
+  name: string;
+  originalName: string | null;
+  createdAt: string;
+  updatedAt: string;
+  website: string | null;
+  image: string | null;
+};
 
-export type ShowFragment = { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null };
+export type TimestampFragment = {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  at: number;
+  source: TimestampSource;
+  typeId: string;
+  episodeId: string;
+  createdBy: {
+    id: string;
+    username: string;
+    profileUrl: string;
+    createdAt: string;
+  };
+  updatedBy: {
+    id: string;
+    username: string;
+    profileUrl: string;
+    createdAt: string;
+  };
+};
 
-export type TimestampFragment = { __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } };
+export type TimestampTypeFragment = {
+  id: string;
+  name: string;
+  description: string;
+};
 
-export type TimestampTypeFragment = { __typename?: 'TimestampType', id: string, name: string, description: string };
+export type UserFragment = {
+  id: string;
+  username: string;
+  profileUrl: string;
+  createdAt: string;
+};
 
-export type UserFragment = { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string };
+export type ThirdPartyEpisodeFragment = {
+  id: string | null;
+  name: string | null;
+  season: string | null;
+  number: string | null;
+  absoluteNumber: string | null;
+  baseDuration: number | null;
+  source: TimestampSource | null;
+  showId: string;
+  show: { name: string };
+  timestamps: Array<{ id: string | null; at: number; typeId: string }>;
+};
 
-export type ThirdPartyEpisodeFragment = { __typename?: 'ThirdPartyEpisode', id?: string | null, name?: string | null, season?: string | null, number?: string | null, absoluteNumber?: string | null, baseDuration?: number | null, source?: TimestampSource | null, showId: string, show: { __typename?: 'ThirdPartyShow', name: string }, timestamps: Array<{ __typename?: 'ThirdPartyTimestamp', id?: string | null, at: number, typeId: string }> };
+export type ThirdPartyShowFragment = { name: string };
 
-export type ThirdPartyShowFragment = { __typename?: 'ThirdPartyShow', name: string };
+export type ThirdPartyTimestampFragment = {
+  id: string | null;
+  at: number;
+  typeId: string;
+};
 
-export type ThirdPartyTimestampFragment = { __typename?: 'ThirdPartyTimestamp', id?: string | null, at: number, typeId: string };
-
-export type TemplateFragment = { __typename?: 'Template', id: string, type: TemplateType, createdAt: string, createdByUserId: string, updatedAt: string, updatedByUserId: string, seasons?: Array<string> | null, sourceEpisodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, sourceEpisode: { __typename?: 'Episode', id: string, createdAt: string, updatedAt: string, season?: string | null, number?: string | null, absoluteNumber?: string | null, name?: string | null, baseDuration?: number | null, show: { __typename?: 'Show', id: string, name: string, originalName?: string | null, createdAt: string, updatedAt: string, website?: string | null, image?: string | null }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> }, timestamps: Array<{ __typename?: 'Timestamp', id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { __typename?: 'User', id: string, username: string, profileUrl: string, createdAt: string } }> };
+export type TemplateFragment = {
+  id: string;
+  type: TemplateType;
+  createdAt: string;
+  createdByUserId: string;
+  updatedAt: string;
+  updatedByUserId: string;
+  seasons: Array<string> | null;
+  sourceEpisodeId: string;
+  createdBy: {
+    id: string;
+    username: string;
+    profileUrl: string;
+    createdAt: string;
+  };
+  updatedBy: {
+    id: string;
+    username: string;
+    profileUrl: string;
+    createdAt: string;
+  };
+  sourceEpisode: {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    season: string | null;
+    number: string | null;
+    absoluteNumber: string | null;
+    name: string | null;
+    baseDuration: number | null;
+    show: {
+      id: string;
+      name: string;
+      originalName: string | null;
+      createdAt: string;
+      updatedAt: string;
+      website: string | null;
+      image: string | null;
+    };
+    timestamps: Array<{
+      id: string;
+      createdAt: string;
+      updatedAt: string;
+      at: number;
+      source: TimestampSource;
+      typeId: string;
+      episodeId: string;
+      createdBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+      updatedBy: {
+        id: string;
+        username: string;
+        profileUrl: string;
+        createdAt: string;
+      };
+    }>;
+  };
+  timestamps: Array<{
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    at: number;
+    source: TimestampSource;
+    typeId: string;
+    episodeId: string;
+    createdBy: {
+      id: string;
+      username: string;
+      profileUrl: string;
+      createdAt: string;
+    };
+    updatedBy: {
+      id: string;
+      username: string;
+      profileUrl: string;
+      createdAt: string;
+    };
+  }>;
+};
 
 export const PreferencesFragmentDoc = gql`
-    fragment Preferences on Preferences {
-  enableAutoSkip
-  enableAutoPlay
-  minimizeToolbarWhenEditing
-  hideTimelineWhenMinimized
-  colorTheme
-  skipBranding
-  skipCanon
-  skipCredits
-  skipFiller
-  skipIntros
-  skipMixedCredits
-  skipMixedIntros
-  skipNewCredits
-  skipNewIntros
-  skipPreview
-  skipRecaps
-  skipTitleCard
-  skipTransitions
-}
-    `;
+  fragment Preferences on Preferences {
+    enableAutoSkip
+    enableAutoPlay
+    minimizeToolbarWhenEditing
+    hideTimelineWhenMinimized
+    colorTheme
+    skipBranding
+    skipCanon
+    skipCredits
+    skipFiller
+    skipIntros
+    skipMixedCredits
+    skipMixedIntros
+    skipNewCredits
+    skipNewIntros
+    skipPreview
+    skipRecaps
+    skipTitleCard
+    skipTransitions
+  }
+`;
 export const MyAccountFragmentDoc = gql`
-    fragment MyAccount on Account {
-  id
-  username
-  email
-  emailVerified
-  profileUrl
-  role
-  createdAt
-}
-    `;
+  fragment MyAccount on Account {
+    id
+    username
+    email
+    emailVerified
+    profileUrl
+    role
+    createdAt
+  }
+`;
 export const AuthDetailsFragmentDoc = gql`
-    fragment AuthDetails on LoginData {
-  authToken
-  refreshToken
-  account {
-    ...MyAccount
+  fragment AuthDetails on LoginData {
+    authToken
+    refreshToken
+    account {
+      ...MyAccount
+    }
   }
-}
-    ${MyAccountFragmentDoc}`;
+  ${MyAccountFragmentDoc}
+`;
 export const ShowFragmentDoc = gql`
-    fragment Show on Show {
-  id
-  name
-  originalName
-  createdAt
-  updatedAt
-  website
-  image
-}
-    `;
-export const UserFragmentDoc = gql`
-    fragment User on User {
-  id
-  username
-  profileUrl
-  createdAt
-}
-    `;
-export const TimestampFragmentDoc = gql`
-    fragment Timestamp on Timestamp {
-  id
-  createdAt
-  createdBy {
-    ...User
-  }
-  updatedAt
-  updatedBy {
-    ...User
-  }
-  at
-  source
-  typeId
-  episodeId
-}
-    ${UserFragmentDoc}`;
-export const EpisodeFragmentDoc = gql`
-    fragment Episode on Episode {
-  id
-  createdAt
-  updatedAt
-  season
-  number
-  absoluteNumber
-  name
-  baseDuration
-  show {
-    ...Show
-  }
-  timestamps {
-    ...Timestamp
-  }
-}
-    ${ShowFragmentDoc}
-${TimestampFragmentDoc}`;
-export const EpisodeUrlFragmentDoc = gql`
-    fragment EpisodeUrl on EpisodeUrl {
-  url
-  createdAt
-  updatedAt
-  duration
-  timestampsOffset
-  episode {
-    ...Episode
-  }
-  source
-}
-    ${EpisodeFragmentDoc}`;
-export const TimestampTypeFragmentDoc = gql`
-    fragment TimestampType on TimestampType {
-  id
-  name
-  description
-}
-    `;
-export const ThirdPartyShowFragmentDoc = gql`
-    fragment ThirdPartyShow on ThirdPartyShow {
-  name
-}
-    `;
-export const ThirdPartyTimestampFragmentDoc = gql`
-    fragment ThirdPartyTimestamp on ThirdPartyTimestamp {
-  id
-  at
-  typeId
-}
-    `;
-export const ThirdPartyEpisodeFragmentDoc = gql`
-    fragment ThirdPartyEpisode on ThirdPartyEpisode {
-  id
-  name
-  season
-  number
-  absoluteNumber
-  baseDuration
-  source
-  showId
-  show {
-    ...ThirdPartyShow
-  }
-  timestamps {
-    ...ThirdPartyTimestamp
-  }
-}
-    ${ThirdPartyShowFragmentDoc}
-${ThirdPartyTimestampFragmentDoc}`;
-export const TemplateFragmentDoc = gql`
-    fragment Template on Template {
-  id
-  type
-  createdAt
-  createdByUserId
-  createdBy {
-    ...User
-  }
-  updatedAt
-  updatedByUserId
-  updatedBy {
-    ...User
-  }
-  seasons
-  sourceEpisodeId
-  sourceEpisode {
-    ...Episode
-  }
-  timestamps {
-    ...Timestamp
-  }
-}
-    ${UserFragmentDoc}
-${EpisodeFragmentDoc}
-${TimestampFragmentDoc}`;
-export const AccountDocument = gql`
-    query account {
-  account {
-    ...MyAccount
-    preferences {
-      ...Preferences
-    }
-  }
-}
-    ${MyAccountFragmentDoc}
-${PreferencesFragmentDoc}`;
-export const AllTimestampTypesDocument = gql`
-    query allTimestampTypes {
-  allTimestampTypes {
-    ...TimestampType
-  }
-}
-    ${TimestampTypeFragmentDoc}`;
-export const CreateEpisodeDocument = gql`
-    mutation createEpisode($showId: ID!, $episodeInput: InputEpisode!) {
-  createEpisode(showId: $showId, episodeInput: $episodeInput) {
-    ...Episode
-  }
-}
-    ${EpisodeFragmentDoc}`;
-export const CreateEpisodeUrlDocument = gql`
-    mutation createEpisodeUrl($episodeId: ID!, $episodeUrlInput: InputEpisodeUrl!) {
-  createEpisodeUrl(episodeId: $episodeId, episodeUrlInput: $episodeUrlInput) {
-    ...EpisodeUrl
-  }
-}
-    ${EpisodeUrlFragmentDoc}`;
-export const CreateShowDocument = gql`
-    mutation createShow($showInput: InputShow!, $becomeAdmin: Boolean!) {
-  createShow(showInput: $showInput, becomeAdmin: $becomeAdmin) {
-    ...Show
-  }
-}
-    ${ShowFragmentDoc}`;
-export const FindTemplateByDetailsDocument = gql`
-    query findTemplateByDetails($episodeId: ID, $showName: String, $season: String) {
-  findTemplateByDetails(
-    episodeId: $episodeId
-    showName: $showName
-    season: $season
-  ) {
-    ...Template
-  }
-}
-    ${TemplateFragmentDoc}`;
-export const DeleteTemplateDocument = gql`
-    mutation deleteTemplate($id: ID!) {
-  deleteTemplate(templateId: $id) {
-    ...Template
-  }
-}
-    ${TemplateFragmentDoc}`;
-export const FindEpisodeByNameDocument = gql`
-    query findEpisodeByName($name: String!) {
-  findEpisodeByName(name: $name) {
-    ...ThirdPartyEpisode
-  }
-}
-    ${ThirdPartyEpisodeFragmentDoc}`;
-export const FindEpisodeDocument = gql`
-    query findEpisode($episodeId: ID!) {
-  findEpisode(episodeId: $episodeId) {
-    ...Episode
-  }
-}
-    ${EpisodeFragmentDoc}`;
-export const FindEpisodeUrlDocument = gql`
-    query findEpisodeUrl($url: String!) {
-  findEpisodeUrl(episodeUrl: $url) {
-    ...EpisodeUrl
-  }
-}
-    ${EpisodeUrlFragmentDoc}`;
-export const LoginDocument = gql`
-    query login($usernameEmail: String!, $passwordHash: String!) {
-  login(usernameEmail: $usernameEmail, passwordHash: $passwordHash) {
-    ...AuthDetails
-  }
-}
-    ${AuthDetailsFragmentDoc}`;
-export const LoginRefreshDocument = gql`
-    query loginRefresh($refreshToken: String!) {
-  loginRefresh(refreshToken: $refreshToken) {
-    ...AuthDetails
-  }
-}
-    ${AuthDetailsFragmentDoc}`;
-export const SavePreferencesDocument = gql`
-    mutation savePreferences($preferences: InputPreferences!) {
-  savePreferences(preferences: $preferences) {
+  fragment Show on Show {
+    id
+    name
+    originalName
+    createdAt
     updatedAt
+    website
+    image
   }
-}
-    `;
+`;
+export const UserFragmentDoc = gql`
+  fragment User on User {
+    id
+    username
+    profileUrl
+    createdAt
+  }
+`;
+export const TimestampFragmentDoc = gql`
+  fragment Timestamp on Timestamp {
+    id
+    createdAt
+    createdBy {
+      ...User
+    }
+    updatedAt
+    updatedBy {
+      ...User
+    }
+    at
+    source
+    typeId
+    episodeId
+  }
+  ${UserFragmentDoc}
+`;
+export const EpisodeFragmentDoc = gql`
+  fragment Episode on Episode {
+    id
+    createdAt
+    updatedAt
+    season
+    number
+    absoluteNumber
+    name
+    baseDuration
+    show {
+      ...Show
+    }
+    timestamps {
+      ...Timestamp
+    }
+  }
+  ${ShowFragmentDoc}
+  ${TimestampFragmentDoc}
+`;
+export const EpisodeUrlFragmentDoc = gql`
+  fragment EpisodeUrl on EpisodeUrl {
+    url
+    createdAt
+    updatedAt
+    duration
+    timestampsOffset
+    episode {
+      ...Episode
+    }
+    source
+  }
+  ${EpisodeFragmentDoc}
+`;
+export const TimestampTypeFragmentDoc = gql`
+  fragment TimestampType on TimestampType {
+    id
+    name
+    description
+  }
+`;
+export const ThirdPartyShowFragmentDoc = gql`
+  fragment ThirdPartyShow on ThirdPartyShow {
+    name
+  }
+`;
+export const ThirdPartyTimestampFragmentDoc = gql`
+  fragment ThirdPartyTimestamp on ThirdPartyTimestamp {
+    id
+    at
+    typeId
+  }
+`;
+export const ThirdPartyEpisodeFragmentDoc = gql`
+  fragment ThirdPartyEpisode on ThirdPartyEpisode {
+    id
+    name
+    season
+    number
+    absoluteNumber
+    baseDuration
+    source
+    showId
+    show {
+      ...ThirdPartyShow
+    }
+    timestamps {
+      ...ThirdPartyTimestamp
+    }
+  }
+  ${ThirdPartyShowFragmentDoc}
+  ${ThirdPartyTimestampFragmentDoc}
+`;
+export const TemplateFragmentDoc = gql`
+  fragment Template on Template {
+    id
+    type
+    createdAt
+    createdByUserId
+    createdBy {
+      ...User
+    }
+    updatedAt
+    updatedByUserId
+    updatedBy {
+      ...User
+    }
+    seasons
+    sourceEpisodeId
+    sourceEpisode {
+      ...Episode
+    }
+    timestamps {
+      ...Timestamp
+    }
+  }
+  ${UserFragmentDoc}
+  ${EpisodeFragmentDoc}
+  ${TimestampFragmentDoc}
+`;
+export const AccountDocument = gql`
+  query account {
+    account {
+      ...MyAccount
+      preferences {
+        ...Preferences
+      }
+    }
+  }
+  ${MyAccountFragmentDoc}
+  ${PreferencesFragmentDoc}
+`;
+export const AllTimestampTypesDocument = gql`
+  query allTimestampTypes {
+    allTimestampTypes {
+      ...TimestampType
+    }
+  }
+  ${TimestampTypeFragmentDoc}
+`;
+export const CreateEpisodeDocument = gql`
+  mutation createEpisode($showId: ID!, $episodeInput: InputEpisode!) {
+    createEpisode(showId: $showId, episodeInput: $episodeInput) {
+      ...Episode
+    }
+  }
+  ${EpisodeFragmentDoc}
+`;
+export const CreateEpisodeUrlDocument = gql`
+  mutation createEpisodeUrl(
+    $episodeId: ID!
+    $episodeUrlInput: InputEpisodeUrl!
+  ) {
+    createEpisodeUrl(episodeId: $episodeId, episodeUrlInput: $episodeUrlInput) {
+      ...EpisodeUrl
+    }
+  }
+  ${EpisodeUrlFragmentDoc}
+`;
+export const CreateShowDocument = gql`
+  mutation createShow($showInput: InputShow!, $becomeAdmin: Boolean!) {
+    createShow(showInput: $showInput, becomeAdmin: $becomeAdmin) {
+      ...Show
+    }
+  }
+  ${ShowFragmentDoc}
+`;
+export const FindTemplateByDetailsDocument = gql`
+  query findTemplateByDetails(
+    $episodeId: ID
+    $showName: String
+    $season: String
+  ) {
+    findTemplateByDetails(
+      episodeId: $episodeId
+      showName: $showName
+      season: $season
+    ) {
+      ...Template
+    }
+  }
+  ${TemplateFragmentDoc}
+`;
+export const DeleteTemplateDocument = gql`
+  mutation deleteTemplate($id: ID!) {
+    deleteTemplate(templateId: $id) {
+      ...Template
+    }
+  }
+  ${TemplateFragmentDoc}
+`;
+export const FindEpisodeByNameDocument = gql`
+  query findEpisodeByName($name: String!) {
+    findEpisodeByName(name: $name) {
+      ...ThirdPartyEpisode
+    }
+  }
+  ${ThirdPartyEpisodeFragmentDoc}
+`;
+export const FindEpisodeDocument = gql`
+  query findEpisode($episodeId: ID!) {
+    findEpisode(episodeId: $episodeId) {
+      ...Episode
+    }
+  }
+  ${EpisodeFragmentDoc}
+`;
+export const FindEpisodeUrlDocument = gql`
+  query findEpisodeUrl($url: String!) {
+    findEpisodeUrl(episodeUrl: $url) {
+      ...EpisodeUrl
+    }
+  }
+  ${EpisodeUrlFragmentDoc}
+`;
+export const LoginDocument = gql`
+  query login($usernameEmail: String!, $passwordHash: String!) {
+    login(usernameEmail: $usernameEmail, passwordHash: $passwordHash) {
+      ...AuthDetails
+    }
+  }
+  ${AuthDetailsFragmentDoc}
+`;
+export const LoginRefreshDocument = gql`
+  query loginRefresh($refreshToken: String!) {
+    loginRefresh(refreshToken: $refreshToken) {
+      ...AuthDetails
+    }
+  }
+  ${AuthDetailsFragmentDoc}
+`;
+export const SavePreferencesDocument = gql`
+  mutation savePreferences($preferences: InputPreferences!) {
+    savePreferences(preferences: $preferences) {
+      updatedAt
+    }
+  }
+`;
 export const UpdateTemplateDocument = gql`
-    mutation updateTemplate($id: ID!, $newTemplate: InputTemplate!) {
-  updateTemplate(templateId: $id, newTemplate: $newTemplate) {
-    ...Template
+  mutation updateTemplate($id: ID!, $newTemplate: InputTemplate!) {
+    updateTemplate(templateId: $id, newTemplate: $newTemplate) {
+      ...Template
+    }
   }
-}
-    ${TemplateFragmentDoc}`;
+  ${TemplateFragmentDoc}
+`;
 export const CreateTemplateDocument = gql`
-    mutation createTemplate($newTemplate: InputTemplate!) {
-  createTemplate(newTemplate: $newTemplate) {
-    ...Template
+  mutation createTemplate($newTemplate: InputTemplate!) {
+    createTemplate(newTemplate: $newTemplate) {
+      ...Template
+    }
   }
-}
-    ${TemplateFragmentDoc}`;
+  ${TemplateFragmentDoc}
+`;
 export const AddTimestampToTemplateDocument = gql`
-    mutation addTimestampToTemplate($timestamp: InputTemplateTimestamp!) {
-  addTimestampToTemplate(templateTimestamp: $timestamp) {
-    timestamp {
-      ...Timestamp
+  mutation addTimestampToTemplate($timestamp: InputTemplateTimestamp!) {
+    addTimestampToTemplate(templateTimestamp: $timestamp) {
+      timestamp {
+        ...Timestamp
+      }
     }
   }
-}
-    ${TimestampFragmentDoc}`;
+  ${TimestampFragmentDoc}
+`;
 export const RemoveTimestampFromTemplateDocument = gql`
-    mutation removeTimestampFromTemplate($timestamp: InputTemplateTimestamp!) {
-  removeTimestampFromTemplate(templateTimestamp: $timestamp) {
-    timestamp {
-      ...Timestamp
+  mutation removeTimestampFromTemplate($timestamp: InputTemplateTimestamp!) {
+    removeTimestampFromTemplate(templateTimestamp: $timestamp) {
+      timestamp {
+        ...Timestamp
+      }
     }
   }
-}
-    ${TimestampFragmentDoc}`;
+  ${TimestampFragmentDoc}
+`;
 export const SearchShowsDocument = gql`
-    query searchShows($search: String!) {
-  searchShows(search: $search) {
-    ...Show
+  query searchShows($search: String!) {
+    searchShows(search: $search) {
+      ...Show
+    }
   }
-}
-    ${ShowFragmentDoc}`;
+  ${ShowFragmentDoc}
+`;
 export const UpdateEpisodeDocument = gql`
-    mutation updateEpisode($episodeId: ID!, $newEpisode: InputEpisode!) {
-  updateEpisode(episodeId: $episodeId, newEpisode: $newEpisode) {
-    ...Episode
+  mutation updateEpisode($episodeId: ID!, $newEpisode: InputEpisode!) {
+    updateEpisode(episodeId: $episodeId, newEpisode: $newEpisode) {
+      ...Episode
+    }
   }
-}
-    ${EpisodeFragmentDoc}`;
+  ${EpisodeFragmentDoc}
+`;
 export const UpdateTimestampsDocument = gql`
-    mutation updateTimestamps($create: [InputTimestampOn!]!, $update: [InputExistingTimestamp!]!, $delete: [ID!]!) {
-  updateTimestamps(create: $create, update: $update, delete: $delete) {
-    created {
-      ...Timestamp
-    }
-    updated {
-      ...Timestamp
-    }
-    deleted {
-      ...Timestamp
+  mutation updateTimestamps(
+    $create: [InputTimestampOn!]!
+    $update: [InputExistingTimestamp!]!
+    $delete: [ID!]!
+  ) {
+    updateTimestamps(create: $create, update: $update, delete: $delete) {
+      created {
+        ...Timestamp
+      }
+      updated {
+        ...Timestamp
+      }
+      deleted {
+        ...Timestamp
+      }
     }
   }
-}
-    ${TimestampFragmentDoc}`;
+  ${TimestampFragmentDoc}
+`;
 
-export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
+export type SdkFunctionWrapper = <T>(
+  action: (requestHeaders?: Record<string, string>) => Promise<T>,
+  operationName: string,
+  operationType?: string,
+  variables?: any,
+) => Promise<T>;
 
+const defaultWrapper: SdkFunctionWrapper = (
+  action,
+  _operationName,
+  _operationType,
+  _variables,
+) => action();
 
-const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationType) => action();
-
-export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
+export function getSdk(
+  client: GraphQLClient,
+  withWrapper: SdkFunctionWrapper = defaultWrapper,
+) {
   return {
-    account(variables?: AccountQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<AccountQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<AccountQuery>(AccountDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'account', 'query');
+    account(
+      variables?: AccountQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<AccountQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<AccountQuery>({
+            document: AccountDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'account',
+        'query',
+        variables,
+      );
     },
-    allTimestampTypes(variables?: AllTimestampTypesQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<AllTimestampTypesQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<AllTimestampTypesQuery>(AllTimestampTypesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'allTimestampTypes', 'query');
+    allTimestampTypes(
+      variables?: AllTimestampTypesQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<AllTimestampTypesQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<AllTimestampTypesQuery>({
+            document: AllTimestampTypesDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'allTimestampTypes',
+        'query',
+        variables,
+      );
     },
-    createEpisode(variables: CreateEpisodeMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreateEpisodeMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<CreateEpisodeMutation>(CreateEpisodeDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'createEpisode', 'mutation');
+    createEpisode(
+      variables: CreateEpisodeMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<CreateEpisodeMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<CreateEpisodeMutation>({
+            document: CreateEpisodeDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'createEpisode',
+        'mutation',
+        variables,
+      );
     },
-    createEpisodeUrl(variables: CreateEpisodeUrlMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreateEpisodeUrlMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<CreateEpisodeUrlMutation>(CreateEpisodeUrlDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'createEpisodeUrl', 'mutation');
+    createEpisodeUrl(
+      variables: CreateEpisodeUrlMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<CreateEpisodeUrlMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<CreateEpisodeUrlMutation>({
+            document: CreateEpisodeUrlDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'createEpisodeUrl',
+        'mutation',
+        variables,
+      );
     },
-    createShow(variables: CreateShowMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreateShowMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<CreateShowMutation>(CreateShowDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'createShow', 'mutation');
+    createShow(
+      variables: CreateShowMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<CreateShowMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<CreateShowMutation>({
+            document: CreateShowDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'createShow',
+        'mutation',
+        variables,
+      );
     },
-    findTemplateByDetails(variables?: FindTemplateByDetailsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<FindTemplateByDetailsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<FindTemplateByDetailsQuery>(FindTemplateByDetailsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'findTemplateByDetails', 'query');
+    findTemplateByDetails(
+      variables?: FindTemplateByDetailsQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<FindTemplateByDetailsQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<FindTemplateByDetailsQuery>({
+            document: FindTemplateByDetailsDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'findTemplateByDetails',
+        'query',
+        variables,
+      );
     },
-    deleteTemplate(variables: DeleteTemplateMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<DeleteTemplateMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<DeleteTemplateMutation>(DeleteTemplateDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'deleteTemplate', 'mutation');
+    deleteTemplate(
+      variables: DeleteTemplateMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<DeleteTemplateMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<DeleteTemplateMutation>({
+            document: DeleteTemplateDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'deleteTemplate',
+        'mutation',
+        variables,
+      );
     },
-    findEpisodeByName(variables: FindEpisodeByNameQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<FindEpisodeByNameQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<FindEpisodeByNameQuery>(FindEpisodeByNameDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'findEpisodeByName', 'query');
+    findEpisodeByName(
+      variables: FindEpisodeByNameQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<FindEpisodeByNameQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<FindEpisodeByNameQuery>({
+            document: FindEpisodeByNameDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'findEpisodeByName',
+        'query',
+        variables,
+      );
     },
-    findEpisode(variables: FindEpisodeQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<FindEpisodeQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<FindEpisodeQuery>(FindEpisodeDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'findEpisode', 'query');
+    findEpisode(
+      variables: FindEpisodeQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<FindEpisodeQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<FindEpisodeQuery>({
+            document: FindEpisodeDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'findEpisode',
+        'query',
+        variables,
+      );
     },
-    findEpisodeUrl(variables: FindEpisodeUrlQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<FindEpisodeUrlQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<FindEpisodeUrlQuery>(FindEpisodeUrlDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'findEpisodeUrl', 'query');
+    findEpisodeUrl(
+      variables: FindEpisodeUrlQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<FindEpisodeUrlQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<FindEpisodeUrlQuery>({
+            document: FindEpisodeUrlDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'findEpisodeUrl',
+        'query',
+        variables,
+      );
     },
-    login(variables: LoginQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<LoginQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<LoginQuery>(LoginDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'login', 'query');
+    login(
+      variables: LoginQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<LoginQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<LoginQuery>({
+            document: LoginDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'login',
+        'query',
+        variables,
+      );
     },
-    loginRefresh(variables: LoginRefreshQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<LoginRefreshQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<LoginRefreshQuery>(LoginRefreshDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'loginRefresh', 'query');
+    loginRefresh(
+      variables: LoginRefreshQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<LoginRefreshQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<LoginRefreshQuery>({
+            document: LoginRefreshDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'loginRefresh',
+        'query',
+        variables,
+      );
     },
-    savePreferences(variables: SavePreferencesMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SavePreferencesMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<SavePreferencesMutation>(SavePreferencesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'savePreferences', 'mutation');
+    savePreferences(
+      variables: SavePreferencesMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<SavePreferencesMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<SavePreferencesMutation>({
+            document: SavePreferencesDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'savePreferences',
+        'mutation',
+        variables,
+      );
     },
-    updateTemplate(variables: UpdateTemplateMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateTemplateMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<UpdateTemplateMutation>(UpdateTemplateDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'updateTemplate', 'mutation');
+    updateTemplate(
+      variables: UpdateTemplateMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<UpdateTemplateMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<UpdateTemplateMutation>({
+            document: UpdateTemplateDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'updateTemplate',
+        'mutation',
+        variables,
+      );
     },
-    createTemplate(variables: CreateTemplateMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreateTemplateMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<CreateTemplateMutation>(CreateTemplateDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'createTemplate', 'mutation');
+    createTemplate(
+      variables: CreateTemplateMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<CreateTemplateMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<CreateTemplateMutation>({
+            document: CreateTemplateDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'createTemplate',
+        'mutation',
+        variables,
+      );
     },
-    addTimestampToTemplate(variables: AddTimestampToTemplateMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<AddTimestampToTemplateMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<AddTimestampToTemplateMutation>(AddTimestampToTemplateDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'addTimestampToTemplate', 'mutation');
+    addTimestampToTemplate(
+      variables: AddTimestampToTemplateMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<AddTimestampToTemplateMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<AddTimestampToTemplateMutation>({
+            document: AddTimestampToTemplateDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'addTimestampToTemplate',
+        'mutation',
+        variables,
+      );
     },
-    removeTimestampFromTemplate(variables: RemoveTimestampFromTemplateMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RemoveTimestampFromTemplateMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<RemoveTimestampFromTemplateMutation>(RemoveTimestampFromTemplateDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'removeTimestampFromTemplate', 'mutation');
+    removeTimestampFromTemplate(
+      variables: RemoveTimestampFromTemplateMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<RemoveTimestampFromTemplateMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<RemoveTimestampFromTemplateMutation>({
+            document: RemoveTimestampFromTemplateDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'removeTimestampFromTemplate',
+        'mutation',
+        variables,
+      );
     },
-    searchShows(variables: SearchShowsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SearchShowsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<SearchShowsQuery>(SearchShowsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'searchShows', 'query');
+    searchShows(
+      variables: SearchShowsQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<SearchShowsQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<SearchShowsQuery>({
+            document: SearchShowsDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'searchShows',
+        'query',
+        variables,
+      );
     },
-    updateEpisode(variables: UpdateEpisodeMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateEpisodeMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<UpdateEpisodeMutation>(UpdateEpisodeDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'updateEpisode', 'mutation');
+    updateEpisode(
+      variables: UpdateEpisodeMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<UpdateEpisodeMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<UpdateEpisodeMutation>({
+            document: UpdateEpisodeDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'updateEpisode',
+        'mutation',
+        variables,
+      );
     },
-    updateTimestamps(variables: UpdateTimestampsMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateTimestampsMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<UpdateTimestampsMutation>(UpdateTimestampsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'updateTimestamps', 'mutation');
-    }
+    updateTimestamps(
+      variables: UpdateTimestampsMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<UpdateTimestampsMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<UpdateTimestampsMutation>({
+            document: UpdateTimestampsDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'updateTimestamps',
+        'mutation',
+        variables,
+      );
+    },
   };
 }
 export type Sdk = ReturnType<typeof getSdk>;
