@@ -1,15 +1,16 @@
 import { Component } from 'vue';
+import { PropType } from 'vue';
+
 import { PreferencesView } from '../utils/preferences';
 import PreferencesAlertView from './PreferencesAlertView.vue';
+import PreferencesAllSettingsLinkView from './PreferencesAllSettingsLinkView.vue';
 import PreferencesCheckboxView from './PreferencesCheckboxView.vue';
 import PreferencesGridView from './PreferencesGridView.vue';
 import PreferencesHeaderView from './PreferencesHeaderView.vue';
 import PreferencesKeyboardShortcutsView from './PreferencesKeyboardShortcutsView.vue';
 import PreferencesPlaybackRateView from './PreferencesPlaybackRateView.vue';
 import PreferencesSelectView from './PreferencesSelectView.vue';
-import PreferencesAllSettingsLinkView from './PreferencesAllSettingsLinkView.vue';
 import PreferencesServiceSettingsView from './PreferencesServiceSettingsView.vue';
-import { PropType } from 'vue';
 
 const typeToComponentMap: Record<PreferencesView['type'], Component> = {
   'keyboard-shortcuts': PreferencesKeyboardShortcutsView,

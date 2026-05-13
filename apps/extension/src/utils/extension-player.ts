@@ -3,6 +3,7 @@ import {
   PlayerVisibility,
   createPlayer,
 } from '@anime-skip/player';
+
 import { ContentScriptContext } from '#imports';
 
 export function initExtensionPlayer(options: ExtensionPlayerOptions): void {

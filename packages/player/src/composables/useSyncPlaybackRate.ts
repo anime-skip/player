@@ -1,7 +1,8 @@
 import { SECOND } from '../utils/time';
 
 /**
- * Keep the playback rate of the video in sync with the playback rate preference.
+ * Keep the playback rate of the video in sync with the playback rate
+ * preference.
  */
 export default createSharedComposable(() => {
   const { pref: prefRate } = useReadonlyPreference('playbackRate');

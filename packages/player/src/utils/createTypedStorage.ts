@@ -1,12 +1,12 @@
 import { IPlayerStorage } from '../options';
 import { MyAccountFragment } from './api';
-import { defaultPreferences } from './preferences/defaultPreferences';
-import { AllPreferences } from './preferences';
 import {
   DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS,
   DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS,
   KeyboardShortcutMap,
 } from './keyboard-shortcut-utils';
+import { AllPreferences } from './preferences';
+import { defaultPreferences } from './preferences/defaultPreferences';
 
 export function createTypedStorage(storage: IPlayerStorage): TypedStorage {
   const createProperty = <T>(key: string): TypedStorageProperty<T | null> => ({
@@ -14,9 +14,7 @@ export function createTypedStorage(storage: IPlayerStorage): TypedStorage {
     set: async (newValue) => await storage.setItem(key, newValue),
     key,
   });
-  /**
-   * Init the value in storage if it is `null`.
-   */
+  /** Init the value in storage if it is `null`. */
   const createPropertyWithInit = <T>(
     key: string,
     init: () => T,
@@ -34,9 +32,7 @@ export function createTypedStorage(storage: IPlayerStorage): TypedStorage {
       },
     };
   };
-  /**
-   * Merge an object of defaults into the returned object if `null`.
-   */
+  /** Merge an object of defaults into the returned object if `null`. */
   const createPropertyWithMergedDefaults = <T>(
     key: string,
     defaultObject: T,

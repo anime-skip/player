@@ -1,13 +1,14 @@
 /// <reference types="vitest" />
 
-import { defineConfig, Plugin } from 'vite';
 import { execSync } from 'node:child_process';
+
 import vue from '@vitejs/plugin-vue';
-import dts from 'vite-plugin-dts';
-import autoImport from 'unplugin-auto-import/vite';
-import icons from 'unplugin-icons/vite';
-import { FileSystemIconLoader } from 'unplugin-icons/loaders';
 import { visualizer } from 'rollup-plugin-visualizer';
+import autoImport from 'unplugin-auto-import/vite';
+import { FileSystemIconLoader } from 'unplugin-icons/loaders';
+import icons from 'unplugin-icons/vite';
+import { defineConfig, Plugin } from 'vite';
+import dts from 'vite-plugin-dts';
 
 function generate(): Plugin {
   return {

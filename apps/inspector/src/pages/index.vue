@@ -5,11 +5,11 @@ const isTabsTabActive = useIsTabActive('/tabs');
 
 <template>
   <header
-    class="tabs tabs-sm tabs-lifted flex-1 bg-base-300 shrink-0 grow-0 sticky top-0"
+    class="tabs tabs-lifted tabs-sm sticky top-0 flex-1 shrink-0 grow-0 bg-base-300"
     role="tablist"
   >
     <p class="tab cursor-default">
-      <span class="opacity-50 text-xs">Inspector</span>
+      <span class="text-xs opacity-50">Inspector</span>
     </p>
     <RouterLink
       role="tab"

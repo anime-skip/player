@@ -1,21 +1,20 @@
 <script lang="ts" setup>
+import IconEdit from '~icons/anime-skip/edit';
 import IconNext from '~icons/anime-skip/next';
 import IconPrevious from '~icons/anime-skip/previous';
+import IconMdiAlertCircle from '~icons/mdi/alert-circle';
+
+import { formatTimestampInS } from '../utils/time-utils';
+import Timeline from './Timeline.vue';
+import ToolbarAccount from './ToolbarAccount.vue';
 import ToolbarButton from './ToolbarButton.vue';
 import ToolbarButtonFullscreen from './ToolbarButtonFullscreen.vue';
 import ToolbarButtonPlay from './ToolbarButtonPlay.vue';
-import ToolbarButtonVolume from './ToolbarButtonVolume.vue';
 import ToolbarButtonPreferences from './ToolbarButtonPreferences.vue';
-import ToolbarAccount from './ToolbarAccount.vue';
-import IconMdiAlertCircle from '~icons/mdi/alert-circle';
-import IconEdit from '~icons/anime-skip/edit';
-import Timeline from './Timeline.vue';
-import { formatTimestampInS } from '../utils/time-utils';
+import ToolbarButtonVolume from './ToolbarButtonVolume.vue';
 
 defineProps<{
-  /**
-   * When hidden, translate the toolbar downwards, hidding it off screen.
-   */
+  /** When hidden, translate the toolbar downwards, hiding it off screen. */
   hidden: boolean;
 }>();
 
@@ -53,7 +52,7 @@ const { isEditing } = useIsEditing();
 
 <template>
   <div
-    class="flex flex-col translate-y-0 transition-transform duration-200 z-0 before:-z-10 before:absolute before:h-36 before:inset-x-0 before:-bottom-4 before:bg-gradient-to-t before:from-base-100 before:transition-opacity before:pointer-events-none"
+    class="z-0 flex translate-y-0 flex-col transition-transform duration-200 before:pointer-events-none before:absolute before:inset-x-0 before:-bottom-4 before:-z-10 before:h-36 before:bg-gradient-to-t before:from-base-100 before:transition-opacity"
     :class="{
       'before:opacity-0': hidden,
       'translate-y-[53px]': hidden && !hideFully,
@@ -68,7 +67,7 @@ const { isEditing } = useIsEditing();
     />
 
     <!-- Main horizontal list -->
-    <div class="flex px-2 items-center h-[3.125rem] gap-2">
+    <div class="flex h-[3.125rem] items-center gap-2 px-2">
       <toolbar-button-play />
 
       <!-- Previous/Next -->
@@ -84,7 +83,7 @@ const { isEditing } = useIsEditing();
 
       <template v-if="duration">
         <!-- Current Time -->
-        <p v-if="duration" class="font-bold text-xs shrink-0">
+        <p v-if="duration" class="shrink-0 text-xs font-bold">
           <span class="text-base-content">{{ currentTimeDisplay }} </span>
           <span class="text-base-content text-opacity-50">
             / {{ durationDisplay }}
@@ -95,12 +94,12 @@ const { isEditing } = useIsEditing();
 
         <!-- Current Timestamp -->
         <div
-          class="shrink-0 h-full flex items-center text-xs text-base-content text-opacity-50 link link-hover gap-1"
+          class="link link-hover flex h-full shrink-0 items-center gap-1 text-xs text-base-content text-opacity-50"
           @click="toggleTimestampsPanel"
         >
-          <icon-mdi-alert-circle v-if="isError" class="w-3 h-3" />
+          <icon-mdi-alert-circle v-if="isError" class="h-3 w-3" />
           <p>{{ currentTimestampDisplay }}</p>
-          <icon-edit v-if="!isError" class="w-3 h-3" />
+          <icon-edit v-if="!isError" class="h-3 w-3" />
         </div>
       </template>
 

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import IconChevronDown from '~icons/anime-skip/chevron-down';
+
 import { AmbiguousTimestamp } from '../utils/timestamp-utils';
 
 const props = defineProps<{
@@ -23,7 +24,7 @@ const type = computed(() => (timestampTypesMap.value ?? {})[typeId.value]);
 <template>
   <div class="relative">
     <select
-      class="appearance-none bg-transparent text-base mr-2 cursor-pointer"
+      class="mr-2 cursor-pointer appearance-none bg-transparent text-base"
       v-model="typeId"
       :disabled="isTypesLoading"
     >
@@ -40,8 +41,8 @@ const type = computed(() => (timestampTypesMap.value ?? {})[typeId.value]);
     </select>
 
     <!-- Chevron placement -->
-    <p class="absolute left-0 top-0 pointer-events-none truncate">
-      <span class="text-base opacity-0 truncate">{{ type?.name }}</span>
+    <p class="pointer-events-none absolute left-0 top-0 truncate">
+      <span class="truncate text-base opacity-0">{{ type?.name }}</span>
       <icon-chevron-down class="inline text-base-content text-opacity-50" />
     </p>
   </div>

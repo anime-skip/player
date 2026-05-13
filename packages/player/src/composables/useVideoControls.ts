@@ -1,7 +1,8 @@
 import { SECOND } from '../utils/time';
 
 /**
- * Return an object containing the video element's current state as refs which can be set.
+ * Return an object containing the video element's current state as refs which
+ * can be set.
  */
 export default createSharedComposable(() => {
   const video = useVideoElement();

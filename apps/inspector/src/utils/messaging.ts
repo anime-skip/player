@@ -1,6 +1,7 @@
 import { defineExtensionMessaging } from '@webext-core/messaging';
-import { LocalNetworkRequest } from './network-repo';
 import { Tabs, WebNavigation } from 'wxt/browser';
+
+import { LocalNetworkRequest } from './network-repo';
 
 export interface ProtocolMap {
   saveNetworkRequest(request: LocalNetworkRequest): Promise<void>;

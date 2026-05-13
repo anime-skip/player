@@ -4,21 +4,19 @@ import {
   TimestampFragment,
   TimestampSource,
   TimestampType,
-  TimestampTypeFragment,
 } from './api';
 import { AllPreferences } from './preferences';
 
 export const UNKNOWN_TIMESTAMP_TYPE_ID = 'ae57fcf9-27b0-49a7-9a99-a91aa7518a29';
 
 /**
- * Either a timestamp from the API, or a local timestamp that hasn't been saved yet.
+ * Either a timestamp from the API, or a local timestamp that hasn't been saved
+ * yet.
  */
 export type AmbiguousTimestamp = TimestampFragment | LocalTimestamp;
 
 export interface LocalTimestamp extends InputTimestamp {
-  /**
-   * The ID is a number (randomly generated) when the timestamp is local.
-   */
+  /** The ID is a number (randomly generated) when the timestamp is local. */
   id: number;
   source: TimestampSource;
 }
@@ -65,7 +63,7 @@ export function isTimestampSkipped(
   preferences: AllPreferences | undefined | null,
   isSkipping: boolean,
 ): boolean {
-  if (!isSkipping) return false; 
+  if (!isSkipping) return false;
 
   if (timestampTypeId === '97e3629a-95e5-4b1a-9411-73a47c0d0e25') return !!preferences?.skipBranding;
   if (timestampTypeId === '9edc0037-fa4e-47a7-a29a-d9c43368daa8') return !!preferences?.skipCanon;
@@ -84,7 +82,8 @@ export function isTimestampSkipped(
 }
 
 /**
- * Return the timestamp that the provided time is in seconds. Assumes that the timestamps are sorted.
+ * Return the timestamp that the provided time is in seconds. Assumes that the
+ * timestamps are sorted.
  */
 export function getTimestampAtTime<T extends { at: number }>(
   timestamps: ReadonlyArray<T>,
@@ -93,9 +92,7 @@ export function getTimestampAtTime<T extends { at: number }>(
   return timestamps.filter((t) => timeInS + 0.001 >= t.at).pop();
 }
 
-/**
- * Sorts a list of timestamps in place.
- */
+/** Sorts a list of timestamps in place. */
 export function sortTimestamps<T extends { at: number }>(
   timestamps: T[],
 ): void {
@@ -108,9 +105,7 @@ export function isTimestampEqual<
   return t1.at === t2.at && t1.source === t2.source && t1.typeId === t2.typeId;
 }
 
-/**
- * Apply a `timestampsOffset` for an `EpisodeUrl`.
- */
+/** Apply a `timestampsOffset` for an `EpisodeUrl`. */
 export function applyTimestampsOffset<T extends { at: number }>(
   timestamps: T[],
   offset: number,
@@ -118,9 +113,7 @@ export function applyTimestampsOffset<T extends { at: number }>(
   return timestamps.map((t) => ({ ...t, at: t.at + offset }));
 }
 
-/**
- * Remove the `timestampsOffset` from an `EpisodeUrl`.
- */
+/** Remove the `timestampsOffset` from an `EpisodeUrl`. */
 export function undoTimestampsOffset<T extends { at: number }>(
   timestamps: T[],
   offset: number,

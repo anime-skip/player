@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { NetworkRequest } from '@/utils/network-repo';
 import { computed } from 'vue';
+
+import { NetworkRequest } from '@/utils/network-repo';
 
 const props = defineProps<{
   request: NetworkRequest;
@@ -28,7 +29,7 @@ const timeAgo = useTimeAgo(() => props.request.request.date);
 
 <template>
   <tr
-    class="cursor-pointer transition-colors select-none hover:bg-base-200 active:bg-base-300"
+    class="cursor-pointer select-none transition-colors hover:bg-base-200 active:bg-base-300"
     :class="{
       'bg-base-300 hover:bg-base-300': isActive,
     }"
@@ -40,15 +41,15 @@ const timeAgo = useTimeAgo(() => props.request.request.date);
       <p class="line-clamp-1 max-w-[50vw]">{{ pathOrOperation }}</p>
     </td>
     <template v-if="request.response">
-      <td class="text-center whitespace-nowrap">
+      <td class="whitespace-nowrap text-center">
         {{ request.response.status }} {{ request.response.statusText }}
       </td>
-      <td class="text-center whitespace-nowrap">
+      <td class="whitespace-nowrap text-center">
         {{ request.response.duration }} ms
       </td>
     </template>
     <template v-else>
-      <td colspan="2" class="text-center whitespace-nowrap">Pending...</td>
+      <td colspan="2" class="whitespace-nowrap text-center">Pending...</td>
     </template>
   </tr>
 </template>

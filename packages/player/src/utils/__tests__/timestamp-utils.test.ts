@@ -1,4 +1,6 @@
 import { describe, it, expect } from 'vitest';
+
+import { TimestampSource } from '../api/graphql.generated';
 import {
   fakeTimestampFragment,
   fakeVideoDuration,
@@ -10,7 +12,6 @@ import {
   getPreviousTimestamp,
   isTimestampEqual,
 } from '../timestamp-utils';
-import { TimestampSource } from '../api/graphql.generated';
 
 describe('Timestamp Utils', () => {
   describe('buildSections', () => {

@@ -37,15 +37,15 @@ const { takeScreenshot, isScreenshotEnabled } = useTakeScreenshot(() => {
   <Transition>
     <ul
       v-if="isOpen"
-      class="absolute menu menu-compact bg-base-100 rounded-box w-56 shadow-2xl"
+      class="menu rounded-box menu-compact absolute w-56 bg-base-100 shadow-2xl"
       :style="`left: ${position.x}px; top: ${position.y}px`"
     >
       <li>
         <div
-          class="flex gap-4 items-center bg-base-300 cursor-default text-base-content"
+          class="flex cursor-default items-center gap-4 bg-base-300 text-base-content"
         >
           <themed-logo class="h-4 w-6 shrink-0" />
-          <div class="flex flex-col gap-0 items-start">
+          <div class="flex flex-col items-start gap-0">
             <h2>Anime Skip Player</h2>
             <p class="text-xs opacity-50">v{{ version }}</p>
           </div>

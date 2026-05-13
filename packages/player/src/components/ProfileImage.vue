@@ -9,13 +9,13 @@ const defaultUrl =
 
 <template>
   <div
-    class="flex rounded-full overflow-hidden"
+    class="flex overflow-hidden rounded-full"
     :class="{
       'bg-base-content': !auth,
     }"
   >
     <img
-      class="w-full h-full"
+      class="h-full w-full"
       v-if="auth?.account"
       :src="auth.account.profileUrl || defaultUrl"
     />

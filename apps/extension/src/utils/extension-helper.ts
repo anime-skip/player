@@ -1,4 +1,5 @@
 import { PlayerOptions } from '@anime-skip/player';
+
 import type { ContentScriptContext } from '#imports';
 
 export function initExtensionHelper(options: HelperOptions) {

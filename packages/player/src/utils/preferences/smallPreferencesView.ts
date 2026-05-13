@@ -1,7 +1,7 @@
-import { PreferencesCheckboxView, PreferencesView } from './views';
 import { prefTitles } from './allPreferencesView';
 import { defaultPreferences } from './defaultPreferences';
 import { AllPreferences } from './types';
+import { PreferencesCheckboxView, PreferencesView } from './views';
 
 export const smallPreferencesView: PreferencesView[] = [
   { type: 'header', text: 'General Settings' },

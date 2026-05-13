@@ -1,11 +1,9 @@
-import { QueryKey } from '../utils/QueryKey';
 import { EpisodeUrlFragment } from '../utils/api';
 import { deleteMatches, getUniqueExistenceMap } from '../utils/array-utils';
+import { QueryKey } from '../utils/QueryKey';
 import { sortTimestamps } from '../utils/timestamp-utils';
 
-/**
- * Perform the updateTimestamp GraphQL mutation to save changes to timestamps.
- */
+/** Perform the updateTimestamp GraphQL mutation to save changes to timestamps. */
 export default function () {
   const client = useApiClient(true);
   const queries = useQueryClient();

@@ -1,5 +1,5 @@
-import { QueryKey } from '../utils/QueryKey';
 import { EpisodeFragment, EpisodeUrlFragment } from '../utils/api';
+import { QueryKey } from '../utils/QueryKey';
 
 export default function () {
   const api = useApiClient(true);

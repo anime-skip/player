@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import ToolbarButton from './ToolbarButton.vue';
-import Preferences from './Preferences.vue';
 import IconGear from '~icons/anime-skip/gear';
+
+import Preferences from './Preferences.vue';
+import ToolbarButton from './ToolbarButton.vue';
 import ToolbarModal from './ToolbarModal.vue';
 </script>
 

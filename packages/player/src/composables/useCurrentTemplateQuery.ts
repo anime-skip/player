@@ -1,6 +1,7 @@
-import { ShowFragment, TemplateFragment, TemplateType } from '../utils/api';
-import { QueryKey } from '../utils/QueryKey';
 import { useQuery } from 'vue-query';
+
+import { TemplateFragment } from '../utils/api';
+import { QueryKey } from '../utils/QueryKey';
 import useFindTemplateVariables from './useFindTemplateVariables';
 
 export default function () {

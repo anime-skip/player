@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-import Toolbar from './Toolbar.vue';
-import EpisodeInfo from './EpisodeInfo.vue';
-import SidePanel from './SidePanel.vue';
-import ReturnToPlayerButton from './ReturnToPlayerButton.vue';
+import { PlayerEvent } from '../utils/PlayerEvent';
 import { PlayerVisibility } from '../utils/PlayerVisibility';
-import ManualSkipButton from './ManualSkipButton.vue';
 import { QueryKey } from '../utils/QueryKey';
 import ContextMenu from './ContextMenu.vue';
+import EpisodeInfo from './EpisodeInfo.vue';
+import ManualSkipButton from './ManualSkipButton.vue';
+import ReturnToPlayerButton from './ReturnToPlayerButton.vue';
 import ScreenshotPreview from './ScreenshotPreview.vue';
-import { PlayerEvent } from '../utils/PlayerEvent';
+import SidePanel from './SidePanel.vue';
+import Toolbar from './Toolbar.vue';
 
 const root = ref<HTMLDivElement>();
 
@@ -78,11 +78,11 @@ useCustomEventListener<PlayerEvent>(PlayerEvent.TYPE, ({ detail }) => {
   <!-- Player -->
   <div
     v-show="visibility === PlayerVisibility.Visible"
-    class="w-full h-full pointer-events-auto flex"
+    class="pointer-events-auto flex h-full w-full"
   >
     <div
       ref="root"
-      class="relative transition-colors flex-1"
+      class="relative flex-1 transition-colors"
       :class="{
         'bg-base-100 bg-opacity-50': !playing || buffering,
         'cursor-none': isToolbarHidden,
@@ -91,21 +91,21 @@ useCustomEventListener<PlayerEvent>(PlayerEvent.TYPE, ({ detail }) => {
     >
       <div
         v-if="playing && buffering"
-        class="flex absolute inset-0 pointer-events-none"
+        class="pointer-events-none absolute inset-0 flex"
       >
-        <div class="spinner w-16 h-16 m-auto" />
+        <div class="spinner m-auto h-16 w-16" />
       </div>
 
-      <episode-info class="absolute top-0 inset-x-0" :hidden="playing" />
+      <episode-info class="absolute inset-x-0 top-0" :hidden="playing" />
 
-      <toolbar class="absolute bottom-0 inset-x-0" :hidden="isToolbarHidden" />
+      <toolbar class="absolute inset-x-0 bottom-0" :hidden="isToolbarHidden" />
 
       <manual-skip-button class="absolute bottom-20 right-4" />
 
       <screenshot-preview />
     </div>
 
-    <side-panel class="h-full z-10" />
+    <side-panel class="z-10 h-full" />
 
     <context-menu v-if="!disableContextMenu" />
   </div>
@@ -113,6 +113,6 @@ useCustomEventListener<PlayerEvent>(PlayerEvent.TYPE, ({ detail }) => {
   <!-- Other top level UIs -->
   <return-to-player-button
     v-if="visibility === PlayerVisibility.ServiceSettings"
-    class="pointer-events-auto absolute top-16 right-16 z-[9999]"
+    class="pointer-events-auto absolute right-16 top-16 z-[9999]"
   />
 </template>

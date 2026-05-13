@@ -3,7 +3,8 @@ import { keyComboFromEvent } from '../utils/keyboard-shortcut-utils';
 import { bounded } from '../utils/math-utils';
 
 /**
- * Registers key press event listeners and performs the actions for a keyboard shortcut if used.
+ * Registers key press event listeners and performs the actions for a keyboard
+ * shortcut if used.
  */
 export default createSharedComposable(() => {
   const {

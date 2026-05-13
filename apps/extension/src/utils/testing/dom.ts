@@ -1,6 +1,7 @@
-import { Window } from 'happy-dom';
-import { resolve } from 'path';
 import fs from 'node:fs/promises';
+import { resolve } from 'path';
+
+import { Window } from 'happy-dom';
 
 export async function createDomFromFile(
   ...path: string[]

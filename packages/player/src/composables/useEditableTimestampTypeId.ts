@@ -1,4 +1,5 @@
 import { Ref } from 'vue';
+
 import { AmbiguousTimestamp } from '../utils/timestamp-utils';
 
 export default function (sourceTimestamp: Ref<AmbiguousTimestamp>) {

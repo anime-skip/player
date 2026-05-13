@@ -1,14 +1,15 @@
 <script lang="ts" setup>
+import IconFilter from '~icons/anime-skip/filter';
+import IconMdiClock from '~icons/mdi/clock';
+import IconMdiRadioBlank from '~icons/mdi/radiobox-blank';
+import IconMdiRadioMarked from '~icons/mdi/radiobox-marked';
+
 import { Scalars } from '../utils/api';
 import { formatTimestampInS } from '../utils/time-utils';
 import {
   AmbiguousTimestamp,
   UNKNOWN_TIMESTAMP_TYPE_ID,
 } from '../utils/timestamp-utils';
-import IconMdiClock from '~icons/mdi/clock';
-import IconFilter from '~icons/anime-skip/filter';
-import IconMdiRadioBlank from '~icons/mdi/radiobox-blank';
-import IconMdiRadioMarked from '~icons/mdi/radiobox-marked';
 
 const props = defineProps<{
   timestamp: AmbiguousTimestamp;
@@ -80,7 +81,7 @@ function onKeyDown(event: KeyboardEvent) {
       @click="focusOnAt"
       @keydown.tab.prevent="focusOnFilter()"
     >
-      <icon-mdi-clock class="w-6 h-6" />
+      <icon-mdi-clock class="h-6 w-6" />
       <span class="flex-1 text-left">{{ at }}</span>
     </button>
 
@@ -91,10 +92,10 @@ function onKeyDown(event: KeyboardEvent) {
           <span class="label-text">Timestamp Type</span>
         </label>
         <label class="input-group">
-          <span><icon-filter class="w-6 h-6" /></span>
+          <span><icon-filter class="h-6 w-6" /></span>
           <input
             ref="filterInput"
-            class="input input-bordered focus:input-primary w-full"
+            class="input input-bordered w-full focus:input-primary"
             v-model="typeSearch"
             placeholder="Filter..."
           />
@@ -115,10 +116,10 @@ function onKeyDown(event: KeyboardEvent) {
             @click="typeId = item.id"
             tabindex="-1"
           >
-            <icon-mdi-radio-marked v-if="typeId === item.id" class="w-5 h-5" />
+            <icon-mdi-radio-marked v-if="typeId === item.id" class="h-5 w-5" />
             <icon-mdi-radio-blank
               v-else
-              class="w-5 h-5 text-base-content text-opacity-50"
+              class="h-5 w-5 text-base-content text-opacity-50"
             />
             <span>{{ item.name }}</span>
           </button>

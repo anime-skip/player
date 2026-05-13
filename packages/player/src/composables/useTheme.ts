@@ -1,8 +1,8 @@
 import { ColorTheme } from '../utils/api';
 
 /**
- * Manage the `data-theme` attribute on the shadow root. Should only be called once, so it's inside
- * a shared composable.
+ * Manage the `data-theme` attribute on the shadow root. Should only be called
+ * once, so it's inside a shared composable.
  */
 export default createSharedComposable(() => {
   const { pref: theme } = useReadonlyPreference('colorTheme');

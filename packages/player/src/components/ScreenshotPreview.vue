@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import useScreenshotPreview from '../composables/useScreenshotPreview';
 import IMdiDownload from '~icons/mdi/download';
+
+import useScreenshotPreview from '../composables/useScreenshotPreview';
 
 const preview = useScreenshotPreview();
 function clearImage() {
@@ -13,9 +14,9 @@ const filename = computed(
 </script>
 
 <template>
-  <div v-if="preview" class="absolute inset-0 pointer-events-none">
+  <div v-if="preview" class="pointer-events-none absolute inset-0">
     <div
-      class="h-24 aspect-video bottom-20 left-4 absolute pointer-events-auto bg-black rounded-box"
+      class="rounded-box pointer-events-auto absolute bottom-20 left-4 aspect-video h-24 bg-black"
       @click.stop
     >
       <img
@@ -24,18 +25,18 @@ const filename = computed(
         alt="Screenshot"
       />
       <div
-        class="absolute inset-0 bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity flex"
+        class="absolute inset-0 flex bg-black bg-opacity-50 opacity-0 transition-opacity hover:opacity-100"
       >
         <!-- TODO: Make the filename "{episode name} at {timestamp}" -->
         <a
-          class="btn btn-ghost btn-circle m-auto"
+          class="btn btn-circle btn-ghost m-auto"
           :href="preview"
           target="_blank"
           title="Download"
           :download="filename"
           @click="clearImage()"
         >
-          <i-mdi-download class="w-6 h-6" />
+          <i-mdi-download class="h-6 w-6" />
         </a>
       </div>
     </div>

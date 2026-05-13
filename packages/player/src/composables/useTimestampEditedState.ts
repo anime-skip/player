@@ -1,6 +1,7 @@
-import { TimestampState } from '../utils/TimestampState';
-import { AmbiguousTimestamp, isTimestampEqual } from '../utils/timestamp-utils';
 import { Ref } from 'vue';
+
+import { AmbiguousTimestamp, isTimestampEqual } from '../utils/timestamp-utils';
+import { TimestampState } from '../utils/TimestampState';
 
 export default function (timestamp: Ref<AmbiguousTimestamp>) {
   const timestamps = useApiTimestamps();

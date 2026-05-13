@@ -7,7 +7,7 @@ export default defineContentScript({
   world: 'ISOLATED',
 
   main(ctx) {
-    // @ts-expect-error: Custome event
+    // @ts-expect-error: Custom event
     ctx.addEventListener(window, 'inspector:networkrequest', (event) => {
       const request: LocalNetworkRequest = (event as CustomEvent).detail;
       messaging.sendMessage('saveNetworkRequest', request);

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import IconClose from '~icons/anime-skip/close';
 import IconArrowLeft from '~icons/anime-skip/arrow-left';
+import IconClose from '~icons/anime-skip/close';
 
 const props = defineProps<{
   mode?: 'close' | 'back';
@@ -15,15 +15,15 @@ const { view, goBack } = useView();
 
 <template>
   <form
-    class="bg-base-100 flex flex-col h-full"
+    class="flex h-full flex-col bg-base-100"
     @submit.prevent.stop="emits('formSubmit')"
   >
     <header
-      class="flex items-center pl-4 pr-2 py-2 gap-2 shrink-0 border-b border-base-content border-opacity-20"
+      class="flex shrink-0 items-center gap-2 border-b border-base-content border-opacity-20 py-2 pl-4 pr-2"
     >
       <button
         v-if="mode === 'back'"
-        class="btn btn-ghost btn-circle -ml-2"
+        class="btn btn-circle btn-ghost -ml-2"
         type="button"
         @click="goBack"
         title="Close"
@@ -35,7 +35,7 @@ const { view, goBack } = useView();
       </h2>
       <button
         v-if="mode !== 'back'"
-        class="btn btn-ghost btn-circle"
+        class="btn btn-circle btn-ghost"
         type="button"
         @click="view = undefined"
         title="Close"
@@ -45,7 +45,7 @@ const { view, goBack } = useView();
     </header>
 
     <div
-      class="flex-1 overflow-y-auto divide-y divide-base-content divide-opacity-20"
+      class="flex-1 divide-y divide-base-content divide-opacity-20 overflow-y-auto"
     >
       <slot name="content" />
     </div>
@@ -56,7 +56,7 @@ const { view, goBack } = useView();
 
     <footer
       v-if="$slots.buttons"
-      class="flex flex-row-reverse shrink-0 p-2 gap-2 border-t border-base-content border-opacity-20"
+      class="flex shrink-0 flex-row-reverse gap-2 border-t border-base-content border-opacity-20 p-2"
     >
       <slot name="buttons" />
     </footer>

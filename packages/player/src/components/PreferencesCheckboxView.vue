@@ -21,13 +21,13 @@ const checked = computed({
 <template>
   <div class="form-control" :title="view.description">
     <label
-      class="label cursor-pointer gap-3 px-2 btn normal-case font-medium text-left justify-start transition-all h-[2.5rem] min-h-[2.5rem]"
+      class="btn label h-[2.5rem] min-h-[2.5rem] cursor-pointer justify-start gap-3 px-2 text-left font-medium normal-case transition-all"
       :class="{ 'btn-primary': checked }"
     >
       <input
         type="checkbox"
         v-model="checked"
-        class="checkbox checkbox-pref checkbox-sm"
+        class="checkbox-pref checkbox checkbox-sm"
       />
       <span
         class="label-text flex-1"

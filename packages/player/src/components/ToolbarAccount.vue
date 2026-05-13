@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import ToolbarModal from './ToolbarModal.vue';
+import AccountMenu from './AccountMenu.vue';
 import LoginForm from './LoginForm.vue';
 import ProfileImage from './ProfileImage.vue';
-import AccountMenu from './AccountMenu.vue';
+import ToolbarModal from './ToolbarModal.vue';
 
 const { state: auth } = useAuth();
 
@@ -15,7 +15,7 @@ const loginCompleted = useViewOperationCompleted('account');
     <template #button="{ toggle }">
       <div class="tooltip" data-tip="Account" @click="toggle">
         <profile-image
-          class="w-[28px] h-[28px] m-[11px] cursor-pointer transition-all ring-base-content text-base-100 active:text-opacity-70 ring-opacity-30 ring-0 hover:ring-4 active:ring-2"
+          class="m-[11px] h-[28px] w-[28px] cursor-pointer text-base-100 ring-0 ring-base-content ring-opacity-30 transition-all hover:ring-4 active:text-opacity-70 active:ring-2"
         />
       </div>
     </template>
@@ -23,7 +23,7 @@ const loginCompleted = useViewOperationCompleted('account');
     <!-- Modal -->
     <template #modal>
       <account-menu v-if="auth" :account="auth.account" />
-      <login-form v-else class="p-4 w-80" @logged-in="loginCompleted" />
+      <login-form v-else class="w-80 p-4" @logged-in="loginCompleted" />
     </template>
   </toolbar-modal>
 </template>

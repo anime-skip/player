@@ -1,9 +1,8 @@
 import { useMutation } from 'vue-query';
-import { QueryKey } from '../utils/QueryKey';
+
 import { InputTemplate, Scalars, TimestampFragment } from '../utils/api';
-import useApiShowId from './useApiShowId';
 import { getUniqueExistenceMap } from '../utils/array-utils';
-import { timestamp } from '@vueuse/core';
+import { QueryKey } from '../utils/QueryKey';
 
 interface SaveTemplateVariables {
   id: Scalars['ID'] | undefined;
@@ -16,7 +15,7 @@ interface SaveTemplateVariables {
 export default function () {
   const api = useApiClient();
   const queries = useQueryClient();
-  const varaibles = useFindTemplateVariables();
+  const variables = useFindTemplateVariables();
 
   return useMutation(
     async ({
@@ -66,7 +65,7 @@ export default function () {
       async onSuccess() {
         await queries.invalidateQueries([
           QueryKey.FindCurrentTemplate,
-          varaibles.value,
+          variables.value,
         ]);
       },
     },

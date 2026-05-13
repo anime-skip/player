@@ -1,8 +1,8 @@
 import useFindEpisodeByShowAndName from './useFindEpisodeByShowAndName';
 
 /**
- * Based on the episode info from `playerOptions.getEpisodeInfo()`, return a matching
- * `ThirdPartyEpisode` from the API.
+ * Based on the episode info from `playerOptions.getEpisodeInfo()`, return a
+ * matching `ThirdPartyEpisode` from the API.
  */
 export default function () {
   const { data: episodeInfo } = useEpisodeInfoQuery();

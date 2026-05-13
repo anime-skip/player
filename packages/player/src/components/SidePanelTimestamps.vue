@@ -1,16 +1,15 @@
 <script lang="ts" setup>
+import IconMdiAlertDecagram from '~icons/mdi/alert-circle';
+import IconMdiChevronRight from '~icons/mdi/chevron-right';
+
+import EditEpisodeForm from './EditEpisodeForm.vue';
 import SidePanelLayout from './SidePanelLayout.vue';
 import TimestampList from './TimestampList.vue';
-import IconMdiChevronRight from '~icons/mdi/chevron-right';
-import IconMdiAlertDecagram from '~icons/mdi/alert-circle';
-import EditEpisodeForm from './EditEpisodeForm.vue';
 
 const { state: auth } = useAuth();
 
 const { view } = useView();
-/**
- * Open the login form, then switch back to this view.
- */
+/** Open the login form, then switch back to this view. */
 const loginAndReturn = useViewOperation('account', () => {
   view.value = 'timestamps';
 });
@@ -48,12 +47,12 @@ const isLoginWarningVisible = computed(() => isEditing.value && !auth.value);
     <!-- Login Warning -->
     <template #bottom-content v-if="isLoginWarningVisible">
       <div
-        class="bg-warning cursor-pointer hover:saturate-150 text-warning-content p-4 flex gap-4 items-center transition-all"
+        class="flex cursor-pointer items-center gap-4 bg-warning p-4 text-warning-content transition-all hover:saturate-150"
         @click="loginAndReturn"
       >
-        <div class="flex-1 flex flex-col gap-2">
-          <h4 class="font-bold text-lg flex gap-2 items-center">
-            <icon-mdi-alert-decagram class="w-6 h-6" />
+        <div class="flex flex-1 flex-col gap-2">
+          <h4 class="flex items-center gap-2 text-lg font-bold">
+            <icon-mdi-alert-decagram class="h-6 w-6" />
             <span>Log In</span>
           </h4>
           <p class="text-sm">
@@ -78,7 +77,7 @@ const isLoginWarningVisible = computed(() => isEditing.value && !auth.value);
 
       <!-- Discard -->
       <button
-        class="flex-1 btn hover:btn-error"
+        class="btn flex-1 hover:btn-error"
         type="button"
         @click="discardChanges"
         :disabled="isLoading"
@@ -89,7 +88,7 @@ const isLoginWarningVisible = computed(() => isEditing.value && !auth.value);
 
     <template #buttons v-else-if="isTemplateButtonsVisible">
       <!-- Create Template -->
-      <button class="flex-1 btn" type="button" @click="view = 'edit-template'">
+      <button class="btn flex-1" type="button" @click="view = 'edit-template'">
         {{ currentTemplate ? 'Edit' : 'Create' }} Template
       </button>
     </template>

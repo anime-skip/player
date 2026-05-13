@@ -1,10 +1,7 @@
 import { PlayerVisibility } from '../utils/PlayerVisibility';
-import { sleep } from '../utils/time-utils';
 import useScreenshotPreview from './useScreenshotPreview';
 
-/**
- * Returns function that takes a screenshot of the player.
- */
+/** Returns function that takes a screenshot of the player. */
 export default function (onStart?: () => void) {
   const visibility = usePlayerVisibility();
   const { takeScreenshot } = usePlayerOptions();

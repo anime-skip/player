@@ -1,12 +1,13 @@
 import { forwardKeydownEvent } from '@anime-skip/player';
+
 import type { ContentScriptContext } from '#imports';
 
 const MESSAGE_TYPE = 'anime-skip-player:keydown';
 
 /**
- * Inside a helper, intercept keydown events and forward them to the player. Also prevent their
- * default behavior if the event would scroll the screen or have some other kind of detrimental
- * side-effect.
+ * Inside a helper, intercept keydown events and forward them to the player.
+ * Also prevent their default behavior if the event would scroll the screen or
+ * have some other kind of detrimental side-effect.
  */
 export function initKeyboardShortcutForwarder(ctx: ContentScriptContext) {
   ctx.addEventListener(
@@ -67,16 +68,16 @@ export function initKeyboardShortcutForwarder(ctx: ContentScriptContext) {
 }
 
 /**
- * Inside a player content script, listen for forwarded keydown events, and publish them on this
- * document instead.
+ * Inside a player content script, listen for forwarded keydown events, and
+ * publish them on this document instead.
  */
 export function initKeyboardShortcutReceiver(ctx: ContentScriptContext) {
   ctx.addEventListener(window, 'message', (event: MessageEvent) => {
     const data: { type: string; event: ForwardedKeyboardEvent } = event.data;
-    logger.debug('Recieved event:', data);
+    logger.debug('Received event:', data);
     if (data.type !== MESSAGE_TYPE) return;
 
-    logger.debug('Recieved forwarded keyboard event:', data);
+    logger.debug('Received forwarded keyboard event:', data);
     forwardKeydownEvent(data.event as KeyboardEvent);
   });
 }

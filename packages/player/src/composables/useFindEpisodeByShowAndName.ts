@@ -1,8 +1,10 @@
 import { Ref } from 'vue';
+
 import { QueryKey } from '../utils/QueryKey';
 
 /**
- * Given an episode and show name, return the first matching `ThirdPartyEpisode` from the API.
+ * Given an episode and show name, return the first matching `ThirdPartyEpisode`
+ * from the API.
  */
 export default function ({
   episodeName,

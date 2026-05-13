@@ -1,9 +1,10 @@
+import chance from 'chance';
+
 import {
   UserFragment,
   TimestampFragment,
   TimestampSource,
 } from '../api/graphql.generated';
-import chance from 'chance';
 import { MINUTE, SECOND } from '../time';
 
 export const rand = chance(__TEST_SEED__);

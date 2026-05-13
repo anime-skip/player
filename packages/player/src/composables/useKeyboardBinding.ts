@@ -1,11 +1,13 @@
 import { Ref } from 'vue';
+
 import {
   KeyboardShortcutAction,
   KeyboardShortcutMap,
 } from '../utils/keyboard-shortcut-utils';
 
 /**
- * Returns a writable reference to the current key binding for an action. Works with v-model.
+ * Returns a writable reference to the current key binding for an action. Works
+ * with v-model.
  */
 export default function (
   map: Ref<KeyboardShortcutMap | null>,

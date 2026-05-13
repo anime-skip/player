@@ -1,8 +1,8 @@
 /**
  * Given an array of objects, return a map of (`key` to `item`).
  *
- * If multiple items have the same value at `key`, the later item in the array will be present in
- * the final map.
+ * If multiple items have the same value at `key`, the later item in the array
+ * will be present in the final map.
  */
 export function getUniqueExistenceMap<
   TType extends Record<string, any>,

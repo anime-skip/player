@@ -1,7 +1,8 @@
 <script lang="ts" setup>
+import IconMdiOpenInNew from '~icons/mdi/open-in-new';
+
 import { MyAccountFragment } from '../utils/api';
 import ProfileImage from './ProfileImage.vue';
-import IconMdiOpenInNew from '~icons/mdi/open-in-new';
 
 const props = defineProps<{
   account: MyAccountFragment;
@@ -13,16 +14,16 @@ const { state: auth } = useAuth();
 
 <template>
   <div class="w-64">
-    <div class="flex flex-col p-4 gap-4">
-      <div class="flex gap-4 items-center" :title="`Joined ${joinedAgo}`">
-        <profile-image class="w-12 h-12" />
+    <div class="flex flex-col gap-4 p-4">
+      <div class="flex items-center gap-4" :title="`Joined ${joinedAgo}`">
+        <profile-image class="h-12 w-12" />
         <div>
           <p
-            class="text-base-content text-opacity-30 text-xs uppercase font-bold -mb-1"
+            class="-mb-1 text-xs font-bold uppercase text-base-content text-opacity-30"
           >
             Anime Skip
           </p>
-          <p class="text-lg truncate font-bold">{{ account.username }}</p>
+          <p class="truncate text-lg font-bold">{{ account.username }}</p>
         </div>
       </div>
 
@@ -35,11 +36,11 @@ const { state: auth } = useAuth();
 
     <div class="h-px bg-base-content bg-opacity-20" />
 
-    <ul class="menu menu-compact bg-base-100 w-full p-2 rounded-box">
+    <ul class="menu rounded-box menu-compact w-full bg-base-100 p-2">
       <li>
         <a href="https://anime-skip.com/account" target="_blank">
           <span class="flex-1">Account Settings</span>
-          <icon-mdi-open-in-new class="w-4 h-4 opacity-50" />
+          <icon-mdi-open-in-new class="h-4 w-4 opacity-50" />
         </a>
       </li>
       <li>

@@ -43,13 +43,13 @@ const isVisible = computed<boolean>(() => {
   // covers that case and prevents the button from showing up after skipping to the end of the
   // video.
   const isAtEnd = Math.abs(currentTime.value - (duration.value ?? 0)) < 1.5;
-  const hiddenbyView = view.value === 'account' || view.value === 'preferences';
+  const hiddenByView = view.value === 'account' || view.value === 'preferences';
 
   return (
     !!currentTimestampType.value &&
     isCurrentTimestampSkipped.value &&
     !isAtEnd &&
-    !hiddenbyView
+    !hiddenByView
   );
 });
 

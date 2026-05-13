@@ -1,8 +1,8 @@
 import useCreateEpisodeUrlMutation from './useCreateEpisodeUrlMutation';
 
 /**
- * Get the inferred episode details, and auto-create the episode URL if there's already an Anime
- * Skip Episode to use.
+ * Get the inferred episode details, and auto-create the episode URL if there's
+ * already an Anime Skip Episode to use.
  */
 export default function () {
   const { data: currentUrl } = useCurrentUrlQuery();

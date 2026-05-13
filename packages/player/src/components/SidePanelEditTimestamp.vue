@@ -1,11 +1,11 @@
 <script lang="ts" setup>
+import useWasPlayingBeforeAddingTimestamp from '../composables/useWasPlayingBeforeAddingTimestamp';
 import {
   AmbiguousTimestamp,
   UNKNOWN_TIMESTAMP_TYPE_ID,
 } from '../utils/timestamp-utils';
-import SidePanelLayout from './SidePanelLayout.vue';
 import EditTimestampForm from './EditTimestampForm.vue';
-import useWasPlayingBeforeAddingTimestamp from '../composables/useWasPlayingBeforeAddingTimestamp';
+import SidePanelLayout from './SidePanelLayout.vue';
 
 const { goBack } = useView();
 
@@ -51,7 +51,7 @@ onUnmounted(() => {
         Save Timestamp
       </button>
       <button
-        class="flex-1 btn hover:btn-error"
+        class="btn flex-1 hover:btn-error"
         type="button"
         @click="deleteTimestamp"
       >

@@ -51,7 +51,7 @@ const hoveredTimestampType = computed(() => {
       class="absolute bottom-4"
       :style="`left: ${left}px`"
     >
-      <div class="flex flex-col items-center bg-neutral px-4 py-2 rounded">
+      <div class="flex flex-col items-center rounded bg-neutral px-4 py-2">
         <p class="text-sm text-primary">
           {{ hoveredTimestampType }}
         </p>

@@ -1,8 +1,8 @@
 import { QueryKey } from '../utils/QueryKey';
 
 /**
- * Queries the logged in user's latest account data, including preferences. When retrieved, it sets
- * the account and preferences in storage.
+ * Queries the logged in user's latest account data, including preferences. When
+ * retrieved, it sets the account and preferences in storage.
  *
  * If not logged in, it does nothing.
  */

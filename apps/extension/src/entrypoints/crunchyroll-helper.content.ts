@@ -67,14 +67,14 @@ async function getEpisodeInfo() {
         .map((node) => {
           try {
             return JSON.parse(node.textContent ?? '');
-          } catch (_) {
+          } catch {
             return undefined;
           }
         })
-        .find((json) => json?.['@type'] === 'TVEpisode')?.partOfSeason
-        ?.seasonNumber;
+        .find((json) => json?.['@type'] === 'TVEpisode')
+        ?.partOfSeason?.seasonNumber;
       if (int != null) season = String(int);
-    } catch (err) {
+    } catch {
       // noop
     }
 

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import SidePanelAllPreferences from './SidePanelAllPreferences.vue';
-import SidePanelEditTimestamp from './SidePanelEditTimestamp.vue';
 import SidePanelEditTemplate from './SidePanelEditTemplate.vue';
+import SidePanelEditTimestamp from './SidePanelEditTimestamp.vue';
 import SidePanelTimestamps from './SidePanelTimestamps.vue';
 
 const contentDiv = ref<HTMLDivElement>();
@@ -21,14 +21,14 @@ watch(width, (width) => {
 
 <template>
   <div
-    class="bg-base-100 overflow-x-hidden"
+    class="overflow-x-hidden bg-base-100"
     :class="{
       'shadow-xl': !!width,
     }"
     :style="{ width: `${width}px` }"
     @click.stop
   >
-    <div ref="contentDiv" class="w-fit h-full">
+    <div ref="contentDiv" class="h-full w-fit">
       <side-panel-timestamps v-if="view === 'timestamps'" />
       <side-panel-all-preferences v-else-if="view === 'all-preferences'" />
       <side-panel-edit-timestamp v-else-if="view === 'edit-timestamp'" />

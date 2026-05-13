@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { NetworkRequest } from '@/utils/network-repo';
 import { computed } from 'vue';
+
+import { NetworkRequest } from '@/utils/network-repo';
 
 const props = defineProps<{
   request: NetworkRequest;
@@ -38,5 +39,5 @@ const timeline = computed(() => {
 </script>
 
 <template>
-  <pre class="w-full p-2 whitespace-pre-line break-all">{{ timeline }}</pre>
+  <pre class="w-full whitespace-pre-line break-all p-2">{{ timeline }}</pre>
 </template>

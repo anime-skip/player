@@ -1,14 +1,16 @@
-import { ElementOption, InternalPlayerOptions, PlayerOptions } from './options';
 import { createApp } from 'vue';
-import Player from './components/Player.vue';
-import { createLocalPlayerStorage } from './utils/createLocalPlayerStorage';
-import { InjectionKey } from './utils/InjectionKey';
-import playerStyles from './assets/tailwind.css?inline';
-import { createTypedStorage } from './utils/createTypedStorage';
 import { VueQueryPlugin } from 'vue-query';
-import { stripHashAndQuery } from './utils/url-utils';
-import { PlayerVisibility } from './utils/PlayerVisibility';
+
+import Player from './components/Player.vue';
+import { ElementOption, InternalPlayerOptions, PlayerOptions } from './options';
+import { createLocalPlayerStorage } from './utils/createLocalPlayerStorage';
+import { createTypedStorage } from './utils/createTypedStorage';
+import { InjectionKey } from './utils/InjectionKey';
 import { PlayerEvent } from './utils/PlayerEvent';
+import { PlayerVisibility } from './utils/PlayerVisibility';
+import { stripHashAndQuery } from './utils/url-utils';
+
+import playerStyles from './assets/tailwind.css?inline';
 
 export function createPlayer(options?: PlayerOptions): AnimeSkipPlayer {
   console.log('Creating player...');
@@ -91,27 +93,22 @@ export function createPlayer(options?: PlayerOptions): AnimeSkipPlayer {
   };
 }
 
-/**
- * Object used to interact with the Anime Skip Player.
- */
+/** Object used to interact with the Anime Skip Player. */
 export interface AnimeSkipPlayer {
   /**
    * Mounts the player as a child of the provided root node.
    *
-   * > This method can be called multiple times for a single `AnimeSkipPlayer` instance if the UI is
-   * > deleted from the DOM.
+   * > This method can be called multiple times for a single `AnimeSkipPlayer`
+   * > instance if the UI is deleted from the DOM.
    *
-   * @param rootContainer The query selector or node parent that the player will be appended to.
+   * @param rootContainer The query selector or node parent that the player will
+   *   be appended to.
    */
   mount(rootContainer: string | Element): void;
-  /**
-   * Removes the player from the DOM.
-   */
+  /** Removes the player from the DOM. */
   unmount(): void;
 
-  /**
-   * Change the player's UI visibility.
-   */
+  /** Change the player's UI visibility. */
   setPlayerVisibility(visibility: PlayerVisibility): void;
 
   /**

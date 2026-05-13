@@ -20,7 +20,8 @@ export interface PreferencesCheckboxView {
   type: 'checkbox';
   preferenceKey: keyof AllPreferences;
   /**
-   * When true, if the checkbox is checked, the value is false and if unchecked, the value is true.
+   * When true, if the checkbox is checked, the value is false and if unchecked,
+   * the value is true.
    */
   invert?: boolean;
   text: string;

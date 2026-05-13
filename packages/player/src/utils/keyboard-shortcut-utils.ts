@@ -1,6 +1,4 @@
-/**
- * The list of actions available for keyboard shortcuts.
- */
+/** The list of actions available for keyboard shortcuts. */
 export type KeyboardShortcutAction =
   | 'playPause'
   | 'toggleFullscreen'
@@ -78,9 +76,7 @@ export const DEFAULT_SECONDARY_KEYBOARD_SHORTCUTS: KeyboardShortcutMap = {
   saveTimestamps: undefined,
 };
 
-/**
- * Convert a map of (action->shortcut) to a map of (shortcut->action[])
- */
+/** Convert a map of (action->shortcut) to a map of (shortcut->action[]) */
 export function invertKeyboardShortcutMap(
   map: KeyboardShortcutMap,
 ): KeyboardShortcutInvertedMap {
@@ -96,12 +92,12 @@ export function invertKeyboardShortcutMap(
   }, {});
 }
 
-export function isModiferKeyPressed(event: KeyboardEvent) {
+export function isModifierKeyPressed(event: KeyboardEvent) {
   return event.ctrlKey || event.altKey || event.shiftKey || event.metaKey;
 }
 
 export function isKeyComboAllowed(event: KeyboardEvent) {
-  const isModifierPressed = isModiferKeyPressed(event);
+  const isModifierPressed = isModifierKeyPressed(event);
   switch (event.key) {
     case 'Enter':
     case 'Backspace':

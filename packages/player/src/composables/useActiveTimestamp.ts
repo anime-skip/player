@@ -1,8 +1,8 @@
 import { AmbiguousTimestamp, sortTimestamps } from '../utils/timestamp-utils';
 
 /**
- * A reactive, writable reference to the timestamp being edited. Works with `v-model`, and keeps the
- * edited timestamps up to date.
+ * A reactive, writable reference to the timestamp being edited. Works with
+ * `v-model`, and keeps the edited timestamps up to date.
  *
  * You must set the entire value, not a field on the value
  */

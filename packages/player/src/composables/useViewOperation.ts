@@ -2,27 +2,30 @@ import { ViewOperationCompletedEvent } from '../utils/ViewOperationCompletedEven
 import { View } from './useView';
 
 /**
- * Used to perform a behavior after a view's work is done. Here's a couple examples:
+ * Used to perform a behavior after a view's work is done. Here's a couple
+ * examples:
  *
  * 1. Create a timestamp after logging in
  * 2. Closing the side panel after creating a timestamp
  *
- * This method returns a function. Wrap the code you want to run after the view has finished it's
- * operation, and pass it in as the second argument.
+ * This method returns a function. Wrap the code you want to run after the view
+ * has finished it's operation, and pass it in as the second argument.
  *
- * The returned function will, when called, open the requested view and run your code once the view is completed.
+ * The returned function will, when called, open the requested view and run your
+ * code once the view is completed.
  *
- * Also see `useViewOperationCompleted` for telling this method when a view's operation is completed.
+ * Also see `useViewOperationCompleted` for telling this method when a view's
+ * operation is completed.
  *
  * @example
- * // SidePanelTimestamps.vue
- * const { view } = useView();
- * const loginThen = useViewOperation("account")
+ *   // SidePanelTimestamps.vue
+ *   const { view } = useView();
+ *   const loginThen = useViewOperation('account');
  *
- * // Login, and once logged in, open this view back up
- * const loginAndReturn = useViewOperation("account", () => {
- *   view.value = 'timestamps';
- * });
+ *   // Login, and once logged in, open this view back up
+ *   const loginAndReturn = useViewOperation('account', () => {
+ *     view.value = 'timestamps';
+ *   });
  */
 export default function <T extends (...args: any[]) => void>(
   operationView: View,

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { Section, buildSections } from '../utils/timestamp-utils';
-import TimelineSection from './TimelineSection.vue';
 import TimelinePreview from './TimelinePreview.vue';
+import TimelineSection from './TimelineSection.vue';
 
 const { currentTime, duration, playing } = useVideoControls();
 const intProgress = computed(() => {
@@ -33,8 +33,8 @@ const { state: preferences } = usePreferences();
 </script>
 
 <template>
-  <div ref="root" class="relative h-[9px] group cursor-pointer select-none">
-    <!-- Timstamp Segments -->
+  <div ref="root" class="group relative h-[9px] cursor-pointer select-none">
+    <!-- Timestamp Segments -->
     <template v-if="sections?.length">
       <timeline-section
         v-for="section of sections"
@@ -46,10 +46,10 @@ const { state: preferences } = usePreferences();
       />
     </template>
 
-    <!-- No Timstamp Segments -->
+    <!-- No Timestamp Segments -->
     <template v-else>
       <div
-        class="absolute inset-x-0 w-full top-[3px] h-[3px] bg-base-content bg-opacity-30"
+        class="absolute inset-x-0 top-[3px] h-[3px] w-full bg-base-content bg-opacity-30"
       />
       <div
         class="absolute left-0 top-[3px] h-[3px] bg-primary"
@@ -59,11 +59,11 @@ const { state: preferences } = usePreferences();
 
     <!-- Thumb -->
     <div
-      class="absolute w-[9px] h-[9px] top-0 translate-x-[-50%]"
+      class="absolute top-0 h-[9px] w-[9px] translate-x-[-50%]"
       :style="{ left: `${intProgress}%` }"
     >
       <div
-        class="bg-primary w-[9px] h-[9px] rounded-full transition-all scale-[33%] group-hover:scale-100 pointer-events-none"
+        class="pointer-events-none h-[9px] w-[9px] scale-[33%] rounded-full bg-primary transition-all group-hover:scale-100"
         :class="{
           'scale-100': isSeeking,
         }"

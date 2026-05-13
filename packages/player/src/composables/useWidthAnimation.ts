@@ -1,4 +1,5 @@
 import { MaybeComputedElementRef, MaybeElement } from '@vueuse/core';
+
 import { MS } from '../utils/time';
 
 /**
@@ -9,7 +10,7 @@ import { MS } from '../utils/time';
  * ```vue
  * <script lang="ts" setup>
  * const content = ref<HtmlElement>();
- * cosnt width = useWidthAnimation(element);
+ * const width = useWidthAnimation(element);
  * </script>
  *
  * <template>

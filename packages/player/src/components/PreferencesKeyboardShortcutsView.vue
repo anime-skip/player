@@ -10,7 +10,7 @@ defineProps<{
 <template>
   <table class="divide-y divide-base-100">
     <tr class="h-8 align-top">
-      <th class="text-sm font-medium text-left">Video Controls</th>
+      <th class="text-left text-sm font-medium">Video Controls</th>
       <th class="text-sm font-medium">Primary</th>
       <th class="text-sm font-medium">Secondary</th>
     </tr>
@@ -35,7 +35,7 @@ defineProps<{
       action="hideDialog"
     />
     <tr class="h-12">
-      <th class="text-sm font-medium text-left">Fast Forward</th>
+      <th class="text-left text-sm font-medium">Fast Forward</th>
     </tr>
     <keyboard-shortcut-row
       group-top
@@ -49,7 +49,7 @@ defineProps<{
       action="advanceLarge"
     />
     <tr class="h-12">
-      <th class="text-sm font-medium text-left">Rewind</th>
+      <th class="text-left text-sm font-medium">Rewind</th>
     </tr>
     <keyboard-shortcut-row
       group-top
@@ -63,7 +63,7 @@ defineProps<{
       action="rewindLarge"
     />
     <tr class="h-12">
-      <th class="text-sm font-medium text-left">Timestamp Editing</th>
+      <th class="text-left text-sm font-medium">Timestamp Editing</th>
     </tr>
     <keyboard-shortcut-row
       group-top

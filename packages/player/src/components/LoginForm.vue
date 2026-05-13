@@ -1,8 +1,8 @@
 <script lang="ts" setup>
+import md5 from 'md5';
 import IconAccount from '~icons/anime-skip/account';
 import IconPassword from '~icons/anime-skip/password';
 import IconMdiOpenInNew from '~icons/mdi/open-in-new';
-import md5 from 'md5';
 
 const emits = defineEmits<{
   (event: 'loggedIn'): void;
@@ -18,21 +18,21 @@ const gqlError = useErrorMessage(error);
 
 function login() {
   const usernameEmail = username.value.trim();
-  const passwordPrehash = password.value.trim();
+  const passwordPreHash = password.value.trim();
   username.value = usernameEmail;
-  password.value = passwordPrehash;
+  password.value = passwordPreHash;
 
   if (!usernameEmail) {
     validationError.value = 'You must enter a username or email.';
     return;
-  } else if (!passwordPrehash) {
+  } else if (!passwordPreHash) {
     validationError.value = 'You must enter a password.';
     return;
   }
 
   validationError.value = undefined;
   mutate(
-    { passwordHash: md5(passwordPrehash), usernameEmail },
+    { passwordHash: md5(passwordPreHash), usernameEmail },
     {
       onSuccess(data) {
         auth.value = {
@@ -53,7 +53,7 @@ const validationError = ref<string>();
   <form class="flex flex-col gap-4" @submit.prevent="login">
     <!-- Header -->
     <div>
-      <h3 class="text-base-content font-bold text-opacity-90 text-lg">
+      <h3 class="text-lg font-bold text-base-content text-opacity-90">
         Log in to Anime Skip
       </h3>
     </div>
@@ -65,7 +65,7 @@ const validationError = ref<string>();
           <icon-account />
         </span>
         <input
-          class="w-full input input-bordered focus:input-primary"
+          class="input input-bordered w-full focus:input-primary"
           type="text"
           autocomplete="username"
           placeholder="Username or email"
@@ -82,7 +82,7 @@ const validationError = ref<string>();
           <icon-password />
         </span>
         <input
-          class="w-full input input-bordered focus:input-primary"
+          class="input input-bordered w-full focus:input-primary"
           type="password"
           autocomplete="current-password"
           placeholder="Password"
@@ -92,12 +92,12 @@ const validationError = ref<string>();
       </label>
     </div>
 
-    <p v-if="isError" class="text-error text-sm text-center">{{ gqlError }}</p>
+    <p v-if="isError" class="text-center text-sm text-error">{{ gqlError }}</p>
 
     <!-- Buttons -->
-    <div class="flex gap-4 flex-row-reverse">
+    <div class="flex flex-row-reverse gap-4">
       <button
-        class="flex-1 btn btn-primary"
+        class="btn btn-primary flex-1"
         :class="{ loading: isLoading }"
         :disabled="isLoading"
         type="submit"
@@ -105,10 +105,10 @@ const validationError = ref<string>();
         Login
       </button>
       <a
-        class="flex-1 btn btn-ghost gap-2"
+        class="btn btn-ghost flex-1 gap-2"
         href="https://anime-skip.com/sign-up"
         target="_blank"
-        >Sign Up<icon-mdi-open-in-new class="w-5 h-5" />
+        >Sign Up<icon-mdi-open-in-new class="h-5 w-5" />
       </a>
     </div>
   </form>

@@ -7,7 +7,7 @@ defineProps<{
 <template>
   <div class="tooltip" :data-tip="title">
     <button
-      class="min-w-[3rem] h-[2.5rem] flex items-center justify-center gap-2 px-3 bg-base-content bg-opacity-0 rounded hover:bg-opacity-20 active:bg-opacity-30 uppercase text-xs font-bold"
+      class="flex h-[2.5rem] min-w-[3rem] items-center justify-center gap-2 rounded bg-base-content bg-opacity-0 px-3 text-xs font-bold uppercase hover:bg-opacity-20 active:bg-opacity-30"
     >
       <slot />
     </button>

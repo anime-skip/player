@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import ToolbarButton from './ToolbarButton.vue';
 import IconVolumeHigh from '~icons/anime-skip/volume-high';
-import IconVolumeMedium from '~icons/anime-skip/volume-medium';
 import IconVolumeLow from '~icons/anime-skip/volume-low';
+import IconVolumeMedium from '~icons/anime-skip/volume-medium';
 import IconVolumeMuted from '~icons/anime-skip/volume-muted';
+
+import ToolbarButton from './ToolbarButton.vue';
 
 const { volume, muted } = useVideoControls();
 
@@ -26,7 +27,7 @@ const width = useWidthAnimation(contentDiv);
     <div class="overflow-x-hidden" :style="{ width: `${width}px` }">
       <div
         ref="contentDiv"
-        class="w-fit flex items-center justify-center gap-2"
+        class="flex w-fit items-center justify-center gap-2"
       >
         <div>
           <icon-volume-muted v-if="muted" />
@@ -36,7 +37,7 @@ const width = useWidthAnimation(contentDiv);
         </div>
 
         <div
-          class="py-1 w-0 opacity-0 group-hover:w-20 group-hover:opacity-100 transition-opacity duration-500"
+          class="w-0 py-1 opacity-0 transition-opacity duration-500 group-hover:w-20 group-hover:opacity-100"
           @click.stop
         >
           <input

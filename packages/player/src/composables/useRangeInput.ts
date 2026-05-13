@@ -1,8 +1,8 @@
-import type { Ref, MaybeRefOrGetter } from 'vue';
+import type { Ref } from 'vue';
 
 /**
- * Mimic the behavior of a range input where your mouse controls poition of a thumb on a regular
- * HTML element.
+ * Mimic the behavior of a range input where your mouse controls position of a
+ * thumb on a regular HTML element.
  */
 export default function (
   element: Ref<HTMLElement | undefined | null>,
@@ -35,7 +35,7 @@ export default function (
     if (isSeeking.value) updateSeekingValue(event);
   });
   // Listen for mouse up globally in case the mouse is not over the timeline when releasing
-  useEventListener('mouseup', (event) => {
+  useEventListener('mouseup', () => {
     if (isSeeking.value) {
       isSeeking.value = false;
       onSeekCompleted?.(seekingValue.value!);

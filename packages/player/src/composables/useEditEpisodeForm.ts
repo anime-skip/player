@@ -1,6 +1,4 @@
-/**
- * Global form state for editing the current episode details
- */
+/** Global form state for editing the current episode details */
 export default createGlobalState(() => {
   const { startEditing } = useIsEditing();
 

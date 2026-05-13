@@ -1,6 +1,4 @@
-/**
- * The current "view" show in the player.
- */
+/** The current "view" show in the player. */
 export type View =
   | 'timestamps'
   | 'edit-timestamp'
@@ -10,8 +8,8 @@ export type View =
   | 'edit-template';
 
 /**
- * Returns a global reference to which "view" is active. A "view" is the current dialog or panel
- * visible. Only one "view" can be open at a time.
+ * Returns a global reference to which "view" is active. A "view" is the current
+ * dialog or panel visible. Only one "view" can be open at a time.
  *
  * To change views, set the value to `undefined`.
  */

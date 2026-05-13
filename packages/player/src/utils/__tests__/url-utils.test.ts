@@ -1,4 +1,5 @@
-import { describe, it, vi, expect } from 'vitest';
+import { describe, it, expect } from 'vitest';
+
 import { stripHashAndQuery } from '../url-utils';
 
 describe('URL Utils', () => {

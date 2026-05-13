@@ -65,9 +65,9 @@ async function openInspector() {
   const position = await windowPosition.getValue();
   const url = browser.runtime.getURL('/inspector.html');
 
-  const exsitingWindows = await browser.windows.getAll({});
+  const existingWindows = await browser.windows.getAll({});
   const windowsAndTabs = await Promise.all(
-    exsitingWindows.map(async (win) => ({
+    existingWindows.map(async (win) => ({
       window: win,
       tabs: await browser.tabs.query({ windowId: win.id }),
     })),

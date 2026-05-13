@@ -35,10 +35,10 @@ const { copy } = useClipboard();
       <tbody>
         <template v-for="{ tab, frames } of tabs" :key="tab.id">
           <tr>
-            <td class="font-mono text-center">
+            <td class="text-center font-mono">
               {{ tab.id }}
             </td>
-            <td class="text-center whitespace-nowrap">-</td>
+            <td class="whitespace-nowrap text-center">-</td>
             <td>
               <div class="flex items-center gap-2">
                 <img v-if="tab.favIconUrl" class="h-6" :src="tab.favIconUrl" />
@@ -58,7 +58,7 @@ const { copy } = useClipboard();
           </tr>
           <tr v-for="frame of frames">
             <td />
-            <td class="font-mono text-center">
+            <td class="text-center font-mono">
               {{ frame.frameId }}
             </td>
             <td class="line-clamp-1 break-all">{{ frame.url }}</td>

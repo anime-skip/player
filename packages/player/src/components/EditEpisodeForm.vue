@@ -8,7 +8,7 @@ const expanded = ref(false);
 </script>
 
 <template>
-  <form class="p-4 flex flex-col gap-2" @submit.prevent.stop>
+  <form class="flex flex-col gap-2 p-4" @submit.prevent.stop>
     <label
       v-if="!episodeUrl"
       class="input-group"
@@ -16,7 +16,7 @@ const expanded = ref(false);
     >
       <span class="w-32 justify-center">Show</span>
       <input
-        class="input input-bordered input-sm focus:input-primary w-full"
+        class="input input-bordered input-sm w-full focus:input-primary"
         :class="{ 'input-error focus:input-error': !showName.trim() }"
         v-model="showName"
         @keydown.stop
@@ -25,7 +25,7 @@ const expanded = ref(false);
     <label class="input-group" title="The name of the episode.">
       <span class="w-32 justify-center">Episode</span>
       <input
-        class="input input-bordered input-sm focus:input-primary w-full"
+        class="input input-bordered input-sm w-full focus:input-primary"
         :class="{ 'input-error focus:input-error': !episodeName.trim() }"
         v-model="episodeName"
         @keydown.stop
@@ -38,7 +38,7 @@ const expanded = ref(false);
     >
       <span class="w-32 justify-center">Season</span>
       <input
-        class="input input-bordered input-sm focus:input-primary w-full"
+        class="input input-bordered input-sm w-full focus:input-primary"
         v-model="season"
         @keydown.stop
       />
@@ -51,7 +51,7 @@ const expanded = ref(false);
     >
       <span class="w-32 justify-center">#</span>
       <input
-        class="input input-bordered input-sm focus:input-primary w-full"
+        class="input input-bordered input-sm w-full focus:input-primary"
         v-model="number"
         @keydown.stop
       />
@@ -63,14 +63,14 @@ const expanded = ref(false);
     >
       <span class="w-32 justify-center">ABS #</span>
       <input
-        class="input input-bordered input-sm focus:input-primary w-full"
+        class="input input-bordered input-sm w-full focus:input-primary"
         v-model="absoluteNumber"
         @keydown.stop
       />
     </label>
 
     <button
-      class="link link-hover hover:link-primary flex gap-2 text-xs self-end"
+      class="link link-hover flex gap-2 self-end text-xs hover:link-primary"
       @click="expanded = !expanded"
     >
       {{ expanded ? 'Less...' : 'More...' }}

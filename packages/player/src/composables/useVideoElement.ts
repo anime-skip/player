@@ -1,10 +1,10 @@
-import { Ref } from 'vue';
 import { SECOND } from '../utils/time';
 
 const POLL_RATE = SECOND;
 
 /**
- * Poll for the current video element, updating the returned ref if it's different.
+ * Poll for the current video element, updating the returned ref if it's
+ * different.
  */
 export default createGlobalState(() => {
   const options = usePlayerOptions();

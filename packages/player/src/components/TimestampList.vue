@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import TimestampListItem from './TimestampListItem.vue';
 import IconPlus from '~icons/anime-skip/plus';
+
+import TimestampListItem from './TimestampListItem.vue';
 
 const timestamps = useCurrentTimestamps();
 const { isLoading, isError, error } = useFindEpisodeUrlQuery();
@@ -12,8 +13,8 @@ const createTimestamp = useCreateTimestamp();
 <template>
   <div class="p-2">
     <!-- Loading -->
-    <div v-if="isLoading" class="flex w-full aspect-square p-16">
-      <span class="spinner w-8 h-8 m-auto" />
+    <div v-if="isLoading" class="flex aspect-square w-full p-16">
+      <span class="spinner m-auto h-8 w-8" />
     </div>
 
     <!-- Error -->
@@ -32,13 +33,13 @@ const createTimestamp = useCreateTimestamp();
       <!-- Empty -->
       <p
         v-if="!timestamps.length"
-        class="p-4 text-center w-full text-sm opacity-50"
+        class="w-full p-4 text-center text-sm opacity-50"
       >
-        No timestmaps
+        No timestamps
       </p>
 
       <!-- Add button -->
-      <button class="btn gap-2 w-full mt-2" @click="createTimestamp">
+      <button class="btn mt-2 w-full gap-2" @click="createTimestamp">
         <icon-plus />
         <span>Add Timestamp</span>
       </button>

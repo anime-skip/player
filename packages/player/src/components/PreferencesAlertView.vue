@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { PreferencesAlertView } from '../utils/preferences';
 import IconMdiAlertCircle from '~icons/mdi/alert-circle';
+
+import { PreferencesAlertView } from '../utils/preferences';
 
 const props = defineProps<{
   view: PreferencesAlertView;
@@ -10,7 +11,7 @@ const props = defineProps<{
 <template>
   <div class="alert alert-info shadow-lg">
     <div>
-      <icon-mdi-alert-circle class="opacity-50 flex-shrink-0 w-6 h-6" />
+      <icon-mdi-alert-circle class="h-6 w-6 flex-shrink-0 opacity-50" />
       <div>
         <p>{{ view.title }}</p>
         <p class="text-sm text-info-content">

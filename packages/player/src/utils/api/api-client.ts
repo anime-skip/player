@@ -1,6 +1,7 @@
 import { GraphQLClient } from 'graphql-request';
-import { getSdk } from './graphql.generated';
+
 import { fetchRefresh } from './fetch-refresh';
+import { getSdk } from './graphql.generated';
 
 export function useBaseGraphqlClient(): GraphQLClient {
   const options = usePlayerOptions();
@@ -29,7 +30,7 @@ export function useAuthorizedGraphqlClient(): GraphQLClient {
             token: data.loginRefresh.authToken,
             account: data.loginRefresh.account,
           };
-        } catch (err) {
+        } catch {
           auth.value = null;
         }
       },

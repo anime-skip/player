@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+
 import { bounded, floorToNearest } from '../math-utils';
 
 describe('Math Utils', () => {

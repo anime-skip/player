@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { TimestampState } from '../utils/TimestampState';
 import { AllPreferences } from '../utils/preferences';
 import { Section, isTimestampSkipped } from '../utils/timestamp-utils';
+import { TimestampState } from '../utils/TimestampState';
 
 const props = defineProps<{
   section: Section;
@@ -49,14 +49,14 @@ const state = useTimestampEditedState(toRef(props, 'section'));
   <div class="absolute top-[3px] h-[3px]" :style="{ left, right: right }">
     <!-- Light Background -->
     <div
-      class="absolute h-full w-full bg-base-content transition bg-opacity-0"
+      class="absolute h-full w-full bg-base-content bg-opacity-0 transition"
       :class="{ 'bg-opacity-30': !isSkipped }"
     />
 
-    <!-- Primary Currnet Time -->
+    <!-- Primary Current Time -->
     <div
       v-if="!isSkipped && (currentTime ?? 0) >= section.at"
-      class="absolute h-full bg-primary left-0"
+      class="absolute left-0 h-full bg-primary"
       :style="{ width: currentTimeWidth }"
     />
 

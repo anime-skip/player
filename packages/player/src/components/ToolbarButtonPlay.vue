@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import ToolbarButton from './ToolbarButton.vue';
-import IconPlay from '~icons/anime-skip/play';
 import IconPause from '~icons/anime-skip/pause';
+import IconPlay from '~icons/anime-skip/play';
+
+import ToolbarButton from './ToolbarButton.vue';
 
 const { playing } = useVideoControls();
 </script>

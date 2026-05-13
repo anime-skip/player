@@ -38,13 +38,13 @@ const isSecondaryDuplicate = useIsDuplicateKeyboardShortcut(
 <template>
   <tr class="h-12">
     <td
-      class="bg-neutral overflow-hidden"
+      class="overflow-hidden bg-neutral"
       :class="{
         'rounded-tl': groupTop,
         'rounded-bl': groupBottom,
       }"
     >
-      <p class="px-4 opacity-70 truncate">{{ label }}</p>
+      <p class="truncate px-4 opacity-70">{{ label }}</p>
     </td>
     <td class="bg-neutral text-center">
       <keyboard-shortcut-chooser

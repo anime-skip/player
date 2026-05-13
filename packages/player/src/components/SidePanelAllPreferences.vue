@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import SidePanelLayout from './SidePanelLayout.vue';
 import Preferences from './Preferences.vue';
+import SidePanelLayout from './SidePanelLayout.vue';
 </script>
 
 <template>

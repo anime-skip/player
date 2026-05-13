@@ -9,7 +9,7 @@ const props = defineProps<{
 
 <template>
   <div
-    class="grid gap-2 grid-flow-row"
+    class="grid grid-flow-row gap-2"
     :class="{
       'grid-cols-1': view.columns === 1,
       'grid-cols-2': view.columns === 2,

@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
+
 import { getUniqueExistenceMap } from '../array-utils';
 import { fakeTimestampFragment } from '../testing/fake-objects';
 
 describe('Array Utils', () => {
-  describe('getUniqueExistanceMap', () => {
+  describe('getUniqueExistenceMap', () => {
     it('should return a map of ids to items', () => {
       const array = [
         fakeTimestampFragment({ id: 'a' }),

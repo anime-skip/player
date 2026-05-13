@@ -1,12 +1,13 @@
 import type { Ref, MaybeRefOrGetter } from 'vue';
+
 import { MS, SECOND } from '../utils/time';
 
 const RESET_AFTER_DURATION = 3 * SECOND;
 const EVENT_THROTTLE_DURATION = 100 * MS;
 
 /**
- * When moving the mouse over the player, the foreground (title, toolbar, etc) will go away after a
- * certain amount of time.
+ * When moving the mouse over the player, the foreground (title, toolbar, etc)
+ * will go away after a certain amount of time.
  */
 export default function (
   element: MaybeRefOrGetter<EventTarget | null | undefined>,

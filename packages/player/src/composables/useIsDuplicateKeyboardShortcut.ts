@@ -1,4 +1,5 @@
 import { Ref } from 'vue';
+
 import { KeyboardShortcutInvertedMap } from '../utils/keyboard-shortcut-utils';
 
 export default function (

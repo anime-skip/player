@@ -1,15 +1,11 @@
-/**
- * Return a value, but make sure it's within a specified bound: `[min, max]`.
- */
+/** Return a value, but make sure it's within a specified bound: `[min, max]`. */
 export function bounded(v: number, min: number, max: number): number {
   if (v < min) return min;
   if (v > max) return max;
   return v;
 }
 
-/**
- * Rounds a number to the nearest increment at a given percision.
- */
+/** Rounds a number to the nearest increment at a given precision. */
 export function floorToNearest(
   num: number,
   increment: number,

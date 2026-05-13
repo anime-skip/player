@@ -28,7 +28,7 @@ const modelValue = computed({
 <template>
   <li>
     <label
-      class="flex items-center p-2 gap-4 cursor-pointer"
+      class="flex cursor-pointer items-center gap-4 p-2"
       @mouseover="hoveredId = timestamp.id"
       @mouseout="hoveredId = undefined"
     >

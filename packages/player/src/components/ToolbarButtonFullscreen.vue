@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import ToolbarButton from './ToolbarButton.vue';
 import IconFullscreenEnter from '~icons/anime-skip/fullscreen-enter';
 import IconFullscreenExit from '~icons/anime-skip/fullscreen-exit';
+
+import ToolbarButton from './ToolbarButton.vue';
 
 const { isFullscreen, isSupported, toggle } = usePlayerFullscreen();
 </script>

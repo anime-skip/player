@@ -1,5 +1,6 @@
-import { LocalNetworkRequest, NetworkRequest } from '@/utils/network-repo';
 import { nanoid } from 'nanoid';
+
+import { LocalNetworkRequest, NetworkRequest } from '@/utils/network-repo';
 
 export default defineContentScript({
   matches: ['*://*/*'],

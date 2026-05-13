@@ -1,10 +1,9 @@
-import { Ref } from 'vue';
 import fuzzysort from 'fuzzysort';
+import { Ref } from 'vue';
 
 export default function <T>(
   search: Ref<string>,
   fullList: Ref<T[] | undefined>,
-  extract: (t: T) => string,
 ) {
   return computed<T[]>(() => {
     if (fullList.value == null) return [];

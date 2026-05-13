@@ -146,7 +146,7 @@ function saveTemplate() {
       <div class="p-2">
         <p class="text-sm">Apply to</p>
         <div class="p-2">
-          <label class="flex gap-4 cursor-pointer p-2 items-center">
+          <label class="flex cursor-pointer items-center gap-4 p-2">
             <input
               type="radio"
               class="radio radio-sm checked:bg-primary"
@@ -161,7 +161,7 @@ function saveTemplate() {
               >Entire Show</span
             >
           </label>
-          <label class="flex gap-4 cursor-pointer p-2 items-center">
+          <label class="flex cursor-pointer items-center gap-4 p-2">
             <input
               type="radio"
               class="radio radio-sm checked:bg-primary"
@@ -178,7 +178,7 @@ function saveTemplate() {
           </label>
         </div>
         <input
-          class="input input-sm bg-neutral min-w-0 w-full ml-12 mr-3 translate-x-1 -translate-y-2"
+          class="input input-sm ml-12 mr-3 w-full min-w-0 -translate-y-2 translate-x-1 bg-neutral"
           placeholder="Enter a season..."
           v-model="season"
         />
@@ -204,7 +204,7 @@ function saveTemplate() {
       <template v-if="template && !hasChanges">
         <!-- Delete -->
         <button
-          class="btn hover:btn-error flex-1"
+          class="btn flex-1 hover:btn-error"
           :class="{
             loading: isDeletingTemplate,
           }"

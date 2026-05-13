@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {
   isKeyComboAllowed,
-  isModiferKeyPressed,
+  isModifierKeyPressed,
   keyComboFromEvent,
 } from '../utils/keyboard-shortcut-utils';
 
@@ -34,7 +34,7 @@ function onKeyDown(event: KeyboardEvent) {
   event.stopImmediatePropagation();
   event.stopPropagation();
 
-  if (!isModiferKeyPressed(event)) {
+  if (!isModifierKeyPressed(event)) {
     switch (event.key) {
       case 'Escape':
         return hideKeyBindingEditor();
@@ -76,7 +76,7 @@ watch(isShowingKeyBindingEditor, (isShowing) => {
     }}</pre>
     <pre
       v-else
-      class="opacity-50 font-mono text-sm"
+      class="font-mono text-sm opacity-50"
       :tabindex="0"
       @click="showKeyBindingEditor"
     >
@@ -86,29 +86,29 @@ unset</pre
     <teleport :to="shadowHtml">
       <div
         v-if="isShowingKeyBindingEditor"
-        class="fixed inset-0 bg-neutral bg-opacity-90 select-none pointer-events-auto flex flex-col justify-center items-center z-[99999]"
+        class="pointer-events-auto fixed inset-0 z-[99999] flex select-none flex-col items-center justify-center bg-neutral bg-opacity-90"
         @click.stop
       >
         <h5
-          class="w-full max-w-xs p-4 rounded ring-2 ring-base-content ring-opacity-50 text-center font-bold"
+          class="w-full max-w-xs rounded p-4 text-center font-bold ring-2 ring-base-content ring-opacity-50"
         >
           <span v-if="!currentKeyBinding" class="no-selection"
             >[Press a key]</span
           >
           <pre v-else class="font-mono">{{ currentKeyBinding }}</pre>
         </h5>
-        <table class="w-full max-w-xs mt-8 border-spacing-4">
+        <table class="mt-8 w-full max-w-xs border-spacing-4">
           <tr>
             <td class="text-right"><kbd class="kbd">Enter</kbd></td>
-            <td class="text-left pl-2">to save</td>
+            <td class="pl-2 text-left">to save</td>
           </tr>
           <tr>
             <td class="text-right"><kbd class="kbd">Backspace</kbd></td>
-            <td class="text-left pl-2">to remove</td>
+            <td class="pl-2 text-left">to remove</td>
           </tr>
           <tr>
             <td class="text-right"><kbd class="kbd">Esc</kbd></td>
-            <td class="text-left pl-2">to cancel</td>
+            <td class="pl-2 text-left">to cancel</td>
           </tr>
         </table>
       </div>

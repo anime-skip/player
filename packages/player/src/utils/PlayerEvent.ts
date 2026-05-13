@@ -10,9 +10,7 @@ type PlayerEventDetail =
       url: string;
     };
 
-/**
- * Event used to send data from outside the player into the Vue app.
- */
+/** Event used to send data from outside the player into the Vue app. */
 export class PlayerEvent extends CustomEvent<PlayerEventDetail> {
   static TYPE = '@anime-skip/player-event';
 

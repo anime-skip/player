@@ -28,7 +28,7 @@ const playbackRate = computed({
       <span class="shrink-0">Playback Rate</span>
       <input
         type="number"
-        class="input input-bordered focus:input-primary min-w-0 w-full"
+        class="input input-bordered w-full min-w-0 focus:input-primary"
         step="0.25"
         min="0.25"
         max="4"

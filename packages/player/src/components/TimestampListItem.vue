@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import { formatTimestampInS } from '../utils/time-utils';
-import IconEdit from '~icons/anime-skip/edit';
 import IconClose from '~icons/anime-skip/close';
-import InPlaceTimestampTypeSelect from './InPlaceTimestampTypeSelect.vue';
-import { AmbiguousTimestamp } from '../utils/timestamp-utils';
+import IconEdit from '~icons/anime-skip/edit';
+
 import useTimestampEditedState from '../composables/useTimestampEditedState';
+import { formatTimestampInS } from '../utils/time-utils';
+import { AmbiguousTimestamp } from '../utils/timestamp-utils';
 import { TimestampState } from '../utils/TimestampState';
+import InPlaceTimestampTypeSelect from './InPlaceTimestampTypeSelect.vue';
 
 const props = defineProps<{
   timestamp: AmbiguousTimestamp;
@@ -41,9 +42,9 @@ const state = useTimestampEditedState(timestamp);
     @mouseleave="clearHovered"
   >
     <td class="h-12">
-      <div class="pl-2 pr-4 cursor-pointer" @click="goToTimestamp">
+      <div class="cursor-pointer pl-2 pr-4" @click="goToTimestamp">
         <p
-          class="text-lg font-black text-right"
+          class="text-right text-lg font-black"
           :class="{
             'text-primary': state === TimestampState.NotChanged,
             'text-secondary': state === TimestampState.Edited,
@@ -54,20 +55,20 @@ const state = useTimestampEditedState(timestamp);
         </p>
         <p
           v-if="state === TimestampState.Edited"
-          class="uppercase text-[0.66rem] text-secondary font-bold -mt-1.5 text-right"
+          class="-mt-1.5 text-right text-[0.66rem] font-bold uppercase text-secondary"
         >
           Edited
         </p>
         <p
           v-else-if="state === TimestampState.New"
-          class="uppercase text-[0.66rem] text-success font-bold -mt-1.5 text-right"
+          class="-mt-1.5 text-right text-[0.66rem] font-bold uppercase text-success"
         >
           New
         </p>
       </div>
     </td>
 
-    <td class="w-full h-12" :title="type?.description">
+    <td class="h-12 w-full" :title="type?.description">
       <div class="flex items-center gap-1">
         <!-- Select -->
         <in-place-timestamp-type-select :timestamp="timestamp" />
@@ -76,22 +77,22 @@ const state = useTimestampEditedState(timestamp);
 
         <!-- Edit -->
         <button
-          class="shrink-0 btn btn-circle btn-ghost text-base-content text-opacity-50 hover:text-opacity-100"
+          class="btn btn-circle btn-ghost shrink-0 text-base-content text-opacity-50 hover:text-opacity-100"
           title="Edit"
           type="button"
           @click="editTimestamp(timestamp)"
         >
-          <icon-edit class="w-[1.375rem] h-[1.375rem]" />
+          <icon-edit class="h-[1.375rem] w-[1.375rem]" />
         </button>
 
         <!-- Delete -->
         <button
-          class="shrink-0 btn btn-circle btn-ghost text-base-content text-opacity-50 hover:text-error hover:text-opacity-100"
+          class="btn btn-circle btn-ghost shrink-0 text-base-content text-opacity-50 hover:text-error hover:text-opacity-100"
           title="Delete"
           type="button"
           @click="deleteTimestamp(timestamp)"
         >
-          <icon-close class="w-5 h-5" />
+          <icon-close class="h-5 w-5" />
         </button>
       </div>
     </td>

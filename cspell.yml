@@ -1,0 +1,42 @@
+ignorePaths:
+  - '*.gen.*'
+  - '*.generated.*'
+  - pnpm-lock.yaml
+  - stats.html
+  - dist
+  - .output
+ignoreWords:
+  - aklinker
+  - autoskip
+  - buildc
+  - chkbg
+  - chkfg
+  - crunchyroll
+  - dcevslhnr
+  - demi
+  - dont
+  - esbuild
+  - funimation
+  - fuzzysort
+  - iconify
+  - idbp
+  - jjlynw
+  - lvhw
+  - networkrequest
+  - ngrxwe
+  - oxfmt
+  - oxlint
+  - pickone
+  - showmedia
+  - triggerable
+  - vetur
+  - vilos
+  - vueuse
+  - webext
+  - zhxt
+  - zoro
+words:
+  - codegen
+  - naruto
+  - outros
+  - prefs

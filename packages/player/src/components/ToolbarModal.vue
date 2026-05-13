@@ -3,12 +3,11 @@ import { View } from '../composables/useView';
 
 const props = defineProps<{
   /**
-   * The singular "view" that this modal will show. See `useView` for more details.
+   * The singular "view" that this modal will show. See `useView` for more
+   * details.
    */
   view: View;
-  /**
-   * Class attribute of the modal, useful for specifying it's size
-   */
+  /** Class attribute of the modal, useful for specifying it's size */
   modalClass?: string;
 }>();
 
@@ -27,7 +26,7 @@ function toggle() {
     <transition name="slide-up">
       <div
         v-if="currentView === props.view"
-        class="bg-base-100 rounded shadow-xl absolute right-0 bottom-full mb-6 overflow-y-auto"
+        class="absolute bottom-full right-0 mb-6 overflow-y-auto rounded bg-base-100 shadow-xl"
         :class="modalClass"
       >
         <slot name="modal" />

@@ -1,7 +1,8 @@
+import { ClientError } from 'graphql-request';
 import { useQuery } from 'vue-query';
+
 import { QueryKey } from '../utils/QueryKey';
 import { MINUTE } from '../utils/time';
-import { ClientError } from 'graphql-request';
 
 export default function () {
   const client = useApiClient(false);

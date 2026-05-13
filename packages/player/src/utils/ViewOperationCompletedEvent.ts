@@ -7,9 +7,7 @@ export class ViewOperationCompletedEvent extends CustomEvent<string> {
     super(ViewOperationCompletedEvent.TYPE, { detail: view });
   }
 
-  /**
-   * The view the operation was completed for.
-   */
+  /** The view the operation was completed for. */
   get view(): string {
     return this.detail;
   }

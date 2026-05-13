@@ -1,5 +1,6 @@
 /**
  * Strip out hashes and query params from a url
+ *
  * @param url The input url
  */
 export function stripUrl(url: string): string {

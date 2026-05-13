@@ -3,9 +3,9 @@ import usePreferences from './usePreferences';
 import useSavePreferencesMutation from './useSavePreferencesMutation';
 
 /**
- * Utility for getting an interactive ref of a specific preference. If the preference is local, it
- * will just update storage. If the preference is from the API, it will update both the API and
- * local storage.
+ * Utility for getting an interactive ref of a specific preference. If the
+ * preference is local, it will just update storage. If the preference is from
+ * the API, it will update both the API and local storage.
  *
  * ```vue
  * <script lang="ts" setup>

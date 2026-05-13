@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/oxfmt/configuration_schema.json",
+  "ignorePatterns": [
+    "pnpm-lock.yaml",
+    "*.gen.*",
+    "*.generated.*",
+    "dist",
+    ".output",
+    ".wxt",
+  ],
+  "jsdoc": true,
+  "printWidth": 80,
+  "proseWrap": "always",
+  "sortImports": true,
+  "sortPackageJson": true,
+  "sortTailwindcss": true,
+  "singleQuote": true,
+}

@@ -1,8 +1,8 @@
 import { forwardKeydownEvent } from '@anime-skip/player';
 
 /**
- * Stop all keydown events before the website can process them, and re-dispatches them as
- * "anime-skip:keydown" for the player to handle.
+ * Stop all keydown events before the website can process them, and
+ * re-dispatches them as "anime-skip:keydown" for the player to handle.
  */
 export default defineContentScript({
   matches: [
@@ -25,7 +25,7 @@ export default defineContentScript({
         forwardKeydownEvent(event);
       },
       {
-        // Run this listener before any others in the tree, without this the stopPropogation call is
+        // Run this listener before any others in the tree, without this the stopPropagation call is
         // executed AFTER the page's keydown listener has already ran
         capture: true,
       },

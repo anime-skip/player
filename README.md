@@ -1,6 +1,7 @@
 # Anime Skip Player
 
-Monorepo for the Anime Skip Player, includes the player UI, web extension, and (maybe in the future) an embedded player other websites can use.
+Monorepo for the Anime Skip Player, includes the player UI, web extension, and
+(maybe in the future) an embedded player other websites can use.
 
 ## Setup
 
