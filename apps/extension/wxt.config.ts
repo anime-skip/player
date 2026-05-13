@@ -26,5 +26,9 @@ export default defineConfig({
     name: 'anime-skip-player',
     sourcesRoot: '../..',
     excludeSources: ['apps/inspector', 'apps/embedded-demo', 'README.md'],
+    includeSources: ['.tool-versions'],
+  },
+  suppressWarnings: {
+    firefoxDataCollection: true,
   },
 });

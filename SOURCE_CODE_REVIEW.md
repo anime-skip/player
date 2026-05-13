@@ -1,11 +1,11 @@
 # Firefox Source Code Review
 
-To build the extension or zip it:
+Required node version listed in `.tool-versions` file, required PNPM version listed in `package.json`'s `packageManager` field.
+
+To build the extension and zip it:
 
 ```sh
 pnpm i
 cd apps/extension
-
-pnpm build:firefox
 pnpm zip:firefox
 ```
