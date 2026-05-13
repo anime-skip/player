@@ -7,14 +7,7 @@ import { forwardKeydownEvent } from '@anime-skip/player';
 export default defineContentScript({
   matches: [
     // Crunchyroll
-    '*://static.crunchyroll.com/vilos-v2/web/vilos/player.html',
-    // Aniwave (9anime)
-    '*://mcloud.bz/e/*',
-    '*://www.mp4upload.com/embed-*',
-    '*://vidplay.online/e/*',
-    // Aniwatch (Zoro)
-    '*://megacloud.tv/e/embed-*',
-    '*://watchsb.com/e/*',
+    '*://www.crunchyroll.com/*',
   ],
   runAt: 'document_start',
   allFrames: true,

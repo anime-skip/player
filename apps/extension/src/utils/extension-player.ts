@@ -9,20 +9,20 @@ export function initExtensionPlayer(options: ExtensionPlayerOptions): void {
   logger.log(`Mounted ${options.serviceName} player`);
   const isDev = import.meta.env.MODE === 'development';
 
-  initKeyboardShortcutReciever(options.ctx);
+  initKeyboardShortcutReceiver(options.ctx);
 
   const player = createPlayer({
     storage: createExtensionPlayerStorage(),
     apiClientId: CLIENT_ID,
     apiUrl: isDev ? TEST_API_URL : PROD_API_URL,
     getEpisodeInfo() {
-      // Send messsage to background
+      // Send message to background
       return messaging.sendMessage('getEpisodeInfoFromHelper', undefined);
     },
-    onVisibilityChange(visiblity) {
+    onVisibilityChange(visibility) {
       const hideBuiltinPlayer =
-        visiblity === PlayerVisibility.Visible ||
-        visiblity === PlayerVisibility.Hidden;
+        visibility === PlayerVisibility.Visible ||
+        visibility === PlayerVisibility.Hidden;
 
       if (hideBuiltinPlayer) {
         document.documentElement.setAttribute(

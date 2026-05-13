@@ -1,26 +1,28 @@
 import '~/assets/crunchyroll-player.scss';
 import { ColorTheme } from '@anime-skip/player';
 
+const PLAYER_SELECTOR = '#player-container';
+const VIDEO_SELECTOR = 'video';
+
 export default defineContentScript({
-  matches: ['*://static.crunchyroll.com/vilos-v2/web/vilos/player.html'],
-  allFrames: true,
-  main(ctx) {
+  matches: ['*://www.crunchyroll.com/*'],
+  async main(ctx) {
+    // Need to wait for both the player wrapper and video element, the video
+    // element is rendered last, so we wait for that.
+    await waitUntil(
+      () => Promise.resolve(!!document.querySelector(VIDEO_SELECTOR)),
+      Infinity,
+      1,
+      100,
+    );
+
     // Load player
     initExtensionPlayer({
       ctx,
       serviceName: 'Crunchyroll',
       serviceTheme: ColorTheme.CrunchyrollOrange,
-      parentElement: 'body',
-      fullscreenElement: 'body',
-      // Strip and remove -XXXXXX from end of url
-      transformServiceUrl(inputUrl) {
-        return stripUrl(inputUrl).replace(/-[0-9]+$/, '');
-      },
-      // Crunchyroll has two iframes, one for preloading and one for the actual video. This skips
-      // the preloading one
-      isDisabled() {
-        return document.body.getBoundingClientRect().width === 0;
-      },
+      parentElement: PLAYER_SELECTOR,
+      fullscreenElement: PLAYER_SELECTOR,
     });
   },
 });

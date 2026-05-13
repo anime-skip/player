@@ -70,7 +70,7 @@ export function initKeyboardShortcutForwarder(ctx: ContentScriptContext) {
  * Inside a player content script, listen for forwarded keydown events, and publish them on this
  * document instead.
  */
-export function initKeyboardShortcutReciever(ctx: ContentScriptContext) {
+export function initKeyboardShortcutReceiver(ctx: ContentScriptContext) {
   ctx.addEventListener(window, 'message', (event: MessageEvent) => {
     const data: { type: string; event: ForwardedKeyboardEvent } = event.data;
     logger.debug('Recieved event:', data);

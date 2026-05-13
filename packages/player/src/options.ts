@@ -20,7 +20,7 @@ export interface PlayerOptions {
    */
   storage?: IPlayerStorage;
   /**
-   * A video element, a query selector to one, or a fucntion that returns one of those. Used to get
+   * A video element, a query selector to one, or a function that returns one of those. Used to get
    * a reference to the video to control it (play, pause, volume, etc).
    *
    * Defaults to `"video"`, a query selector that selects the first video in the DOM.

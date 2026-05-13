@@ -11,7 +11,9 @@ import { PlayerVisibility } from './utils/PlayerVisibility';
 import { PlayerEvent } from './utils/PlayerEvent';
 
 export function createPlayer(options?: PlayerOptions): AnimeSkipPlayer {
+  console.log('Creating player...');
   const internalOptions = getInternalOptions(options);
+  console.log('options:', internalOptions);
   const app = createApp(Player)
     .provide(InjectionKey.PlayerOptions, internalOptions)
     .use(VueQueryPlugin);
@@ -34,7 +36,10 @@ export function createPlayer(options?: PlayerOptions): AnimeSkipPlayer {
 
       // Don't do anything if it's already mounted
       const tag = 'anime-skip-player';
-      if (document.querySelector(tag) != null) return;
+      if (document.querySelector(tag) != null) {
+        console.log('Anime skip player already mounted, skipping');
+        return;
+      }
 
       // Create the ShadowRoot
       const shadowElement = document.createElement(tag);
@@ -66,6 +71,7 @@ export function createPlayer(options?: PlayerOptions): AnimeSkipPlayer {
       // Add the ShadowRoot to the DOM
       shadow.append(shadowHtml);
       rootElement.appendChild(shadowElement);
+      console.log('Done', { rootElement, shadow, shadowBody });
     },
     unmount() {
       app.unmount();
@@ -138,16 +144,16 @@ function getInternalOptions(options?: PlayerOptions): InternalPlayerOptions {
     storage: createTypedStorage(options?.storage ?? createLocalPlayerStorage()),
 
     fullscreenElement: () => {
-      const element = resolveElement(options?.video, 'body');
+      const element = resolveElement(options?.fullscreenElement, 'body');
 
       if (element == null) {
-        console.error('options.video:', element);
+        console.error('options.fullscreenElement resolved to', element);
         throw Error(
-          `options.video resoled to ${element}, but it must be a VIDEO element`,
+          `options.fullscreenElement resoled to ${element}, but it must exist`,
         );
       }
 
-      return element as HTMLVideoElement;
+      return element as HTMLElement;
     },
 
     video: () => {
