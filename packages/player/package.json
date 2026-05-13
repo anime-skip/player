@@ -18,8 +18,9 @@
     "src"
   ],
   "scripts": {
+    "check": "pnpm build && check",
     "dev": "vite dev",
-    "build": "vite build",
+    "build": "buildc -- vite build",
     "compile": "vue-tsc --noEmit",
     "test": "vitest",
     "generate:graphql": "graphql-codegen --config graphql-codegen.yml",
@@ -41,6 +42,7 @@
     "daisyui": "^2.52.0",
     "postcss": "^8.5.14",
     "postcss-unroot": "^1.0.2",
+    "publint": "^0.3.20",
     "rollup-plugin-visualizer": "^7.0.1",
     "tailwindcss": "^3.4.0",
     "typescript": "^6.0.3",

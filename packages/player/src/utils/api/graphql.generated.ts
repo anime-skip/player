@@ -1,12 +1,8 @@
 /** Internal type. DO NOT USE DIRECTLY. */
 type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 /** Internal type. DO NOT USE DIRECTLY. */
-export type Incremental<T> =
-  | T
-  | {
-      [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never;
-    };
-import type { DocumentNode } from 'graphql';
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+import type { DocumentNode } from "graphql";
 import type { GraphQLClient, RequestOptions } from 'graphql-request';
 import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
@@ -14,13 +10,13 @@ export type InputMaybe<T> = Maybe<T>;
 type GraphQLClientRequestHeaders = RequestOptions['requestHeaders'];
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string };
-  String: { input: string; output: string };
-  Boolean: { input: boolean; output: boolean };
-  Int: { input: number; output: number };
-  Float: { input: number; output: number };
-  Time: { input: string; output: string };
-  UInt: { input: string; output: string };
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  Time: { input: string; output: string; }
+  UInt: { input: string; output: string; }
 };
 
 /** Account info that should only be accessible by the authorized user */
@@ -110,7 +106,7 @@ export enum ColorTheme {
   FunimationPurple = 'FUNIMATION_PURPLE',
   /** Change to match where you're watching */
   PerService = 'PER_SERVICE',
-  VrvYellow = 'VRV_YELLOW',
+  VrvYellow = 'VRV_YELLOW'
 }
 
 export type CreateApiClient = {
@@ -194,6 +190,7 @@ export type Episode = BaseModel & {
   userReports: Array<UserReport>;
 };
 
+
 /**
  * Basic information about an episode, including season, numbers, a list of timestamps, and urls that
  * it can be watched at
@@ -214,7 +211,7 @@ export enum EpisodeSource {
   /** Data came from an external source */
   Unknown = 'UNKNOWN',
   /** Data is from <vrv.co> */
-  Vrv = 'VRV',
+  Vrv = 'VRV'
 }
 
 /** Stores information about what where an episode can be watched from */
@@ -264,7 +261,7 @@ export type ExternalLink = {
 
 /** Allowed services for show's external links */
 export enum ExternalService {
-  Anilist = 'ANILIST',
+  Anilist = 'ANILIST'
 }
 
 /** Data required to create a new `Episode`. See `Episode` for a description of each field */
@@ -542,20 +539,24 @@ export type Mutation = {
   verifyEmailAddress: Account;
 };
 
+
 export type MutationAddExternalLinkArgs = {
   showId: Scalars['ID']['input'];
   url: Scalars['String']['input'];
 };
 
+
 export type MutationAddTimestampToTemplateArgs = {
   templateTimestamp: InputTemplateTimestamp;
 };
+
 
 export type MutationChangePasswordArgs = {
   confirmNewPassword: Scalars['String']['input'];
   newPassword: Scalars['String']['input'];
   oldPassword: Scalars['String']['input'];
 };
+
 
 export type MutationCreateAccountArgs = {
   email: Scalars['String']['input'];
@@ -564,103 +565,127 @@ export type MutationCreateAccountArgs = {
   username: Scalars['String']['input'];
 };
 
+
 export type MutationCreateApiClientArgs = {
   client: CreateApiClient;
 };
+
 
 export type MutationCreateEpisodeArgs = {
   episodeInput: InputEpisode;
   showId: Scalars['ID']['input'];
 };
 
+
 export type MutationCreateEpisodeUrlArgs = {
   episodeId: Scalars['ID']['input'];
   episodeUrlInput: InputEpisodeUrl;
 };
+
 
 export type MutationCreateShowArgs = {
   becomeAdmin: Scalars['Boolean']['input'];
   showInput: InputShow;
 };
 
+
 export type MutationCreateShowAdminArgs = {
   showAdminInput: InputShowAdmin;
 };
 
+
 export type MutationCreateTemplateArgs = {
   newTemplate: InputTemplate;
 };
+
 
 export type MutationCreateTimestampArgs = {
   episodeId: Scalars['ID']['input'];
   timestampInput: InputTimestamp;
 };
 
+
 export type MutationCreateTimestampTypeArgs = {
   timestampTypeInput: InputTimestampType;
 };
+
 
 export type MutationCreateUserReportArgs = {
   report?: InputMaybe<InputUserReport>;
 };
 
+
 export type MutationDeleteAccountArgs = {
   deleteToken: Scalars['String']['input'];
 };
+
 
 export type MutationDeleteAccountRequestArgs = {
   passwordHash: Scalars['String']['input'];
 };
 
+
 export type MutationDeleteApiClientArgs = {
   id: Scalars['String']['input'];
 };
+
 
 export type MutationDeleteEpisodeArgs = {
   episodeId: Scalars['ID']['input'];
 };
 
+
 export type MutationDeleteEpisodeUrlArgs = {
   episodeUrl: Scalars['String']['input'];
 };
+
 
 export type MutationDeleteShowArgs = {
   showId: Scalars['ID']['input'];
 };
 
+
 export type MutationDeleteShowAdminArgs = {
   showAdminId: Scalars['ID']['input'];
 };
+
 
 export type MutationDeleteTemplateArgs = {
   templateId: Scalars['ID']['input'];
 };
 
+
 export type MutationDeleteTimestampArgs = {
   timestampId: Scalars['ID']['input'];
 };
 
+
 export type MutationDeleteTimestampTypeArgs = {
   timestampTypeId: Scalars['ID']['input'];
 };
+
 
 export type MutationRemoveExternalLinkArgs = {
   showId: Scalars['ID']['input'];
   url: Scalars['String']['input'];
 };
 
+
 export type MutationRemoveTimestampFromTemplateArgs = {
   templateTimestamp: InputTemplateTimestamp;
 };
+
 
 export type MutationRequestPasswordResetArgs = {
   email: Scalars['String']['input'];
   recaptchaResponse: Scalars['String']['input'];
 };
 
+
 export type MutationResendVerificationEmailArgs = {
   recaptchaResponse: Scalars['String']['input'];
 };
+
 
 export type MutationResetPasswordArgs = {
   confirmNewPassword: Scalars['String']['input'];
@@ -668,55 +693,66 @@ export type MutationResetPasswordArgs = {
   passwordResetToken: Scalars['String']['input'];
 };
 
+
 export type MutationResolveUserReportArgs = {
   id: Scalars['ID']['input'];
   resolvedMessage?: InputMaybe<Scalars['String']['input']>;
 };
 
+
 export type MutationSavePreferencesArgs = {
   preferences: InputPreferences;
 };
+
 
 export type MutationUpdateApiClientArgs = {
   changes: ApiClientChanges;
   id: Scalars['String']['input'];
 };
 
+
 export type MutationUpdateEpisodeArgs = {
   episodeId: Scalars['ID']['input'];
   newEpisode: InputEpisode;
 };
+
 
 export type MutationUpdateEpisodeUrlArgs = {
   episodeUrl: Scalars['String']['input'];
   newEpisodeUrl: InputEpisodeUrl;
 };
 
+
 export type MutationUpdateShowArgs = {
   newShow: InputShow;
   showId: Scalars['ID']['input'];
 };
+
 
 export type MutationUpdateTemplateArgs = {
   newTemplate: InputTemplate;
   templateId: Scalars['ID']['input'];
 };
 
+
 export type MutationUpdateTimestampArgs = {
   newTimestamp: InputTimestamp;
   timestampId: Scalars['ID']['input'];
 };
+
 
 export type MutationUpdateTimestampTypeArgs = {
   newTimestampType: InputTimestampType;
   timestampTypeId: Scalars['ID']['input'];
 };
 
+
 export type MutationUpdateTimestampsArgs = {
   create: Array<InputTimestampOn>;
   delete: Array<Scalars['ID']['input']>;
   update: Array<InputExistingTimestamp>;
 };
+
 
 export type MutationVerifyEmailAddressArgs = {
   validationToken: Scalars['String']['input'];
@@ -896,54 +932,67 @@ export type Query = {
   searchShows: Array<Show>;
 };
 
+
 export type QueryFindApiClientArgs = {
   id: Scalars['String']['input'];
 };
+
 
 export type QueryFindEpisodeArgs = {
   episodeId: Scalars['ID']['input'];
 };
 
+
 export type QueryFindEpisodeByNameArgs = {
   name: Scalars['String']['input'];
 };
+
 
 export type QueryFindEpisodeUrlArgs = {
   episodeUrl: Scalars['String']['input'];
 };
 
+
 export type QueryFindEpisodeUrlsByEpisodeIdArgs = {
   episodeId: Scalars['ID']['input'];
 };
+
 
 export type QueryFindEpisodesByShowIdArgs = {
   showId: Scalars['ID']['input'];
 };
 
+
 export type QueryFindShowArgs = {
   showId: Scalars['ID']['input'];
 };
+
 
 export type QueryFindShowAdminArgs = {
   showAdminId: Scalars['ID']['input'];
 };
 
+
 export type QueryFindShowAdminsByShowIdArgs = {
   showId: Scalars['ID']['input'];
 };
 
+
 export type QueryFindShowAdminsByUserIdArgs = {
   userId: Scalars['ID']['input'];
 };
+
 
 export type QueryFindShowsByExternalIdArgs = {
   service: ExternalService;
   serviceId: Scalars['String']['input'];
 };
 
+
 export type QueryFindTemplateArgs = {
   templateId: Scalars['ID']['input'];
 };
+
 
 export type QueryFindTemplateByDetailsArgs = {
   episodeId?: InputMaybe<Scalars['ID']['input']>;
@@ -951,33 +1000,41 @@ export type QueryFindTemplateByDetailsArgs = {
   showName?: InputMaybe<Scalars['String']['input']>;
 };
 
+
 export type QueryFindTemplatesByShowIdArgs = {
   showId: Scalars['ID']['input'];
 };
+
 
 export type QueryFindTimestampArgs = {
   timestampId: Scalars['ID']['input'];
 };
 
+
 export type QueryFindTimestampTypeArgs = {
   timestampTypeId: Scalars['ID']['input'];
 };
+
 
 export type QueryFindTimestampsByEpisodeIdArgs = {
   episodeId: Scalars['ID']['input'];
 };
 
+
 export type QueryFindUserArgs = {
   userId: Scalars['ID']['input'];
 };
+
 
 export type QueryFindUserByUsernameArgs = {
   username: Scalars['String']['input'];
 };
 
+
 export type QueryFindUserReportArgs = {
   id: Scalars['ID']['input'];
 };
+
 
 export type QueryFindUserReportsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -986,14 +1043,17 @@ export type QueryFindUserReportsArgs = {
   sort?: InputMaybe<Scalars['String']['input']>;
 };
 
+
 export type QueryLoginArgs = {
   passwordHash: Scalars['String']['input'];
   usernameEmail: Scalars['String']['input'];
 };
 
+
 export type QueryLoginRefreshArgs = {
   refreshToken: Scalars['String']['input'];
 };
+
 
 export type QueryMyApiClientsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -1002,10 +1062,12 @@ export type QueryMyApiClientsArgs = {
   sort?: InputMaybe<Scalars['String']['input']>;
 };
 
+
 export type QueryRecentlyAddedEpisodesArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
+
 
 export type QuerySearchEpisodesArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -1014,6 +1076,7 @@ export type QuerySearchEpisodesArgs = {
   showId?: InputMaybe<Scalars['ID']['input']>;
   sort?: InputMaybe<Scalars['String']['input']>;
 };
+
 
 export type QuerySearchShowsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -1034,7 +1097,7 @@ export enum Role {
   /** Reviewer role. Lets the user review issues with timestamps */
   Reviewer = 'REVIEWER',
   /** Basic role. Has no elevated permissions */
-  User = 'USER',
+  User = 'USER'
 }
 
 /** A show containing a list of episodes and relevant links */
@@ -1170,7 +1233,7 @@ export enum TemplateType {
   /** The template is loaded for episodes of a given show where their season is included in `Template.seasons` */
   Seasons = 'SEASONS',
   /** The template is loaded for all episodes of a given show */
-  Show = 'SHOW',
+  Show = 'SHOW'
 }
 
 /**
@@ -1249,7 +1312,7 @@ export type Timestamp = BaseModel & {
 /** Where a timestamp originated from */
 export enum TimestampSource {
   AnimeSkip = 'ANIME_SKIP',
-  BetterVrv = 'BETTER_VRV',
+  BetterVrv = 'BETTER_VRV'
 }
 
 /**
@@ -1465,168 +1528,43 @@ export type TemplateType =
   | 'SHOW';
 
 /** Where a timestamp originated from */
-export type TimestampSource = 'ANIME_SKIP' | 'BETTER_VRV';
+export type TimestampSource =
+  | 'ANIME_SKIP'
+  | 'BETTER_VRV';
 
-export type AccountQueryVariables = Exact<{ [key: string]: never }>;
+export type AccountQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type AccountQuery = {
-  account: {
-    id: string;
-    username: string;
-    email: string;
-    emailVerified: boolean;
-    profileUrl: string;
-    role: Role;
-    createdAt: string;
-    preferences: {
-      enableAutoSkip: boolean;
-      enableAutoPlay: boolean;
-      minimizeToolbarWhenEditing: boolean;
-      hideTimelineWhenMinimized: boolean;
-      colorTheme: ColorTheme;
-      skipBranding: boolean;
-      skipCanon: boolean;
-      skipCredits: boolean;
-      skipFiller: boolean;
-      skipIntros: boolean;
-      skipMixedCredits: boolean;
-      skipMixedIntros: boolean;
-      skipNewCredits: boolean;
-      skipNewIntros: boolean;
-      skipPreview: boolean;
-      skipRecaps: boolean;
-      skipTitleCard: boolean;
-      skipTransitions: boolean;
-    };
-  };
-};
 
-export type AllTimestampTypesQueryVariables = Exact<{ [key: string]: never }>;
+export type AccountQuery = { account: { id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role, createdAt: string, preferences: { enableAutoSkip: boolean, enableAutoPlay: boolean, minimizeToolbarWhenEditing: boolean, hideTimelineWhenMinimized: boolean, colorTheme: ColorTheme, skipBranding: boolean, skipCanon: boolean, skipCredits: boolean, skipFiller: boolean, skipIntros: boolean, skipMixedCredits: boolean, skipMixedIntros: boolean, skipNewCredits: boolean, skipNewIntros: boolean, skipPreview: boolean, skipRecaps: boolean, skipTitleCard: boolean, skipTransitions: boolean } } };
 
-export type AllTimestampTypesQuery = {
-  allTimestampTypes: Array<{ id: string; name: string; description: string }>;
-};
+export type AllTimestampTypesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllTimestampTypesQuery = { allTimestampTypes: Array<{ id: string, name: string, description: string }> };
 
 export type CreateEpisodeMutationVariables = Exact<{
   showId: string | number;
   episodeInput: InputEpisode;
 }>;
 
-export type CreateEpisodeMutation = {
-  createEpisode: {
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-    season: string | null;
-    number: string | null;
-    absoluteNumber: string | null;
-    name: string | null;
-    baseDuration: number | null;
-    show: {
-      id: string;
-      name: string;
-      originalName: string | null;
-      createdAt: string;
-      updatedAt: string;
-      website: string | null;
-      image: string | null;
-    };
-    timestamps: Array<{
-      id: string;
-      createdAt: string;
-      updatedAt: string;
-      at: number;
-      source: TimestampSource;
-      typeId: string;
-      episodeId: string;
-      createdBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-      updatedBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-    }>;
-  };
-};
+
+export type CreateEpisodeMutation = { createEpisode: { id: string, createdAt: string, updatedAt: string, season: string | null, number: string | null, absoluteNumber: string | null, name: string | null, baseDuration: number | null, show: { id: string, name: string, originalName: string | null, createdAt: string, updatedAt: string, website: string | null, image: string | null }, timestamps: Array<{ id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string } }> } };
 
 export type CreateEpisodeUrlMutationVariables = Exact<{
   episodeId: string | number;
   episodeUrlInput: InputEpisodeUrl;
 }>;
 
-export type CreateEpisodeUrlMutation = {
-  createEpisodeUrl: {
-    url: string;
-    createdAt: string;
-    updatedAt: string;
-    duration: number | null;
-    timestampsOffset: number | null;
-    source: EpisodeSource;
-    episode: {
-      id: string;
-      createdAt: string;
-      updatedAt: string;
-      season: string | null;
-      number: string | null;
-      absoluteNumber: string | null;
-      name: string | null;
-      baseDuration: number | null;
-      show: {
-        id: string;
-        name: string;
-        originalName: string | null;
-        createdAt: string;
-        updatedAt: string;
-        website: string | null;
-        image: string | null;
-      };
-      timestamps: Array<{
-        id: string;
-        createdAt: string;
-        updatedAt: string;
-        at: number;
-        source: TimestampSource;
-        typeId: string;
-        episodeId: string;
-        createdBy: {
-          id: string;
-          username: string;
-          profileUrl: string;
-          createdAt: string;
-        };
-        updatedBy: {
-          id: string;
-          username: string;
-          profileUrl: string;
-          createdAt: string;
-        };
-      }>;
-    };
-  };
-};
+
+export type CreateEpisodeUrlMutation = { createEpisodeUrl: { url: string, createdAt: string, updatedAt: string, duration: number | null, timestampsOffset: number | null, source: EpisodeSource, episode: { id: string, createdAt: string, updatedAt: string, season: string | null, number: string | null, absoluteNumber: string | null, name: string | null, baseDuration: number | null, show: { id: string, name: string, originalName: string | null, createdAt: string, updatedAt: string, website: string | null, image: string | null }, timestamps: Array<{ id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string } }> } } };
 
 export type CreateShowMutationVariables = Exact<{
   showInput: InputShow;
   becomeAdmin: boolean;
 }>;
 
-export type CreateShowMutation = {
-  createShow: {
-    id: string;
-    name: string;
-    originalName: string | null;
-    createdAt: string;
-    updatedAt: string;
-    website: string | null;
-    image: string | null;
-  };
-};
+
+export type CreateShowMutation = { createShow: { id: string, name: string, originalName: string | null, createdAt: string, updatedAt: string, website: string | null, image: string | null } };
 
 export type FindTemplateByDetailsQueryVariables = Exact<{
   episodeId?: string | number | null | undefined;
@@ -1634,656 +1572,102 @@ export type FindTemplateByDetailsQueryVariables = Exact<{
   season?: string | null | undefined;
 }>;
 
-export type FindTemplateByDetailsQuery = {
-  findTemplateByDetails: {
-    id: string;
-    type: TemplateType;
-    createdAt: string;
-    createdByUserId: string;
-    updatedAt: string;
-    updatedByUserId: string;
-    seasons: Array<string> | null;
-    sourceEpisodeId: string;
-    createdBy: {
-      id: string;
-      username: string;
-      profileUrl: string;
-      createdAt: string;
-    };
-    updatedBy: {
-      id: string;
-      username: string;
-      profileUrl: string;
-      createdAt: string;
-    };
-    sourceEpisode: {
-      id: string;
-      createdAt: string;
-      updatedAt: string;
-      season: string | null;
-      number: string | null;
-      absoluteNumber: string | null;
-      name: string | null;
-      baseDuration: number | null;
-      show: {
-        id: string;
-        name: string;
-        originalName: string | null;
-        createdAt: string;
-        updatedAt: string;
-        website: string | null;
-        image: string | null;
-      };
-      timestamps: Array<{
-        id: string;
-        createdAt: string;
-        updatedAt: string;
-        at: number;
-        source: TimestampSource;
-        typeId: string;
-        episodeId: string;
-        createdBy: {
-          id: string;
-          username: string;
-          profileUrl: string;
-          createdAt: string;
-        };
-        updatedBy: {
-          id: string;
-          username: string;
-          profileUrl: string;
-          createdAt: string;
-        };
-      }>;
-    };
-    timestamps: Array<{
-      id: string;
-      createdAt: string;
-      updatedAt: string;
-      at: number;
-      source: TimestampSource;
-      typeId: string;
-      episodeId: string;
-      createdBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-      updatedBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-    }>;
-  };
-};
+
+export type FindTemplateByDetailsQuery = { findTemplateByDetails: { id: string, type: TemplateType, createdAt: string, createdByUserId: string, updatedAt: string, updatedByUserId: string, seasons: Array<string> | null, sourceEpisodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string }, sourceEpisode: { id: string, createdAt: string, updatedAt: string, season: string | null, number: string | null, absoluteNumber: string | null, name: string | null, baseDuration: number | null, show: { id: string, name: string, originalName: string | null, createdAt: string, updatedAt: string, website: string | null, image: string | null }, timestamps: Array<{ id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string } }> }, timestamps: Array<{ id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string } }> } };
 
 export type DeleteTemplateMutationVariables = Exact<{
   id: string | number;
 }>;
 
-export type DeleteTemplateMutation = {
-  deleteTemplate: {
-    id: string;
-    type: TemplateType;
-    createdAt: string;
-    createdByUserId: string;
-    updatedAt: string;
-    updatedByUserId: string;
-    seasons: Array<string> | null;
-    sourceEpisodeId: string;
-    createdBy: {
-      id: string;
-      username: string;
-      profileUrl: string;
-      createdAt: string;
-    };
-    updatedBy: {
-      id: string;
-      username: string;
-      profileUrl: string;
-      createdAt: string;
-    };
-    sourceEpisode: {
-      id: string;
-      createdAt: string;
-      updatedAt: string;
-      season: string | null;
-      number: string | null;
-      absoluteNumber: string | null;
-      name: string | null;
-      baseDuration: number | null;
-      show: {
-        id: string;
-        name: string;
-        originalName: string | null;
-        createdAt: string;
-        updatedAt: string;
-        website: string | null;
-        image: string | null;
-      };
-      timestamps: Array<{
-        id: string;
-        createdAt: string;
-        updatedAt: string;
-        at: number;
-        source: TimestampSource;
-        typeId: string;
-        episodeId: string;
-        createdBy: {
-          id: string;
-          username: string;
-          profileUrl: string;
-          createdAt: string;
-        };
-        updatedBy: {
-          id: string;
-          username: string;
-          profileUrl: string;
-          createdAt: string;
-        };
-      }>;
-    };
-    timestamps: Array<{
-      id: string;
-      createdAt: string;
-      updatedAt: string;
-      at: number;
-      source: TimestampSource;
-      typeId: string;
-      episodeId: string;
-      createdBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-      updatedBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-    }>;
-  };
-};
+
+export type DeleteTemplateMutation = { deleteTemplate: { id: string, type: TemplateType, createdAt: string, createdByUserId: string, updatedAt: string, updatedByUserId: string, seasons: Array<string> | null, sourceEpisodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string }, sourceEpisode: { id: string, createdAt: string, updatedAt: string, season: string | null, number: string | null, absoluteNumber: string | null, name: string | null, baseDuration: number | null, show: { id: string, name: string, originalName: string | null, createdAt: string, updatedAt: string, website: string | null, image: string | null }, timestamps: Array<{ id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string } }> }, timestamps: Array<{ id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string } }> } };
 
 export type FindEpisodeByNameQueryVariables = Exact<{
   name: string;
 }>;
 
-export type FindEpisodeByNameQuery = {
-  findEpisodeByName: Array<{
-    id: string | null;
-    name: string | null;
-    season: string | null;
-    number: string | null;
-    absoluteNumber: string | null;
-    baseDuration: number | null;
-    source: TimestampSource | null;
-    showId: string;
-    show: { name: string };
-    timestamps: Array<{ id: string | null; at: number; typeId: string }>;
-  }>;
-};
+
+export type FindEpisodeByNameQuery = { findEpisodeByName: Array<{ id: string | null, name: string | null, season: string | null, number: string | null, absoluteNumber: string | null, baseDuration: number | null, source: TimestampSource | null, showId: string, show: { name: string }, timestamps: Array<{ id: string | null, at: number, typeId: string }> }> };
 
 export type FindEpisodeQueryVariables = Exact<{
   episodeId: string | number;
 }>;
 
-export type FindEpisodeQuery = {
-  findEpisode: {
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-    season: string | null;
-    number: string | null;
-    absoluteNumber: string | null;
-    name: string | null;
-    baseDuration: number | null;
-    show: {
-      id: string;
-      name: string;
-      originalName: string | null;
-      createdAt: string;
-      updatedAt: string;
-      website: string | null;
-      image: string | null;
-    };
-    timestamps: Array<{
-      id: string;
-      createdAt: string;
-      updatedAt: string;
-      at: number;
-      source: TimestampSource;
-      typeId: string;
-      episodeId: string;
-      createdBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-      updatedBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-    }>;
-  };
-};
+
+export type FindEpisodeQuery = { findEpisode: { id: string, createdAt: string, updatedAt: string, season: string | null, number: string | null, absoluteNumber: string | null, name: string | null, baseDuration: number | null, show: { id: string, name: string, originalName: string | null, createdAt: string, updatedAt: string, website: string | null, image: string | null }, timestamps: Array<{ id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string } }> } };
 
 export type FindEpisodeUrlQueryVariables = Exact<{
   url: string;
 }>;
 
-export type FindEpisodeUrlQuery = {
-  findEpisodeUrl: {
-    url: string;
-    createdAt: string;
-    updatedAt: string;
-    duration: number | null;
-    timestampsOffset: number | null;
-    source: EpisodeSource;
-    episode: {
-      id: string;
-      createdAt: string;
-      updatedAt: string;
-      season: string | null;
-      number: string | null;
-      absoluteNumber: string | null;
-      name: string | null;
-      baseDuration: number | null;
-      show: {
-        id: string;
-        name: string;
-        originalName: string | null;
-        createdAt: string;
-        updatedAt: string;
-        website: string | null;
-        image: string | null;
-      };
-      timestamps: Array<{
-        id: string;
-        createdAt: string;
-        updatedAt: string;
-        at: number;
-        source: TimestampSource;
-        typeId: string;
-        episodeId: string;
-        createdBy: {
-          id: string;
-          username: string;
-          profileUrl: string;
-          createdAt: string;
-        };
-        updatedBy: {
-          id: string;
-          username: string;
-          profileUrl: string;
-          createdAt: string;
-        };
-      }>;
-    };
-  };
-};
+
+export type FindEpisodeUrlQuery = { findEpisodeUrl: { url: string, createdAt: string, updatedAt: string, duration: number | null, timestampsOffset: number | null, source: EpisodeSource, episode: { id: string, createdAt: string, updatedAt: string, season: string | null, number: string | null, absoluteNumber: string | null, name: string | null, baseDuration: number | null, show: { id: string, name: string, originalName: string | null, createdAt: string, updatedAt: string, website: string | null, image: string | null }, timestamps: Array<{ id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string } }> } } };
 
 export type LoginQueryVariables = Exact<{
   usernameEmail: string;
   passwordHash: string;
 }>;
 
-export type LoginQuery = {
-  login: {
-    authToken: string;
-    refreshToken: string;
-    account: {
-      id: string;
-      username: string;
-      email: string;
-      emailVerified: boolean;
-      profileUrl: string;
-      role: Role;
-      createdAt: string;
-    };
-  };
-};
+
+export type LoginQuery = { login: { authToken: string, refreshToken: string, account: { id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role, createdAt: string } } };
 
 export type LoginRefreshQueryVariables = Exact<{
   refreshToken: string;
 }>;
 
-export type LoginRefreshQuery = {
-  loginRefresh: {
-    authToken: string;
-    refreshToken: string;
-    account: {
-      id: string;
-      username: string;
-      email: string;
-      emailVerified: boolean;
-      profileUrl: string;
-      role: Role;
-      createdAt: string;
-    };
-  };
-};
+
+export type LoginRefreshQuery = { loginRefresh: { authToken: string, refreshToken: string, account: { id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role, createdAt: string } } };
 
 export type SavePreferencesMutationVariables = Exact<{
   preferences: InputPreferences;
 }>;
 
-export type SavePreferencesMutation = {
-  savePreferences: { updatedAt: string };
-};
+
+export type SavePreferencesMutation = { savePreferences: { updatedAt: string } };
 
 export type UpdateTemplateMutationVariables = Exact<{
   id: string | number;
   newTemplate: InputTemplate;
 }>;
 
-export type UpdateTemplateMutation = {
-  updateTemplate: {
-    id: string;
-    type: TemplateType;
-    createdAt: string;
-    createdByUserId: string;
-    updatedAt: string;
-    updatedByUserId: string;
-    seasons: Array<string> | null;
-    sourceEpisodeId: string;
-    createdBy: {
-      id: string;
-      username: string;
-      profileUrl: string;
-      createdAt: string;
-    };
-    updatedBy: {
-      id: string;
-      username: string;
-      profileUrl: string;
-      createdAt: string;
-    };
-    sourceEpisode: {
-      id: string;
-      createdAt: string;
-      updatedAt: string;
-      season: string | null;
-      number: string | null;
-      absoluteNumber: string | null;
-      name: string | null;
-      baseDuration: number | null;
-      show: {
-        id: string;
-        name: string;
-        originalName: string | null;
-        createdAt: string;
-        updatedAt: string;
-        website: string | null;
-        image: string | null;
-      };
-      timestamps: Array<{
-        id: string;
-        createdAt: string;
-        updatedAt: string;
-        at: number;
-        source: TimestampSource;
-        typeId: string;
-        episodeId: string;
-        createdBy: {
-          id: string;
-          username: string;
-          profileUrl: string;
-          createdAt: string;
-        };
-        updatedBy: {
-          id: string;
-          username: string;
-          profileUrl: string;
-          createdAt: string;
-        };
-      }>;
-    };
-    timestamps: Array<{
-      id: string;
-      createdAt: string;
-      updatedAt: string;
-      at: number;
-      source: TimestampSource;
-      typeId: string;
-      episodeId: string;
-      createdBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-      updatedBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-    }>;
-  };
-};
+
+export type UpdateTemplateMutation = { updateTemplate: { id: string, type: TemplateType, createdAt: string, createdByUserId: string, updatedAt: string, updatedByUserId: string, seasons: Array<string> | null, sourceEpisodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string }, sourceEpisode: { id: string, createdAt: string, updatedAt: string, season: string | null, number: string | null, absoluteNumber: string | null, name: string | null, baseDuration: number | null, show: { id: string, name: string, originalName: string | null, createdAt: string, updatedAt: string, website: string | null, image: string | null }, timestamps: Array<{ id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string } }> }, timestamps: Array<{ id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string } }> } };
 
 export type CreateTemplateMutationVariables = Exact<{
   newTemplate: InputTemplate;
 }>;
 
-export type CreateTemplateMutation = {
-  createTemplate: {
-    id: string;
-    type: TemplateType;
-    createdAt: string;
-    createdByUserId: string;
-    updatedAt: string;
-    updatedByUserId: string;
-    seasons: Array<string> | null;
-    sourceEpisodeId: string;
-    createdBy: {
-      id: string;
-      username: string;
-      profileUrl: string;
-      createdAt: string;
-    };
-    updatedBy: {
-      id: string;
-      username: string;
-      profileUrl: string;
-      createdAt: string;
-    };
-    sourceEpisode: {
-      id: string;
-      createdAt: string;
-      updatedAt: string;
-      season: string | null;
-      number: string | null;
-      absoluteNumber: string | null;
-      name: string | null;
-      baseDuration: number | null;
-      show: {
-        id: string;
-        name: string;
-        originalName: string | null;
-        createdAt: string;
-        updatedAt: string;
-        website: string | null;
-        image: string | null;
-      };
-      timestamps: Array<{
-        id: string;
-        createdAt: string;
-        updatedAt: string;
-        at: number;
-        source: TimestampSource;
-        typeId: string;
-        episodeId: string;
-        createdBy: {
-          id: string;
-          username: string;
-          profileUrl: string;
-          createdAt: string;
-        };
-        updatedBy: {
-          id: string;
-          username: string;
-          profileUrl: string;
-          createdAt: string;
-        };
-      }>;
-    };
-    timestamps: Array<{
-      id: string;
-      createdAt: string;
-      updatedAt: string;
-      at: number;
-      source: TimestampSource;
-      typeId: string;
-      episodeId: string;
-      createdBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-      updatedBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-    }>;
-  };
-};
+
+export type CreateTemplateMutation = { createTemplate: { id: string, type: TemplateType, createdAt: string, createdByUserId: string, updatedAt: string, updatedByUserId: string, seasons: Array<string> | null, sourceEpisodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string }, sourceEpisode: { id: string, createdAt: string, updatedAt: string, season: string | null, number: string | null, absoluteNumber: string | null, name: string | null, baseDuration: number | null, show: { id: string, name: string, originalName: string | null, createdAt: string, updatedAt: string, website: string | null, image: string | null }, timestamps: Array<{ id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string } }> }, timestamps: Array<{ id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string } }> } };
 
 export type AddTimestampToTemplateMutationVariables = Exact<{
   timestamp: InputTemplateTimestamp;
 }>;
 
-export type AddTimestampToTemplateMutation = {
-  addTimestampToTemplate: {
-    timestamp: {
-      id: string;
-      createdAt: string;
-      updatedAt: string;
-      at: number;
-      source: TimestampSource;
-      typeId: string;
-      episodeId: string;
-      createdBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-      updatedBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-    };
-  };
-};
+
+export type AddTimestampToTemplateMutation = { addTimestampToTemplate: { timestamp: { id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string } } } };
 
 export type RemoveTimestampFromTemplateMutationVariables = Exact<{
   timestamp: InputTemplateTimestamp;
 }>;
 
-export type RemoveTimestampFromTemplateMutation = {
-  removeTimestampFromTemplate: {
-    timestamp: {
-      id: string;
-      createdAt: string;
-      updatedAt: string;
-      at: number;
-      source: TimestampSource;
-      typeId: string;
-      episodeId: string;
-      createdBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-      updatedBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-    };
-  };
-};
+
+export type RemoveTimestampFromTemplateMutation = { removeTimestampFromTemplate: { timestamp: { id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string } } } };
 
 export type SearchShowsQueryVariables = Exact<{
   search: string;
 }>;
 
-export type SearchShowsQuery = {
-  searchShows: Array<{
-    id: string;
-    name: string;
-    originalName: string | null;
-    createdAt: string;
-    updatedAt: string;
-    website: string | null;
-    image: string | null;
-  }>;
-};
+
+export type SearchShowsQuery = { searchShows: Array<{ id: string, name: string, originalName: string | null, createdAt: string, updatedAt: string, website: string | null, image: string | null }> };
 
 export type UpdateEpisodeMutationVariables = Exact<{
   episodeId: string | number;
   newEpisode: InputEpisode;
 }>;
 
-export type UpdateEpisodeMutation = {
-  updateEpisode: {
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-    season: string | null;
-    number: string | null;
-    absoluteNumber: string | null;
-    name: string | null;
-    baseDuration: number | null;
-    show: {
-      id: string;
-      name: string;
-      originalName: string | null;
-      createdAt: string;
-      updatedAt: string;
-      website: string | null;
-      image: string | null;
-    };
-    timestamps: Array<{
-      id: string;
-      createdAt: string;
-      updatedAt: string;
-      at: number;
-      source: TimestampSource;
-      typeId: string;
-      episodeId: string;
-      createdBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-      updatedBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-    }>;
-  };
-};
+
+export type UpdateEpisodeMutation = { updateEpisode: { id: string, createdAt: string, updatedAt: string, season: string | null, number: string | null, absoluteNumber: string | null, name: string | null, baseDuration: number | null, show: { id: string, name: string, originalName: string | null, createdAt: string, updatedAt: string, website: string | null, image: string | null }, timestamps: Array<{ id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string } }> } };
 
 export type UpdateTimestampsMutationVariables = Exact<{
   create: Array<InputTimestampOn> | InputTimestampOn;
@@ -2291,1109 +1675,437 @@ export type UpdateTimestampsMutationVariables = Exact<{
   delete: Array<string | number> | string | number;
 }>;
 
-export type UpdateTimestampsMutation = {
-  updateTimestamps: {
-    created: Array<{
-      id: string;
-      createdAt: string;
-      updatedAt: string;
-      at: number;
-      source: TimestampSource;
-      typeId: string;
-      episodeId: string;
-      createdBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-      updatedBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-    }>;
-    updated: Array<{
-      id: string;
-      createdAt: string;
-      updatedAt: string;
-      at: number;
-      source: TimestampSource;
-      typeId: string;
-      episodeId: string;
-      createdBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-      updatedBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-    }>;
-    deleted: Array<{
-      id: string;
-      createdAt: string;
-      updatedAt: string;
-      at: number;
-      source: TimestampSource;
-      typeId: string;
-      episodeId: string;
-      createdBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-      updatedBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-    }>;
-  };
-};
 
-export type MyAccountFragment = {
-  id: string;
-  username: string;
-  email: string;
-  emailVerified: boolean;
-  profileUrl: string;
-  role: Role;
-  createdAt: string;
-};
+export type UpdateTimestampsMutation = { updateTimestamps: { created: Array<{ id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string } }>, updated: Array<{ id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string } }>, deleted: Array<{ id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string } }> } };
 
-export type PreferencesFragment = {
-  enableAutoSkip: boolean;
-  enableAutoPlay: boolean;
-  minimizeToolbarWhenEditing: boolean;
-  hideTimelineWhenMinimized: boolean;
-  colorTheme: ColorTheme;
-  skipBranding: boolean;
-  skipCanon: boolean;
-  skipCredits: boolean;
-  skipFiller: boolean;
-  skipIntros: boolean;
-  skipMixedCredits: boolean;
-  skipMixedIntros: boolean;
-  skipNewCredits: boolean;
-  skipNewIntros: boolean;
-  skipPreview: boolean;
-  skipRecaps: boolean;
-  skipTitleCard: boolean;
-  skipTransitions: boolean;
-};
+export type MyAccountFragment = { id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role, createdAt: string };
 
-export type AuthDetailsFragment = {
-  authToken: string;
-  refreshToken: string;
-  account: {
-    id: string;
-    username: string;
-    email: string;
-    emailVerified: boolean;
-    profileUrl: string;
-    role: Role;
-    createdAt: string;
-  };
-};
+export type PreferencesFragment = { enableAutoSkip: boolean, enableAutoPlay: boolean, minimizeToolbarWhenEditing: boolean, hideTimelineWhenMinimized: boolean, colorTheme: ColorTheme, skipBranding: boolean, skipCanon: boolean, skipCredits: boolean, skipFiller: boolean, skipIntros: boolean, skipMixedCredits: boolean, skipMixedIntros: boolean, skipNewCredits: boolean, skipNewIntros: boolean, skipPreview: boolean, skipRecaps: boolean, skipTitleCard: boolean, skipTransitions: boolean };
 
-export type EpisodeUrlFragment = {
-  url: string;
-  createdAt: string;
-  updatedAt: string;
-  duration: number | null;
-  timestampsOffset: number | null;
-  source: EpisodeSource;
-  episode: {
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-    season: string | null;
-    number: string | null;
-    absoluteNumber: string | null;
-    name: string | null;
-    baseDuration: number | null;
-    show: {
-      id: string;
-      name: string;
-      originalName: string | null;
-      createdAt: string;
-      updatedAt: string;
-      website: string | null;
-      image: string | null;
-    };
-    timestamps: Array<{
-      id: string;
-      createdAt: string;
-      updatedAt: string;
-      at: number;
-      source: TimestampSource;
-      typeId: string;
-      episodeId: string;
-      createdBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-      updatedBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-    }>;
-  };
-};
+export type AuthDetailsFragment = { authToken: string, refreshToken: string, account: { id: string, username: string, email: string, emailVerified: boolean, profileUrl: string, role: Role, createdAt: string } };
 
-export type EpisodeFragment = {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  season: string | null;
-  number: string | null;
-  absoluteNumber: string | null;
-  name: string | null;
-  baseDuration: number | null;
-  show: {
-    id: string;
-    name: string;
-    originalName: string | null;
-    createdAt: string;
-    updatedAt: string;
-    website: string | null;
-    image: string | null;
-  };
-  timestamps: Array<{
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-    at: number;
-    source: TimestampSource;
-    typeId: string;
-    episodeId: string;
-    createdBy: {
-      id: string;
-      username: string;
-      profileUrl: string;
-      createdAt: string;
-    };
-    updatedBy: {
-      id: string;
-      username: string;
-      profileUrl: string;
-      createdAt: string;
-    };
-  }>;
-};
+export type EpisodeUrlFragment = { url: string, createdAt: string, updatedAt: string, duration: number | null, timestampsOffset: number | null, source: EpisodeSource, episode: { id: string, createdAt: string, updatedAt: string, season: string | null, number: string | null, absoluteNumber: string | null, name: string | null, baseDuration: number | null, show: { id: string, name: string, originalName: string | null, createdAt: string, updatedAt: string, website: string | null, image: string | null }, timestamps: Array<{ id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string } }> } };
 
-export type ShowFragment = {
-  id: string;
-  name: string;
-  originalName: string | null;
-  createdAt: string;
-  updatedAt: string;
-  website: string | null;
-  image: string | null;
-};
+export type EpisodeFragment = { id: string, createdAt: string, updatedAt: string, season: string | null, number: string | null, absoluteNumber: string | null, name: string | null, baseDuration: number | null, show: { id: string, name: string, originalName: string | null, createdAt: string, updatedAt: string, website: string | null, image: string | null }, timestamps: Array<{ id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string } }> };
 
-export type TimestampFragment = {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  at: number;
-  source: TimestampSource;
-  typeId: string;
-  episodeId: string;
-  createdBy: {
-    id: string;
-    username: string;
-    profileUrl: string;
-    createdAt: string;
-  };
-  updatedBy: {
-    id: string;
-    username: string;
-    profileUrl: string;
-    createdAt: string;
-  };
-};
+export type ShowFragment = { id: string, name: string, originalName: string | null, createdAt: string, updatedAt: string, website: string | null, image: string | null };
 
-export type TimestampTypeFragment = {
-  id: string;
-  name: string;
-  description: string;
-};
+export type TimestampFragment = { id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string } };
 
-export type UserFragment = {
-  id: string;
-  username: string;
-  profileUrl: string;
-  createdAt: string;
-};
+export type TimestampTypeFragment = { id: string, name: string, description: string };
 
-export type ThirdPartyEpisodeFragment = {
-  id: string | null;
-  name: string | null;
-  season: string | null;
-  number: string | null;
-  absoluteNumber: string | null;
-  baseDuration: number | null;
-  source: TimestampSource | null;
-  showId: string;
-  show: { name: string };
-  timestamps: Array<{ id: string | null; at: number; typeId: string }>;
-};
+export type UserFragment = { id: string, username: string, profileUrl: string, createdAt: string };
+
+export type ThirdPartyEpisodeFragment = { id: string | null, name: string | null, season: string | null, number: string | null, absoluteNumber: string | null, baseDuration: number | null, source: TimestampSource | null, showId: string, show: { name: string }, timestamps: Array<{ id: string | null, at: number, typeId: string }> };
 
 export type ThirdPartyShowFragment = { name: string };
 
-export type ThirdPartyTimestampFragment = {
-  id: string | null;
-  at: number;
-  typeId: string;
-};
+export type ThirdPartyTimestampFragment = { id: string | null, at: number, typeId: string };
 
-export type TemplateFragment = {
-  id: string;
-  type: TemplateType;
-  createdAt: string;
-  createdByUserId: string;
-  updatedAt: string;
-  updatedByUserId: string;
-  seasons: Array<string> | null;
-  sourceEpisodeId: string;
-  createdBy: {
-    id: string;
-    username: string;
-    profileUrl: string;
-    createdAt: string;
-  };
-  updatedBy: {
-    id: string;
-    username: string;
-    profileUrl: string;
-    createdAt: string;
-  };
-  sourceEpisode: {
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-    season: string | null;
-    number: string | null;
-    absoluteNumber: string | null;
-    name: string | null;
-    baseDuration: number | null;
-    show: {
-      id: string;
-      name: string;
-      originalName: string | null;
-      createdAt: string;
-      updatedAt: string;
-      website: string | null;
-      image: string | null;
-    };
-    timestamps: Array<{
-      id: string;
-      createdAt: string;
-      updatedAt: string;
-      at: number;
-      source: TimestampSource;
-      typeId: string;
-      episodeId: string;
-      createdBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-      updatedBy: {
-        id: string;
-        username: string;
-        profileUrl: string;
-        createdAt: string;
-      };
-    }>;
-  };
-  timestamps: Array<{
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-    at: number;
-    source: TimestampSource;
-    typeId: string;
-    episodeId: string;
-    createdBy: {
-      id: string;
-      username: string;
-      profileUrl: string;
-      createdAt: string;
-    };
-    updatedBy: {
-      id: string;
-      username: string;
-      profileUrl: string;
-      createdAt: string;
-    };
-  }>;
-};
+export type TemplateFragment = { id: string, type: TemplateType, createdAt: string, createdByUserId: string, updatedAt: string, updatedByUserId: string, seasons: Array<string> | null, sourceEpisodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string }, sourceEpisode: { id: string, createdAt: string, updatedAt: string, season: string | null, number: string | null, absoluteNumber: string | null, name: string | null, baseDuration: number | null, show: { id: string, name: string, originalName: string | null, createdAt: string, updatedAt: string, website: string | null, image: string | null }, timestamps: Array<{ id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string } }> }, timestamps: Array<{ id: string, createdAt: string, updatedAt: string, at: number, source: TimestampSource, typeId: string, episodeId: string, createdBy: { id: string, username: string, profileUrl: string, createdAt: string }, updatedBy: { id: string, username: string, profileUrl: string, createdAt: string } }> };
 
 export const PreferencesFragmentDoc = gql`
-  fragment Preferences on Preferences {
-    enableAutoSkip
-    enableAutoPlay
-    minimizeToolbarWhenEditing
-    hideTimelineWhenMinimized
-    colorTheme
-    skipBranding
-    skipCanon
-    skipCredits
-    skipFiller
-    skipIntros
-    skipMixedCredits
-    skipMixedIntros
-    skipNewCredits
-    skipNewIntros
-    skipPreview
-    skipRecaps
-    skipTitleCard
-    skipTransitions
-  }
-`;
+    fragment Preferences on Preferences {
+  enableAutoSkip
+  enableAutoPlay
+  minimizeToolbarWhenEditing
+  hideTimelineWhenMinimized
+  colorTheme
+  skipBranding
+  skipCanon
+  skipCredits
+  skipFiller
+  skipIntros
+  skipMixedCredits
+  skipMixedIntros
+  skipNewCredits
+  skipNewIntros
+  skipPreview
+  skipRecaps
+  skipTitleCard
+  skipTransitions
+}
+    `;
 export const MyAccountFragmentDoc = gql`
-  fragment MyAccount on Account {
-    id
-    username
-    email
-    emailVerified
-    profileUrl
-    role
-    createdAt
-  }
-`;
+    fragment MyAccount on Account {
+  id
+  username
+  email
+  emailVerified
+  profileUrl
+  role
+  createdAt
+}
+    `;
 export const AuthDetailsFragmentDoc = gql`
-  fragment AuthDetails on LoginData {
-    authToken
-    refreshToken
-    account {
-      ...MyAccount
-    }
+    fragment AuthDetails on LoginData {
+  authToken
+  refreshToken
+  account {
+    ...MyAccount
   }
-  ${MyAccountFragmentDoc}
-`;
+}
+    ${MyAccountFragmentDoc}`;
 export const ShowFragmentDoc = gql`
-  fragment Show on Show {
-    id
-    name
-    originalName
-    createdAt
-    updatedAt
-    website
-    image
-  }
-`;
+    fragment Show on Show {
+  id
+  name
+  originalName
+  createdAt
+  updatedAt
+  website
+  image
+}
+    `;
 export const UserFragmentDoc = gql`
-  fragment User on User {
-    id
-    username
-    profileUrl
-    createdAt
-  }
-`;
+    fragment User on User {
+  id
+  username
+  profileUrl
+  createdAt
+}
+    `;
 export const TimestampFragmentDoc = gql`
-  fragment Timestamp on Timestamp {
-    id
-    createdAt
-    createdBy {
-      ...User
-    }
-    updatedAt
-    updatedBy {
-      ...User
-    }
-    at
-    source
-    typeId
-    episodeId
+    fragment Timestamp on Timestamp {
+  id
+  createdAt
+  createdBy {
+    ...User
   }
-  ${UserFragmentDoc}
-`;
+  updatedAt
+  updatedBy {
+    ...User
+  }
+  at
+  source
+  typeId
+  episodeId
+}
+    ${UserFragmentDoc}`;
 export const EpisodeFragmentDoc = gql`
-  fragment Episode on Episode {
-    id
-    createdAt
-    updatedAt
-    season
-    number
-    absoluteNumber
-    name
-    baseDuration
-    show {
-      ...Show
-    }
-    timestamps {
-      ...Timestamp
-    }
+    fragment Episode on Episode {
+  id
+  createdAt
+  updatedAt
+  season
+  number
+  absoluteNumber
+  name
+  baseDuration
+  show {
+    ...Show
   }
-  ${ShowFragmentDoc}
-  ${TimestampFragmentDoc}
-`;
+  timestamps {
+    ...Timestamp
+  }
+}
+    ${ShowFragmentDoc}
+${TimestampFragmentDoc}`;
 export const EpisodeUrlFragmentDoc = gql`
-  fragment EpisodeUrl on EpisodeUrl {
-    url
-    createdAt
-    updatedAt
-    duration
-    timestampsOffset
-    episode {
-      ...Episode
-    }
-    source
+    fragment EpisodeUrl on EpisodeUrl {
+  url
+  createdAt
+  updatedAt
+  duration
+  timestampsOffset
+  episode {
+    ...Episode
   }
-  ${EpisodeFragmentDoc}
-`;
+  source
+}
+    ${EpisodeFragmentDoc}`;
 export const TimestampTypeFragmentDoc = gql`
-  fragment TimestampType on TimestampType {
-    id
-    name
-    description
-  }
-`;
+    fragment TimestampType on TimestampType {
+  id
+  name
+  description
+}
+    `;
 export const ThirdPartyShowFragmentDoc = gql`
-  fragment ThirdPartyShow on ThirdPartyShow {
-    name
-  }
-`;
+    fragment ThirdPartyShow on ThirdPartyShow {
+  name
+}
+    `;
 export const ThirdPartyTimestampFragmentDoc = gql`
-  fragment ThirdPartyTimestamp on ThirdPartyTimestamp {
-    id
-    at
-    typeId
-  }
-`;
+    fragment ThirdPartyTimestamp on ThirdPartyTimestamp {
+  id
+  at
+  typeId
+}
+    `;
 export const ThirdPartyEpisodeFragmentDoc = gql`
-  fragment ThirdPartyEpisode on ThirdPartyEpisode {
-    id
-    name
-    season
-    number
-    absoluteNumber
-    baseDuration
-    source
-    showId
-    show {
-      ...ThirdPartyShow
-    }
-    timestamps {
-      ...ThirdPartyTimestamp
+    fragment ThirdPartyEpisode on ThirdPartyEpisode {
+  id
+  name
+  season
+  number
+  absoluteNumber
+  baseDuration
+  source
+  showId
+  show {
+    ...ThirdPartyShow
+  }
+  timestamps {
+    ...ThirdPartyTimestamp
+  }
+}
+    ${ThirdPartyShowFragmentDoc}
+${ThirdPartyTimestampFragmentDoc}`;
+export const TemplateFragmentDoc = gql`
+    fragment Template on Template {
+  id
+  type
+  createdAt
+  createdByUserId
+  createdBy {
+    ...User
+  }
+  updatedAt
+  updatedByUserId
+  updatedBy {
+    ...User
+  }
+  seasons
+  sourceEpisodeId
+  sourceEpisode {
+    ...Episode
+  }
+  timestamps {
+    ...Timestamp
+  }
+}
+    ${UserFragmentDoc}
+${EpisodeFragmentDoc}
+${TimestampFragmentDoc}`;
+export const AccountDocument = gql`
+    query account {
+  account {
+    ...MyAccount
+    preferences {
+      ...Preferences
     }
   }
-  ${ThirdPartyShowFragmentDoc}
-  ${ThirdPartyTimestampFragmentDoc}
-`;
-export const TemplateFragmentDoc = gql`
-  fragment Template on Template {
-    id
-    type
-    createdAt
-    createdByUserId
-    createdBy {
-      ...User
-    }
+}
+    ${MyAccountFragmentDoc}
+${PreferencesFragmentDoc}`;
+export const AllTimestampTypesDocument = gql`
+    query allTimestampTypes {
+  allTimestampTypes {
+    ...TimestampType
+  }
+}
+    ${TimestampTypeFragmentDoc}`;
+export const CreateEpisodeDocument = gql`
+    mutation createEpisode($showId: ID!, $episodeInput: InputEpisode!) {
+  createEpisode(showId: $showId, episodeInput: $episodeInput) {
+    ...Episode
+  }
+}
+    ${EpisodeFragmentDoc}`;
+export const CreateEpisodeUrlDocument = gql`
+    mutation createEpisodeUrl($episodeId: ID!, $episodeUrlInput: InputEpisodeUrl!) {
+  createEpisodeUrl(episodeId: $episodeId, episodeUrlInput: $episodeUrlInput) {
+    ...EpisodeUrl
+  }
+}
+    ${EpisodeUrlFragmentDoc}`;
+export const CreateShowDocument = gql`
+    mutation createShow($showInput: InputShow!, $becomeAdmin: Boolean!) {
+  createShow(showInput: $showInput, becomeAdmin: $becomeAdmin) {
+    ...Show
+  }
+}
+    ${ShowFragmentDoc}`;
+export const FindTemplateByDetailsDocument = gql`
+    query findTemplateByDetails($episodeId: ID, $showName: String, $season: String) {
+  findTemplateByDetails(
+    episodeId: $episodeId
+    showName: $showName
+    season: $season
+  ) {
+    ...Template
+  }
+}
+    ${TemplateFragmentDoc}`;
+export const DeleteTemplateDocument = gql`
+    mutation deleteTemplate($id: ID!) {
+  deleteTemplate(templateId: $id) {
+    ...Template
+  }
+}
+    ${TemplateFragmentDoc}`;
+export const FindEpisodeByNameDocument = gql`
+    query findEpisodeByName($name: String!) {
+  findEpisodeByName(name: $name) {
+    ...ThirdPartyEpisode
+  }
+}
+    ${ThirdPartyEpisodeFragmentDoc}`;
+export const FindEpisodeDocument = gql`
+    query findEpisode($episodeId: ID!) {
+  findEpisode(episodeId: $episodeId) {
+    ...Episode
+  }
+}
+    ${EpisodeFragmentDoc}`;
+export const FindEpisodeUrlDocument = gql`
+    query findEpisodeUrl($url: String!) {
+  findEpisodeUrl(episodeUrl: $url) {
+    ...EpisodeUrl
+  }
+}
+    ${EpisodeUrlFragmentDoc}`;
+export const LoginDocument = gql`
+    query login($usernameEmail: String!, $passwordHash: String!) {
+  login(usernameEmail: $usernameEmail, passwordHash: $passwordHash) {
+    ...AuthDetails
+  }
+}
+    ${AuthDetailsFragmentDoc}`;
+export const LoginRefreshDocument = gql`
+    query loginRefresh($refreshToken: String!) {
+  loginRefresh(refreshToken: $refreshToken) {
+    ...AuthDetails
+  }
+}
+    ${AuthDetailsFragmentDoc}`;
+export const SavePreferencesDocument = gql`
+    mutation savePreferences($preferences: InputPreferences!) {
+  savePreferences(preferences: $preferences) {
     updatedAt
-    updatedByUserId
-    updatedBy {
-      ...User
-    }
-    seasons
-    sourceEpisodeId
-    sourceEpisode {
-      ...Episode
-    }
-    timestamps {
+  }
+}
+    `;
+export const UpdateTemplateDocument = gql`
+    mutation updateTemplate($id: ID!, $newTemplate: InputTemplate!) {
+  updateTemplate(templateId: $id, newTemplate: $newTemplate) {
+    ...Template
+  }
+}
+    ${TemplateFragmentDoc}`;
+export const CreateTemplateDocument = gql`
+    mutation createTemplate($newTemplate: InputTemplate!) {
+  createTemplate(newTemplate: $newTemplate) {
+    ...Template
+  }
+}
+    ${TemplateFragmentDoc}`;
+export const AddTimestampToTemplateDocument = gql`
+    mutation addTimestampToTemplate($timestamp: InputTemplateTimestamp!) {
+  addTimestampToTemplate(templateTimestamp: $timestamp) {
+    timestamp {
       ...Timestamp
     }
   }
-  ${UserFragmentDoc}
-  ${EpisodeFragmentDoc}
-  ${TimestampFragmentDoc}
-`;
-export const AccountDocument = gql`
-  query account {
-    account {
-      ...MyAccount
-      preferences {
-        ...Preferences
-      }
-    }
-  }
-  ${MyAccountFragmentDoc}
-  ${PreferencesFragmentDoc}
-`;
-export const AllTimestampTypesDocument = gql`
-  query allTimestampTypes {
-    allTimestampTypes {
-      ...TimestampType
-    }
-  }
-  ${TimestampTypeFragmentDoc}
-`;
-export const CreateEpisodeDocument = gql`
-  mutation createEpisode($showId: ID!, $episodeInput: InputEpisode!) {
-    createEpisode(showId: $showId, episodeInput: $episodeInput) {
-      ...Episode
-    }
-  }
-  ${EpisodeFragmentDoc}
-`;
-export const CreateEpisodeUrlDocument = gql`
-  mutation createEpisodeUrl(
-    $episodeId: ID!
-    $episodeUrlInput: InputEpisodeUrl!
-  ) {
-    createEpisodeUrl(episodeId: $episodeId, episodeUrlInput: $episodeUrlInput) {
-      ...EpisodeUrl
-    }
-  }
-  ${EpisodeUrlFragmentDoc}
-`;
-export const CreateShowDocument = gql`
-  mutation createShow($showInput: InputShow!, $becomeAdmin: Boolean!) {
-    createShow(showInput: $showInput, becomeAdmin: $becomeAdmin) {
-      ...Show
-    }
-  }
-  ${ShowFragmentDoc}
-`;
-export const FindTemplateByDetailsDocument = gql`
-  query findTemplateByDetails(
-    $episodeId: ID
-    $showName: String
-    $season: String
-  ) {
-    findTemplateByDetails(
-      episodeId: $episodeId
-      showName: $showName
-      season: $season
-    ) {
-      ...Template
-    }
-  }
-  ${TemplateFragmentDoc}
-`;
-export const DeleteTemplateDocument = gql`
-  mutation deleteTemplate($id: ID!) {
-    deleteTemplate(templateId: $id) {
-      ...Template
-    }
-  }
-  ${TemplateFragmentDoc}
-`;
-export const FindEpisodeByNameDocument = gql`
-  query findEpisodeByName($name: String!) {
-    findEpisodeByName(name: $name) {
-      ...ThirdPartyEpisode
-    }
-  }
-  ${ThirdPartyEpisodeFragmentDoc}
-`;
-export const FindEpisodeDocument = gql`
-  query findEpisode($episodeId: ID!) {
-    findEpisode(episodeId: $episodeId) {
-      ...Episode
-    }
-  }
-  ${EpisodeFragmentDoc}
-`;
-export const FindEpisodeUrlDocument = gql`
-  query findEpisodeUrl($url: String!) {
-    findEpisodeUrl(episodeUrl: $url) {
-      ...EpisodeUrl
-    }
-  }
-  ${EpisodeUrlFragmentDoc}
-`;
-export const LoginDocument = gql`
-  query login($usernameEmail: String!, $passwordHash: String!) {
-    login(usernameEmail: $usernameEmail, passwordHash: $passwordHash) {
-      ...AuthDetails
-    }
-  }
-  ${AuthDetailsFragmentDoc}
-`;
-export const LoginRefreshDocument = gql`
-  query loginRefresh($refreshToken: String!) {
-    loginRefresh(refreshToken: $refreshToken) {
-      ...AuthDetails
-    }
-  }
-  ${AuthDetailsFragmentDoc}
-`;
-export const SavePreferencesDocument = gql`
-  mutation savePreferences($preferences: InputPreferences!) {
-    savePreferences(preferences: $preferences) {
-      updatedAt
-    }
-  }
-`;
-export const UpdateTemplateDocument = gql`
-  mutation updateTemplate($id: ID!, $newTemplate: InputTemplate!) {
-    updateTemplate(templateId: $id, newTemplate: $newTemplate) {
-      ...Template
-    }
-  }
-  ${TemplateFragmentDoc}
-`;
-export const CreateTemplateDocument = gql`
-  mutation createTemplate($newTemplate: InputTemplate!) {
-    createTemplate(newTemplate: $newTemplate) {
-      ...Template
-    }
-  }
-  ${TemplateFragmentDoc}
-`;
-export const AddTimestampToTemplateDocument = gql`
-  mutation addTimestampToTemplate($timestamp: InputTemplateTimestamp!) {
-    addTimestampToTemplate(templateTimestamp: $timestamp) {
-      timestamp {
-        ...Timestamp
-      }
-    }
-  }
-  ${TimestampFragmentDoc}
-`;
+}
+    ${TimestampFragmentDoc}`;
 export const RemoveTimestampFromTemplateDocument = gql`
-  mutation removeTimestampFromTemplate($timestamp: InputTemplateTimestamp!) {
-    removeTimestampFromTemplate(templateTimestamp: $timestamp) {
-      timestamp {
-        ...Timestamp
-      }
+    mutation removeTimestampFromTemplate($timestamp: InputTemplateTimestamp!) {
+  removeTimestampFromTemplate(templateTimestamp: $timestamp) {
+    timestamp {
+      ...Timestamp
     }
   }
-  ${TimestampFragmentDoc}
-`;
+}
+    ${TimestampFragmentDoc}`;
 export const SearchShowsDocument = gql`
-  query searchShows($search: String!) {
-    searchShows(search: $search) {
-      ...Show
-    }
+    query searchShows($search: String!) {
+  searchShows(search: $search) {
+    ...Show
   }
-  ${ShowFragmentDoc}
-`;
+}
+    ${ShowFragmentDoc}`;
 export const UpdateEpisodeDocument = gql`
-  mutation updateEpisode($episodeId: ID!, $newEpisode: InputEpisode!) {
-    updateEpisode(episodeId: $episodeId, newEpisode: $newEpisode) {
-      ...Episode
-    }
+    mutation updateEpisode($episodeId: ID!, $newEpisode: InputEpisode!) {
+  updateEpisode(episodeId: $episodeId, newEpisode: $newEpisode) {
+    ...Episode
   }
-  ${EpisodeFragmentDoc}
-`;
+}
+    ${EpisodeFragmentDoc}`;
 export const UpdateTimestampsDocument = gql`
-  mutation updateTimestamps(
-    $create: [InputTimestampOn!]!
-    $update: [InputExistingTimestamp!]!
-    $delete: [ID!]!
-  ) {
-    updateTimestamps(create: $create, update: $update, delete: $delete) {
-      created {
-        ...Timestamp
-      }
-      updated {
-        ...Timestamp
-      }
-      deleted {
-        ...Timestamp
-      }
+    mutation updateTimestamps($create: [InputTimestampOn!]!, $update: [InputExistingTimestamp!]!, $delete: [ID!]!) {
+  updateTimestamps(create: $create, update: $update, delete: $delete) {
+    created {
+      ...Timestamp
+    }
+    updated {
+      ...Timestamp
+    }
+    deleted {
+      ...Timestamp
     }
   }
-  ${TimestampFragmentDoc}
-`;
+}
+    ${TimestampFragmentDoc}`;
 
-export type SdkFunctionWrapper = <T>(
-  action: (requestHeaders?: Record<string, string>) => Promise<T>,
-  operationName: string,
-  operationType?: string,
-  variables?: any,
-) => Promise<T>;
+export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string, variables?: any) => Promise<T>;
 
-const defaultWrapper: SdkFunctionWrapper = (
-  action,
-  _operationName,
-  _operationType,
-  _variables,
-) => action();
 
-export function getSdk(
-  client: GraphQLClient,
-  withWrapper: SdkFunctionWrapper = defaultWrapper,
-) {
+const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationType, _variables) => action();
+
+export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    account(
-      variables?: AccountQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-      signal?: RequestInit['signal'],
-    ): Promise<AccountQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<AccountQuery>({
-            document: AccountDocument,
-            variables,
-            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
-            signal,
-          }),
-        'account',
-        'query',
-        variables,
-      );
+    account(variables?: AccountQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<AccountQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AccountQuery>({ document: AccountDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'account', 'query', variables);
     },
-    allTimestampTypes(
-      variables?: AllTimestampTypesQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-      signal?: RequestInit['signal'],
-    ): Promise<AllTimestampTypesQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<AllTimestampTypesQuery>({
-            document: AllTimestampTypesDocument,
-            variables,
-            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
-            signal,
-          }),
-        'allTimestampTypes',
-        'query',
-        variables,
-      );
+    allTimestampTypes(variables?: AllTimestampTypesQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<AllTimestampTypesQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AllTimestampTypesQuery>({ document: AllTimestampTypesDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'allTimestampTypes', 'query', variables);
     },
-    createEpisode(
-      variables: CreateEpisodeMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-      signal?: RequestInit['signal'],
-    ): Promise<CreateEpisodeMutation> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<CreateEpisodeMutation>({
-            document: CreateEpisodeDocument,
-            variables,
-            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
-            signal,
-          }),
-        'createEpisode',
-        'mutation',
-        variables,
-      );
+    createEpisode(variables: CreateEpisodeMutationVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<CreateEpisodeMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<CreateEpisodeMutation>({ document: CreateEpisodeDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'createEpisode', 'mutation', variables);
     },
-    createEpisodeUrl(
-      variables: CreateEpisodeUrlMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-      signal?: RequestInit['signal'],
-    ): Promise<CreateEpisodeUrlMutation> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<CreateEpisodeUrlMutation>({
-            document: CreateEpisodeUrlDocument,
-            variables,
-            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
-            signal,
-          }),
-        'createEpisodeUrl',
-        'mutation',
-        variables,
-      );
+    createEpisodeUrl(variables: CreateEpisodeUrlMutationVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<CreateEpisodeUrlMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<CreateEpisodeUrlMutation>({ document: CreateEpisodeUrlDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'createEpisodeUrl', 'mutation', variables);
     },
-    createShow(
-      variables: CreateShowMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-      signal?: RequestInit['signal'],
-    ): Promise<CreateShowMutation> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<CreateShowMutation>({
-            document: CreateShowDocument,
-            variables,
-            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
-            signal,
-          }),
-        'createShow',
-        'mutation',
-        variables,
-      );
+    createShow(variables: CreateShowMutationVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<CreateShowMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<CreateShowMutation>({ document: CreateShowDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'createShow', 'mutation', variables);
     },
-    findTemplateByDetails(
-      variables?: FindTemplateByDetailsQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-      signal?: RequestInit['signal'],
-    ): Promise<FindTemplateByDetailsQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<FindTemplateByDetailsQuery>({
-            document: FindTemplateByDetailsDocument,
-            variables,
-            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
-            signal,
-          }),
-        'findTemplateByDetails',
-        'query',
-        variables,
-      );
+    findTemplateByDetails(variables?: FindTemplateByDetailsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<FindTemplateByDetailsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<FindTemplateByDetailsQuery>({ document: FindTemplateByDetailsDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'findTemplateByDetails', 'query', variables);
     },
-    deleteTemplate(
-      variables: DeleteTemplateMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-      signal?: RequestInit['signal'],
-    ): Promise<DeleteTemplateMutation> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<DeleteTemplateMutation>({
-            document: DeleteTemplateDocument,
-            variables,
-            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
-            signal,
-          }),
-        'deleteTemplate',
-        'mutation',
-        variables,
-      );
+    deleteTemplate(variables: DeleteTemplateMutationVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<DeleteTemplateMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<DeleteTemplateMutation>({ document: DeleteTemplateDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'deleteTemplate', 'mutation', variables);
     },
-    findEpisodeByName(
-      variables: FindEpisodeByNameQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-      signal?: RequestInit['signal'],
-    ): Promise<FindEpisodeByNameQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<FindEpisodeByNameQuery>({
-            document: FindEpisodeByNameDocument,
-            variables,
-            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
-            signal,
-          }),
-        'findEpisodeByName',
-        'query',
-        variables,
-      );
+    findEpisodeByName(variables: FindEpisodeByNameQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<FindEpisodeByNameQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<FindEpisodeByNameQuery>({ document: FindEpisodeByNameDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'findEpisodeByName', 'query', variables);
     },
-    findEpisode(
-      variables: FindEpisodeQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-      signal?: RequestInit['signal'],
-    ): Promise<FindEpisodeQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<FindEpisodeQuery>({
-            document: FindEpisodeDocument,
-            variables,
-            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
-            signal,
-          }),
-        'findEpisode',
-        'query',
-        variables,
-      );
+    findEpisode(variables: FindEpisodeQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<FindEpisodeQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<FindEpisodeQuery>({ document: FindEpisodeDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'findEpisode', 'query', variables);
     },
-    findEpisodeUrl(
-      variables: FindEpisodeUrlQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-      signal?: RequestInit['signal'],
-    ): Promise<FindEpisodeUrlQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<FindEpisodeUrlQuery>({
-            document: FindEpisodeUrlDocument,
-            variables,
-            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
-            signal,
-          }),
-        'findEpisodeUrl',
-        'query',
-        variables,
-      );
+    findEpisodeUrl(variables: FindEpisodeUrlQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<FindEpisodeUrlQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<FindEpisodeUrlQuery>({ document: FindEpisodeUrlDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'findEpisodeUrl', 'query', variables);
     },
-    login(
-      variables: LoginQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-      signal?: RequestInit['signal'],
-    ): Promise<LoginQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<LoginQuery>({
-            document: LoginDocument,
-            variables,
-            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
-            signal,
-          }),
-        'login',
-        'query',
-        variables,
-      );
+    login(variables: LoginQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<LoginQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<LoginQuery>({ document: LoginDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'login', 'query', variables);
     },
-    loginRefresh(
-      variables: LoginRefreshQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-      signal?: RequestInit['signal'],
-    ): Promise<LoginRefreshQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<LoginRefreshQuery>({
-            document: LoginRefreshDocument,
-            variables,
-            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
-            signal,
-          }),
-        'loginRefresh',
-        'query',
-        variables,
-      );
+    loginRefresh(variables: LoginRefreshQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<LoginRefreshQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<LoginRefreshQuery>({ document: LoginRefreshDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'loginRefresh', 'query', variables);
     },
-    savePreferences(
-      variables: SavePreferencesMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-      signal?: RequestInit['signal'],
-    ): Promise<SavePreferencesMutation> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<SavePreferencesMutation>({
-            document: SavePreferencesDocument,
-            variables,
-            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
-            signal,
-          }),
-        'savePreferences',
-        'mutation',
-        variables,
-      );
+    savePreferences(variables: SavePreferencesMutationVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<SavePreferencesMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<SavePreferencesMutation>({ document: SavePreferencesDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'savePreferences', 'mutation', variables);
     },
-    updateTemplate(
-      variables: UpdateTemplateMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-      signal?: RequestInit['signal'],
-    ): Promise<UpdateTemplateMutation> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<UpdateTemplateMutation>({
-            document: UpdateTemplateDocument,
-            variables,
-            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
-            signal,
-          }),
-        'updateTemplate',
-        'mutation',
-        variables,
-      );
+    updateTemplate(variables: UpdateTemplateMutationVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<UpdateTemplateMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UpdateTemplateMutation>({ document: UpdateTemplateDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'updateTemplate', 'mutation', variables);
     },
-    createTemplate(
-      variables: CreateTemplateMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-      signal?: RequestInit['signal'],
-    ): Promise<CreateTemplateMutation> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<CreateTemplateMutation>({
-            document: CreateTemplateDocument,
-            variables,
-            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
-            signal,
-          }),
-        'createTemplate',
-        'mutation',
-        variables,
-      );
+    createTemplate(variables: CreateTemplateMutationVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<CreateTemplateMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<CreateTemplateMutation>({ document: CreateTemplateDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'createTemplate', 'mutation', variables);
     },
-    addTimestampToTemplate(
-      variables: AddTimestampToTemplateMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-      signal?: RequestInit['signal'],
-    ): Promise<AddTimestampToTemplateMutation> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<AddTimestampToTemplateMutation>({
-            document: AddTimestampToTemplateDocument,
-            variables,
-            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
-            signal,
-          }),
-        'addTimestampToTemplate',
-        'mutation',
-        variables,
-      );
+    addTimestampToTemplate(variables: AddTimestampToTemplateMutationVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<AddTimestampToTemplateMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AddTimestampToTemplateMutation>({ document: AddTimestampToTemplateDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'addTimestampToTemplate', 'mutation', variables);
     },
-    removeTimestampFromTemplate(
-      variables: RemoveTimestampFromTemplateMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-      signal?: RequestInit['signal'],
-    ): Promise<RemoveTimestampFromTemplateMutation> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<RemoveTimestampFromTemplateMutation>({
-            document: RemoveTimestampFromTemplateDocument,
-            variables,
-            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
-            signal,
-          }),
-        'removeTimestampFromTemplate',
-        'mutation',
-        variables,
-      );
+    removeTimestampFromTemplate(variables: RemoveTimestampFromTemplateMutationVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<RemoveTimestampFromTemplateMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<RemoveTimestampFromTemplateMutation>({ document: RemoveTimestampFromTemplateDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'removeTimestampFromTemplate', 'mutation', variables);
     },
-    searchShows(
-      variables: SearchShowsQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-      signal?: RequestInit['signal'],
-    ): Promise<SearchShowsQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<SearchShowsQuery>({
-            document: SearchShowsDocument,
-            variables,
-            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
-            signal,
-          }),
-        'searchShows',
-        'query',
-        variables,
-      );
+    searchShows(variables: SearchShowsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<SearchShowsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<SearchShowsQuery>({ document: SearchShowsDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'searchShows', 'query', variables);
     },
-    updateEpisode(
-      variables: UpdateEpisodeMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-      signal?: RequestInit['signal'],
-    ): Promise<UpdateEpisodeMutation> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<UpdateEpisodeMutation>({
-            document: UpdateEpisodeDocument,
-            variables,
-            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
-            signal,
-          }),
-        'updateEpisode',
-        'mutation',
-        variables,
-      );
+    updateEpisode(variables: UpdateEpisodeMutationVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<UpdateEpisodeMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UpdateEpisodeMutation>({ document: UpdateEpisodeDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'updateEpisode', 'mutation', variables);
     },
-    updateTimestamps(
-      variables: UpdateTimestampsMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-      signal?: RequestInit['signal'],
-    ): Promise<UpdateTimestampsMutation> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<UpdateTimestampsMutation>({
-            document: UpdateTimestampsDocument,
-            variables,
-            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
-            signal,
-          }),
-        'updateTimestamps',
-        'mutation',
-        variables,
-      );
-    },
+    updateTimestamps(variables: UpdateTimestampsMutationVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<UpdateTimestampsMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UpdateTimestampsMutation>({ document: UpdateTimestampsDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'updateTimestamps', 'mutation', variables);
+    }
   };
 }
 export type Sdk = ReturnType<typeof getSdk>;

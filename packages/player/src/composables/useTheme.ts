@@ -14,7 +14,7 @@ export default createSharedComposable(() => {
     (newTheme) => {
       const themeName =
         newTheme === ColorTheme.PerService
-          ? serviceTheme ?? ColorTheme.AnimeSkipBlue
+          ? (serviceTheme ?? ColorTheme.AnimeSkipBlue)
           : newTheme;
 
       if (themeName) shadowHtml.setAttribute('data-theme', themeName);

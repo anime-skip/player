@@ -14,11 +14,10 @@ export default createSharedComposable(() => {
       (t) => !isTimestampSkipped(t.typeId, preferences.value, isSkipping.value),
     ),
   );
-  const skippedTimestamps = computed(
-    () =>
-      timestamps.value?.filter((t) =>
-        isTimestampSkipped(t.typeId, preferences.value, isSkipping.value),
-      ),
+  const skippedTimestamps = computed(() =>
+    timestamps.value?.filter((t) =>
+      isTimestampSkipped(t.typeId, preferences.value, isSkipping.value),
+    ),
   );
 
   const { currentTime, duration, playbackRate } = useVideoControls();

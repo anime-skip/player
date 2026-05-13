@@ -39,8 +39,8 @@ export default defineBackground(() => {
         const frames =
           tab.id == null
             ? []
-            : (await browser.webNavigation.getAllFrames({ tabId: tab.id })) ??
-              [];
+            : ((await browser.webNavigation.getAllFrames({ tabId: tab.id })) ??
+              []);
         return {
           tab,
           frames,

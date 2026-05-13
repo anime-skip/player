@@ -33,3 +33,6 @@ stats.html
 .env
 .env.*
 !.env.template
+
+# Buildc
+.cache

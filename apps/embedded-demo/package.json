@@ -4,16 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "pnpm build:dependencies && vite dev",
-    "compile": "turbo turbo:compile --filter=@anime-skip/extension...",
-    "build:dependencies": "turbo turbo:build --filter=@anime-skip/embedded-demo^...",
-    "turbo:compile": "vue-tsc"
+    "check": "check",
+    "dev": "buildc --deps-only && vite dev"
   },
   "dependencies": {
     "@anime-skip/player": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^6.0.3",
-    "vite": "^8.0.12"
+    "vite": "^8.0.12",
+    "vue-tsc": "^3.2.8"
   }
 }

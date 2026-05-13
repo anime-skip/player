@@ -3,14 +3,14 @@
   "type": "module",
   "packageManager": "pnpm@11.1.1",
   "scripts": {
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "prepare": "simple-git-hooks",
-    "compile": "turbo turbo:compile",
-    "build": "turbo turbo:build",
-    "test": "turbo turbo:test"
+    "check": "check && pnpm -r check",
+    "build": "buildc all",
+    "test": "pnpm -r test",
+    "prepare": "simple-git-hooks"
   },
   "devDependencies": {
+    "@aklinker1/buildc": "^1.1.7",
+    "@aklinker1/check": "^2.4.0",
     "lint-staged": "^17.0.4",
     "prettier": "^3.8.3",
     "simple-git-hooks": "^2.13.1"
