@@ -1,6 +1,7 @@
 {
   "name": "anime-skip-player",
   "type": "module",
+  "packageManager": "pnpm@8.15.9",
   "scripts": {
     "format": "prettier --write .",
     "format:check": "prettier --check .",
