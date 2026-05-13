@@ -4,4 +4,5 @@ packages:
 allowBuilds:
   '@parcel/watcher': false
   esbuild: true
+  simple-git-hooks: true
   vue-demi: true

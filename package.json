@@ -11,9 +11,9 @@
     "test": "turbo turbo:test"
   },
   "devDependencies": {
-    "lint-staged": "^15.2.0",
-    "prettier": "^3.1.1",
-    "simple-git-hooks": "^2.9.0"
+    "lint-staged": "^17.0.4",
+    "prettier": "^3.8.3",
+    "simple-git-hooks": "^2.13.1"
   },
   "pnpm": {
     "peerDependencyRules": {
