@@ -1,5 +1,5 @@
 import { forwardKeydownEvent } from '@anime-skip/player';
-import type { ContentScriptContext } from 'wxt/client';
+import type { ContentScriptContext } from '#imports';
 
 const MESSAGE_TYPE = 'anime-skip-player:keydown';
 

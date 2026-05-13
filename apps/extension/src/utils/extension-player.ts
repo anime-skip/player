@@ -3,7 +3,7 @@ import {
   PlayerVisibility,
   createPlayer,
 } from '@anime-skip/player';
-import { ContentScriptContext } from 'wxt/client';
+import { ContentScriptContext } from '#imports';
 
 export function initExtensionPlayer(options: ExtensionPlayerOptions): void {
   logger.log(`Mounted ${options.serviceName} player`);
@@ -56,8 +56,10 @@ export function initExtensionPlayer(options: ExtensionPlayerOptions): void {
   options.ctx.onInvalidated(() => player.unmount());
 }
 
-export interface ExtensionPlayerOptions
-  extends Omit<PlayerOptions, 'apiClientId' | 'apiUrl' | 'storage'> {
+export interface ExtensionPlayerOptions extends Omit<
+  PlayerOptions,
+  'apiClientId' | 'apiUrl' | 'storage'
+> {
   ctx: ContentScriptContext;
   parentElement: string | Element;
   transformServiceUrl?(url: string): string;

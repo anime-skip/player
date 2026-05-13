@@ -25,6 +25,6 @@ export default defineConfig({
   zip: {
     name: 'anime-skip-player',
     sourcesRoot: '../..',
-    ignoredSources: ['apps/inspector', 'apps/embedded-demo', 'README.md'],
+    excludeSources: ['apps/inspector', 'apps/embedded-demo', 'README.md'],
   },
 });

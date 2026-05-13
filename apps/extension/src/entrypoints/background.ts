@@ -21,23 +21,24 @@ export default defineBackground(() => {
   });
   browser.contextMenus.onClicked.addListener(async (info, tab) => {
     if (info.menuItemId !== 'screenshot') return;
+    if (tab == null) return;
 
     try {
       await messaging.sendMessage(
         'setPlayerVisibility',
         PlayerVisibility.Hidden,
-        tab?.id,
+        tab.id,
       );
-      const res = await browser.tabs.captureVisibleTab(tab?.windowId, {
+      const res = await browser.tabs.captureVisibleTab(tab.windowId, {
         format: 'jpeg',
         quality: 100,
       });
-      await messaging.sendMessage('sendScreenshotToTab', res, tab?.id);
+      await messaging.sendMessage('sendScreenshotToTab', res, tab.id);
     } finally {
       await messaging.sendMessage(
         'setPlayerVisibility',
         PlayerVisibility.Visible,
-        tab?.id,
+        tab.id,
       );
     }
   });

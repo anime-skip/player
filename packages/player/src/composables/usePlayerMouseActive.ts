@@ -1,5 +1,4 @@
-import type { MaybeRefOrGetter } from '@vueuse/core';
-import type { Ref } from 'vue';
+import type { Ref, MaybeRefOrGetter } from 'vue';
 import { MS, SECOND } from '../utils/time';
 
 const RESET_AFTER_DURATION = 3 * SECOND;

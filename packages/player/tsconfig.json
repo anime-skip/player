@@ -3,7 +3,7 @@
     "target": "ESNext",
     "useDefineForClassFields": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "strict": true,
     "jsx": "preserve",
     "resolveJsonModule": true,
@@ -12,7 +12,7 @@
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
     "outDir": "./dist",
-    "declaration": true
-  },
-  "references": [{ "path": "./tsconfig.node.json" }]
+    "declaration": true,
+    "noEmit": true
+  }
 }

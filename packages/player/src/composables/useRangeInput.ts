@@ -1,5 +1,4 @@
-import { MaybeRefOrGetter } from '@vueuse/core';
-import { Ref } from 'vue';
+import type { Ref, MaybeRefOrGetter } from 'vue';
 
 /**
  * Mimic the behavior of a range input where your mouse controls poition of a thumb on a regular
