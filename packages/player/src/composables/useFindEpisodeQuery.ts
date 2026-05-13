@@ -1,4 +1,4 @@
-import { MaybeRefOrGetter, toValue } from '@vueuse/core';
+import { MaybeRefOrGetter, toValue } from 'vue';
 import { Episode } from '../utils/api';
 import { QueryKey } from '../utils/QueryKey';
 

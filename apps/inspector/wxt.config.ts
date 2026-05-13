@@ -19,7 +19,7 @@ export default defineConfig({
       default_area: 'navbar',
     },
   },
-  runner: {
+  webExt: {
     startUrls: ['https://anime-skip.com/'],
   },
 });
