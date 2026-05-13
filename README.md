@@ -5,10 +5,12 @@ Monorepo for the Anime Skip Player, includes the player UI, web extension, and
 
 ## Setup
 
-1. Install NodeJS LTS
-2. Install PNPM: `corepack enable`
+Install ASDF then run:
 
 ```sh
+asdf install
+npm add -g corepack
+corepack enable
 pnpm i
 ```
 
