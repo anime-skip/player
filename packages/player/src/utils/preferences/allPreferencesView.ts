@@ -25,7 +25,6 @@ export const prefTitles: Record<keyof AllPreferences, string> = {
   skipRecaps: 'Recaps',
   skipTitleCard: 'Title Card',
   skipTransitions: 'Transitions',
-  __typename: '',
 };
 
 export const allPreferencesView: PreferencesView[] = [
