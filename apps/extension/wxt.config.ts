@@ -31,4 +31,7 @@ export default defineConfig({
   suppressWarnings: {
     firefoxDataCollection: true,
   },
+  webExt: {
+    disabled: true,
+  },
 });
