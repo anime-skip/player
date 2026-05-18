@@ -10,6 +10,8 @@ export function initExtensionPlayer(options: ExtensionPlayerOptions): void {
   logger.log(`Mounted ${options.serviceName} player`);
   const isDev = import.meta.env.MODE === 'development';
 
+  const isTopFrame = window === window.top;
+
   initKeyboardShortcutReceiver(options.ctx);
 
   const player = createPlayer({
@@ -37,7 +39,9 @@ export function initExtensionPlayer(options: ExtensionPlayerOptions): void {
       }
     },
     async getEpisodeUrl() {
-      const url = await messaging.sendMessage('getTopFrameUrl', undefined);
+      const url = isTopFrame
+        ? location.href
+        : await messaging.sendMessage('getTopFrameUrl', undefined);
       if (url == null) throw Error("Could not find episode's URL");
 
       return options.transformServiceUrl?.(url) ?? stripUrl(url);
