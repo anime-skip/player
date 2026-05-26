@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import { VueQueryPlugin } from 'vue-query';
+import { QueryClient, VueQueryPlugin } from 'vue-query';
 
 import Player from './components/Player.vue';
 import { ElementOption, InternalPlayerOptions, PlayerOptions } from './options';
@@ -13,12 +13,13 @@ import { stripHashAndQuery } from './utils/url-utils';
 import playerStyles from './assets/tailwind.css?inline';
 
 export function createPlayer(options?: PlayerOptions): AnimeSkipPlayer {
-  console.log('Creating player...');
   const internalOptions = getInternalOptions(options);
-  console.log('options:', internalOptions);
+
+  const queryClient = new QueryClient();
+
   const app = createApp(Player)
     .provide(InjectionKey.PlayerOptions, internalOptions)
-    .use(VueQueryPlugin);
+    .use(VueQueryPlugin, { queryClient });
 
   // const playerCss = window.animeSkipPlayerCss ?? '/* Anime Skip Player styles missing... */';
   // delete window.animeSkipPlayerCss;
@@ -76,6 +77,9 @@ export function createPlayer(options?: PlayerOptions): AnimeSkipPlayer {
       console.log('Done', { rootElement, shadow, shadowBody });
     },
     unmount() {
+      queryClient.clear();
+      queryClient.cancelQueries();
+      queryClient.unmount();
       app.unmount();
     },
     setPlayerVisibility(visibility) {

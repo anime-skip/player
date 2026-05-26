@@ -1,7 +1,8 @@
+import { defineSpaContentScript } from '@/utils/define-spa-content-script';
 import { initExtensionHelper } from '@/utils/extension-helper';
 
-export default defineContentScript({
-  matches: ['*://www.crunchyroll.com/*'],
+export default defineSpaContentScript({
+  matches: ['*://www.crunchyroll.com/watch/*'],
   allFrames: false,
 
   main(ctx) {
