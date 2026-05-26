@@ -43,6 +43,7 @@ export function defineSpaContentScript(
                 '[wxt] SPA navigated to matching page, running content script main function',
               );
           childContext = new Context(
+            // @ts-expect-error: Private member
             parentContext.contentScriptName + '-spa-child',
             options,
           );
@@ -71,6 +72,7 @@ export function defineSpaContentScript(
       run(location.href, true);
 
       // Setup the listener to re-run the content script on URL change
+      // @ts-expect-error: Private member
       parentContext.locationWatcher.run();
       parentContext.addEventListener(window, 'wxt:locationchange', (event) => {
         if (import.meta.env.DEV) console.debug('[wxt] SPA URL changed:', event);
