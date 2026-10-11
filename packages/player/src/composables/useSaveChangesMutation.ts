@@ -9,13 +9,14 @@ import {
   Scalars,
   ShowFragment,
 } from '../utils/api';
+import { createAppState } from '../utils/app-state';
 import { getUniqueExistenceMap } from '../utils/array-utils';
 import {
   isTimestampEqual,
   undoTimestampsOffset,
 } from '../utils/timestamp-utils';
 
-export default createSharedComposable(() => {
+export default createAppState(() => {
   const { state: auth } = useAuth();
   const { data: currentUrl } = useCurrentUrlQuery();
   const episodeUrl = useApiEpisodeUrl();

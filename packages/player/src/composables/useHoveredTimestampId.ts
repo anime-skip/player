@@ -1,3 +1,4 @@
+import { createAppState } from '../utils/app-state';
 import { SECOND } from '../utils/time';
 import { AmbiguousTimestamp } from '../utils/timestamp-utils';
 
@@ -8,7 +9,7 @@ import { AmbiguousTimestamp } from '../utils/timestamp-utils';
  *
  * The ID will be automatically unset after a timeout.
  */
-export default createGlobalState(() => {
+export default createAppState(() => {
   const id = ref<AmbiguousTimestamp['id']>();
   const reset = useTimeoutFn(
     () => {

@@ -1,6 +1,7 @@
 import { TimestampTypeFragment } from '../utils/api';
+import { createAppState } from '../utils/app-state';
 
-export default createSharedComposable(() => {
+export default createAppState(() => {
   const { data: types } = useAllTimestampTypesQuery();
 
   return computed(() =>

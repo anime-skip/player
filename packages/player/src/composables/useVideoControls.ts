@@ -1,10 +1,11 @@
+import { createAppState } from '../utils/app-state';
 import { SECOND } from '../utils/time';
 
 /**
  * Return an object containing the video element's current state as refs which
  * can be set.
  */
-export default createSharedComposable(() => {
+export default createAppState(() => {
   const video = useVideoElement();
 
   function getCurrentDuration() {
@@ -52,6 +53,7 @@ export default createSharedComposable(() => {
   const { ignoreUpdates: ignoreUpdatesPlaying } = watchIgnorable(
     playing,
     (playing) => {
+      console.log('Setting playing...', { playing });
       if (playing) video.value.play();
       else video.value.pause();
     },

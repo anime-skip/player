@@ -1,6 +1,7 @@
+import { createAppState } from '../utils/app-state';
 import { PlayerVisibility } from '../utils/PlayerVisibility';
 
-export default createGlobalState(() => {
+export default createAppState(() => {
   const visibility = ref(PlayerVisibility.Visible);
 
   const { onVisibilityChange } = usePlayerOptions();

@@ -1,3 +1,4 @@
+import { createAppState } from '../utils/app-state';
 import { AmbiguousTimestamp, sortTimestamps } from '../utils/timestamp-utils';
 
 /**
@@ -6,7 +7,7 @@ import { AmbiguousTimestamp, sortTimestamps } from '../utils/timestamp-utils';
  *
  * You must set the entire value, not a field on the value
  */
-export default createGlobalState(() => {
+export default createAppState(() => {
   const index = ref<number>();
   const editedTimestamps = useEditedTimestamps();
 

@@ -1,8 +1,9 @@
+import { createAppState } from '../utils/app-state';
 import { AmbiguousTimestamp } from '../utils/timestamp-utils';
 import useEditedTimestamps from './useEditedTimestamps';
 
 /** Global state for whether the player is in edit mode. */
-export default createGlobalState(() => {
+export default createAppState(() => {
   const isEditing = ref(false);
   const editedTimestamps = useEditedTimestamps();
 

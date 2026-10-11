@@ -3,6 +3,7 @@ import { QueryClient, VueQueryPlugin } from 'vue-query';
 
 import Player from './components/Player.vue';
 import { ElementOption, InternalPlayerOptions, PlayerOptions } from './options';
+import { defineAppState } from './utils/app-state';
 import { createLocalPlayerStorage } from './utils/createLocalPlayerStorage';
 import { createTypedStorage } from './utils/createTypedStorage';
 import { InjectionKey } from './utils/InjectionKey';
@@ -16,10 +17,12 @@ export function createPlayer(options?: PlayerOptions): AnimeSkipPlayer {
   const internalOptions = getInternalOptions(options);
 
   const queryClient = new QueryClient();
+  const appState = defineAppState();
 
   const app = createApp(Player)
     .provide(InjectionKey.PlayerOptions, internalOptions)
-    .use(VueQueryPlugin, { queryClient });
+    .use(VueQueryPlugin, { queryClient })
+    .use(appState);
 
   // const playerCss = window.animeSkipPlayerCss ?? '/* Anime Skip Player styles missing... */';
   // delete window.animeSkipPlayerCss;
@@ -80,6 +83,7 @@ export function createPlayer(options?: PlayerOptions): AnimeSkipPlayer {
       queryClient.clear();
       queryClient.cancelQueries();
       queryClient.unmount();
+      appState.destroy();
       app.unmount();
     },
     setPlayerVisibility(visibility) {

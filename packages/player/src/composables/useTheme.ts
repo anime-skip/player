@@ -1,10 +1,11 @@
 import { ColorTheme } from '../utils/api';
+import { createAppState } from '../utils/app-state';
 
 /**
  * Manage the `data-theme` attribute on the shadow root. Should only be called
  * once, so it's inside a shared composable.
  */
-export default createSharedComposable(() => {
+export default createAppState(() => {
   const { pref: theme } = useReadonlyPreference('colorTheme');
   const { shadowHtml } = useShadowRoot();
   const { serviceTheme } = usePlayerOptions();

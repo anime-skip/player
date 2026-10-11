@@ -1,3 +1,4 @@
+import { createAppState } from '../utils/app-state';
 import { SECOND } from '../utils/time';
 
 const POLL_RATE = SECOND;
@@ -6,7 +7,7 @@ const POLL_RATE = SECOND;
  * Poll for the current video element, updating the returned ref if it's
  * different.
  */
-export default createGlobalState(() => {
+export default createAppState(() => {
   const options = usePlayerOptions();
   const currentVideo = ref(options.video());
 

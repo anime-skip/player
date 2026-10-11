@@ -1,3 +1,5 @@
+import { createAppState } from '../utils/app-state';
+
 /** The current "view" show in the player. */
 export type View =
   | 'timestamps'
@@ -13,7 +15,7 @@ export type View =
  *
  * To change views, set the value to `undefined`.
  */
-export default createGlobalState(() => {
+export default createAppState(() => {
   const view = ref<View>();
   const { undo: goBack } = useRefHistory(view, { capacity: 1 });
 

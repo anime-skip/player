@@ -1,6 +1,7 @@
+import { createAppState } from '../utils/app-state';
 import usePlayerStorage from './usePlayerStorage';
 
-export default createSharedComposable(() => {
+export default createAppState(() => {
   const { storage } = usePlayerOptions();
   return usePlayerStorage(storage.auth);
 });

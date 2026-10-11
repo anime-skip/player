@@ -1,6 +1,7 @@
+import { createAppState } from '../utils/app-state';
 import { SECOND } from '../utils/time';
 
-export default createGlobalState(() => {
+export default createAppState(() => {
   const url = ref<string>();
 
   const clearPreview = useTimeoutFn(

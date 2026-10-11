@@ -1,3 +1,4 @@
+import { createAppState } from '../utils/app-state';
 import { invertKeyboardShortcutMap } from '../utils/keyboard-shortcut-utils';
 
 /**
@@ -8,7 +9,7 @@ import { invertKeyboardShortcutMap } from '../utils/keyboard-shortcut-utils';
  * - `*BindingActionsMap` - Read only map of key presses to the actions they
  *   trigger. Used to decide which action to trigger when pressing keys.
  */
-export default createGlobalState(() => {
+export default createAppState(() => {
   const { storage } = usePlayerOptions();
   const { state: primaryKeyboardActionBindingMap } = usePlayerStorage(
     storage.primaryKeyboardShortcuts,

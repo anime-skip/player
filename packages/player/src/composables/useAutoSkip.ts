@@ -1,10 +1,11 @@
+import { createAppState } from '../utils/app-state';
 import { getNextTimestamp, isTimestampSkipped } from '../utils/timestamp-utils';
 
 /**
  * Watch the current time and list of timestamps. Auto-skip over skipped
  * sections if needed.
  */
-export default createSharedComposable(() => {
+export default createAppState(() => {
   const { state: preferences } = usePreferences();
   const timestamps = useCurrentTimestamps();
   const isSkipping = useIsAutoSkipEnabled();

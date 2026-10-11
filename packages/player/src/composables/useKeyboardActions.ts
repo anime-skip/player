@@ -1,3 +1,4 @@
+import { createAppState } from '../utils/app-state';
 import { KeyboardShortcutAction } from '../utils/keyboard-shortcut-utils';
 import { keyComboFromEvent } from '../utils/keyboard-shortcut-utils';
 import { bounded } from '../utils/math-utils';
@@ -6,7 +7,7 @@ import { bounded } from '../utils/math-utils';
  * Registers key press event listeners and performs the actions for a keyboard
  * shortcut if used.
  */
-export default createSharedComposable(() => {
+export default createAppState(() => {
   const {
     primaryKeyboardBindingActionsMap,
     secondaryKeyboardBindingActionsMap,

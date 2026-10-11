@@ -4,10 +4,10 @@ This is the app containing all the code for the Anime Skip Player Chrome
 Extension.
 
 ```sh
-# Run extension against test.api.anime-skip.com
+# Run extension against test.anime-skip.com/api
 pnpm dev
 
-# Run extension against api.anime-skip.com
+# Run extension against anime-skip.com/api
 pnpm dev:prod
 ```
 

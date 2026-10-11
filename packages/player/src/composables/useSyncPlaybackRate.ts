@@ -1,10 +1,11 @@
+import { createAppState } from '../utils/app-state';
 import { SECOND } from '../utils/time';
 
 /**
  * Keep the playback rate of the video in sync with the playback rate
  * preference.
  */
-export default createSharedComposable(() => {
+export default createAppState(() => {
   const { pref: prefRate } = useReadonlyPreference('playbackRate');
   const { playbackRate: videoRate } = useVideoControls();
 

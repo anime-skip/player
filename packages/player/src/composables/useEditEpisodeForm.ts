@@ -1,5 +1,7 @@
+import { createAppState } from '../utils/app-state';
+
 /** Global form state for editing the current episode details */
-export default createGlobalState(() => {
+export default createAppState(() => {
   const { startEditing } = useIsEditing();
 
   // Form values
