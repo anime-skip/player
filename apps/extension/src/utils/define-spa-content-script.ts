@@ -54,6 +54,7 @@ export function defineSpaContentScript(
               '[wxt] SPA navigated off matching page, stopping content script',
             );
           childContext!.abort('SPA navigated off matching page');
+          messaging.removeAllListeners();
           childContext = undefined;
         } else {
           if (import.meta.env.DEV)
