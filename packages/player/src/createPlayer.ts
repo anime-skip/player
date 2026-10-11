@@ -192,7 +192,7 @@ function getInternalOptions(options?: PlayerOptions): InternalPlayerOptions {
       };
     },
 
-    apiUrl: options?.apiUrl ?? 'https://api.anime-skip.com/graphql',
+    apiUrl: options?.apiUrl ?? 'https://next.anime-skip.com/api/graphql',
     apiClientId: options?.apiClientId ?? 'ZGfO0sMF3eCwLYf8yMSCJjlynwNGRXWE',
 
     getEpisodeUrl:

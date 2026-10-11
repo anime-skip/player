@@ -23,9 +23,8 @@ export type Scalars = {
 export type Account = {
   __typename?: 'Account';
   /**
-   * The linking object that associates a user to the shows they are admins of.
-   *
-   * > This data is also accessible on the `User` model. It has been added here for convenience
+   * > Deprecated: show admins are no longer supported. This is always an empty list.
+   * @deprecated Show admins are no longer supported
    */
   adminOfShows: Array<ShowAdmin>;
   createdAt: Scalars['Time']['output'];
@@ -325,7 +324,7 @@ export type InputShow = {
   website?: InputMaybe<Scalars['String']['input']>;
 };
 
-/** Data required to create a new `ShowAdmin`. See `ShowAdmin` for a description of each field */
+/** Deprecated: show admins are no longer supported. */
 export type InputShowAdmin = {
   showId: Scalars['ID']['input'];
   userId: Scalars['ID']['input'];
@@ -417,14 +416,18 @@ export type Mutation = {
   createEpisode: Episode;
   /** Link an `Episode` to a service URL */
   createEpisodeUrl: EpisodeUrl;
-  /** Create a show and optionally become an admin */
+  /**
+   * Create a show and optionally become an admin
+   * @deprecated Use `createShowV2` instead, `becomeAdmin` is always ignored
+   */
   createShow: Show;
   /**
-   * Give admin privilege to a user for a show.
-   *
-   * > `@isShowAdmin` - You need to be an admin of the show to do this action
+   * > Deprecated: show admins are no longer supported. This always throws an error.
+   * @deprecated Show admins are no longer supported
    */
   createShowAdmin: ShowAdmin;
+  /** Create a show */
+  createShowV2: Show;
   /** Make changes to an existing template */
   createTemplate: Template;
   /** Add a timestamp to an `Episode` */
@@ -437,44 +440,32 @@ export type Mutation = {
   createTimestampType: TimestampType;
   /** Report an issue with a single timestamp, episode, episode URL, or show. */
   createUserReport: UserReport;
-  /** Handle a deleteToken from `deleteAccountRequest` and actually delete the user's account */
-  deleteAccount: Account;
   /**
-   * Request your account be deleted. The user will receive an email with a link to confirm deleting
-   * their account
+   * Delete a user's account (admin only)
+   *
+   * > `@hasRole(role: ADMIN)` - The user must have the `ADMIN` role to perform this action
    */
-  deleteAccountRequest: Account;
+  deleteAccount: Account;
   /** Delete one of the authenticated user's API clients */
   deleteApiClient: ApiClient;
-  /**
-   * Delete an episode and all it's child data
-   *
-   * > `@isShowAdmin` - You need to be an admin of the show to do this action
-   */
+  /** Delete an episode and all it's child data */
   deleteEpisode: Episode;
-  /**
-   * Unlink an `Episode` to from service URL
-   *
-   * > `@isShowAdmin` - You need to be an admin of the show to do this action
-   */
+  /** Unlink an `Episode` to from service URL */
   deleteEpisodeUrl: EpisodeUrl;
+  /** Delete the authenticated user's account */
+  deleteMyAccount: Account;
   /**
-   * Delete a show and all it's children (episodes, episode urls, timestamps, admins, etc)
+   * Delete a show and all it's children (episodes, episode urls, timestamps, etc)
    *
    * > `@hasRole(role: ADMIN)` - The user must have the `ADMIN` role to perform this action
    */
   deleteShow: Show;
   /**
-   * Remove admin privileges from a user for a show.
-   *
-   * > `@isShowAdmin` - You need to be an admin of the show to do this action
+   * > Deprecated: show admins are no longer supported. This always throws an error.
+   * @deprecated Show admins are no longer supported
    */
   deleteShowAdmin: ShowAdmin;
-  /**
-   * Delete an existing template
-   *
-   * > `@isShowAdmin` - You need to be an admin of the show to do this action
-   */
+  /** Delete an existing template */
   deleteTemplate: Template;
   /** Delete a timestamp */
   deleteTimestamp: Timestamp;
@@ -594,6 +585,11 @@ export type MutationCreateShowAdminArgs = {
 };
 
 
+export type MutationCreateShowV2Args = {
+  showInput: InputShow;
+};
+
+
 export type MutationCreateTemplateArgs = {
   newTemplate: InputTemplate;
 };
@@ -616,12 +612,7 @@ export type MutationCreateUserReportArgs = {
 
 
 export type MutationDeleteAccountArgs = {
-  deleteToken: Scalars['String']['input'];
-};
-
-
-export type MutationDeleteAccountRequestArgs = {
-  passwordHash: Scalars['String']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 
@@ -847,11 +838,20 @@ export type Query = {
   findEpisodesByShowId: Array<Episode>;
   /** Find show with a matching `Show.id` */
   findShow: Show;
-  /** Find show admin with a matching `ShowAdmin.id` */
+  /**
+   * Deprecated: always throws an error.
+   * @deprecated Show admins are no longer supported
+   */
   findShowAdmin: ShowAdmin;
-  /** Get a list of admins for a given `Show.id` */
+  /**
+   * Deprecated: always returns an empty list.
+   * @deprecated Show admins are no longer supported
+   */
   findShowAdminsByShowId: Array<ShowAdmin>;
-  /** Get a list of show admins for a given `User.id` */
+  /**
+   * Deprecated: always returns an empty list.
+   * @deprecated Show admins are no longer supported
+   */
   findShowAdminsByUserId: Array<ShowAdmin>;
   findShowsByExternalId: Array<Show>;
   /**
@@ -1103,7 +1103,10 @@ export enum Role {
 /** A show containing a list of episodes and relevant links */
 export type Show = BaseModel & {
   __typename?: 'Show';
-  /** The list of admins for the show */
+  /**
+   * Deprecated: show admins are no longer supported. This is always an empty list.
+   * @deprecated Show admins are no longer supported
+   */
   admins: Array<ShowAdmin>;
   createdAt: Scalars['Time']['output'];
   createdBy: User;
@@ -1149,16 +1152,7 @@ export type Show = BaseModel & {
   website?: Maybe<Scalars['String']['output']>;
 };
 
-/**
- * A list of users that have elevated permissions when making changes to a show, it's episodes, and
- * timestamps. Show admins are responsible for approving any changes that users might submit.
- *
- * If a user has the `ADMIN` or `DEV` roles, they do not need to be show admins to approve changes or
- * make changes directly. Likewise, if a show doesn't have an admin, the user that create the
- * show/episode will have temporary access to editing the data until someone becomes that shows admin.
- *
- * Admins can be created using the API and will soon come to the Anime Skip player/website.
- */
+/** Deprecated: show admins are no longer supported. */
 export type ShowAdmin = BaseModel & {
   __typename?: 'ShowAdmin';
   createdAt: Scalars['Time']['output'];
@@ -1168,16 +1162,12 @@ export type ShowAdmin = BaseModel & {
   deletedBy?: Maybe<User>;
   deletedByUserId?: Maybe<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
-  /** The `Show` that the admin has elevated privileges for */
   show: Show;
-  /** The `Show.id` that the admin has elevated privileges for */
   showId: Scalars['ID']['output'];
   updatedAt: Scalars['Time']['output'];
   updatedBy: User;
   updatedByUserId: Scalars['ID']['output'];
-  /** The `User` that the admin privileges belong to */
   user: User;
-  /** The `User.id` that the admin privileges belong to */
   userId: Scalars['ID']['output'];
 };
 
@@ -1360,6 +1350,10 @@ export type UpdatedTimestamps = {
 /** Information about a user that is public. See `Account` for a description of each field */
 export type User = {
   __typename?: 'User';
+  /**
+   * Deprecated: show admins are no longer supported. This is always an empty list.
+   * @deprecated Show admins are no longer supported
+   */
   adminOfShows: Array<ShowAdmin>;
   createdAt: Scalars['Time']['output'];
   deletedAt?: Maybe<Scalars['Time']['output']>;
