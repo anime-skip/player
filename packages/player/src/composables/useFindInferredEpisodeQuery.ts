@@ -6,7 +6,7 @@ import useFindEpisodeByShowAndName from './useFindEpisodeByShowAndName';
  */
 export default function () {
   const { data: episodeInfo } = useEpisodeInfoQuery();
-  const { data: episodeUrl, isFetched: isEpisodeUrlFetched } =
+  const { data: episodeUrl, isPending: isEpisodeUrlPending } =
     useFindEpisodeUrlQuery();
 
   const episodeName = computed(() => episodeInfo.value?.episodeName);
@@ -15,7 +15,8 @@ export default function () {
   // Only perform the query if we've loaded the episode info from the page and we didn't find an
   // episode URL for the current page's URL
   const enabled = computed(
-    () => !!episodeInfo.value && isEpisodeUrlFetched.value && !episodeUrl.value,
+    () =>
+      !!episodeInfo.value && !isEpisodeUrlPending.value && !episodeUrl.value,
   );
 
   return useFindEpisodeByShowAndName({ episodeName, showName, enabled });

@@ -1,6 +1,7 @@
 ignorePaths:
   - '*.gen.*'
   - '*.generated.*'
+  - 'graphql.schema.ts'
   - pnpm-lock.yaml
   - stats.html
   - dist

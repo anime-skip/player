@@ -53,7 +53,6 @@ export default createAppState(() => {
   const { ignoreUpdates: ignoreUpdatesPlaying } = watchIgnorable(
     playing,
     (playing) => {
-      console.log('Setting playing...', { playing });
       if (playing) video.value.play();
       else video.value.pause();
     },

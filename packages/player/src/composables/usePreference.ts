@@ -26,33 +26,34 @@ export default function <T extends keyof AllPreferences>(
 
   const { mutateAsync: savePrefs } = useSavePreferencesMutation();
 
-  const updatePref = useMutation(async (newValue: AllPreferences[T]) => {
-    // Don't continue if the prefs aren't loaded yet.
-    const currentPrefs = toRaw(storedPrefs.value!);
-    const oldValue = currentPrefs[key];
+  const updatePref = useMutation({
+    async mutation({ newValue }: { newValue: AllPreferences[T] }) {
+      // Don't continue if the prefs aren't loaded yet.
+      const currentPrefs = toRaw(storedPrefs.value!);
+      const oldValue = currentPrefs[key];
 
-    try {
-      // Update local value
-      storedPrefs.value = {
-        ...currentPrefs,
-        [key]: newValue,
-      };
-      // Update API
-      await savePrefs({ preferences: { [key]: newValue } });
-    } catch (err) {
-      console.error('Failed to save preferences:', err);
-      window.alert('Failed to save preferences: ' + String(err));
-      storedPrefs.value = {
-        ...storedPrefs.value!, // Stored value may have changed, use latest value (should always exist, should be loaded at this point.)
-        [key]: oldValue,
-      };
-    }
+      try {
+        // Update local value
+        storedPrefs.value = {
+          ...currentPrefs,
+          [key]: newValue,
+        };
+        // Update API
+        await savePrefs({ preferences: { [key]: newValue } });
+      } catch (err) {
+        console.error('Failed to save preferences:', err);
+        window.alert('Failed to save preferences: ' + String(err));
+        storedPrefs.value = {
+          ...storedPrefs.value!, // Stored value may have changed, use latest value (should always exist, should be loaded at this point.)
+          [key]: oldValue,
+        };
+      }
+    },
   });
 
   return {
     isSaving: updatePref.isLoading,
     error: updatePref.error,
-    isError: updatePref.isError,
     pref: computed({
       get() {
         return storedPrefs.value?.[key];
@@ -62,7 +63,7 @@ export default function <T extends keyof AllPreferences>(
         if (storedPrefs.value == null) return;
 
         if (!isLocal && auth.value) {
-          updatePref.mutate(newValue!);
+          updatePref.mutate({ newValue: newValue! });
         } else {
           storedPrefs.value = {
             ...storedPrefs.value,

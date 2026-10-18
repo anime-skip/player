@@ -17,10 +17,14 @@ export default function ({
 }) {
   const api = useApiClient(false);
 
-  return useQuery(
-    [QueryKey.FindEpisodeByName, episodeName, showName],
+  return useQuery({
+    key: () => [
+      QueryKey.FindEpisodeByName,
+      episodeName.value ?? null,
+      showName.value ?? null,
+    ],
 
-    async () => {
+    async query() {
       const eName = episodeName.value;
       const sName = showName.value?.toLowerCase();
       if (!eName || !sName) return;
@@ -34,13 +38,11 @@ export default function ({
       );
     },
 
-    {
-      enabled,
-      cacheTime: Infinity,
-      staleTime: Infinity,
-      refetchOnMount: false,
-      refetchOnReconnect: false,
-      refetchOnWindowFocus: false,
-    },
-  );
+    enabled,
+    gcTime: false,
+    staleTime: Infinity,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+  });
 }

@@ -33,7 +33,7 @@ function focusOnAt() {
 }
 onMounted(focusOnAt);
 
-const typeId = computed<Scalars['ID']>({
+const typeId = computed<Scalars['ID']['output']>({
   get() {
     return timestamp.value.typeId;
   },
@@ -42,11 +42,12 @@ const typeId = computed<Scalars['ID']>({
   },
 });
 
-const { data: types, isLoading, error, isError } = useAllTimestampTypesQuery();
+const { data: types, isLoading, error } = useAllTimestampTypesQuery();
+
 const errorMessage = useErrorMessage(error);
 
 const typeSearch = ref('');
-const typeSearchResults = useFuzzySearch(typeSearch, types, (t) => t.name);
+const typeSearchResults = useFuzzySearch(typeSearch, types);
 
 // Reset the selected type on change
 watch(typeSearchResults, (newResults) => {

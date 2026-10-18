@@ -1,4 +1,4 @@
-import { PlayerOptions } from '@anime-skip/player';
+import type { PlayerOptions } from '@anime-skip/player';
 
 import type { ContentScriptContext } from '#imports';
 

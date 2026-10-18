@@ -37,10 +37,10 @@ const currentTimestamps = useCurrentTimestamps();
 
 const currentTimestampType = useTimestampType(currentTimestamp);
 
-const { isLoading, isError } = useEpisodeInfoQuery();
+const { isLoading, error } = useEpisodeInfoQuery();
 const currentTimestampDisplay = computed(() => {
   if (isLoading.value) return 'Loading...';
-  if (isError.value) return 'Error';
+  if (error.value) return 'Error';
   if (currentTimestamps.value.length === 0) return 'No timestamps';
   return currentTimestampType.value?.name ?? 'Unknown';
 });
@@ -97,9 +97,9 @@ const { isEditing } = useIsEditing();
           class="link link-hover flex h-full shrink-0 items-center gap-1 text-xs text-base-content text-opacity-50"
           @click="toggleTimestampsPanel"
         >
-          <icon-mdi-alert-circle v-if="isError" class="h-3 w-3" />
+          <icon-mdi-alert-circle v-if="error" class="h-3 w-3" />
           <p>{{ currentTimestampDisplay }}</p>
-          <icon-edit v-if="!isError" class="h-3 w-3" />
+          <icon-edit v-if="!error" class="h-3 w-3" />
         </div>
       </template>
 

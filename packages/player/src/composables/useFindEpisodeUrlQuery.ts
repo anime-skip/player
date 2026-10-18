@@ -1,5 +1,4 @@
 import { ClientError } from 'graphql-request';
-import { useQuery } from 'vue-query';
 
 import { QueryKey } from '../utils/QueryKey';
 import { MINUTE } from '../utils/time';
@@ -9,8 +8,8 @@ export default function () {
   const { data: url } = useCurrentUrlQuery();
 
   return useQuery({
-    queryKey: [QueryKey.FindEpisodeUrl, url],
-    async queryFn() {
+    key: () => [QueryKey.FindEpisodeUrl, url.value ?? null],
+    async query() {
       if (url.value == null) return undefined;
 
       try {
@@ -27,7 +26,7 @@ export default function () {
       }
     },
     staleTime: 30 * MINUTE,
-    enabled: computed(() => !!url.value),
-    keepPreviousData: true,
+    enabled: () => !!url.value,
+    placeholderData: (previous) => previous,
   });
 }

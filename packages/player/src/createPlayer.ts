@@ -1,5 +1,6 @@
+import { PiniaColada, useQueryCache } from '@pinia/colada';
+import { createPinia, disposePinia } from 'pinia';
 import { createApp } from 'vue';
-import { QueryClient, VueQueryPlugin } from 'vue-query';
 
 import Player from './components/Player.vue';
 import { ElementOption, InternalPlayerOptions, PlayerOptions } from './options';
@@ -16,12 +17,13 @@ import playerStyles from './assets/tailwind.css?inline';
 export function createPlayer(options?: PlayerOptions): AnimeSkipPlayer {
   const internalOptions = getInternalOptions(options);
 
-  const queryClient = new QueryClient();
+  const pinia = createPinia();
   const appState = defineAppState();
 
   const app = createApp(Player)
     .provide(InjectionKey.PlayerOptions, internalOptions)
-    .use(VueQueryPlugin, { queryClient })
+    .use(pinia)
+    .use(PiniaColada)
     .use(appState);
 
   // const playerCss = window.animeSkipPlayerCss ?? '/* Anime Skip Player styles missing... */';
@@ -80,11 +82,13 @@ export function createPlayer(options?: PlayerOptions): AnimeSkipPlayer {
       console.log('Done', { rootElement, shadow, shadowBody });
     },
     unmount() {
-      queryClient.clear();
-      queryClient.cancelQueries();
-      queryClient.unmount();
+      // Stop in-flight requests before tearing down the stores that own them
+      useQueryCache(pinia).cancelQueries();
       appState.destroy();
       app.unmount();
+      // Stops Pinia's effect scope, which clears Colada's GC timers and
+      // document event listeners so nothing keeps running after unmount
+      disposePinia(pinia);
     },
     setPlayerVisibility(visibility) {
       PlayerEvent.dispatch({
@@ -192,7 +196,7 @@ function getInternalOptions(options?: PlayerOptions): InternalPlayerOptions {
       };
     },
 
-    apiUrl: options?.apiUrl ?? 'https://next.anime-skip.com/api/graphql',
+    apiUrl: options?.apiUrl ?? 'https://anime-skip.com/api/graphql',
     apiClientId: options?.apiClientId ?? 'ZGfO0sMF3eCwLYf8yMSCJjlynwNGRXWE',
 
     getEpisodeUrl:

@@ -94,20 +94,17 @@ function toggleTimestamp(timestamp: TimestampFragment, isChecked: boolean) {
 }
 
 const view = useView();
-const { mutate: _deleteTemplate, isLoading: isDeletingTemplate } =
+const { mutateAsync: _deleteTemplate, isLoading: isDeletingTemplate } =
   useDeleteTemplateMutation();
-function deleteTemplate() {
+async function deleteTemplate() {
   if (!template.value) return;
-  _deleteTemplate(
-    { id: template.value.id },
-    {
-      onSuccess: () => view.goBack(),
-      onError: (err) => {
-        console.error(err);
-        window.alert(err);
-      },
-    },
-  );
+  try {
+    await _deleteTemplate({ id: template.value.id });
+    view.goBack();
+  } catch (err) {
+    console.error(err);
+    window.alert(err);
+  }
 }
 
 function discardTemplate() {

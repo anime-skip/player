@@ -1,4 +1,7 @@
-import { EpisodeUrlFragment } from '../utils/api';
+import {
+  EpisodeUrlFragment,
+  UpdateTimestampsMutationVariables,
+} from '../utils/api';
 import { deleteMatches, getUniqueExistenceMap } from '../utils/array-utils';
 import { QueryKey } from '../utils/QueryKey';
 import { sortTimestamps } from '../utils/timestamp-utils';
@@ -6,20 +9,20 @@ import { sortTimestamps } from '../utils/timestamp-utils';
 /** Perform the updateTimestamp GraphQL mutation to save changes to timestamps. */
 export default function () {
   const client = useApiClient(true);
-  const queries = useQueryClient();
+  const queryCache = useQueryCache();
 
-  return useMutation(client.updateTimestamps, {
+  return useMutation({
+    mutation: (vars: UpdateTimestampsMutationVariables) =>
+      client.updateTimestamps(vars),
     onSuccess(data) {
       const results = data.updateTimestamps;
       const deletedIds = results.deleted.map((t) => t.id);
       const updatedMap = getUniqueExistenceMap(results.updated, 'id');
 
-      queries.setQueriesData(
-        [QueryKey.FindEpisodeUrl],
-        (oldData): EpisodeUrlFragment | undefined => {
-          if (!oldData) return;
-
-          const episodeUrl = oldData as EpisodeUrlFragment;
+      queryCache.setQueriesData<EpisodeUrlFragment | undefined>(
+        { key: [QueryKey.FindEpisodeUrl] },
+        (episodeUrl) => {
+          if (!episodeUrl) return;
 
           // Remove deleted
           let newTimestamps = deleteMatches(

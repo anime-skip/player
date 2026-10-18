@@ -1,19 +1,29 @@
 overwrite: true
 schema:
-  - https://next.anime-skip.com/api/graphql:
+  - https://anime-skip.com/api/graphql:
       headers:
         X-Client-ID: OB3AfF3fZg9XlZhxtLvhwLhDcevslhnr
 documents: 'src/**/*.graphql'
 generates:
+  src/utils/api/graphql.schema.ts:
+    plugins:
+      - typescript
+    config:
+      useTypeImports: true
+      scalars:
+        Time: string
+        UInt: string
   src/utils/api/graphql.generated.ts:
     plugins:
       - add:
-          content: 'import type { DocumentNode } from "graphql";'
-      - typescript
+          content:
+            - 'import type { DocumentNode } from "graphql";'
+            - "export * from './graphql.schema';"
       - typescript-operations
       - typescript-graphql-request
     config:
       useTypeImports: true
+      importSchemaTypesFrom: src/utils/api/graphql.schema.ts
       scalars:
         Time: string
         UInt: string

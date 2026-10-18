@@ -10,9 +10,9 @@ const props = defineProps<{
 const {
   data: types,
   isLoading: isTypesLoading,
-  isError: isTypesError,
   error: typesError,
 } = useAllTimestampTypesQuery();
+
 const typesErrorMessage = useErrorMessage(typesError);
 
 const typeId = useEditableTimestampTypeId(toRef(props, 'timestamp'));
@@ -29,7 +29,7 @@ const type = computed(() => (timestampTypesMap.value ?? {})[typeId.value]);
       :disabled="isTypesLoading"
     >
       <!-- Error Message -->
-      <option v-if="isTypesError" disabled>{{ typesErrorMessage }}</option>
+      <option v-if="typesError" disabled>{{ typesErrorMessage }}</option>
 
       <!-- Types List -->
       <template v-else>

@@ -1,4 +1,4 @@
-import { IPlayerStorage } from '@anime-skip/player';
+import type { IPlayerStorage } from '@anime-skip/player';
 
 export function createExtensionPlayerStorage(): IPlayerStorage {
   const getKey = (key: string): `local:${string}` => `local:${key}`;

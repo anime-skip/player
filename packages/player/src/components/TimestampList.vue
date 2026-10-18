@@ -4,7 +4,8 @@ import IconPlus from '~icons/anime-skip/plus';
 import TimestampListItem from './TimestampListItem.vue';
 
 const timestamps = useCurrentTimestamps();
-const { isLoading, isError, error } = useFindEpisodeUrlQuery();
+const { isLoading, error } = useFindEpisodeUrlQuery();
+
 const errorMessage = useErrorMessage(error);
 
 const createTimestamp = useCreateTimestamp();
@@ -18,7 +19,7 @@ const createTimestamp = useCreateTimestamp();
     </div>
 
     <!-- Error -->
-    <p v-else-if="isError">{{ errorMessage }}</p>
+    <p v-else-if="error">{{ errorMessage }}</p>
 
     <template v-else>
       <!-- Timestamps -->

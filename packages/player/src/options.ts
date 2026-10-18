@@ -51,7 +51,7 @@ export interface PlayerOptions {
   /**
    * The full API url that ends with /graphql.
    *
-   * Defaults to the production API: "https://next.anime-skip.com/api/graphql"
+   * Defaults to the production API: "https://anime-skip.com/api/graphql"
    */
   apiUrl?: string;
   /**

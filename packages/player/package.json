@@ -7,14 +7,12 @@
     "src"
   ],
   "type": "module",
-  "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     }
   },
   "scripts": {
@@ -27,6 +25,7 @@
     "prepare": "pnpm build"
   },
   "dependencies": {
+    "@pinia/colada": "^1.4.8",
     "@vueuse/core": "^14.3.0",
     "fuzzysort": "^3.1.0",
     "graphql": "^16.14.0",
@@ -34,9 +33,9 @@
     "graphql-tag": "^2.12.6",
     "md5": "^2.3.0",
     "p-singleton": "^1.0.4",
+    "pinia": "^4.0.3",
     "uuid": "^14.0.0",
-    "vue": "^3.5.34",
-    "vue-query": "^1.26.0"
+    "vue": "^3.5.34"
   },
   "devDependencies": {
     "@graphql-codegen/add": "^7.0.0",

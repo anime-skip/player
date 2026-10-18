@@ -1,5 +1,3 @@
-import { useQuery } from 'vue-query';
-
 import { TemplateFragment } from '../utils/api';
 import { QueryKey } from '../utils/QueryKey';
 import useFindTemplateVariables from './useFindTemplateVariables';
@@ -9,18 +7,16 @@ export default function () {
 
   const variables = useFindTemplateVariables();
 
-  return useQuery(
-    [QueryKey.FindCurrentTemplate, variables],
-    async (): Promise<TemplateFragment | undefined> => {
+  return useQuery({
+    key: () => [QueryKey.FindCurrentTemplate, variables.value ?? null],
+    async query(): Promise<TemplateFragment | undefined> {
       const res = await api
         .findTemplateByDetails(variables.value!)
         .catch(() => {});
       return res?.findTemplateByDetails;
     },
-    {
-      enabled: computed(() => !!variables.value),
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
-    },
-  );
+    enabled: () => !!variables.value,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  });
 }

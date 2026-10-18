@@ -8,12 +8,12 @@ export default function (
 ) {
   const api = useApiClient();
 
-  return useQuery(
-    [QueryKey.FindEpisode, episodeId],
-    async () => {
+  return useQuery({
+    key: () => [QueryKey.FindEpisode, toValue(episodeId) ?? null],
+    async query() {
       const res = await api.findEpisode({ episodeId: toValue(episodeId)! });
       return res.findEpisode;
     },
-    { enabled: computed(() => !!toValue(episodeId)) },
-  );
+    enabled: () => !!toValue(episodeId),
+  });
 }

@@ -21,8 +21,7 @@ const { mutate: saveChanges, isLoading } = useSaveChangesMutation();
 const episodeUrl = useApiEpisodeUrl();
 const timestamps = useCurrentTimestamps();
 
-const { data: currentTemplate, isFetched: isCurrentTemplateFetched } =
-  useCurrentTemplateQuery();
+const { data: currentTemplate } = useCurrentTemplateQuery();
 
 const isTemplateButtonsVisible = computed(
   () =>
@@ -35,7 +34,7 @@ const isLoginWarningVisible = computed(() => isEditing.value && !auth.value);
 </script>
 
 <template>
-  <side-panel-layout class="w-72 lg:w-80" @form-submit="saveChanges">
+  <side-panel-layout class="w-72 lg:w-80" @form-submit="() => saveChanges()">
     <template #title>Edit Episode</template>
 
     <!-- Timestamps -->

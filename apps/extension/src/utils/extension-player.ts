@@ -1,5 +1,5 @@
 import {
-  PlayerOptions,
+  type PlayerOptions,
   PlayerVisibility,
   createPlayer,
 } from '@anime-skip/player';

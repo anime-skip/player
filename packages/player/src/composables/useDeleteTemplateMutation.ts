@@ -1,17 +1,19 @@
+import { DeleteTemplateMutationVariables } from '../utils/api';
 import { QueryKey } from '../utils/QueryKey';
 import useFindTemplateVariables from './useFindTemplateVariables';
 
 export default function () {
   const api = useApiClient();
-  const queries = useQueryClient();
+  const queryCache = useQueryCache();
   const variables = useFindTemplateVariables();
 
-  return useMutation(api.deleteTemplate, {
+  return useMutation({
+    mutation: (vars: DeleteTemplateMutationVariables) =>
+      api.deleteTemplate(vars),
     async onSuccess() {
-      await queries.invalidateQueries([
-        QueryKey.FindCurrentTemplate,
-        variables.value,
-      ]);
+      await queryCache.invalidateQueries({
+        key: [QueryKey.FindCurrentTemplate, variables.value ?? null],
+      });
     },
   });
 }

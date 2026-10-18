@@ -48,12 +48,12 @@ useAllTimestampTypesQuery();
 useAccountQuery();
 
 // URL change behavior
-const client = useQueryClient();
+const queryCache = useQueryCache();
 const { data: url } = useCurrentUrlQuery();
 const discardChanges = useDiscardChanges();
 
 watch(url, () => {
-  client.invalidateQueries(QueryKey.EpisodeInfo);
+  queryCache.invalidateQueries({ key: [QueryKey.EpisodeInfo] });
   if (isEditing.value) {
     // TODO: Don't discard changes, ask if the user wants to save their changes for the previous episode
     discardChanges();

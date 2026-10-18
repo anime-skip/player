@@ -1,12 +1,15 @@
+import { CreateEpisodeUrlMutationVariables } from '../utils/api';
 import { QueryKey } from '../utils/QueryKey';
 
 export default function () {
   const api = useApiClient(true);
-  const queries = useQueryClient();
+  const queryCache = useQueryCache();
 
-  return useMutation(api.createEpisodeUrl, {
+  return useMutation({
+    mutation: (vars: CreateEpisodeUrlMutationVariables) =>
+      api.createEpisodeUrl(vars),
     onSuccess({ createEpisodeUrl: episodeUrl }, { episodeUrlInput }) {
-      queries.setQueryData(
+      queryCache.setQueryData(
         [QueryKey.FindEpisodeUrl, episodeUrlInput.url],
         episodeUrl,
       );

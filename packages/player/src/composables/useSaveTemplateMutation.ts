@@ -1,11 +1,9 @@
-import { useMutation } from 'vue-query';
-
 import { InputTemplate, Scalars, TimestampFragment } from '../utils/api';
 import { getUniqueExistenceMap } from '../utils/array-utils';
 import { QueryKey } from '../utils/QueryKey';
 
 interface SaveTemplateVariables {
-  id: Scalars['ID'] | undefined;
+  id: Scalars['ID']['input'] | undefined;
   newTemplate: InputTemplate;
   oldTimestamps: TimestampFragment[];
   newTimestamps: TimestampFragment[];
@@ -14,16 +12,16 @@ interface SaveTemplateVariables {
 // TODO: Create a single mutation to create or update a template and it's timestamps
 export default function () {
   const api = useApiClient();
-  const queries = useQueryClient();
+  const queryCache = useQueryCache();
   const variables = useFindTemplateVariables();
 
-  return useMutation(
-    async ({
+  return useMutation({
+    async mutation({
       newTemplate,
       id,
       oldTimestamps,
       newTimestamps,
-    }: SaveTemplateVariables) => {
+    }: SaveTemplateVariables) {
       if (id == null) {
         const { createTemplate: created } = await api.createTemplate({
           newTemplate,
@@ -61,13 +59,10 @@ export default function () {
         ),
       ]);
     },
-    {
-      async onSuccess() {
-        await queries.invalidateQueries([
-          QueryKey.FindCurrentTemplate,
-          variables.value,
-        ]);
-      },
+    async onSuccess() {
+      await queryCache.invalidateQueries({
+        key: [QueryKey.FindCurrentTemplate, variables.value ?? null],
+      });
     },
-  );
+  });
 }

@@ -35,8 +35,8 @@ export function defineAppState(): AppState {
 export function createAppState<Fn extends AnyFn>(
   stateFactory: Fn,
 ): CreateGlobalStateReturn<Fn> {
-  let initialized = false;
-  let state: any;
+  // Cache per scope, so each mounted player gets fresh state
+  const states = new WeakMap<EffectScope, any>();
 
   return ((...args: any[]) => {
     const scope = inject(INJECTION_KEY);
@@ -46,10 +46,12 @@ export function createAppState<Fn extends AnyFn>(
         'App state plugin not installed: ' + (err.stack ?? '<no stack>'),
       );
 
-    if (!initialized) {
-      state = scope.run(() => stateFactory(...args))!;
-      initialized = true;
+    if (!states.has(scope)) {
+      states.set(
+        scope,
+        scope.run(() => stateFactory(...args)),
+      );
     }
-    return state;
+    return states.get(scope);
   }) as Fn;
 }

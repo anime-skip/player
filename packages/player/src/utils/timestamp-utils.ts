@@ -100,7 +100,11 @@ export function sortTimestamps<T extends { at: number }>(
 }
 
 export function isTimestampEqual<
-  T extends { at: number; source: TimestampSource; typeId: Scalars['ID'] },
+  T extends {
+    at: number;
+    source: TimestampSource;
+    typeId: Scalars['ID']['output'];
+  },
 >(t1: T, t2: T): boolean {
   return t1.at === t2.at && t1.source === t2.source && t1.typeId === t2.typeId;
 }

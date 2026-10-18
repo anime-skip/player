@@ -57,7 +57,7 @@ export default defineConfig(({ mode }) => {
           'vue',
           '@vueuse/core',
           {
-            'vue-query': ['useQuery', 'useMutation', 'useQueryClient'],
+            '@pinia/colada': ['useQuery', 'useMutation', 'useQueryCache'],
           },
         ],
       }),
@@ -66,7 +66,7 @@ export default defineConfig(({ mode }) => {
       lib: {
         name: 'animeSkipPlayer',
         entry: 'src/index.ts',
-        formats: ['cjs', 'iife', 'es'],
+        formats: ['es'],
         fileName: 'index',
       },
       sourcemap: true,

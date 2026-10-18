@@ -1,4 +1,11 @@
 {
   "$schema": "node_modules/oxlint/configuration_schema.json",
-  "ignorePatterns": ["*.gen.*", "*.generated.*", "dist", ".output", ".wxt"],
+  "ignorePatterns": [
+    "*.gen.*",
+    "*.generated.*",
+    "graphql.schema.ts",
+    "dist",
+    ".output",
+    ".wxt",
+  ],
 }

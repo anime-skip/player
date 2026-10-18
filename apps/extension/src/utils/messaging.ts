@@ -1,4 +1,4 @@
-import { PlayerOptions, PlayerVisibility } from '@anime-skip/player';
+import { type PlayerOptions, PlayerVisibility } from '@anime-skip/player';
 import { defineExtensionMessaging } from '@webext-core/messaging';
 
 export const messaging = defineExtensionMessaging<MessagingProtocol>({

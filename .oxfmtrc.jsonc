@@ -4,6 +4,7 @@
     "pnpm-lock.yaml",
     "*.gen.*",
     "*.generated.*",
+    "graphql.schema.ts",
     "dist",
     ".output",
     ".wxt",

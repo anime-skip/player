@@ -3,5 +3,8 @@ import { QueryKey } from '../utils/QueryKey';
 export default function () {
   const options = usePlayerOptions();
 
-  return useQuery(QueryKey.EpisodeInfo, options.getEpisodeInfo);
+  return useQuery({
+    key: [QueryKey.EpisodeInfo],
+    query: async () => options.getEpisodeInfo(),
+  });
 }

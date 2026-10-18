@@ -33,8 +33,8 @@ export default createAppState(() => {
   const { mutateAsync: updateEpisode } = useUpdateEpisodeMutation();
   const { mutateAsync: createEpisodeUrl } = useCreateEpisodeUrlMutation();
 
-  return useMutation(
-    async () => {
+  return useMutation({
+    async mutation() {
       const newShowName = episodeForm.showName.value.trim();
       const newEpisodeName = episodeForm.episodeName.value.trim();
       const newNumber = episodeForm.number.value.trim();
@@ -123,7 +123,7 @@ export default createAppState(() => {
 
         const createdTimestamps: InputTimestampOn[] = [];
         const updatedTimestamps: InputExistingTimestamp[] = [];
-        const deletedTimestamps: Scalars['ID'][] = [];
+        const deletedTimestamps: Scalars['ID']['input'][] = [];
 
         const existingMap = getUniqueExistenceMap(realExistingTimestamps, 'id');
         for (const edited of realCurrentTimestamps) {
@@ -167,8 +167,6 @@ export default createAppState(() => {
         }
       }
     },
-    {
-      onSuccess: stopEditing,
-    },
-  );
+    onSuccess: () => stopEditing(),
+  });
 });

@@ -74,7 +74,7 @@ export function initKeyboardShortcutForwarder(ctx: ContentScriptContext) {
 export function initKeyboardShortcutReceiver(ctx: ContentScriptContext) {
   ctx.addEventListener(window, 'message', (event: MessageEvent) => {
     const data: { type: string; event: ForwardedKeyboardEvent } = event.data;
-    logger.debug('Received event:', data);
+    if (data.type) logger.debug('Received event:', data);
     if (data.type !== MESSAGE_TYPE) return;
 
     logger.debug('Received forwarded keyboard event:', data);

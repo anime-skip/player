@@ -13,10 +13,11 @@ const { state: auth } = useAuth();
 const username = ref('');
 const password = ref('');
 
-const { mutate, isLoading, isError, error } = useLoginMutation();
+const { mutateAsync, isLoading, error } = useLoginMutation();
+
 const gqlError = useErrorMessage(error);
 
-function login() {
+async function login() {
   const usernameEmail = username.value.trim();
   const passwordPreHash = password.value.trim();
   username.value = usernameEmail;
@@ -31,19 +32,20 @@ function login() {
   }
 
   validationError.value = undefined;
-  mutate(
-    { passwordHash: md5(passwordPreHash), usernameEmail },
-    {
-      onSuccess(data) {
-        auth.value = {
-          refreshToken: data.login.refreshToken,
-          token: data.login.authToken,
-          account: data.login.account,
-        };
-        emits('loggedIn');
-      },
-    },
-  );
+  try {
+    const data = await mutateAsync({
+      passwordHash: md5(passwordPreHash),
+      usernameEmail,
+    });
+    auth.value = {
+      refreshToken: data.login.refreshToken,
+      token: data.login.authToken,
+      account: data.login.account,
+    };
+    emits('loggedIn');
+  } catch {
+    // The error is exposed through the mutation's `error` state
+  }
 }
 
 const validationError = ref<string>();
@@ -92,7 +94,7 @@ const validationError = ref<string>();
       </label>
     </div>
 
-    <p v-if="isError" class="text-center text-sm text-error">{{ gqlError }}</p>
+    <p v-if="error" class="text-center text-sm text-error">{{ gqlError }}</p>
 
     <!-- Buttons -->
     <div class="flex flex-row-reverse gap-4">
