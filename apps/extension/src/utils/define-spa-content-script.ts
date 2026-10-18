@@ -24,6 +24,10 @@ export function defineSpaContentScript(
         childMatches?.some((match) => match.includes(url));
 
       const run = (url: string, initial?: boolean) => {
+        // Downloads (e.g. screenshots) can report data:/blob: URLs as a
+        // location change. They aren't real navigations, so don't tear down.
+        if (/^(data|blob):/i.test(url)) return;
+
         const isMatch = isUrlMatch(url);
         const wasMatch = !!childContext;
         if (isMatch && wasMatch) {
