@@ -7,13 +7,31 @@
     "src"
   ],
   "type": "module",
+  "sideEffects": false,
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
-    }
+    },
+    "./keydown": {
+      "types": "./dist/keydown.d.ts",
+      "default": "./dist/keydown.js"
+    },
+    "./logger": {
+      "types": "./dist/logger.d.ts",
+      "default": "./dist/logger.js"
+    },
+    "./storage": {
+      "types": "./dist/logger.d.ts",
+      "default": "./dist/logger.js"
+    },
+    "./ui": {
+      "types": "./dist/ui.d.ts",
+      "default": "./dist/ui.js"
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
     "check": "pnpm build && check",
@@ -26,43 +44,44 @@
   },
   "dependencies": {
     "@pinia/colada": "^1.4.8",
-    "@vueuse/core": "^14.3.0",
+    "@vueuse/core": "^15.0.0",
     "fuzzysort": "^3.1.0",
     "graphql": "^16.14.0",
     "graphql-request": "~7.4.0",
-    "graphql-tag": "^2.12.6",
+    "graphql-tag": "^2.12.7",
     "md5": "^2.3.0",
     "p-singleton": "^1.0.4",
-    "pinia": "^4.0.3",
-    "uuid": "^14.0.0",
-    "vue": "^3.5.34"
+    "pinia": "^4.1.0",
+    "uuid": "^14.0.3",
+    "vue": "^3.5.44"
   },
   "devDependencies": {
-    "@graphql-codegen/add": "^7.0.0",
-    "@graphql-codegen/cli": "^7.0.0",
-    "@graphql-codegen/typescript": "^6.0.1",
-    "@graphql-codegen/typescript-graphql-request": "^7.0.1",
-    "@graphql-codegen/typescript-operations": "^6.0.2",
-    "@iconify/json": "^2.2.472",
+    "@graphql-codegen/add": "^7.1.1",
+    "@graphql-codegen/cli": "^7.4.6",
+    "@graphql-codegen/typescript": "^6.1.2",
+    "@graphql-codegen/typescript-graphql-request": "^7.1.0",
+    "@graphql-codegen/typescript-operations": "^6.1.10",
+    "@iconify/json": "^2.2.544",
+    "@microsoft/api-extractor": "^7.59.4",
     "@types/chance": "^1.1.8",
     "@types/md5": "^2.3.6",
     "@types/uuid": "^11.0.0",
-    "@vitejs/plugin-vue": "^6.0.6",
+    "@vitejs/plugin-vue": "^6.0.10",
     "autoprefixer": "^10.5.0",
     "chance": "^1.1.13",
     "daisyui": "^2.52.0",
     "postcss": "^8.5.14",
     "postcss-unroot": "^1.0.2",
-    "publint": "^0.3.20",
-    "rollup-plugin-visualizer": "^7.0.1",
+    "publint": "^0.3.25",
+    "rollup-plugin-visualizer": "^7.1.1",
     "tailwindcss": "^3.4.0",
     "typescript": "^6.0.3",
-    "unplugin-auto-import": "^21.0.0",
-    "unplugin-icons": "^23.0.1",
-    "vite": "^8.0.12",
+    "unplugin-auto-import": "^21.1.0",
+    "unplugin-icons": "^24.0.0",
+    "vite": "^8.3.4",
     "vite-plugin-css-injected-by-js": "^5.0.1",
-    "vite-plugin-dts": "^5.0.0",
-    "vitest": "^4.1.6",
-    "vue-tsc": "^3.2.8"
+    "vite-plugin-dts": "^5.1.2",
+    "vitest": "^5.0.5",
+    "vue-tsc": "^3.3.13"
   }
 }

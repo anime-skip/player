@@ -81,14 +81,12 @@ export const allPreferencesView: PreferencesView[] = [
     columns: 3,
     children: Object.keys(defaultPreferences)
       .filter((key) => key.startsWith('skip'))
-      .map(
-        (key): PreferencesCheckboxView => ({
-          type: 'checkbox',
-          invert: true,
-          preferenceKey: key as keyof AllPreferences,
-          text: prefTitles[key as keyof AllPreferences],
-        }),
-      ),
+      .map((key): PreferencesCheckboxView => ({
+        type: 'checkbox',
+        invert: true,
+        preferenceKey: key as keyof AllPreferences,
+        text: prefTitles[key as keyof AllPreferences],
+      })),
   },
 
   { type: 'header', text: 'Keyboard Shortcuts' },

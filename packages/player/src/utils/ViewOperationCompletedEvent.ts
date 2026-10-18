@@ -1,4 +1,4 @@
-import { View } from '../composables/useView';
+import { View } from './view';
 
 export class ViewOperationCompletedEvent extends CustomEvent<string> {
   static TYPE = '@anime-skip/view-operation-completed';

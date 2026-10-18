@@ -1,4 +1,4 @@
-import { IPlayerStorage } from '../options';
+import { IPlayerStorage } from '../types';
 import { MyAccountFragment } from './api';
 import {
   DEFAULT_PRIMARY_KEYBOARD_SHORTCUTS,

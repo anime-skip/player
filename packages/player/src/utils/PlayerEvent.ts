@@ -1,4 +1,4 @@
-import { PlayerVisibility } from './PlayerVisibility';
+import { PlayerVisibility } from '../types';
 
 type PlayerEventDetail =
   | {

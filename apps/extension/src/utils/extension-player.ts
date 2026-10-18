@@ -1,8 +1,5 @@
-import {
-  type PlayerOptions,
-  PlayerVisibility,
-  createPlayer,
-} from '@anime-skip/player';
+import { type PlayerOptions, PlayerVisibility } from '@anime-skip/player';
+import { createPlayer } from '@anime-skip/player/ui';
 
 import { ContentScriptContext } from '#imports';
 

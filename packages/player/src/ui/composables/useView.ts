@@ -1,0 +1,15 @@
+import { createAppState } from '../../utils/app-state';
+import { View } from '../../utils/view';
+
+/**
+ * Returns a global reference to which "view" is active. A "view" is the current
+ * dialog or panel visible. Only one "view" can be open at a time.
+ *
+ * To change views, set the value to `undefined`.
+ */
+export default createAppState(() => {
+  const view = ref<View>();
+  const { undo: goBack } = useRefHistory(view, { capacity: 1 });
+
+  return { view, goBack };
+});

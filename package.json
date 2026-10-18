@@ -10,11 +10,11 @@
   "devDependencies": {
     "@aklinker1/buildc": "^1.1.7",
     "@aklinker1/check": "^2.4.0",
-    "cspell": "^10.0.0",
+    "cspell": "^10.4.0",
     "nano-staged": "^1.0.2",
-    "oxfmt": "^0.49.0",
-    "oxlint": "^1.64.0",
-    "simple-git-hooks": "^2.13.1"
+    "oxfmt": "^0.73.0",
+    "oxlint": "^1.88.0",
+    "simple-git-hooks": "^2.14.0"
   },
   "simple-git-hooks": {
     "pre-commit": "./node_modules/.bin/nano-staged"

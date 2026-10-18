@@ -1,4 +1,4 @@
-import { IPlayerStorage } from '../options';
+import { IPlayerStorage } from '../types';
 
 export function createLocalPlayerStorage(): IPlayerStorage {
   return {

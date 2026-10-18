@@ -1,4 +1,5 @@
-import { createPlayer, forwardKeydownEvent } from '../src';
+import { forwardKeydownEvent } from '../src/keydown';
+import { createPlayer } from '../src/ui';
 
 const getShowName = (): HTMLElement => document.getElementById('show')!;
 const getEpisodeName = (): HTMLElement => document.getElementById('episode')!;

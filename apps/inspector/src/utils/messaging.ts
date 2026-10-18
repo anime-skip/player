@@ -1,7 +1,6 @@
 import { defineExtensionMessaging } from '@webext-core/messaging';
-import { Tabs, WebNavigation } from 'wxt/browser';
 
-import { LocalNetworkRequest } from './network-repo';
+import type { LocalNetworkRequest } from './network-repo';
 
 export interface ProtocolMap {
   saveNetworkRequest(request: LocalNetworkRequest): Promise<void>;
@@ -10,8 +9,8 @@ export interface ProtocolMap {
     id: NetworkRequest['id'],
   ): Promise<NetworkRequest | undefined>;
   getTabs(): Array<{
-    tab: Tabs.Tab;
-    frames: WebNavigation.GetAllFramesCallbackDetailsItemType[];
+    tab: Browser.tabs.Tab;
+    frames: Browser.webNavigation.GetFrameDetails[];
   }>;
   getFrameHtml(options: {
     tabId: number | undefined;

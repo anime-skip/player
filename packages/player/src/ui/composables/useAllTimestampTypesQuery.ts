@@ -1,0 +1,14 @@
+import { QueryKey } from '../../utils/QueryKey';
+import { HOUR } from '../../utils/time';
+
+export default function () {
+  const client = useApiClient(false);
+  return useQuery({
+    key: [QueryKey.AllTimestampTypes],
+    async query() {
+      const data = await client.allTimestampTypes();
+      return data.allTimestampTypes;
+    },
+    staleTime: HOUR,
+  });
+}

@@ -5,7 +5,7 @@ export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' |
 import type { DocumentNode } from "graphql";
 import type * as Types from './graphql.schema';
 
-import type { GraphQLClient, RequestOptions } from 'graphql-request';
+import { type GraphQLClient, type RequestOptions } from 'graphql-request';
 import gql from 'graphql-tag';
 export * from './graphql.schema';
 type GraphQLClientRequestHeaders = RequestOptions['requestHeaders'];

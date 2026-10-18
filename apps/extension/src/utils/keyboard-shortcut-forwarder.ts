@@ -1,4 +1,4 @@
-import { forwardKeydownEvent } from '@anime-skip/player';
+import { forwardKeydownEvent } from '@anime-skip/player/keydown';
 
 import type { ContentScriptContext } from '#imports';
 

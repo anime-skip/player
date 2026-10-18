@@ -1,0 +1,49 @@
+<script lang="ts" setup>
+import IconChevronDown from '~icons/anime-skip/chevron-down';
+
+import { AmbiguousTimestamp } from '../../utils/timestamp-utils';
+
+const props = defineProps<{
+  timestamp: AmbiguousTimestamp;
+}>();
+
+const {
+  data: types,
+  isLoading: isTypesLoading,
+  error: typesError,
+} = useAllTimestampTypesQuery();
+
+const typesErrorMessage = useErrorMessage(typesError);
+
+const typeId = useEditableTimestampTypeId(toRef(props, 'timestamp'));
+
+const timestampTypesMap = useTimestampTypeMap();
+const type = computed(() => (timestampTypesMap.value ?? {})[typeId.value]);
+</script>
+
+<template>
+  <div class="relative">
+    <select
+      class="mr-2 cursor-pointer appearance-none bg-transparent text-base"
+      v-model="typeId"
+      :disabled="isTypesLoading"
+    >
+      <!-- Error Message -->
+      <option v-if="typesError" disabled>{{ typesErrorMessage }}</option>
+
+      <!-- Types List -->
+      <template v-else>
+        <option disabled>Select a type:</option>
+        <option v-for="t of types" :key="t.id" :value="t.id">
+          {{ t.name }}
+        </option>
+      </template>
+    </select>
+
+    <!-- Chevron placement -->
+    <p class="pointer-events-none absolute left-0 top-0 truncate">
+      <span class="truncate text-base opacity-0">{{ type?.name }}</span>
+      <icon-chevron-down class="inline text-base-content text-opacity-50" />
+    </p>
+  </div>
+</template>

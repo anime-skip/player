@@ -1,0 +1,29 @@
+import type { View } from '../../utils/view';
+import { ViewOperationCompletedEvent } from '../../utils/ViewOperationCompletedEvent';
+
+/**
+ * Works with `useViewOperation`. Tells that composable when a view's work is
+ * done.
+ *
+ * This method works using the `window.CustomEvent` API.
+ *
+ * @example
+ *   // LoginForm.vue
+ *   const viewOperationCompleted = useViewOperationCompleted('account');
+ *
+ *   const { mutate: _login } = useLoginMutation();
+ *
+ *   function login() {
+ *   ...
+ *   _login(..., {
+ *   onSuccess: viewOperationCompleted,
+ *   })
+ *   }
+ */
+export default function (view: View): ViewOperationCompletedFn {
+  return () => {
+    window.dispatchEvent(new ViewOperationCompletedEvent(view));
+  };
+}
+
+type ViewOperationCompletedFn = () => void;

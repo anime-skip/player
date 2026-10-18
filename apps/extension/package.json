@@ -17,13 +17,13 @@
   },
   "dependencies": {
     "@anime-skip/player": "workspace:*",
-    "@webext-core/messaging": "^1.4.0"
+    "@webext-core/messaging": "^4.0.0"
   },
   "devDependencies": {
-    "happy-dom": "^20.9.0",
-    "sass": "^1.99.0",
+    "happy-dom": "^21.0.3",
+    "sass": "^1.105.2",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.6",
+    "vitest": "^5.0.5",
     "wxt": "^0.21.4"
   }
 }

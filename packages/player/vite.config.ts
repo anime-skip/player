@@ -10,9 +10,11 @@ import icons from 'unplugin-icons/vite';
 import { defineConfig, Plugin } from 'vite';
 import dts from 'vite-plugin-dts';
 
-function generate(): Plugin {
+import pkg from './package.json' with { type: 'json' };
+
+function generateGql(): Plugin {
   return {
-    name: 'generate',
+    name: 'generate-gql',
     buildStart() {
       console.log('Generating GraphQL...');
       execSync('pnpm generate:graphql');
@@ -38,20 +40,24 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       visualizer(),
-      dts({ tsconfigPath: 'tsconfig.build.json', entryRoot: 'src' }),
+      dts({
+        tsconfigPath: 'tsconfig.build.json',
+        entryRoot: 'src',
+        bundleTypes: true,
+      }),
       vue(),
-      generate(),
+      generateGql(),
       icons({
         scale: 24 / 14, // 14px is the default size in px, so the first number is the desired size in px
         customCollections: {
-          'anime-skip': FileSystemIconLoader('./src/assets/icons', (svg) =>
+          'anime-skip': FileSystemIconLoader('./src/ui/assets/icons', (svg) =>
             svg.replace(/fill="white"/g, 'fill="currentColor"'),
           ),
         },
       }),
       autoImport({
         dts: 'src/@types/auto-import.d.ts',
-        dirs: ['src/composables'],
+        dirs: ['src/ui/composables'],
         defaultExportByFilename: true,
         imports: [
           'vue',
@@ -65,14 +71,21 @@ export default defineConfig(({ mode }) => {
     build: {
       lib: {
         name: 'animeSkipPlayer',
-        entry: 'src/index.ts',
+        entry: {
+          index: 'src/index.ts',
+          keydown: 'src/keydown.ts',
+          logger: 'src/logger.ts',
+          storage: 'src/storage.ts',
+          ui: 'src/ui/index.ts',
+        },
         formats: ['es'],
-        fileName: 'index',
+        // fileName: 'index',
       },
       sourcemap: true,
     },
     define: {
       __TEST_SEED__: JSON.stringify(__TEST_SEED__),
+      __VERSION__: JSON.stringify(pkg.version),
     },
   };
 });

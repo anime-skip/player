@@ -1,4 +1,4 @@
-import { forwardKeydownEvent } from '@anime-skip/player';
+import { forwardKeydownEvent } from '@anime-skip/player/keydown';
 
 /**
  * Stop all keydown events before the website can process them, and
