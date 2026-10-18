@@ -6,8 +6,5 @@ export default defineConfig({
     restoreMocks: true,
     mockReset: true,
   },
-  ssr: {
-    noExternal: ['@webext-core/messaging'],
-  },
   plugins: [WxtVitest()],
 });
