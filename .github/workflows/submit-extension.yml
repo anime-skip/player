@@ -63,7 +63,7 @@ jobs:
           publishCommands: |-
             pnpm wxt submit --chrome-zip .output/*-chrome.zip --firefox-zip .output/*-firefox.zip --firefox-sources-zip .output/*-sources.zip
           dryRunPublishCommands: |-
-            pnpm wxt submit --chrome-zip .output/*-chrome.zip --firefox-zip .output/*-firefox.zip --firefox-sources-zip .output/*-sources.zip
+            pnpm wxt submit --chrome-zip .output/*-chrome.zip --firefox-zip .output/*-firefox.zip --firefox-sources-zip .output/*-sources.zip --dry-run
           releaseArtifacts: |-
             .output/*-chrome.zip
             .output/*-firefox.zip
