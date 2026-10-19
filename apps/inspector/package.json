@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "wxt",
     "build": "wxt build",
-    "compile": "vue-tsc --noEmit",
+    "check": "check",
     "postinstall": "wxt prepare"
   },
   "dependencies": {

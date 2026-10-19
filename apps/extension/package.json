@@ -3,6 +3,7 @@
   "version": "2.0.6",
   "type": "module",
   "scripts": {
+    "check": "buildc --deps-only -- check",
     "dev": "buildc --deps-only -- wxt",
     "dev:firefox": "buildc --deps-only -- pnpm -s dev -b firefox",
     "dev:prod": "buildc --deps-only -- wxt --mode production",
@@ -11,7 +12,6 @@
     "build:firefox": "pnpm -s build -b firefox",
     "zip": "buildc --deps-only -- wxt zip",
     "zip:firefox": "pnpm -s zip -b firefox",
-    "compile": "tsc --noEmit",
     "postinstall": "wxt prepare",
     "test": "vitest"
   },
