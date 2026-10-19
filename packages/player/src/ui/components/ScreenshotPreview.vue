@@ -8,9 +8,10 @@ function clearImage() {
   preview.value = undefined;
 }
 
-const filename = computed(
-  () => `Anime Skip Screenshot ${new Date().toISOString()}.jpeg`,
-);
+const filename = computed(() => {
+  void preview.value;
+  return `Anime Skip Screenshot ${new Date().toISOString()}.jpeg`;
+});
 </script>
 
 <template>
