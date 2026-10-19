@@ -12,10 +12,22 @@ const { view } = useView();
 // Autoscale video based on side panel width
 const { shadowHtml } = useShadowRoot();
 const video = useVideoElement();
-watch(width, (width) => {
-  const scale = 1 - width / shadowHtml.clientWidth;
-  video.value.style.transform = `scale(${scale * 100}%)`;
-  video.value.style.transformOrigin = 'left';
+const { width: containerWidth, height: containerHeight } =
+  useElementSize(shadowHtml);
+watchEffect(() => {
+  // Assume a 16:9 video letterboxed inside the container. Shift the video
+  // left to stay centered in the remaining space, and only scale it down if
+  // the rendered video wouldn't fit next to the panel.
+  const panelWidth = width.value;
+  const videoWidth = Math.min(
+    containerWidth.value,
+    (containerHeight.value * 16) / 9,
+  );
+  const scale = videoWidth
+    ? Math.min(1, (containerWidth.value - panelWidth) / videoWidth)
+    : 1;
+  video.value.style.transform = `translateX(${-panelWidth / 2}px) scale(${scale})`;
+  video.value.style.transformOrigin = 'center';
 });
 </script>
 
