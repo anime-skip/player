@@ -1,3 +1,4 @@
+import type { ServiceSegment, ServiceSegmentType } from '../types';
 import {
   InputTimestamp,
   Scalars,
@@ -8,6 +9,60 @@ import {
 import { AllPreferences } from './preferences';
 
 export const UNKNOWN_TIMESTAMP_TYPE_ID = 'ae57fcf9-27b0-49a7-9a99-a91aa7518a29';
+
+const CANON_TIMESTAMP_TYPE_ID = '9edc0037-fa4e-47a7-a29a-d9c43368daa8';
+
+const SERVICE_SEGMENT_TYPE_IDS: Record<ServiceSegmentType, string> = {
+  intro: '14550023-2589-46f0-bfb4-152976506b4c',
+  credits: '2a730a51-a601-439b-bc1f-7b94a640ffb9',
+  recap: 'f38ac196-0d49-40a9-8fcf-f3ef2f40f127',
+  preview: 'c7b1eddb-defa-4bc6-a598-f143081cfe4b',
+};
+
+/**
+ * Convert a streaming service's segments into Anime Skip timestamps. Each
+ * segment becomes a timestamp at its start, followed by a "Canon" timestamp at
+ * its end, unless another segment starts right there or the video ends.
+ *
+ * Returned timestamps are sorted.
+ */
+export function serviceSegmentsToTimestamps(
+  segments: ReadonlyArray<ServiceSegment>,
+  duration: number,
+  source: TimestampSource = TimestampSource.AnimeSkip,
+): LocalTimestamp[] {
+  const valid = segments
+    .filter(
+      (s) =>
+        Number.isFinite(s.start) &&
+        Number.isFinite(s.end) &&
+        s.end > s.start &&
+        s.start < duration,
+    )
+    .map((s) => ({ ...s, start: Math.max(0, s.start) }))
+    .sort((l, r) => l.start - r.start);
+  if (valid.length === 0) return [];
+
+  const timestamps: LocalTimestamp[] = [];
+  const add = (at: number, typeId: string) =>
+    timestamps.push({
+      id: Math.random(),
+      at,
+      source,
+      typeId,
+    });
+
+  if (valid[0].start > 0.5) add(0, CANON_TIMESTAMP_TYPE_ID);
+  valid.forEach((segment, i) => {
+    add(segment.start, SERVICE_SEGMENT_TYPE_IDS[segment.type]);
+    const nextStart = valid[i + 1]?.start;
+    const endsAtNext = nextStart != null && nextStart - segment.end < 0.5;
+    const endsAtVideoEnd = segment.end >= duration - 1;
+    if (!endsAtNext && !endsAtVideoEnd)
+      add(segment.end, CANON_TIMESTAMP_TYPE_ID);
+  });
+  return timestamps;
+}
 
 /**
  * Either a timestamp from the API, or a local timestamp that hasn't been saved

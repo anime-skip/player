@@ -1,7 +1,7 @@
-import { ColorTheme } from './utils/api';
+import { ColorTheme, TimestampSource } from './utils/api';
 import type { TypedStorage } from './utils/createTypedStorage';
 
-export { ColorTheme };
+export { ColorTheme, TimestampSource };
 
 export interface PlayerOptions {
   /**
@@ -49,6 +49,22 @@ export interface PlayerOptions {
     number?: string | null;
     absoluteNumber?: string | null;
   }>;
+  /**
+   * Returns the segments (intro, credits, etc) that the streaming service
+   * itself knows about. When an episode has no Anime Skip timestamps, these are
+   * loaded into the editor as an unsaved draft.
+   *
+   * Return an empty array (or throw) if the service doesn't know of any.
+   *
+   * Defaults to a function returning an empty array.
+   */
+  getServiceSegments?: () => MaybePromise<ServiceSegment[]>;
+  /**
+   * The `source` set on timestamps created from `getServiceSegments`.
+   *
+   * Defaults to `TimestampSource.AnimeSkip`.
+   */
+  serviceTimestampSource?: TimestampSource;
   /**
    * The full API url that ends with /graphql.
    *
@@ -99,6 +115,8 @@ export interface InternalPlayerOptions {
   storage: TypedStorage;
   video: () => HTMLVideoElement;
   getEpisodeInfo: () => MaybePromise<InferredEpisodeInfo>;
+  getServiceSegments: () => MaybePromise<ServiceSegment[]>;
+  serviceTimestampSource: TimestampSource;
   fullscreenElement: () => HTMLElement;
   apiUrl: string;
   apiClientId: string;
@@ -115,6 +133,17 @@ export interface InferredEpisodeInfo {
   number?: string;
   absoluteNumber?: string;
 }
+
+/** A section of an episode that a streaming service has labeled itself. */
+export interface ServiceSegment {
+  type: ServiceSegmentType;
+  /** Start of the segment, in seconds. */
+  start: number;
+  /** End of the segment, in seconds. */
+  end: number;
+}
+
+export type ServiceSegmentType = 'intro' | 'credits' | 'recap' | 'preview';
 
 export type ElementOption = string | Element | (() => string | Element);
 

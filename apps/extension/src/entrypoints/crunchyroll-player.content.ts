@@ -1,5 +1,5 @@
 import '~/assets/crunchyroll-player.scss';
-import { ColorTheme } from '@anime-skip/player';
+import { ColorTheme, TimestampSource } from '@anime-skip/player';
 
 import { defineSpaContentScript } from '@/utils/define-spa-content-script';
 
@@ -23,6 +23,7 @@ export default defineSpaContentScript({
       ctx,
       serviceName: 'Crunchyroll',
       serviceTheme: ColorTheme.CrunchyrollOrange,
+      serviceTimestampSource: TimestampSource.Crunchyroll,
       parentElement: PLAYER_SELECTOR,
       fullscreenElement: PLAYER_SELECTOR,
     });

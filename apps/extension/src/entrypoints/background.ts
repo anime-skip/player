@@ -14,6 +14,14 @@ export default defineBackground(() => {
     );
   });
 
+  messaging.onMessage('getServiceSegmentsFromHelper', ({ sender }) => {
+    return messaging.sendMessage(
+      'getServiceSegmentsFromHelper',
+      undefined,
+      sender.tab?.id,
+    );
+  });
+
   // Setup screenshot process
   browser.contextMenus.create({
     id: 'screenshot',

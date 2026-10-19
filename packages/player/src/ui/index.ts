@@ -7,6 +7,7 @@ import {
   InternalPlayerOptions,
   PlayerOptions,
   PlayerVisibility,
+  TimestampSource,
 } from '../types';
 import { defineAppState } from '../utils/app-state';
 import { createLocalPlayerStorage } from '../utils/createLocalPlayerStorage';
@@ -199,6 +200,13 @@ function getInternalOptions(options?: PlayerOptions): InternalPlayerOptions {
         absoluteNumber: res.absoluteNumber?.trim() || undefined,
       };
     },
+
+    async getServiceSegments() {
+      return (await options?.getServiceSegments?.()) ?? [];
+    },
+
+    serviceTimestampSource:
+      options?.serviceTimestampSource ?? TimestampSource.AnimeSkip,
 
     apiUrl: options?.apiUrl ?? 'https://anime-skip.com/api/graphql',
     apiClientId: options?.apiClientId ?? 'ZGfO0sMF3eCwLYf8yMSCJjlynwNGRXWE',

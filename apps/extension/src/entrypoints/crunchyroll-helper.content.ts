@@ -1,3 +1,5 @@
+import type { ServiceSegment } from '@anime-skip/player';
+
 import { defineSpaContentScript } from '@/utils/define-spa-content-script';
 import { initExtensionHelper } from '@/utils/extension-helper';
 
@@ -9,10 +11,47 @@ export default defineSpaContentScript({
     initExtensionHelper({
       ctx,
       getEpisodeInfo,
+      getServiceSegments,
     });
     logger.log(`Initialized ${location.host} helper`);
   },
 });
+
+interface SkipEvent {
+  start: number;
+  end: number;
+}
+
+/**
+ * Crunchyroll publishes its own skip events at a public, static URL keyed by
+ * the episode's ID (the `/watch/<ID>/...` part of the URL). No auth required.
+ */
+async function getServiceSegments(): Promise<ServiceSegment[]> {
+  const episodeId = /\/watch\/([^/]+)/.exec(location.pathname)?.[1];
+  if (!episodeId) return [];
+
+  const res = await fetch(
+    `https://static.crunchyroll.com/skip-events/production/${episodeId}.json`,
+  );
+  // Missing for episodes without skip events
+  if (!res.ok) return [];
+
+  const json: Partial<Record<ServiceSegment['type'], SkipEvent>> =
+    await res.json();
+  const types: ServiceSegment['type'][] = [
+    'recap',
+    'intro',
+    'credits',
+    'preview',
+  ];
+  return types.flatMap((type) => {
+    const event = json[type];
+    if (typeof event?.start !== 'number' || typeof event?.end !== 'number') {
+      return [];
+    }
+    return [{ type, start: event.start, end: event.end }];
+  });
+}
 
 async function getEpisodeInfo() {
   const pageHasLoaded = () =>

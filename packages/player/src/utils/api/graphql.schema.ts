@@ -1305,7 +1305,8 @@ export type Timestamp = BaseModel & {
 /** Where a timestamp originated from */
 export enum TimestampSource {
   AnimeSkip = 'ANIME_SKIP',
-  BetterVrv = 'BETTER_VRV'
+  BetterVrv = 'BETTER_VRV',
+  Crunchyroll = 'CRUNCHYROLL'
 }
 
 /**

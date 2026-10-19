@@ -19,6 +19,9 @@ export function initExtensionPlayer(options: ExtensionPlayerOptions): void {
       // Send message to background
       return messaging.sendMessage('getEpisodeInfoFromHelper', undefined);
     },
+    getServiceSegments() {
+      return messaging.sendMessage('getServiceSegmentsFromHelper', undefined);
+    },
     onVisibilityChange(visibility) {
       const hideBuiltinPlayer =
         visibility === PlayerVisibility.Visible ||

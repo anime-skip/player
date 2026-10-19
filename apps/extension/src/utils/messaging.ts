@@ -1,4 +1,8 @@
-import { type PlayerOptions, PlayerVisibility } from '@anime-skip/player';
+import {
+  type PlayerOptions,
+  PlayerVisibility,
+  type ServiceSegment,
+} from '@anime-skip/player';
 import { defineExtensionMessaging } from '@webext-core/messaging';
 
 export const messaging = defineExtensionMessaging<MessagingProtocol>({
@@ -8,6 +12,7 @@ export const messaging = defineExtensionMessaging<MessagingProtocol>({
 interface MessagingProtocol {
   getTopFrameUrl(): string;
   getEpisodeInfoFromHelper(): EpisodeInfo;
+  getServiceSegmentsFromHelper(): ServiceSegment[];
   sendScreenshotToTab(url: string): void;
   setPlayerVisibility(visibility: PlayerVisibility): void;
 }

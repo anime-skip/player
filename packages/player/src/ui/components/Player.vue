@@ -42,6 +42,7 @@ useSyncPlaybackRate();
 useAutoSkip();
 useKeyboardActions();
 useAutoconnectEpisode();
+useImportServiceTimestamps();
 
 // Preload queries that need ran ASAP
 useAllTimestampTypesQuery();
