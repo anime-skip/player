@@ -13,7 +13,7 @@
     "zip": "buildc --deps-only -- wxt zip",
     "zip:firefox": "pnpm -s zip -b firefox",
     "postinstall": "wxt prepare",
-    "test": "vitest"
+    "test": "vitest --passWithNoTests"
   },
   "dependencies": {
     "@anime-skip/player": "workspace:*",
