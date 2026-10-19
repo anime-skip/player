@@ -45,7 +45,7 @@ jobs:
           git config --global user.email "github-actions@users.noreply.github.com"
 
       - name: Bump, Build, Submit, and Release
-        uses: aklinker1/zero-changelog/actions/release@580807ccd232072f137084a7817d4213d39dbb99 # v0.2.3
+        uses: aklinker1/zero-changelog/actions/release@7040a44d413dcea5b8569676b61463ec61fb1cd4 # v0.2.4
         with:
           path: apps/extension
           # Include changes to the player package, since it's bundled into the extension
