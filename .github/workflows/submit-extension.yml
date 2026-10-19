@@ -50,7 +50,7 @@ jobs:
           path: apps/extension
           # Include changes to the player package, since it's bundled into the extension
           additionalDirs: |-
-            ../../packages/player
+            packages/player
           tagPrefix: v
           commitTemplate: 'chore(release): v{{version}}'
           releaseNameTemplate: 'v{{version}}'
