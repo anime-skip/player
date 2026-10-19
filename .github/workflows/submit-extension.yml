@@ -1,0 +1,81 @@
+name: Submit Extension for Review
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: Blank (auto), a version (1.4.1), or major/minor/patch
+        type: string
+      dryRun:
+        description: Dry run? Skips validation and submission
+        type: boolean
+        default: false
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate
+    if: ${{ !inputs.dryRun }}
+    uses: ./.github/workflows/validate.yml
+
+  submit:
+    name: Submit
+    runs-on: ubuntu-24.04
+    if:
+      ${{ !cancelled() && (needs.validate.result == 'success' ||
+      needs.validate.result == 'skipped') }}
+    needs: [validate]
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - uses: ./.github/actions/setup
+
+      - name: Setup Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@users.noreply.github.com"
+
+      - name: Bump, Build, Submit, and Release
+        uses: aklinker1/zero-changelog/actions/release@580807ccd232072f137084a7817d4213d39dbb99 # v0.2.3
+        with:
+          path: apps/extension
+          # Include changes to the player package, since it's bundled into the extension
+          additionalDirs: |-
+            ../../packages/player
+          tagPrefix: v
+          commitTemplate: 'chore(release): v{{version}}'
+          releaseNameTemplate: 'v{{version}}'
+          bump: ${{ inputs.bump }}
+          dryRun: ${{ inputs.dryRun }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          preCommitCommands: |-
+            pnpm zip
+            pnpm zip:firefox
+          publishCommands: |-
+            pnpm wxt submit --chrome-zip .output/*-chrome.zip --firefox-zip .output/*-firefox.zip --firefox-sources-zip .output/*-sources.zip
+          dryRunPublishCommands: |-
+            pnpm wxt submit --chrome-zip .output/*-chrome.zip --firefox-zip .output/*-firefox.zip --firefox-sources-zip .output/*-sources.zip
+          releaseArtifacts: |-
+            .output/*-chrome.zip
+            .output/*-firefox.zip
+        env:
+          DRY_RUN: ${{ inputs.dryRun }}
+          CHROME_API_VERSION: v2
+          CHROME_PUBLISHER_ID: ${{ secrets.CHROME_PUBLISHER_ID }}
+          CHROME_EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
+          CHROME_SERVICE_ACCOUNT_CLIENT_EMAIL:
+            ${{ secrets.CHROME_SERVICE_ACCOUNT_CLIENT_EMAIL }}
+          CHROME_SERVICE_ACCOUNT_PRIVATE_KEY:
+            ${{ secrets.CHROME_SERVICE_ACCOUNT_PRIVATE_KEY }}
+          FIREFOX_EXTENSION_ID: ${{ secrets.FIREFOX_EXTENSION_ID }}
+          FIREFOX_JWT_ISSUER: ${{ secrets.FIREFOX_JWT_ISSUER }}
+          FIREFOX_JWT_SECRET: ${{ secrets.FIREFOX_JWT_SECRET }}
