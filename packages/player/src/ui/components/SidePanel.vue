@@ -15,7 +15,7 @@ const video = useVideoElement();
 const { width: containerWidth, height: containerHeight } =
   useElementSize(shadowHtml);
 watchEffect(() => {
-  // Assume a 16:9 video letterboxed inside the container. Shift the video
+  // Assume a 16:9 video. Shift the video
   // left to stay centered in the remaining space, and only scale it down if
   // the rendered video wouldn't fit next to the panel.
   const panelWidth = width.value;
