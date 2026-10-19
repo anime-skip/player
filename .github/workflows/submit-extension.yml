@@ -52,8 +52,8 @@ jobs:
           additionalDirs: |-
             packages/player
           tagPrefix: v
-          commitTemplate: 'chore(release): v{{version}}'
-          releaseNameTemplate: 'v{{version}}'
+          commitTemplate: 'chore(release): extension-v{{version}}'
+          releaseNameTemplate: 'extension-v{{version}}'
           bump: ${{ inputs.bump }}
           dryRun: ${{ inputs.dryRun }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
