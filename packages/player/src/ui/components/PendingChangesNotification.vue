@@ -42,7 +42,7 @@ async function save(ctx: SaveContext) {
   >
     <h4 class="text-base font-bold">Unsaved Changes</h4>
     <p class="break-words">
-      You have unsaved timestamps for {{ description }}.
+      {{ description }}
     </p>
     <p v-if="!auth" class="text-warning">Log in to save these changes.</p>
     <div class="flex gap-2">
