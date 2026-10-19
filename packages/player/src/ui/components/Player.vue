@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { PlayerVisibility } from '../../types';
 import { PlayerEvent } from '../../utils/PlayerEvent';
-import { QueryKey } from '../../utils/QueryKey';
 import ContextMenu from './ContextMenu.vue';
 import EpisodeInfo from './EpisodeInfo.vue';
 import ManualSkipButton from './ManualSkipButton.vue';
@@ -49,12 +48,10 @@ useAllTimestampTypesQuery();
 useAccountQuery();
 
 // URL change behavior
-const queryCache = useQueryCache();
 const { data: url } = useCurrentUrlQuery();
 const { stashEdits } = usePendingChanges();
 
 watch(url, () => {
-  queryCache.invalidateQueries({ key: [QueryKey.EpisodeInfo] });
   if (isEditing.value) stashEdits();
 });
 
