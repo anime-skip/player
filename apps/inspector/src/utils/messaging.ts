@@ -10,7 +10,7 @@ export interface ProtocolMap {
   ): Promise<NetworkRequest | undefined>;
   getTabs(): Array<{
     tab: Browser.tabs.Tab;
-    frames: Browser.webNavigation.GetFrameDetails[];
+    frames: Browser.webNavigation.GetAllFrameResultDetails[];
   }>;
   getFrameHtml(options: {
     tabId: number | undefined;

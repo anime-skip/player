@@ -1,6 +1,6 @@
 import { openDB } from 'idb';
 
-import { ExtensionIdb } from './schema';
+import type { ExtensionIdb } from './schema';
 
 export function openIdb(): Promise<ExtensionIdb> {
   return openDB('inspector', undefined, {

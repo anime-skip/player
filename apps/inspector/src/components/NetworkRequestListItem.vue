@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { NetworkRequest } from '@/utils/network-repo';
+import type { NetworkRequest } from '@/utils/network-repo';
 
 const props = defineProps<{
   request: NetworkRequest;

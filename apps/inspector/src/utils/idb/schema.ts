@@ -1,4 +1,4 @@
-import { DBSchema, IDBPDatabase } from 'idb';
+import type { DBSchema, IDBPDatabase } from 'idb';
 
 export interface IdbDatabaseSchema extends DBSchema {
   logs: {

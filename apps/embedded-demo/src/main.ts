@@ -1,4 +1,4 @@
-import { createPlayer } from '@anime-skip/player';
+import { createPlayer } from '@anime-skip/player/ui';
 
 const player = createPlayer({
   serviceName: 'Demo',

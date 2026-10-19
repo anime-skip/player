@@ -1,4 +1,4 @@
-import { NetworkRequest } from '@/utils/network-repo';
+import type { NetworkRequest } from '@/utils/network-repo';
 
 export default defineBackground(() => {
   browser.action.onClicked.addListener(openInspector);

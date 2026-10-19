@@ -1,4 +1,4 @@
-import { MaybeRefOrGetter, computed } from 'vue';
+import { type MaybeRefOrGetter, computed, toValue } from 'vue';
 
 export default function (path: MaybeRefOrGetter<string>) {
   const route = useRoute();

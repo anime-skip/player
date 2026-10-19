@@ -1,5 +1,5 @@
-import { NetworkRepo } from '../network-repo';
-import { ExtensionIdb } from './schema';
+import type { NetworkRepo } from '../network-repo';
+import type { ExtensionIdb } from './schema';
 
 export function createIdbNetworkRepo(idb: Promise<ExtensionIdb>): NetworkRepo {
   return {

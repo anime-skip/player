@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 
-import { LocalNetworkRequest, NetworkRequest } from '@/utils/network-repo';
+import type { LocalNetworkRequest, NetworkRequest } from '@/utils/network-repo';
 
 export default defineContentScript({
   matches: ['*://*/*'],
@@ -30,13 +30,16 @@ export default defineContentScript({
       },
       async onResponse(id, response) {
         const now = Date.now();
+        const request = requests[id];
+        if (!request) throw Error(`No request found for id ${id}`);
+
         const model: LocalNetworkRequest = {
-          ...requests[id],
+          ...request,
           response: {
             status: response.status,
             body: await response.text(),
             date: now,
-            duration: now - requests[id].request.date,
+            duration: now - request.request.date,
             headers: serializeHeaders(response.headers),
             statusText: response.statusText,
           },
@@ -58,8 +61,11 @@ export default defineContentScript({
         sendToIsolatedContentScript(model);
       },
       onResponse(id, response) {
+        const request = requests[id];
+        if (!request) throw Error(`No request found for id ${id}`);
+
         const model = {
-          ...requests[id],
+          ...request,
           response,
         };
         delete requests[id];
@@ -101,15 +107,15 @@ function monkeyPatchXhr(options: {
     responseBody?: string;
     responseHeaders = new Headers();
 
-    open(method: string, url: string | URL): void;
-    open(
+    override open(method: string, url: string | URL): void;
+    override open(
       method: string,
       url: string | URL,
       isAsync: boolean,
       username?: string | null | undefined,
       password?: string | null | undefined,
     ): void;
-    open(
+    override open(
       method: string,
       url: string | URL,
       isAsync?: unknown,
@@ -120,11 +126,13 @@ function monkeyPatchXhr(options: {
       this.method = method;
       this.url = typeof url === 'string' ? url : url.href;
     }
-    setRequestHeader(name: string, value: string): void {
+    override setRequestHeader(name: string, value: string): void {
       super.setRequestHeader(name, value);
       this.requestHeaders.append(name, value);
     }
-    send(body?: Document | XMLHttpRequestBodyInit | null | undefined): void {
+    override send(
+      body?: Document | XMLHttpRequestBodyInit | null | undefined,
+    ): void {
       super.addEventListener('readystatechange', async () => {
         if (this.readyState === this.DONE) {
           if (this.responseType === 'blob') {
