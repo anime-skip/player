@@ -15,16 +15,12 @@ import {
   isTimestampEqual,
   undoTimestampsOffset,
 } from '../../utils/timestamp-utils';
+import type { SaveContext } from './useGetLiveContext';
 
 export default createAppState(() => {
   const { state: auth } = useAuth();
-  const { data: currentUrl } = useCurrentUrlQuery();
-  const episodeUrl = useApiEpisodeUrl();
-  const episodeForm = useEditEpisodeForm();
-  const { duration } = useVideoControls();
+  const getLiveContext = useGetLiveContext();
   const api = useApiClient(true);
-  const existingTimestamps = useApiTimestamps();
-  const currentTimestamps = useCurrentTimestamps();
   const { stopEditing } = useIsEditing();
 
   const { mutateAsync: createShow } = useCreateShowMutation();
@@ -34,14 +30,18 @@ export default createAppState(() => {
   const { mutateAsync: createEpisodeUrl } = useCreateEpisodeUrlMutation();
 
   return useMutation({
-    async mutation() {
-      const newShowName = episodeForm.showName.value.trim();
-      const newEpisodeName = episodeForm.episodeName.value.trim();
-      const newNumber = episodeForm.number.value.trim();
-      const newSeason = episodeForm.season.value.trim();
-      const newAbsoluteNumber = episodeForm.absoluteNumber.value.trim();
-      const currentDuration = duration.value;
-      const url = currentUrl.value;
+    async mutation(context: SaveContext | undefined) {
+      const ctx = context ?? getLiveContext();
+      const episodeUrl = { value: ctx.episodeUrl };
+      const existingTimestamps = { value: ctx.existingTimestamps };
+      const currentTimestamps = { value: ctx.currentTimestamps };
+      const newShowName = ctx.showName.trim();
+      const newEpisodeName = ctx.episodeName.trim();
+      const newNumber = ctx.number.trim();
+      const newSeason = ctx.season.trim();
+      const newAbsoluteNumber = ctx.absoluteNumber.trim();
+      const currentDuration = ctx.duration;
+      const url = ctx.url;
 
       if (auth.value == null) {
         throw Error('Not logged in, cannot save.');
@@ -167,6 +167,9 @@ export default createAppState(() => {
         }
       }
     },
-    onSuccess: () => stopEditing(),
+    onSuccess: (_data, context) => {
+      // Saving a previous episode's changes shouldn't end the current edit session
+      if (!context) stopEditing();
+    },
   });
 });

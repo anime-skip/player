@@ -81,7 +81,7 @@ export default createAppState(() => {
 
     createTimestamp,
     discardChanges,
-    saveTimestamps: saveChanges,
+    saveTimestamps: () => saveChanges(undefined),
   };
 
   const { shadow } = useShadowRoot();

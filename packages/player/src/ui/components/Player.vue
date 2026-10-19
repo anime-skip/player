@@ -5,6 +5,7 @@ import { QueryKey } from '../../utils/QueryKey';
 import ContextMenu from './ContextMenu.vue';
 import EpisodeInfo from './EpisodeInfo.vue';
 import ManualSkipButton from './ManualSkipButton.vue';
+import PendingChangesNotification from './PendingChangesNotification.vue';
 import ReturnToPlayerButton from './ReturnToPlayerButton.vue';
 import ScreenshotPreview from './ScreenshotPreview.vue';
 import SidePanel from './SidePanel.vue';
@@ -50,14 +51,11 @@ useAccountQuery();
 // URL change behavior
 const queryCache = useQueryCache();
 const { data: url } = useCurrentUrlQuery();
-const discardChanges = useDiscardChanges();
+const { stashEdits } = usePendingChanges();
 
 watch(url, () => {
   queryCache.invalidateQueries({ key: [QueryKey.EpisodeInfo] });
-  if (isEditing.value) {
-    // TODO: Don't discard changes, ask if the user wants to save their changes for the previous episode
-    discardChanges();
-  }
+  if (isEditing.value) stashEdits();
 });
 
 const preview = useScreenshotPreview();
@@ -97,6 +95,8 @@ useCustomEventListener<PlayerEvent>(PlayerEvent.TYPE, ({ detail }) => {
       </div>
 
       <episode-info class="absolute inset-x-0 top-0" :hidden="playing" />
+
+      <pending-changes-notification class="absolute right-4 top-4 z-10" />
 
       <toolbar class="absolute inset-x-0 bottom-0" :hidden="isToolbarHidden" />
 
