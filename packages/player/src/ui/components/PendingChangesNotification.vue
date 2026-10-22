@@ -2,18 +2,10 @@
 import type { SaveContext } from '../composables/useGetLiveContext';
 
 const { pending, remove } = usePendingChanges();
-const { view } = useView();
 const { mutateAsync: saveChanges, isLoading } = useSaveChangesMutation();
 const { state: auth } = useAuth();
 
 const current = computed(() => pending.value[0]);
-const isSidePanelOpen = computed(
-  () =>
-    view.value === 'timestamps' ||
-    view.value === 'all-preferences' ||
-    view.value === 'edit-timestamp' ||
-    view.value === 'edit-template',
-);
 
 const description = computed(() => {
   const ctx = current.value;
@@ -36,7 +28,7 @@ async function save(ctx: SaveContext) {
 
 <template>
   <div
-    v-if="current && !isSidePanelOpen"
+    v-if="current"
     class="flex w-64 flex-col gap-2 rounded bg-base-200 p-3 text-sm shadow-xl"
     @click.stop
   >
