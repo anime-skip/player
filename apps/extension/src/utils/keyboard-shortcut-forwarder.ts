@@ -60,6 +60,10 @@ export function initKeyboardShortcutForwarder(ctx: ContentScriptContext) {
       if (preventDefaultForKeys.includes(event.key)) {
         event.preventDefault();
       }
+      // On macOS, ctrl+enter opens the context menu
+      if (event.ctrlKey && event.key === 'Enter') {
+        event.preventDefault();
+      }
     },
     {
       capture: true,
