@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { PlayerVisibility } from '../../types';
+import { downloadScreenshot } from '../../utils/downloadScreenshot';
 import { PlayerEvent } from '../../utils/PlayerEvent';
 import ContextMenu from './ContextMenu.vue';
 import EpisodeInfo from './EpisodeInfo.vue';
 import ManualSkipButton from './ManualSkipButton.vue';
 import PendingChangesNotification from './PendingChangesNotification.vue';
 import ReturnToPlayerButton from './ReturnToPlayerButton.vue';
-import ScreenshotPreview from './ScreenshotPreview.vue';
 import SidePanel from './SidePanel.vue';
 import Toolbar from './Toolbar.vue';
 
@@ -56,15 +56,13 @@ watch(url, () => {
   if (isEditing.value) stashEdits();
 });
 
-const preview = useScreenshotPreview();
-
 useCustomEventListener<PlayerEvent>(PlayerEvent.TYPE, ({ detail }) => {
   switch (detail.type) {
     case 'setPlayerVisibility':
       visibility.value = detail.visibility;
       break;
     case 'showScreenshot':
-      preview.value = detail.url;
+      downloadScreenshot(detail.url);
       break;
   }
 });
@@ -99,8 +97,6 @@ useCustomEventListener<PlayerEvent>(PlayerEvent.TYPE, ({ detail }) => {
       <toolbar class="absolute inset-x-0 bottom-0" :hidden="isToolbarHidden" />
 
       <manual-skip-button class="absolute bottom-20 right-4" />
-
-      <screenshot-preview />
     </div>
 
     <side-panel class="z-10 h-full" />

@@ -1,12 +1,11 @@
 import { PlayerVisibility } from '../../types';
-import useScreenshotPreview from './useScreenshotPreview';
+import { downloadScreenshot } from '../../utils/downloadScreenshot';
 
 /** Returns function that takes a screenshot of the player. */
 export default function (onStart?: () => void) {
   const visibility = usePlayerVisibility();
   const { takeScreenshot } = usePlayerOptions();
   const { playing } = useVideoControls();
-  const preview = useScreenshotPreview();
 
   return {
     isScreenshotEnabled: computed(() => !!takeScreenshot),
@@ -34,7 +33,7 @@ export default function (onStart?: () => void) {
         visibility.value = PlayerVisibility.Hidden;
         await nextTick();
         const result = await takeScreenshot(bounds);
-        preview.value = result;
+        downloadScreenshot(result);
       } finally {
         visibility.value = PlayerVisibility.Visible;
       }
