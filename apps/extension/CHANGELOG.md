@@ -1,5 +1,24 @@
 # Changelog
 
+## v2.1.1
+
+[compare changes](https://github.com/anime-skip/player/compare/extension-v2.1.0...extension-v2.1.1)
+
+### 🩹 Fixes
+
+- Show pending changes notification all the time
+  ([`6432386`](https://github.com/anime-skip/player/commit/64323860f188dbcf22a0fef81192a84f3cff0120))
+- Don't open context men u on Mac when pressing `ctrl+enter`
+  ([`5876c4c`](https://github.com/anime-skip/player/commit/5876c4c745b0f02e48cfef4fc1f2c99043ce5060))
+- Download screenshots automatically without a preview
+  ([`3327ad2`](https://github.com/anime-skip/player/commit/3327ad26016ac4d8f3798360a9308bac71c00764))
+- **crunchyroll**: Don't stall when seeking to un-buffered segments of the video
+  ([`3c69ac7`](https://github.com/anime-skip/player/commit/3c69ac74fb90f060142618bb3c8afa64d436781e))
+
+### ❤️ Contributors
+
+- [@aklinker1](https://github.com/aklinker1)
+
 ## v2.1.0
 
 [compare changes](https://github.com/anime-skip/player/compare/extension-v2.0.6...extension-v2.1.0)
