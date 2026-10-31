@@ -219,5 +219,11 @@ function getInternalOptions(options?: PlayerOptions): InternalPlayerOptions {
     takeScreenshot: options?.takeScreenshot ?? false,
 
     disableContextMenu: options?.disableContextMenu ?? false,
+
+    seek:
+      options?.seek ??
+      ((video, time) => {
+        video.currentTime = time;
+      }),
   };
 }

@@ -7,6 +7,7 @@ import { SECOND } from '../../utils/time';
  */
 export default createAppState(() => {
   const video = useVideoElement();
+  const { seek } = usePlayerOptions();
 
   function getCurrentDuration() {
     const s = video.value.duration;
@@ -135,7 +136,7 @@ export default createAppState(() => {
   const { ignoreUpdates: ignoreUpdatesCurrentTime } = watchIgnorable(
     currentTime,
     () => {
-      video.value.currentTime = currentTime.value;
+      seek(video.value, currentTime.value);
     },
   );
 

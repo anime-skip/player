@@ -107,6 +107,14 @@ export interface PlayerOptions {
 
   /** When true, don't show a custom context menu when right-clicking. */
   disableContextMenu?: boolean;
+
+  /**
+   * Seek the video to a specific time, in seconds. Override this when the
+   * service's player doesn't support setting `video.currentTime` directly.
+   *
+   * Defaults to setting `video.currentTime`.
+   */
+  seek?: (video: HTMLVideoElement, time: number) => void;
 }
 
 export interface InternalPlayerOptions {
@@ -124,6 +132,7 @@ export interface InternalPlayerOptions {
   onVisibilityChange: OnVisibilityChangeCallback | undefined;
   takeScreenshot: false | ((bounds: ScreenshotBounds) => Promise<string>);
   disableContextMenu: boolean;
+  seek: (video: HTMLVideoElement, time: number) => void;
 }
 
 export interface InferredEpisodeInfo {
