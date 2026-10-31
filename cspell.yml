@@ -9,6 +9,7 @@ ignorePaths:
 ignoreWords:
   - aklinker
   - autoskip
+  - bitmovin
   - buildc
   - chkbg
   - chkfg
@@ -32,6 +33,7 @@ ignoreWords:
   - oxlint
   - pickone
   - showmedia
+  - sidepanel
   - triggerable
   - vetur
   - vilos
